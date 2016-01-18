@@ -1,4 +1,4 @@
-# yang
+# Yang
 Yang models for the Junos platform
 
 # Contact
