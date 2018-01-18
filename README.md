@@ -107,4 +107,4 @@ list community {
 
 
 # Contact
-yang-hackers@juniper.net
+yang-support@juniper.net
