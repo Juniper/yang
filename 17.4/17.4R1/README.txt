@@ -1,6 +1,6 @@
 Juniper YANG modules
 ====================
-
+ 
 This package contains the configuration and operational YANG modules for
 various JUNOS families. Each family has its own directory and contains the
 family specific files. The 'common' directory contains the family independent
