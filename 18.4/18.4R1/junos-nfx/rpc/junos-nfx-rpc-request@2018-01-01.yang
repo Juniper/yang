@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for request command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.7";
    }
 
    rpc request-commit-server-cleanup {
@@ -3044,7 +3044,7 @@
              pattern "<.*>|$.*";
            }
            type uint32 {
-             range "0 .. 1";
+             range "0 .. 2";
            }
          }
          mandatory true;
@@ -3171,7 +3171,7 @@
              pattern "<.*>|$.*";
            }
            type uint32 {
-             range "0 .. 1";
+             range "0 .. 2";
            }
          }
          mandatory true;

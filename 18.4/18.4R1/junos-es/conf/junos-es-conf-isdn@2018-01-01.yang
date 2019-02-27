@@ -22,7 +22,7 @@
    description "Junos isdn configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.7";
    }
 
    augment /jc:configuration {
