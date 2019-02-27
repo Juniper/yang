@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for evpn command(s)";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1";
+     description "Junos: 19.1R1.1";
    }
 
    rpc get-evpn-instance-information {

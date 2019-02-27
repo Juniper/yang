@@ -18,7 +18,7 @@
    description "Junos YANG module for configuration hierarchies.";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1";
+     description "Junos: 19.1R1.1";
    }
 
    container configuration {
