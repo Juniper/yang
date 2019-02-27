@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for route command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-route-information {
@@ -33,11 +33,6 @@
            }
          }
          case fabric {
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
          }
        }
        leaf destination {
@@ -868,11 +863,6 @@
            }
          }
          case fabric {
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
          }
        }
        leaf table {

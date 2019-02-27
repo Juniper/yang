@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for ospf3 command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-ospf3-overview-information {
@@ -37,13 +37,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf verbosity_level {
@@ -100,13 +93,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf level {
@@ -216,13 +202,6 @@
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
          }
        }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
-         }
-       }
        leaf verbosity_level {
          default "brief";
          type enumeration {
@@ -290,13 +269,6 @@
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
          }
        }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
-         }
-       }
        leaf verbosity_level {
          default "brief";
          type enumeration {
@@ -361,13 +333,6 @@
    rpc get-ospf3-route-information {
      description "Show the OSPFv3 routing table";
      input {
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
-         }
-       }
        leaf logical-system {
          description "Name of logical system, or 'all'";
          type string {
@@ -474,13 +439,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf instance {

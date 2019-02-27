@@ -14,7 +14,7 @@
    description "This module contains definitions for Junos YANG types.";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    typedef daemon {

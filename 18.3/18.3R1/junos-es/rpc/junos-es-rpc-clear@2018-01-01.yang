@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for clear command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc clear-cli-logical-system {
@@ -567,6 +567,11 @@
          case fabric {
          }
        }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+         }
+       }
        leaf prefix {
          description "Destination prefix and prefix length";
          type string;
@@ -597,6 +602,11 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
          }
        }
        leaf disposition {

@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for clear command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc clear-cli-logical-system {
@@ -620,10 +620,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf prefix {
@@ -658,10 +654,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf disposition {
@@ -739,10 +731,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf table {
@@ -2970,13 +2958,6 @@
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
          }
        }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
-         }
-       }
        leaf all {
          description "Clear all Neighbor";
          type empty;
@@ -3019,13 +3000,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf all {
@@ -3091,13 +3065,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf instance {
@@ -3180,13 +3147,6 @@
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
          }
        }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
-         }
-       }
        leaf all {
          description "Clear all Neighbor";
          type empty;
@@ -3243,13 +3203,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf all {
@@ -3343,13 +3296,6 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf instance {

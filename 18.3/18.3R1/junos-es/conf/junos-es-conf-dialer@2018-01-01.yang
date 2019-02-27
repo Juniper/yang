@@ -22,7 +22,7 @@
    description "Junos dialer configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    augment /jc:configuration {

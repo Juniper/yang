@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for v4ov6-tunnels command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-v4ov6-information {
@@ -43,10 +43,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf anti-spoof-ip {

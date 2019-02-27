@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for backup-selection command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-backup-selection {
@@ -33,10 +33,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf prefix {
@@ -81,10 +77,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf instance-name {

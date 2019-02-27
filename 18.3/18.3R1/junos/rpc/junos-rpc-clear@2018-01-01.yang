@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for clear command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc clear-cli-logical-system {
@@ -606,10 +606,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf prefix {
@@ -642,10 +638,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf disposition {
@@ -719,10 +711,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf table {
@@ -2854,11 +2842,6 @@
          type string {
          }
        }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-         }
-       }
        leaf all {
          description "Clear all Neighbor";
          type empty;
@@ -2898,11 +2881,6 @@
      input {
        leaf logical-system {
          description "Name of logical system, or 'all'";
-         type string {
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
          type string {
          }
        }
@@ -2964,11 +2942,6 @@
      input {
        leaf logical-system {
          description "Name of logical system, or 'all'";
-         type string {
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
          type string {
          }
        }
@@ -3046,11 +3019,6 @@
          type string {
          }
        }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-         }
-       }
        leaf all {
          description "Clear all Neighbor";
          type empty;
@@ -3104,11 +3072,6 @@
      input {
        leaf logical-system {
          description "Name of logical system, or 'all'";
-         type string {
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
          type string {
          }
        }
@@ -3198,11 +3161,6 @@
      input {
        leaf logical-system {
          description "Name of logical system, or 'all'";
-         type string {
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
          type string {
          }
        }

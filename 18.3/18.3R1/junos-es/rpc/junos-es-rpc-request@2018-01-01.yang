@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for request command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc request-yang-add {
@@ -2102,6 +2102,12 @@
    }
    rpc request-jfw-ssd-upgrade {
      description "Upgrade SSD firmware";
+     input {
+       leaf disk {
+         description "1, 2";
+         type string;
+       }
+     }
      output {
        choice output_c {
          case output-tag {

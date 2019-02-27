@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for interfaces command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-interface-information {
@@ -134,10 +134,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf level {

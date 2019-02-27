@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for request command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc request-yang-add {
@@ -2474,6 +2474,10 @@
    rpc request-jfw-ssd-upgrade {
      description "Upgrade SSD firmware";
      input {
+       leaf disk {
+         description "1, 2";
+         type string;
+       }
        leaf file {
          description "Jfirmware package file";
          type string;
@@ -12183,8 +12187,18 @@
      }
    }
    rpc request-chassis-satellite-file-copy {
-     description "File copy (Local or remote)";
+     description "File copy";
      input {
+       leaf cmd {
+         type enumeration {
+           enum "local" {
+             description "Local user";
+           }
+           enum "remote" {
+             description "Remote user";
+           }
+         }
+       }
        leaf source {
          description "URL of source file e.g. For SD, use sd100:/..";
          type string;

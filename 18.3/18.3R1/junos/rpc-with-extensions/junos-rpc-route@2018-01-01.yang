@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for route command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-route-information {
@@ -43,17 +43,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf destination {
@@ -725,10 +714,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf verbosity_level {
@@ -904,17 +889,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
-           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
-           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf table {
@@ -952,10 +926,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf table {
@@ -993,10 +963,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf vpn-family {
@@ -1041,10 +1007,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
      }
@@ -1173,10 +1135,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf verbosity_level {
@@ -1236,10 +1194,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf-list community {
@@ -1289,10 +1243,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf instance-name {

@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for bgp command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.8";
    }
 
    rpc get-bgp-summary-information {
@@ -33,6 +33,11 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
          }
        }
        leaf group {
@@ -94,6 +99,11 @@
      input {
        leaf logical-system {
          description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
          type string {
          }
        }
@@ -280,6 +290,11 @@
          case fabric {
          }
        }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+         }
+       }
        leaf group-name {
          description "Show group information for a particular group";
          type string;
@@ -313,6 +328,11 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
          }
        }
        leaf exact-instance {
@@ -356,6 +376,11 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
          }
        }
        leaf verbosity_level {
@@ -406,6 +431,11 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
          }
        }
        leaf instance {
