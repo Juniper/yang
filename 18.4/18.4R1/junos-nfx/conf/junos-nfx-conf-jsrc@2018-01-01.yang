@@ -22,7 +22,7 @@
    description "Junos jsrc configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1.7";
+     description "Junos: 18.4R1.8";
    }
 
    augment /jc:configuration {
