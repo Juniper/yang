@@ -14,7 +14,7 @@
    description "This module contains definitions for Junos YANG extensions.";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.8";
+     description "Junos: 18.3R1.9";
    }
 
    extension must {

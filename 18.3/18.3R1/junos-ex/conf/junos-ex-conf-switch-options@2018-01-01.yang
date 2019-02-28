@@ -22,7 +22,7 @@
    description "Junos switch-options configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.8";
+     description "Junos: 18.3R1.9";
    }
 
    augment /jc:configuration {
