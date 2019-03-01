@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for clear command(s)";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.1";
+     description "Junos: 19.1R1.2";
    }
 
    rpc clear-system-commit {
@@ -92,6 +92,26 @@
          }
          case actual-tag {
            anyxml clear-system-login-lockout;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc clear-pfe-multicast-stat {
+     input {
+       leaf multicast-statistics {
+         description "Clear per route multicast counters";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
          }
          case multichassis-tag {
            anyxml multi-routing-engine-results;

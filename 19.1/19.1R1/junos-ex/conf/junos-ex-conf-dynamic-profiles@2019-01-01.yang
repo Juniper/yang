@@ -22,7 +22,7 @@
    description "Junos dynamic-profiles configuration module";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.1";
+     description "Junos: 19.1R1.2";
    }
 
    augment /jc:configuration {

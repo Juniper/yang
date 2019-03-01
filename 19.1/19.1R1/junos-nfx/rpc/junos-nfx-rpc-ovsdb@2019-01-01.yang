@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for ovsdb command(s)";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.1";
+     description "Junos: 19.1R1.2";
    }
 
    rpc get-ovsdb-controller-information {
