@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for database-replication command(s)";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.2";
+     description "Junos: 19.1R1.3";
    }
 
    rpc get-database-replication-statistics-information {

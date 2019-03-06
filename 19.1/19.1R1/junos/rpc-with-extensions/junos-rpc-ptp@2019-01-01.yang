@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for ptp command(s)";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.2";
+     description "Junos: 19.1R1.3";
    }
 
    rpc get-ptp-global-information {

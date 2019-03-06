@@ -22,7 +22,7 @@
    description "Junos virtual-chassis configuration module";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.2";
+     description "Junos: 19.1R1.3";
    }
 
    augment /jc:configuration {

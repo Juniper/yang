@@ -26,7 +26,7 @@
    description "Junos chassis configuration module";
 
    revision 2019-01-01 {
-     description "Junos: 19.1R1.2";
+     description "Junos: 19.1R1.3";
    }
 
    augment /jc:configuration {
@@ -5686,6 +5686,8 @@
          type enumeration {
            enum "reset" {
              description "Reset FPC";
+             junos:must "(!(\".. .. action disable-pfe\"))";
+             junos:must-message "'reset' and 'disable-pfe' cannot be both configured";
              junos:must "(!(\".. .. action offline\"))";
              junos:must-message "'reset' and 'offline' cannot be both configured";
            }
