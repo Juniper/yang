@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for flexible-tunnels command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.8";
    }
 
    rpc get-flexible-tunnels-profiles {

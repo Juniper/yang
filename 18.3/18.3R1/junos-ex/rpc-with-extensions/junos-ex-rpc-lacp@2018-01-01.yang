@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for lacp command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.9";
    }
 
    rpc get-lacp-interface-statistics {

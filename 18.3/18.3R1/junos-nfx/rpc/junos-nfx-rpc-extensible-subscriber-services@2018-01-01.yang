@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for extensible-subscriber-services command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.9";
    }
 
    rpc get-extensible-subscriber-services-sessions {

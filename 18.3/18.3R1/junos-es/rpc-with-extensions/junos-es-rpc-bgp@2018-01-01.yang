@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for bgp command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.9";
    }
 
    rpc get-bgp-summary-information {
@@ -43,6 +43,13 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf group {
@@ -109,6 +116,13 @@
          type string {
            junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
            junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf verbosity_level {
@@ -302,6 +316,13 @@
          case fabric {
          }
        }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
+         }
+       }
        leaf group-name {
          description "Show group information for a particular group";
          type string;
@@ -337,6 +358,13 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf exact-instance {
@@ -382,6 +410,13 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf verbosity_level {
@@ -434,6 +469,13 @@
            }
          }
          case fabric {
+         }
+       }
+       leaf tenant {
+         description "Name of tenant, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
          }
        }
        leaf instance {

@@ -22,7 +22,7 @@
    description "Junos YANG module for configuration hierarchies.";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.8";
    }
 
    container configuration {
@@ -92199,8 +92199,6 @@
        ordered-by user;
        description "Interface name for this VLAN";
        leaf name {
-         junos:must "(!(\".. .. switch-options interface $$ interface-mac-limit\"))";
-         junos:must-message "Interface mac limit should not be configured at VLAN level for sub interfaces";
          junos:must "((!(\"interfaces $$-IFL family\") || \"interfaces $$-IFL family ethernet-switching\"))";
          junos:must-message "only family bridge can be configured on this interface";
          junos:must "((!((\"interfaces $$ vlan-id-list\" || \"interfaces $$ vlan-tags inner-list\")) || !((\".. .. vlan-id\" || \".. .. vlan-tags\"))))";

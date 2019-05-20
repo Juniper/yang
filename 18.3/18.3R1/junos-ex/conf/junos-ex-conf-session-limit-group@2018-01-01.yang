@@ -22,7 +22,7 @@
    description "Junos session-limit-group configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.9";
    }
 
    augment /jc:configuration {

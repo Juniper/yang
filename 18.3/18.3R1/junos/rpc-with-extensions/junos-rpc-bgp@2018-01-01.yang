@@ -26,7 +26,7 @@
    description "Junos RPC YANG module for bgp command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.9";
    }
 
    rpc get-bgp-summary-information {
@@ -43,10 +43,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf group {
@@ -214,10 +210,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf verbosity_level {
@@ -266,10 +258,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf label {
@@ -312,10 +300,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf group-name {
@@ -353,10 +337,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf exact-instance {
@@ -402,10 +382,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf verbosity_level {
@@ -458,10 +434,6 @@
            }
          }
          case fabric {
-           leaf fabric {
-             description "Internal fabric state";
-             type empty;
-           }
          }
        }
        leaf instance {

@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for protection-group command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.8";
    }
 
    rpc get-raps-pdu-information {

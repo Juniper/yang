@@ -18,7 +18,7 @@
    description "Junos RPC YANG module for route command(s)";
 
    revision 2018-01-01 {
-     description "Junos: 18.3R1.1";
+     description "Junos: 18.3R1.9";
    }
 
    rpc get-route-information {
@@ -37,11 +37,6 @@
              description "Internal fabric state";
              type empty;
            }
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
          }
        }
        leaf destination {
@@ -983,11 +978,6 @@
              description "Internal fabric state";
              type empty;
            }
-         }
-       }
-       leaf tenant {
-         description "Name of tenant, or 'all'";
-         type string {
          }
        }
        leaf table {

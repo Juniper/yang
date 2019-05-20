@@ -22,7 +22,7 @@
    description "Junos firewall configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.8";
    }
 
    augment /jc:configuration {
@@ -3507,10 +3507,6 @@
              }
            }
          }
-         leaf egress-to-ingress {
-           description "Match egress fields in ingress";
-           type empty;
-         }
          choice flex-mask_choice {
            case case_1 {
              container flexible-match-mask {
@@ -4667,10 +4663,6 @@
          description "Match Differentiated Services (DiffServ) code point";
          type empty;
        }
-       leaf egress-to-ingress {
-         description "Match egress fields in ingress";
-         type empty;
-       }
      }
    }
    grouping inet_dialer_filter {
@@ -5145,10 +5137,6 @@
          }
          leaf is-fragment {
            description "Match if packet is a fragment";
-           type empty;
-         }
-         leaf egress-to-ingress {
-           description "Match egress fields in ingress";
            type empty;
          }
          choice fragment-offset_choice {
@@ -6697,10 +6685,6 @@
        }
        leaf ttl {
          description "Match IP ttl type";
-         type empty;
-       }
-       leaf egress-to-ingress {
-         description "Match egress fields in ingress";
          type empty;
        }
      }

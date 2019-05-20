@@ -26,7 +26,7 @@
    description "Junos logical-systems configuration module";
 
    revision 2018-01-01 {
-     description "Junos: 18.4R1";
+     description "Junos: 18.4R1.8";
    }
 
    augment /jc:configuration {
@@ -5507,10 +5507,6 @@
              }
            }
          }
-         leaf egress-to-ingress {
-           description "Match egress fields in ingress";
-           type empty;
-         }
          choice flex-mask_choice {
            case case_1 {
              container flexible-match-mask {
@@ -6827,10 +6823,6 @@
          description "Match Differentiated Services (DiffServ) code point";
          type empty;
        }
-       leaf egress-to-ingress {
-         description "Match egress fields in ingress";
-         type empty;
-       }
      }
    }
    grouping inet_dialer_filter {
@@ -7337,10 +7329,6 @@
          }
          leaf is-fragment {
            description "Match if packet is a fragment";
-           type empty;
-         }
-         leaf egress-to-ingress {
-           description "Match egress fields in ingress";
            type empty;
          }
          choice fragment-offset_choice {
@@ -9091,10 +9079,6 @@
        }
        leaf ttl {
          description "Match IP ttl type";
-         type empty;
-       }
-       leaf egress-to-ingress {
-         description "Match egress fields in ingress";
          type empty;
        }
      }
@@ -102115,8 +102099,6 @@
        ordered-by user;
        description "Interface name for this VLAN";
        leaf name {
-         junos:must "(!(\".. .. switch-options interface $$ interface-mac-limit\"))";
-         junos:must-message "Interface mac limit should not be configured at VLAN level for sub interfaces";
          junos:must "((!(\"interfaces $$-IFL family\") || \"interfaces $$-IFL family ethernet-switching\"))";
          junos:must-message "only family bridge can be configured on this interface";
          junos:must "((!((\"interfaces $$ vlan-id-list\" || \"interfaces $$ vlan-tags inner-list\")) || !((\".. .. vlan-id\" || \".. .. vlan-tags\"))))";
@@ -102133,6 +102115,8 @@
          junos:must-message "vlan-tags inner-range is specified for this logical interface; 'vlan-id all' or 'vlan-id inner-all' should also be enabled";
          junos:must "((!(\"interfaces $$-IFL vlan-id-range\") || \".. .. vlan-id all\"))";
          junos:must-message "vlan-id-range is specified for this logical interface; 'vlan-id all' should also be enabled";
+         junos:must "(!(\".. .. switch-options interface $$ interface-mac-limit\"))";
+         junos:must-message "Interface mac limit should not be configured at VLAN level for sub interfaces";
          junos:must "((!(\"interfaces $$-IFL vlan-id-list\") || !((\"interfaces $$-IFL input-vlan-map swap\" || \"interfaces $$-IFL input-vlan-map pop\"))))";
          junos:must-message "interface with vlan-id-list and input-vlan-map swap/pop is not supported";
          junos:must "((!(\"interfaces $$-IFL vlan-id\") || !((\".. .. vlan-tags\" || \".. .. vlan-id-list\"))))";
