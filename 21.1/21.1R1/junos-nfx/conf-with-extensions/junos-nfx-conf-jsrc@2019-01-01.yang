@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2021 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-conf-jsrc {
+   namespace "http://yang.juniper.net/junos-nfx/conf/jsrc";
+
+   prefix jc-jsrc;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2019-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2019-01-01;
+   }
+
+   import junos-nfx-conf-root {
+     prefix jc;
+     revision-date 2019-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos jsrc configuration module";
+
+   revision 2019-01-01 {
+     description "Junos: 21.1R1.11";
+   }
+
+   augment /jc:configuration {
+     uses jsrc-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses jsrc-group;
+   }
+   grouping jsrc-group {
+     container jsrc {
+       description "JSRC partition configuration";
+       uses jsrc-options;
+     }
+   }
+   grouping jsrc-options {
+     uses apply-advanced;
+     list partition {
+       key name;
+       ordered-by user;
+       description "JSRC partition definition";
+       leaf name {
+         description "JSRC partition name";
+         type string {
+           length "1 .. 63";
+         }
+       }
+       uses apply-advanced;
+       leaf diameter-instance {
+         description "JSRC diameter instance";
+         junos:must "(\"diameter origin\")";
+         junos:must-message "Diameter origin must be defined in the [edit diameter origin] hierarchy";
+         type string {
+           length "1 .. 63";
+         }
+       }
+       leaf destination-realm {
+         description "JSRC destination realm";
+         type string {
+           length "1 .. 63";
+         }
+       }
+       leaf destination-host {
+         description "JSRC destination host";
+         type string {
+           length "1 .. 63";
+         }
+       }
+     }
+   }
+   grouping apply-advanced {
+     description "Apply advanced configuration logic";
+     leaf-list apply-groups {
+       ordered-by user;
+       description "Groups from which to inherit configuration data";
+       type string;
+     }
+     leaf-list apply-groups-except {
+       ordered-by user;
+       description "Don't inherit configuration data from these groups";
+       type string;
+     }
+     list apply-macro {
+       key name;
+       ordered-by user;
+       description "Macro and parameters for commit script expansion";
+       uses apply-macro-type;
+     }
+   }
+   grouping apply-macro-type {
+     description "Macro data for commit-script expansion";
+     leaf name {
+       description "Name of the macro to be expanded";
+       type string;
+     }
+     list data {
+       key name;
+       uses macro-data-type;
+     }
+   }
+   grouping macro-data-type {
+     leaf name {
+       description "Keyword part of the keyword-value pair";
+       type string;
+     }
+     leaf value {
+       description "Value part of the keyword-value pair";
+       type string;
+     }
+   }
+ }
