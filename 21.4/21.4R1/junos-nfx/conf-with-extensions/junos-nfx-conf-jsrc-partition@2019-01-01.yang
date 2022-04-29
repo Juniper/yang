@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2021 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-conf-jsrc-partition {
+   namespace "http://yang.juniper.net/junos-nfx/conf/jsrc-partition";
+
+   prefix jc-jsrc-partition;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2019-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2019-01-01;
+   }
+
+   import junos-nfx-conf-root {
+     prefix jc;
+     revision-date 2019-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos jsrc-partition configuration module";
+
+   revision 2019-01-01 {
+     description "Junos: 21.4R1.12";
+   }
+
+   augment /jc:configuration {
+     uses jsrc-partition-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses jsrc-partition-group;
+   }
+   grouping jsrc-partition-group {
+     container jsrc-partition {
+       description "JSRC partition configuration";
+       leaf jsrc-partition-name {
+         description "JSRC partition name";
+         junos:must "(\"jsrc partition $$\")";
+         junos:must-message "JSRC partition name must be defined in the [edit jsrc partition] hierarchy";
+         type string {
+           length "1 .. 63";
+         }
+       }
+     }
+   }
+ }
