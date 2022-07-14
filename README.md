@@ -4,6 +4,7 @@ Yang models for the Junos platform
 #device-specific
 
 Starting from Junos OS Release 17.4R1, to generate device-specific modules, configure the device-specific configuration statement at the [edit system services netconf yang-modules] hierarchy level and generate the Yang modules from device, if device-specific Yang modules are needed
+Reference: https://www.juniper.net/documentation/us/en/software/junos/netconf/topics/ref/command/show-system-schema.html
 
 #Usage
 The Yang files are tested for compilation with pyang v1.5. Before consumption by an NMS, this requires changes to handle non-YANG Junos data models.
