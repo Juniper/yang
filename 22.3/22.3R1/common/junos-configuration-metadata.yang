@@ -1,0 +1,66 @@
+/*
+ * $Id: junos-configuration-metadata.yang 1276067 2022-08-03 15:09:47Z ramas $
+ *
+ * junos-configuration-metadata.yang -- Defines annotations (RFC 7951) for
+ * Junos configuration metadata operations.
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+module junos-configuration-metadata {
+    namespace "http://yang.juniper.net/junos/jcmd";
+    prefix "jcmd";
+
+    import ietf-yang-metadata {
+        prefix "md";
+    }
+
+    organization
+        "Juniper Networks, Inc.";
+
+    contact
+        "yang-support@juniper.net";
+
+    description
+        "This Yang module defines annotations (RFC 7952) for Junos configuration
+        metadata operations.";
+
+    revision 2021-09-01 {
+        description
+            "Initial version.";
+    }
+
+    md:annotation active {
+        type boolean;
+        description
+            "This annotation can be used in configuration XML/JSON to
+            deactivate/activate a configuration element. Specifying the value
+            'false' deactivates the configuration element. Specifying the
+            value 'true' activates the configuration element. When the
+            configuration element is deactivated and committed, the element
+            remains in the configuration, but the element does not affect the
+            functioning of the device.";
+    }
+
+    md:annotation protect {
+        type boolean;
+        description
+            "This annotation can be used in configuration XML/JSON to
+            protect/unprotect the configuration hierarchies and statements.
+            Specifying the value 'true' protects the configuration
+            hierarchy/statement. Specifying the value 'false' unprotects the
+            configuration hiearchy/statement. The protect operation
+            prevents changes to selected (protected) configuration hierarchies
+            and statements.";
+    }
+
+    md:annotation comment {
+        type string;
+        description
+            "This annotation must be used in configuration XML/JSON to
+            add comments to a configuration element. To remove the existing
+            comment, empty string has to be supplied as a value for this
+            annotation.";
+    }
+}
+

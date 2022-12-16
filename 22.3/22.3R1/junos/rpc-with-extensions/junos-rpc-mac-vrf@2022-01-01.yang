@@ -1,0 +1,2667 @@
+/*
+ * Copyright (c) 2022 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-mac-vrf {
+   namespace "http://yang.juniper.net/junos/rpc/mac-vrf";
+
+   prefix mac-vrf;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2022-01-01;
+   }
+
+   import junos-common-odl-extensions {
+     prefix junos-odl;
+     revision-date 2022-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2022-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for mac-vrf command(s)";
+
+   revision 2022-01-01 {
+     description "Junos: 22.3R1.9";
+   }
+
+   rpc get-mac-vrf-instance-information {
+     description "Show EVPN instance information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance-name {
+         description "Name of EVPN instance";
+         default "all";
+         type string;
+       }
+       leaf neighbor {
+         description "Address of EVPN neighbor";
+         type jt:ipaddr;
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "brief" {
+             description "Display brief version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+           enum "designated-forwarder" {
+             description "Display only designated forwarder information";
+           }
+           enum "backup-forwarder" {
+             description "Display only backup forwarder information";
+           }
+           enum "esi-info" {
+             description "Display only ESI information";
+           }
+           enum "neighbor-info" {
+             description "Display only neighbor information";
+           }
+           enum "bridge-domains" {
+             description "Display detailed bridge-domain information";
+           }
+         }
+       }
+       leaf get-mac-vrf-instance-dci-information {
+         description "Display dci information";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-instance-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-database-information {
+     description "Show EVPN internal MAC database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf mac-address {
+         description "Display a specifc MAC address";
+         type jt:mac-addr;
+       }
+       leaf instance {
+         description "Display MAC address from a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display MAC address with a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       choice origin-choice {
+         case neighbor {
+           leaf neighbor {
+             description "Display MAC address learned from a specific neighbor";
+             type jt:ipaddr;
+           }
+         }
+         case interface {
+           leaf interface {
+             description "Display MAC address learned from a specific interface";
+             type string;
+           }
+         }
+         case origin {
+           leaf origin {
+             description "Display MAC address with a specific origin";
+             type enumeration {
+               enum "local" {
+                 description "Display local MAC address";
+               }
+               enum "remote" {
+                 description "Display remote MAC address";
+               }
+               enum "dci-remote" {
+                 description "Display MAC addresses received from DCI";
+               }
+             }
+           }
+         }
+       }
+       leaf state {
+         description "Display MAC address with a specific state";
+         type enumeration {
+           enum "default-gateway" {
+             description "Display default gateway MAC address";
+           }
+           enum "static" {
+             description "Display static MAC address";
+           }
+           enum "pinned" {
+             description "Display pinned MAC address";
+           }
+           enum "duplicate" {
+             description "Display duplicate MAC address";
+           }
+           enum "dci-adv" {
+             description "Display MAC advertised to DCI";
+           }
+           enum "dc-adv" {
+             description "Display MAC advertised to DC";
+           }
+         }
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-database-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-p2mp-information {
+     description "Show EVPN p2mp information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display p2mp information for a specific EVPN instance";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-p2mp-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-status {
+     description "Show general status";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-multicast-snooping-status;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-ar-nexthops-data {
+     description "Show next-hops information";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf index {
+         description "Display for a specific nexthop id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-multicast-snooping-ar-nexthops-data;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-ar-mh-peers-data {
+     description "Show multi-homed peers";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-multicast-snooping-ar-mh-peers-data;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-ar-replicators-data {
+     description "Show replicators";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-multicast-snooping-ar-replicators-data;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-next-hops-information {
+     description "Show EVPN multicast-snooping nexthops table";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf identifier {
+         description "ID of next hop";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml multicast-next-hops-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-igmp-proxy-information {
+     description "Show EVPN igmp snooping proxy";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-igmp-snooping-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-igmp-database-information {
+     description "Show EVPN igmp snooping database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf interface {
+         description "Display for a specific interface";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-igmp-snooping-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mld-proxy-information {
+     description "Show EVPN mld snooping proxy";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-mld-snooping-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mld-database-information {
+     description "Show EVPN mld snooping database";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf interface {
+         description "Display for a specific interface";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-mld-snooping-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-oism-information {
+     description "Show EVPN OISM information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf l3-context {
+         description "Name of specific EVPN L3 context";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "brief" {
+             description "Display brief version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml evpn-oism-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-routing-instance-information {
+     description "Show routing instances";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Particular vlan-name or 'all'";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-routing-table-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-interface-details {
+     description "Show interface";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of interface for which to display ethernet-switching information";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ng-l2ald-iff-interface-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-vlan-statistics-information {
+     description "Show bridge statistics information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml bridge-statistics-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-table {
+     description "Show media access control table";
+     input {
+       leaf instance {
+         description "Display information for a specified vpls";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf vlan-id {
+         description "Display MAC address learned on a specified VLAN";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+           enum "age" {
+             description "Display age of a single mac-address";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-rtb-macdb;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-interface-mac-table {
+     description "Display MAC table for a specified interface";
+     input {
+       choice interface-choice {
+         case interface-name {
+           leaf interface-name {
+             description "Name of interface for which to display table";
+             type string;
+           }
+         }
+         case all {
+           leaf all {
+             description "Display MAC table for all the interfaces";
+             type empty;
+           }
+         }
+       }
+       leaf remote-beb-mac-address {
+         description "Remote backbone edge bridge MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf vlan-id {
+         description "Display MAC address learned on a specified VLAN";
+         type string;
+       }
+       leaf isid {
+         description "Display Information for specified ISID or all ISID(s)";
+         type string;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+           enum "age" {
+             description "Display age of a single mac-address";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-interface-macdb;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-ip-table {
+     description "Show IP table for EVPN instances";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-rtb-mac-ip-db;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-kernel-ip-table-information {
+     description "Entries present in kernel";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-rtb-mac-ip-kernel-db;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-kernel-ipv4-table-information {
+     description "IPv4 entries present in kernel";
+     input {
+       leaf bd-id {
+         description "Display IP address under particular bd-id";
+         type string;
+       }
+       leaf ipv4-addr {
+         description "Display kernel information for ip";
+         default "all";
+         type jt:ipv4addr;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-rtb-mac-ip-kernel-db;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-kernel-ipv6-table-information {
+     description "IPv6 entries present in kernel";
+     input {
+       leaf bd-id {
+         description "Display IP address under particular bd-id";
+         type string;
+       }
+       leaf ipv6-addr {
+         description "Display kernel information for ip";
+         default "all";
+         type jt:ipv6addr;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-rtb-mac-ip-kernel-db;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-ip4-table {
+     description "Show INET entries associated with MACs learned via ARP";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN, or 'all'";
+         default "all";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ng-l2rtb-evpn-arp-db;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-ipv6-table {
+     description "Show INET6 entries associated with MACs learned via NDP";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN, or 'all'";
+         default "all";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ng-l2rtb-evpn-nd-db;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svtep-information {
+     description "Display source VXLAN tunnel endpoint configuration";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-source-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svtep-ip-information {
+     description "Display VXLAN configuration for source ip address";
+     input {
+       leaf virtual-tunnel-end-point-source-ip {
+         description "Display information for a source ip";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-source-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rvtep-information {
+     description "Display remote VXLAN tunnel endpoint information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "detail";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-source-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rvtep-mactable-information {
+     description "Display remote VTEP MAC table";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-remote-vtep-mactable;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rvtep-ip-information {
+     description "Display remote VTEP MAC table for ip address";
+     input {
+       leaf virtual-tunnel-end-point-remote-ip {
+         description "Display information for a remote end point";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-remote-vtep-ip;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rmt-svtep-ip-information {
+     description "Display remote VXLAN endpoints associated with source endpoint";
+     input {
+       leaf virtual-tunnel-end-point-source-ip {
+         description "Display information for a source ip";
+         type jt:ipaddr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-source-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-esi-information {
+     description "Display VXLAN tunnel endpoint ESI information";
+     input {
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf esi-identifier {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf svlbnh {
+         type enumeration {
+           enum "svlbnh" {
+             description "Display Shared VLBNH information for a given ESI";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-esi-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-arvlbnh-information {
+     description "Display VXLAN tunnel endpoint AR-VLBNH information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-arvlbnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-arvlbnh-information {
+     description "Display VxLAN AR-VLBNH information for VLBNH index";
+     input {
+       leaf vxlan-ar-vlbnh-index {
+         description "Display information for a specified index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-arvlbnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-info-rtt-index {
+     description "Display VxLAN AR-VLBNH information for RTT index";
+     input {
+       leaf vxlan-ar-vlbnh-rtt-index {
+         description "Display information for a specified RTT index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-arvlbnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-info-bd-index {
+     description "Display VxLAN AR-VLBNH information for BD index";
+     input {
+       leaf vxlan-ar-vlbnh-bd-index {
+         description "Display information for a specified BD index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-arvlbnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-mh-vtep-information {
+     description "Display Multi Homing Peer VTEP information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-mh-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rtt-mh-vtep-information {
+     description "Display MH Peer table for routing instance";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-rtt-mh-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-ip-mh-vtep-information {
+     description "Display MH Peer table for ip address";
+     input {
+       leaf virtual-tunnel-end-point-remote-ip {
+         description "Display information for a remote end point";
+         type jt:ipaddr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-ip-mh-vtep-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svlbnh-information {
+     description "Display Shared VLBNH information";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-svlbnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svlbnh-overflow {
+     description "Display pending requests for SVLBNH allocation";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml svlbnh-overflow-list;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svlbnh-info-index {
+     description "Display information for a particular SVLBNH index";
+     input {
+       leaf svlbnh-id {
+         description "Display information for a specified index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-svlbnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rrnh-information {
+     description "Display FMM Reroute-NH information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml vxlan-rrnh-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-flood-information {
+     description "Show bridging flooding information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "detail";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-instance;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mbb-information {
+     description "Show bridge flooding information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "detail";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-instance;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-bd-flood-route-information {
+     description "Show route for flooding traffic of a bridge domain if no-local-switching is not enabled";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-all-ce-flood-route-information {
+     description "Show route for flooding traffic to all CE routers if no-local-switching is enabled";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-ve-flood-route-information {
+     description "Show route for flooding traffic to all VE routers if no-local-switching is enabled";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-re-flood-route-information {
+     description "Show route for Routing Engine flooding to all interfaces";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mlp-flood-route-information {
+     description "Show route for flooding traffic to MAC learning chips";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-alt-root-flood-route-information {
+     description "Show STP alt-root flooding route used for interface";
+     input {
+       leaf interface {
+         description "Interface for which to show alternate-root flooding route";
+         type union {
+           type jt:interface-unit;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-event-queue-information {
+     description "Show queue of pending bridge flood events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-vpls-flood-event-queue;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-fld-group {
+     description "Display  Flood Group info";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-flood-group;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-fld-group-ri-information {
+     description "Display Flood Group info for routing instance";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bd-index {
+         description "Bd id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-flood-group-ri;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-eamnh-information {
+     description "Display EAMNH and member info";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-enh-eamnh-info;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-global-mac-count {
+     description "Show layer-2 global mac address count";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-global-macdb-count;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-global-mac-ip-count {
+     description "Show global MAC+IP bindings count";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-global-mac-ip-count;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-global-information {
+     description "Show process-related information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-global-configuration;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mgrp-policy {
+     description "Display global mesh group policy";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-mgrp-policy;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-mgrp-policy-ri {
+     description "Display Mesh Group policy for routing instance";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf mgrp-id {
+         description "Mesh group id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-mgrp-policy-ri;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vlan-information {
+     description "Show VLANs information";
+     input {
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         type string;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf interface {
+         description "Name of interface for which to display table";
+         type union {
+           type jt:interface-unit;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ng-l2ald-vlan-instance-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-vlan-operational-information {
+     description "Show operational bridging instance";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ng-l2ald-vlan-instance-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-fwd-instance-information {
+     description "Show global mac-vrf and forwarding instance mapping";
+     input {
+       leaf forwarding-instance-id {
+         description "Show mac vrf instances mapped to a forwarding instance id";
+         type string;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml l2ald-get-mac-vrf-fwd-inst-mapping;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+ }

@@ -1,0 +1,4087 @@
+/*
+ * Copyright (c) 2022 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-system {
+   namespace "http://yang.juniper.net/junos/rpc/system";
+
+   prefix system;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2022-01-01;
+   }
+
+   import junos-common-odl-extensions {
+     prefix junos-odl;
+     revision-date 2022-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2022-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for system command(s)";
+
+   revision 2022-01-01 {
+     description "Junos: 22.3R1.9";
+   }
+
+   rpc get-commit-information {
+     description "Show pending commit requests (if any) and commit history";
+     input {
+       leaf include-configuration-revision {
+         description "Display configuration revision information against each commit record";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml commit-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-commit-revision-information {
+     description "Show latest commit revision number for shared database";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml commit-revision-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-pending-commit-sync-jobs {
+     description "Show pending commit synchronize jobs";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml commit-sync-jobs;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-commit-server-information {
+     description "Show commit server detail";
+     input {
+       leaf status {
+         description "Display commit server status";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml commit-server-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-commit-server-queue-information {
+     description "Show transaction ids in the commit queue";
+     input {
+       choice job-status-or-id {
+         case id {
+           leaf id {
+             description "Show commit queue id";
+             type union {
+               type uint32;
+               type string {
+                 pattern "<.*>|$.*";
+               }
+             }
+           }
+         }
+         case job-status {
+           leaf job-status {
+             description "Restrict display by job status";
+             default "all";
+             type enumeration {
+               enum "all" {
+                 description "Display all jobs";
+               }
+               enum "error" {
+                 description "Display jobs that had errors";
+               }
+               enum "success" {
+                 description "Display jobs that succeeded";
+               }
+               enum "pending" {
+                 description "Display jobs that are pending";
+               }
+             }
+           }
+         }
+       }
+       leaf patch {
+         description "Display commit queue patch";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml commit-server-queue-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-rescue-information {
+     description "Show rescue configuration";
+     input {
+       leaf format {
+         description "Output format of configuration (XML or text or JSON)";
+         type enumeration {
+           enum "text" {
+             description "Output text configuration";
+           }
+           enum "xml" {
+             description "Output XML configuration";
+           }
+           enum "json" {
+             description "Output JSON configuration";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml rescue-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-configuration-by-revision {
+     description "Show configuration for the specified configuration revision";
+     input {
+       leaf revision-string {
+         description "Configuration revision string";
+         type string;
+         mandatory true;
+       }
+       choice configuration-revision-choice {
+         case rollback-number {
+           leaf rollback-number {
+             description "Show corresponding rollback number for the given configuration revision";
+             type empty;
+           }
+         }
+         case compare {
+           leaf compare {
+             description "Configuration revision to compare";
+             type string;
+           }
+         }
+       }
+       leaf format {
+         description "Output format of configuration (XML or text or JSON)";
+         type enumeration {
+           enum "text" {
+             description "Output text configuration";
+           }
+           enum "xml" {
+             description "Output XML configuration";
+           }
+           enum "json" {
+             description "Output JSON configuration";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml configuration-revision-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-database-usage {
+     description "Show configuration database usage";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml database-usage;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-archival {
+     description "List files queued up for archive transfer";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml directory-list;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-rollback-information {
+     description "Show rolled back configuration";
+     input {
+       leaf rollback {
+         description "Rollback number to display";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 49";
+           }
+         }
+         mandatory true;
+       }
+       leaf configuration-revision {
+         description "Show corresponding configuration revision for this rollback number";
+         type empty;
+       }
+       leaf compare {
+         description "Rollback number to compare";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 49";
+           }
+         }
+       }
+       leaf format {
+         description "Output format of configuration (XML or text or JSON)";
+         type enumeration {
+           enum "text" {
+             description "Output text configuration";
+           }
+           enum "xml" {
+             description "Output XML configuration";
+           }
+           enum "json" {
+             description "Output JSON configuration";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml rollback-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-alarm-information {
+     description "Show system alarm status";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml alarm-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc unified-services-chassis-mode-status {
+     description "Current status of Unified-Services feature";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml unified-services-status-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-uptime-information {
+     description "Show time since system and processes started";
+     input {
+       uses command-forwarding;
+       choice dcf-role {
+         description "Device type";
+         case interconnect-device {
+         }
+         case node-group {
+         }
+         case infrastructure {
+         }
+         case director-group {
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-uptime-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-summary-information {
+     description "Show feature licenses information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-summary-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-information {
+     description "Show installed feature licenses";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-key-information {
+     description "Show license keys";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-key-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-usage-summary {
+     description "Show licensed features";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-usage-summary;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-revoked-info {
+     description "Show revoked licenses information";
+     status deprecated;
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-revoked-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-fpc-information {
+     description "Show license fpc information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-fpc-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-bandwidth-summary-information {
+     description "Show license bandwidth summary";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-bandwidth-summary;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-fpc-bandwidth-information {
+     description "Show license fpc bandwidth summary";
+     input {
+       leaf fpc-slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-bandwidth-summary;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-license-bandwidth-information {
+     description "Show fpc port bandwidth details";
+     input {
+       leaf fpc-slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml license-bandwidth-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-information {
+     description "Show system information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-login-lockout-information {
+     description "Show user accounts not permitted logins";
+     input {
+       leaf user {
+         description "Name of user";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-login-lockout-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-yang-schema {
+     description "Show system schema in various formats";
+     input {
+       leaf format {
+         description "The data modeling language of the schema";
+         default "yang";
+         type enumeration {
+           enum "yang" {
+             description "YANG (default)";
+           }
+         }
+       }
+       leaf identifier {
+         description "Module to be shown";
+         type string;
+         mandatory true;
+       }
+       leaf output-directory {
+         description "Directory to save requested YANG modules";
+         type string;
+         mandatory true;
+       }
+       leaf version {
+         description "Version of the schema requested";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-yang-packages {
+     description "Show YANG package(s) installed on system";
+     input {
+       leaf id {
+         description "Show YANG package with ID";
+         type string;
+       }
+       choice re-choice {
+         case re0 {
+           leaf re0 {
+             description "Add/Delete YANG module(s) on RE0";
+             type empty;
+           }
+         }
+         case re1 {
+           leaf re1 {
+             description "Add/Delete YANG module(s) on RE1";
+             type empty;
+           }
+         }
+         case other-routing-engine {
+           leaf other-routing-engine {
+             description "Add/Delete YANG module(s) on other RE";
+             type empty;
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml yang-pkgs-info;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-upm-summary-information {
+     description "User-plane manager summary information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-user-plane-cpm;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-upm-association-information {
+     description "User-plane manager association information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-user-plane-associations;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-upm-client-information {
+     description "User-plane manager client information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-user-plane-clients;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-upm-services-information {
+     description "User-plane services information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-user-plane-services;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-upm-service-information {
+     description "User-plane service information";
+     input {
+       leaf service-name {
+         description "Service name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-user-plane-service;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-control-plane-information {
+     description "Control-plane information";
+     input {
+       leaf control-plane-name {
+         description "Control plane name";
+         type string;
+         mandatory true;
+       }
+       leaf endpoint {
+         description "Name of the Endpoint";
+         type enumeration {
+           enum "all" {
+             description "All endpoints";
+           }
+           enum "Sci-Node" {
+             description "Node association";
+           }
+           enum "Sci-Stats" {
+             description "Statistics";
+           }
+           enum "Sci-Session" {
+             description "Smi session";
+           }
+           enum "Cpri-High" {
+             description "High priority I/O";
+           }
+           enum "Cpri-Med" {
+             description "Medium priority I/O";
+           }
+           enum "Cpri-Low" {
+             description "Low priority I/O";
+           }
+           enum "RepClientSS" {
+             description "Rep client state sync";
+           }
+           enum "RepServerSS" {
+             description "Rep server state sync";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-control-plane;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-summary-information {
+     description "Show Subscriber management summary";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-summary-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-statistics {
+     description "Show subscriber management statistics";
+     input {
+       leaf all {
+         description "Display all statistics";
+         type empty;
+       }
+       leaf dhcp {
+         description "Display dhcp statistics";
+         type empty;
+       }
+       leaf dvlan {
+         description "Display dvlan statistics";
+         type empty;
+       }
+       leaf ppp {
+         description "Display ppp statistics";
+         type empty;
+       }
+       leaf pppoe {
+         description "Display pppoe statistics";
+         type empty;
+       }
+       leaf l2tp {
+         description "Display l2tp statistics";
+         type empty;
+       }
+       leaf fixed-wireless-access {
+         description "Display fixed-wireless-access statistics";
+         type empty;
+       }
+       leaf agf {
+         description "Display agf statistics";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-statistics;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-route-information {
+     description "Show subscriber management route information";
+     input {
+       leaf family {
+         description "Name of family";
+         type enumeration {
+           enum "inet" {
+             description "IP version 4 (IPv4)";
+           }
+           enum "inet6" {
+             description "IP version 6 (IPv6)";
+           }
+         }
+       }
+       leaf route-type {
+         description "Type of route";
+         type enumeration {
+           enum "local" {
+             description "Local route";
+           }
+           enum "access" {
+             description "Access route";
+           }
+           enum "access-internal" {
+             description "Access-internal route";
+           }
+           enum "kernel" {
+             description "Kernel route";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+         }
+       }
+       leaf incomplete {
+         description "Display only incomplete routes";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-route-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-route-summary {
+     description "Show subscriber management route summary";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-route-summary;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-route-nh {
+     description "Show subscriber management route next-hop information";
+     input {
+       leaf index {
+         description "Next-hop index";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint16 {
+             range "1 .. 65535";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-route-nh;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-arp {
+     description "Show subscriber management arp information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-arp;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-arp-interface {
+     description "Name of interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-arp-interface;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-arp-address {
+     description "Ipv4 address";
+     input {
+       leaf ip-address {
+         description "Ipv4 address";
+         type jt:ipv4addr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-arp-address;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-ipv6-neighbors {
+     description "Show subscriber management ipv6 neighbors information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-ipv6-neighbors;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-ipv6-neighbor-interface {
+     description "Name of interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-ipv6-neighbor-interface;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-ipv6-neighbor-address {
+     description "Ipv6 address";
+     input {
+       leaf interface-name {
+         description "Ipv6 address";
+         type jt:ipv6addr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-ipv6-neighbor-address;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-ipv6-ra {
+     description "Show subscriber management ipv6 router-advertisement information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-ipv6-ra;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-ipv6-ra-interface {
+     description "Name of interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-ipv6-ra-interface;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-ipv6-ra-prefix {
+     description "Ipv6 prefix";
+     input {
+       leaf interface-prefix {
+         description "Ipv6 prefix";
+         type jt:ipv6addr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-ipv6-ra-prefix;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-v4-liveness {
+     description "Show subscriber management dhcpv4 liveness detection information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-v4-liveness;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-v4-liveness-interface {
+     description "Name of interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-v4-liveness-interface;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-v4-liveness-address {
+     description "Ipv4 address";
+     input {
+       leaf ip-address {
+         description "Ipv4 address";
+         type jt:ipv4addr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-v4-liveness-address;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-v6-liveness {
+     description "Show subscriber management dhcpv6 liveness detection information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-v6-liveness;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-v6-liveness-interface {
+     description "Name of interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-v6-liveness-interface;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-v6-liveness-address {
+     description "Ipv6 address";
+     input {
+       leaf interface-name {
+         description "Ipv6 address";
+         type jt:ipv6addr;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-management-v6-liveness-address;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-management-resiliency-information {
+     description "Show resiliency information";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "extensive" {
+             description "Display extensive information";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-mgmt-red-state {
+     description "Show subscriber management redundancy state";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-mgmt-red-state;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-mgmt-red-state-dhcp {
+     description "DHCP information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-mgmt-red-state-dhcp;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-mgmt-red-state-dhcp-alq {
+     description "Active-leasequery protocol";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-mgmt-red-state-dhcp-alq;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-mgmt-red-state-dhcp-alq-intf {
+     description "Underlying interface name";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-mgmt-red-state-dhcp-alq-intf;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscriber-mgmt-red-state-intf {
+     description "Underlying interface name";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscriber-mgmt-red-state-intf;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-core-dumps {
+     description "Show system core files";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml directory-list;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-core-file-information {
+     description "Display the stack trace of core file";
+     status deprecated;
+     input {
+       uses command-forwarding;
+       leaf display-style {
+         description "Option for viewing brief/detailed info about core file";
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "View stack trace with details of binary";
+           }
+           enum "brief" {
+             description "View details of binary";
+           }
+         }
+       }
+       leaf core-filename {
+         description "Name of core file";
+         type jt:filename;
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml core-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-core-file-satellite {
+     description "Show core-files on satellite devices";
+     input {
+       leaf fpc-slot {
+         description "Satellite slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "65 .. 254";
+           }
+         }
+       }
+       leaf device-alias {
+         description "Device alias";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-boot-media-information {
+     description "Display permanent boot media settings";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-boot-media-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-active-error-count-information {
+     description "Show all errors";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-count-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-active-error-information {
+     description "Show active errors";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-fpc-active-error-information {
+     description "Show active errors for FPC";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-sib-active-error-information {
+     description "Show active errors for SIB";
+     input {
+       leaf slot {
+         description "SIB slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-re-active-error-information {
+     description "Show active errors for RE";
+     input {
+       leaf slot {
+         description "RE slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-active-error-detail-information {
+     description "Show active errors detail";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-fpc-active-error-detail-information {
+     description "Show active errors detail for FPC";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+       leaf scope {
+         description "Specify scope";
+         type enumeration {
+           enum "board" {
+             description "Show board scope";
+           }
+           enum "pfe" {
+             description "Show pfe scope";
+           }
+         }
+       }
+       leaf category {
+         description "Specify category";
+         type enumeration {
+           enum "functional" {
+             description "Show functional category";
+           }
+           enum "memory" {
+             description "Show memory category";
+           }
+           enum "io" {
+             description "Show io category";
+           }
+           enum "storage" {
+             description "Show storage category";
+           }
+           enum "switch" {
+             description "Show switch category";
+           }
+           enum "processing" {
+             description "Show processing category";
+           }
+           enum "internal" {
+             description "Show internal category";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-sib-active-error-detail-information {
+     description "Show active errors detail for SIB";
+     input {
+       leaf slot {
+         description "SIB slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+       leaf scope {
+         description "Specify scope";
+         type enumeration {
+           enum "board" {
+             description "Show board scope";
+           }
+           enum "switch" {
+             description "Show switch scope";
+           }
+         }
+       }
+       leaf category {
+         description "Specify category";
+         type enumeration {
+           enum "functional" {
+             description "Show functional category";
+           }
+           enum "memory" {
+             description "Show memory category";
+           }
+           enum "io" {
+             description "Show io category";
+           }
+           enum "storage" {
+             description "Show storage category";
+           }
+           enum "switch" {
+             description "Show switch category";
+           }
+           enum "processing" {
+             description "Show processing category";
+           }
+           enum "internal" {
+             description "Show internal category";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-re-active-error-detail-information {
+     description "Show active errors detail for RE";
+     input {
+       leaf slot {
+         description "RE slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+         mandatory true;
+       }
+       leaf scope {
+         description "Specify scope";
+         type enumeration {
+           enum "board" {
+             description "Show board scope";
+           }
+         }
+       }
+       leaf category {
+         description "Specify category";
+         type enumeration {
+           enum "functional" {
+             description "Show functional category";
+           }
+           enum "memory" {
+             description "Show memory category";
+           }
+           enum "io" {
+             description "Show io category";
+           }
+           enum "storage" {
+             description "Show storage category";
+           }
+           enum "switch" {
+             description "Show switch category";
+           }
+           enum "processing" {
+             description "Show processing category";
+           }
+           enum "internal" {
+             description "Show internal category";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-inactive-error-information {
+     description "Show inactive errors";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-fpc-inactive-error-information {
+     description "Show inactive errors for FPC";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-sib-inactive-error-information {
+     description "Show inactive errors for SIB";
+     input {
+       leaf slot {
+         description "SIB slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-re-inactive-error-information {
+     description "Show inactive errors for RE";
+     input {
+       leaf slot {
+         description "RE slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-inactive-error-detail-information {
+     description "Show inactive errors detail";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-fpc-inactive-error-detail-information {
+     description "Show inactive errors detail for FPC";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+       leaf scope {
+         description "Specify scope";
+         type enumeration {
+           enum "board" {
+             description "Show board scope";
+           }
+           enum "pfe" {
+             description "Show pfe scope";
+           }
+         }
+       }
+       leaf category {
+         description "Specify category";
+         type enumeration {
+           enum "functional" {
+             description "Show functional category";
+           }
+           enum "memory" {
+             description "Show memory category";
+           }
+           enum "io" {
+             description "Show io category";
+           }
+           enum "storage" {
+             description "Show storage category";
+           }
+           enum "switch" {
+             description "Show switch category";
+           }
+           enum "processing" {
+             description "Show processing category";
+           }
+           enum "internal" {
+             description "Show internal category";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-sib-inactive-error-detail-information {
+     description "Show inactive errors detail for SIB";
+     input {
+       leaf slot {
+         description "SIB slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+       leaf scope {
+         description "Specify scope";
+         type enumeration {
+           enum "board" {
+             description "Show board scope";
+           }
+           enum "switch" {
+             description "Show switch scope";
+           }
+         }
+       }
+       leaf category {
+         description "Specify category";
+         type enumeration {
+           enum "functional" {
+             description "Show functional category";
+           }
+           enum "memory" {
+             description "Show memory category";
+           }
+           enum "io" {
+             description "Show io category";
+           }
+           enum "storage" {
+             description "Show storage category";
+           }
+           enum "switch" {
+             description "Show switch category";
+           }
+           enum "processing" {
+             description "Show processing category";
+           }
+           enum "internal" {
+             description "Show internal category";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-re-inactive-error-detail-information {
+     description "Show inactive errors detail for RE";
+     input {
+       leaf slot {
+         description "RE slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+         mandatory true;
+       }
+       leaf scope {
+         description "Specify scope";
+         type enumeration {
+           enum "board" {
+             description "Show board scope";
+           }
+         }
+       }
+       leaf category {
+         description "Specify category";
+         type enumeration {
+           enum "functional" {
+             description "Show functional category";
+           }
+           enum "memory" {
+             description "Show memory category";
+           }
+           enum "io" {
+             description "Show io category";
+           }
+           enum "storage" {
+             description "Show storage category";
+           }
+           enum "switch" {
+             description "Show switch category";
+           }
+           enum "processing" {
+             description "Show processing category";
+           }
+           enum "internal" {
+             description "Show internal category";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml inactive-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-active-fru-error-information {
+     description "Show fru error information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-fru-error-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-active-fru-error-detail-information {
+     description "Show fru error information in detail";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-fru-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-fpc-active-fru-error-detail-information {
+     description "Show active errors for FPC";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-fru-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-sib-active-fru-error-detail-information {
+     description "Show active errors for SIB";
+     input {
+       leaf slot {
+         description "SIB slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-fru-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-re-active-fru-error-detail-information {
+     description "Show active errors for RE";
+     input {
+       leaf slot {
+         description "RE slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-fru-error-detail-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-active-fru-error-id-information {
+     description "Show error information by error-id";
+     input {
+       leaf id {
+         description "URI for the error";
+         type string {
+           length "1 .. 255";
+           junos:posix-pattern "^(/[^/ ]+/[0-9]+)";
+           junos:pattern-message "Invalid error identifier format";
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml active-fru-error-id-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-health-mon-information {
+     description "Show health monitoring parameters";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml health-mon-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-health-mon-fpc-information {
+     description "Health parameters for FPC";
+     input {
+       leaf fpc-slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml health-mon-fpc-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-boot-console-information {
+     description "Show boot console port information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-buffer-informations {
+     description "Show buffer statistics";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml memory-statistics;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-queues-information {
+     description "Show queue statistics";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml queues-statistics;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-directory-usage-information {
+     description "Show local directory information";
+     input {
+       uses command-forwarding;
+       leaf path {
+         description "Path of root directory to traverse";
+         type string;
+       }
+       leaf depth {
+         description "Depth of directories to traverse";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml directory-usage-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-auto-snapshot-information {
+     description "Show auto-snapshot status when system booted from alternate slice";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml auto-snapshot-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-snapshot-information {
+     description "Show snapshot information";
+     input {
+       uses command-forwarding;
+       leaf slice {
+         description "Show snapshot information from specified partition";
+         status deprecated;
+         type enumeration {
+           enum "1" {
+             description "Show snapshot information from first partition";
+             status deprecated;
+           }
+           enum "2" {
+             description "Show snapshot information from second partition";
+             status deprecated;
+           }
+           enum "alternate" {
+             description "Show snapshot information from alternate partition";
+             status deprecated;
+           }
+         }
+       }
+       leaf media {
+         description "Media to show snapshot information from";
+         type enumeration {
+           enum "removable-compact-flash" {
+             description "Show snapshot information from removable compact flash";
+           }
+           enum "compact-flash" {
+             description "Show snapshot information from compact flash";
+           }
+           enum "usb" {
+             description "Show snapshot information from device connected to USB port";
+           }
+           enum "usb0" {
+             description "Show snapshot information from device connected to USB0";
+           }
+           enum "usb1" {
+             description "Show snapshot information from device connected to USB1";
+           }
+           enum "hard-disk" {
+             description "Show snapshot information from hard disk";
+           }
+           enum "internal" {
+             description "Show snapshot information from internal flash";
+           }
+           enum "external" {
+             description "Show snapshot information from external flash";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml snapshot-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-software-installation-status {
+     description "Show status of software installation";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml software-installation-status;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-package-backup-information {
+     description "Show status of old system software packages";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml package-backup-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-software-sets-information {
+     description "Show version of software sets available";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml software-sets-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-process-information {
+     description "Show system process table";
+     input {
+       uses command-forwarding;
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf wide {
+         description "Display information even if wider than 80 columns";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-process-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-process-brief-information {
+     description "Display brief output";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-process-health-information {
+     description "Show process health information";
+     input {
+       choice name_pid_choice {
+         case process-name {
+           leaf process-name {
+             description "Process name";
+             type string;
+           }
+         }
+         case pid {
+           leaf pid {
+             description "Process identifier";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type uint32 {
+                 range "1 .. 99999";
+               }
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-processes-health-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-process-resource-limits {
+     description "Show process resource limits";
+     input {
+       leaf process-name {
+         description "Process name";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml secpolinfo-policy-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-statistics-information {
+     description "Show statistics for protocol";
+     input {
+       uses command-forwarding;
+       leaf protocol {
+         type enumeration {
+           enum "ip" {
+             description "IP version 4 (IPv4)";
+           }
+           enum "ip6" {
+             description "IP version 6 (IPv6)";
+           }
+           enum "icmp" {
+             description "Internet Control Message Protocol";
+           }
+           enum "nd6" {
+             description "Internet Control Message Protocol for IPv6";
+           }
+           enum "icmp6" {
+             description "Internet Control Message Protocol for IPv6";
+           }
+           enum "tcp" {
+             description "Transmission Control Protocol";
+           }
+           enum "sctp" {
+             description "Stream Control Transmission Protocol";
+           }
+           enum "udp" {
+             description "User Datagram Protocol";
+           }
+           enum "igmp" {
+             description "Internet Gateway Management Protocol";
+           }
+           enum "arp" {
+             description "Address Resolution Protocol";
+           }
+           enum "clns" {
+             description "Connectionless Network Service";
+           }
+           enum "esis" {
+             description "End System-to-Intermediate System";
+           }
+           enum "tnp" {
+             description "Trivial Network Protocol";
+           }
+           enum "rdp" {
+             description "Reliable Datagram Protocol";
+           }
+           enum "ttp" {
+             description "TNP Tunneling Protocol";
+           }
+           enum "tudp" {
+             description "Trivial User Datagram Protocol";
+           }
+           enum "mpls" {
+             description "Multiprotocol Label Switching";
+           }
+           enum "ethoamcfm" {
+             description "Ethernet OAM protocol for connectivity fault management";
+           }
+           enum "ethoamlfm" {
+             description "Ethernet OAM protocol for link fault management";
+           }
+           enum "jsr" {
+             description "Juniper Socket Replication";
+           }
+         }
+       }
+       leaf backup {
+         description "Statistics of backup JunosVM";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml statistics;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-vpls-statistics {
+     description "Virtual private LAN service";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml statistics;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-bridge-statistics {
+     description "IEEE 802.1 Bridging";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml statistics;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-stats-extended {
+     description "System wide statistics";
+     input {
+       leaf protocol {
+         description "Show sysstem statistics extended protocol";
+         type enumeration {
+           enum "ipv4" {
+             description "Display ipv4 sysstem statistics";
+           }
+           enum "ipv6" {
+             description "Display ipv6 sysstem statistics";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml extended-system-stats;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-storage {
+     description "Show local storage data";
+     input {
+       uses command-forwarding;
+       leaf detail {
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-storage-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-storage-partitions {
+     description "Show partitions information for the boot media";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-storage-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-storage-satellite {
+     description "Show satellite device storage data";
+     input {
+       leaf fpc-slot {
+         description "Satellite slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "65 .. 254";
+           }
+         }
+       }
+       leaf device-alias {
+         description "Device alias";
+         type string;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-storage-mmc-information {
+     description "Show MMC storage information";
+     input {
+       uses command-forwarding;
+       leaf device-name {
+         type enumeration {
+           enum "all" {
+             description "Show all MMCs";
+           }
+           enum "mmcsd0" {
+             description "Show mmcsd0";
+           }
+         }
+         mandatory true;
+       }
+       leaf information-type {
+         type enumeration {
+           enum "status" {
+             description "Show general information and health status";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-storage-mmc-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-switchover-information {
+     description "Show Routing Engine graceful switchover information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml switchover-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-services-reverse-information {
+     description "Show reverse telnet/SSH connection information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-services-reverse-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcp-binding-information {
+     description "Show DHCP client binding information";
+     input {
+       uses command-forwarding;
+       leaf detail {
+         description "Display detailed information";
+         type empty;
+       }
+       leaf address {
+         description "Address of DHCP client binding";
+         type jt:ipaddr;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml dhcp-binding-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcp-conflict-information {
+     description "Show DHCP address conflict";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml dhcp-conflict-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcp-global-information {
+     description "Show DHCP global scope information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml dhcp-global-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcp-pool-information {
+     description "Show DHCP address pool information";
+     input {
+       uses command-forwarding;
+       leaf detail {
+         description "Display detailed information";
+         type empty;
+       }
+       leaf subnet-address {
+         description "Logical subnet of address pool";
+         type jt:ipprefix;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml dhcp-pool-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcp-statistics-information {
+     description "Show DHCP statistics";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml dhcp-statistics-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-service-deployment-service-information {
+     description "Show service deployment service information";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml service-deployment-service-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-memory-information {
+     description "Show system memory usage";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-memory-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-virtual-memory-information {
+     description "Show kernel dynamic memory usage";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-virtual-memory-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-users-information {
+     description "Show users who are currently logged in";
+     input {
+       uses command-forwarding;
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-users-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-syslog-events {
+     description "Show system log messages";
+     input {
+       leaf stream {
+         description "Name of stream (log file) containing messages to filter";
+         type string {
+           junos:posix-pattern "![/ %]";
+           junos:pattern-message "Must not contain '/', % or a space";
+         }
+         mandatory true;
+       }
+       leaf event {
+         description "Event ID of messages to include in output";
+         type string {
+           length "1 .. 256";
+         }
+       }
+       leaf process {
+         description "Name of process generating messages to include in output";
+         type string {
+           length "1 .. 256";
+         }
+       }
+       leaf-list priority {
+         ordered-by user;
+         description "Facility and severity of messages to include in output";
+         type string;
+       }
+       leaf host {
+         description "Name of host generating messages to include in output";
+         type string {
+           length "1 .. 256";
+         }
+       }
+       leaf start-time {
+         description "Earliest timestamp of messages to include in output";
+         type jt:time;
+       }
+       choice stop-time-choice {
+         case current-time {
+           leaf current-time {
+             description "Include messages up to current time";
+             type empty;
+           }
+         }
+         case stop-time {
+           leaf stop-time {
+             description "Latest timestamp of messages to include in output";
+             type jt:time;
+           }
+         }
+       }
+       leaf-list parameter {
+         ordered-by user;
+         description "Parameter (key=value) of messages to include in output";
+         type jt:regular-expression;
+       }
+       leaf text-pattern {
+         description "Pattern in messages to include in output";
+         type jt:regular-expression;
+       }
+       leaf count {
+         description "Number of messages to include in output";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf recorded {
+         description "Match only the recorded messages";
+         type empty;
+       }
+       leaf connection-id {
+         description "Connection ID";
+         type string;
+       }
+       leaf total-events {
+         description "Print total count of the messages matching filter criteria";
+         type empty;
+       }
+       leaf start-count {
+         description "Print start-count";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf end-count {
+         description "Print end-count";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf pretty {
+         description "Display output in pretty format";
+         type empty;
+       }
+       leaf print-json {
+         description "Print the output of pretty in json format";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml syslog-events;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-resource-cleanup-processes-information {
+     description "Show process resource cleanup information";
+     input {
+       leaf detail {
+         description "Display detailed information";
+         type empty;
+       }
+       choice name_pid_choice {
+         case process-name {
+           leaf process-name {
+             description "Process name";
+             type string;
+           }
+         }
+         case pid {
+           leaf pid {
+             description "Process identifier";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type uint32 {
+                 range "1 .. 99999";
+               }
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-resource-cleanup-processes-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-resource-monitor-summary-fpc-information {
+     description "Show Resource Monitor summary";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml resource-monitor-summary-fpc-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-resource-monitor-fpc-information {
+     description "Show Line Card Resource utilization for monitoring";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml resource-monitor-fpc-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-resource-monitor-fpc-slot-information {
+     description "FPC Slot number";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml resource-monitor-fpc-slot-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-resource-monitor-ifd-mapping-information {
+     description "Display ifd to queue mapping";
+     input {
+       leaf fpc {
+         description "FPC number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml resource-monitor-ifd-mapping-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-subscribers-limit-level {
+     description "Show Subscriber limit";
+     input {
+       leaf chassis {
+         description "Show Subscriber limit of chassis level";
+         type empty;
+         mandatory true;
+       }
+       leaf fpc {
+         description "Show Subscriber limit of fpc level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+         mandatory true;
+       }
+       leaf pic {
+         description "Show Subscriber limit of pic level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 3";
+           }
+         }
+       }
+       leaf port {
+         description "Show Subscriber limit of port level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 23";
+           }
+         }
+       }
+       leaf extensive {
+         description "Display extensive output";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml subscribers-limit-level;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-events {
+     description "Display history of events minor/major/critical ";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-events-all {
+     description "Display history of all events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-events-system {
+     description "Display history of system events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-events-process {
+     description "Display history of process events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-status {
+     description "Display current status of the events minor/major/critical";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-status-all {
+     description "Display current status of all events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-status-system {
+     description "Display current status of system events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-status-process {
+     description "Display current status of process events";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-monitor-memory-actions {
+     description "Display history of actions taken on events";
+     input {
+       leaf action-choice {
+         type enumeration {
+           enum "all" {
+             description "Display history of action taken on system/process events";
+           }
+           enum "system" {
+             description "Display history of actions taken on system events";
+           }
+           enum "process" {
+             description "Display history of actions taken on process events";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-system-firmware-information {
+     description "Show all firmware version information";
+     input {
+       uses command-forwarding;
+       leaf compatibility {
+         description "Show all firmware compatibility information";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml system-firmware-information;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+ }
