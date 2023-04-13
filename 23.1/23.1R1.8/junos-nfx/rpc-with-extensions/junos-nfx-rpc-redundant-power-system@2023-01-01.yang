@@ -1,0 +1,409 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-redundant-power-system {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/redundant-power-system";
+
+   prefix redundant-power-system;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for redundant-power-system command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.1R1.8";
+   }
+
+   rpc get-rps-status-information {
+     description "Show redundant power system status information";
+     junos:command "show redundant-power-system status";
+     output {
+       container rps-status-information {
+         uses rps-status-information-block;
+       }
+     }
+   }
+   rpc get-rps-power-supply-information {
+     description "Show redundant power system power supply information";
+     junos:command "show redundant-power-system power-supply";
+     output {
+       container rps-power-supply-information {
+         uses rps-power-supply-information-block;
+       }
+     }
+   }
+   rpc get-rps-led-information {
+     description "Show redundant power system led information";
+     junos:command "show redundant-power-system led";
+     output {
+       container rps-led-information {
+         uses rps-led-information-block;
+       }
+     }
+   }
+   rpc get-rps-version-information {
+     description "Show redundant power system version information";
+     junos:command "show redundant-power-system version";
+     output {
+       container rps-version-information {
+         uses rps-version-information-block;
+       }
+     }
+   }
+   rpc get-rps-upgrade-information {
+     description "Show redundant power system upgrade information";
+     junos:command "show redundant-power-system upgrade";
+     output {
+       container rps-upgrade-information {
+         uses rps-upgrade-information-block;
+       }
+     }
+   }
+   rpc get-rps-scale-information {
+     description "Show redundant power system multi-backup information";
+     junos:command "show redundant-power-system multi-backup";
+     output {
+       container rps-scale-information {
+         uses rps-scale-information-block;
+       }
+     }
+   }
+   rpc get-rps-network-information {
+     description "Show redundant power system network information";
+     junos:command "show redundant-power-system network";
+     output {
+       container rps-network-information {
+         uses rps-network-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping rps-status-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       list rps-switch-information {
+         leaf rps-port {
+           type int32;
+         }
+         leaf rps-switch-status {
+           type string;
+         }
+         leaf rps-switch-priority {
+           type int32;
+         }
+         leaf rps-power-requested {
+           type string;
+         }
+         leaf rps-serial-num {
+           type string;
+         }
+       }
+     }
+   }
+   grouping rps-power-supply-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       list rps-psu-information {
+         leaf rps-psu-slot-number {
+           type int32;
+         }
+         leaf rps-psu-status {
+           type string;
+         }
+         leaf rps-psu-description {
+           type string;
+         }
+       }
+     }
+   }
+   grouping rps-led-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       leaf rps-fan-led {
+         type string;
+       }
+       leaf rps-status-led {
+         type string;
+       }
+       list rps-port-led-status {
+         leaf rps-port-id {
+           type int32;
+         }
+         leaf rps-port-led {
+           type string;
+         }
+       }
+     }
+   }
+   grouping rps-version-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       leaf rps-model {
+         type string;
+       }
+       leaf rps-firmware-version {
+         type string;
+       }
+       leaf rps-uboot-version {
+         type string;
+       }
+     }
+   }
+   grouping rps-upgrade-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       container rps-upgrade-status-information {
+         leaf rps-upgrade-status {
+           type string;
+         }
+         leaf rps-upgrade-previous-version {
+           type string;
+         }
+         leaf rps-upgrade-current-version {
+           type string;
+         }
+       }
+     }
+   }
+   grouping rps-scale-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       container rps-scale-entry {
+         leaf rps-scale {
+           type string;
+         }
+       }
+     }
+   }
+   grouping rps-network-information-block {
+     list rps-list {
+       leaf rps-serial-number {
+         type string;
+       }
+       container rps-network-entry {
+         leaf rps-ip {
+           type string;
+         }
+         leaf rps-netmask {
+           type string;
+         }
+         leaf rps-gateway {
+           type string;
+         }
+       }
+     }
+   }
+ }
