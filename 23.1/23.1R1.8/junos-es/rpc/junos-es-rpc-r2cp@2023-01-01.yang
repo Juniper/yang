@@ -1,0 +1,385 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-r2cp {
+   namespace "http://yang.juniper.net/junos-es/rpc/r2cp";
+
+   prefix r2cp;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for r2cp command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.1R1.8";
+   }
+
+   rpc get-r2cp-interface-information {
+     description "Show interface information";
+     input {
+       leaf level {
+         type enumeration {
+           enum "brief" {
+             description "Show brief output";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+           enum "extensive" {
+             description "Show extensive output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of R2CP interface";
+         type string;
+       }
+     }
+   }
+   rpc get-r2cp-radio-information {
+     description "Show radio";
+     input {
+       leaf level {
+         type enumeration {
+           enum "brief" {
+             description "Show brief output";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+           enum "extensive" {
+             description "Show extensive output";
+           }
+         }
+       }
+       leaf radio-name {
+         description "Name of R2CP radio";
+         type string;
+       }
+     }
+   }
+   rpc get-r2cp-session-information {
+     description "Show sessions";
+     input {
+       leaf level {
+         type enumeration {
+           enum "brief" {
+             description "Show brief output";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+           enum "extensive" {
+             description "Show extensive output";
+           }
+         }
+       }
+       choice session-id_choice {
+         case session-id {
+           leaf session-id {
+             description "Session ID";
+             type string;
+           }
+         }
+         case vlan {
+           leaf vlan {
+             description "Vlan identifier";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type uint16 {
+                 range "0 .. 4094";
+               }
+             }
+           }
+         }
+       }
+     }
+     output {
+       container r2cp-session-information {
+         uses r2cp-session-information-block;
+       }
+     }
+   }
+   rpc get-r2cp-statistics {
+     description "Show statistics";
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping r2cp-session-information-block {
+     list r2cp-session {
+       leaf session-id {
+         type int32;
+         description "Session id";
+       }
+       leaf mac-address {
+         type jt:mac-addr;
+         description "Remote MAC address";
+       }
+       leaf session-status {
+         type string;
+         description "Session status";
+       }
+       leaf uptime {
+         type string;
+         description "Time that the session has been established";
+       }
+       leaf vlan-ids {
+         type string;
+         description "Vlan IDs";
+       }
+       container r2cp-session-update {
+         leaf last-received {
+           type string;
+           description "Time since last session update";
+         }
+         leaf current-bandwidth {
+           type string;
+           description "Current bandwidth";
+         }
+         leaf max-bandwidth {
+           type string;
+           description "Maximum bandwidth";
+         }
+         leaf quality {
+           type string;
+           description "Quality field";
+         }
+         leaf resources {
+           type string;
+           description "Resources field";
+         }
+         leaf latency {
+           type string;
+           description "Latency interval";
+         }
+       }
+       container r2cp-session-bandwidth {
+         leaf effective-bandwidth {
+           type string;
+           description "Effective bandwidth";
+         }
+         leaf last-change {
+           type string;
+           description "Time since last bandwidth change";
+         }
+         leaf below-threshold {
+           type string;
+           description "Updates below threshold";
+         }
+       }
+       leaf term-vlan-ids {
+         type string;
+         description "Terminating Vlans";
+       }
+       leaf vc-id {
+         type int32;
+         description "Virtual channel id";
+       }
+       leaf packets-out {
+         type int32;
+         description "Forwarded packets";
+       }
+     }
+   }
+ }
