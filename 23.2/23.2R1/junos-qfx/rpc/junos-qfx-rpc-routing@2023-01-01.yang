@@ -1,0 +1,533 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-routing {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/routing";
+
+   prefix routing;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for routing command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-routing-information {
+     description "Show routing information";
+     output {
+       container trace-information {
+         uses trace-information-block;
+       }
+     }
+   }
+   rpc get-service-mapping-information {
+     description "Show routing Transport Class information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       choice trans-class-choice {
+         case name {
+           leaf get-routing-transport-class-by-name {
+             description "Transport class Name";
+             type string;
+           }
+         }
+         case color {
+           leaf color {
+             description "Transport class Color";
+             type union {
+               type uint32;
+               type string {
+                 pattern "<.*>|$.*";
+               }
+             }
+           }
+         }
+         case color-only {
+           leaf color-only {
+             description "Transport class Color-Only";
+             type empty;
+           }
+         }
+         case all {
+           leaf all {
+             description "Show all transport classes";
+             type empty;
+           }
+         }
+       }
+     }
+     output {
+       container service-mapping-information {
+         uses service-mapping-information-block;
+       }
+     }
+   }
+   rpc get-routing-frr-inh-db {
+     description "Show FRR indirect database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container routing-frr-inh-db {
+         uses routing-frr-inh-db-block;
+       }
+     }
+   }
+   rpc get-routing-frr-inh-db-index {
+     description "Show FRR indirect database by index";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       leaf index {
+         description "FRR-INH NH index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container routing-frr-inh-db {
+         uses routing-frr-inh-db-block;
+       }
+     }
+   }
+   rpc get-routing-frr-inh-db-nh-handle {
+     description "Show FRR indirect database by nh handle";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       leaf nh-handle {
+         description "FRR-INH NH handle";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container routing-frr-inh-db {
+         uses routing-frr-inh-db-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping trace-information-block {
+     list trace-event {
+       leaf event-name {
+         type string;
+       }
+       leaf serial-number {
+         type int32;
+       }
+       leaf event-string {
+         type string;
+       }
+       leaf event-count {
+         type int32;
+       }
+       leaf event-level {
+         type string;
+       }
+     }
+     list trace-event-list {
+       leaf event-sys-name {
+         type string;
+       }
+     }
+   }
+   grouping service-mapping-information-block {
+     container sm-overview {
+       leaf tc-auto-create {
+         type string;
+         description "Auto creation of Transport class";
+       }
+     }
+     list transport-class-information {
+       leaf tc-name {
+         type string;
+         description "Auto generated name";
+       }
+       leaf tc-cfg-name {
+         type string;
+         description "Configured name";
+       }
+       leaf tc-color {
+         type uint32;
+         description "Color value, auto derives other attributes";
+       }
+       leaf tc-ref-cnt {
+         type uint32;
+         description "Reference count";
+       }
+       leaf tc-v4-prefix-cnt {
+         type int32;
+         description "Number of IPv4 prefixes in this Transport class RIB";
+       }
+       leaf tc-v6-prefix-cnt {
+         type int32;
+         description "Number of IPv6 prefixes in this Transport class RIB";
+       }
+       leaf tc-map-community {
+         type string;
+         description "BGP community that maps to default resolution scheme of this Transport class";
+       }
+       leaf tc-rt-community {
+         type string;
+         description "The BGP Route Target Extended community identifying this Transport class";
+       }
+       leaf tc-import-policy {
+         type string;
+         description "Transport Route Target import policy";
+       }
+       leaf tc-export-policy {
+         type string;
+         description "Transport Route Target export policy";
+       }
+       leaf tc-rt-instance {
+         type string;
+         description "The Routing instance helping with import, export of transport routes";
+       }
+       leaf tc-flags {
+         type string;
+         description "Transport class interesting flags";
+       }
+       leaf tc-type {
+         type string;
+         description "Transport class type";
+       }
+     }
+   }
+   grouping routing-frr-inh-db-block {
+     list routing-frr-inh-data {
+       leaf routing-frr-inh-nh-handle {
+         type string;
+         description "FRR-INH NH handle";
+       }
+       leaf routing-frr-inh-handle {
+         type string;
+         description "INH FRR handle";
+       }
+       leaf routing-frr-inh-num-keys {
+         type int32;
+         description "Number of composite keys";
+       }
+       leaf routing-frr-inh-nh-index {
+         type int32;
+         description "Kernel assigned index to the nexthop";
+       }
+       leaf routing-frr-inh-sessid {
+         type int32;
+         description "Kernel assigned fast re-route session ID to the nexthop";
+       }
+       leaf routing-frr-inh-fnh {
+         type string;
+         description "Forwarding next hop handle";
+       }
+       leaf routing-frr-inh-fnh-type {
+         type string;
+         description "Forwarding next hop type";
+       }
+       leaf routing-frr-inh-kernel-fnh {
+         type string;
+         description "Kernel forwarding next hop handle";
+       }
+       leaf routing-frr-inh-kernel-fnh-type {
+         type string;
+         description "Kernel forwarding next hop type";
+       }
+       leaf routing-frr-inh-kernel-fnh-index {
+         type int32;
+         description "Kernel assigned index to the forwarding nexthop";
+       }
+       leaf routing-frr-inh-reference-count {
+         type int32;
+         description "FRR INH reference count";
+       }
+       list routing-frr-inh-component-key {
+         leaf routing-frr-inh-component-key-index {
+           type int32;
+           description "Component key index";
+         }
+         leaf routing-frr-inh-component-key-ribid {
+           type int32;
+           description "Component key RIB ID for FRR Indirect";
+         }
+         leaf routing-frr-inh-component-key-pnh-address {
+           type string;
+           description "Component key protocol-next-hop address for FRR Indirect";
+         }
+         leaf routing-frr-inh-component-key-app-specific-opaque {
+           type string;
+           description "Component application specific key for FRR Indirect";
+         }
+       }
+     }
+   }
+ }

@@ -1,0 +1,395 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-ntp {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/ntp";
+
+   prefix ntp;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for ntp command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-ntp-associations-information {
+     description "Show status of peers";
+     junos:command "show ntp associations";
+     input {
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+     }
+     output {
+       container ntp-associations {
+         uses ntp-associations-block;
+       }
+     }
+   }
+   rpc get-ntp-status-information {
+     description "Show internal variables returned by peers";
+     junos:command "show ntp status";
+     input {
+       leaf no-resolve {
+         description "Do not attempt to print addresses symbolically";
+         type empty;
+       }
+     }
+     output {
+       container ntp-status {
+         uses ntp-status-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping ntp-associations-block {
+     list association {
+       leaf remote {
+         type string;
+         description "Remote server: The reference clock";
+       }
+       leaf refid {
+         type string;
+         description "The 32-bit code identifying the particular server or reference clock";
+       }
+       leaf auth {
+         type string;
+         description "Authentication key information";
+       }
+       leaf st {
+         type uint32;
+         description "NTP uses a hierarchical, semi-layered system of time sources. Each level of hierarchy is termed a stratum and is assigned a number starting with zero for the reference clock at the top.";
+       }
+       leaf association-type {
+         type string;
+         description "Connection type";
+       }
+       leaf when {
+         type uint32;
+         description "Last transaction time";
+       }
+       leaf poll {
+         type uint32;
+         description "Polling interval: 8-bit signed integer representing the maximum interval between successive messages";
+       }
+       leaf reach {
+         type uint32;
+         description "Reachability information in octal";
+       }
+       leaf delay {
+         type string;
+         description "The delay (delta) represents the round-trip delay between the client and server.";
+       }
+       leaf offset {
+         type string;
+         description "Estimated time offset relative to the server time";
+       }
+       leaf jitter {
+         type string;
+         description "Exponential average of first-order time differences";
+       }
+       leaf rootdelay {
+         type string;
+         description "Unsigned, fixed-point number indicating the total round-trip delay to the reference clock";
+       }
+       leaf rootdisp {
+         type string;
+         description "Unsigned, fixed-point number indicating the maximum error relative to the reference clock";
+       }
+     }
+   }
+   grouping ntp-status-block {
+     leaf associd {
+       type uint32;
+       description "Association ID";
+     }
+     leaf statusinfo {
+       type string;
+       description "NTP synchronization status";
+     }
+     leaf version {
+       type string;
+       description "NTP Version";
+     }
+     leaf processor {
+       type string;
+       description "Processor in use";
+     }
+     leaf system {
+       type string;
+       description "Underlying system data";
+     }
+     leaf leap {
+       type string;
+       description "Leap Indicator: 2-bit integer warning of an impending leap second to be inserted or deleted in the last minute of the current month";
+     }
+     leaf stratum {
+       type string;
+       description "NTP uses a hierarchical, semi-layered system of time sources. Each level of hierarchy is termed a stratum and is assigned a number starting with zero for the reference clock at the top.";
+     }
+     leaf precision {
+       type string;
+       description "Signed integer representing the precision of the system clock, in log2 seconds.";
+     }
+     leaf rootdelay {
+       type string;
+       description "Unsigned, fixed-point number indicating the total round-trip delay to the reference clock";
+     }
+     leaf rootdisp {
+       type string;
+       description "Unsigned, fixed-point number indicating the maximum error relative to the reference clock";
+     }
+     leaf refid {
+       type string;
+       description "The 32-bit code identifying the particular server or reference clock";
+     }
+     leaf reftime {
+       type string;
+       description "Last update time";
+     }
+     leaf clock {
+       type string;
+       description "Clock data, current time";
+     }
+     leaf peer {
+       type string;
+       description "Peer data";
+     }
+     leaf tc {
+       type string;
+       description "Time constant";
+     }
+     leaf mintc {
+       type string;
+       description "Minimum polling time constant";
+     }
+     leaf offset {
+       type string;
+       description "Estimated time offset relative to the server time";
+     }
+     leaf frequency {
+       type string;
+       description "Frequency data";
+     }
+     leaf sys-jitter {
+       type string;
+       description "System jitter";
+     }
+     leaf clk-jitter {
+       type string;
+       description "Clock jitter";
+     }
+     leaf clk-wander {
+       type string;
+       description "For long-term observation one may notice variations in the clock frequency. The difference of the frequency is called wander";
+     }
+   }
+ }

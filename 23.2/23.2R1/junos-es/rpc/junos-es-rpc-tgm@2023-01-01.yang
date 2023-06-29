@@ -1,0 +1,328 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-tgm {
+   namespace "http://yang.juniper.net/junos-es/rpc/tgm";
+
+   prefix tgm;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for tgm command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-tgm-dynamic-cac-information {
+     description "Show dynamic call admission control information";
+     output {
+       container tgm-dynamic-cac-information {
+         uses tgm-dynamic-cac-information-block;
+       }
+     }
+   }
+   rpc get-tgm-telephony-interface-module-status {
+     description "Show telephony interface module information";
+     input {
+       leaf options {
+         type enumeration {
+           enum "status" {
+             description "Status of telephony interface modules";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container telephony-interface-module-status-information {
+         uses telephony-interface-module-status-information-block;
+       }
+     }
+   }
+   rpc get-tgm-information {
+     description "Show Flexible PIC Concentrator information";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+       leaf command {
+         type enumeration {
+           enum "media-gateway-controller" {
+             description "Show TGM media gateway controller configuration";
+           }
+           enum "dsp-capacity" {
+             description "Show TGM DSP resources";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container tgm-information {
+         uses tgm-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping tgm-dynamic-cac-information-block {
+     leaf tgm-reported-bearer-bandwidth-limit {
+       type string;
+       description "Reported bearer bandwidth limit";
+     }
+     container tgm-dynamic-cac-list {
+       description "List of dynamic call admission control configured interfaces";
+       list dynamic-cac-information {
+         description "Information about dynamic call admission control";
+         leaf dynamic-cac-interface-name {
+           type string;
+           description "Dynamic call admission control configured interface";
+         }
+         leaf dynamic-cac-interface-state {
+           type string;
+           description "State of the interface";
+         }
+         leaf dynamic-cac-activation-priority {
+           type string;
+           description "Activation priority configured on the interface";
+         }
+         leaf dynamic-cac-bbl {
+           type string;
+           description "Bearer bandwidth limit configured on the interface";
+         }
+       }
+     }
+   }
+   grouping telephony-interface-module-status-information-block {
+     list telephony-interface-module-status {
+       description "Status of the telephony interface modules";
+       leaf slot {
+         type int32;
+         description "Slot number of the telephony interface module";
+       }
+       leaf tim-state {
+         type string;
+       }
+       leaf offline-reason {
+         type string;
+         description "Offline reason";
+       }
+     }
+   }
+   grouping tgm-information-block {
+     container media-gateway-controller-configuration {
+       description "Information about a telephony gateway module (TGM) media gateway controller";
+       leaf-list media-gateway-controller {
+         type string;
+         description "IPv4 address of the TGM media gateway controller";
+       }
+     }
+   }
+ }

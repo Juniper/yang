@@ -1,0 +1,1147 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-spring-traffic-engineering {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/spring-traffic-engineering";
+
+   prefix spring-traffic-engineering;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for spring-traffic-engineering command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-spring-te-overview-information {
+     description "Show overview of ingress SPRING Traffic Engineering";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container spring-te-overview-information {
+         uses spring-te-overview-information-block;
+       }
+     }
+   }
+   rpc get-spring-te-lsp-information {
+     description "Show SPRING Traffic Engineered ingress LSPs";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf regex {
+         description "Regular expression for LSP names to match";
+         type string;
+       }
+       leaf tunnel-source {
+         description "Source of tunnel creation";
+         type enumeration {
+           enum "pcep" {
+             description "Path computation element protocol";
+           }
+           enum "static" {
+             description "Static configuration";
+           }
+           enum "dtm" {
+             description "Dynamic tunnel module";
+           }
+           enum "bgp" {
+             description "BGP SRTE";
+           }
+         }
+       }
+       leaf color {
+         description "Tunnel color";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint64 {
+             range "0 .. 4294967296";
+           }
+         }
+       }
+       leaf destination {
+         description "IPV4/IPV6 to-address of tunnel";
+         type jt:ipaddr;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container spring-te-lsp-information {
+         uses spring-te-lsp-information-block;
+       }
+     }
+   }
+   rpc get-spring-te-bfd-session-information {
+     description "Show SPRING Traffic Engineered BFD session";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf regex {
+         description "Regular expression for BFD session names to match";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container spring-te-bfd-session-information {
+         uses spring-te-bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-spring-te-route-information {
+     description "Show spring traffic engineering route information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tunnel-source {
+         description "Source of tunnel creation";
+         type enumeration {
+           enum "pcep" {
+             description "Path computation element protocol";
+           }
+           enum "static" {
+             description "Static configuration";
+           }
+           enum "dtm" {
+             description "Dynamic tunnel module";
+           }
+           enum "bgp" {
+             description "BGP SRTE";
+           }
+         }
+       }
+       leaf destination {
+         description "IPV4/IPV6 to-address of tunnel  and optional prefix length of destination";
+         type jt:ipprefix;
+       }
+       leaf match-prefix {
+         description "Regular expression to match formatted prefix";
+         type string;
+       }
+       leaf label {
+         description "Label of entry in MPLS routing table";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of spring traffic engineering instance";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container spring-te-route-information {
+         uses spring-te-route-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping spring-te-overview-information-block {
+     container spring-te-overview {
+       description "Overview of SPRING Traffic-Engineering";
+       leaf ste-preference {
+         type uint32;
+       }
+       leaf ste-num-lsps {
+         type uint32;
+       }
+       leaf ste-num-lsps-up {
+         type uint32;
+       }
+       leaf ste-num-lsps-down {
+         type uint32;
+       }
+       leaf ste-num-ldp-tunnels {
+         type uint32;
+       }
+       container ste-ext-ctrlrs {
+         leaf-list ste-ext-ctrlr {
+           type string;
+         }
+       }
+     }
+   }
+   grouping spring-te-lsp-information-block {
+     container spring-te-lsp {
+       description "SPRING Traffic-Engineered LSP";
+       leaf stl-dest-address {
+         type jt:ipaddr;
+       }
+       leaf stl-lsp-state {
+         type string;
+       }
+       leaf stl-lsp-name {
+         type string;
+       }
+       leaf stl-metric {
+         type uint32;
+       }
+       container stl-telemetry-statistics {
+         leaf stl-telemetry-statistics.heading {
+           type string;
+           description "SPRING Traffic-Engineered Telemetry Statistics ";
+         }
+         list stl-telemetry-statistics-info {
+           leaf stl-telemetry-statistics-sensor-name {
+             type string;
+           }
+           leaf stl-telemetry-statistics-sensor-id {
+             type uint32;
+           }
+         }
+       }
+       container stl-path {
+         leaf stl-path-name {
+           type string;
+         }
+         leaf stl-path-state {
+           type string;
+         }
+         leaf stl-path-ero-valid {
+           type string;
+         }
+         leaf stl-path-out-if {
+           type string;
+         }
+         leaf stl-path-auto-translate-status {
+           type string;
+         }
+         leaf stl-path-auto-translate-result {
+           type string;
+         }
+         leaf stl-path-bfd-status {
+           type string;
+         }
+         leaf stl-path-bfd-name {
+           type string;
+         }
+         leaf stl-path-bfd-up {
+           type uint32;
+         }
+         leaf stl-path-bfd-down {
+           type uint32;
+         }
+         leaf stl-path-bfd-remote-discriminator-string {
+           type string;
+         }
+         leaf stl-path-compute-algo-id {
+           type uint32;
+         }
+         leaf stl-path-compute-status {
+           type string;
+         }
+         leaf stl-path-compute-result {
+           type string;
+         }
+         leaf stl-path-compute-profile {
+           type string;
+         }
+         leaf stl-num-computed-paths {
+           type uint32;
+         }
+         leaf stl-lsp-path-bandwidth {
+           type uint32;
+         }
+         leaf stl-lsp-path-bandwidth-prio {
+           type uint32;
+         }
+         leaf stl-sr-segment-index {
+           type uint32;
+         }
+         container str-lsp-path-compute-info {
+           leaf str-lsp-path-compute-status {
+             type string;
+           }
+           leaf str-lsp-path-compute-result {
+             type string;
+           }
+           leaf str-lsp-path-compute-profile {
+             type string;
+           }
+           leaf str-lsp-num-computed-paths {
+             type uint32;
+           }
+           leaf str-lsp-path-bandwidth {
+             type uint32;
+           }
+           leaf str-lsp-path-bandwidth-prio {
+             type uint32;
+           }
+         }
+         container stl-sr-ero-list {
+           leaf stl-sr-ero-num-eros {
+             type uint32;
+           }
+           list stl-sr-ero {
+             leaf stl-sr-ero-index {
+               type uint32;
+             }
+             leaf stl-sr-ero-hop-type {
+               type string;
+             }
+             leaf stl-sr-ero-nai-type {
+               type string;
+             }
+             leaf stl-sr-ero-ip-node-id {
+               type jt:ipaddr;
+             }
+             leaf stl-sr-ero-local-intf-id {
+               type jt:ipaddr;
+             }
+             leaf stl-sr-ero-remote-intf-id {
+               type jt:ipaddr;
+             }
+             leaf stl-sr-ero-unnum-local-router-id {
+               type jt:ipaddr;
+             }
+             leaf stl-sr-ero-unnum-local-id {
+               type uint32;
+             }
+             leaf stl-sr-ero-unnum-remote-router-id {
+               type jt:ipaddr;
+             }
+             leaf stl-sr-ero-unnum-remote-id {
+               type uint32;
+             }
+             leaf stl-sr-ero-sid-type {
+               type string;
+             }
+             leaf stl-sr-ero-sid-value {
+               type uint32;
+             }
+             leaf stl-sr-ero-srv6-sid-value {
+               type jt:ipaddr;
+             }
+             leaf stl-sr-ero-sid-ttl {
+               type uint32;
+             }
+             leaf stl-sr-ero-sid-exp {
+               type uint32;
+             }
+           }
+         }
+         container stl-compute {
+           leaf stl-computed-path-index {
+             type uint32;
+           }
+           container stl-bfd {
+             leaf stl-bfd-status {
+               type string;
+             }
+             leaf stl-bfd-name {
+               type string;
+             }
+             leaf stl-bfd-up {
+               type uint32;
+             }
+             leaf stl-bfd-down {
+               type uint32;
+             }
+             leaf stl-bfd-remote-discriminator {
+               type string;
+             }
+           }
+           container stl-computed-metric {
+             leaf stl-computed-te-metric {
+               type uint64;
+             }
+             leaf stl-computed-igp-metric {
+               type uint64;
+             }
+             leaf stl-computed-min-delay-metric {
+               type uint64;
+             }
+             leaf stl-computed-max-delay-metric {
+               type uint64;
+             }
+             leaf stl-computed-avg-delay-metric {
+               type uint64;
+             }
+             leaf stl-optimized-metric-type {
+               type string;
+             }
+             leaf stl-optimized-metric-type-active {
+               type string;
+             }
+           }
+           container stl-sr-computed-segment-list {
+             leaf stl-sr-computed-segments-count {
+               type uint32;
+             }
+             list stl-sr-computed-segment {
+               leaf stl-sr-computed-segment-index {
+                 type uint32;
+               }
+               leaf stl-sr-computed-segment-type {
+                 type string;
+               }
+               leaf stl-sr-adjacency-segment-label {
+                 type string;
+               }
+               leaf stl-sr-source-router-id {
+                 type jt:ipaddr;
+               }
+               leaf stl-sr-destination-router-id {
+                 type jt:ipaddr;
+               }
+               leaf stl-sr-source-iso-system-id {
+                 type string;
+               }
+               leaf stl-sr-destination-iso-system-id {
+                 type string;
+               }
+               leaf stl-sr-source-interface-address {
+                 type jt:ipaddr;
+               }
+               leaf stl-sr-destination-interface-address {
+                 type jt:ipaddr;
+               }
+               leaf stl-sr-node-segment-label {
+                 type string;
+               }
+               leaf stl-sr-router-id {
+                 type jt:ipaddr;
+               }
+               leaf stl-sr-iso-system-id {
+                 type string;
+               }
+             }
+           }
+         }
+         container stl-lsp-telemetry-statistics {
+           leaf stl-lsp-telemetry-statistics.heading {
+             type string;
+             description "SPRING Traffic-Engineered Per LSP Telemetry Statistics ";
+           }
+           list stl-lsp-telemetry-statistics-info {
+             leaf stl-lsp-telemetry-statistics-sensor-name {
+               type string;
+             }
+             leaf stl-lsp-telemetry-statistics-sensor-id {
+               type uint32;
+             }
+           }
+         }
+         container stl-delegation {
+           leaf stl-delegation.heading {
+             type string;
+             description "SPRING Traffic-Engineered Path Delegation info ";
+           }
+           leaf stl-delegation-control-status {
+             type string;
+           }
+           leaf stl-delegation-routing-status {
+             type string;
+           }
+         }
+         container stl-delegation-compute-constraint-info {
+           leaf stl-delegation-compute-constraint-info.heading {
+             type string;
+             description "SPRING TE compute constraint info ";
+           }
+           leaf stl-delegation-compute-constraint-bandwidth-requested-cli {
+             type string;
+           }
+           leaf stl-delegation-compute-constraint-bandwidth-requested-pcupdate {
+             type string;
+           }
+           leaf stl-delegation-compute-constraint-actual-bandwidth-pcupdate {
+             type string;
+           }
+           leaf stl-delegation-compute-constraint-bandwidth-setup-priority {
+             type string;
+           }
+           leaf stl-delegation-compute-constraint-bandwidth-hold-priority {
+             type string;
+           }
+         }
+       }
+       leaf stl-tunnel-source {
+         type string;
+       }
+       leaf stl-tunnel-template {
+         type string;
+       }
+       leaf stl-te-group-id {
+         type uint32;
+       }
+       leaf stl-src-address {
+         type jt:ipaddr;
+       }
+       leaf stl-tunnel-type {
+         type string;
+       }
+       leaf stl-ldp-tunneling {
+         type string;
+       }
+     }
+     container spring-te-lsp-counts {
+       leaf stl-total {
+         type uint32;
+       }
+       leaf stl-up {
+         type uint32;
+       }
+       leaf stl-down {
+         type uint32;
+       }
+     }
+   }
+   grouping spring-te-bfd-session-information-block {
+     container spring-te-bfd-session {
+       leaf stl-path-bfd-name {
+         type string;
+       }
+       leaf stl-path-bfd-status {
+         type string;
+       }
+       container ste-bfd-ref-lsps {
+         leaf-list ste-bfd-ref-lsp {
+           type string;
+         }
+       }
+       container stl-sr-ero-list {
+         leaf stl-sr-ero-num-eros {
+           type uint32;
+         }
+         list stl-sr-ero {
+           leaf stl-sr-ero-index {
+             type uint32;
+           }
+           leaf stl-sr-ero-hop-type {
+             type string;
+           }
+           leaf stl-sr-ero-nai-type {
+             type string;
+           }
+           leaf stl-sr-ero-ip-node-id {
+             type jt:ipaddr;
+           }
+           leaf stl-sr-ero-local-intf-id {
+             type jt:ipaddr;
+           }
+           leaf stl-sr-ero-remote-intf-id {
+             type jt:ipaddr;
+           }
+           leaf stl-sr-ero-unnum-local-router-id {
+             type jt:ipaddr;
+           }
+           leaf stl-sr-ero-unnum-local-id {
+             type uint32;
+           }
+           leaf stl-sr-ero-unnum-remote-router-id {
+             type jt:ipaddr;
+           }
+           leaf stl-sr-ero-unnum-remote-id {
+             type uint32;
+           }
+           leaf stl-sr-ero-sid-type {
+             type string;
+           }
+           leaf stl-sr-ero-sid-value {
+             type uint32;
+           }
+           leaf stl-sr-ero-srv6-sid-value {
+             type jt:ipaddr;
+           }
+           leaf stl-sr-ero-sid-ttl {
+             type uint32;
+           }
+           leaf stl-sr-ero-sid-exp {
+             type uint32;
+           }
+         }
+       }
+       leaf stl-path-bfd-remote-discriminator {
+         type uint32;
+       }
+     }
+     container spring-te-bfd-session-counts {
+       leaf ste-bfd-session-total {
+         type uint32;
+       }
+       leaf ste-bfd-session-up {
+         type uint32;
+       }
+       leaf ste-bfd-session-down {
+         type uint32;
+       }
+     }
+   }
+   grouping spring-te-route-information-block {
+     list spring-te-route {
+       description "SPRING Traffic-Engineered Route";
+       leaf str-dest-address {
+         type string;
+       }
+       leaf str-tunnel-source-brief {
+         type string;
+       }
+       leaf str-instance {
+         type string;
+       }
+       list spring-te-route-lsp-brief-info {
+         leaf str-sr-preference-override-brief {
+           type uint32;
+         }
+         leaf str-sr-preference-brief {
+           type string;
+         }
+         leaf str-lsp-name-brief {
+           type string;
+         }
+         list spring-te-lsp-path-brief-info {
+           leaf str-lsp-path-name-brief {
+             type string;
+           }
+         }
+       }
+       list spring-te-route-node-information {
+         leaf str-distinguisher {
+           type uint32;
+         }
+         leaf str-origin {
+           type string;
+         }
+         leaf str-tunnel-source {
+           type string;
+         }
+         leaf str-route-nhtype {
+           type string;
+         }
+         leaf str-route-metric2 {
+           type uint32;
+         }
+         leaf str-route-type {
+           type string;
+         }
+         leaf str-route-encap-mode {
+           type string;
+         }
+         leaf str-using-tc-class {
+           type string;
+         }
+         leaf str-invalid-reason {
+           type string;
+         }
+         list spring-te-route-lsp-information {
+           leaf str-lsp-name {
+             type string;
+           }
+           leaf str-sr-preference {
+             type string;
+           }
+           leaf str-sr-preference-override {
+             type uint32;
+           }
+           leaf str-sr-lsp-metric {
+             type uint32;
+           }
+           leaf str-sr-lsp-weight {
+             type uint32;
+           }
+           leaf str-sr-lsp-state {
+             type string;
+           }
+           leaf str-sr-lsp-id {
+             type uint32;
+           }
+           leaf str-sr-lsp-sensor-id {
+             type string;
+           }
+           container stl-telemetry-statistics {
+             leaf stl-telemetry-statistics.heading {
+               type string;
+               description "SPRING Traffic-Engineered Telemetry Statistics ";
+             }
+             list stl-telemetry-statistics-info {
+               leaf stl-telemetry-statistics-sensor-name {
+                 type string;
+               }
+               leaf stl-telemetry-statistics-sensor-id {
+                 type uint32;
+               }
+             }
+           }
+           list str-sr-segment-list {
+             leaf str-sr-seg-path-name {
+               type string;
+             }
+             leaf str-sr-path-state {
+               type string;
+             }
+             leaf str-sr-seg-path-bandwidth {
+               type uint32;
+             }
+             leaf str-sr-seg-path-out-if {
+               type string;
+             }
+             leaf str-sr-seg-path-weight {
+               type uint32;
+             }
+             leaf str-sr-seg-path-balance {
+               type uint32;
+             }
+             leaf stl-path-compute-info {
+               type string;
+             }
+             leaf str-sr-seg-path-valid {
+               type string;
+             }
+             container stl-delegation {
+               leaf stl-delegation.heading {
+                 type string;
+                 description "SPRING Traffic-Engineered Path Delegation info ";
+               }
+               leaf stl-delegation-control-status {
+                 type string;
+               }
+               leaf stl-delegation-routing-status {
+                 type string;
+               }
+             }
+             container stl-delegation-compute-constraint-info {
+               leaf stl-delegation-compute-constraint-bandwidth-requested-cli {
+                 type string;
+               }
+               leaf stl-delegation-compute-constraint-bandwidth-requested-pcupdate {
+                 type string;
+               }
+               leaf stl-delegation-compute-constraint-actual-bandwidth-pcupdate {
+                 type string;
+               }
+               leaf stl-delegation-compute-constraint-bandwidth-setup-priority {
+                 type string;
+               }
+               leaf stl-delegation-compute-constraint-bandwidth-hold-priority {
+                 type string;
+               }
+             }
+             container stl-lsp-telemetry-statistics {
+               leaf stl-lsp-telemetry-statistics.heading {
+                 type string;
+                 description "SPRING Traffic-Engineered Per LSP Telemetry Statistics ";
+               }
+               list stl-lsp-telemetry-statistics-info {
+                 leaf stl-lsp-telemetry-statistics-sensor-name {
+                   type string;
+                 }
+                 leaf stl-lsp-telemetry-statistics-sensor-id {
+                   type uint32;
+                 }
+               }
+             }
+             container stl-compute {
+               leaf stl-computed-path-index {
+                 type uint32;
+               }
+               container stl-bfd {
+                 leaf stl-bfd-status {
+                   type string;
+                 }
+                 leaf stl-bfd-name {
+                   type string;
+                 }
+                 leaf stl-bfd-up {
+                   type uint32;
+                 }
+                 leaf stl-bfd-down {
+                   type uint32;
+                 }
+                 leaf stl-bfd-remote-discriminator {
+                   type string;
+                 }
+               }
+               container stl-computed-metric {
+                 leaf stl-computed-te-metric {
+                   type uint64;
+                 }
+                 leaf stl-computed-igp-metric {
+                   type uint64;
+                 }
+                 leaf stl-computed-min-delay-metric {
+                   type uint64;
+                 }
+                 leaf stl-computed-max-delay-metric {
+                   type uint64;
+                 }
+                 leaf stl-computed-avg-delay-metric {
+                   type uint64;
+                 }
+                 leaf stl-optimized-metric-type {
+                   type string;
+                 }
+                 leaf stl-optimized-metric-type-active {
+                   type string;
+                 }
+               }
+               container stl-sr-computed-segment-list {
+                 leaf stl-sr-computed-segments-count {
+                   type uint32;
+                 }
+                 list stl-sr-computed-segment {
+                   leaf stl-sr-computed-segment-index {
+                     type uint32;
+                   }
+                   leaf stl-sr-computed-segment-type {
+                     type string;
+                   }
+                   leaf stl-sr-adjacency-segment-label {
+                     type string;
+                   }
+                   leaf stl-sr-source-router-id {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-destination-router-id {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-source-iso-system-id {
+                     type string;
+                   }
+                   leaf stl-sr-destination-iso-system-id {
+                     type string;
+                   }
+                   leaf stl-sr-source-interface-address {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-destination-interface-address {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-node-segment-label {
+                     type string;
+                   }
+                   leaf stl-sr-router-id {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-iso-system-id {
+                     type string;
+                   }
+                 }
+               }
+             }
+             container stl-sr-ero-list {
+               leaf stl-sr-ero-num-eros {
+                 type uint32;
+               }
+               list stl-sr-ero {
+                 leaf stl-sr-ero-index {
+                   type uint32;
+                 }
+                 leaf stl-sr-ero-hop-type {
+                   type string;
+                 }
+                 leaf stl-sr-ero-nai-type {
+                   type string;
+                 }
+                 leaf stl-sr-ero-ip-node-id {
+                   type jt:ipaddr;
+                 }
+                 leaf stl-sr-ero-local-intf-id {
+                   type jt:ipaddr;
+                 }
+                 leaf stl-sr-ero-remote-intf-id {
+                   type jt:ipaddr;
+                 }
+                 leaf stl-sr-ero-unnum-local-router-id {
+                   type jt:ipaddr;
+                 }
+                 leaf stl-sr-ero-unnum-local-id {
+                   type uint32;
+                 }
+                 leaf stl-sr-ero-unnum-remote-router-id {
+                   type jt:ipaddr;
+                 }
+                 leaf stl-sr-ero-unnum-remote-id {
+                   type uint32;
+                 }
+                 leaf stl-sr-ero-sid-type {
+                   type string;
+                 }
+                 leaf stl-sr-ero-sid-value {
+                   type uint32;
+                 }
+                 leaf stl-sr-ero-srv6-sid-value {
+                   type jt:ipaddr;
+                 }
+                 leaf stl-sr-ero-sid-ttl {
+                   type uint32;
+                 }
+                 leaf stl-sr-ero-sid-exp {
+                   type uint32;
+                 }
+               }
+             }
+           }
+         }
+         leaf str-resolved {
+           type string;
+         }
+       }
+     }
+   }
+ }

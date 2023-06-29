@@ -1,0 +1,901 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-monitor {
+   namespace "http://yang.juniper.net/junos/rpc/monitor";
+
+   prefix monitor;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for monitor command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc request-monitor-ethernet-delay-measurement {
+     description "Trigger ethernet delay measurement from local to remote host";
+     input {
+       leaf ethdm-type {
+         type enumeration {
+           enum "one-way" {
+             description "One-way delay measurement";
+           }
+           enum "two-way" {
+             description "Two-way delay measurement";
+           }
+         }
+         mandatory true;
+       }
+       leaf wait {
+         description "Delay after sending last packet";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf count {
+         description "Number of delay measurement requests to send";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 65535";
+           }
+         }
+       }
+       leaf maintenance-domain {
+         description "Name of maintenance domain";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf maintenance-association {
+         description "Name of maintenance association";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf remote-mac-address {
+         description "MAC address of remote host in xx:xx:xx:xx:xx:xx format";
+         type jt:mac-unicast;
+       }
+       leaf mep {
+         description "MEP identifier of remote host (default 1)";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf local-mep {
+         description "MEP identifier of local host";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf priority {
+         description "Priority (802.1p) value of delay measurement request frame";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf size {
+         description "Size of data in data TLV of request packets";
+         units "bytes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+       }
+       leaf no-session-id-tlv {
+         description "Suppress insertion of session id tlv in request packet";
+         type empty;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container ethdm-results {
+         uses ethdm-results-block;
+       }
+     }
+   }
+   rpc request-monitor-ethernet-loss-measurement {
+     description "Trigger ethernet loss measurement from local to remote host";
+     input {
+       leaf wait {
+         description "Delay after sending last packet";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf count {
+         description "Number of loss measurement requests to send";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 65535";
+           }
+         }
+       }
+       leaf maintenance-domain {
+         description "Name of maintenance domain";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf maintenance-association {
+         description "Name of maintenance association";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf remote-mac-address {
+         description "MAC address of remote host in xx:xx:xx:xx:xx:xx format";
+         type jt:mac-unicast;
+       }
+       leaf mep {
+         description "MEP identifier of remote host (default 1)";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf local-mep {
+         description "MEP identifier of local host";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf priority {
+         description "Frame priority (802.1p) value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf no-session-id-tlv {
+         description "Suppress insertion of session id tlv in request packet";
+         type empty;
+       }
+     }
+   }
+   rpc request-monitor-ethernet-synthetic-loss-measurement {
+     description "Trigger ethernet synthetic loss measurement (ETH_SLM) from local to remote host";
+     input {
+       leaf wait {
+         description "Delay after sending last packet";
+         units "milliseconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "100 .. 5000";
+           }
+         }
+       }
+       leaf count {
+         description "Number of delay measurement requests to send";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 65535";
+           }
+         }
+       }
+       leaf maintenance-domain {
+         description "Name of maintenance domain";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf maintenance-association {
+         description "Name of maintenance association";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf remote-mac-address {
+         description "MAC address of remote host in xx:xx:xx:xx:xx:xx format";
+         type jt:mac-unicast;
+       }
+       leaf mep {
+         description "MEP identifier of remote host (default 1)";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf local-mep {
+         description "MEP identifier of local host";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf priority {
+         description "Priority (802.1p) value of eth-slm request frame";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf size {
+         description "Size of data in data TLV of request packets";
+         units "bytes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 1400";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container ethslm-results {
+         uses ethslm-results-block;
+       }
+     }
+   }
+   rpc monitor-mpls-loss-measurement-rsvp-lsp {
+     description "Trigger loss measurement for RSVP LSPs";
+     input {
+       leaf count {
+         description "Number of queries to send";
+         units "packets";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 1000000";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf interval {
+         description "Delay between successive packets";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf traffic-class {
+         description "Traffic class";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf bytes {
+         description "Measure byte loss";
+         type empty;
+       }
+       leaf lsp-name {
+         description "Name of LSP";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+     }
+   }
+   rpc monitor-mpls-delay-measurement-rsvp-lsp {
+     description "Trigger delay measurement for RSVP LSPs";
+     input {
+       leaf count {
+         description "Number of queries to send";
+         units "packets";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 1000000";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf interval {
+         description "Delay between successive packets";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf traffic-class {
+         description "Traffic class";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf padding-size {
+         description "Size of padding";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 1500";
+           }
+         }
+       }
+       leaf lsp-name {
+         description "Name of LSP";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+     }
+   }
+   rpc monitor-mpls-loss-delay-measurement-rsvp-lsp {
+     description "Trigger combined loss delay measurement for RSVP LSPs";
+     input {
+       leaf count {
+         description "Number of queries to send";
+         units "packets";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 1000000";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf interval {
+         description "Delay between successive packets";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf traffic-class {
+         description "Traffic class";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf bytes {
+         description "Measure byte loss";
+         type empty;
+       }
+       leaf padding-size {
+         description "Size of padding";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 1500";
+           }
+         }
+       }
+       leaf lsp-name {
+         description "Name of LSP";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping ethdm-results-block {
+     container cfm-ethdm-error-snapshot {
+       leaf cfm-ethdm-error-reason {
+         type string;
+         description "Reason for failure of a ETH-DM request.";
+       }
+     }
+     container cfm-ethdm-request-snapshot {
+       leaf cfm-ethdm-type {
+         type string;
+         description "Type of ethernet delay measurement.";
+       }
+       leaf cfm-destination-mac-address {
+         type string;
+         description "MAC address of the target MEP or MIP.";
+       }
+       leaf cfm-interface-name {
+         type string;
+         description "Name of the interface.";
+       }
+       leaf cfm-level {
+         type uint32;
+         description "Maintenance-domain level.";
+       }
+       leaf cfm-maintenance-domain-name {
+         type string;
+         description "Name of maintenance domain.";
+       }
+       leaf cfm-maintenance-association-name {
+         type string;
+         description "Name of maintenance association.";
+       }
+       leaf cfm-local-mep-identifier {
+         type uint32;
+         description "Identifier of local maintenance endpoint.";
+       }
+     }
+     list cfm-twoway-ethdm-reply-entry {
+       leaf cfm-destination-mac-address {
+         type string;
+         description "MAC address of the target MEP or MIP.";
+       }
+       leaf cfm-twoway-ethdm-invalid-timestamp-response {
+         type string;
+         description "Invalid timestamp detected in the received DMR";
+       }
+       leaf cfm-twoway-ethdm-invalid-flags-response {
+         type string;
+         description "Invalid flags detected in the received DMR";
+       }
+       leaf cfm-twoway-ethdm-invalid-tlvoffset-response {
+         type string;
+         description "Invalid TLV offset detected in the received DMR";
+       }
+       leaf cfm-twoway-ethdm-no-endtlv-response {
+         type string;
+         description "End TLV was not found in the received DMR";
+       }
+       leaf cfm-twoway-ethdm-delay {
+         type uint32;
+         description "Two-way delay measured using ETH-DM.";
+       }
+       leaf cfm-twoway-ethdm-delay-variation {
+         type uint32;
+         description "Variation of two-way delay between two samples of measurement.";
+       }
+     }
+     container cfm-oneway-ethdm-reply-summary {
+       leaf cfm-oneway-ethdm-requests-packets {
+         type uint32;
+         description "Number of one-way ETH-DM requests transmitted.";
+       }
+     }
+     container cfm-twoway-ethdm-reply-summary {
+       leaf cfm-twoway-ethdm-requests-packets {
+         type uint32;
+         description "Number of two-way ETH-DM requests transmitted.";
+       }
+       leaf cfm-twoway-ethdm-responses-packets {
+         type uint32;
+         description "Number of two-way ETH-DM responses received.";
+       }
+       leaf cfm-twoway-ethdm-invalid-responses-packets {
+         type uint32;
+         description "Number of invalid two-way ETH-DM responses received.";
+       }
+       leaf cfm-twoway-ethdm-average-delay {
+         type uint32;
+         description "Average two-way delay measured using ETH-DM.";
+       }
+       leaf cfm-twoway-ethdm-average-delay-variation {
+         type uint32;
+         description "Average variation of delay between two samples of measurement.";
+       }
+       leaf cfm-twoway-ethdm-bestcase-delay {
+         type uint32;
+         description "Bestcase two-way delay measured using ETH-DM.";
+       }
+       leaf cfm-twoway-ethdm-worstcase-delay {
+         type uint32;
+         description "Worstcase two-way delay measured using ETH-DM.";
+       }
+     }
+   }
+   grouping ethslm-results-block {
+     container cfm-ethslm-error-snapshot {
+       leaf cfm-ethslm-error-reason {
+         type string;
+         description "Reason for failure of a ETH-SLM request.";
+       }
+     }
+     container cfm-ethslm-request-snapshot {
+       leaf cfm-destination-mac-address {
+         type string;
+         description "MAC address of the target MEP or MIP.";
+       }
+       leaf cfm-interface-name {
+         type string;
+         description "Name of the interface.";
+       }
+       leaf cfm-level {
+         type uint32;
+         description "Maintenance-domain level.";
+       }
+       leaf cfm-maintenance-domain-name {
+         type string;
+         description "Name of maintenance domain.";
+       }
+       leaf cfm-maintenance-association-name {
+         type string;
+         description "Name of maintenance association.";
+       }
+       leaf cfm-local-mep-identifier {
+         type uint32;
+         description "Identifier of local maintenance endpoint.";
+       }
+     }
+     list cfm-ethslm-reply-entry {
+       leaf cfm-destination-mac-address {
+         type string;
+         description "MAC address of the target MEP or MIP.";
+       }
+       leaf cfm-ethslm-invalid-flags-response {
+         type string;
+         description "Invalid flags detected in the received SLR";
+       }
+       leaf cfm-ethslm-invalid-tlvoffset-response {
+         type string;
+         description "Invalid TLV offset detected in the received SLR";
+       }
+       leaf cfm-ethslm-no-endtlv-response {
+         type string;
+         description "End TLV was not found in the received SLR";
+       }
+     }
+     container cfm-ethslm-reply-summary {
+       leaf cfm-ethslm-requests-packets {
+         type uint32;
+         description "Number of ETH-SLM requests transmitted.";
+       }
+       leaf cfm-ethslm-responses-packets {
+         type uint32;
+         description "Number of ETH-SLM responses received.";
+       }
+       leaf cfm-ethslm-invalid-responses-packets {
+         type uint32;
+         description "Number of invalid ETH-SLM requests received.";
+       }
+       leaf cfm-ethslm-packet-tx-packets {
+         type uint32;
+         description "Number of ETH-SLM requests transmitted (packet counter).";
+       }
+       leaf cfm-ethslm-packet-rx-packets {
+         type uint32;
+         description "Number of ETH-SLM responses received. (packet counter)";
+       }
+       leaf cfm-ethslm-near-end-frame-loss {
+         type uint32;
+         description "Near-end loss measured using ETH-SLM.";
+       }
+       leaf cfm-ethslm-near-end-loss-ratio {
+         type string;
+         description "Near-end loss ratio measured using ETH-SLM.";
+       }
+       leaf cfm-ethslm-far-end-frame-loss {
+         type uint32;
+         description "Far-end loss measured using ETH-SLM.";
+       }
+       leaf cfm-ethslm-far-end-loss-ratio {
+         type string;
+         description "Far-end loss ratio measured using ETH-SLM.";
+       }
+     }
+   }
+ }

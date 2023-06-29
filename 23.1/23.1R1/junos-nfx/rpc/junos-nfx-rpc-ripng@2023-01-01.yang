@@ -1,0 +1,462 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-ripng {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/ripng";
+
+   prefix ripng;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for ripng command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.1R1.8";
+   }
+
+   rpc get-ripng-statistics-information {
+     description "Show RIPng statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf neighbor-name {
+         description "Name of RIPng neighbor";
+         type string;
+       }
+       leaf instance {
+         description "Name of RIPng instance";
+         type string;
+       }
+     }
+     output {
+       container rip-statistics-information {
+         uses rip-statistics-information-block;
+       }
+     }
+   }
+   rpc get-ripng-general-statistics-information {
+     description "Show RIPng general statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container rip-general-statistics-information {
+         uses rip-general-statistics-information-block;
+       }
+     }
+   }
+   rpc get-ripng-neighbor-information {
+     description "Show RIPng interfaces";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf neighbor-name {
+         description "Name of RIPng neighbor";
+         type string;
+       }
+       leaf instance {
+         description "Name of RIPng instance";
+         type string;
+       }
+     }
+     output {
+       container rip-neighbor-information {
+         uses rip-neighbor-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping rip-statistics-information-block {
+     container rip-timer-values {
+       description "Information about RIP timer values";
+       leaf rip-protocol-name {
+         type string;
+         description "Protocol name";
+       }
+       leaf rip-port {
+         type int32;
+         description "Port on which the protocol is running";
+       }
+       leaf rip-holddown {
+         type int32;
+         description "Value of the hold-down timer";
+       }
+     }
+     container rip-restart-values {
+       description "Information about RIP restart values";
+       leaf rip-restart-state {
+         type string;
+         description "Indicates if graceful restart is in progress";
+       }
+       leaf rip-restart-time {
+         type int32;
+         description "Restart time locally configured";
+       }
+       leaf rip-restart-timeout {
+         type int32;
+         description "Time after which graceful restart is complete";
+       }
+     }
+     container rip-global-statistics {
+       description "RIP global statistics";
+       leaf rip-routes-learned {
+         type int32;
+         description "Number of routes learned";
+       }
+       leaf rip-routes-holddown {
+         type int32;
+         description "Number of routes in hold-down state";
+       }
+       leaf rip-requests-dropped {
+         type int32;
+         description "Number of requests dropped";
+       }
+       leaf rip-responses-dropped {
+         type int32;
+         description "Number of responses dropped";
+       }
+     }
+     container rip-neighbor-statistics {
+       description "RIP neighbor statistics";
+       leaf rip-neighbor-name {
+         type string;
+         description "Neighbor name";
+       }
+       leaf rip-neighbor-learnt-routes {
+         type int32;
+         description "Number of routes learned by this neighbor";
+       }
+       leaf rip-neighbor-advertised-routes {
+         type int32;
+         description "Number of routes advertised by this neighbor";
+       }
+       leaf rip-neighbor-route-timeout {
+         type int32;
+         description "Timeout value for routes learned from this neighbor";
+       }
+       leaf rip-neighbor-update-interval {
+         type int32;
+         description "Value of update interval timer for this neighbor";
+       }
+       container rip-message-statistics {
+         leaf rip-message {
+           type string;
+         }
+         leaf rip-message-total {
+           type int32;
+           description "Total number of messages";
+         }
+         leaf rip-message-last-5minutes {
+           type int32;
+           description "Number of messages in the last 5 minutes";
+         }
+         leaf rip-message-last-minute {
+           type int32;
+           description "Number of messages in the last minute";
+         }
+       }
+     }
+   }
+   grouping rip-general-statistics-information-block {
+     container rip-general-statistics {
+       leaf rip-protocol-name {
+         type string;
+         description "Protocol name";
+       }
+       leaf rip-bad-messages {
+         type int32;
+         description "Number of bad messages";
+       }
+       leaf rip-interface-count {
+         type int32;
+         description "Number of receiving interfaces";
+       }
+       leaf rip-current-memory {
+         type int32;
+         description "Memory currently in use";
+       }
+       leaf rip-maximum-memory {
+         type int32;
+         description "Maximum memory ever used";
+       }
+     }
+   }
+   grouping rip-neighbor-information-block {
+     leaf authentication-type-rip {
+       type string;
+     }
+     container rip-neighbor {
+       leaf rip-neighbor-name {
+         type string;
+         description "Neighbor name";
+       }
+       leaf rip-neighbor-state {
+         type string;
+         description "Status of a neighbor";
+       }
+       leaf rip-local-address-ipv4 {
+         type jt:ipaddr;
+         description "Local address for this neighbor";
+       }
+       leaf rip-remote-address-ipv4 {
+         type jt:ipaddr;
+         description "Remote address for this neighbor";
+       }
+       leaf send-mode-ripv2 {
+         type string;
+         description "Send state of a neighbor";
+       }
+       leaf receive-mode-ripv2 {
+         type string;
+         description "Receive state of a neighbor";
+       }
+       leaf rip-neighbor-metric-in {
+         type int32;
+         description "Metric value to add to incoming routes (1..15)";
+       }
+       leaf authentication-type-rip {
+         type string;
+       }
+       leaf-list active-key-id {
+         type int32;
+       }
+       leaf active-key-start-time {
+         type string;
+       }
+       leaf rip-local-address-ipv6 {
+         type jt:ipaddr;
+         description "Local address for this neighbor";
+       }
+       leaf rip-remote-address-ipv6 {
+         type jt:ipaddr;
+         description "Remote address for this neighbor";
+       }
+       leaf send-mode-ripng {
+         type string;
+         description "Send state of a neighbor";
+       }
+       leaf receive-mode-ripng {
+         type string;
+         description "Receive state of a neighbor";
+       }
+     }
+   }
+ }

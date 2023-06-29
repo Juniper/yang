@@ -1,0 +1,572 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-forwarding-options {
+   namespace "http://yang.juniper.net/junos-ex/rpc/forwarding-options";
+
+   prefix forwarding-options;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for forwarding-options command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-native-analyzer-information {
+     description "Show native analyzer information";
+     junos:command "show forwarding-options analyzer";
+     input {
+       leaf analyzer-name {
+         description "Analyzer name";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+     output {
+       container analyzer {
+         uses analyzer-block;
+       }
+     }
+   }
+   rpc get-forwarding-options-next-hop-group {
+     description "Show next-hop-group information";
+     junos:command "show forwarding-options next-hop-group";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detail output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of next-hop-group";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+     output {
+       container smpl-next-hop-group {
+         uses smpl-next-hop-group-block;
+       }
+     }
+   }
+   rpc get-forwarding-options-port-mirroring {
+     description "Show port-mirroring information";
+     junos:command "show forwarding-options port-mirroring";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "detail";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "detail" {
+             description "Display detail output";
+           }
+         }
+       }
+       leaf instance-name {
+         description "Name of port-mirroring instance";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+     output {
+       container smpl-port-mirroring {
+         uses smpl-port-mirroring-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping analyzer-block {
+     list analyzer-information {
+       leaf analyzer-name {
+         type string;
+         description "Name of the analyzer";
+       }
+       leaf analyzer-mirror-ratio {
+         type uint32;
+         description "Mirror ratio (for N, mirror 1 packet out of N)";
+       }
+       leaf analyzer-loss-priority {
+         type string;
+         description "Loss priority of the analyzer";
+       }
+       list analyzer-ingress-interface-list {
+         leaf analyzer-ingress-interface-name {
+           type string;
+           description "Monitored ingress interface";
+         }
+       }
+       list analyzer-egress-interface-list {
+         leaf analyzer-egress-interface-name {
+           type string;
+           description "Monitored egress interface";
+         }
+       }
+       list analyzer-ingress-vlan-list {
+         leaf analyzer-ingress-vlan-name {
+           type string;
+           description "Monitored ingress VLAN";
+         }
+       }
+       list analyzer-egress-vlan-list {
+         leaf analyzer-egress-vlan-name {
+           type string;
+           description "Monitored egress VLAN";
+         }
+       }
+       container analyzer-monitor {
+         leaf analyzer-monitor-port {
+           type string;
+           description "Monitored interface";
+         }
+         leaf analyzer-monitor-vlan {
+           type string;
+           description "Monitored VLAN";
+         }
+         leaf analyzer-monitor-ipaddr {
+           type jt:ipaddr;
+           description "Monitored IP address";
+         }
+         leaf analyzer-monitor-erspan {
+           type string;
+           description "ERSPAN Destination IP Address";
+         }
+         leaf analyzer-monitor-next-hop-group {
+           type string;
+           description "Monitored next hop group";
+         }
+       }
+       leaf analyzer-rate {
+         type uint32;
+         description "Mirror ratio (for N, mirror 1 packet out of N)";
+       }
+       leaf analyzer-max-pkt-len {
+         type uint32;
+         description "Maximum length of the mirrored packet";
+       }
+       leaf analyzer-output-state {
+         type string;
+         description "State of destination";
+       }
+     }
+   }
+   grouping smpl-next-hop-group-block {
+     list smpl-nhgroup {
+       leaf smpl-nhgroup-name {
+         type string;
+         description "Name of the next-hop-group";
+       }
+       leaf smpl-nhgroup-type {
+         type string;
+         description "Type of the next-hop-group";
+       }
+       leaf smpl-nhgroup-state {
+         type string;
+         description "State of the next-hop-group";
+       }
+       list smpl-nhgroup-subgroup {
+         leaf smpl-nhgroup-nexthop-state {
+           type string;
+           description "State of the next-hop";
+         }
+         leaf smpl-nhgroup-name {
+           type string;
+           description "Name of the next-hop-group";
+         }
+         list smpl-subgroup-member-list {
+           leaf smpl-nhgroup-member-interface {
+             type string;
+             description "Name of the next-hop-group member interface";
+           }
+           leaf smpl-nhgroup-nexthop-address {
+             type string;
+             description "Nexthop address of the next-hop-group member interface";
+           }
+           leaf smpl-nhgroup-nexthop-state {
+             type string;
+             description "State of the next-hop";
+           }
+           leaf smpl-nexthop-index {
+             type string;
+             description "Next-hop index value";
+           }
+         }
+         leaf smpl-nhgroup-state {
+           type string;
+           description "State of the next-hop-group";
+         }
+         leaf smpl-nexthop-index {
+           type string;
+           description "Next-hop index value";
+         }
+         leaf smpl-subgroup-num-members-configured {
+           type int32;
+           description "Number of subgroup members interfaces that are configured";
+         }
+         leaf smpl-subgroup-num-members-up {
+           type int32;
+           description "Number of subgroup members interfaces that are up";
+         }
+         leaf smpl-nhgroup-nhid-header {
+           type string;
+           description "Next-hop index header";
+         }
+       }
+       list smpl-nhgroup-member-list {
+         leaf smpl-nhgroup-member-interface {
+           type string;
+           description "Name of the next-hop-group member interface";
+         }
+         leaf smpl-nhgroup-nexthop-address {
+           type string;
+           description "Nexthop address of the next-hop-group member interface";
+         }
+         leaf smpl-nhgroup-nexthop-state {
+           type string;
+           description "State of the next-hop";
+         }
+         leaf smpl-nexthop-index {
+           type string;
+           description "Next-hop index value";
+         }
+       }
+       leaf smpl-nhgroup-num-members-configured {
+         type int32;
+         description "Number of members interfaces that are configured";
+       }
+       leaf smpl-nhgroup-num-members-up {
+         type int32;
+         description "Number of members interfaces that are up";
+       }
+       leaf smpl-nhgroup-subgroups-configured {
+         type int32;
+         description "Number of subgroups that are configured";
+       }
+       leaf smpl-nhgroup-subgroups-up {
+         type int32;
+         description "Number of subgroups that are up";
+       }
+       leaf smpl-nhgroup-nhid-header {
+         type string;
+         description "Next-hop index header";
+       }
+     }
+   }
+   grouping smpl-port-mirroring-block {
+     list smpl-port-mirroring-instance {
+       leaf smpl-instance-name {
+         type string;
+         description "Name of the instance";
+       }
+       leaf smpl-instance-id {
+         type int32;
+         description "Instance identifier";
+       }
+       leaf smpl-instance-state {
+         type string;
+         description "State of the instance";
+       }
+       list smpl-port-mirror-output-family-list {
+         leaf smpl-output-family-name {
+           type string;
+           description "Family of the desintation";
+         }
+         leaf smpl-output-family-state {
+           type string;
+           description "State of desintation";
+         }
+         leaf smpl-output-family-destination {
+           type string;
+           description "Destination interface/group of the family";
+         }
+         leaf smpl-output-nexthop-address {
+           type string;
+           description "Nexthop address of the family";
+         }
+         leaf smpl-nexthop-index {
+           type string;
+           description "Next-hop index value";
+         }
+         list smpl-nhgroup-member-list {
+           leaf smpl-nhgroup-member-interface {
+             type string;
+             description "Name of the next-hop-group member interface";
+           }
+           leaf smpl-nhgroup-nexthop-address {
+             type string;
+             description "Nexthop address of the next-hop-group member interface";
+           }
+           leaf smpl-nexthop-index {
+             type string;
+             description "Next-hop index value";
+           }
+         }
+       }
+       leaf smpl-instance-input-rate {
+         type int32;
+         description "Ratio of packets to be sampled (1 out of N)";
+       }
+       leaf smpl-instance-input-run-length {
+         type int32;
+         description "Number of samples after initial trigger";
+       }
+       leaf smpl-instance-input-maximum-packet-length {
+         type int32;
+         description "Maximum length of the mirrored packet";
+       }
+       leaf smpl-instance-nhid-header {
+         type string;
+         description "Next-hop index header";
+       }
+       list smpl-port-mirror-profile-output {
+         leaf smpl-mirror-profile-name {
+           type string;
+           description "Name of the mirror-profile";
+         }
+         leaf smpl-output-mirror-type {
+           type string;
+           description "Type of the mirroring";
+         }
+         leaf smpl-output-observation-domain-id {
+           type int32;
+           description "Observation domain id";
+         }
+         leaf smpl-output-destination-routing-instance {
+           type string;
+           description "Routing-instance of the destination";
+         }
+         leaf smpl-output-family-state {
+           type string;
+           description "State of desintation";
+         }
+         leaf smpl-output-family-destination {
+           type string;
+           description "Destination interface/group of the family";
+         }
+         leaf smpl-output-l4-destination-port {
+           type int32;
+           description "UDP/TCP port of the collector";
+         }
+       }
+     }
+   }
+ }

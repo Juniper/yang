@@ -1,0 +1,406 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-vlans {
+   namespace "http://yang.juniper.net/junos-ex/rpc/vlans";
+
+   prefix vlans;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for vlans command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-vlan-information {
+     description "Show VLANs information";
+     junos:command "show vlans";
+     input {
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       choice interface-choice {
+         case interface {
+           leaf interface {
+             description "Name of interface for which to display table";
+             type union {
+               type jt:interface-unit;
+               type string {
+                 pattern "<.*>|$.*";
+               }
+             }
+           }
+         }
+       }
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "object-summary" {
+             description "Display object GUID output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ng-l2ald-vlan-instance-information {
+         uses l2ng-l2ald-vlan-instance-information-block;
+       }
+     }
+   }
+   rpc get-operational-vlan-instance-information {
+     description "Show operational bridging instance";
+     junos:command "show vlans operational";
+     output {
+       container l2ng-l2ald-vlan-instance-information {
+         uses l2ng-l2ald-vlan-instance-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping l2ng-l2ald-vlan-instance-information-block {
+     container l2ng-l2ald-vlan-instance-group {
+       leaf l2ng-l2rtb-name {
+         type string;
+         description "Name of the routing instance";
+       }
+       leaf l2ng-l2rtb-vlan-name {
+         type string;
+         description "Name of the bridging domain";
+       }
+       leaf l2ng-l2rtb-instance-description {
+         type string;
+       }
+       leaf l2ng-l2rtb-instance-type {
+         type string;
+         description "Type of instance (routing instance/bridge domain)";
+       }
+       leaf l2ng-l2rtb-instance-restart-state {
+         type string;
+       }
+       leaf l2ng-l2rtb-instance-pathse1-timeout {
+         type int32;
+       }
+       leaf l2ng-l2rtb-brief-summary {
+         type empty;
+       }
+       leaf l2ng-l2rtb-vlan-tag {
+         type string;
+       }
+       list l2ng-l2rtb-vlan-member {
+         leaf l2ng-l2rtb-vlan-member-interface {
+           type string;
+         }
+         leaf l2ng-l2rtb-vlan-member-tagness {
+           type string;
+         }
+         leaf l2ng-l2rtb-vlan-member-interface-mode {
+           type string;
+         }
+         leaf l2ng-l2rtb-inter-switch-link {
+           type string;
+         }
+         leaf l2ng-l2rtb-vlan-member-interface-guid {
+           type uint64;
+         }
+       }
+       leaf l2ng-l2rtb-instance-state {
+         type string;
+       }
+       leaf l2ng-l2rtb-evpn-extension {
+         type string;
+       }
+       leaf l2ng-l2rtb-pvlan-type {
+         type string;
+       }
+       leaf l2ng-l2rtb-pvlan {
+         type string;
+       }
+       leaf l2ng-l2rtb-instance-flags {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-internal-index {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-generation-index {
+         type string;
+       }
+       leaf l2ng-l2rtb-origin {
+         type string;
+       }
+       leaf l2ng-l2rtb-mac-aging-time {
+         type uint32;
+       }
+       leaf l2ng-vlan-unknown-unicast-nexthop {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-l3-interface {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-vxlan-enabled {
+         type string;
+       }
+       leaf l2ng-l2rtb-bridge-evpn-num-replicator {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-bridge-evpn-num-mh-ext-replicator {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-vlan-member-tagged-count {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-vlan-member-untagged-count {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this routing instance";
+       }
+       list l2ng-l2rtb-pvlan-secondary-vlan {
+         leaf l2ng-l2rtb-secondary-vlan-id {
+           type uint32;
+         }
+         leaf l2ng-l2rtb-secondary-vlan-name {
+           type string;
+         }
+       }
+       leaf l2ng-l2rtb-rtt-guid {
+         type uint64;
+       }
+       leaf l2ng-l2rtb-vlan-guid {
+         type uint64;
+       }
+     }
+   }
+ }
