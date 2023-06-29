@@ -1,0 +1,499 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-modem {
+   namespace "http://yang.juniper.net/junos-es/rpc/modem";
+
+   prefix modem;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for modem command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.1R1.8";
+   }
+
+   rpc get-modem-wireless-firmware {
+     description "Show wireless interface firmware details";
+     junos:command "show modem wireless firmware";
+     input {
+       leaf interface-name {
+         description "Name of physical interface";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container wwand-modem-wireless-lte-mpim-firmware {
+         uses wwand-modem-wireless-lte-mpim-firmware-block;
+       }
+     }
+   }
+   rpc get-modem-wireless-network {
+     description "Show wireless Network statistics";
+     junos:command "show modem wireless network";
+     input {
+       leaf interface-name {
+         description "Name of physical interface";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container wwand-modem-wireless-lte-network {
+         uses wwand-modem-wireless-lte-network-block;
+       }
+     }
+   }
+   rpc get-modem-wireless-rssi {
+     description "Show Received Signal Strength";
+     junos:command "show modem wireless rssi";
+     input {
+       leaf interface-name {
+         description "Name of physical interface";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container wwand-modem-wireless-interface-rssi {
+         uses wwand-modem-wireless-interface-rssi-block;
+       }
+     }
+   }
+   rpc get-modem-wireless-profiles {
+     description "Show profile details";
+     junos:command "show modem wireless profiles";
+     input {
+       leaf slot {
+         description "SIM slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32;
+         }
+         mandatory true;
+       }
+       leaf interface-name {
+         description "Name of physical interface";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container wwand-modem-wireless-interface-profiles {
+         uses wwand-modem-wireless-interface-profiles-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping wwand-modem-wireless-lte-mpim-firmware-block {
+     leaf lte-product-name {
+       type string;
+       description "LTE mPIM product name";
+     }
+     leaf lte-serial-num {
+       type string;
+       description "LTE mPIM serial number";
+     }
+     leaf lte-hardware-ver {
+       type string;
+       description "LTE mPIM hardware version";
+     }
+     leaf lte-firmware-ver {
+       type string;
+       description "LTE mPIM firmware version";
+     }
+     leaf lte-mac-addr {
+       type string;
+       description "LTE mPIM MAC address";
+     }
+     leaf lte-sys-uptime {
+       type int32;
+       description "LTE mPIM syste uptime";
+     }
+   }
+   grouping wwand-modem-wireless-lte-network-block {
+     container lte-network-generic {
+       leaf connected-time {
+         type string;
+         description "Connected time";
+       }
+     }
+     container lte-network-ipv4 {
+       leaf ip-addr {
+         type string;
+         description "IP address";
+       }
+       leaf gateway {
+         type string;
+         description "Gateway";
+       }
+       leaf dns {
+         type string;
+         description "DNS";
+       }
+     }
+     container lte-network-ipv6 {
+       leaf ip6-addr {
+         type string;
+         description "IPv6 address";
+       }
+       leaf gateway6 {
+         type string;
+         description "IPv6 Gateway";
+       }
+       leaf dns6 {
+         type string;
+         description "IPv6 DNS";
+       }
+     }
+     container lte-network-packet {
+       leaf in-bps {
+         type uint32;
+         description "Input bps";
+       }
+       leaf out-bps {
+         type uint32;
+         description "Output bps";
+       }
+       leaf byte-rx {
+         type uint32;
+         description "Byte RX";
+       }
+       leaf byte-tx {
+         type uint32;
+         description "Byte TX";
+       }
+       leaf packet-rx {
+         type uint32;
+         description "Packet RX";
+       }
+       leaf packet-tx {
+         type uint32;
+         description "Packet TX";
+       }
+     }
+     container lte-second-network-generic {
+       leaf second-connected-time {
+         type string;
+         description "Connected time";
+       }
+     }
+     container lte-second-network-ipv4 {
+       leaf second-ip-addr {
+         type string;
+         description "IP address";
+       }
+       leaf second-gateway {
+         type string;
+         description "Gateway";
+       }
+       leaf second-dns {
+         type string;
+         description "DNS";
+       }
+     }
+     container lte-second-network-ipv6 {
+       leaf second-ip6-addr {
+         type string;
+         description "IPv6 address";
+       }
+       leaf second-gateway6 {
+         type string;
+         description "IPv6 Gateway";
+       }
+       leaf second-dns6 {
+         type string;
+         description "IPv6 DNS";
+       }
+     }
+     container lte-second-network-packet {
+       leaf second-in-bps {
+         type uint32;
+         description "Input bps";
+       }
+       leaf second-out-bps {
+         type uint32;
+         description "Output bps";
+       }
+       leaf second-byte-rx {
+         type uint32;
+         description "Byte RX";
+       }
+       leaf second-byte-tx {
+         type uint32;
+         description "Byte TX";
+       }
+       leaf second-packet-rx {
+         type uint32;
+         description "Packet RX";
+       }
+       leaf second-packet-tx {
+         type uint32;
+         description "Packet TX";
+       }
+     }
+   }
+   grouping wwand-modem-wireless-interface-rssi-block {
+     leaf rssi {
+       type string;
+       description "Radio signal strength indication (RSSI)";
+     }
+   }
+   grouping wwand-modem-wireless-interface-profiles-block {
+     container profile-summary {
+       leaf max-profiles {
+         type int32;
+         description "Max profiles";
+       }
+       leaf default-profile {
+         type int32;
+         description "Default profile";
+       }
+     }
+     container gsm-profiles {
+       container gsm-profile {
+         leaf profile-id {
+           type string;
+           description "Prifile state";
+         }
+         leaf profile-valid {
+           type string;
+           description "Valid to use";
+         }
+         leaf profile-username {
+           type string;
+           description "Username";
+         }
+         leaf profile-password {
+           type string;
+           description "Password";
+         }
+         leaf profile-access-point-name {
+           type string;
+           description "Access point name (APN)";
+         }
+         leaf profile-authentication {
+           type string;
+           description "Authentication type";
+         }
+         leaf profile-ip-version {
+           type string;
+           description "IP version";
+         }
+       }
+     }
+   }
+ }
