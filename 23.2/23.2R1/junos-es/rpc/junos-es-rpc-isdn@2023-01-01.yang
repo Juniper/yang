@@ -1,0 +1,592 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-isdn {
+   namespace "http://yang.juniper.net/junos-es/rpc/isdn";
+
+   prefix isdn;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for isdn command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-isdn-q931-statistics {
+     description "Show Q.931 layer statistics";
+     input {
+       leaf interface {
+         description "Interface name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container q931-statistics {
+         uses q931-statistics-block;
+       }
+     }
+   }
+   rpc get-isdn-q921-statistics {
+     description "Show Q.921 layer statistics";
+     input {
+       leaf interface {
+         description "Interface name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container q921-statistics {
+         uses q921-statistics-block;
+       }
+     }
+   }
+   rpc get-isdn-calls {
+     description "Information about calls";
+     output {
+       container isdn-calls {
+         uses isdn-calls-block;
+       }
+     }
+   }
+   rpc get-isdn-call-history {
+     description "History of calls";
+     output {
+       container isdn-call-history {
+         uses isdn-call-history-block;
+       }
+     }
+   }
+   rpc get-isdn-status {
+     description "Show isdn information";
+     input {
+       leaf level {
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface {
+         description "Interface name";
+         type string;
+       }
+     }
+     output {
+       container isdn-status {
+         uses isdn-status-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping q931-statistics-block {
+     leaf alerting-sent {
+       type int32;
+       description "Number of ALERTING messages sent";
+     }
+     leaf alerting-recv {
+       type int32;
+       description "Number of ALERTING messages received";
+     }
+     leaf call-proceed-sent {
+       type int32;
+       description "Number of CALL PROCEED messages sent";
+     }
+     leaf call-proceed-recv {
+       type int32;
+       description "Number of CALL PROCEED messages received";
+     }
+     leaf conn-sent {
+       type int32;
+       description "Number of CONNECT messages sent";
+     }
+     leaf conn-recv {
+       type int32;
+       description "Number of CONNECT messages received";
+     }
+     leaf conn-ack-sent {
+       type int32;
+       description "Number of CONNECT ACK messages sent";
+     }
+     leaf conn-ack-recv {
+       type int32;
+       description "Number of CONNECT ACK messages received";
+     }
+     leaf progress-sent {
+       type int32;
+       description "Number of PROGRESS messages sent";
+     }
+     leaf progress-recv {
+       type int32;
+       description "Number of PROGRESS messages received";
+     }
+     leaf setup-sent {
+       type int32;
+       description "Number of SETUP messages sent";
+     }
+     leaf setup-recv {
+       type int32;
+       description "Number of SETUP messages received";
+     }
+     leaf setup-ack-sent {
+       type int32;
+       description "Number of SETUP ACK messages sent";
+     }
+     leaf setup-ack-recv {
+       type int32;
+       description "Number of SETUP ACK messages received";
+     }
+     leaf disc-sent {
+       type int32;
+       description "Number of DISCONNECT messages sent";
+     }
+     leaf disc-recv {
+       type int32;
+       description "Number of DISCONNECT messages received";
+     }
+     leaf rel-sent {
+       type int32;
+       description "Number of RELEASE messages sent";
+     }
+     leaf rel-recv {
+       type int32;
+       description "Number of RELEASE messages received";
+     }
+     leaf rel-cmplt-sent {
+       type int32;
+       description "Number of RELEASE COMPLETION messages sent";
+     }
+     leaf rel-cmplt-recv {
+       type int32;
+       description "Number of RELEASE COMPLETION messages received";
+     }
+     leaf rst-sent {
+       type int32;
+       description "Number of RESTART messages sent";
+     }
+     leaf rst-recv {
+       type int32;
+       description "Number of RESTART messages received";
+     }
+     leaf rst-ack-sent {
+       type int32;
+       description "Number of RESTART ACK messages sent";
+     }
+     leaf rst-ack-recv {
+       type int32;
+       description "Number of RESTART ACK messages received";
+     }
+     leaf info-sent {
+       type int32;
+       description "Number of INFORMATION messages sent";
+     }
+     leaf info-recv {
+       type int32;
+       description "Number of INFORMATION messages received";
+     }
+     leaf notify-sent {
+       type int32;
+       description "Number of NOTIFICATION messages sent";
+     }
+     leaf notify-recv {
+       type int32;
+       description "Number of NOTIFICATION messages received";
+     }
+     leaf stat-sent {
+       type int32;
+       description "Number of STATUS messages sent";
+     }
+     leaf stat-recv {
+       type int32;
+       description "Number of STATUS messages received";
+     }
+     leaf stat-enq-sent {
+       type int32;
+       description "Number of STATUS ENQUIRY messages sent";
+     }
+     leaf stat-enq-recv {
+       type int32;
+       description "Number of STATUS ENQUIRY messages received";
+     }
+   }
+   grouping q921-statistics-block {
+     leaf info-frame-sent {
+       type int32;
+       description "Number of Information (INFO) frames sent";
+     }
+     leaf info-frame-recv {
+       type int32;
+       description "Number of Information (INFO) frames received";
+     }
+     leaf rr-frame-sent {
+       type int32;
+       description "Number of Receive Ready (RR) frames sent";
+     }
+     leaf rr-frame-recv {
+       type int32;
+       description "Number of Receive Ready (RR) frames received";
+     }
+     leaf rnr-frame-sent {
+       type int32;
+       description "Number of Receive Not Ready (RNR) frames sent";
+     }
+     leaf rnr-frame-recv {
+       type int32;
+       description "Number of Receive Not Ready (RNR) frames received";
+     }
+     leaf rej-frame-sent {
+       type int32;
+       description "Number of Reject (REJ) frames sent";
+     }
+     leaf rej-frame-recv {
+       type int32;
+       description "Number of Reject (REJ) frames received";
+     }
+     leaf sabme-frame-sent {
+       type int32;
+       description "Number of Set Asynchronous Balanced Mode Extended (SABME) frames sent";
+     }
+     leaf sabme-frame-recv {
+       type int32;
+       description "Number of Set Asynchronous Balanced Mode Extended (SABME) frames received";
+     }
+     leaf disc-frame-sent {
+       type int32;
+       description "Number of Disconnect (DISC) frames sent";
+     }
+     leaf disc-frame-recv {
+       type int32;
+       description "Number of Disconnect (DISC) frames received";
+     }
+     leaf ua-frame-sent {
+       type int32;
+       description "Number of Unnumbered Acknowledgment (UA) frames sent";
+     }
+     leaf ua-frame-recv {
+       type int32;
+       description "Number of Unnumbered Acknowledgment (UA) frames received";
+     }
+     leaf dm-frame-sent {
+       type int32;
+       description "Number of Disconnect Mode (DM) frames sent";
+     }
+     leaf dm-frame-recv {
+       type int32;
+       description "Number of Disconnect Mode (DM) frames received";
+     }
+     leaf frmr-frame-sent {
+       type int32;
+       description "Number of Frame Reject (FRMR) frames sent";
+     }
+     leaf frmr-frame-recv {
+       type int32;
+       description "Number of Frame Reject (FRMR) frames received";
+     }
+     leaf xid-frame-sent {
+       type int32;
+       description "Number of Xid (XID) frames sent";
+     }
+     leaf xid-frame-recv {
+       type int32;
+       description "Number of Xid (XID) frames received";
+     }
+     leaf ui-frame-sent {
+       type int32;
+       description "Number of Unnumbered Information (UI) frames sent";
+     }
+     leaf ui-frame-recv {
+       type int32;
+       description "Number of Unnumbered Information (UI) frames received";
+     }
+   }
+   grouping isdn-calls-block {
+     container isdn-call {
+       leaf bc-interface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf call-status {
+         type string;
+         description "Current status of call";
+       }
+       leaf error-code {
+         type string;
+         description "Error code as returned by ISDN stack";
+       }
+       leaf call-duration {
+         type int32;
+         description "Duration for which call has been on";
+       }
+       leaf call-direction {
+         type string;
+         description "Direction of call (incoming or outgoing)";
+       }
+     }
+   }
+   grouping isdn-call-history-block {
+     container isdn-call {
+       leaf calling-number {
+         type string;
+         description "Number from which call was made";
+       }
+       leaf called-number {
+         type string;
+         description "Number to which call was made";
+       }
+       leaf bc-interface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf call-duration {
+         type int32;
+         description "Duration for which call has been on";
+       }
+       leaf call-direction {
+         type string;
+         description "Direction of call (incoming or outgoing)";
+       }
+     }
+   }
+   grouping isdn-status-block {
+     leaf isdn-interface-name {
+       type string;
+       description "Interface name";
+     }
+     leaf layer1-status {
+       type string;
+       description "Layer 1 status";
+     }
+     container q921-status {
+       container ces-status {
+         leaf layer2-status {
+           type string;
+           description "Layer 2 status";
+         }
+         leaf tei-assigned {
+           type string;
+           description "Terminal Equipment Identifier (TEI) assigned value";
+         }
+         leaf tei-status {
+           type string;
+           description "Terminal Equipment Identifier (TEI) assigned status";
+         }
+         leaf ces-num {
+           type int32;
+           description "Connection Endpoint Suffix number";
+         }
+       }
+     }
+     container q931-status {
+       leaf active-num-calls {
+         type int32;
+         description "Number of active calls";
+       }
+     }
+   }
+ }

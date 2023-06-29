@@ -1,0 +1,486 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-lacp {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/lacp";
+
+   prefix lacp;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for lacp command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-lacp-interface-statistics {
+     description "Show LACP interface statistics";
+     junos:command "show lacp statistics interfaces";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container lacp-interface-statistics-list {
+         uses lacp-interface-statistics-list-block;
+       }
+     }
+   }
+   rpc get-lacp-interface-information {
+     description "Show LACP interfaces information";
+     junos:command "show lacp interfaces";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf extensive {
+         description "Show lacp information in detail";
+         type empty;
+       }
+     }
+     output {
+       container lacp-interface-information-list {
+         uses lacp-interface-information-list-block;
+       }
+     }
+   }
+   rpc get-lacp-timeout-information {
+     description "Show LACP interfaces timeout information";
+     junos:command "show lacp timeouts";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container lacp-timeout-information-list {
+         uses lacp-timeout-information-list-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping lacp-interface-statistics-list-block {
+     list lacp-interface-statistics {
+       description "Statistics for an aggregated interface";
+       list lag-lacp-header {
+         description "LACP header";
+         leaf aggregate-name {
+           type string;
+           description "Aggregated Interface name";
+         }
+       }
+       list lag-lacp-statistics {
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf lacp-rx-packets {
+           type string;
+           description "Number of LACP packets received";
+         }
+         leaf lacp-tx-packets {
+           type string;
+           description "Number of LACP packets transmitted";
+         }
+         leaf unknown-rx-packets {
+           type string;
+           description "Number of unknown type packets received";
+         }
+         leaf illegal-rx-packets {
+           type string;
+           description "Number of ill formed packets received";
+         }
+       }
+     }
+   }
+   grouping lacp-interface-information-list-block {
+     list lacp-interface-information {
+       description "Information about an aggregated interface";
+       list lag-lacp-header {
+         description "LACP header";
+         leaf aggregate-name {
+           type string;
+           description "Aggregated Interface name";
+         }
+       }
+       list lag-lacp-info {
+         description "LACP information";
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf lacp-role {
+           type string;
+           description "Whether it is an actor or partner";
+         }
+         leaf lacp-sys-priority {
+           type string;
+           description "System priority";
+         }
+         leaf lacp-system-id {
+           type string;
+           description "LACP system identifier";
+         }
+         leaf lacp-port-priority {
+           type string;
+           description "Priority of the port";
+         }
+         leaf lacp-port-number {
+           type string;
+           description "Port number";
+         }
+         leaf lacp-port-key {
+           type string;
+           description "Operational key of the port";
+         }
+       }
+       list lag-lacp-state {
+         description "LACP protocol state information";
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf lacp-role {
+           type string;
+           description "Whether it is an actor or partner";
+         }
+         leaf lacp-expired {
+           type string;
+           description "State of the receive lacp machine is EXPIRED?";
+         }
+         leaf lacp-defaulted {
+           type string;
+           description "State of the receive lacp machine is DEFAULTED?";
+         }
+         leaf lacp-distributing {
+           type string;
+           description "State of the mux lacp machine is DISTRIBUTING?";
+         }
+         leaf lacp-collecting {
+           type string;
+           description "State of the mux lacp machine is COLLECTING?";
+         }
+         leaf lacp-synchronization {
+           type string;
+           description "Actor view of partner information is in sync";
+         }
+         leaf lacp-aggregation {
+           type string;
+           description "Actor view of partner information is in sync";
+         }
+         leaf lacp-timeout {
+           type string;
+           description "Configured as either fast or slow periodic";
+         }
+         leaf lacp-activity {
+           type string;
+           description "Configured as either active or passive";
+         }
+       }
+       list lag-lacp-protocol {
+         description "LACP protocol information";
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf lacp-receive-state {
+           type string;
+           description "State of the receive lacp machine";
+         }
+         leaf lacp-transmit-state {
+           type string;
+           description "State of the transmit lacp machine";
+         }
+         leaf lacp-mux-state {
+           type string;
+           description "State of the mux lacp machine";
+         }
+       }
+       list lag-lacp-bfd {
+         description "BFD protocol information";
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf lacp-bfd-state {
+           type string;
+           description "State of the BFD session";
+         }
+       }
+       container lacp-hold-up-state {
+         description "Hold-up timer state";
+         leaf lacp-hold-up-time {
+           type int32;
+           description "LACP hold time up";
+         }
+       }
+       list lacp-hold-up-information {
+         description "LACP hold-up information";
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf status {
+           type string;
+         }
+         leaf restart-count {
+           type int32;
+         }
+         leaf time-to-expire {
+           type int32;
+         }
+         leaf start-time {
+           type string;
+         }
+       }
+     }
+   }
+   grouping lacp-timeout-information-list-block {
+     container lacp-timeout-information {
+       list lag-lacp-header {
+         description "LACP header";
+         leaf aggregate-name {
+           type string;
+           description "Aggregated Interface name";
+         }
+       }
+       list lacp-timeout-info {
+         leaf name {
+           type string;
+           description "Interface name";
+         }
+         leaf lacp-mux-state {
+           type string;
+           description "State of the mux lacp machine";
+         }
+         leaf lacp-timeout-time {
+           type string;
+         }
+       }
+     }
+   }
+ }

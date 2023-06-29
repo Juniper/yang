@@ -1,0 +1,665 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-virtual-network-functions {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/virtual-network-functions";
+
+   prefix virtual-network-functions;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for virtual-network-functions command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-virtual-network-functions-information {
+     description "Show virtual network functions information";
+     junos:command "show virtual-network-functions";
+     input {
+       leaf vnf-name {
+         description "VNF name";
+         junos:cli-feature "nokeyword";
+         type string {
+           length "1 .. 256";
+           junos:posix-pattern "^[a-zA-Z0-9_-]+$";
+           junos:pattern-message "VNF name must be a string of alphanumericals, dashes or underscores";
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container vnf-information {
+         uses vnf-information-block;
+       }
+     }
+   }
+   rpc get-vnf-staging-dir-info {
+     description "Show virtaul network function storage";
+     junos:command "show virtual-network-functions storage";
+     output {
+       container vnf-staging-dir-info {
+         uses vnf-staging-dir-info-block;
+       }
+     }
+   }
+   rpc get-vnf-staging-dir-info-extensive {
+     description "Display extensive output";
+     junos:command "show virtual-network-functions storage extensive";
+     output {
+       container vnf-staging-dir-info-extensive {
+         uses vnf-staging-dir-info-extensive-block;
+       }
+     }
+   }
+   rpc get-vnf-img-integrity-check-information {
+     description "Show virtual network function storage integrity check";
+     junos:command "show virtual-network-functions storage integrity-check";
+     output {
+       container vnf-img-integrity-check-info {
+         uses vnf-img-integrity-check-info-block;
+       }
+     }
+   }
+   rpc get-vnf-img-integrity-check-info-detail {
+     description "Display detailed output";
+     junos:command "show virtual-network-functions storage integrity-check detail";
+     input {
+       leaf file-name {
+         description "URL or path name of file";
+         junos:cli-feature "nokeyword";
+         type jt:filename;
+         mandatory true;
+       }
+     }
+     output {
+       container vnf-img-integrity-check-info-detail {
+         uses vnf-img-integrity-check-info-detail-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping vnf-information-block {
+     list vnf-instance {
+       leaf id {
+         type string;
+       }
+       leaf name {
+         type string;
+       }
+       leaf state {
+         type string;
+       }
+       leaf liveliness {
+         type string;
+       }
+       leaf used_mem {
+         type string;
+       }
+       container vnf-blk-dev-list {
+         container vnf-blk-dev {
+           leaf target {
+             type string;
+           }
+           leaf source {
+             type string;
+           }
+         }
+       }
+       leaf ip_addr {
+         type string;
+       }
+       leaf vcpus {
+         type string;
+       }
+       leaf max_mem {
+         type string;
+       }
+       leaf resource_template {
+         type string;
+       }
+       leaf serial_port {
+         type string;
+       }
+       leaf qemu_process_id {
+         type string;
+       }
+       leaf smbios_version {
+         type string;
+       }
+       leaf used_huge1g_count {
+         type string;
+       }
+       leaf used_huge2m_count {
+         type string;
+       }
+       leaf vnf_err_str {
+         type string;
+       }
+       leaf uuid {
+         type string;
+       }
+     }
+     container vnf-statistics-information {
+       container vnf-uptime-information {
+         leaf vnf-uptime {
+           type string;
+         }
+       }
+       container vnf-cpu-utilization-information {
+         container vnf-cpu-usage-information {
+           leaf vnf-name {
+             type string;
+           }
+           leaf cpu-ids {
+             type string;
+           }
+           leaf cpu-usage {
+             type string;
+           }
+           leaf vnf-pid {
+             type string;
+           }
+         }
+       }
+       container vnf-memory-utilization-information {
+         container vnf-memory-utilization {
+           leaf vnf-name {
+             type string;
+           }
+           leaf mem-actual {
+             type string;
+           }
+           leaf mem-resident {
+             type string;
+           }
+         }
+       }
+       container vnf-storage-utilization-information {
+         container vnf-storage-information {
+           leaf vnf-dir {
+             type string;
+           }
+           leaf virtual-size {
+             type string;
+           }
+           leaf actual-size {
+             type string;
+           }
+         }
+       }
+       container vnf-interfaces-statistics {
+         container vnf-interface {
+           leaf intf-name {
+             type string;
+           }
+           leaf ip-bytes {
+             type string;
+           }
+           leaf ip-packets {
+             type string;
+           }
+           leaf ip-error {
+             type string;
+           }
+           leaf ip-drop {
+             type string;
+           }
+           leaf op-bytes {
+             type string;
+           }
+           leaf op-packets {
+             type string;
+           }
+           leaf op-error {
+             type string;
+           }
+           leaf op-drop {
+             type string;
+           }
+         }
+       }
+       container vnf-network-information {
+         container vnf-interface {
+           leaf virtual-intf {
+             type string;
+           }
+           leaf physical-intf {
+             type string;
+           }
+           leaf mac {
+             type string;
+           }
+         }
+       }
+       container mac-block {
+         leaf base-mac-address {
+           type string;
+         }
+         leaf size {
+           type string;
+         }
+         leaf licensed {
+           type string;
+         }
+         leaf donor {
+           type string;
+         }
+       }
+     }
+     leaf vnf-xml-profile {
+       type string;
+       description "VNF xml profile";
+     }
+     leaf error-string {
+       type string;
+     }
+   }
+   grouping vnf-staging-dir-info-block {
+     list vnf-img-info-brief {
+       container vnf-image-info {
+         leaf no {
+           type string;
+         }
+         leaf file-format {
+           type string;
+         }
+         leaf file-in-use {
+           type string;
+         }
+         leaf size-on-disk {
+           type string;
+         }
+         leaf file-name {
+           type string;
+         }
+       }
+     }
+     list staging-dir-info {
+       leaf filesystem {
+         type string;
+       }
+       leaf size {
+         type string;
+       }
+       leaf avail {
+         type string;
+       }
+       leaf used {
+         type string;
+       }
+       leaf used_percent {
+         type string;
+       }
+     }
+   }
+   grouping vnf-staging-dir-info-extensive-block {
+     list vnf-img-info-detail {
+       container vnf-image-info {
+         leaf no {
+           type string;
+         }
+         leaf file-format {
+           type string;
+         }
+         leaf file-checksum {
+           type string;
+         }
+         leaf uuid {
+           type string;
+         }
+         leaf file-name {
+           type string;
+         }
+         leaf file-in-use {
+           type string;
+         }
+         leaf vm-name {
+           type string;
+         }
+         leaf virtual-size {
+           type string;
+         }
+         leaf size-on-disk {
+           type string;
+         }
+       }
+     }
+     list staging-dir-info {
+       leaf filesystem {
+         type string;
+       }
+       leaf size {
+         type string;
+       }
+       leaf avail {
+         type string;
+       }
+       leaf used {
+         type string;
+       }
+       leaf used_percent {
+         type string;
+       }
+     }
+   }
+   grouping vnf-img-integrity-check-info-block {
+     list vnf-img-check-info {
+       leaf file-format {
+         type string;
+       }
+       leaf file-name {
+         type string;
+       }
+       leaf allocated-clusters {
+         type string;
+       }
+       leaf fragmented-clusters {
+         type string;
+       }
+       leaf compressed-clusters {
+         type string;
+       }
+       leaf image-end-offset {
+         type string;
+       }
+       leaf file-check-info {
+         type string;
+       }
+       container leaked-cluster-detail {
+         list leaked-cluster-info {
+         }
+       }
+       container error-cluster-detail {
+         list error-cluster-info {
+         }
+       }
+     }
+   }
+   grouping vnf-img-integrity-check-info-detail-block {
+     list vnf-img-check-info {
+       leaf file-format {
+         type string;
+       }
+       leaf file-name {
+         type string;
+       }
+       leaf allocated-clusters {
+         type string;
+       }
+       leaf fragmented-clusters {
+         type string;
+       }
+       leaf compressed-clusters {
+         type string;
+       }
+       leaf image-end-offset {
+         type string;
+       }
+       leaf file-check-info {
+         type string;
+       }
+       leaf filename {
+         type string;
+       }
+       leaf file-check-error {
+         type string;
+       }
+       container leaked-cluster-detail {
+         leaf leaked-cluster-total {
+           type string;
+         }
+         leaf leaked-cluster-warning {
+           type string;
+         }
+         list leaked-cluster-info {
+           container leaked-cluster-group-info {
+             leaf cluster-id {
+               type string;
+             }
+             leaf refcount-info {
+               type string;
+             }
+             leaf reference-info {
+               type string;
+             }
+           }
+         }
+       }
+       container error-cluster-detail {
+         leaf error-cluster-total {
+           type string;
+         }
+         leaf error-message {
+           type string;
+         }
+         list error-cluster-info {
+           container error-cluster-group-info {
+             leaf error-cluster-id {
+               type string;
+             }
+             leaf error-refcount-info {
+               type string;
+             }
+             leaf error-reference-info {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+ }

@@ -1,0 +1,2587 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-probe {
+   namespace "http://yang.juniper.net/junos-es/rpc/probe";
+
+   prefix probe;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for probe command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc probe {
+     description "Probe interfaces on remote target";
+     junos:command "probe";
+     input {
+       leaf by-name {
+         description "Probe a local interface by name";
+         type string;
+       }
+       leaf by-index {
+         description "Probe a local interface by index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf by-address {
+         description "Probe a local interface by address";
+         type string;
+       }
+       leaf by-remote-address {
+         description "Probe a remote interface by address";
+         type string;
+       }
+       leaf count {
+         description "Number of probe requests to send";
+         units "packets";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Maximum wait time after sending final packet";
+         units "seconds";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf detail {
+         description "Display incoming interface of received packet";
+         type empty;
+       }
+       leaf interface {
+         description "Source interface (multicast, all-ones, unrouted packets)";
+         type string;
+       }
+       leaf interval {
+         description "Delay between probe requests";
+         units "seconds";
+         type string;
+       }
+       leaf source {
+         description "Source address of probe request";
+         type string;
+       }
+       leaf ttl {
+         description "IP time-to-live value (IPv6 hop-limit value)";
+         units "hops";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf tos {
+         description "IP type-of-service value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf inet {
+         description "Force probe to IPv4 destination";
+         type empty;
+       }
+       leaf inet6 {
+         description "Force probe to IPv6 destination";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Routing instance for probe attempt";
+         type string;
+       }
+       leaf proxy {
+         description "Hostname or IP address of proxy node";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
+         }
+       }
+     }
+     output {
+       container probe-results {
+         uses probe-results-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping probe-results-block {
+     list probe-results-terse {
+       leaf test-name {
+         type string;
+         description "Name of test";
+       }
+       leaf destination-interface {
+         type string;
+         description "Name of output interface for probes";
+       }
+       leaf target-address {
+         type string;
+         description "Target address of test";
+       }
+       leaf last-status {
+         type string;
+         description "Status";
+       }
+       leaf last-status-changed {
+         type string;
+         description "Last time when status updated";
+       }
+       leaf twl-local-link {
+         type string;
+         description "Name of local link for TWAMP-Light probes";
+       }
+       leaf last-probe-status {
+         type string;
+         description "Probe status";
+       }
+     }
+     list probe-test-results {
+       leaf owner {
+         type string;
+         description "Test owner name";
+       }
+       leaf test-name {
+         type string;
+         description "Name of test";
+       }
+       leaf target-address {
+         type string;
+         description "Target address of test";
+       }
+       leaf target-url {
+         type string;
+         description "Target URL of test";
+       }
+       leaf source-address {
+         type string;
+         description "Source address of test";
+       }
+       leaf probe-type {
+         type string;
+         description "Name of the probe";
+       }
+       leaf icmp-id {
+         type uint32;
+         description "Icmp id for icmp-ping probes";
+       }
+       leaf test-size {
+         type uint32;
+         description "Number of probes in test";
+       }
+       leaf server-status {
+         type string;
+         description "TWAMP server is Connected or Not";
+       }
+       leaf twamp-client-retries {
+         type uint32;
+         description "Retries to connect TWAMP server at every test-interval";
+       }
+       leaf server-address {
+         type jt:ipaddr;
+         description "Server address";
+       }
+       leaf server-port {
+         type uint32;
+         description "Server port";
+       }
+       leaf client-address {
+         type jt:ipaddr;
+         description "Client address";
+       }
+       leaf client-port {
+         type uint32;
+         description "Client port";
+       }
+       leaf reflector-address {
+         type jt:ipaddr;
+         description "Reflector address";
+       }
+       leaf reflector-port {
+         type uint32;
+         description "Reflector port";
+       }
+       leaf sender-address {
+         type jt:ipaddr;
+         description "Sender address";
+       }
+       leaf sender-port {
+         type uint32;
+         description "Sender port";
+       }
+       leaf routing-instance-name {
+         type string;
+         description "Routing Instance Name";
+       }
+       leaf destination-interface {
+         type string;
+         description "Name of output interface for probes";
+       }
+       leaf twl-local-link {
+         type string;
+         description "Name of local link for TWAMP-Light probes";
+       }
+       leaf http-status {
+         type uint32;
+         description "HTTP Status Code";
+       }
+       leaf loss-thresh-total {
+         type uint32;
+         description "Maximum number of all lost probes";
+       }
+       leaf loss-thresh-succ {
+         type uint32;
+         description "Maximum number of successive lost probes";
+       }
+       leaf delay-thresh {
+         type uint32;
+         description "Maximum delay threshold";
+       }
+       leaf jitter-thresh {
+         type uint32;
+         description "Maximum jitter threshold";
+       }
+       leaf stddev-thresh {
+         type uint32;
+         description "Maximum standard deviation threshold";
+       }
+       leaf egress-thresh {
+         type uint32;
+         description "Maximum egress delay threshold";
+       }
+       leaf egress-jitter-thresh {
+         type uint32;
+         description "Maximum egress jitter threshold";
+       }
+       leaf egress-stddev-thresh {
+         type uint32;
+         description "Maximum egress standard deviation threshold";
+       }
+       leaf ingress-thresh {
+         type uint32;
+         description "Maximum ingress delay threshold";
+       }
+       leaf ingress-jitter-thresh {
+         type uint32;
+         description "Maximum ingress jitter threshold";
+       }
+       leaf ingress-stddev-thresh {
+         type uint32;
+         description "Maximum ingress standard deviation threshold";
+       }
+       container probe-single-results {
+         leaf probe-sent-time {
+           type string;
+           description "Time at which probe was sent";
+         }
+         leaf probe-status {
+           type string;
+           description "Operation response status from probes";
+         }
+         leaf probe-time {
+           type string;
+           description "Time at which probe response was received or timed out";
+         }
+         leaf hardware-timestamp-status {
+           type string;
+           description "Use of hardware timestamps in probes";
+         }
+         leaf http-status {
+           type uint32;
+           description "HTTP Status Code";
+         }
+         leaf rtt {
+           type uint32;
+           description "Round trip time of probes";
+         }
+         leaf ingress {
+           type uint32;
+           description "Ingress trip time of probes";
+         }
+         leaf egress {
+           type uint32;
+           description "Egress trip time of probes";
+         }
+         leaf egress-jitter {
+           type int32;
+           description "Egress jitter of probes";
+         }
+         leaf ingress-jitter {
+           type int32;
+           description "Ingress jitter of probes";
+         }
+         leaf round-trip-jitter {
+           type int32;
+           description "Round trip jitter of probes";
+         }
+         leaf egress-interarrival-jitter {
+           type int32;
+           description "Egress interarrival jitter of probes";
+         }
+         leaf ingress-interarrival-jitter {
+           type int32;
+           description "Ingress interarrival jitter of probes";
+         }
+         leaf round-trip-interarrival-jitter {
+           type int32;
+           description "Round trip interarrival jitter of probes";
+         }
+         leaf owner {
+           type string;
+           description "Test owner name";
+         }
+         leaf test-name {
+           type string;
+           description "Name of test";
+         }
+       }
+       container probe-test-current-results {
+         container probe-test-generic-results {
+           leaf results-scope {
+             type string;
+             description "Scope of results";
+           }
+           leaf probes-sent {
+             type uint32;
+             description "Number of probes sent";
+           }
+           leaf probe-responses {
+             type uint32;
+             description "Responses from probes";
+           }
+           leaf loss-percentage {
+             type string;
+             description "Percentage of probes lost (no response)";
+           }
+           container probe-last-test-info {
+             leaf last-test-time {
+               type string;
+               description "Time at which last test was completed";
+             }
+           }
+           container probe-test-rtt {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container rpm-results-thresh {
+             leaf rtt-thresh {
+               type uint32;
+               description "Round trip time thresh";
+             }
+             leaf rtt-jitter-thresh {
+               type uint32;
+               description "Round trip jitter threshold";
+             }
+             leaf rtt-stddev-thresh {
+               type uint32;
+               description "Round trip standard deviaion thresh";
+             }
+             leaf igr-thresh {
+               type uint32;
+               description "Ingress threshold";
+             }
+             leaf igr-jitter-thresh {
+               type uint32;
+               description "Ingress jitter threshold";
+             }
+             leaf igr-stddev-thresh {
+               type uint32;
+               description "Ingress standard deviation threshold";
+             }
+             leaf egr-thresh {
+               type uint32;
+               description "Egress threshold";
+             }
+             leaf egr-jitter-thresh {
+               type uint32;
+               description "Egress jitter threshold";
+             }
+             leaf egr-stddev-thresh {
+               type uint32;
+               description "Egress standared deviation threshold";
+             }
+           }
+         }
+       }
+       container probe-last-test-results {
+         container probe-test-generic-results {
+           leaf results-scope {
+             type string;
+             description "Scope of results";
+           }
+           leaf probes-sent {
+             type uint32;
+             description "Number of probes sent";
+           }
+           leaf probe-responses {
+             type uint32;
+             description "Responses from probes";
+           }
+           leaf loss-percentage {
+             type string;
+             description "Percentage of probes lost (no response)";
+           }
+           container probe-last-test-info {
+             leaf last-test-time {
+               type string;
+               description "Time at which last test was completed";
+             }
+           }
+           container probe-test-rtt {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container rpm-results-thresh {
+             leaf rtt-thresh {
+               type uint32;
+               description "Round trip time thresh";
+             }
+             leaf rtt-jitter-thresh {
+               type uint32;
+               description "Round trip jitter threshold";
+             }
+             leaf rtt-stddev-thresh {
+               type uint32;
+               description "Round trip standard deviaion thresh";
+             }
+             leaf igr-thresh {
+               type uint32;
+               description "Ingress threshold";
+             }
+             leaf igr-jitter-thresh {
+               type uint32;
+               description "Ingress jitter threshold";
+             }
+             leaf igr-stddev-thresh {
+               type uint32;
+               description "Ingress standard deviation threshold";
+             }
+             leaf egr-thresh {
+               type uint32;
+               description "Egress threshold";
+             }
+             leaf egr-jitter-thresh {
+               type uint32;
+               description "Egress jitter threshold";
+             }
+             leaf egr-stddev-thresh {
+               type uint32;
+               description "Egress standared deviation threshold";
+             }
+           }
+         }
+       }
+       container probe-test-moving-results {
+         container probe-test-generic-results {
+           leaf results-scope {
+             type string;
+             description "Scope of results";
+           }
+           leaf probes-sent {
+             type uint32;
+             description "Number of probes sent";
+           }
+           leaf probe-responses {
+             type uint32;
+             description "Responses from probes";
+           }
+           leaf loss-percentage {
+             type string;
+             description "Percentage of probes lost (no response)";
+           }
+           container probe-last-test-info {
+             leaf last-test-time {
+               type string;
+               description "Time at which last test was completed";
+             }
+           }
+           container probe-test-rtt {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container rpm-results-thresh {
+             leaf rtt-thresh {
+               type uint32;
+               description "Round trip time thresh";
+             }
+             leaf rtt-jitter-thresh {
+               type uint32;
+               description "Round trip jitter threshold";
+             }
+             leaf rtt-stddev-thresh {
+               type uint32;
+               description "Round trip standard deviaion thresh";
+             }
+             leaf igr-thresh {
+               type uint32;
+               description "Ingress threshold";
+             }
+             leaf igr-jitter-thresh {
+               type uint32;
+               description "Ingress jitter threshold";
+             }
+             leaf igr-stddev-thresh {
+               type uint32;
+               description "Ingress standard deviation threshold";
+             }
+             leaf egr-thresh {
+               type uint32;
+               description "Egress threshold";
+             }
+             leaf egr-jitter-thresh {
+               type uint32;
+               description "Egress jitter threshold";
+             }
+             leaf egr-stddev-thresh {
+               type uint32;
+               description "Egress standared deviation threshold";
+             }
+           }
+         }
+       }
+       container probe-test-global-results {
+         container probe-test-generic-results {
+           leaf results-scope {
+             type string;
+             description "Scope of results";
+           }
+           leaf probes-sent {
+             type uint32;
+             description "Number of probes sent";
+           }
+           leaf probe-responses {
+             type uint32;
+             description "Responses from probes";
+           }
+           leaf loss-percentage {
+             type string;
+             description "Percentage of probes lost (no response)";
+           }
+           container probe-last-test-info {
+             leaf last-test-time {
+               type string;
+               description "Time at which last test was completed";
+             }
+           }
+           container probe-test-rtt {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-egress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-ingress-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-positive-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-negative-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container probe-test-round-trip-jitter {
+             container probe-summary-results {
+               leaf probe-results-type {
+                 type string;
+                 description "Results type";
+               }
+               leaf samples {
+                 type uint32;
+                 description "Number of samples";
+               }
+               leaf min-delay {
+                 type uint32;
+                 description "Minimum delay time";
+               }
+               leaf max-delay {
+                 type uint32;
+                 description "Maximum delay time";
+               }
+               leaf avg-delay {
+                 type uint32;
+                 description "Average delay time";
+               }
+               leaf jitter-delay {
+                 type uint32;
+                 description "Difference between maximum and minimum delay times";
+               }
+               leaf stddev-delay {
+                 type uint64;
+                 description "Standard deviation of delay time";
+               }
+               leaf sum-delay {
+                 type uint64;
+                 description "Sum of delay times";
+               }
+             }
+           }
+           container rpm-results-thresh {
+             leaf rtt-thresh {
+               type uint32;
+               description "Round trip time thresh";
+             }
+             leaf rtt-jitter-thresh {
+               type uint32;
+               description "Round trip jitter threshold";
+             }
+             leaf rtt-stddev-thresh {
+               type uint32;
+               description "Round trip standard deviaion thresh";
+             }
+             leaf igr-thresh {
+               type uint32;
+               description "Ingress threshold";
+             }
+             leaf igr-jitter-thresh {
+               type uint32;
+               description "Ingress jitter threshold";
+             }
+             leaf igr-stddev-thresh {
+               type uint32;
+               description "Ingress standard deviation threshold";
+             }
+             leaf egr-thresh {
+               type uint32;
+               description "Egress threshold";
+             }
+             leaf egr-jitter-thresh {
+               type uint32;
+               description "Egress jitter threshold";
+             }
+             leaf egr-stddev-thresh {
+               type uint32;
+               description "Egress standared deviation threshold";
+             }
+           }
+         }
+       }
+       container probe-test-hwts-err-stats {
+         leaf invalid-client-recv-ts-cntr {
+           type uint32;
+           description "Client recv timestamp less than Client send timestamp";
+         }
+         leaf invalid-client-nots-cntr {
+           type uint32;
+           description "Client timestamps (T1, T4) are marked as deadbeef";
+         }
+         leaf invalid-server-send-ts-cntr {
+           type uint32;
+           description "Server send timestamp less than Server recv timestamp";
+         }
+         leaf invalid-server-spent-time-cntr {
+           type uint32;
+           description "Server side spent time greater than RTT";
+         }
+         leaf pkt-rcvd-after-timeout-cntr {
+           type uint32;
+           description "RTT is greater than probe-interval";
+         }
+       }
+     }
+   }
+ }

@@ -1,0 +1,976 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-task {
+   namespace "http://yang.juniper.net/junos/rpc/task";
+
+   prefix task;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for task command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R1.14";
+   }
+
+   rpc get-lrmuxd-task-information {
+     description "Show logical-system-mux per-task information";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output (default)";
+           }
+         }
+       }
+       leaf task-name {
+         description "Name of task";
+         type string;
+       }
+     }
+   }
+   rpc get-lrmuxd-tasks-io-statistics {
+     description "Show task I/O statistics";
+   }
+   rpc get-lrmuxd-task-memory {
+     description "Show memory utilization of lrmuxd tasks";
+     input {
+       leaf level {
+         type enumeration {
+           enum "summary" {
+             description "Display current and maximum memory usage";
+           }
+           enum "brief" {
+             description "Display current/maximum/available memory";
+           }
+           enum "detail" {
+             description "Display memory usage by individual users";
+           }
+           enum "history" {
+             description "Display memory usage in the recent past";
+           }
+         }
+       }
+     }
+   }
+   rpc get-scheduler-slip-history {
+     description "Display history and statistics for scheduler slips";
+     output {
+       container task-scheduler-slip-history-information {
+         uses task-scheduler-slip-history-information-block;
+       }
+     }
+   }
+   rpc get-routing-task-replication-state {
+     description "Stateful replication";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container task-replication-state {
+         uses task-replication-state-block;
+       }
+     }
+   }
+   rpc get-task-memory-information {
+     description "Show memory utilization of routing tasks";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf level {
+         type enumeration {
+           enum "summary" {
+             description "Display current and maximum memory usage";
+           }
+           enum "brief" {
+             description "Display current/maximum/available memory";
+           }
+           enum "detail" {
+             description "Display memory usage by individual users";
+           }
+           enum "history" {
+             description "Display memory usage in the recent past";
+           }
+         }
+       }
+     }
+     output {
+       container task-memory-information {
+         uses task-memory-information-block;
+       }
+     }
+   }
+   rpc get-task-object-information {
+     description "Show an object's reference count statistcis";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-task-object-refcount-information {
+     description "Show memory reference statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf obj-name {
+         description "Name of refcount object";
+         type string;
+       }
+     }
+     output {
+       container task-object-reference-report {
+         uses task-object-reference-report-block;
+       }
+     }
+   }
+   rpc get-task-snooping-information {
+     description "Show task information for multicast-snooping daemon";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output (default)";
+           }
+         }
+       }
+       leaf task-name {
+         description "Name of task";
+         type string;
+       }
+     }
+   }
+   rpc get-task-snooping-accounting {
+     description "Per-task CPU accounting";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-task-snooping-complete-dump {
+     description "Verbose dump of all routing protocol tasks";
+   }
+   rpc get-task-snooping-io-statistics {
+     description "Show task I/O statistics";
+   }
+   rpc get-task-snooping-jobs {
+     description "Foreground and background task jobs";
+   }
+   rpc get-snooping-task-replication-state {
+     description "Stateful replication";
+   }
+   rpc get-task-snooping-timers {
+     description "Task timers";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "expired" {
+             description "Display expired timers";
+           }
+           enum "detail" {
+             description "Display timer detail";
+           }
+         }
+       }
+       leaf task-name {
+         description "Name of task";
+         type string;
+       }
+     }
+   }
+   rpc get-task-snooping-statistics {
+     description "Task statistics";
+   }
+   rpc get-snooping-task-memory-information {
+     description "Show memory utilization of routing tasks";
+     input {
+       leaf level {
+         type enumeration {
+           enum "summary" {
+             description "Display current and maximum memory usage";
+           }
+           enum "brief" {
+             description "Display current/maximum/available memory";
+           }
+           enum "detail" {
+             description "Display memory usage by individual users";
+           }
+           enum "history" {
+             description "Display memory usage in the recent past";
+           }
+           enum "internals" {
+             description "Display interesting internal information";
+           }
+           enum "fragmentation" {
+             description "Display memory allocator fragmentation";
+           }
+         }
+       }
+     }
+   }
+   rpc get-task-snooping-slip-detector {
+     description "Slip detector status";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-task-snooping-memtrace {
+     description "Memtrace status";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping task-scheduler-slip-history-information-block {
+     leaf task-sched-slip-history-count {
+       type int32;
+     }
+     container task-scheduler-history-list-report {
+       list task-scheduler-slip-entry {
+         leaf ts-timestamp {
+           type string;
+           description "Timestamp for this event";
+         }
+         leaf ts-total-time {
+           type uint32;
+           description "Total slip time";
+         }
+         leaf ts-user-time {
+           type string;
+           description "Time spent in userland processing";
+         }
+         leaf ts-system-time {
+           type string;
+           description "Time spent in kernel processing";
+         }
+       }
+     }
+   }
+   grouping task-replication-state-block {
+     leaf task-gres-state {
+       type string;
+       description "Current state of graceful Routing Engine Switchover";
+     }
+     leaf task-re-mode {
+       type string;
+       description "Current mastership state of Routing Engine";
+     }
+     leaf task-protocol-replication-name {
+       type string;
+     }
+     leaf task-protocol-replication-state {
+       type string;
+     }
+     list task-protocol-replication {
+       description "Current state of task protocol replication";
+       leaf task-protocol-replication-name {
+         type string;
+       }
+       leaf task-protocol-replication-state {
+         type string;
+       }
+     }
+   }
+   grouping task-memory-information-block {
+     leaf task-memory-in-use-size {
+       type int32;
+     }
+     leaf task-memory-in-use-avail {
+       type string;
+     }
+     leaf task-memory-max-size {
+       type int32;
+     }
+     leaf task-memory-max-avail {
+       type string;
+     }
+     container task-memory-overall-report {
+       container task-size-block-list {
+         list task-size-block {
+           leaf tsb-size {
+             type int32;
+             description "Size of this block";
+           }
+           leaf tsb-terse-transient {
+             type empty;
+           }
+           leaf tsb-terse-exclusive {
+             type empty;
+           }
+           leaf tsb-terse-fullpage {
+             type empty;
+           }
+           leaf tsb-allocs {
+             type string;
+             description "Number of items allocated now not using malloc";
+           }
+           leaf tsb-mallocs {
+             type string;
+             description "Number of items allocated using malloc";
+           }
+           leaf tsb-alloc-bytes {
+             type string;
+             description "Number of items allocated in bytes";
+           }
+           leaf tsb-max-allocs {
+             type string;
+             description "Maximum items ever allocated";
+           }
+           leaf tsb-max-bytes {
+             type string;
+             description "Maximum items ever allocated in bytes";
+           }
+           leaf tsb-free-bytes {
+             type string;
+             description "Number of free bytes";
+           }
+         }
+       }
+       container task-memory-stats-list {
+         list task-memory-stats {
+           leaf tms-name {
+             type string;
+           }
+           leaf tms-allocs {
+             type string;
+             description "Number of items allocated";
+           }
+           leaf tms-mallocs {
+             type string;
+             description "Number of items allocated using malloc";
+           }
+           leaf tms-alloc-bytes {
+             type string;
+             description "Number of bytes now allocated";
+           }
+           leaf tms-max-allocs {
+             type string;
+             description "Maximum items ever allocated";
+           }
+           leaf tms-max-bytes {
+             type string;
+             description "Maximum bytes ever allocated";
+           }
+           leaf tms-free-bytes {
+             type string;
+           }
+         }
+       }
+       leaf task-memory-total-bytes {
+         type int32;
+       }
+       leaf task-memory-total-max-bytes {
+         type int32;
+       }
+       leaf task-memory-total-free-bytes {
+         type int32;
+       }
+     }
+     container task-memory-allocator-report {
+       container task-block-list {
+         list task-block {
+           leaf tb-name {
+             type string;
+             description "Name for this block";
+           }
+           leaf tb-size {
+             type int32;
+             description "Actual size of this block";
+           }
+           leaf tb-alloc-size {
+             type string;
+             description "Allocated size for this block";
+           }
+           leaf tb-terse-debug {
+             type empty;
+           }
+           leaf tb-terse-transient {
+             type empty;
+           }
+           leaf tb-terse-exclusive {
+             type empty;
+           }
+           leaf tb-terse-fullpage {
+             type empty;
+           }
+           leaf tb-alloc-blocks {
+             type string;
+             description "Number of allocated structures";
+           }
+           leaf tb-alloc-bytes {
+             type string;
+             description "Number of allocated bytes";
+           }
+           leaf tb-max-alloc-blocks {
+             type int32;
+             description "Maximum number of structures ever allocated";
+           }
+           leaf tb-max-alloc-bytes {
+             type int32;
+             description "Maximum number of bytes ever allocated";
+           }
+         }
+       }
+       container task-lite-page-list {
+         list task-lite-page {
+           leaf tlp-name {
+             type string;
+             description "Name of this pool";
+           }
+           leaf tlp-alloc-pages {
+             type string;
+             description "Number of pages allocated";
+           }
+           leaf tlp-alloc-bytes {
+             type string;
+             description "Number of bytes allocated";
+           }
+           leaf tlp-max-alloc-pages {
+             type string;
+             description "Maximum pages ever allocated";
+           }
+           leaf tlp-max-alloc-bytes {
+             type string;
+             description "Maximum bytes ever allocated";
+           }
+         }
+       }
+       leaf task-memory-total-bytes {
+         type int32;
+       }
+       leaf task-memory-total-max-bytes {
+         type int32;
+       }
+     }
+     container task-memory-malloc-usage-report {
+       container task-malloc-list {
+         list task-malloc {
+           leaf tm-name {
+             type string;
+           }
+           leaf tm-allocs {
+             type string;
+             description "Number of allocations out";
+           }
+           leaf tm-alloc-bytes {
+             type string;
+             description "Number of bytes allocated";
+           }
+           leaf tm-max-allocs {
+             type string;
+             description "Maximum allocations ever out";
+           }
+           leaf tm-max-alloc-bytes {
+             type string;
+             description "Maximum bytes allocated";
+           }
+           leaf tm-function-calls {
+             type int32;
+             description "Number of function calls";
+           }
+         }
+       }
+       leaf task-memory-total-bytes {
+         type int32;
+       }
+       leaf task-memory-total-max-bytes {
+         type int32;
+       }
+     }
+     leaf minute-ending {
+       type string;
+       description "Minute Ending timestamp";
+     }
+     leaf in-use {
+       type uint32;
+       description "Memory usage";
+     }
+     leaf median {
+       type uint32;
+       description "Memory usage at median";
+     }
+     leaf maximum {
+       type uint32;
+       description "Maximum memory utilization";
+     }
+     leaf maximum-timestamp {
+       type string;
+       description "Maximum memory utilization timestamp";
+     }
+     leaf minimum {
+       type uint32;
+       description "Minimum memory utilization";
+     }
+     leaf minimum-timestamp {
+       type string;
+       description "Minimum memory utilization timestamp";
+     }
+     container task-memory-one-minute-utilization {
+       list task-memory-one-minute-utilization-block {
+         leaf minute-ending {
+           type string;
+           description "Minute Ending timestamp";
+         }
+         leaf in-use {
+           type uint32;
+           description "Memory usage";
+         }
+         leaf maximum {
+           type uint32;
+           description "Maximum memory utilization";
+         }
+         leaf maximum-timestamp {
+           type string;
+           description "Maximum memory utilization timestamp";
+         }
+         leaf minimum {
+           type uint32;
+           description "Minimum memory utilization";
+         }
+         leaf minimum-timestamp {
+           type string;
+           description "Minimum memory utilization timestamp";
+         }
+       }
+     }
+     container task-memory-twenty-minutes-utilization {
+       list task-memory-twenty-minutes-utilization-block {
+         leaf minute-ending {
+           type string;
+           description "Minute Ending timestamp";
+         }
+         leaf median {
+           type uint32;
+           description "Memory usage at median";
+         }
+         leaf maximum {
+           type uint32;
+           description "Maximum memory utilization";
+         }
+         leaf maximum-timestamp {
+           type string;
+           description "Maximum memory utilization timestamp";
+         }
+         leaf minimum {
+           type uint32;
+           description "Minimum memory utilization";
+         }
+         leaf minimum-timestamp {
+           type string;
+           description "Minimum memory utilization timestamp";
+         }
+       }
+     }
+     container task-memory-minute-significant-utilization-changes {
+       list task-memory-minute-significant-utilization-changes-block {
+         leaf minute-ending {
+           type string;
+           description "Minute Ending timestamp";
+         }
+         leaf in-use {
+           type uint32;
+           description "Memory usage";
+         }
+         leaf maximum {
+           type uint32;
+           description "Maximum memory utilization";
+         }
+         leaf maximum-timestamp {
+           type string;
+           description "Maximum memory utilization timestamp";
+         }
+         leaf minimum {
+           type uint32;
+           description "Minimum memory utilization";
+         }
+         leaf minimum-timestamp {
+           type string;
+           description "Minimum memory utilization timestamp";
+         }
+       }
+     }
+     leaf task-memory-max-when {
+       type string;
+     }
+     leaf task-memory-free-size {
+       type int32;
+     }
+     leaf task-memory-dynamic-allocs {
+       type string;
+     }
+     leaf task-memory-max-dynamic-allocs {
+       type string;
+     }
+     leaf task-memory-bss-bytes {
+       type string;
+     }
+     leaf task-memory-max-bss-bytes {
+       type string;
+     }
+     leaf task-memory-page-data-bytes {
+       type string;
+     }
+     leaf task-memory-max-page-data-bytes {
+       type string;
+     }
+     leaf task-memory-dir-bytes {
+       type string;
+     }
+     leaf task-memory-max-dir-bytes {
+       type string;
+     }
+     leaf task-memory-total-bytes-in-use {
+       type string;
+     }
+     leaf task-memory-total-bytes-percent {
+       type string;
+     }
+   }
+   grouping task-object-reference-report-block {
+     container task-block-ref-list {
+       list task-block-ref {
+         leaf tb-name {
+           type string;
+           description "Name for this block";
+         }
+         leaf tb-object-count {
+           type int32;
+         }
+         leaf tb-refcount-allocs {
+           type int32;
+           description "Number of refcount allocs";
+         }
+         leaf tb-refcount-frees {
+           type int32;
+           description "Number of refcount frees";
+         }
+         leaf tb-refcount-inuse {
+           type int32;
+           description "Difference between tot allocs and tot frees";
+         }
+         leaf tb-refcount-max-user {
+           type string;
+           description "Maximum refcount user ";
+         }
+         leaf tb-refcount-threshold {
+           type int32;
+           description "Threshold for an object's refcount value";
+         }
+         leaf tb-refcount-maxcount {
+           type int32;
+           description "Maximum refcount  of any object in a type";
+         }
+       }
+     }
+     container task-block-ref-filter {
+       leaf tb-name {
+         type string;
+         description "Name for this block";
+       }
+       leaf tb-thread-num {
+         type int32;
+       }
+       leaf tb-thread-name {
+         type string;
+       }
+       container task-block-ref-ctx {
+         leaf tb-ctx-name {
+           type string;
+         }
+         leaf tb-refcount-allocs {
+           type int32;
+           description "Number of refcount allocs";
+         }
+         leaf tb-refcount-frees {
+           type int32;
+           description "Number of refcount frees";
+         }
+       }
+     }
+   }
+ }
