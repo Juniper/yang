@@ -1,0 +1,2607 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-traceroute {
+   namespace "http://yang.juniper.net/junos/rpc/traceroute";
+
+   prefix traceroute;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for traceroute command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10";
+   }
+
+   rpc traceroute {
+     description "Trace route to remote host";
+     input {
+       leaf gateway {
+         description "Address of router gateway to route through";
+         type string;
+       }
+       leaf ttl {
+         description "IP maximum time-to-live value (or IPv6 maximum hop-limit value)";
+         type string;
+       }
+       leaf wait {
+         description "Number of seconds to wait for response";
+         units "seconds";
+         type string;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf source {
+         description "Source address to use in outgoing traceroute packets";
+         type string;
+       }
+       leaf tos {
+         description "IP type-of-service field (IPv4)";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf as-number-lookup {
+         description "Look up AS numbers for each hop";
+         type empty;
+       }
+       leaf bypass-routing {
+         description "Bypass routing table, use specified interface";
+         type empty;
+       }
+       leaf inet {
+         description "Force traceroute to IPv4 destination";
+         type empty;
+       }
+       leaf inet6 {
+         description "Force traceroute to IPv6 destination";
+         type empty;
+       }
+       leaf next-hop {
+         description "Next-hop address";
+         type string;
+       }
+       leaf interface {
+         description "Name of interface to use for outgoing traffic";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf vpn-interface {
+         description "VPN interface for traceroute attempt";
+         status deprecated;
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf propagate-ttl {
+         description "Enable propagate-ttl for locally sourced RE traffic";
+         type empty;
+       }
+       leaf extension {
+         description "Print icmp extensions";
+         type empty;
+       }
+       leaf port {
+         description "Base port to use in traceroute probes";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf host {
+         description "Hostname or address of remote host";
+         type string;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system";
+         type string {
+         }
+       }
+     }
+     output {
+       container traceroute-results {
+         uses traceroute-results-block;
+       }
+     }
+   }
+   rpc request-traceroute-ethernet {
+     description "Trace route to an ethernet host by unicast mac address";
+     input {
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait for response";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf maintenance-domain {
+         description "Name of maintenance domain";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf maintenance-association {
+         description "Name of maintenance association";
+         type string {
+           length "1 .. 45";
+         }
+         mandatory true;
+       }
+       leaf host {
+         description "MAC address of remote host in xx:xx:xx:xx:xx:xx format";
+         type jt:mac-unicast;
+       }
+       leaf mep {
+         description "MEP identifier of remote host (default 1)";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf local-mep {
+         description "MEP identifier of local host";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 8191";
+           }
+         }
+       }
+       leaf priority {
+         description "Frame priority (802.1p) value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detail output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container ethtraceroute-results {
+         uses ethtraceroute-results-block;
+       }
+     }
+   }
+   rpc request-traceroute-overlay {
+     description "Traceroute overlay path";
+     input {
+       leaf tunnel-type {
+         description "Tunnel type";
+         default "vxlan";
+         type enumeration {
+           enum "vxlan" {
+             description "Vxlan tunnel-type";
+           }
+         }
+       }
+       leaf vni {
+         description "Value of the vni that identifies the overlay segment";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 16777215";
+           }
+         }
+         mandatory true;
+       }
+       leaf tunnel-src {
+         description "Source VTEP IP address";
+         type string;
+         mandatory true;
+       }
+       leaf tunnel-dst {
+         description "Remote VTEP IP address";
+         type string;
+         mandatory true;
+       }
+       leaf hash {
+         description "User supplied hash to be used as UDP source port in the VXLAN packet";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "49152 .. 65535";
+           }
+         }
+       }
+       choice address {
+         case mac {
+           leaf mac {
+             description "Validate MAC address";
+             type jt:mac-unicast;
+           }
+         }
+       }
+       leaf ttl {
+         description "TTL to use in the OAM packets";
+         default "255";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf hash-input-interface {
+         type union {
+           type jt:interface-device;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf hash-source-mac {
+         type jt:mac-unicast;
+       }
+       leaf hash-destination-mac {
+         type jt:mac-unicast;
+       }
+       leaf hash-protocol {
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf hash-source-address {
+         description "IPv4 or IPv6 address";
+         type string;
+       }
+       leaf hash-destination-address {
+         description "IPv4 or IPv6 address";
+         type string;
+       }
+       leaf hash-source-port {
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 65535";
+           }
+         }
+       }
+       leaf hash-destination-port {
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 65535";
+           }
+         }
+       }
+       leaf hash-vlan {
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc request-traceroute-ce-ip {
+     description "Traceroute CE IP address";
+     input {
+       leaf ip {
+         description "IPv4/IPv6 address or prefix of CE to be pinged";
+         type string;
+         mandatory true;
+       }
+       leaf instance {
+         description "VPLS or EVPN instance name";
+         type string;
+         mandatory true;
+       }
+       leaf source-ip {
+         description "Source IP address";
+         type string;
+         mandatory true;
+       }
+       leaf ttl {
+         description "IP maximum time-to-live value (or IPv6 maximum hop-limit value)";
+         default "64";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf vni {
+         description "VNI identifier";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 16777215";
+           }
+         }
+         mandatory true;
+       }
+       leaf l3-vni {
+         description "L3 VNI identifier";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 16777215";
+           }
+         }
+       }
+     }
+   }
+   rpc traceroute-mpls-ldp {
+     description "Trace FEC paths";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf fec {
+         description "IP address and optional prefix length of FEC";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf update {
+         description "Update database contents with traceroute results";
+         type empty;
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipv4addr;
+       }
+       leaf pipe-mode {
+         description "Traces only the outermost FEC";
+         type empty;
+       }
+     }
+   }
+   rpc traceroute-mpls-sr-isis {
+     description "Trace ISIS prefix";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf fec {
+         description "IP address and optional prefix length of FEC";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf algorithm {
+         description "Algorithm ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+     }
+   }
+   rpc traceroute-mpls-sr-ospf {
+     description "Trace OSPF prefix";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf fec {
+         description "IP address and optional prefix length of FEC";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipv4addr;
+       }
+       leaf algorithm {
+         description "Algorithm ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+     }
+   }
+   rpc traceroute-mpls-static-egress {
+     description "Trace to/install IP address to use when sending probes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf egress-ip {
+         description "To/Install address to use when sending probes";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc traceroute-mpls-sr-srte-egress {
+     description "Trace to/install IP address to use when sending probes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf egress-ip {
+         description "To/Install address to use when sending probes";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf color {
+         description "Color identifier for the tunnel end-point";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4294967295";
+           }
+         }
+       }
+       leaf tunnel-source {
+         description "Source protocol used to create tunnel";
+         type enumeration {
+           enum "static" {
+             description "Static configuration";
+           }
+           enum "bgp-sr-te" {
+             description "BGP-SR-TE configuration";
+           }
+         }
+       }
+       leaf skip-fec-validation {
+         description "Skip fec validation/ use NIL fec";
+         type empty;
+       }
+       leaf active {
+         description "Use forwarding path/nexthops from the RIB table";
+         type empty;
+       }
+       leaf secondary {
+         description "Use configured secondary segment list for the given SR path";
+         type empty;
+       }
+       leaf segment-list {
+         description "Segment list to use when sending probes";
+         type string {
+           length "1 .. 64";
+         }
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc traceroute-mpls-sr-srte-srp {
+     description "Trace Source Path routing to use when sending probes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf lsp-name {
+         description "Source path routing name";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+       leaf tunnel-source {
+         description "Source protocol used to create tunnel";
+         type enumeration {
+           enum "static" {
+             description "Static configuration";
+           }
+           enum "pcep" {
+             description "PCEP configuration";
+           }
+         }
+       }
+       leaf skip-fec-validation {
+         description "Skip fec validation";
+         type empty;
+       }
+       leaf active {
+         description "Use forwarding path/nexthops from the RIB table";
+         type empty;
+       }
+       leaf secondary {
+         description "Use configured secondary segment list for the given SR path";
+         type empty;
+       }
+       leaf egress-ip {
+         description "To/Install address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf color {
+         description "Color identifier for the tunnel end-point";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4294967295";
+           }
+         }
+       }
+       leaf segment-list {
+         description "Segment list to use when sending probes";
+         type string {
+           length "1 .. 64";
+         }
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc traceroute-mpls-sr-srte-label-stack {
+     description "Label stack for traceroute packets";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf-list labels {
+         ordered-by user;
+         description "Labels value range 16..1048575 in label stack - [label1 label2 ... label(top)]";
+         type string {
+           length "2 .. 64";
+         }
+       }
+       leaf nexthop-interface {
+         description "Outgoing interface for the traceroute packet";
+         type string;
+         mandatory true;
+       }
+       leaf nexthop-address {
+         description "Nexthop IP address for the traceroute packet";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf egress {
+         description "Egress IP address";
+         type jt:ipaddr;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc traceroute-mpls-bgp {
+     description "Trace FEC paths";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf fec {
+         description "IP address and optional prefix length of FEC";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf paths {
+         description "Maximum number of paths to traverse";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf pipe-mode {
+         description "Traces only the outermost FEC";
+         type empty;
+       }
+       leaf fanout {
+         description "Maximum number of nexthops to search per node";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 64";
+           }
+         }
+       }
+       leaf destination {
+         description "Destination address to use when sending probes";
+         type jt:ipv4addr;
+       }
+     }
+   }
+   rpc traceroute-mpls-rsvp {
+     description "Trace RSVP-signaled LSP paths";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf lsp-name {
+         description "Name of LSP";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+       leaf egress {
+         description "Request only a specific multipoint egress to respond";
+         type jt:ipv4addr;
+       }
+       leaf multipoint {
+         description "Probe multipoint LSP";
+         type empty;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+     }
+   }
+   rpc traceroute-mpls-l2vpn {
+     description "Trace L2vpn fec129";
+   }
+   rpc traceroute-mpls-mspw {
+     description "Trace the Layer 2 VPN connection";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf interface {
+         description "Name of l2vpn fec129 interface";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source address to use when sending probes";
+         type jt:ipprefix;
+       }
+       leaf exp {
+         description "Class-of-service to use when sending probes";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "0 .. 7";
+           }
+         }
+       }
+       leaf detail {
+         description "Display detailed output";
+         type empty;
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+     }
+   }
+   rpc traceroute-srv6-isis {
+     description "Trace FEC paths";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf host {
+         description "IPv6 loopback address or SRv6 SID of remote host";
+         type jt:ipv6prefix;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source IPv6 address to use when sending probes";
+         type jt:ipv6addr;
+       }
+       leaf tos {
+         description "IPv6 type-of-service value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf probe-icmp {
+         description "Use ICMP echo request for probes";
+         type empty;
+       }
+     }
+   }
+   rpc traceroute-srv6-srte-sids-stack {
+     description "SRv6 SID stack for trace paths";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf-list sids {
+         ordered-by user;
+         description "SRv6 SIDs in srv6-stack - [sid0 sid1 sid2 ... sidn(top)]";
+         type jt:ipv6addr;
+       }
+       leaf nexthop-interface {
+         description "Outgoing interface for the traceroute packet";
+         type string;
+         mandatory true;
+       }
+       leaf nexthop-address {
+         description "Nexthop IP address for the traceroute packet";
+         type jt:ipv6addr;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source IPv6 address to use when sending probes";
+         type jt:ipv6addr;
+       }
+       leaf tos {
+         description "IPv6 type-of-service value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf probe-icmp {
+         description "Use ICMP echo request for probes";
+         type empty;
+       }
+     }
+   }
+   rpc traceroute-srv6-srte-usids-stack {
+     description "SRv6 uSID stack for trace paths";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf-list usids {
+         ordered-by user;
+         description "SRv6 uSIDs in stack - [usid0 ... usidn(top)]";
+         type jt:ipv6addr;
+       }
+       leaf nexthop-interface {
+         description "Outgoing interface for the traceroute packet";
+         type string;
+         mandatory true;
+       }
+       leaf nexthop-address {
+         description "Nexthop IP address for the traceroute packet";
+         type jt:ipv6addr;
+         mandatory true;
+       }
+       leaf retries {
+         description "Number of times to resend probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 9";
+           }
+         }
+       }
+       leaf source {
+         description "Source IPv6 address to use when sending probes";
+         type jt:ipv6addr;
+       }
+       leaf tos {
+         description "IPv6 type-of-service value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Name of routing instance for traceroute attempt";
+         type string;
+       }
+       leaf ttl {
+         description "Maximum time-to-live value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Number of seconds to wait before resending probe";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8 {
+             range "5 .. 15";
+           }
+         }
+       }
+       leaf probe-icmp {
+         description "Use ICMP echo request for probes";
+         type empty;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping traceroute-results-block {
+     leaf target-host {
+       type string;
+       description "Specified target address or hostname";
+     }
+     leaf source {
+       type string;
+       description "Specified source address or hostname";
+     }
+     leaf target-ip {
+       type string;
+       description "Resolved target IP address";
+     }
+     leaf packet-size {
+       type int32;
+       description "Packet size of probes (bytes)";
+     }
+     leaf max-hop-index {
+       type int32;
+       description "Maximum number of hops (maximum TTL value)";
+     }
+     leaf traceroute-success {
+       type empty;
+       description "Destination was reached";
+     }
+     leaf traceroute-failure {
+       type string;
+       description "Traceroute failed";
+     }
+     list hop {
+       description "Traceroute results for a single hop (TTL value)";
+       leaf ttl-value {
+         type int32;
+         description "Current TTL value being sent in probes";
+       }
+       leaf percent-loss {
+         type int32;
+         description "Probe packet loss (no response at all) as percentage";
+       }
+       leaf icmp-extension {
+         type string;
+         description "String representation of data in ICMP packet extension";
+       }
+       leaf last-host-name {
+         type string;
+         description "Hostname of last probe with this TTL to reach host";
+       }
+       leaf last-ip-address {
+         type string;
+         description "IP address of last probe with this TTL to reach host";
+       }
+       leaf as-number {
+         type int32;
+         description "AS number of each intermediate hop";
+       }
+       list probe-result {
+         description "Result of one probe";
+         leaf date-determined {
+           type string;
+           description "UTC time when the result was determined, as number of seconds since 1 January 1970";
+         }
+         leaf probe-index {
+           type int32;
+           description "Sequence number of probe";
+         }
+         leaf sequence-number {
+           type int32;
+           description "Sequence number in response packet";
+         }
+         leaf time-to-live {
+           type int32;
+           description "Time-to-live (TTL) value in response packet";
+         }
+         leaf response-size {
+           type int32;
+           description "Size of response (bytes)";
+         }
+         leaf rtt {
+           type uint64;
+           description "Route trip time for probe (microseconds)";
+         }
+         leaf ingress-interface {
+           type string;
+           description "Interface that received the response";
+         }
+         leaf ip-address {
+           type jt:ipaddr;
+           description "IP address of interface that received probe";
+         }
+         leaf host-name {
+           type string;
+           description "Hostname of interface that received probe";
+         }
+         leaf probe-success {
+           type empty;
+           description "A valid response was received";
+         }
+         leaf probe-duplicate {
+           type empty;
+           description "A duplicate response was received";
+         }
+         leaf probe-reached {
+           type empty;
+           description "Probe reached destination host";
+         }
+         leaf probe-failure {
+           type string;
+           description "No valid response received";
+         }
+         container icmp-type {
+           description "Type of ICMP message";
+           leaf icmp-type-none {
+             type empty;
+           }
+           leaf icmp-echoreply {
+             type empty;
+           }
+           leaf icmp-unreach {
+             type empty;
+           }
+           leaf icmp-sourcequench {
+             type empty;
+           }
+           leaf icmp-redirect {
+             type empty;
+           }
+           leaf icmp-echo {
+             type empty;
+           }
+           leaf icmp-routeradvert {
+             type empty;
+           }
+           leaf icmp-routersolicit {
+             type empty;
+           }
+           leaf icmp-timxceed {
+             type empty;
+           }
+           leaf icmp-paramprob {
+             type empty;
+           }
+           leaf icmp-tstamp {
+             type empty;
+           }
+           leaf icmp-tstampreply {
+             type empty;
+           }
+           leaf icmp-ireq {
+             type empty;
+           }
+           leaf icmp-ireqreply {
+             type empty;
+           }
+           leaf icmp-maskreq {
+             type empty;
+           }
+           leaf icmp-maskreply {
+             type empty;
+           }
+           leaf icmp6-unreach {
+             type empty;
+           }
+           leaf icmp6-packet-too-big {
+             type empty;
+           }
+           leaf icmp6-time-exceeded {
+             type empty;
+           }
+           leaf icmp6-parameter-problem {
+             type empty;
+           }
+           leaf icmp6-echo-request {
+             type empty;
+           }
+           leaf icmp6-echo-reply {
+             type empty;
+           }
+           leaf icmp6-membership-query {
+             type empty;
+           }
+           leaf icmp6-membership-report {
+             type empty;
+           }
+           leaf icmp6-membership-reduction {
+             type empty;
+           }
+           leaf icmp6-router-solicit {
+             type empty;
+           }
+           leaf icmp6-router-advert {
+             type empty;
+           }
+           leaf icmp6-neighbor-solicit {
+             type empty;
+           }
+           leaf icmp6-neighbor-advert {
+             type empty;
+           }
+           leaf icmp6-redirect {
+             type empty;
+           }
+           leaf icmp6-router-renumbering {
+             type empty;
+           }
+           leaf icmp6-ni-query {
+             type empty;
+           }
+           leaf icmp6-ni-reply {
+             type empty;
+           }
+         }
+         container icmp-code {
+           description "Type of ICMP message type sub code";
+           leaf icmp-code-none {
+             type empty;
+           }
+           leaf icmp-unreach-net {
+             type empty;
+           }
+           leaf icmp-unreach-host {
+             type empty;
+           }
+           leaf icmp-unreach-protocol {
+             type empty;
+           }
+           leaf icmp-unreach-port {
+             type empty;
+           }
+           leaf icmp-unreach-needfrag {
+             type empty;
+           }
+           leaf icmp-unreach-srcfail {
+             type empty;
+           }
+           leaf icmp-unreach-net-unknown {
+             type empty;
+           }
+           leaf icmp-unreach-host-unknown {
+             type empty;
+           }
+           leaf icmp-unreach-isolated {
+             type empty;
+           }
+           leaf icmp-unreach-net-prohib {
+             type empty;
+           }
+           leaf icmp-unreach-host-prohib {
+             type empty;
+           }
+           leaf icmp-unreach-tosnet {
+             type empty;
+           }
+           leaf icmp-unreach-toshost {
+             type empty;
+           }
+           leaf icmp-unreach-filter-prohib {
+             type empty;
+           }
+           leaf icmp-unreach-host-precedence {
+             type empty;
+           }
+           leaf icmp-unreach-precedence-cutoff {
+             type empty;
+           }
+           leaf icmp-redirect-net {
+             type empty;
+           }
+           leaf icmp-redirect-host {
+             type empty;
+           }
+           leaf icmp-redirect-tosnet {
+             type empty;
+           }
+           leaf icmp-redirect-toshost {
+             type empty;
+           }
+           leaf icmp-timxceed-intrans {
+             type empty;
+           }
+           leaf icmp-timxceed-reass {
+             type empty;
+           }
+           leaf icmp-paramprob-optabsent {
+             type empty;
+           }
+           leaf icmp6-unreach-noroute {
+             type empty;
+           }
+           leaf icmp6-unreach-admin {
+             type empty;
+           }
+           leaf icmp6-unreach-beyond-scope {
+             type empty;
+           }
+           leaf icmp6-unreach-address {
+             type empty;
+           }
+           leaf icmp6-unreach-port {
+             type empty;
+           }
+           leaf icmp6-time-exceed-transit {
+             type empty;
+           }
+           leaf icmp6-time-exceed-reassembly {
+             type empty;
+           }
+           leaf icmp6-parameter-problem-header {
+             type empty;
+           }
+           leaf icmp6-parameter-problem-nextheader {
+             type empty;
+           }
+           leaf icmp6-parameter-problem-option {
+             type empty;
+           }
+           leaf icmp6-ni-subject-ipv6 {
+             type empty;
+           }
+           leaf icmp6-ni-subject-fqdn {
+             type empty;
+           }
+           leaf icmp6-ni-subject-ipv4 {
+             type empty;
+           }
+           leaf icmp6-ni-success {
+             type empty;
+           }
+           leaf icmp6-ni-refused {
+             type empty;
+           }
+           leaf icmp6-ni-unknown {
+             type empty;
+           }
+         }
+         container ip-options {
+           description "IP options contained in the response";
+           container record-route {
+             description "Record route (RR) IP option";
+             list record-route-host {
+               description "Host entry in the record route";
+               leaf ip-address {
+                 type jt:ipaddr;
+                 description "IP address of interface that received probe";
+               }
+               leaf host-name {
+                 type string;
+                 description "Hostname of interface that received probe";
+               }
+             }
+           }
+           container loose-source-route {
+             description "Loose source route (LSRR) IP option";
+             list record-route-host {
+               description "Host entry in the record route";
+               leaf ip-address {
+                 type jt:ipaddr;
+                 description "IP address of interface that received probe";
+               }
+               leaf host-name {
+                 type string;
+                 description "Hostname of interface that received probe";
+               }
+             }
+           }
+           container strict-source-route {
+             description "Strict source route (SSRR) IP option";
+             list record-route-host {
+               description "Host entry in the record route";
+               leaf ip-address {
+                 type jt:ipaddr;
+                 description "IP address of interface that received probe";
+               }
+               leaf host-name {
+                 type string;
+                 description "Hostname of interface that received probe";
+               }
+             }
+           }
+         }
+         leaf rtt-ms {
+           type string;
+           description "Route trip time of probe in milliseconds (3 decimal places)";
+         }
+         leaf error-indicator {
+           type string;
+           description "Traditional textual indicator of error in CLNP packet";
+         }
+         leaf iso-address {
+           type string;
+           description "ISO address of interface that received probe and rejected it";
+         }
+         leaf rtt-us {
+           type int32;
+           description "Route trip time of probe in microseconds";
+         }
+         container probe-status {
+           description "Status of CLNP probe";
+           leaf no-reply {
+             type empty;
+             description "No reply within timeout period from the current hop";
+           }
+           leaf probe-success {
+             type empty;
+             description "A host responded with time exceeded (hop along the way)";
+           }
+           leaf probe-error {
+             type empty;
+             description "A host responded with an error, refer to CLNP error code";
+           }
+           leaf probe-reached {
+             type empty;
+             description "A host responded with echo reply (destination reached)";
+           }
+           leaf internal-err {
+             type empty;
+             description "Internal error sending probe or receiving response";
+           }
+           leaf no-route-to-target {
+             type empty;
+             description "Could not find a route to target";
+           }
+           leaf interface-inactive-to-target {
+             type empty;
+             description "Outgoing interface is inactive";
+           }
+           leaf invalid-host-address {
+             type empty;
+             description "Specified address (target or host) was invalid";
+           }
+         }
+         container clnp-err-type {
+           description "Type of CLNP Error PDU message";
+           leaf clnp-type-none {
+             type empty;
+           }
+           leaf clnp-echoreply {
+             type empty;
+           }
+           leaf clnp-echo {
+             type empty;
+           }
+           leaf clnp-gen-noreas {
+             type empty;
+           }
+           leaf clnp-gen-protoerr {
+             type empty;
+           }
+           leaf clnp-gen-badcsum {
+             type empty;
+           }
+           leaf clnp-gen-hdrsyntax {
+             type empty;
+           }
+           leaf clnp-gen-segneeded {
+             type empty;
+           }
+           leaf clnp-gen-incomplete {
+             type empty;
+           }
+           leaf clnp-addr-destunreach {
+             type empty;
+           }
+           leaf clnp-addr-destunknown {
+             type empty;
+           }
+           leaf clnp-timxceed-intrans {
+             type empty;
+           }
+           leaf clnp-timxceed-reass {
+             type empty;
+           }
+         }
+         container clnp-err-code {
+           description "Code of CLNP Error PDU message sub type";
+           leaf clnp-code-none {
+             type empty;
+           }
+         }
+       }
+       leaf last-iso-address {
+         type string;
+         description "ISO address of last probe with this TTL to reach host";
+       }
+     }
+     leaf target {
+       type string;
+       description "Specified target address";
+     }
+     leaf target-iso {
+       type string;
+       description "Resolved target ISO address";
+     }
+   }
+   grouping ethtraceroute-results-block {
+     list cfm-linktrace-error-snapshot {
+       leaf cfm-linktrace-error-reason {
+         type string;
+         description "Reason for failure of a linktrace request";
+       }
+     }
+     container cfm-linktrace-request-snapshot {
+       leaf cfm-target-mac-address {
+         type string;
+         description "MAC address of of the target host";
+       }
+       leaf cfm-interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf cfm-maintenance-domain-name {
+         type string;
+         description "Name of maintenance domain";
+       }
+       leaf cfm-level {
+         type uint32;
+         description "Maintenance-domain level";
+       }
+       leaf cfm-maintenance-association-name {
+         type string;
+         description "Name of maintenance association";
+       }
+       leaf cfm-local-mep-identifier {
+         type uint32;
+         description "Identifier of maintenance endpoint";
+       }
+       leaf cfm-linktrace-transaction-identifier {
+         type uint32;
+         description "Identifier which uniquely identifies a linktrace request";
+       }
+     }
+     list cfm-linktrace-reply-entry {
+       leaf cfm-linktrace-reply-wait-str {
+         type string;
+         description "String displayed while waiting for traceroute reply";
+       }
+       leaf cfm-linktrace-request-hop-identifier {
+         type uint32;
+         description "Identifier showing the order in which linktrace replies are received";
+       }
+       leaf cfm-linktrace-reply-ttl {
+         type uint32;
+         description "Time-to-live value received in linktrace reply";
+       }
+       leaf cfm-mep-mip-mac-address {
+         type string;
+         description "MAC address of maintenance endpoint or maintenance intermediate point";
+       }
+       leaf cfm-next-hop-mac-address {
+         type string;
+         description "MAC address of the next-hop";
+       }
+     }
+     list cfm-linktrace-reply-entry-detail {
+       container cfm-linktrace-reply-hop {
+         leaf cfm-linktrace-reply-ttl {
+           type uint32;
+           description "Time-to-live value received in linktrace reply";
+         }
+         leaf cfm-linktrace-chassis-name {
+           type string;
+           description "Resolved responding chassis and names";
+         }
+         leaf cfm-linktrace-ingress-port-name {
+           type string;
+           description "Resolved ingress port name";
+         }
+         leaf cfm-linktrace-egress-port-name {
+           type string;
+           description "Resolved egress port name";
+         }
+         leaf cfm-linktrace-relay-action {
+           type string;
+           description "Relay action hit in the MP responder";
+         }
+         leaf cfm-linktrace-service-name {
+           type string;
+           description "Resolved responding Service names";
+         }
+         leaf cfm-linktrace-ingress-mac-address {
+           type string;
+           description "Ingress MAC address of maintenance endpoint or maintenance intermediate point";
+         }
+         leaf cfm-linktrace-egress-mac-address {
+           type string;
+           description "Egress MAC address of the next-hop";
+         }
+         leaf cfm-linktrace-flags {
+           type string;
+           description "LTR flags prepared byresponder";
+         }
+         leaf cfm-linktrace-sendid-chassis-mac {
+           type string;
+           description "Resolved responding sendid chassis mac";
+         }
+         leaf cfm-linktrace-sendid-manage-ip {
+           type string;
+           description "Resolved responding management address";
+         }
+       }
+     }
+   }
+ }

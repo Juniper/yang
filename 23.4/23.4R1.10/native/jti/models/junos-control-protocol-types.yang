@@ -1,0 +1,68 @@
+module junos-control-protocol-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/control-protocol/types";
+  prefix "junos-cpt";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains the definitions for types of protocol data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-08-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  identity control-plane-protocol {
+    description
+      "Base identity from which control-plane protocol identities are
+       derived. This is adapted from the identity,
+       control-plane-protocol in module
+       urn:ietf:params:xml:ns:yang:ietf-routing, but separated out into
+       a types only file, so it can be used inside other JUNOS native
+       modules.";
+    reference
+      "Adapted from RFC 8349 Section 7";
+  }
+
+  identity routing-protocol {
+    base control-plane-protocol;
+    description
+      "Identify from which layer 3 routing protocols are derived.";
+  }
+
+  identity rtproto-direct {
+    base routing-protocol;
+    description
+      "Route pseudo-protocol that provides routes to directly connected
+       networks.";
+  }
+
+  identity rtproto-static {
+    base routing-protocol;
+    description
+      "'Static' routing pseduo-protocol.";
+  }
+}
+

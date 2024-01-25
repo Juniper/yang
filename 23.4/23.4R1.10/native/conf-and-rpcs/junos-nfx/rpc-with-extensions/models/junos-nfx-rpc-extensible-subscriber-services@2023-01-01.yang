@@ -1,0 +1,528 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-extensible-subscriber-services {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/extensible-subscriber-services";
+
+   prefix extensible-subscriber-services;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for extensible-subscriber-services command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10";
+   }
+
+   rpc get-extensible-subscriber-services-sessions {
+     description "Show sessions";
+     junos:command "show extensible-subscriber-services sessions";
+     input {
+       leaf accounting-session-id {
+         description "Accounting session ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+     output {
+       container extensible-subscriber-services-information {
+         uses extensible-subscriber-services-information-block;
+       }
+     }
+   }
+   rpc get-extensible-subscriber-services-services {
+     description "Show services";
+     junos:command "show extensible-subscriber-services services";
+     output {
+       container extensible-subscriber-services-information {
+         uses extensible-subscriber-services-information-block;
+       }
+     }
+   }
+   rpc get-extensible-subscriber-services-dictionary {
+     description "Show dictionary";
+     junos:command "show extensible-subscriber-services dictionary";
+     input {
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "both";
+         type enumeration {
+           enum "both" {
+             description "Display dictionary";
+           }
+           enum "attributes" {
+             description "Display attributes";
+           }
+           enum "services" {
+             description "Display services";
+           }
+         }
+       }
+     }
+     output {
+       container extensible-subscriber-services-information {
+         uses extensible-subscriber-services-information-block;
+       }
+     }
+   }
+   rpc get-extensible-subscriber-services-counters {
+     description "Show counters";
+     junos:command "show extensible-subscriber-services counters";
+     output {
+       container extensible-subscriber-services-information {
+         uses extensible-subscriber-services-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping extensible-subscriber-services-information-block {
+     leaf reload-dictionary {
+       type string;
+       description "Reload dictionary";
+     }
+     leaf session-id-error {
+       type string;
+       description "Session ID error";
+     }
+     leaf statistics {
+       type string;
+       description "Statistics";
+     }
+     leaf error-message {
+       type string;
+       description " Error Message";
+     }
+     container sessions {
+       leaf session-id {
+         type string;
+         description "Session ID";
+       }
+       leaf session-timestamp {
+         type string;
+         description "Session Timestamp";
+       }
+       leaf service-name {
+         type string;
+         description "Service Name";
+       }
+       leaf total-sessions {
+         type int32;
+         description "Total Sessions count";
+       }
+     }
+     container session-information {
+       leaf service-id {
+         type string;
+         description "Service ID";
+       }
+       leaf service-timestamp {
+         type string;
+         description "Service Timestamp";
+       }
+       leaf service-name {
+         type string;
+         description "Service Name";
+       }
+       leaf commit-status {
+         type string;
+         description "Commit status of the service";
+       }
+       leaf total-services {
+         type int32;
+         description "Total Services count";
+       }
+     }
+     container services {
+       leaf service-name {
+         type string;
+         description "Service Name";
+       }
+       leaf action-header {
+         type string;
+         description "Action Header";
+       }
+       leaf provision-action {
+         type string;
+         description "Provision Action";
+       }
+       leaf deprovision-action {
+         type string;
+         description "Deprovision Action";
+       }
+       leaf services-per-action {
+         type int32;
+         description "Services count per action";
+       }
+       leaf total-services {
+         type int32;
+         description "Total Services count";
+       }
+     }
+     container dictionary {
+       leaf dictionary-type {
+         type string;
+         description "Dictionary Type";
+       }
+       container local-param-attributes {
+         leaf attribute-name {
+           type string;
+           description "Attribute Name";
+         }
+         leaf attribute-code {
+           type int32;
+           description "Attribute Code";
+         }
+         leaf attribute-type {
+           type string;
+           description "Attribute Type";
+         }
+       }
+       container param-attributes {
+         leaf attribute-name {
+           type string;
+           description "Attribute Name";
+         }
+         leaf vendor-id {
+           type int32;
+         }
+         leaf attribute-code {
+           type int32;
+           description "Attribute Code";
+         }
+         leaf attribute-type {
+           type string;
+           description "Attribute Type";
+         }
+         leaf has-tag {
+           type string;
+           description "Has Tag";
+         }
+         leaf config-type {
+           type string;
+           description "Config Type";
+         }
+       }
+       container service-info {
+         leaf service-name {
+           type string;
+           description "Service Name";
+         }
+         leaf service-attribute-name {
+           type string;
+           description "Service Attribute Name";
+         }
+         leaf action {
+           type string;
+           description "Action";
+         }
+         leaf action-type {
+           type int32;
+           description "Action Type";
+         }
+         leaf action-version {
+           type string;
+           description "Action Version";
+         }
+         leaf action-name {
+           type string;
+           description "Action Name";
+         }
+         leaf parameter-header {
+           type string;
+           description "Parameter Header";
+         }
+         leaf param-attribute-name {
+           type string;
+           description "Parameter Attribute Name";
+         }
+       }
+     }
+     container counters {
+       leaf total-sessions {
+         type int32;
+         description "Total Sessions count";
+       }
+       leaf total-services {
+         type int32;
+         description "Total Services count";
+       }
+       leaf active-services {
+         type int32;
+         description "Active Services count";
+       }
+       leaf op-script-success {
+         type uint32;
+         description "Successful Op-script Execution count";
+       }
+       leaf op-script-failure {
+         type uint32;
+         description "Unsuccessful Op-script Execution count";
+       }
+       leaf commit-success {
+         type uint32;
+         description "Successful Commit Execution count";
+       }
+       leaf commit-failure {
+         type uint32;
+         description "Unsuccessful Commit Execution count";
+       }
+       leaf application-success {
+         type uint32;
+         description "Successful Application Execution count";
+       }
+       leaf application-failure {
+         type uint32;
+         description "Unsuccessful Application Execution count";
+       }
+       leaf service-requests-received {
+         type uint32;
+         description "Received Service Requests count";
+       }
+       leaf service-requests-acked {
+         type uint32;
+         description "Acknowledged Service Requests count";
+       }
+       leaf service-requests-nacked {
+         type uint32;
+         description "Negative Acknowledged Service Requests count";
+       }
+       leaf out-of-units {
+         type uint32;
+         description "Number of times there were no available IFL units";
+       }
+       leaf total-units {
+         type uint32;
+         description "Total number of IFL units";
+       }
+       leaf units-in-use {
+         type uint32;
+         description "Number of IFL units in use";
+       }
+       leaf units-usage {
+         type uint32;
+         description "Percentage of total IFL units in use";
+       }
+     }
+     container debug {
+       leaf dump-record {
+         type string;
+         description "File Name of Dump Record";
+       }
+       leaf dictionary-config-record {
+         type string;
+         description "File Name of Configured Dictionary";
+       }
+       leaf dictionary-active-record {
+         type string;
+         description "File Name of Active Dictionary";
+       }
+     }
+     container profiling {
+       leaf profile-dump-record {
+         type string;
+         description "File Name of Profile Dump Record";
+       }
+     }
+   }
+ }

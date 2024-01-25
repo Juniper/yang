@@ -1,0 +1,87 @@
+/*
+ * Copyright (c) 2017, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module jnx-tel-PFE-dynamic-tunnel-stats {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/jnx-tel-PFE-dynamic-tunnel-stats";
+
+    prefix "jnx-tel-dynamic-tunnel";
+
+    import jnx-tel-top { prefix junos; }
+
+    import ietf-yang-types { prefix yang; }
+
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "streaming PFE dynamic iptunnel stats counters";
+
+    revision "2017-07-21" {
+        description "";
+    }
+
+    grouping dynamic-tunnel-top {
+        list iptunnel-counters {
+            key "name tunnel-type tunnel-source tunnel-destination";
+
+            leaf name {
+                type string;
+                description
+                    "The name of iptunnel record";
+            }
+
+            leaf tunnel-type {
+                type string;
+                description
+                    "The type of iptunnel record";
+            }
+
+            leaf tunnel-source {
+                type string;
+                description
+                    "The source ip of iptunnel record";
+            }
+
+            leaf tunnel-destination {
+                type string;
+                description
+                    "The destination ip of iptunnel record";
+            }
+
+            leaf in-packets {
+                type yang:counter64;
+                description
+                    "Packets received on the tunnel";
+            }
+
+            leaf in-octets {
+                type yang:counter64;
+                description
+                    "Bytes received on the tunnel";
+            }
+
+            leaf out-packets {
+                type yang:counter64;
+                description
+                    "Packets sent on the tunnel";
+            }
+
+            leaf out-octets {
+                type yang:counter64;
+                description
+                    "Bytes sent on the tunnel";
+            }
+        }
+    }
+
+    augment "/junos:junos" {
+        container dynamic-tunnel-information {
+            uses dynamic-tunnel-top;
+        }
+    }
+}
