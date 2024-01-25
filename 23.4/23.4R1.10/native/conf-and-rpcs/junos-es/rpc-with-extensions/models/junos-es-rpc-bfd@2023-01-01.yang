@@ -1,0 +1,1414 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-bfd {
+   namespace "http://yang.juniper.net/junos-es/rpc/bfd";
+
+   prefix bfd;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for bfd command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10";
+   }
+
+   rpc get-bfd-session-information {
+     description "Show all BFD sessions";
+     junos:command "show bfd session";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-revert {
+     description "Show BFD session on revert thread";
+     junos:command "show bfd session revert";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container bfd-thread-information {
+         uses bfd-thread-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-address {
+     description "Show BFD session with specific neighbor address";
+     junos:command "show bfd session address";
+     input {
+       leaf session-address {
+         description "Neighbor address of session";
+         junos:cli-feature "nokeyword";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-discriminator {
+     description "Show BFD session with specific local discriminator";
+     junos:command "show bfd session discriminator";
+     input {
+       leaf discriminator-number {
+         description "Local discriminator of session";
+         junos:cli-feature "nokeyword";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-client {
+     description "Show all BFD sessions of a particular client";
+     junos:command "show bfd session client";
+   }
+   rpc get-bfd-session-client-rsvp {
+     description "Show RSVP-OAM BFD sessions";
+     junos:command "show bfd session client rsvp-oam";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-client-spring-te {
+     description "Show SPRING Traffic Engineering BFD sessions";
+     junos:command "show bfd session client spring-te";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-client-vpls {
+     description "Show VPLS-OAM BFD sessions";
+     junos:command "show bfd session client vpls-oam";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-client-vpls-instance {
+     description "Show vpls bfd sessions under the instance";
+     junos:command "show bfd session client vpls-oam instance";
+     input {
+       leaf routing-instance {
+         description "Name of routing instance";
+         junos:cli-feature "nokeyword";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+         mandatory true;
+       }
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-client-name {
+     description "Show BFD sessions for client name";
+     junos:command "show bfd session client name";
+     input {
+       leaf client-name {
+         description "Name of BFD client";
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "ospf" {
+             description "Client OSPF";
+           }
+           enum "isis" {
+             description "Client ISIS";
+           }
+           enum "rip" {
+             description "Client RIP";
+           }
+           enum "static" {
+             description "Client Static";
+           }
+           enum "bgp" {
+             description "Client BGP";
+           }
+           enum "pim" {
+             description "Client PIM";
+           }
+           enum "dhcp" {
+             description "Client DHCP";
+           }
+           enum "iccp" {
+             description "Client ICCP";
+           }
+           enum "lacpd" {
+             description "Client LACPD";
+           }
+           enum "dcd" {
+             description "Client DCD";
+           }
+           enum "vgd" {
+             description "Client VGD";
+           }
+           enum "prpd" {
+             description "Client PRPD";
+           }
+           enum "jsrpd" {
+             description "Client JSRPD";
+           }
+         }
+         mandatory true;
+       }
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-session-prefix {
+     description "Show all BFD sessions for this LDP FEC";
+     junos:command "show bfd session prefix";
+     input {
+       leaf prefix-address {
+         description "Prefix address of session";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+         mandatory true;
+       }
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-subscriber-session {
+     description "Show subscriber session info";
+     junos:command "show bfd subscriber session";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container bfd-session-information {
+         uses bfd-session-information-block;
+       }
+     }
+   }
+   rpc get-bfd-seamless-session {
+     description "Show seamless BFD session info";
+     junos:command "show bfd seamless session";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container bfd-seamless-session-information {
+         uses bfd-seamless-session-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping bfd-session-information-block {
+     leaf sessions-shop {
+       type int32;
+       description "Total number of single-hop BFD sessions";
+     }
+     leaf sessions-shop-echolite {
+       type int32;
+       description "Total number of single-hop-echolite BFD sessions";
+     }
+     leaf sessions-shop-seamless {
+       type int32;
+       description "Total number of single-hop-seamless BFD sessions";
+     }
+     leaf sessions-mhop {
+       type int32;
+       description "Total number of multi-hop BFD sessions";
+     }
+     leaf sessions-mhop-seamless {
+       type int32;
+       description "Total number of multi-hop-seamless BFD sessions";
+     }
+     leaf sessions-micro {
+       type int32;
+       description "Total number of micro BFD sessions";
+     }
+     leaf sessions-mpls {
+       type int32;
+       description "Total number of mpls BFD sessions";
+     }
+     leaf sessions-vccv {
+       type int32;
+       description "Total number of vccv BFD sessions";
+     }
+     leaf sessions-admindown {
+       type int32;
+       description "Total number of Admin Down BFD sessions";
+     }
+     leaf sessions-down {
+       type int32;
+       description "Total number of Down state BFD sessions";
+     }
+     leaf sessions-init {
+       type int32;
+       description "Total number of Init state BFD sessions";
+     }
+     leaf sessions-up {
+       type int32;
+       description "Total number of Up state BFD sessions";
+     }
+     leaf sessions-failing {
+       type int32;
+       description "Total number of Failing BFD sessions";
+     }
+     leaf sessions {
+       type int32;
+       description "Total number of active BFD sessions";
+     }
+     leaf clients {
+       type int32;
+       description "Total number of clients that are hosting BFD sessions";
+     }
+     leaf up-sessions {
+       type string;
+       description "Total number of BFD sessions which are UP";
+     }
+     leaf down-sessions {
+       type string;
+       description "Total number of BFD sessions which are not UP";
+     }
+     leaf cumulative-transmission-rate {
+       type string;
+       description "Number of BFD control packets transmitted per second inall active sessions";
+     }
+     leaf cumulative-reception-rate {
+       type string;
+       description "Number of BFD control packets received per second inall active sessions";
+     }
+     leaf cumulative-up-time {
+       type string;
+       description "Time taken to being up bfd sesison";
+     }
+     list bfd-session {
+       leaf session-neighbor {
+         type string;
+         description "IP address of the neighbor for the BFD session";
+       }
+       leaf session-state {
+         type string;
+         description "BFD session state";
+       }
+       leaf session-interface {
+         type string;
+         description "Name of the interface on which the BFD session is active";
+       }
+       leaf session-detection-time {
+         type string;
+         description "Time period within which the host must receive BFD controlpackets to continue considering the session active (seconds)";
+       }
+       leaf session-transmission-interval {
+         type string;
+         description "Frequency at which the host system sends BFD controlpackets (seconds)";
+       }
+       leaf session-adaptive-multiplier {
+         type int32;
+         description "The adjusted value of detect multiplier.";
+       }
+       leaf session-up-time {
+         type string;
+         description "Time since the current session began (hours:minutes:seconds)";
+       }
+       leaf previous-down-time {
+         type string;
+         description "Amount of time the previous session was down(hours:minutes:seconds)";
+       }
+       leaf session-down-time {
+         type string;
+         description "Time for which the current session was down(hours:minutes:seconds)";
+       }
+       leaf previous-up-time {
+         type string;
+         description "Duration of the previous session (hours:minutes:seconds)";
+       }
+       leaf local-diagnostic {
+         type string;
+         description "Information provided by the local host about BFD sessionsthat have failed (for example if the node is administrativelydown or a control timer has expired)";
+       }
+       leaf remote-diagnostic {
+         type string;
+         description "Information provided by the remote host about BFD sessionsthat have failed (for example if the node is administrativelydown or a control timer has expired)";
+       }
+       leaf v0-remote-state {
+         type string;
+         description "(BFD version 0 only.) Indicates whether the local system is receiving BFD control packets from the remote system.";
+       }
+       leaf remote-listen {
+         type string;
+         description "(BFD version 0 only.) Indicates whether the remote system isreceiving control packets transmitted by the local system.";
+       }
+       leaf remote-state {
+         type string;
+         description "(BFD version 1 only.) Indicates the remote session state";
+       }
+       leaf session-version {
+         type int32;
+         description "Version of the BFD protocol being used for the session";
+       }
+       leaf logical-system-id {
+         type int32;
+         description "Logical system on which the session is established";
+       }
+       leaf route-table-index {
+         type int32;
+         description "Routing table index for the current logical system";
+       }
+       leaf replicated {
+         type string;
+         description "Indicates whether the session is replicated between master andstandby RE";
+       }
+       leaf session-type {
+         type string;
+         description "Indicates the flavor of the BFD session";
+       }
+       leaf minimum-asynchronous-interval {
+         type string;
+         description "Minimum amount of time that the local system proposes forthe delay between transmission of asynchronous control packetsacross the BFD session (seconds)";
+       }
+       leaf minimum-slow-interval {
+         type string;
+         description "Either one second or the minimum asynchronous interval,whichever is greater";
+       }
+       leaf adaptive-asynchronous-transmission-interval {
+         type string;
+         description "Minimum asynchronous interval used when there is routeflapping";
+       }
+       leaf adaptive-reception-interval {
+         type string;
+         description "Adjusted value of minimum reception interval.";
+       }
+       leaf minimum-transmission-interval {
+         type string;
+         description "Minimum amount of time that the local system proposes forthe delay between transmission of control packets across theBFD session (seconds). It is either the minimum slow interval orthe adaptive asynchronous transmission interval";
+       }
+       leaf minimum-reception-interval {
+         type string;
+         description "Minimum amount of time that the local system waits betweenchecks for newly received control packets (seconds)";
+       }
+       leaf detection-multiplier {
+         type int32;
+         description "Desired detect time multiplier for BFD control packets.It is multiplied by the negotiated control packet receptioninterval to determine the session detection time (time todetect whether the session is alive).";
+       }
+       leaf neighbor-minimum-transmission-interval {
+         type string;
+         description "Minimum amount of time that the remote system proposes forthe delay between transmission of control packets across the BFDsession (seconds)";
+       }
+       leaf neighbor-minimum-reception-interval {
+         type string;
+         description "Minimum amount of time that the remote system waits betweenchecks for newly received control packets (seconds)";
+       }
+       leaf neighbor-session-multiplier {
+         type int32;
+         description "Neighbor's detection multiplier";
+       }
+       leaf issu-state {
+         type string;
+         description "ISSU state of the session";
+       }
+       leaf original-transmission-interval {
+         type int32;
+         description "Original pre-ISSU transmission interval";
+       }
+       leaf original-reception-interval {
+         type int32;
+         description "Original pre-ISSU reception interval";
+       }
+       leaf local-discriminator {
+         type int32;
+         description "Authentication code used by the local system to identify theBFD session";
+       }
+       leaf remote-discriminator {
+         type uint32;
+         description "Authentication code used by the remote system to identify theBFD session";
+       }
+       leaf echo-tx-interval {
+         type string;
+         description "Echo tx interval";
+       }
+       leaf echo-detection-interval {
+         type string;
+         description "Echo detection interval";
+       }
+       leaf threshold-transmission-interval {
+         type string;
+         description "The maximum duration (in seconds) for the transmissioninterval before an SNMP trap is generated";
+       }
+       leaf threshold-detection-time {
+         type int32;
+         description "The maximum duration (in seconds) for the detection timebefore an SNMP trap is generated";
+       }
+       leaf authentication {
+         type string;
+         description "Authentication status";
+       }
+       leaf session-keychain {
+         type string;
+         description "Authentication status";
+       }
+       leaf session-algorithm {
+         type int32;
+         description "Session authentication algorithm";
+       }
+       leaf session-authentication-loose {
+         type int32;
+         description "Session authentication mode";
+       }
+       leaf neighbor-fate {
+         type string;
+         description "Indicates whether the remote system is control-planeindependent";
+       }
+       leaf adaptation-disabled {
+         type string;
+         description "Indicates whether adaptation has been disabled";
+       }
+       leaf holddown-timer {
+         type string;
+         description "Status of version negotiation";
+       }
+       leaf l2ckt-neighbor-address {
+         type string;
+         description "L2circuit neighbor address";
+       }
+       leaf l2ckt-vc-id {
+         type int32;
+         description "L2circuit virtual circuit id";
+       }
+       leaf l2vpn-local-site-id {
+         type int32;
+         description "Local site id of the L2vpn";
+       }
+       leaf l2vpn-remote-site-id {
+         type int32;
+         description "Remote site id of the L2vpn";
+       }
+       leaf l2vpn-fec129-agi {
+         type string;
+         description "AGI of the L2vpn";
+       }
+       leaf l2vpn-fec129-saii {
+         type string;
+         description "SAII of the L2vpn";
+       }
+       leaf l2vpn-fec129-taii {
+         type string;
+         description "TAII of the L2vpn";
+       }
+       leaf tunnel-name {
+         type string;
+         description "Name of the BFD tunnel";
+       }
+       leaf tunnel-path {
+         type string;
+         description "Path of the BFD tunnel";
+       }
+       leaf tunnel-prefix {
+         type string;
+         description "Prefix for the Label Distribution Protocol tunnel";
+       }
+       leaf tunnel-prefix-length {
+         type int32;
+         description "Length of prefix for the Label Distribution Protocol tunnel";
+       }
+       leaf tunnel-type {
+         type string;
+         description "Type of tunnel";
+       }
+       leaf tunnel-destination {
+         type string;
+         description "Destination for the Label Distribution Protocol tunnel";
+       }
+       leaf multihop {
+         type string;
+         description "Multihop session";
+       }
+       leaf multihop-time-to-live {
+         type int32;
+         description "Time-to-live for multihop session";
+       }
+       leaf multihop-routing-table-index {
+         type int32;
+         description "Multihop session index in the routing table ";
+       }
+       leaf multihop-local-address {
+         type string;
+         description "Multihop local address";
+       }
+       leaf echo-mode-desired {
+         type string;
+         description "Indicates whether the local system proposes that echotransmissions be enabled for the BFD session";
+       }
+       leaf echo-mode-state {
+         type string;
+         description "Indicates whether echo transmissions are enabled for theBFD session";
+       }
+       leaf no-async {
+         type string;
+         description "No async enabled for this bfd session";
+       }
+       leaf no-absorb {
+         type string;
+         description "Incoming packets are not absorbed";
+       }
+       leaf no-refresh {
+         type string;
+         description "The adjacency is not refreshed";
+       }
+       leaf update-adjacency {
+         type string;
+         description "Indicates whether the adjacency needs to be updated";
+       }
+       leaf update-transmit {
+         type string;
+         description "Indicates whether a transmission needs to be updated";
+       }
+       leaf bfd-pdu-size {
+         type uint32;
+         description "Bfd pdu size incase of large pkt support";
+       }
+       leaf inline-disable {
+         type string;
+         description "Inline Disabled status";
+       }
+       leaf session-id {
+         type uint32;
+         description "Session repair ID";
+       }
+       leaf trace-session-id-state {
+         type string;
+         description "Session repair ID State";
+       }
+       leaf trace-session-type {
+         type string;
+         description "Trace session type";
+       }
+       leaf trace-rtbl-index {
+         type int32;
+         description "Route table Index";
+       }
+       leaf trace-ifl-index {
+         type int32;
+         description "Interface index";
+       }
+       leaf trace-src-addr {
+         type string;
+         description "Source address";
+       }
+       leaf trace-dest-addr {
+         type string;
+         description "Destination address";
+       }
+       leaf trace-tunnel-label {
+         type int32;
+         description "Tunnel label for PW";
+       }
+       leaf trace-bundle-ifd {
+         type int32;
+         description "Bundle ifd";
+       }
+       leaf trace-bundle-af {
+         type int32;
+         description "Bundle family";
+       }
+       leaf trace-session-enabled {
+         type string;
+         description "Session tracing status";
+       }
+       list bfd-client {
+         leaf client-name {
+           type string;
+           description "Protocol for which the BFD session is active (forexample: OSPF, ISIS, Static, and so on) ";
+         }
+         leaf client-transmission-interval {
+           type string;
+           description "Base frequency that the client proposes for sending BFDcontrol packets (seconds)";
+         }
+         leaf client-reception-interval {
+           type string;
+           description "Base frequency that the client has proposed for peersto send BFD control packets (seconds)";
+         }
+         leaf client-echo-transmission-interval {
+           type string;
+           description "Base frequency that the client proposes for sending BFD Echocontrol packets (seconds)";
+         }
+         leaf client-multiplier {
+           type int32;
+           description "Multiplier that the client has requested to determine theliveness of the BFD session.";
+         }
+         leaf client-authentication {
+           type string;
+           description "Client requested authentication";
+         }
+         leaf client-holddown-interval {
+           type string;
+           description "Hold interval for which BFD does not send a session UP notification to the client (seconds)";
+         }
+         leaf client-state {
+           type string;
+           description "Tells whether client is in holddown or not";
+         }
+         leaf client-keychain {
+           type string;
+           description "Client requested keychain name";
+         }
+         leaf client-algorithm {
+           type int32;
+           description "Client requested algorithm";
+         }
+         leaf client-authentication-loose {
+           type string;
+           description "Client requested mode";
+         }
+         leaf client-damp-suppress {
+           type uint32;
+           description "Suppress Threshold";
+         }
+         leaf client-damp-reuse {
+           type uint32;
+           description "Reuse Threshold";
+         }
+         leaf client-damp-halflife {
+           type uint32;
+           description "Decay Halflife interval in seconds";
+         }
+         leaf client-damp-increment {
+           type uint32;
+           description "Merit increments for every fault event";
+         }
+         leaf client-damp-maxsuppress {
+           type uint32;
+           description "Maximum suppress time limit in seconds";
+         }
+         leaf client-damp-maxmerit {
+           type uint32;
+           description "Maximum limit for merit value";
+         }
+         leaf client-damp-state {
+           type string;
+           description "Dampening state";
+         }
+         leaf client-damp-time {
+           type string;
+           description "Last damp or reuse event time";
+         }
+         leaf client-damp-next-reuse-time {
+           type string;
+           description "Expected reuse time";
+         }
+         leaf client-damp-merit {
+           type uint32;
+           description "Current value of merit";
+         }
+         leaf client-damp-session-state {
+           type string;
+           description "Last notified session state";
+         }
+         leaf client-damp-notif-time {
+           type string;
+           description "Last state notified time";
+         }
+         leaf client-damp-increment-time {
+           type string;
+           description "Last merit increment time";
+         }
+         leaf client-damp-decay-time {
+           type string;
+           description "Last merit detay time";
+         }
+       }
+     }
+     leaf error-value {
+       type string;
+       description "Error code that is returned when a 'clear' operation fails";
+     }
+   }
+   grouping bfd-thread-information-block {
+     list bfd-thread-program-session-entry {
+       description "Information about progam thread";
+       leaf session-neighbor {
+         type string;
+         description "IP address of the neighbor for the BFD session";
+       }
+       leaf session-interface {
+         type string;
+         description "Name of the interface on which the BFD session is active";
+       }
+       leaf local-discriminator {
+         type int32;
+         description "Authentication code used by the local system to identify theBFD session";
+       }
+       leaf session-state {
+         type string;
+         description "BFD session state";
+       }
+       leaf sessions {
+         type int32;
+         description "Total number of active BFD sessions";
+       }
+     }
+     list bfd-thread-pending-session-entry {
+       description "Information about pending thread";
+       leaf session-neighbor {
+         type string;
+         description "IP address of the neighbor for the BFD session";
+       }
+       leaf session-interface {
+         type string;
+         description "Name of the interface on which the BFD session is active";
+       }
+       leaf local-discriminator {
+         type int32;
+         description "Authentication code used by the local system to identify theBFD session";
+       }
+       leaf session-state {
+         type string;
+         description "BFD session state";
+       }
+       leaf sessions {
+         type int32;
+         description "Total number of active BFD sessions";
+       }
+     }
+     list bfd-thread-revert-session-entry {
+       description "Information about client less thread";
+       leaf session-neighbor {
+         type string;
+         description "IP address of the neighbor for the BFD session";
+       }
+       leaf session-interface {
+         type string;
+         description "Name of the interface on which the BFD session is active";
+       }
+       leaf local-discriminator {
+         type int32;
+         description "Authentication code used by the local system to identify theBFD session";
+       }
+       leaf session-state {
+         type string;
+         description "BFD session state";
+       }
+       leaf sessions {
+         type int32;
+         description "Total number of active BFD sessions";
+       }
+     }
+     list bfd-thread-client-less-session-entry {
+       description "Information about client less thread";
+       leaf session-neighbor {
+         type string;
+         description "IP address of the neighbor for the BFD session";
+       }
+       leaf session-interface {
+         type string;
+         description "Name of the interface on which the BFD session is active";
+       }
+       leaf local-discriminator {
+         type int32;
+         description "Authentication code used by the local system to identify theBFD session";
+       }
+       leaf session-state {
+         type string;
+         description "BFD session state";
+       }
+       leaf sessions {
+         type int32;
+         description "Total number of active BFD sessions";
+       }
+     }
+     list bfd-thread-slow-start-session-entry {
+       description "Information about slow start thread";
+       leaf session-neighbor {
+         type string;
+         description "IP address of the neighbor for the BFD session";
+       }
+       leaf session-interface {
+         type string;
+         description "Name of the interface on which the BFD session is active";
+       }
+       leaf local-discriminator {
+         type int32;
+         description "Authentication code used by the local system to identify theBFD session";
+       }
+       leaf session-state {
+         type string;
+         description "BFD session state";
+       }
+       leaf sessions {
+         type int32;
+         description "Total number of active BFD sessions";
+       }
+     }
+   }
+   grouping bfd-seamless-session-information-block {
+     leaf local-sessions {
+       type int32;
+       description "Total number of local seamless BFD sessions";
+     }
+     leaf remote-sessions {
+       type int32;
+       description "Total number of remote seamless BFD sessions";
+     }
+     list bfd-seamless-session {
+       leaf seamless-session-type {
+         type string;
+         description "BFD session type";
+       }
+       leaf seamless-session-discriminator {
+         type string;
+         description "Seamless BFD discriminator";
+       }
+       leaf seamless-session-route-table-name {
+         type string;
+         description "Routing table name for the current logical system with theSeamless BFD session";
+       }
+       leaf seamless-session-ip-address {
+         type string;
+         description "Seamless BFD target inet address";
+       }
+       leaf seamless-responder-state {
+         type string;
+         description "Seamless BFD session state";
+       }
+       leaf seamless-responder-minimum-receive-interval {
+         type int32;
+         description "Frequency at which the SBFD initiator system sends BFD controlpackets (seconds)";
+       }
+       leaf seamless-session-ipv6-address {
+         type string;
+         description "Seamless BFD target inet6 address";
+       }
+       leaf seamless-responder-logical-system-id {
+         type int32;
+         description "Logical system on which the session is configured";
+       }
+       leaf seamless-responder-route-table-index {
+         type int32;
+         description "Routing table index for the current logical system with theseamless BFD session";
+       }
+       leaf seamless-responder-issu-state {
+         type string;
+         description "ISSU state of the session";
+       }
+       leaf seamless-responder-authentication {
+         type string;
+         description "Authentication status";
+       }
+     }
+   }
+ }

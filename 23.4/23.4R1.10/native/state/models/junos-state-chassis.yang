@@ -1,0 +1,214 @@
+module junos-state-chassis {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/chassis";
+  prefix js-chas;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     chassis state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-04-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping chassis-sub-module-top {
+    description
+      "Top-level grouping for the list of sub-module references";
+
+    container sub-modules {
+      description
+        "Encapsulating container for the list of chassis sub-modules
+         references";
+
+      list sub-module {
+        key name;
+        description
+          "List of chassis sub-module references";
+
+        leaf name {
+          type leafref {
+            path "../../../../module/name";
+          }
+          description
+            "Reference to the name of the sub-module";
+        }
+      }
+    }
+  }
+
+  grouping chassis-module-common {
+    description
+      "Top-level grouping for common chassis module attributes";
+
+    leaf part-name {
+      type string;
+      description
+        "Complete part name as described in the output of 'show chassis
+         hardware'";
+    }
+
+    leaf hardware-version {
+      type string;
+      description
+        "Hardware revision of the chassis component";
+    }
+
+    leaf model-number {
+      type string;
+      description
+        "Model number of the chassis component";
+    }
+
+    leaf part-number {
+      type string;
+      description
+        "Part number for the chassis component";
+    }
+
+    leaf serial-number {
+      type string;
+      description
+        "Serial number of the chassis component. The serial number of
+         the backplane is also the serial number of the device
+         chassis.";
+    }
+
+    leaf description {
+      type string;
+      description
+        "Brief description of the chassis component";
+    }
+
+    leaf clei-code {
+      type string;
+      description
+        "Common Language Equipment Identifier code. This value is
+         displayed only for hardware components that use ID EEPROM
+         format v2. This value is not displayed for components that use
+         ID EEPROM format v1.";
+    }
+
+    leaf parent-module {
+      type leafref {
+        path "../../module/name";
+      }
+      description
+        "Reference to the name of the parent component";
+    }
+
+  }
+
+  grouping chassis-mac-addresses {
+    description
+      "Grouping for MAC address information related to chassis modules";
+
+    container mac-addresses {
+      description
+        "MAC address information for a given chassis module";
+
+      leaf public-base-address {
+        type yang:mac-address;
+        description
+          "Base (Starting) Public MAC address for the chassis module";
+      }
+
+      leaf public-address-count {
+        type uint32;
+        description
+          "Total number of available public MAC addresses for the
+           chassis module";
+      }
+
+      leaf private-base-address {
+        type yang:mac-address;
+        description
+          "Base (Staring) Private MAC address for the chassis module";
+      }
+
+      leaf private-address-count {
+        type uint32;
+        description
+          "Total number of available private MAC addresses for the
+           chassis module";
+      }
+    }
+  }
+
+  grouping chassis-module-top {
+    description
+      "Top-level grouping containing a list of chassis modules";
+
+    container modules {
+      description
+        "Encapsulating container for the list of chassis modules in the
+         system";
+
+      list module {
+        key name;
+        description
+          "List of chassis modules in the system";
+
+        leaf name {
+          type string;
+          description
+            "A name representing a unique chassis module in the system";
+        }
+
+        uses chassis-module-common;
+        uses chassis-sub-module-top;
+        uses chassis-mac-addresses;
+      }
+    }
+  }
+
+  grouping chassis-top {
+    description
+      "Top-level grouping for chassis state data";
+
+    container chassis {
+      description
+        "Container for chassis state";
+
+      uses chassis-module-top;
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds chassis domain to system state";
+
+    uses chassis-top;
+  }
+}

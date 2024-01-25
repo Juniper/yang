@@ -1,0 +1,202 @@
+/*
+ * $Id$
+ * JunOS OS SPU flow statistics Yang model.
+ * Copyright (c) 2020, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+module junos-spu-flow {
+    yang-version "1";
+
+    // namespace
+    namespace "http://juniper.net/yang/security/spu-flow";
+
+    prefix "junos-spu-flow";
+
+    // meta
+    organization "Juniper Networks";
+    contact "yang-support@juniper.net";
+    description
+      "Yang definition for JunOS OS SPU(Security Processing Unit) flow usage";
+    revision "2020-09-20" {
+        description "Initial yang file";
+    }
+
+    grouping spu-flow-stats {
+
+        container session {
+            description "SPU flow session statistics";
+
+            leaf no-v4 {
+                type uint32;
+                description
+                  "IPv4 session count";
+            }
+
+            leaf no-v6 {
+                type uint32;
+                description
+                  "IPv6 session count";
+            }
+
+            leaf no-unicast {
+                type uint32;
+                description
+                  "Unicast session count";
+            }
+
+            leaf no-multicast {
+                type uint32;
+                description
+                  "Multicast session count";
+            }
+
+            leaf no-sof {
+                type uint32;
+                description
+                  "SOF session count";
+            }
+
+            leaf no-nat {
+                type uint32;
+                description
+                  "NAT session count";
+            }
+
+            leaf no-ssl {
+                type uint32;
+                description
+                  "SSL session count";
+            }
+
+            leaf no-tunnel {
+                type uint32;
+                description
+                  "Tunnel session count";
+            }
+
+            leaf no-failed {
+                type uint32;
+                description
+                  "Failed sessions";
+            }
+        }
+
+        container packet {
+            description
+              "Packet statistics";
+
+            leaf pkt-received {
+                type uint64;
+                description
+                  "Packets received";
+            }
+
+            leaf pkt-transmitted {
+                type uint64;
+                description
+                  "Packets transmitted";
+            }
+
+            leaf pkt-dropped {
+                type uint64;
+                description
+                  "Packets dropped";
+            }
+
+            leaf fragments-received {
+                type uint64;
+                description
+                  "Fragment packets received";
+            }
+
+            leaf pre-fragments {
+                type uint64;
+                description
+                  "Pre-fragment packets generated";
+            }
+
+            leaf post-fragments {
+                type uint64;
+                description
+                  "Post-fragment packets generated";
+            }
+
+            leaf pmi-received {
+                type uint64;
+                description
+                  "PMI packets received";
+            }
+
+            leaf pmi-transmitted {
+                type uint64;
+                description
+                  "PMI packets trasmitted";
+            }
+
+            leaf pmi-dropped {
+                type uint64;
+                description
+                  "PMI packets dropped";
+            }
+        }
+    }
+
+    grouping jnx-spu-flow {
+
+        container junos {
+            config false;
+            description "JunOS OS";
+
+            container security {
+                description
+                  "Contains JTI sensor objects of JunOS OS firewalls";
+
+                container spu {
+                    description
+                      "Contains SPU(Security Processing Unit) JTI sensor objects of JunOS OS firewalls";
+
+                    leaf spu-name {
+                        type string;
+                        description
+                          "SPU name";
+                    }
+
+                    container flow {
+                        description
+                          "Contains SPU flow statistics";
+
+                        choice stats-scope {
+                            description
+                              "System/LSYS flow statistics";
+
+                            case system {
+                                description
+                                  "System-scope flow statistics";
+                                uses spu-flow-stats;
+                            }
+
+                            case lsys-scope {
+                                description
+                                  "LSYS-scope flow statistics";
+
+                                list lsys {
+                                    description
+                                      "List of flow statistics by LSYS name";
+                                    key lsys-name;
+
+                                    leaf lsys-name {
+                                        type string;
+                                        description
+                                          "LSYS name";
+                                    }
+                                    uses spu-flow-stats;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    uses jnx-spu-flow;
+}

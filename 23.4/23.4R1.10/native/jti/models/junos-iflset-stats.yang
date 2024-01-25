@@ -1,0 +1,102 @@
+/*
+ * YANG definition for Iflset stats
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-iflset-stats {
+  yang-version 1;
+
+  // namespace
+  namespace "http://juniper.net/yang/junos-telemetry-iflset";
+
+  prefix "jnx-iflset";
+
+  import jnx-tel-top { prefix junos; }
+
+
+  // meta
+  organization "Juniper Networks";
+
+  contact "support@juniper.net";
+
+  description "Yang definition for Iflset stats";
+  revision "2021-11-09" {
+    description "Initial yang file";
+  }
+
+
+    grouping iflset-counter {
+        leaf queue-number {
+            type uint64;
+            description "The output queue number of iflset interface";
+        }
+        leaf queued-pkts {
+            type uint64;
+            description "The total number of packets queued at the output queue";
+        }
+        leaf queued-octets {
+            type uint64;
+            description "Number of bytes queued at the output queue";
+        }
+        leaf transmit-pkts {
+            type uint64;
+            description "Number of packets transmitted on the queue";
+        }
+        leaf transmit-octets {
+            type uint64;
+            description "Number of bytes transmitted on the queue";
+        }
+        leaf tail-drop-pkts {
+            type uint64;
+            description "The number of packets tail dropped at the output queue";
+        }
+        leaf red-drop-pkts {
+            type uint64;
+            description "Total number of packets dropped due to RED at the output on the queue";
+        }
+        leaf red-drop-octets {
+            type uint64;
+            description "The total number of bytes RED-dropped at the output queue";
+        }
+    }
+
+  augment "/junos:junos" {
+    container system {
+      config false;
+      description "Container node for system";
+        container linecard {
+          config false;
+          description "Container node for linecard";
+          container cos {
+            config false;
+            description "Container node for cos";
+             list interface {
+                key name;
+                leaf name {
+                  type string;
+                  description "Interface name";
+                }
+                list interface-set {
+                   key iflsetindex;
+                   leaf iflsetindex {
+                     type uint64;
+                     description "iflset index";
+                   }
+                   container output {
+                     config false;
+                     description "container node for output";
+                     list queue {
+                       key queue-number;
+                       uses iflset-counter;
+                       description "iflset stats";
+                     }
+                   }
+                }
+             }
+          }
+        }
+    }
+  }
+}

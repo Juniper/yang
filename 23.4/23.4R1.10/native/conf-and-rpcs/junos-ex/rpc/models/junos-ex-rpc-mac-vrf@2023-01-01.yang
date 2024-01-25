@@ -1,0 +1,5783 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-mac-vrf {
+   namespace "http://yang.juniper.net/junos-ex/rpc/mac-vrf";
+
+   prefix mac-vrf;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for mac-vrf command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10";
+   }
+
+   rpc get-mac-vrf-instance-information {
+     description "Show EVPN instance information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance-name {
+         description "Name of EVPN instance";
+         default "all";
+         type string;
+       }
+       leaf neighbor {
+         description "Address of EVPN neighbor";
+         type jt:ipaddr;
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "brief" {
+             description "Display brief version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+           enum "designated-forwarder" {
+             description "Display only designated forwarder information";
+           }
+           enum "backup-forwarder" {
+             description "Display only backup forwarder information";
+           }
+           enum "esi-info" {
+             description "Display only ESI information";
+           }
+           enum "neighbor-info" {
+             description "Display only neighbor information";
+           }
+           enum "bridge-domains" {
+             description "Display detailed bridge-domain information";
+           }
+         }
+       }
+       leaf get-mac-vrf-instance-dci-information {
+         description "Display dci information";
+         type empty;
+       }
+     }
+     output {
+       container evpn-instance-information {
+         uses evpn-instance-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-database-information {
+     description "Show EVPN internal MAC database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf mac-address {
+         description "Display a specifc MAC address";
+         type jt:mac-addr;
+       }
+       leaf instance {
+         description "Display MAC address from a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display MAC address with a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf l3-context {
+         description "Display MAC address from a specific EVPN l3 Context";
+         type string;
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       choice origin-choice {
+         case neighbor {
+           leaf neighbor {
+             description "Display MAC address learned from a specific neighbor";
+             type jt:ipaddr;
+           }
+         }
+         case interface {
+           leaf interface {
+             description "Display MAC address learned from a specific interface";
+             type string;
+           }
+         }
+         case origin {
+           leaf origin {
+             description "Display MAC address with a specific origin";
+             type enumeration {
+               enum "local" {
+                 description "Display local MAC address";
+               }
+               enum "remote" {
+                 description "Display remote MAC address";
+               }
+               enum "dci-remote" {
+                 description "Display MAC addresses received from DCI";
+               }
+             }
+           }
+         }
+       }
+       leaf state {
+         description "Display MAC address with a specific state";
+         type enumeration {
+           enum "default-gateway" {
+             description "Display default gateway MAC address";
+           }
+           enum "static" {
+             description "Display static MAC address";
+           }
+           enum "pinned" {
+             description "Display pinned MAC address";
+           }
+           enum "duplicate" {
+             description "Display duplicate MAC address";
+           }
+           enum "dci-adv" {
+             description "Display MAC advertised to DCI";
+           }
+           enum "dc-adv" {
+             description "Display MAC advertised to DC";
+           }
+         }
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-database-information {
+         uses evpn-database-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-p2mp-information {
+     description "Show EVPN p2mp information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display p2mp information for a specific EVPN instance";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-p2mp-information {
+         uses evpn-p2mp-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-status {
+     description "Show general status";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-ar-nexthops-data {
+     description "Show next-hops information";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf index {
+         description "Display for a specific nexthop id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-multicast-snooping-ar-nexthops-data {
+         uses evpn-multicast-snooping-ar-nexthops-data-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-ar-mh-peers-data {
+     description "Show multi-homed peers";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-multicast-snooping-ar-mh-peers-data {
+         uses evpn-multicast-snooping-ar-mh-peers-data-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-ar-replicators-data {
+     description "Show replicators";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "deterministic-ar" {
+             description "Display replicators from Deterministic-AR tree";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-multicast-snooping-ar-replicators-data {
+         uses evpn-multicast-snooping-ar-replicators-data-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-multicast-next-hops-information {
+     description "Show EVPN multicast-snooping nexthops table";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf identifier {
+         description "ID of next hop";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container multicast-next-hops-information {
+         uses multicast-next-hops-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-igmp-proxy-information {
+     description "Show EVPN igmp snooping proxy";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+           enum "deterministic-ar" {
+             description "Display Deterministic-AR policy results";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-igmp-snooping-information {
+         uses evpn-igmp-snooping-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-igmp-database-information {
+     description "Show EVPN igmp snooping database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf interface {
+         description "Display for a specific interface";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-igmp-snooping-information {
+         uses evpn-igmp-snooping-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-igmp-fld-rt-information {
+     description "Show EVPN igmp snooping Core Flood Routes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-igmp-snooping-information {
+         uses evpn-igmp-snooping-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mld-proxy-information {
+     description "Show EVPN mld snooping proxy";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+           enum "deterministic-ar" {
+             description "Display Deterministic-AR policy results";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-mld-snooping-information {
+         uses evpn-mld-snooping-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mld-database-information {
+     description "Show EVPN mld snooping database";
+     input {
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf esi {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf interface {
+         description "Display for a specific interface";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-mld-snooping-information {
+         uses evpn-mld-snooping-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mld-fld-rt-information {
+     description "Show EVPN mld snooping Core Flood Routes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Display for a specific EVPN instance";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-mld-snooping-information {
+         uses evpn-mld-snooping-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-oism-information {
+     description "Show EVPN OISM information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf l3-context {
+         description "Name of specific EVPN L3 context";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "brief" {
+             description "Display brief version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-oism-information {
+         uses evpn-oism-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-oism-peg-df-information {
+     description "Show EVPN OISM PEG DF Status";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf l3-context {
+         description "Name of specific EVPN L3 context";
+         type string;
+       }
+       leaf l2-domain-id {
+         description "Display for a specific VLAN or VNI or ISID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-oism-peg-df-information {
+         uses evpn-oism-peg-df-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-oism-spmsi-ad-information {
+     description "Show EVPN OISM spmsi-ad";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf group {
+         description "Group address";
+         type jt:ipaddr;
+       }
+       leaf source {
+         description "Source address";
+         type jt:ipaddr;
+       }
+       leaf l3-context {
+         description "Name of specific EVPN L3 context";
+         type string;
+       }
+       leaf verbosity {
+         type enumeration {
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container evpn-oism-spmsi-ad-information {
+         uses evpn-oism-spmsi-ad-information-block;
+       }
+     }
+   }
+   rpc get-routing-instance-information {
+     description "Show routing instances";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Particular vlan-name or 'all'";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-routing-table-information {
+         uses l2ald-routing-table-information-block;
+       }
+     }
+   }
+   rpc get-interface-details {
+     description "Show interface";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of interface for which to display ethernet-switching information";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container l2ng-l2ald-iff-interface-information {
+         uses l2ng-l2ald-iff-interface-information-block;
+       }
+     }
+   }
+   rpc get-vlan-statistics-information {
+     description "Show bridge statistics information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container bridge-statistics-information {
+         uses bridge-statistics-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-table {
+     description "Show media access control table";
+     input {
+       leaf instance {
+         description "Display information for a specified vpls";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf vlan-id {
+         description "Display MAC address learned on a specified VLAN";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+           enum "age" {
+             description "Display age of a single mac-address";
+           }
+           enum "sync-check" {
+             description "Sync check";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-rtb-macdb {
+         uses l2ald-rtb-macdb-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-interface-mac-table {
+     description "Display MAC table for a specified interface";
+     input {
+       choice interface-choice {
+         case interface-name {
+           leaf interface-name {
+             description "Name of interface for which to display table";
+             type string;
+           }
+         }
+         case all {
+           leaf all {
+             description "Display MAC table for all the interfaces";
+             type empty;
+           }
+         }
+       }
+       leaf remote-beb-mac-address {
+         description "Remote backbone edge bridge MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf vlan-id {
+         description "Display MAC address learned on a specified VLAN";
+         type string;
+       }
+       leaf isid {
+         description "Display Information for specified ISID or all ISID(s)";
+         type string;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+           enum "age" {
+             description "Display age of a single mac-address";
+           }
+           enum "sync-check" {
+             description "Sync check";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-interface-macdb {
+         uses l2ald-interface-macdb-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-ip-table {
+     description "Show IP table for EVPN instances";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-rtb-mac-ip-db {
+         uses l2ald-rtb-mac-ip-db-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-kernel-ip-table-information {
+     description "Entries present in kernel";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-rtb-mac-ip-kernel-db {
+         uses l2ald-rtb-mac-ip-kernel-db-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-kernel-ipv4-table-information {
+     description "IPv4 entries present in kernel";
+     input {
+       leaf bd-id {
+         description "Display IP address under particular bd-id";
+         type string;
+       }
+       leaf ipv4-addr {
+         description "Display kernel information for ip";
+         default "all";
+         type jt:ipv4addr;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-rtb-mac-ip-kernel-db {
+         uses l2ald-rtb-mac-ip-kernel-db-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-kernel-ipv6-table-information {
+     description "IPv6 entries present in kernel";
+     input {
+       leaf bd-id {
+         description "Display IP address under particular bd-id";
+         type string;
+       }
+       leaf ipv6-addr {
+         description "Display kernel information for ip";
+         default "all";
+         type jt:ipv6addr;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-rtb-mac-ip-kernel-db {
+         uses l2ald-rtb-mac-ip-kernel-db-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-ip4-table {
+     description "Show INET entries associated with MACs learned via ARP";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN, or 'all'";
+         default "all";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+         }
+       }
+     }
+     output {
+       container l2ng-l2rtb-evpn-arp-db {
+         uses l2ng-l2rtb-evpn-arp-db-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mac-ipv6-table {
+     description "Show INET6 entries associated with MACs learned via NDP";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN, or 'all'";
+         default "all";
+         type string;
+       }
+       leaf address {
+         description "MAC address";
+         default "all";
+         type jt:mac-addr;
+       }
+       leaf show-choice {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display count only";
+           }
+         }
+       }
+     }
+     output {
+       container l2ng-l2rtb-evpn-nd-db {
+         uses l2ng-l2rtb-evpn-nd-db-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svtep-information {
+     description "Display source VXLAN tunnel endpoint configuration";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container vxlan-source-vtep-information {
+         uses vxlan-source-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svtep-ip-information {
+     description "Display VXLAN configuration for source ip address";
+     input {
+       leaf virtual-tunnel-end-point-source-ip {
+         description "Display information for a source ip";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container vxlan-source-vtep-information {
+         uses vxlan-source-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rvtep-information {
+     description "Display remote VXLAN tunnel endpoint information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "detail";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       container vxlan-source-vtep-information {
+         uses vxlan-source-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rvtep-mactable-information {
+     description "Display remote VTEP MAC table";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container vxlan-remote-vtep-mactable {
+         uses vxlan-remote-vtep-mactable-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rvtep-ip-information {
+     description "Display remote VTEP MAC table for ip address";
+     input {
+       leaf virtual-tunnel-end-point-remote-ip {
+         description "Display information for a remote end point";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container vxlan-remote-vtep-ip {
+         uses vxlan-remote-vtep-ip-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rmt-svtep-ip-information {
+     description "Display remote VXLAN endpoints associated with source endpoint";
+     input {
+       leaf virtual-tunnel-end-point-source-ip {
+         description "Display information for a source ip";
+         type jt:ipaddr;
+         mandatory true;
+       }
+     }
+     output {
+       container vxlan-source-vtep-information {
+         uses vxlan-source-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-esi-information {
+     description "Display VXLAN tunnel endpoint ESI information";
+     input {
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf esi-identifier {
+         description "Ethernet segment identifier";
+         type string;
+       }
+       leaf svlbnh {
+         type enumeration {
+           enum "svlbnh" {
+             description "Display Shared VLBNH information for a given ESI";
+           }
+         }
+       }
+     }
+     output {
+       container vxlan-esi-information {
+         uses vxlan-esi-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-arvlbnh-information {
+     description "Display VXLAN tunnel endpoint AR-VLBNH information";
+     output {
+       container vxlan-arvlbnh-information {
+         uses vxlan-arvlbnh-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-arvlbnh-information {
+     description "Display VxLAN AR-VLBNH information for VLBNH index";
+     input {
+       leaf vxlan-ar-vlbnh-index {
+         description "Display information for a specified index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container vxlan-arvlbnh-information {
+         uses vxlan-arvlbnh-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-info-rtt-index {
+     description "Display VxLAN AR-VLBNH information for RTT index";
+     input {
+       leaf vxlan-ar-vlbnh-rtt-index {
+         description "Display information for a specified RTT index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container vxlan-arvlbnh-information {
+         uses vxlan-arvlbnh-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-info-bd-index {
+     description "Display VxLAN AR-VLBNH information for BD index";
+     input {
+       leaf vxlan-ar-vlbnh-bd-index {
+         description "Display information for a specified BD index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container vxlan-arvlbnh-information {
+         uses vxlan-arvlbnh-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-mh-vtep-information {
+     description "Display Multi Homing Peer VTEP information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+     }
+     output {
+       container vxlan-mh-vtep-information {
+         uses vxlan-mh-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rtt-mh-vtep-information {
+     description "Display MH Peer table for routing instance";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container vxlan-rtt-mh-vtep-information {
+         uses vxlan-rtt-mh-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-ip-mh-vtep-information {
+     description "Display MH Peer table for ip address";
+     input {
+       leaf virtual-tunnel-end-point-remote-ip {
+         description "Display information for a remote end point";
+         type jt:ipaddr;
+         mandatory true;
+       }
+     }
+     output {
+       container vxlan-ip-mh-vtep-information {
+         uses vxlan-ip-mh-vtep-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svlbnh-information {
+     description "Display Shared VLBNH information";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+         }
+       }
+     }
+     output {
+       container vxlan-svlbnh-information {
+         uses vxlan-svlbnh-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svlbnh-overflow {
+     description "Display pending requests for SVLBNH allocation";
+     output {
+       container svlbnh-overflow-list {
+         uses svlbnh-overflow-list-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-svlbnh-info-index {
+     description "Display information for a particular SVLBNH index";
+     input {
+       leaf svlbnh-id {
+         description "Display information for a specified index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container vxlan-svlbnh-information {
+         uses vxlan-svlbnh-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vxlan-rrnh-information {
+     description "Display FMM Reroute-NH information";
+   }
+   rpc get-mac-vrf-flood-information {
+     description "Show bridging flooding information";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+       leaf verbosity {
+         default "detail";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-vpls-flood-instance {
+         uses l2ald-vpls-flood-instance-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-bd-flood-route-information {
+     description "Show route for flooding traffic of a bridge domain if no-local-switching is not enabled";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container l2ald-vpls-flood-route-information {
+         uses l2ald-vpls-flood-route-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-all-ce-flood-route-information {
+     description "Show route for flooding traffic to all CE routers if no-local-switching is enabled";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container l2ald-vpls-flood-route-information {
+         uses l2ald-vpls-flood-route-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-ve-flood-route-information {
+     description "Show route for flooding traffic to all VE routers if no-local-switching is enabled";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container l2ald-vpls-flood-route-information {
+         uses l2ald-vpls-flood-route-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-re-flood-route-information {
+     description "Show route for Routing Engine flooding to all interfaces";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container l2ald-vpls-flood-route-information {
+         uses l2ald-vpls-flood-route-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mlp-flood-route-information {
+     description "Show route for flooding traffic to MAC learning chips";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bridge-domain {
+         description "Display information for a specified bridge domain";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container l2ald-vpls-flood-route-information {
+         uses l2ald-vpls-flood-route-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-event-queue-information {
+     description "Show queue of pending bridge flood events";
+     output {
+       container l2ald-vpls-flood-event-queue {
+         uses l2ald-vpls-flood-event-queue-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-fld-group {
+     description "Display  Flood Group info";
+   }
+   rpc get-mac-vrf-fld-group-ri-information {
+     description "Display Flood Group info for routing instance";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf bd-index {
+         description "Bd id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-flood-group-ri {
+         uses l2ald-flood-group-ri-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-eamnh-information {
+     description "Display EAMNH and member info";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         default "all";
+         type string;
+       }
+     }
+   }
+   rpc get-mac-vrf-global-mac-count {
+     description "Show layer-2 global mac address count";
+     output {
+       container l2ald-global-macdb-count {
+         uses l2ald-global-macdb-count-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-global-mac-ip-count {
+     description "Show global MAC+IP bindings count";
+     output {
+       container l2ald-global-mac-ip-count {
+         uses l2ald-global-mac-ip-count-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-global-information {
+     description "Show process-related information";
+     output {
+       container l2ald-global-configuration {
+         uses l2ald-global-configuration-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mgrp-policy {
+     description "Display global mesh group policy";
+     output {
+       container l2ald-mgrp-policy {
+         uses l2ald-mgrp-policy-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-mgrp-policy-ri {
+     description "Display Mesh Group policy for routing instance";
+     input {
+       leaf instance-name {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf mgrp-id {
+         description "Mesh group id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container l2ald-mgrp-policy-ri {
+         uses l2ald-mgrp-policy-ri-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vlan-information {
+     description "Show VLANs information";
+     input {
+       leaf instance {
+         description "Display information for a specified instance";
+         default "all";
+         type string;
+       }
+       leaf vlan-name {
+         description "Display information for a specified VLAN";
+         type string;
+       }
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         default "all";
+         type string {
+         }
+       }
+       leaf interface {
+         description "Name of interface for which to display table";
+         type union {
+           type jt:interface-unit;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container l2ng-l2ald-vlan-instance-information {
+         uses l2ng-l2ald-vlan-instance-information-block;
+       }
+     }
+   }
+   rpc get-mac-vrf-vlan-operational-information {
+     description "Show operational bridging instance";
+     output {
+       container l2ng-l2ald-vlan-instance-information {
+         uses l2ng-l2ald-vlan-instance-information-block;
+       }
+     }
+   }
+   rpc get-fwd-instance-information {
+     description "Show global mac-vrf and forwarding instance mapping";
+     input {
+       leaf forwarding-instance-id {
+         description "Show mac vrf instances mapped to a forwarding instance id";
+         type string;
+       }
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-instance-information-block {
+     container evpn-instance {
+       leaf evpn-instance-name {
+         type string;
+       }
+       leaf route-distinguisher {
+         type string;
+       }
+       leaf evpn-encap-type {
+         type string;
+       }
+       leaf evpn-instance-vlan-id {
+         type string;
+       }
+       leaf evpn-instance-pbb-evpn-core {
+         type string;
+       }
+       leaf evpn-instance-pbb-optimize-multicast {
+         type string;
+       }
+       leaf evpn-instance-control-word {
+         type string;
+       }
+       leaf evpn-instance-flow-label {
+         type string;
+       }
+       leaf evpn-instance-flow-label-static {
+         type string;
+       }
+       leaf evpn-service-interface-type {
+         type string;
+       }
+       leaf evpn-instance-mac-label {
+         type string;
+       }
+       leaf evpn-instance-mc-label {
+         type string;
+       }
+       leaf evpn-etree-leaf-label {
+         type string;
+       }
+       leaf evpn-instance-df-preference {
+         type string;
+       }
+       leaf duplicate-mac-detection-threshold {
+         type int32;
+       }
+       leaf duplicate-mac-detection-window {
+         type int32;
+       }
+       leaf duplicate-mac-auto-recovery-time {
+         type int32;
+       }
+       leaf num-local-macs {
+         type int32;
+       }
+       leaf num-remote-macs {
+         type int32;
+       }
+       leaf local-interfaces {
+         type int32;
+       }
+       leaf local-interfaces-up {
+         type int32;
+       }
+       leaf num-protect-interfaces {
+         type int32;
+       }
+       leaf irb-interfaces {
+         type int32;
+       }
+       leaf irb-interfaces-up {
+         type int32;
+       }
+       leaf num-bridge-domains {
+         type int32;
+       }
+       leaf num-bundle-bridge-domains {
+         type int32;
+       }
+       leaf evpn-num-neighbors {
+         type int32;
+       }
+       leaf evpn-num-esi {
+         type int32;
+       }
+       leaf evpn-router-id {
+         type jt:ipaddr;
+       }
+       leaf evpn-source-vtep-ipaddr {
+         type jt:ipaddr;
+       }
+       leaf evpn-migration {
+         type string;
+       }
+       leaf evpn-smet-forwarding {
+         type string;
+       }
+       leaf evpn-srv6-locator {
+         type string;
+       }
+       leaf evpn-srv6-mode {
+         type string;
+       }
+       leaf esi-df-election-algorithm {
+         type string;
+       }
+       leaf esi-granularity {
+         type string;
+       }
+       leaf esi-lacp-oos-on-ndf {
+         type string;
+       }
+       container mac-database-status-table {
+         leaf local-macs {
+           type int32;
+         }
+         leaf remote-macs {
+           type int32;
+         }
+         leaf local-mac-ips {
+           type int32;
+         }
+         leaf remote-mac-ips {
+           type int32;
+         }
+         leaf local-default-gateway-macs {
+           type int32;
+         }
+         leaf remote-default-gateway-macs {
+           type int32;
+         }
+       }
+       container evpn-interconn-info {
+         leaf route-distinguisher {
+           type string;
+         }
+         leaf interconn-vrf-import {
+           type string;
+         }
+         leaf interconn-vrf-export {
+           type string;
+         }
+         leaf interconn-vrf-import-target {
+           type string;
+         }
+         leaf interconn-vrf-export-target {
+           type string;
+         }
+         leaf evpn-interconn-mac-label {
+           type string;
+         }
+         leaf evpn-interconn-mc-label {
+           type string;
+         }
+       }
+       container evpn-interconn-route-stats-table {
+         leaf evpn-interconn-num-local-ad-routes {
+           type int32;
+         }
+         leaf evpn-interconn-num-local-im-routes {
+           type int32;
+         }
+         leaf evpn-interconn-num-local-mac-routes {
+           type int32;
+         }
+         leaf evpn-interconn-num-local-mac-ip-routes {
+           type int32;
+         }
+         leaf evpn-interconn-num-local-es-routes {
+           type int32;
+         }
+         leaf evpn-interconn-num-local-sg-proxy-routes {
+           type int32;
+         }
+       }
+       container evpn-interface-status-table {
+         list evpn-interface {
+           leaf evpn-interface-name {
+             type string;
+           }
+           leaf evpn-interface-esi {
+             type string;
+           }
+           leaf evpn-interface-mode {
+             type string;
+           }
+           leaf evpn-interface-status {
+             type string;
+           }
+           leaf evpn-interface-etree-role {
+             type string;
+           }
+         }
+       }
+       container irb-interface-status-table {
+         list irb-interface {
+           leaf irb-interface-name {
+             type string;
+           }
+           leaf irb-interface-vlan-id {
+             type string;
+           }
+           leaf irb-interface-vni-id {
+             type string;
+           }
+           leaf irb-interface-status {
+             type string;
+           }
+           leaf irb-interface-l3-context {
+             type string;
+           }
+         }
+       }
+       container evpn-protect-interface-status-table {
+         list evpn-protect-interface {
+           leaf evpn-primary-interface-name {
+             type string;
+           }
+           leaf evpn-protect-interface-name {
+             type string;
+           }
+           leaf evpn-protect-interface-status {
+             type string;
+           }
+         }
+       }
+       container bridge-domain-status-table {
+         list bridge-domain {
+           leaf vlan-id {
+             type int32;
+           }
+           leaf domain-id {
+             type int32;
+           }
+           leaf interfaces {
+             type int32;
+           }
+           leaf interfaces-up {
+             type int32;
+           }
+           leaf-list irb-interface {
+             type string;
+           }
+           leaf mode {
+             type string;
+           }
+           leaf mac-sync-status {
+             type string;
+           }
+           leaf sg-sync-status {
+             type string;
+           }
+           leaf v6-sg-sync-status {
+             type string;
+           }
+         }
+       }
+       container bridge-domain-status-table-detailed {
+         list bridge-domain-detailed {
+           leaf vlan-id {
+             type int32;
+           }
+           leaf domain-id {
+             type int32;
+           }
+           leaf trans-domain-id {
+             type int32;
+           }
+           leaf inclusive-multicast-label {
+             type int32;
+           }
+           leaf bd-mac-label {
+             type int32;
+           }
+           leaf evpn-srv6-dt2u-sid {
+             type jt:ipaddr;
+           }
+           leaf evpn-srv6-dt2m-sid {
+             type jt:ipaddr;
+           }
+           leaf inclusive-multicast-core-nh {
+             type int32;
+           }
+           leaf v6-inclusive-multicast-core-nh {
+             type int32;
+           }
+         }
+       }
+       container bundle-bridge-domain-status-table {
+         list bundle-bridge-domain {
+           leaf domain-name {
+             type string;
+           }
+           leaf num-isids {
+             type int32;
+           }
+           leaf mode {
+             type string;
+           }
+           leaf mac-sync-status {
+             type string;
+           }
+         }
+       }
+       list evpn-neighbor {
+         leaf evpn-neighbor-address {
+           type jt:ipaddr;
+         }
+         container evpn-neighbor-route-information {
+           leaf evpn-neighbor-address {
+             type jt:ipaddr;
+           }
+           leaf evpn-num-mac-routes {
+             type int32;
+           }
+           leaf evpn-num-mac-ip-routes {
+             type int32;
+           }
+           leaf evpn-num-ethernet-autodiscovery-routes {
+             type int32;
+           }
+           leaf evpn-num-inclusive-multicast-routes {
+             type int32;
+           }
+           leaf evpn-num-ethernet-segment-routes {
+             type int32;
+           }
+           leaf evpn-peer-leaf-label {
+             type int32;
+           }
+           leaf evpn-peer-dci {
+             type string;
+           }
+           leaf evpn-flow-label {
+             type string;
+           }
+           leaf evpn-recv-srv6-dt2u-sid {
+             type jt:ipaddr;
+           }
+           leaf evpn-recv-srv6-dt2m-sid {
+             type jt:ipaddr;
+           }
+         }
+       }
+       list evpn-esi {
+         leaf evpn-esi-value {
+           type string;
+         }
+         leaf evpn-interconn-esi {
+           type string;
+         }
+         leaf evpn-esi-status {
+           type string;
+         }
+         leaf evpn-esi-min-isid {
+           type int32;
+         }
+         leaf evpn-esi-mac-label {
+           type int32;
+         }
+         leaf evpn-esi-aliasing-label {
+           type int32;
+         }
+         leaf evpn-esi-split-horizon-label {
+           type int32;
+         }
+         leaf evpn-esi-srv6-argument {
+           type int32;
+         }
+         container evpn-esi-local-intf-information {
+           leaf evpn-esi-local-intf-name {
+             type string;
+           }
+           leaf evpn-esi-local-intf-status {
+             type string;
+           }
+         }
+         container evpn-esi-event-history-information {
+           list evpn-esi-event-history-database {
+             leaf evpn-esi-event-entry {
+               type string;
+             }
+           }
+         }
+         container evpn-esi-remote-pe-information {
+           leaf evpn-esi-num-remote-pe {
+             type int32;
+           }
+           list evpn-esi-remote-pe {
+             leaf evpn-esi-remote-pe-ipaddr {
+               type jt:ipaddr;
+             }
+             leaf evpn-esi-remote-mac-label {
+               type int32;
+             }
+             leaf evpn-esi-remote-aliasing-label {
+               type int32;
+             }
+             leaf evpn-esi-remote-pe-mode {
+               type string;
+             }
+           }
+         }
+         container evpn-esi-df-information {
+           leaf esi-df-election-algorithm {
+             type string;
+           }
+           leaf esi-granularity {
+             type string;
+           }
+           leaf esi-lacp-oos-on-ndf {
+             type string;
+           }
+           leaf esi-designated-forwarder {
+             type string;
+           }
+           leaf esi-df-preference {
+             type int32;
+           }
+           leaf esi-df-no-preempt {
+             type string;
+           }
+           leaf-list esi-backup-forwarder {
+             type string;
+           }
+           leaf-list esi-backup-df-preference {
+             type int32;
+           }
+           leaf-list esi-backup-df-no-preempt {
+             type string;
+           }
+           leaf esi-last-df-update-timestamp {
+             type string;
+           }
+         }
+         list evpn-esi-bd-remote-pe-information {
+           leaf evpn-esi-bd-vlan {
+             type int32;
+           }
+           leaf evpn-esi-bd-status {
+             type string;
+           }
+           leaf evpn-esi-bd-num-remote-pe {
+             type int32;
+           }
+           list evpn-esi-bd-remote-pe {
+             leaf evpn-esi-bd-remote-pe-ipaddr {
+               type jt:ipaddr;
+             }
+             leaf evpn-esi-bd-remote-mac-label {
+               type int32;
+             }
+             leaf evpn-esi-bd-remote-aliasing-label {
+               type int32;
+             }
+             leaf evpn-esi-bd-remote-pe-mode {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-database-information-block {
+     list evpn-database-instance {
+       leaf instance-name {
+         type string;
+       }
+       list mac-entry {
+         leaf vlan-id {
+           type int32;
+         }
+         leaf vni-id {
+           type int32;
+         }
+         leaf isid-val {
+           type int32;
+         }
+         leaf mac-address {
+           type jt:mac-addr;
+         }
+         leaf active-source {
+           type string;
+         }
+         leaf active-source-timestamp {
+           type string;
+         }
+         leaf ip-address {
+           type jt:ipaddr;
+         }
+         container mobility-history {
+           list mobility-event {
+             leaf event-time {
+               type string;
+             }
+             leaf event-type {
+               type string;
+             }
+             leaf event-source {
+               type string;
+             }
+             leaf event-seq-num {
+               type int32;
+             }
+           }
+         }
+         list mac-source {
+           leaf source-name {
+             type string;
+           }
+           leaf source-rank {
+             type string;
+           }
+           leaf source-status {
+             type string;
+           }
+           leaf source-local-origin {
+             type string;
+           }
+           leaf source-remote-origin {
+             type string;
+           }
+           leaf source-remote-mac-label {
+             type int32;
+           }
+           leaf source-local-mac-label {
+             type int32;
+           }
+           leaf source-remote-state {
+             type string;
+           }
+           leaf source-mobility-seq-num {
+             type int32;
+           }
+           leaf source-mobility-min-origin-address {
+             type jt:ipaddr;
+           }
+           leaf source-timestamp {
+             type string;
+           }
+           leaf source-timestamp-value {
+             type int32;
+           }
+           leaf source-state {
+             type string;
+           }
+           leaf source-mac-adv-route-status {
+             type string;
+           }
+           leaf interconn-adv-route-status {
+             type string;
+           }
+           list mac-ip-information {
+             leaf address {
+               type jt:ipaddr;
+             }
+             leaf mac-ip-flags {
+               type string;
+             }
+             leaf l3-route {
+               type string;
+             }
+             leaf l3-context {
+               type string;
+             }
+             leaf-list irb-interface {
+               type string;
+             }
+             leaf interconn-adv-route-status {
+               type string;
+             }
+             list mac-ip-origin {
+               leaf ip-local-origin {
+                 type string;
+               }
+               leaf ip-remote-origin {
+                 type jt:ipaddr;
+               }
+               leaf ip-remote-state {
+                 type string;
+               }
+             }
+             list mac-ip-peer-symm-route {
+               leaf symm-remote-pe {
+                 type jt:ipaddr;
+               }
+               leaf symm-l3-route {
+                 type string;
+               }
+               list mac-ip-peer-symm-route-l3-context {
+                 leaf symm-l3-context {
+                   type string;
+                 }
+                 leaf symm-rt-status {
+                   type string;
+                 }
+                 leaf reject-reason {
+                   type string;
+                 }
+               }
+             }
+           }
+         }
+         container history-db {
+           leaf history-db-heading {
+             type string;
+           }
+           leaf history-db-maximum-size {
+             type int32;
+           }
+           leaf history-db-current-size {
+             type int32;
+           }
+           container history-db-entries {
+             leaf history-db-entries-heading {
+               type string;
+             }
+             list history-db-entry {
+               leaf history-db-entry-timestamp {
+                 type string;
+               }
+               leaf history-db-entry-event {
+                 type string;
+               }
+             }
+           }
+         }
+         leaf mac-state-value {
+           type int32;
+         }
+         leaf mac-state {
+           type string;
+         }
+         leaf duplicate-mac-auto-recovery-timer {
+           type string;
+         }
+         leaf nexthop-id {
+           type string;
+         }
+       }
+     }
+   }
+   grouping evpn-p2mp-information-block {
+     list evpn-p2mp-instance {
+       leaf evpn-instance-name {
+         type string;
+       }
+       list evpn-p2mp-nh-table {
+         leaf evpn-p2mp-nh-l2-domain {
+           type int32;
+         }
+         leaf evpn-p2mp-nh-id {
+           type int32;
+         }
+         leaf evpn-p2mp-nh-leaf-id {
+           type int32;
+         }
+         list evpn-p2mp-nh-esi-list {
+           leaf evpn-p2mp-nh-esi {
+             type string;
+           }
+           leaf evpn-p2mp-nh-sh {
+             type int32;
+           }
+         }
+         leaf evpn-p2mp-nh-tunnel {
+           type string;
+         }
+         leaf evpn-p2mp-nh-pmsi {
+           type string;
+           description "P-multicast service interface";
+         }
+       }
+       container evpn-p2mp-peer-table {
+         list evpn-p2mp-peer {
+           leaf evpn-p2mp-peer-addr {
+             type jt:ipaddr;
+           }
+           leaf evpn-p2mp-peer-l2-domain {
+             type int32;
+           }
+           leaf evpn-p2mp-peer-transport-label {
+             type int32;
+           }
+           leaf evpn-p2mp-peer-transport-label-backup {
+             type int32;
+           }
+           leaf evpn-p2mp-peer-pmsi {
+             type string;
+             description "P-multicast service interface";
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-multicast-snooping-ar-nexthops-data-block {
+     list evpn-multicast-snooping-ar-nexthops-per-instance {
+       leaf evpn-instance-name {
+         type string;
+       }
+       leaf evpn-ar-role {
+         type string;
+       }
+       list evpn-multicast-snooping-ar-nexthops-per-domain {
+         leaf vni-id {
+           type int32;
+         }
+         leaf evpn-ar-load-balance-nexthop-index {
+           type int32;
+         }
+         leaf load-balance-to {
+           type empty;
+         }
+         list evpn-ar-load-balance-nexthops-member {
+           leaf evpn-neighbor-nexthop-index {
+             type int32;
+           }
+           leaf evpn-neighbor-interface {
+             type string;
+           }
+           leaf evpn-ar-ip {
+             type jt:ipaddr;
+           }
+           leaf designated-node {
+             type empty;
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-multicast-snooping-ar-mh-peers-data-block {
+     list evpn-multicast-snooping-ar-mh-peers-per-instance {
+       leaf evpn-instance-name {
+         type string;
+       }
+       leaf evpn-ar-role {
+         type string;
+       }
+       list evpn-ar-mh-peer {
+         leaf evpn-neighbor-address {
+           type jt:ipaddr;
+         }
+         leaf evpn-neighbor-nexthop-index {
+           type int32;
+         }
+         leaf evpn-neighbor-interface {
+           type string;
+         }
+         list evpn-local-multihomed-esi-table {
+           leaf evpn-interface-esi {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-multicast-snooping-ar-replicators-data-block {
+     list evpn-multicast-snooping-ar-replicators-per-instance {
+       leaf evpn-instance-name {
+         type string;
+       }
+       leaf evpn-ar-role {
+         type string;
+       }
+       list evpn-multicast-snooping-ar-replicators-per-domain {
+         leaf vni-id {
+           type int32;
+         }
+         leaf evpn-operational-replication-mode {
+           type string;
+         }
+         list evpn-ar-replicator {
+           leaf evpn-neighbor-address {
+             type jt:ipaddr;
+           }
+           leaf evpn-neighbor-nexthop-index {
+             type int32;
+           }
+           leaf evpn-neighbor-interface {
+             type string;
+           }
+           leaf evpn-replication-mode {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   grouping multicast-next-hops-information-block {
+     list next-hops-family {
+       leaf address-family {
+         type string;
+       }
+       list iflist-next-hop {
+         leaf next-hop-id {
+           type uint32;
+         }
+         leaf next-hop-ref-count {
+           type uint32;
+         }
+         leaf next-hop-kernel-ref-count {
+           type uint32;
+         }
+         leaf next-hop-addr {
+           type uint32;
+         }
+         leaf rpf-next-hop-id {
+           type uint32;
+         }
+         list next-hop-downstream-interface {
+           leaf interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf interface-index {
+             type int32;
+           }
+           leaf interface-nh-index {
+             type uint32;
+             description "Logical interface nexthop index";
+           }
+         }
+         leaf next-hop-downstream-interface-count {
+           type uint32;
+         }
+       }
+     }
+   }
+   grouping evpn-igmp-snooping-information-block {
+     list evpn-igmp-snooping-database-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list sg-entry {
+         leaf grp-ip {
+           type jt:ipprefix;
+         }
+         leaf src-ip {
+           type jt:ipprefix;
+         }
+         leaf access-oif-count {
+           type int32;
+         }
+         list sg-esi {
+           leaf esi-intf-name {
+             type string;
+           }
+           leaf esi-name {
+             type string;
+           }
+           leaf esi-local-count {
+             type string;
+           }
+           leaf esi-peer-count {
+             type string;
+           }
+         }
+       }
+     }
+     list evpn-igmp-snooping-proxy-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list sg-proxy {
+         leaf proxy-grp-ip {
+           type jt:ipprefix;
+         }
+         leaf proxy-src-ip {
+           type jt:ipprefix;
+         }
+         leaf interconn-adv-route-status {
+           type string;
+         }
+         leaf proxy-grp-local-count {
+           type string;
+         }
+         leaf proxy-grp-remote-count {
+           type string;
+         }
+         leaf proxy-grp-smet-corenh {
+           type int32;
+         }
+         leaf proxy-grp-smet-flood {
+           type int32;
+         }
+         container deterministic-ar-info {
+           leaf deterministic-ar-policy-mode {
+             type string;
+           }
+           leaf deterministic-ar-preferred-replicator {
+             type jt:ipaddr;
+           }
+           leaf deterministic-ar-fallback-replicator {
+             type jt:ipaddr;
+           }
+         }
+       }
+     }
+     list evpn-igmp-snooping-fld-rt-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list core-fld-rt {
+         leaf fld-rt-grp-ip {
+           type jt:ipprefix;
+         }
+         leaf fld-rt-src-ip {
+           type jt:ipprefix;
+         }
+         leaf fld-rt-type {
+           type string;
+         }
+         leaf fld-rt-cemg-nh {
+           type int32;
+         }
+         leaf fld-rt-create-ts {
+           type string;
+         }
+         leaf fld-rt-ar-mapping-update-time {
+           type string;
+         }
+         leaf fld-rt-ar-mapping-compute-time {
+           type string;
+         }
+         container deterministic-ar-info {
+           leaf deterministic-ar-policy-mode {
+             type string;
+           }
+           leaf deterministic-ar-preferred-replicator {
+             type jt:ipaddr;
+           }
+           leaf deterministic-ar-fallback-replicator {
+             type jt:ipaddr;
+           }
+         }
+       }
+       container history-db {
+         leaf history-db-heading {
+           type string;
+         }
+         leaf history-db-maximum-size {
+           type int32;
+         }
+         leaf history-db-current-size {
+           type int32;
+         }
+         container history-db-entries {
+           leaf history-db-entries-heading {
+             type string;
+           }
+           list history-db-entry {
+             leaf history-db-entry-timestamp {
+               type string;
+             }
+             leaf history-db-entry-event {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-mld-snooping-information-block {
+     list evpn-mld-snooping-database-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list sg-entry {
+         leaf grp-ip {
+           type jt:ipprefix;
+         }
+         leaf src-ip {
+           type jt:ipprefix;
+         }
+         leaf access-oif-count {
+           type int32;
+         }
+         list sg-esi {
+           leaf esi-intf-name {
+             type string;
+           }
+           leaf esi-name {
+             type string;
+           }
+           leaf esi-local-count {
+             type string;
+           }
+           leaf esi-peer-count {
+             type string;
+           }
+         }
+       }
+     }
+     list evpn-mld-snooping-proxy-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list sg-proxy {
+         leaf proxy-grp-ip {
+           type jt:ipprefix;
+         }
+         leaf proxy-src-ip {
+           type jt:ipprefix;
+         }
+         leaf interconn-adv-route-status {
+           type string;
+         }
+         leaf proxy-grp-local-count {
+           type string;
+         }
+         leaf proxy-grp-remote-count {
+           type string;
+         }
+         leaf proxy-grp-smet-corenh {
+           type int32;
+         }
+         leaf proxy-grp-smet-flood {
+           type int32;
+         }
+         container deterministic-ar-info {
+           leaf deterministic-ar-policy-mode {
+             type string;
+           }
+           leaf deterministic-ar-preferred-replicator {
+             type jt:ipaddr;
+           }
+           leaf deterministic-ar-fallback-replicator {
+             type jt:ipaddr;
+           }
+         }
+       }
+     }
+     list evpn-mld-snooping-fld-rt-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list core-fld-rt {
+         leaf fld-rt-grp-ip {
+           type jt:ipprefix;
+         }
+         leaf fld-rt-src-ip {
+           type jt:ipprefix;
+         }
+         leaf fld-rt-type {
+           type string;
+         }
+         leaf fld-rt-cemg-nh {
+           type int32;
+         }
+         leaf fld-rt-create-ts {
+           type string;
+         }
+         leaf fld-rt-ar-mapping-update-time {
+           type string;
+         }
+         leaf fld-rt-ar-mapping-compute-time {
+           type string;
+         }
+         container deterministic-ar-info {
+           leaf deterministic-ar-policy-mode {
+             type string;
+           }
+           leaf deterministic-ar-preferred-replicator {
+             type jt:ipaddr;
+           }
+           leaf deterministic-ar-fallback-replicator {
+             type jt:ipaddr;
+           }
+         }
+       }
+       container history-db {
+         leaf history-db-heading {
+           type string;
+         }
+         leaf history-db-maximum-size {
+           type int32;
+         }
+         leaf history-db-current-size {
+           type int32;
+         }
+         container history-db-entries {
+           leaf history-db-entries-heading {
+             type string;
+           }
+           list history-db-entry {
+             leaf history-db-entry-timestamp {
+               type string;
+             }
+             leaf history-db-entry-event {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-oism-information-block {
+     container evpn-oism {
+       leaf oism-context-name {
+         type string;
+       }
+       leaf oism-sbd-interface {
+         type string;
+       }
+       leaf oism-peg-df-election {
+         type string;
+       }
+       leaf oism-peg-df-algorithm {
+         type string;
+       }
+       leaf oism-mode {
+         type string;
+       }
+     }
+   }
+   grouping evpn-oism-peg-df-information-block {
+     list evpn-oism-peg-df-status-context {
+       leaf oism-context-name {
+         type string;
+       }
+       list peg-df-state {
+         leaf vlan-id {
+           type int32;
+         }
+         leaf vni-id {
+           type int32;
+         }
+         list peg-df-af-state {
+           leaf pegdf-af {
+             type string;
+           }
+           leaf pegdf-status {
+             type string;
+           }
+           leaf pegdf-ip {
+             type string;
+           }
+           leaf pegdf-candidate-cnt {
+             type int32;
+           }
+           leaf pegdf-pimupdtime {
+             type string;
+           }
+           leaf pegdf-comptime {
+             type string;
+           }
+           list pegdf-candidate-list {
+             leaf address {
+               type jt:ipaddr;
+             }
+           }
+         }
+         container history-db {
+           leaf history-db-heading {
+             type string;
+           }
+           leaf history-db-maximum-size {
+             type int32;
+           }
+           leaf history-db-current-size {
+             type int32;
+           }
+           container history-db-entries {
+             leaf history-db-entries-heading {
+               type string;
+             }
+             list history-db-entry {
+               leaf history-db-entry-timestamp {
+                 type string;
+               }
+               leaf history-db-entry-event {
+                 type string;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping evpn-oism-spmsi-ad-information-block {
+     list evpn-oism-spmsi-ad-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf vlan-id {
+         type int32;
+       }
+       leaf vni-id {
+         type int32;
+       }
+       list sg-spmsi-ad {
+         leaf spmsi-ad-grp-ip {
+           type jt:ipprefix;
+         }
+         leaf spmsi-ad-src-ip {
+           type jt:ipprefix;
+         }
+         leaf spmsi-ad-grp-local-count {
+           type string;
+         }
+         leaf spmsi-ad-grp-remote-count {
+           type string;
+         }
+       }
+     }
+   }
+   grouping l2ald-routing-table-information-block {
+     list l2ald-rtb-entry {
+       leaf l2rtb-instance-type {
+         type string;
+         description "Type of instance (routing instance/bridge domain)";
+       }
+       leaf l2rtb-logical-system {
+         type string;
+         description "Logical system name";
+       }
+       leaf l2rtb-name {
+         type string;
+         description "Name of the routing instance";
+       }
+       leaf l2rtb-bridging-domain {
+         type string;
+         description "Name of the bridging domain";
+       }
+       leaf l2rtb-id {
+         type uint32;
+         description "Routing instance identifier";
+       }
+       leaf l2rtb-l2irb-ifl-index {
+         type uint32;
+       }
+       leaf l2rtb-flags {
+         type string;
+         description "Attributes associated with this routing instance";
+       }
+       leaf l2bd-vlan-id {
+         type string;
+         description "Bridge domain VLAN";
+       }
+       leaf l2bd-id {
+         type uint32;
+         description "Bridge domain identifier";
+       }
+       leaf l2bd-generation {
+         type uint32;
+         description "Bridge domain generation identifier";
+       }
+       leaf l2rtb-mac-limit {
+         type uint32;
+         description "Maximum number of MAC addresses that can be learned on this routing instance";
+       }
+       leaf l2rtb-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-local-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-config-smacs-learned {
+         type uint32;
+         description "Number of configured static MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-non-config-smacs-learned {
+         type uint32;
+         description "Number of non configured static MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-mac-ip-limit {
+         type uint32;
+         description "Maximum number of MAC+IP bindings that can be learned on this routing instance";
+       }
+       leaf l2rtb-mac-ip-learned {
+         type uint32;
+         description "Number of MAC+IP bindings that are learned on this routing instance";
+       }
+       leaf l2rtb-local-mac-ip-learned {
+         type uint32;
+         description "Number of local MAC+IP bindings that are learned on this routing instance";
+       }
+       leaf l2rtb-irb-interface {
+         type string;
+         description "Name of the IRB interface associated with this routing instance";
+       }
+       leaf l2rtb-irb-interface-index {
+         type uint32;
+         description "IRB interface index associated with this routing instance";
+       }
+       leaf l2rtb-sequence-number {
+         type uint32;
+         description "Current routing instance sequence number";
+       }
+       leaf l2rtb-handle {
+         type uint32;
+         description "Handle associated with this routing instance";
+       }
+       leaf l2rtb-peer-pbbn-rtb-id {
+         type uint32;
+         description "Peer PBBN RTB index";
+       }
+       leaf l2rtb-configured-service-id {
+         type uint32;
+         description "Configured Service-id attributes associated with this routing instance";
+       }
+       leaf l2rtb-active-service-id {
+         type uint32;
+         description "Service-id attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-iesi-value {
+         type string;
+         description "Interconnect ESI Value";
+       }
+       leaf l2rtb-esi-mode {
+         type uint32;
+         description "Interconnect Esi Mode";
+       }
+       leaf l2rtb-esi-df-role {
+         type uint32;
+         description "Interconnect Esi DF Role";
+       }
+       leaf l2rtb-indr-sess-id {
+         type uint32;
+         description "Indirect Session ID for IESI";
+       }
+       leaf l2rtb-dc-pref {
+         type uint32;
+         description "Interconnect VTEP preference mode";
+       }
+       leaf l2rtb-vxlan-mpls-aa-src-ip {
+         type string;
+         description "Source IP in outer header of vxlan packet";
+       }
+       leaf l2rtb-config-bd-vlan {
+         type string;
+         description "Vlan configured for the givn bridge domain on routing instance";
+       }
+       leaf l2rtb-config-operation {
+         type string;
+         description "Configuration notify operation on bridge domain/routing instance";
+       }
+       leaf l2rtb-config-smac-count {
+         type uint32;
+         description "Configured Static MAC on the BD";
+       }
+       leaf l2rtb-config-params {
+         type string;
+         description "Configured attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-config-mac-ip-params {
+         type string;
+         description "Configured MAC+IP attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-config-flags {
+         type string;
+         description "Configured flags associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-service-type {
+         type string;
+         description "Configured service type for this routing instance";
+       }
+       leaf l2rtb-configured-rg-id {
+         type uint32;
+         description "Config Redundancy Group ID";
+       }
+       leaf l2rtb-active-rg-id {
+         type uint32;
+         description "Active Redundancy Group ID";
+       }
+       leaf l2rtb-configured-bd-service-id {
+         type uint32;
+         description "Configured Service-id attributes associated with this bridge domain";
+       }
+       leaf l2rtb-active-bd-service-id {
+         type uint32;
+         description "Service-id attributes associated with this bridge domain";
+       }
+       leaf l2rtb-configured-bd-vnid {
+         type uint32;
+         description "Configured VXLAN identifier";
+       }
+       leaf l2rtb-active-bd-vnid {
+         type uint32;
+         description "Active VXLAN identifier";
+       }
+       leaf l2rtb-configured-bd-trans-vnid {
+         type uint32;
+         description "Configured translation VXLAN identifier";
+       }
+       leaf l2rtb-active-bd-trans-vnid {
+         type uint32;
+         description "Active translation VXLAN identifier";
+       }
+       leaf l2rtb-configured-bd-vxgrp {
+         type string;
+         description "Configured VXLAN multicast group IP address";
+       }
+       leaf l2rtb-active-bd-vxgrp {
+         type string;
+         description "Active VXLAN multicast group IP address";
+       }
+       leaf l2rtb-configured-decap-accept-inner-vlan {
+         type uint32;
+         description "Configured VXLAN Decap accept inner vlan";
+       }
+       leaf l2rtb-configured-encap-inner-vlan {
+         type uint32;
+         description "Configured VXLAN Encap inner vlan";
+       }
+       leaf l2rtb-configured-unreachable-rvtep-timer {
+         type uint32;
+         description "Configured VXLAN Unreachable rvtep timer";
+       }
+       leaf l2rtb-configured-ovsdb-enabled {
+         type string;
+         description "Configured VXLAN OVSDB Enabled";
+       }
+       leaf l2rtb-active-bd-l3rtt {
+         type uint32;
+         description "Active VXLAN Layer-3 routing instance index";
+       }
+       leaf l2rtb-active-bd-svtep-ip {
+         type string;
+         description "Active VXLAN source tunnel endpoint IP address";
+       }
+       leaf l2rtb-active-vxlan-token {
+         type uint32;
+         description "VXLAN Token";
+       }
+       leaf l2rtb-active-vxlan-bcport-token {
+         type uint32;
+         description "VXLAN bcport Token";
+       }
+       leaf l2rtb-active-vxlan-flood-token {
+         type uint32;
+         description "VXLAN flood Token";
+       }
+       leaf l2rtb-active-vxlan-wan-token {
+         type uint32;
+         description "VXLAN Wan Token";
+       }
+       leaf l2rtb-config-ownership-flags {
+         type string;
+         description "Configured ownership flags on attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-ownership-flags {
+         type string;
+         description "Kernel ownership flags on attributes associated with this routing instance";
+       }
+       leaf l2rtb-active-re-flood-token {
+         type uint32;
+         description "RE flood token";
+       }
+       leaf l2rtb-active-mlp-flood-token {
+         type uint32;
+         description "MLP flood token";
+       }
+       leaf l2rtb-config-mvrp-ref-count {
+         type uint32;
+         description " Number of join count on the bridge domain";
+       }
+       leaf l2rtb-rtsock-write-errors {
+         type uint32;
+         description "Number of times kernel write has failed.";
+       }
+     }
+   }
+   grouping l2ng-l2ald-iff-interface-information-block {
+     list l2ng-l2ald-iff-interface-entry {
+       leaf l2iff-interface-lr-name {
+         type string;
+         description "Logical router name";
+       }
+       leaf l2iff-interface-rtt-name {
+         type string;
+         description "Routing Instance name";
+       }
+       leaf l2iff-interface-name {
+         type string;
+         description "Logical interface name";
+       }
+       leaf l2iff-interface-vlan-name {
+         type string;
+         description "BD name in compressed form";
+       }
+       leaf l2iff-interface-vlan-id {
+         type string;
+         description "Bridge domain VLAN";
+       }
+       leaf l2iff-interface-mac-limit {
+         type uint32;
+         description "Maximum number of MAC addresses that can be learned on this interface family";
+       }
+       leaf l2iff-interface-mac-ip-limit {
+         type uint32;
+         description "Maximum number of MAC+IP bindings that can be learned on this interface family";
+       }
+       leaf l2iff-interface-vlan-member-stp-state {
+         type string;
+         description "STP state for this IFBD";
+       }
+       leaf l2iff-interface-flags {
+         type string;
+         description "Attributes associated with this interface family";
+       }
+       leaf l2iff-interface-vlan-member-tagness {
+         type string;
+         description "Interface Taggness";
+       }
+       leaf l2iff-interface-index {
+         type uint32;
+         description "Interface family index";
+       }
+       leaf l2iff-interface-generation {
+         type uint32;
+         description "Layer 2 interface family creation time";
+       }
+       leaf l2iff-interface-rt-index {
+         type uint32;
+         description "Routing instance to which the interface family belongs";
+       }
+       leaf l2iff-interface-ifd-index {
+         type uint32;
+         description "Physical media to which the interface family belongs";
+       }
+       leaf l2iff-interface-ifl-index {
+         type uint32;
+         description "Logical interface to which the interface family belongs";
+       }
+       leaf l2iff-interface-af-value {
+         type uint32;
+         description "Address family to which the interface family belongs";
+       }
+       leaf l2iff-interface-sequence-number {
+         type uint32;
+         description "Current interface family sequence number";
+       }
+       leaf l2iff-interface-mac-sequence-number {
+         type uint32;
+         description "Current MAC address sequence number for this interface family";
+       }
+       leaf l2iff-interface-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this interface family";
+       }
+       leaf l2iff-interface-config-smacs-learned {
+         type uint32;
+         description "Number of configured static MACs that are learned on this interface family";
+       }
+       leaf l2iff-interface-non-config-smacs-learned {
+         type uint32;
+         description "Number of non configured static MACs that are learned on this interface family";
+       }
+       leaf l2iff-interface-mac-ip-learned {
+         type uint32;
+         description "Number of configured static and dynamic MAC+IPs that are learned on this interface family";
+       }
+       leaf l2iff-interface-handle {
+         type uint32;
+         description "Handle associated with this interface family";
+       }
+       leaf l2iff-interface-config-mac-limit {
+         type uint32;
+         description "Maximum number of MAC addresses that is configured on this interface family";
+       }
+       leaf l2iff-interface-config-smac-count {
+         type uint32;
+         description "Number of static MAC addresses that is configured on this interface family";
+       }
+       leaf l2iff-interface-config-smac-applied {
+         type uint32;
+         description "Number of static MAC addresses that is successfully applied to MAC DB on this interface family";
+       }
+       leaf l2iff-interface-config-rtb-handle {
+         type uint32;
+         description "Handle for the routing instance for this IFL config";
+       }
+       leaf l2iff-interface-config-state {
+         type string;
+         description "Configured state attributes associated with this interface family";
+       }
+       leaf l2iff-interface-config-flags {
+         type string;
+         description "Configured attributes associated with this interface family";
+       }
+       leaf l2iff-interface-config-previous-flags {
+         type string;
+         description "Previous configured attributes associated with this interface family";
+       }
+       leaf l2iff-interface-config-smac-address {
+         type jt:mac-addr;
+         description "Configured static media access control address associated with this interface family";
+       }
+       leaf l2iff-interface-config-smac-vlan {
+         type uint32;
+         description "Configured VLAN ID for the static MAC associated with this interface family";
+       }
+       leaf l2iff-interface-config-smac-flags {
+         type string;
+         description "Configured static MAC attributes associated with this interface family";
+       }
+       leaf l2iff-interface-interface-type {
+         type string;
+         description "Type of interface (IFF/IFBD)";
+       }
+       leaf l2iff-interface-rtsock-write-errors {
+         type uint32;
+         description "Number of times kernel write has failed.";
+       }
+       leaf l2iff-interface-trunk-vlan {
+         type uint32;
+         description "Specify the incoming VLAN id which gets translated.";
+       }
+       leaf l2iff-interface-rewrite-op {
+         type string;
+         description "Configured rewrite operation.";
+       }
+       leaf l2iff-interface-vstp-index {
+         type uint32;
+         description "VSTP index";
+       }
+       leaf l2iff-interface-vlan-member-flags {
+         type string;
+         description "L2 learning level flags";
+       }
+       leaf l2iff-interface-vlan-member-mac-limit {
+         type uint32;
+         description "MAC limit for the IFBD";
+       }
+       leaf l2iff-interface-vlan-member-mac-ip-limit {
+         type uint32;
+         description "MAC+IP limit for the IFBD";
+       }
+       leaf l2iff-interface-rbeb-mac-address {
+         type jt:mac-addr;
+         description "Media access control address of remote backbone edge bridge (BEB)";
+       }
+       leaf l2iff-interface-time-before-expiry {
+         type uint32;
+         description "Time before object is deleted in seconds";
+       }
+     }
+   }
+   grouping bridge-statistics-information-block {
+     leaf bd-name {
+       type string;
+       description "Bridging media access control address count for bridge-domain";
+     }
+     list l2ald-rtb-entry {
+       leaf l2rtb-instance-type {
+         type string;
+         description "Type of instance (routing instance/bridge domain)";
+       }
+       leaf l2rtb-logical-system {
+         type string;
+         description "Logical system name";
+       }
+       leaf l2rtb-name {
+         type string;
+         description "Name of the routing instance";
+       }
+       leaf l2rtb-bridging-domain {
+         type string;
+         description "Name of the bridging domain";
+       }
+       leaf l2rtb-id {
+         type uint32;
+         description "Routing instance identifier";
+       }
+       leaf l2rtb-l2irb-ifl-index {
+         type uint32;
+       }
+       leaf l2rtb-flags {
+         type string;
+         description "Attributes associated with this routing instance";
+       }
+       leaf l2bd-vlan-id {
+         type string;
+         description "Bridge domain VLAN";
+       }
+       leaf l2bd-id {
+         type uint32;
+         description "Bridge domain identifier";
+       }
+       leaf l2bd-generation {
+         type uint32;
+         description "Bridge domain generation identifier";
+       }
+       leaf l2rtb-mac-limit {
+         type uint32;
+         description "Maximum number of MAC addresses that can be learned on this routing instance";
+       }
+       leaf l2rtb-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-local-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-config-smacs-learned {
+         type uint32;
+         description "Number of configured static MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-non-config-smacs-learned {
+         type uint32;
+         description "Number of non configured static MACs that are learned on this routing instance";
+       }
+       leaf l2rtb-mac-ip-limit {
+         type uint32;
+         description "Maximum number of MAC+IP bindings that can be learned on this routing instance";
+       }
+       leaf l2rtb-mac-ip-learned {
+         type uint32;
+         description "Number of MAC+IP bindings that are learned on this routing instance";
+       }
+       leaf l2rtb-local-mac-ip-learned {
+         type uint32;
+         description "Number of local MAC+IP bindings that are learned on this routing instance";
+       }
+       leaf l2rtb-irb-interface {
+         type string;
+         description "Name of the IRB interface associated with this routing instance";
+       }
+       leaf l2rtb-irb-interface-index {
+         type uint32;
+         description "IRB interface index associated with this routing instance";
+       }
+       leaf l2rtb-sequence-number {
+         type uint32;
+         description "Current routing instance sequence number";
+       }
+       leaf l2rtb-handle {
+         type uint32;
+         description "Handle associated with this routing instance";
+       }
+       leaf l2rtb-peer-pbbn-rtb-id {
+         type uint32;
+         description "Peer PBBN RTB index";
+       }
+       leaf l2rtb-configured-service-id {
+         type uint32;
+         description "Configured Service-id attributes associated with this routing instance";
+       }
+       leaf l2rtb-active-service-id {
+         type uint32;
+         description "Service-id attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-iesi-value {
+         type string;
+         description "Interconnect ESI Value";
+       }
+       leaf l2rtb-esi-mode {
+         type uint32;
+         description "Interconnect Esi Mode";
+       }
+       leaf l2rtb-esi-df-role {
+         type uint32;
+         description "Interconnect Esi DF Role";
+       }
+       leaf l2rtb-indr-sess-id {
+         type uint32;
+         description "Indirect Session ID for IESI";
+       }
+       leaf l2rtb-dc-pref {
+         type uint32;
+         description "Interconnect VTEP preference mode";
+       }
+       leaf l2rtb-vxlan-mpls-aa-src-ip {
+         type string;
+         description "Source IP in outer header of vxlan packet";
+       }
+       leaf l2rtb-config-bd-vlan {
+         type string;
+         description "Vlan configured for the givn bridge domain on routing instance";
+       }
+       leaf l2rtb-config-operation {
+         type string;
+         description "Configuration notify operation on bridge domain/routing instance";
+       }
+       leaf l2rtb-config-smac-count {
+         type uint32;
+         description "Configured Static MAC on the BD";
+       }
+       leaf l2rtb-config-params {
+         type string;
+         description "Configured attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-config-mac-ip-params {
+         type string;
+         description "Configured MAC+IP attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-config-flags {
+         type string;
+         description "Configured flags associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-service-type {
+         type string;
+         description "Configured service type for this routing instance";
+       }
+       leaf l2rtb-configured-rg-id {
+         type uint32;
+         description "Config Redundancy Group ID";
+       }
+       leaf l2rtb-active-rg-id {
+         type uint32;
+         description "Active Redundancy Group ID";
+       }
+       leaf l2rtb-configured-bd-service-id {
+         type uint32;
+         description "Configured Service-id attributes associated with this bridge domain";
+       }
+       leaf l2rtb-active-bd-service-id {
+         type uint32;
+         description "Service-id attributes associated with this bridge domain";
+       }
+       leaf l2rtb-configured-bd-vnid {
+         type uint32;
+         description "Configured VXLAN identifier";
+       }
+       leaf l2rtb-active-bd-vnid {
+         type uint32;
+         description "Active VXLAN identifier";
+       }
+       leaf l2rtb-configured-bd-trans-vnid {
+         type uint32;
+         description "Configured translation VXLAN identifier";
+       }
+       leaf l2rtb-active-bd-trans-vnid {
+         type uint32;
+         description "Active translation VXLAN identifier";
+       }
+       leaf l2rtb-configured-bd-vxgrp {
+         type string;
+         description "Configured VXLAN multicast group IP address";
+       }
+       leaf l2rtb-active-bd-vxgrp {
+         type string;
+         description "Active VXLAN multicast group IP address";
+       }
+       leaf l2rtb-configured-decap-accept-inner-vlan {
+         type uint32;
+         description "Configured VXLAN Decap accept inner vlan";
+       }
+       leaf l2rtb-configured-encap-inner-vlan {
+         type uint32;
+         description "Configured VXLAN Encap inner vlan";
+       }
+       leaf l2rtb-configured-unreachable-rvtep-timer {
+         type uint32;
+         description "Configured VXLAN Unreachable rvtep timer";
+       }
+       leaf l2rtb-configured-ovsdb-enabled {
+         type string;
+         description "Configured VXLAN OVSDB Enabled";
+       }
+       leaf l2rtb-active-bd-l3rtt {
+         type uint32;
+         description "Active VXLAN Layer-3 routing instance index";
+       }
+       leaf l2rtb-active-bd-svtep-ip {
+         type string;
+         description "Active VXLAN source tunnel endpoint IP address";
+       }
+       leaf l2rtb-active-vxlan-token {
+         type uint32;
+         description "VXLAN Token";
+       }
+       leaf l2rtb-active-vxlan-bcport-token {
+         type uint32;
+         description "VXLAN bcport Token";
+       }
+       leaf l2rtb-active-vxlan-flood-token {
+         type uint32;
+         description "VXLAN flood Token";
+       }
+       leaf l2rtb-active-vxlan-wan-token {
+         type uint32;
+         description "VXLAN Wan Token";
+       }
+       leaf l2rtb-config-ownership-flags {
+         type string;
+         description "Configured ownership flags on attributes associated with this routing instance/bridge domain";
+       }
+       leaf l2rtb-ownership-flags {
+         type string;
+         description "Kernel ownership flags on attributes associated with this routing instance";
+       }
+       leaf l2rtb-active-re-flood-token {
+         type uint32;
+         description "RE flood token";
+       }
+       leaf l2rtb-active-mlp-flood-token {
+         type uint32;
+         description "MLP flood token";
+       }
+       leaf l2rtb-config-mvrp-ref-count {
+         type uint32;
+         description " Number of join count on the bridge domain";
+       }
+       leaf l2rtb-rtsock-write-errors {
+         type uint32;
+         description "Number of times kernel write has failed.";
+       }
+     }
+     list interface-statistics {
+       leaf l2bd-vlan-id {
+         type string;
+         description "Bridge domain VLAN";
+       }
+       leaf vn-id {
+         type uint32;
+         description "VXLAN identifier";
+       }
+       leaf remote-pe {
+         type jt:ipaddr;
+       }
+       leaf broadcast-packets {
+         type uint64;
+         description "Broadcast packets";
+       }
+       leaf broadcast-bytes {
+         type uint64;
+         description "Broadcast bytes";
+       }
+       leaf multicast-packets {
+         type uint64;
+         description "Multicast packets";
+       }
+       leaf multicast-bytes {
+         type uint64;
+         description "Multicast bytes";
+       }
+       leaf flooded-packets {
+         type uint64;
+         description "Flooded packets";
+       }
+       leaf flooded-bytes {
+         type uint64;
+         description "Flooded bytes";
+       }
+       leaf unicast-packets {
+         type uint64;
+         description "Unicast packets";
+       }
+       leaf unicast-bytes {
+         type uint64;
+         description "Unicast bytes";
+       }
+       leaf data-vlan-mlp-drop-count {
+         type int32;
+         description "Number of mac learning packets dropped in data vlan";
+       }
+       leaf num-mac-count {
+         type int32;
+         description "Number of addresses learned on the interface";
+       }
+       leaf mac-limit {
+         type int32;
+         description "Limit of number of addresses learned on interface";
+       }
+       list interface {
+         leaf interface-name {
+           type string;
+           description "Bridging media access control address interface";
+         }
+         leaf local-interface-index {
+           type int32;
+         }
+         leaf interface-flags {
+           type int32;
+         }
+       }
+     }
+   }
+   grouping l2ald-rtb-macdb-block {
+     leaf l2ald-macdb-rtb-name {
+       type string;
+       description "Bridging MAC database for a routing instance";
+     }
+     list l2ald-mac-entry {
+       leaf l2-mac-address {
+         type jt:mac-addr;
+         description "Media access control address learned from another source";
+       }
+       leaf l2-mac-logical-interface {
+         type string;
+         description "Name of logical interface on which MAC address was learned";
+       }
+       leaf l2-mac-logical-system {
+         type string;
+         description "Name of logical system in which this MAC address was learned";
+       }
+       leaf l2-mac-routing-instance {
+         type string;
+         description "Routing instance in which the MAC address was learned";
+       }
+       leaf l2-mac-bridging-domain {
+         type string;
+         description "Bridging domain in which the MAC address was learned";
+       }
+       leaf l2-mac-flags {
+         type string;
+         description "Forwarding entry flags associated with MACs displayed in short form";
+       }
+       leaf l2-mac-fwd-next-hop {
+         type uint32;
+         description "Forwarding next hop for Control MAC to be routed to";
+       }
+       leaf l2-mac-property {
+         type string;
+         description "Property of MAC route";
+       }
+       leaf l2-active-source {
+         type string;
+         description "Remote VXLAN tunnel endpoint ip address or ESI value";
+       }
+       leaf l2-mac-pvlan-port-role {
+         type string;
+         description "The PVLAN port role for interface associated with these MAC addresses";
+       }
+       leaf l2-mac-pvlan-vlan-id {
+         type string;
+         description "The PVLAN vlan ID associated with these MAC addresses";
+       }
+       leaf l2-mac-interface-device {
+         type string;
+         description "Name of interface device on which MAC address was learned";
+       }
+       leaf l2-mac-rtr-id {
+         type uint32;
+         description "Remote Rourter ID for Control MAC to be routed to";
+       }
+       leaf l2-mac-vlan {
+         type uint32;
+         description "VLAN ID of the routing instance in which the MAC address was learned";
+       }
+       leaf l2-mac-stp-index {
+         type uint32;
+         description "Spanning Tree Protocol (STP) index of the logical interface in which the MAC address was learned";
+       }
+       leaf l2-mac-ifl-generation {
+         type uint32;
+         description "Creation time of the logical interface when this MAC address was learned";
+       }
+       leaf l2-mac-entry-age {
+         type string;
+         description "Age of the mac entry";
+       }
+       leaf l2-bridge-vlan {
+         type string;
+         description "Vlan for the bridging domain";
+       }
+       leaf l2-bridge-isid {
+         type uint32;
+         description "ISID for the bridging domain";
+       }
+       leaf l2-remote-beb-mac-address {
+         type jt:mac-addr;
+         description "Media access control address of remote backbone edge bridge (BEB)";
+       }
+       leaf l2-mac-elp-nh {
+         type uint32;
+         description "ELP NH Id of the MAC address";
+       }
+       leaf l2-mac-base-logical-interface {
+         type string;
+         description "Name of logical interface on which MAC address was learnt first";
+       }
+       leaf l2-mac-entry-flags {
+         type string;
+         description "Forwarding entry flags associated with these MAC addresses";
+       }
+       leaf l2-mac-epoch {
+         type uint32;
+         description "Spanning Tree Protocol (STP) epoch number when MAC address was learned";
+       }
+       leaf l2-mac-sequence-number {
+         type uint32;
+         description "Sequence number assigned to this MAC address";
+       }
+       leaf l2-mac-learn-mask {
+         type string;
+         description "Mask of Packet Forwarding Engines where this MAC address was learned";
+       }
+       leaf l2-mac-mcae-id {
+         type uint32;
+         description "MCAE ID of the mac entry";
+       }
+       leaf l2-mac-mcae-ifl-unit {
+         type uint32;
+         description "MCAE IFL unit of the mac entry";
+       }
+       leaf l2-mac-svc-id {
+         type uint32;
+         description "MCAE SVC ID of the mac entry";
+       }
+       leaf l2-mac-rg-id {
+         type uint32;
+         description "RG ID of the mac entry";
+       }
+       leaf l2-mac-rtm-op {
+         type uint32;
+         description "MCAE mac operation of the mac entry";
+       }
+       leaf l2-mac-time-info {
+         type string;
+         description "Mac learning time";
+       }
+       container l2ald-mac-source-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+       container l2ald-mac-destination-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+       leaf l2-remote-vtep-address {
+         type string;
+         description "Remote VXLAN tunnel endpoint ip address";
+       }
+     }
+   }
+   grouping l2ald-interface-macdb-block {
+     leaf l2ald-macdb-if-name {
+       type string;
+     }
+     list l2ald-mac-entry {
+       leaf l2-mac-address {
+         type jt:mac-addr;
+         description "Media access control address learned from another source";
+       }
+       leaf l2-mac-logical-interface {
+         type string;
+         description "Name of logical interface on which MAC address was learned";
+       }
+       leaf l2-mac-logical-system {
+         type string;
+         description "Name of logical system in which this MAC address was learned";
+       }
+       leaf l2-mac-routing-instance {
+         type string;
+         description "Routing instance in which the MAC address was learned";
+       }
+       leaf l2-mac-bridging-domain {
+         type string;
+         description "Bridging domain in which the MAC address was learned";
+       }
+       leaf l2-mac-flags {
+         type string;
+         description "Forwarding entry flags associated with MACs displayed in short form";
+       }
+       leaf l2-mac-fwd-next-hop {
+         type uint32;
+         description "Forwarding next hop for Control MAC to be routed to";
+       }
+       leaf l2-mac-property {
+         type string;
+         description "Property of MAC route";
+       }
+       leaf l2-active-source {
+         type string;
+         description "Remote VXLAN tunnel endpoint ip address or ESI value";
+       }
+       leaf l2-mac-pvlan-port-role {
+         type string;
+         description "The PVLAN port role for interface associated with these MAC addresses";
+       }
+       leaf l2-mac-pvlan-vlan-id {
+         type string;
+         description "The PVLAN vlan ID associated with these MAC addresses";
+       }
+       leaf l2-mac-interface-device {
+         type string;
+         description "Name of interface device on which MAC address was learned";
+       }
+       leaf l2-mac-rtr-id {
+         type uint32;
+         description "Remote Rourter ID for Control MAC to be routed to";
+       }
+       leaf l2-mac-vlan {
+         type uint32;
+         description "VLAN ID of the routing instance in which the MAC address was learned";
+       }
+       leaf l2-mac-stp-index {
+         type uint32;
+         description "Spanning Tree Protocol (STP) index of the logical interface in which the MAC address was learned";
+       }
+       leaf l2-mac-ifl-generation {
+         type uint32;
+         description "Creation time of the logical interface when this MAC address was learned";
+       }
+       leaf l2-mac-entry-age {
+         type string;
+         description "Age of the mac entry";
+       }
+       leaf l2-bridge-vlan {
+         type string;
+         description "Vlan for the bridging domain";
+       }
+       leaf l2-bridge-isid {
+         type uint32;
+         description "ISID for the bridging domain";
+       }
+       leaf l2-remote-beb-mac-address {
+         type jt:mac-addr;
+         description "Media access control address of remote backbone edge bridge (BEB)";
+       }
+       leaf l2-mac-elp-nh {
+         type uint32;
+         description "ELP NH Id of the MAC address";
+       }
+       leaf l2-mac-base-logical-interface {
+         type string;
+         description "Name of logical interface on which MAC address was learnt first";
+       }
+       leaf l2-mac-entry-flags {
+         type string;
+         description "Forwarding entry flags associated with these MAC addresses";
+       }
+       leaf l2-mac-epoch {
+         type uint32;
+         description "Spanning Tree Protocol (STP) epoch number when MAC address was learned";
+       }
+       leaf l2-mac-sequence-number {
+         type uint32;
+         description "Sequence number assigned to this MAC address";
+       }
+       leaf l2-mac-learn-mask {
+         type string;
+         description "Mask of Packet Forwarding Engines where this MAC address was learned";
+       }
+       leaf l2-mac-mcae-id {
+         type uint32;
+         description "MCAE ID of the mac entry";
+       }
+       leaf l2-mac-mcae-ifl-unit {
+         type uint32;
+         description "MCAE IFL unit of the mac entry";
+       }
+       leaf l2-mac-svc-id {
+         type uint32;
+         description "MCAE SVC ID of the mac entry";
+       }
+       leaf l2-mac-rg-id {
+         type uint32;
+         description "RG ID of the mac entry";
+       }
+       leaf l2-mac-rtm-op {
+         type uint32;
+         description "MCAE mac operation of the mac entry";
+       }
+       leaf l2-mac-time-info {
+         type string;
+         description "Mac learning time";
+       }
+       container l2ald-mac-source-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+       container l2ald-mac-destination-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+       leaf l2-remote-vtep-address {
+         type string;
+         description "Remote VXLAN tunnel endpoint ip address";
+       }
+     }
+   }
+   grouping l2ald-rtb-mac-ip-db-block {
+     leaf l2ald-rtb-mac-ip-db-name {
+       type string;
+       description "Bridging MAC database for a routing instance";
+     }
+     list l2ald-mac-ip-entry {
+       leaf l2-mac-ip-logical-system {
+         type string;
+         description "Name of logical system in which this MAC address was learned";
+       }
+       leaf l2-mac-ip-routing-instance {
+         type string;
+         description "Routing instance in which the MAC address was learned";
+       }
+       leaf l2-mac-ip-bridging-domain {
+         type string;
+         description "Bridging domain in which the MAC address was learned";
+       }
+       leaf l2-ip-address {
+         type jt:ipaddr;
+         description "IP address learned from another source";
+       }
+       leaf l2-mac-address {
+         type jt:mac-addr;
+         description "Media access control address learned from another source";
+       }
+       leaf l2-mac-ip-flags {
+         type string;
+         description "MAC IP flags";
+       }
+       leaf l2-mac-ip-gbptag {
+         type int32;
+         description "GBP tag value";
+       }
+       leaf l2-mac-logical-interface {
+         type string;
+         description "Name of logical interface on which MAC address was learned";
+       }
+       leaf l2-active-source {
+         type string;
+         description "Remote VXLAN tunnel endpoint ip address or ESI value";
+       }
+       leaf l2-mac-ip-state {
+         type string;
+         description "MAC IP state";
+       }
+       leaf l2-mac-ip-rpd-flags {
+         type string;
+         description "MAC IP RPD flags";
+       }
+       leaf l2-mac-ip-local-learn-mask {
+         type string;
+         description "Local learn mask";
+       }
+       leaf l2-mac-ip-remote-learn-mask {
+         type string;
+         description "Remote learn mask";
+       }
+       leaf l2-mac-ip-remote-proxy-learn-mask {
+         type string;
+         description "Remote Proxy learn mask";
+       }
+       leaf l2-mac-ip-time-info {
+         type string;
+         description "MAC IP Time info";
+       }
+     }
+   }
+   grouping l2ald-rtb-mac-ip-kernel-db-block {
+     list l2ald-mac-ip-kernel-entry {
+       leaf l2-mac-ip-bd-id {
+         type int32;
+         description "Bridge-domain id";
+       }
+       leaf l2-ip-address {
+         type jt:ipaddr;
+         description "IP address learned from another source";
+       }
+       leaf l2-mac-address {
+         type jt:mac-addr;
+         description "Media access control address learned from another source";
+       }
+       leaf l2-mac-logical-interface {
+         type string;
+         description "Name of logical interface on which MAC address was learned";
+       }
+       leaf l2-mac-ip-flags {
+         type string;
+         description "MAC IP flags";
+       }
+       leaf l2-mac-ip-state {
+         type string;
+         description "MAC IP state";
+       }
+       leaf l2-mac-pseudo-interface {
+         type string;
+         description "Pseudo vtep interface";
+       }
+       leaf l2-mac-ip-rpd-flags {
+         type string;
+         description "MAC IP RPD flags";
+       }
+       leaf l2-mac-ip-local-learn-mask {
+         type string;
+         description "Local learn mask";
+       }
+       leaf l2-mac-ip-remote-learn-mask {
+         type string;
+         description "Remote learn mask";
+       }
+       leaf l2-mac-ip-remote-proxy-learn-mask {
+         type string;
+         description "Remote Proxy learn mask";
+       }
+       leaf l2-mac-ip-time-info {
+         type string;
+         description "MAC IP Time info";
+       }
+     }
+   }
+   grouping l2ng-l2rtb-evpn-arp-db-block {
+     leaf l2ng-l2rtb-evpn-arp-db-rtb-name {
+       type string;
+       description "Bridging MAC INET database for a routing instance";
+     }
+     list l2ng-l2rtb-evpn-arp-entry {
+       leaf l2ng-l2-evpn-arp-inet-address {
+         type jt:ipaddr;
+         description "INET addresses learned via ARP";
+       }
+       leaf l2ng-l2-mac-address {
+         type jt:mac-addr;
+       }
+       leaf l2ng-l2-mac-logical-interface {
+         type string;
+       }
+       leaf l2ng-l2-mac-routing-instance {
+         type string;
+       }
+       leaf l2ng-l2-mac-bridging-domain {
+         type string;
+       }
+       leaf l2ng-l2-mac-interface-device {
+         type string;
+       }
+       container l2ng-l2ald-mac-destination-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+       container l2ng-l2ald-mac-source-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+     }
+   }
+   grouping l2ng-l2rtb-evpn-nd-db-block {
+     leaf l2ng-l2rtb-evpn-nd-db-rtb-name {
+       type string;
+       description "Bridging MAC INET6 database for a routing instance";
+     }
+     list l2ng-l2rtb-evpn-nd-entry {
+       leaf l2ng-l2-evpn-nd-inet6-address {
+         type jt:ipv6addr;
+         description "INET6 addresses learned via NDP";
+       }
+       leaf l2ng-l2-mac-address {
+         type jt:mac-addr;
+       }
+       leaf l2ng-l2-mac-logical-interface {
+         type string;
+       }
+       leaf l2ng-l2-mac-routing-instance {
+         type string;
+       }
+       leaf l2ng-l2-mac-bridging-domain {
+         type string;
+       }
+       leaf l2ng-l2-mac-interface-device {
+         type string;
+       }
+       container l2ng-l2ald-mac-destination-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+       container l2ng-l2ald-mac-source-address-statistics {
+         leaf packet-count {
+           type uint64;
+           description "Packet count";
+         }
+         leaf byte-count {
+           type uint64;
+           description "Byte count";
+         }
+       }
+     }
+   }
+   grouping vxlan-source-vtep-information-block {
+     container svtep-format {
+       leaf vtep-logical-system-name {
+         type string;
+         description "Name of the logical system";
+       }
+       leaf vtep-logical-system-id {
+         type uint32;
+         description "Logical system index";
+       }
+       leaf source-vtep-address {
+         type string;
+         description "Source VXLAN tunnel endpoint IP address";
+       }
+       leaf source-vtep-interface {
+         type string;
+         description "Source VXLAN tunnel endpoint IFL name";
+       }
+       leaf l3-id {
+         type uint32;
+         description "Layer-3 routing instance index";
+       }
+       leaf source-vtep-mode {
+         type string;
+         description "Source VXLAN tunnel endpoint mode";
+       }
+       leaf elp-source-vtep-address {
+         type string;
+         description "ELP Source VXLAN tunnel endpoint IP address";
+       }
+       leaf source-vtep-interface-id {
+         type uint32;
+         description "Source VXLAN tunnel endpoint IFL index";
+       }
+     }
+   }
+   grouping vxlan-remote-vtep-mactable-block {
+     leaf l2-mac-logical-system {
+       type string;
+       description "Name of logical system in which this MAC address was learned";
+     }
+     leaf l2-mac-routing-instance {
+       type string;
+       description "Routing instance in which the MAC address was learned";
+     }
+     leaf l2-mac-bridging-domain {
+       type string;
+       description "Bridging domain in which the MAC address was learned";
+     }
+     leaf l2-bridge-vlan {
+       type string;
+       description "Vlan for the bridging domain";
+     }
+     leaf l2rtb-active-bd-vnid {
+       type uint32;
+       description "Active VXLAN identifier";
+     }
+     leaf l2-mac-address {
+       type jt:mac-addr;
+       description "Media access control address learned from another source";
+     }
+     leaf l2-mac-flags {
+       type string;
+       description "Forwarding entry flags associated with MACs displayed in short form";
+     }
+     leaf l2-mac-logical-interface {
+       type string;
+       description "Name of logical interface on which MAC address was learned";
+     }
+     leaf l2-remote-vtep-address {
+       type string;
+       description "Remote VXLAN tunnel endpoint ip address";
+     }
+   }
+   grouping vxlan-remote-vtep-ip-block {
+     leaf l2-mac-logical-system {
+       type string;
+       description "Name of logical system in which this MAC address was learned";
+     }
+     leaf l2-mac-routing-instance {
+       type string;
+       description "Routing instance in which the MAC address was learned";
+     }
+     leaf l2-mac-bridging-domain {
+       type string;
+       description "Bridging domain in which the MAC address was learned";
+     }
+     leaf l2-bridge-vlan {
+       type string;
+       description "Vlan for the bridging domain";
+     }
+     leaf l2rtb-active-bd-vnid {
+       type uint32;
+       description "Active VXLAN identifier";
+     }
+     leaf l2rtb-configured-bd-vxgrp {
+       type string;
+       description "Configured VXLAN multicast group IP address";
+     }
+     leaf l2-remote-vtep-address-global {
+       type string;
+       description "Remote VXLAN tunnel endpoint IP address";
+     }
+     leaf l2-rvtep-nh-id {
+       type uint32;
+       description "Remote VXLAN tunnel endpoint nexthop index";
+     }
+     leaf l2-mac-address {
+       type jt:mac-addr;
+       description "Media access control address learned from another source";
+     }
+     leaf l2-mac-flags {
+       type string;
+       description "Forwarding entry flags associated with MACs displayed in short form";
+     }
+     leaf l2-mac-logical-interface {
+       type string;
+       description "Name of logical interface on which MAC address was learned";
+     }
+     leaf l2-remote-vtep-address {
+       type string;
+       description "Remote VXLAN tunnel endpoint ip address";
+     }
+   }
+   grouping vxlan-esi-information-block {
+     list esi-format {
+       leaf esi-value {
+         type string;
+         description "Interface ESI Value";
+       }
+       leaf routing-instance-name {
+         type string;
+         description "Name of the layer-2 routing instance";
+       }
+       leaf vxlan-load-balancing-next-hop {
+         type uint32;
+         description "VXLAN Load Balancing Next Hop";
+       }
+       leaf indirect-next-hop {
+         type uint32;
+         description "VXLAN Indirect Next Hop";
+       }
+       leaf esi-interface {
+         type string;
+         description "Ethernet Segment Id IFL name";
+       }
+       leaf local-interface {
+         type string;
+         description "Local Ethernet Segment Id IFL name";
+       }
+       leaf num-remote-vteps {
+         type uint32;
+         description "Number of RVTEPs in this ESI";
+       }
+       leaf esi-aliasing-enabled {
+         type string;
+         description "ESI Aliasing Enabled";
+       }
+       leaf esi-interconn-esi {
+         type string;
+         description "Interconnect ESI";
+       }
+       leaf shared-vlbnh {
+         type uint32;
+         description "Shared VXLAN Load Balancing Next Hop";
+       }
+     }
+   }
+   grouping vxlan-arvlbnh-information-block {
+     container arvlbnh-format {
+       leaf routing-instance-name {
+         type string;
+         description "Name of the layer-2 routing instance";
+       }
+       leaf ar-bridge-domain-name {
+         type string;
+         description "Name of bridge domain";
+       }
+       leaf ar-vxlan-load-balancing-next-hop {
+         type uint32;
+         description "VXLAN AR Load Balancing Next Hop";
+       }
+       leaf ar-num-remote-replicator-vteps {
+         type uint32;
+         description "Number of replicator RVTEPs in this AR VLBNH";
+       }
+     }
+   }
+   grouping vxlan-mh-vtep-information-block {
+     container mh-vtep-format {
+       leaf routing-instance-name {
+         type string;
+         description "Name of the layer-2 routing instance";
+       }
+       leaf source-vtep-address {
+         type string;
+         description "Source VXLAN tunnel endpoint IP address";
+       }
+       leaf source-vtep-interface {
+         type string;
+         description "Source VXLAN tunnel endpoint IFL name";
+       }
+       leaf source-vtep-interface-id {
+         type uint32;
+         description "Source VXLAN tunnel endpoint IFL index";
+       }
+     }
+   }
+   grouping vxlan-rtt-mh-vtep-information-block {
+     container mh-vtep-format {
+       leaf routing-instance-name {
+         type string;
+         description "Name of the layer-2 routing instance";
+       }
+       leaf source-vtep-address {
+         type string;
+         description "Source VXLAN tunnel endpoint IP address";
+       }
+       leaf source-vtep-interface {
+         type string;
+         description "Source VXLAN tunnel endpoint IFL name";
+       }
+       leaf source-vtep-interface-id {
+         type uint32;
+         description "Source VXLAN tunnel endpoint IFL index";
+       }
+     }
+   }
+   grouping vxlan-ip-mh-vtep-information-block {
+     container mh-vtep-format {
+       leaf routing-instance-name {
+         type string;
+         description "Name of the layer-2 routing instance";
+       }
+       leaf source-vtep-address {
+         type string;
+         description "Source VXLAN tunnel endpoint IP address";
+       }
+       leaf source-vtep-interface {
+         type string;
+         description "Source VXLAN tunnel endpoint IFL name";
+       }
+       leaf source-vtep-interface-id {
+         type uint32;
+         description "Source VXLAN tunnel endpoint IFL index";
+       }
+     }
+   }
+   grouping vxlan-svlbnh-information-block {
+     container svlbnh-entry {
+       leaf shared-vxlan-lb-next-hop {
+         type uint32;
+         description "Shared VXLAN Load Balancing Next Hop";
+       }
+       leaf rvtep-count {
+         type uint32;
+         description "Number of RVTEPs in this SVLBNH";
+       }
+       leaf esi-count {
+         type uint32;
+         description "Number of ESIs using SVLBNH";
+       }
+     }
+   }
+   grouping svlbnh-overflow-list-block {
+     container overflow-esi-format {
+       leaf esi-value {
+         type string;
+         description "Interface ESI Value";
+       }
+       leaf routing-instance-name {
+         type string;
+         description "Name of the layer-2 routing instance";
+       }
+       leaf num-remote-vteps {
+         type uint32;
+         description "Number of RVTEPs in this ESI";
+       }
+     }
+   }
+   grouping l2ald-vpls-flood-instance-block {
+     list l2ald-vpls-lr-information {
+       list logical-system-info {
+         leaf logical-system-name {
+           type string;
+           description "Logical System";
+         }
+       }
+       list l2ald-vpls-flood-instance-information {
+         leaf instance-name {
+           type string;
+         }
+         leaf num-active-ce-iffs {
+           type int32;
+         }
+         leaf num-active-ve-iffs {
+           type int32;
+         }
+         leaf bridging-domain {
+           type string;
+         }
+         list flood-route {
+           leaf route-prefix {
+             type string;
+           }
+           leaf route-type {
+             type string;
+           }
+           leaf owner {
+             type string;
+           }
+           leaf nhtype {
+             type string;
+           }
+           leaf nhindex {
+             type int32;
+           }
+           list flood-nh-components {
+             leaf interface-name {
+               type string;
+               description "Bridging media access control address interface";
+             }
+             leaf interface-type {
+               type string;
+             }
+             leaf nhtype {
+               type string;
+             }
+             leaf nhindex {
+               type int32;
+             }
+             leaf interface-esi {
+               type string;
+               description "ESI";
+             }
+             leaf nh-guid {
+               type uint64;
+             }
+             leaf remote-vtep-address {
+               type string;
+               description "Remote VXLAN tunnel endpoint IP address";
+             }
+             leaf shared-rvtep-interface-name {
+               type string;
+             }
+           }
+           list flood-nh-group {
+             leaf flood-nh-group-name {
+               type string;
+             }
+             leaf flood-nh-group-type {
+               type string;
+             }
+             leaf nhtype {
+               type string;
+             }
+             leaf nhindex {
+               type int32;
+             }
+             leaf flood-group-composite-function {
+               type string;
+             }
+             list flood-nh-components {
+               leaf interface-name {
+                 type string;
+                 description "Bridging media access control address interface";
+               }
+               leaf interface-type {
+                 type string;
+               }
+               leaf nhtype {
+                 type string;
+               }
+               leaf nhindex {
+                 type int32;
+               }
+               leaf interface-esi {
+                 type string;
+                 description "ESI";
+               }
+               leaf nh-guid {
+                 type uint64;
+               }
+               leaf remote-vtep-address {
+                 type string;
+                 description "Remote VXLAN tunnel endpoint IP address";
+               }
+               leaf shared-rvtep-interface-name {
+                 type string;
+               }
+             }
+             list flood-nh-p2mp-components {
+               leaf component-nhindex {
+                 type int32;
+               }
+             }
+             list flood-nh-evpn-core-components {
+               leaf component-nhindex {
+                 type int32;
+               }
+               leaf peer {
+                 type string;
+               }
+               leaf nh-type {
+                 type string;
+               }
+               leaf interface-esi {
+                 type string;
+                 description "ESI";
+               }
+             }
+             leaf nh-guid {
+               type uint64;
+             }
+           }
+           leaf route-flood-group-name {
+             type string;
+           }
+           leaf route-flood-group-index {
+             type int32;
+           }
+           leaf df-indirect-index {
+             type int32;
+           }
+           leaf df-composite-index {
+             type int32;
+           }
+           leaf ndf-indirect-index {
+             type int32;
+           }
+           leaf ndf-composite-index {
+             type int32;
+           }
+           leaf make-before-break {
+             type string;
+           }
+           leaf make-before-break-state {
+             type string;
+           }
+           list flood-nh-evpn-core-components {
+             leaf component-nhindex {
+               type int32;
+             }
+             leaf peer {
+               type string;
+             }
+             leaf nh-type {
+               type string;
+             }
+             leaf interface-esi {
+               type string;
+               description "ESI";
+             }
+           }
+           list flood-nh-p2mp-components {
+             leaf component-nhindex {
+               type int32;
+             }
+           }
+           leaf nh-guid {
+             type uint64;
+           }
+         }
+         leaf bridge-domain-name {
+           type string;
+           description "Name of the bridging domain";
+         }
+         leaf bridge-domain-evpn-extension {
+           type string;
+           description "EVPN extension for the BD";
+         }
+       }
+     }
+   }
+   grouping l2ald-vpls-flood-route-information-block {
+     list flood-route {
+       leaf route-prefix {
+         type string;
+       }
+       leaf route-type {
+         type string;
+       }
+       leaf owner {
+         type string;
+       }
+       leaf nhtype {
+         type string;
+       }
+       leaf nhindex {
+         type int32;
+       }
+       list flood-nh-components {
+         leaf interface-name {
+           type string;
+           description "Bridging media access control address interface";
+         }
+         leaf interface-type {
+           type string;
+         }
+         leaf nhtype {
+           type string;
+         }
+         leaf nhindex {
+           type int32;
+         }
+         leaf interface-esi {
+           type string;
+           description "ESI";
+         }
+         leaf nh-guid {
+           type uint64;
+         }
+         leaf remote-vtep-address {
+           type string;
+           description "Remote VXLAN tunnel endpoint IP address";
+         }
+         leaf shared-rvtep-interface-name {
+           type string;
+         }
+       }
+       list flood-nh-group {
+         leaf flood-nh-group-name {
+           type string;
+         }
+         leaf flood-nh-group-type {
+           type string;
+         }
+         leaf nhtype {
+           type string;
+         }
+         leaf nhindex {
+           type int32;
+         }
+         leaf flood-group-composite-function {
+           type string;
+         }
+         list flood-nh-components {
+           leaf interface-name {
+             type string;
+             description "Bridging media access control address interface";
+           }
+           leaf interface-type {
+             type string;
+           }
+           leaf nhtype {
+             type string;
+           }
+           leaf nhindex {
+             type int32;
+           }
+           leaf interface-esi {
+             type string;
+             description "ESI";
+           }
+           leaf nh-guid {
+             type uint64;
+           }
+           leaf remote-vtep-address {
+             type string;
+             description "Remote VXLAN tunnel endpoint IP address";
+           }
+           leaf shared-rvtep-interface-name {
+             type string;
+           }
+         }
+         list flood-nh-p2mp-components {
+           leaf component-nhindex {
+             type int32;
+           }
+         }
+         list flood-nh-evpn-core-components {
+           leaf component-nhindex {
+             type int32;
+           }
+           leaf peer {
+             type string;
+           }
+           leaf nh-type {
+             type string;
+           }
+           leaf interface-esi {
+             type string;
+             description "ESI";
+           }
+         }
+         leaf nh-guid {
+           type uint64;
+         }
+       }
+       leaf route-flood-group-name {
+         type string;
+       }
+       leaf route-flood-group-index {
+         type int32;
+       }
+       leaf df-indirect-index {
+         type int32;
+       }
+       leaf df-composite-index {
+         type int32;
+       }
+       leaf ndf-indirect-index {
+         type int32;
+       }
+       leaf ndf-composite-index {
+         type int32;
+       }
+       leaf make-before-break {
+         type string;
+       }
+       leaf make-before-break-state {
+         type string;
+       }
+       list flood-nh-evpn-core-components {
+         leaf component-nhindex {
+           type int32;
+         }
+         leaf peer {
+           type string;
+         }
+         leaf nh-type {
+           type string;
+         }
+         leaf interface-esi {
+           type string;
+           description "ESI";
+         }
+       }
+       list flood-nh-p2mp-components {
+         leaf component-nhindex {
+           type int32;
+         }
+       }
+       leaf nh-guid {
+         type uint64;
+       }
+     }
+   }
+   grouping l2ald-vpls-flood-event-queue-block {
+     container l2ald-vpls-flood-next-event {
+       list l2ald-vpls-flood-event-info {
+         leaf event-name {
+           type string;
+         }
+         leaf event-owner {
+           type string;
+         }
+         leaf event-type {
+           type string;
+         }
+         leaf event-op {
+           type string;
+         }
+         leaf event-error {
+           type string;
+         }
+       }
+     }
+     container l2ald-vpls-flood-event-list {
+       list l2ald-vpls-flood-event-info {
+         leaf event-name {
+           type string;
+         }
+         leaf event-owner {
+           type string;
+         }
+         leaf event-type {
+           type string;
+         }
+         leaf event-op {
+           type string;
+         }
+         leaf event-error {
+           type string;
+         }
+       }
+     }
+   }
+   grouping l2ald-flood-group-ri-block {
+     list l2ald-flood-group-ri-entry {
+       leaf l2-flood-group-fgname {
+         type string;
+         description "Flood group Name";
+       }
+       leaf l2-flood-group-mgname {
+         type string;
+         description "Mesh group Name";
+       }
+       leaf l2-flood-group-bdname {
+         type string;
+         description "Bridge Name";
+       }
+       leaf l2-flood-group-fgflag {
+         type uint32;
+         description "Flood group Flag";
+       }
+       leaf l2-flood-group-eamnh {
+         type uint32;
+         description "Eamnh pointer";
+       }
+       leaf l2-flood-group-eamnhid {
+         type uint32;
+         description "Eamnh Id";
+       }
+       leaf l2-flood-group-eamnhflag {
+         type uint32;
+         description "Eamnh Flag";
+       }
+       leaf l2-flood-group-token-flag {
+         type uint32;
+         description "Token Flag";
+       }
+       leaf l2-flood-group-fld-route {
+         type uint32;
+         description "Route pointer";
+       }
+       leaf l2-flood-group-token {
+         type string;
+         description "Token prefix";
+       }
+       leaf l2-flood-group-fnhid {
+         type uint32;
+         description "Flood group Id";
+       }
+     }
+   }
+   grouping l2ald-global-macdb-count-block {
+     leaf global-mac-count {
+       type uint64;
+       description "Number of global media access control addresses";
+     }
+   }
+   grouping l2ald-global-mac-ip-count-block {
+     leaf global-mac-ip-count {
+       type uint64;
+       description "Number of global MAC+IP bindings";
+     }
+   }
+   grouping l2ald-global-configuration-block {
+     leaf l2ald-mac-aging-time {
+       type uint32;
+       description "Configured aging interval for media access control entries";
+     }
+     leaf l2ald-mac-learning-status {
+       type string;
+       description "Status of media access control address learning (enabled or disabled)";
+     }
+     leaf l2ald-statistics-status {
+       type string;
+       description "Status of statistics collection for media access control entries (enabled or disabled)";
+     }
+     leaf l2ald-global-mac-limit-count {
+       type string;
+       description "Count of number of MACs allowed globally in the system";
+     }
+     leaf l2ald-global-mac-limit {
+       type string;
+       description "Status of global mac limit (whether reached or not)";
+     }
+     leaf l2ald-global-packet-action-drop {
+       type string;
+       description "Status of packet action drop (enabled or disabled)";
+     }
+     leaf l2ald-mac-ip-aging-time-ipv4 {
+       type uint32;
+       description "Configured aging interval for MAC+IPv4 bindings";
+     }
+     leaf l2ald-mac-ip-aging-time-ipv6 {
+       type uint32;
+       description "Configured aging interval for MAC+IPv6 bindings";
+     }
+     leaf l2ald-global-mac-ip-limit-count {
+       type string;
+       description "Count of number of MAC+IPs allowed globally in the system";
+     }
+     leaf l2ald-global-mac-ip-limit-reached {
+       type string;
+       description "Status of global mac+ip limit (whether reached or not)";
+     }
+     leaf l2ald-le-aging-time {
+       type uint32;
+       description "LE aging time";
+     }
+     leaf l2ald-le-bridge-domain-aging-time {
+       type uint32;
+       description "LE bridge-domain aging time";
+     }
+     leaf l2ald-control-mac-aging-status {
+       type string;
+       description "Status of Control MAC aging (enabled or disabled)";
+     }
+     leaf l2ald-gc-global-mode {
+       type string;
+       description "Global Mode";
+     }
+     leaf l2ald-global-mp-discard-notification-interval {
+       type uint32;
+       description "Timer value for Mac Pinning discard notification interval";
+     }
+     leaf l2ald-re-state {
+       type string;
+       description "RE State";
+     }
+     leaf l2ald-global-evpn-bum-blocking-hold-timer {
+       type string;
+       description "Timer value for evpn bum blocking hold timer";
+     }
+     leaf l2ald-vxlan-overlay-lb {
+       type string;
+       description "VXLAN Overlay Load Balance";
+     }
+     leaf l2ald-vxlan-ecmp {
+       type string;
+       description "VXLAN ECMP";
+     }
+     leaf l2ald-crb-proxy-mac-inet4 {
+       type string;
+       description "CRB proxy MAC for IPv4";
+     }
+     leaf l2ald-crb-proxy-mac-inet6 {
+       type string;
+       description "CRB proxy MAC for IPv6";
+     }
+     leaf l2ald-evpn-vxlan-host-gbp-src-tag {
+       type uint32;
+       description "Configured GBP src tag value for host originated vxlan packets";
+     }
+     container l2ald-process-information {
+       leaf l2ald-max-peers {
+         type uint32;
+         description "Maximum number of Layer 2 address learning service peers allowed";
+       }
+       leaf l2ald-rtm-retries {
+         type uint32;
+         description "Configured limit on retry attempts for asynchronous event processing";
+       }
+       leaf l2ald-rtm-mac-process {
+         type uint32;
+         description "Number of media access control entries processed in each batch";
+       }
+       leaf l2ald-move-threshold-count {
+         type uint32;
+         description "Number of moves that will be treated as threshold for rapid MAC address moves";
+       }
+       leaf l2ald-move-threshold-time {
+         type uint32;
+         description "Duration of time considered for monitoring the rapid MAC address move";
+       }
+       container l2ald-control-options {
+         leaf l2ald-control-flag {
+           type uint32;
+           description "Currently configured value of control flags";
+         }
+         leaf l2ald-fnh-module-status {
+           type string;
+           description "Status of flood next-hop module (enabled or disabled)";
+         }
+         leaf l2ald-mlrn-module-status {
+           type string;
+           description "Status of media access control address learning module (enabled or disabled)";
+         }
+         leaf l2ald-irb-module-status {
+           type string;
+           description "Status of integrated routing and bridging module (enabled or disabled)";
+         }
+         leaf l2ald-enhanced-fnh-module-status {
+           type string;
+           description "Status of enhanced flood module (enabled or disabled)";
+         }
+         leaf l2ald-routing-table-owner-status {
+           type string;
+           description "Status of routing table manipulation by process (enabled or disabled)";
+         }
+         leaf l2ald-hardware-split-horizon-status {
+           type string;
+           description "Status of split-horizon in hardware (enabled or disabled)";
+         }
+         leaf l2ald-hardware-learning-status {
+           type string;
+           description "Status of hardware learning (enabled or disabled)";
+         }
+         leaf l2ald-fork-ui-status {
+           type string;
+           description "Status of forking for 'show' commands (enabled or disabled)";
+         }
+         leaf l2ald-lc-status {
+           type string;
+           description "Status of lc interfaces (enabled or disabled)";
+         }
+         leaf l2ald-stp-status {
+           type string;
+           description "Status of Spanning Tree Protocol (enabled or disabled)";
+         }
+         leaf l2ald-sync-read-status {
+           type string;
+           description "Status of synchronous kernel read (enabled or disabled)";
+         }
+       }
+     }
+     leaf l2ald-config-flag {
+       type uint32;
+       description "Show the global configuration flag value";
+     }
+     leaf l2ald-hardware-mac-learning-status {
+       type string;
+       description "Status of media access control address learning in hardware (enabled or disabled)";
+     }
+     leaf l2ald-software-mac-learning-status {
+       type string;
+       description "Status of media access control address learning in software (enabled or disabled)";
+     }
+     leaf l2ald-interface-mac-limit-wm {
+       type uint32;
+       description "Watermark of Inteface MAC limit in percentage";
+     }
+     leaf l2ald-rtb-mac-limit-wm {
+       type uint32;
+       description "Watermark of Routing MAC limit in percentage";
+     }
+     leaf l2ald-mac-limit-wm {
+       type uint32;
+       description "Watermark of Global MAC limit in percentage";
+     }
+     leaf l2ald-interface-mac-limit-timeout {
+       type uint32;
+       description "Timeout value on Interface MAC limit in seconds";
+     }
+     leaf l2ald-rtb-mac-limit-timeout {
+       type uint32;
+       description "Timeout value on Routing instance MAC limit in seconds";
+     }
+     leaf l2ald-mac-limit-timeout {
+       type uint32;
+       description "Timeout value on Global MAC limit in seconds";
+     }
+     leaf l2ald-sequence-number {
+       type uint32;
+       description "Count of global sequence number";
+     }
+     leaf l2ald-global-mbb-flag {
+       type string;
+       description "Status of make-before-break knob (enabled or disabled)";
+     }
+     leaf l2ald-mac-ip-limit-wm {
+       type uint32;
+       description "Watermark of Global MAC+IP limit in percentage";
+     }
+     leaf l2ald-mac-learn-toggle-count {
+       type uint32;
+       description "Count of status changes for media access control address learning (between enabled and disabled)";
+     }
+     leaf l2ald-hardware-mac-learn-toggle-count {
+       type uint32;
+       description "Count of status changes for media access control address learning in hardware (between enabled and disabled)";
+     }
+     leaf l2ald-software-mac-learn-toggle-count {
+       type uint32;
+       description "Count of status changes for media access control address learning in software (between enabled and disabled)";
+     }
+     leaf l2ald-statistics-toggle-count {
+       type uint32;
+       description "Count of status changes for statistics collection on media access control entries (between enabled and disabled)";
+     }
+     leaf l2ald-config-smac-count {
+       type uint32;
+       description "Number of configured static MACs that are learned globally";
+     }
+     leaf l2ald-non-config-smac-count {
+       type uint32;
+       description "Number of non configured static MACs that are learned globally";
+     }
+     leaf l2ald-kernel-vtep-scaling-mode {
+       type string;
+       description "Kernel VTEP Scaling Mode";
+     }
+     leaf l2ald-arp-nd-probe-disable {
+       type string;
+       description "Disable ARP or ND probing";
+     }
+     leaf l2ald-arp-nd-probe-failed-log {
+       type string;
+       description "Log failure of ARP or ND probe";
+     }
+     leaf l2ald-garp-na-enable {
+       type string;
+       description "Enable GARP or unsolicited NA";
+     }
+   }
+   grouping l2ald-mgrp-policy-block {
+     leaf l2-mgrp-role {
+       type string;
+       description "Meshgroup Role";
+     }
+     leaf l2-mgrp-name {
+       type string;
+       description "Meshgroup Name";
+     }
+     leaf l2-mgrp-name-to {
+       type string;
+       description "Meshgroup Name";
+     }
+   }
+   grouping l2ald-mgrp-policy-ri-block {
+     leaf l2-mgrp-role-ri {
+       type string;
+       description "Meshgroup Role";
+     }
+     leaf l2-mgrp-name-ri {
+       type string;
+       description "Meshgroup Name";
+     }
+     leaf l2-mgrp-flags-ri {
+       type uint32;
+       description "Meshgroup Flag";
+     }
+     leaf l2-mgrp-flags-str-ri {
+       type string;
+       description "Meshgroup Name";
+     }
+     leaf l2-mgrp-name-to-ri {
+       type string;
+       description "Meshgroup Name";
+     }
+   }
+   grouping l2ng-l2ald-vlan-instance-information-block {
+     container l2ng-l2ald-vlan-instance-group {
+       leaf l2ng-l2rtb-name {
+         type string;
+         description "Name of the routing instance";
+       }
+       leaf l2ng-l2rtb-vlan-name {
+         type string;
+         description "Name of the bridging domain";
+       }
+       leaf l2ng-l2rtb-instance-description {
+         type string;
+       }
+       leaf l2ng-l2rtb-instance-type {
+         type string;
+         description "Type of instance (routing instance/bridge domain)";
+       }
+       leaf l2ng-l2rtb-instance-restart-state {
+         type string;
+       }
+       leaf l2ng-l2rtb-instance-pathse1-timeout {
+         type int32;
+       }
+       leaf l2ng-l2rtb-brief-summary {
+         type empty;
+       }
+       leaf l2ng-l2rtb-vlan-tag {
+         type string;
+       }
+       list l2ng-l2rtb-vlan-member {
+         leaf l2ng-l2rtb-vlan-member-interface {
+           type string;
+         }
+         leaf l2ng-l2rtb-vlan-member-tagness {
+           type string;
+         }
+         leaf l2ng-l2rtb-vlan-member-interface-mode {
+           type string;
+         }
+         leaf l2ng-l2rtb-inter-switch-link {
+           type string;
+         }
+         leaf l2ng-l2rtb-vlan-member-interface-guid {
+           type uint64;
+         }
+       }
+       leaf l2ng-l2rtb-instance-state {
+         type string;
+       }
+       leaf l2ng-l2rtb-evpn-extension {
+         type string;
+       }
+       leaf l2ng-l2rtb-pvlan-type {
+         type string;
+       }
+       leaf l2ng-l2rtb-pvlan {
+         type string;
+       }
+       leaf l2ng-l2rtb-instance-flags {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-internal-index {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-generation-index {
+         type string;
+       }
+       leaf l2ng-l2rtb-origin {
+         type string;
+       }
+       leaf l2ng-l2rtb-mac-aging-status {
+         type string;
+       }
+       leaf l2ng-l2rtb-mac-aging-time {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-vlan-mac-move-limit {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-vlan-mac-move-action {
+         type string;
+       }
+       leaf l2ng-vlan-unknown-unicast-nexthop {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-l3-interface {
+         type string;
+       }
+       leaf l2ng-l2rtb-vlan-vxlan-enabled {
+         type string;
+       }
+       leaf l2ng-l2rtb-bridge-evpn-num-replicator {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-bridge-evpn-num-mh-ext-replicator {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-vlan-member-tagged-count {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-vlan-member-untagged-count {
+         type uint32;
+       }
+       leaf l2ng-l2rtb-macs-learned {
+         type uint32;
+         description "Number of configured static and dynamic MACs that are learned on this routing instance";
+       }
+       list l2ng-l2rtb-pvlan-secondary-vlan {
+         leaf l2ng-l2rtb-secondary-vlan-id {
+           type uint32;
+         }
+         leaf l2ng-l2rtb-secondary-vlan-name {
+           type string;
+         }
+       }
+       leaf l2ng-l2rtb-rtt-guid {
+         type uint64;
+       }
+       leaf l2ng-l2rtb-vlan-guid {
+         type uint64;
+       }
+     }
+   }
+ }

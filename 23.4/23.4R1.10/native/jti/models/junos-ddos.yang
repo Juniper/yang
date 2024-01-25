@@ -1,0 +1,300 @@
+module junos-ddos {
+
+    yang-version "1";
+
+   // namespace
+   namespace "http://juniper.net/yang/ddos";
+
+   prefix "ddos";
+
+   // meta
+   organization "Juniper Networks";
+
+   description
+   "This module provides data definitions for configuration of
+    Ddos Protection
+
+    The statistics for the ddos policers is exported for
+    every protocol group and packet types associated with it.
+    ";
+
+    revision "2020-10-07" {
+        description "Junos DDOS telemetry Information data model";
+        reference "1.0.0";
+    }
+
+    grouping ddos-flow-info {
+        list flow-info {
+            description
+            "Describes the list of flow statistics for the scfd flow";
+
+            key ifl;
+            leaf ifl {
+                type uint64;
+                description
+                "Describes the ifl for the scfd flow";
+            }
+            leaf time-found {
+                type uint64;
+                units "nanoseconds";
+                description
+                "Describes the start time for the scfd flow";
+            }
+            leaf time-last-violated {
+                type uint64;
+                units "nanoseconds";
+                description
+                "Describes the end time for the scfd flow";
+            }
+            leaf rate {
+                type uint64;
+                description
+                "Describes the rate for the scfd flow";
+            }
+            leaf packets {
+                type uint64;
+                description
+                "Describes the number of packets for the scfd flow";
+            }
+        }
+   }
+
+    grouping ddos-flow {
+        list flow {
+            description
+            "List of ddos statistics for the scfd flows";
+            key flow-type;
+            leaf flow-type {
+                description
+                "The category of the scfd flow";
+                type enumeration {
+                    enum FLOW_NONE {
+                        description
+                        "No flows";
+                    }
+                    enum FLOW_SUB {
+                        description
+                        "Subscriber flow";
+                    }
+                    enum FLOW_IFL {
+                        description
+                        "IFL flow";
+                    }
+                    enum FLOW_IFD {
+                        description
+                        "IFD flow";
+                    }
+                 }
+            }
+            leaf flow-count {
+                type uint64;
+                description
+                "Number of scfd flows seen for this type";
+            }
+            container flow-info-stats {
+                uses ddos-flow-info;
+                description
+                "Describes the flow statistics for the scfd flow";
+            }
+
+        }
+   }
+
+    grouping ddos-violation {
+        leaf policer-state {
+            type enumeration {
+                enum STATE_NEVER_VIOLATED {
+                    description
+                    "Ddos policer never violated";
+                }
+                enum STATE_VIOLATING {
+                    description
+                    "Ddos policer is currently violating";
+                }
+                enum STATE_WAS_VIOLATED {
+                    description
+                    "Ddos policer was violating and has stopped violating currently";
+                }
+             }
+        }
+        leaf policer-violation-count {
+            type uint32;
+            description
+            "Describes the number of times the policer violated";
+        }
+        leaf policer-violation-start-time {
+            type uint64;
+            units "nanoseconds";
+            description
+            "Describes the start time for the policer violation";
+        }
+        leaf policer-violation-end-time {
+            type uint64;
+            units "nanoseconds";
+            description
+            "Describes the end time for the policer violation";
+        }
+        leaf policer-violation-duration {
+            type uint64;
+            description
+            "Describes the duration of the policer violation in seconds";
+        }
+
+    }
+
+    grouping ddos-locale-stats {
+        list locale {
+            description
+            "Describes the list of packet-types exported per group.
+             Examples of packet type dhcpv4 request and arp aggregate.";
+            key location;
+            leaf location {
+                type string;
+                description
+                "Describes the name of the locale where the policer runs.";
+            }
+            leaf received {
+                type uint64;
+                description
+                "Describes the number of packets received at the location.";
+            }
+            leaf arrived-policer {
+                type uint64;
+                description
+                "Describes the number of packets arrived at policer.";
+            }
+            leaf dropped-individual-policer {
+                type uint64;
+                description
+                "Describes the number of packets dropped by an individual
+                 policer.";
+            }
+            leaf dropped-aggregate-policer {
+                type uint64;
+                description
+                "Describes the number of packets dropped by an aggregate policer.";
+            }
+            leaf dropped-individual-flow {
+                type uint64;
+                description
+                "Describes the number of packets dropped by an individual flow";
+            }
+            leaf dropped-aggregate-flow {
+                type uint64;
+                description
+                "Describes the number of packets dropped by an aggregate flow";
+            }
+            leaf total-dropped {
+                type uint64;
+                description
+                "Describes the total number of packets dropped by the policer";
+            }
+            leaf final-passed {
+                type uint64;
+                description
+                "Describes the number of packets passed by the policer";
+            }
+            leaf arrival-rate {
+                type uint64;
+                description
+                "Describes the arrival rate for the protocol";
+            }
+            leaf max-arrival-rate {
+                type uint64;
+                description
+                "Describes the max arrival rate ever seen thus far";
+            }
+            leaf pass-rate {
+                type uint64;
+                description
+                "Describes the pass rate at the policer";
+            }
+            container violation {
+                uses ddos-violation;
+                description
+                "Describes the ddos violations when the policer dropped packets or
+                is in one of the 2 states -DDOS_POL_ST_VIOLATING
+                or DDOS_POL_ST_WAS_VIOLATED";
+            }
+
+        }
+    }
+
+    grouping ddos-protocol {
+        list protocol {
+            description
+            "Describes the list of packet-types exported per group.
+             Examples of packet type dhcpv4 request and arp aggregate.";
+
+            key protocol-name;
+            leaf protocol-name {
+                type string;
+                description
+                "Describes the name for a packet type classified by a ddos policer.";
+            }
+            leaf protocol-id {
+                type uint32;
+                description
+                "Describes the identifier for a packet type classified by a ddos policer.";
+            }
+
+            container locale-stats {
+                uses ddos-locale-stats;
+                description
+                "Describes the ddos stats for an instance. A locale is a place where
+                 the policer runs. Examples are fpc1, fpc10.";
+            }
+
+            container flow-stats {
+                uses ddos-flow;
+                description
+                "Describes the ddos scfd information";
+            }
+
+        }
+    }
+
+    grouping ddos-group {
+        description
+        "Describes the list of data exported per group.
+        A group can mean any protocol group like dhcpv4 or arp.";
+
+        list group {
+            key "group-name";
+            leaf group-name {
+            type string;
+            description
+            "Describes the name for a group classified by a ddos policer.";
+            }
+            leaf group-id {
+                type uint32;
+                description
+                "Describes the identifier for a group classified
+                 by a ddos policer.";
+            }
+
+            container protocol-stats {
+                uses ddos-protocol;
+                description
+                "Describes the data for a ddos packet type classified
+                by a ddos policer.";
+            }
+        }
+
+    }
+
+   grouping pfe-ddos {
+       description
+       "This describes the data exported by ddos-protection
+        module on the linecard";
+        container ddos-stats {
+            config false;
+            description
+            "This describes the data for each protocol group exported
+             by ddos-protection module on the linecard";
+             uses ddos-group;
+        }
+   }
+
+   uses pfe-ddos;
+}

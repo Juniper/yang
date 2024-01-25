@@ -1,0 +1,161 @@
+module interface-cos-voqmon-stats {
+
+  yang-version "1";
+
+  // namespace
+  namespace "http://juniper.net/yang/interface-cos-voqmon-stats";
+
+  prefix "interface-cos-voqmon-stats";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+  // meta
+  organization "Juniper Networks";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module provides data definitions for exporting VoqMon Stats
+    ";
+
+  revision 2023-08-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  grouping interface-voqmon-stat-detail {
+    container cos {
+      description
+      "Describes voqmon stat details";
+      container interfaces {
+        description
+        "Describes interface details";
+        list interface {
+          description
+          "Describes interface voqmon stats information";
+          key interface-id;
+
+          leaf interface-id {
+            type string;
+            description
+            "Describes interface name";
+          }
+
+          container input {
+            description
+            "Describes voqmon data related to ingress interface";
+            container queues {
+              description
+              "Describes interface input queues info";
+              list queue {
+                description
+                "Describes voqmon stats per each queue";
+                key queue-num;
+
+                leaf queue-num {
+                  type uint8;
+                  description
+                  "Describes queue number";
+                }
+
+                container pfes {
+                  description
+                  "Describes ingress interface pfe voqmon stats";
+                  list pfe {
+                    description
+                    "Describes interface voqmon stats per each pfe";
+                    key pfe-index;
+
+                    leaf pfe-index {
+                      type uint8;
+                      description
+                      "Describes pfe index";
+                    }
+
+                    leaf peak-queue-length-bytes {
+                      type uint64;
+                      description
+                      "Describes maximum observed queue length";
+                    }
+
+                    leaf peak-queue-length-percent {
+                      type uint64;
+                      description
+                      "Describes maximum observed queue length percentage";
+                    }
+
+                    leaf cur-queue-length-bytes {
+                      type uint64;
+                      description
+                      "Describes current observed queue length";
+                    }
+
+                    leaf cur-queue-length-percent {
+                      type uint64;
+                      description
+                      "Describes current observed queue length percentage";
+                    }
+
+                    leaf avg-queue-length-bytes {
+                      type uint64;
+                      description
+                      "Describes average observed queue length";
+                    }
+
+                    leaf avg-queue-length-percent {
+                      type uint64;
+                      description
+                      "Describes average observed queue length percentage";
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping interface-cos-voqmon-stats {
+    description
+      "This describes the data exported by PFE jvision voqmon sensor";
+
+    container junos {
+      config false;
+      description "JunOS OS";
+
+      container system {
+        description "Junos System";
+
+        container linecard {
+          description "Contains PFE resources";
+
+          list qmon-sw {
+            description "Voqmon sensor data";
+             key name;
+             leaf name {
+               type string;
+               description
+               "Describes interface name";
+             }
+            uses interface-voqmon-stat-detail;
+          }
+        }
+      }
+    }
+  }
+
+  uses interface-cos-voqmon-stats;
+
+}

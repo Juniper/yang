@@ -1,0 +1,2973 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-dhcpv6 {
+   namespace "http://yang.juniper.net/junos-es/rpc/dhcpv6";
+
+   prefix dhcpv6;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for dhcpv6 command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10";
+   }
+
+   rpc get-dhcpv6-relay-binding-information {
+     description "Show DHCPv6 relay client binding information";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       choice show-choice {
+         case address {
+           leaf address {
+             description "IPv6 Prefix, session-id or CID of DHCPv6 client binding";
+             type string;
+           }
+         }
+         case interfaces-wildcard {
+           leaf interfaces-wildcard {
+             description "Interfaces to show bindings on (can be '*' wildcard)";
+             type string {
+             }
+           }
+         }
+         case interfaces-vlan {
+           leaf interfaces-vlan {
+             description "Interface VLAN-ID/SVLAN-ID on which to show bindings";
+             type string {
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-relay-binding-information {
+         uses dhcpv6-relay-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-binding-ltv-information {
+     description "Display lease time violated client bindings";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-relay-binding-information {
+         uses dhcpv6-relay-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-binding-interface {
+     description "Name of interface on which to show bindings";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-relay-binding-information {
+         uses dhcpv6-relay-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-binding-interface-tag {
+     description "Interface on which to show bindings";
+     input {
+       leaf interface-tag-name {
+         description "Name of interface tag";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-relay-binding-information {
+         uses dhcpv6-relay-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-statistics-information {
+     description "Show DHCPv6 relay statistics";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+           enum "verbose" {
+             description "Display verbose information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-relay-statistics-information {
+         uses dhcpv6-relay-statistics-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-leasequery-statistics {
+     description "Show DHCP relay leasequery statistics";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcp-relay-leasequery-statistics {
+         uses dhcp-relay-leasequery-statistics-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-bulk-leasequery-conn-statistics {
+     description "Show DHCP relay bulk leasequery statistics";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcp-relay-bulk-leasequery-conn-statistics {
+         uses dhcp-relay-bulk-leasequery-conn-statistics-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-relay-lockout-entries-information {
+     description "Show DHCP lockout entries";
+     input {
+       leaf level {
+         default "all";
+         type enumeration {
+           enum "all" {
+             description "Display all the lockout entries";
+           }
+         }
+       }
+       leaf index {
+         description "Display lockout information per index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-relay-lockout-entries-information {
+         uses dhcpv6-relay-lockout-entries-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-active-leasequery-information {
+     description "Show DHCP active-leasequery entries";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-alq-information-peer {
+     description "Active-leasequery peer";
+     input {
+       leaf peer-address {
+         description "Active-leasequery peer address";
+         type string;
+         mandatory true;
+       }
+       leaf details {
+         description "Active-leasequery peer details";
+         type empty;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-alq-information-statistics-peer {
+     description "Active-leasequery peer";
+     input {
+       leaf peer-address {
+         description "Active-leasequery peer address";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-alq-information-statistics-interface {
+     description "Active-leasequery interface";
+     input {
+       leaf interface-name {
+         description "Active-leasequery interface name";
+         type string;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-active-leasequery-neighbors {
+     description "Show DHCPv6 active-leasequery neighbors";
+     output {
+       container dhcpv6-active-leasequery-neighbors {
+         uses dhcpv6-active-leasequery-neighbors-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-service-statistics-information {
+     description "Show DHCPv6 service statistics";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-service-statistics-information {
+         uses dhcpv6-service-statistics-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-dynamic-pool-addresses-information {
+     description "Show DHCPv6 dynamic pool addresses";
+     input {
+       leaf pool-name {
+         description "Name of dynamic pool";
+         type string;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-dynamic-pool-addresses-information {
+         uses dhcpv6-dynamic-pool-addresses-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-dynamic-pool-tatistics {
+     description "Show DHCPv6 dynamic pool statistics";
+     input {
+       leaf pool-name {
+         description "Name of dynamic pool";
+         type string;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-dynamic-pool-statistics {
+         uses dhcpv6-dynamic-pool-statistics-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-binding-information {
+     description "Show DHCPv6 server client binding information";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       choice show-choice {
+         case address {
+           leaf address {
+             description "IPv6 Prefix, session-id or CID of DHCPv6 client binding";
+             type string;
+           }
+         }
+         case interfaces-wildcard {
+           leaf interfaces-wildcard {
+             description "Interfaces to show bindings on (can be '*' wildcard)";
+             type string {
+             }
+           }
+         }
+         case interfaces-vlan {
+           leaf interfaces-vlan {
+             description "Interface VLAN-ID/SVLAN-ID on which to show bindings";
+             type string {
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-binding-information {
+         uses dhcpv6-server-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-binding-ltv-information {
+     description "Display lease time violated client bindings";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-binding-information {
+         uses dhcpv6-server-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-binding-interface {
+     description "Name of interface on which to show bindings";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-binding-information {
+         uses dhcpv6-server-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-binding-interface-tag {
+     description "Interface tag on which to show bindings";
+     input {
+       leaf interface-tag-name {
+         description "Name of interface tag";
+         type string {
+           length "1 .. 64";
+         }
+         mandatory true;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-binding-information {
+         uses dhcpv6-server-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-statistics-information {
+     description "Show DHCPv6 server statistics";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-statistics-information {
+         uses dhcpv6-server-statistics-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-bulk-leasequery-conn-statistics {
+     description "Show DHCP server bulk leasequeery conn statistics";
+     input {
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcp-server-bulk-leasequery-conn-statistics {
+         uses dhcp-server-bulk-leasequery-conn-statistics-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-server-active-leasequery-information {
+     description "Show DHCP active-leasequery entries";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-server-alq-information-peer {
+     description "Active-leasequery peer";
+     input {
+       leaf peer-address {
+         description "Active-leasequery peer address";
+         type string;
+         mandatory true;
+       }
+       leaf details {
+         description "Active-leasequery peer details";
+         type empty;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-server-alq-info-statistics-peer {
+     description "Active-leasequery peer";
+     input {
+       leaf peer-address {
+         description "Active-leasequery peer address";
+         type jt:ipaddr;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-server-alq-info-stats-interface {
+     description "Active-leasequery interface";
+     input {
+       leaf interface-name {
+         description "Active-leasequery interface name";
+         type string;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-server-lockout-entries-information {
+     description "Show DHCP lockout entries";
+     input {
+       leaf level {
+         default "all";
+         type enumeration {
+           enum "all" {
+             description "Display all the lockout entries";
+           }
+         }
+       }
+       leaf index {
+         description "Display lockout information per index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-lockout-entries-information {
+         uses dhcpv6-server-lockout-entries-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-dynamic-server-binding-information {
+     description "Show DHCPv6 dynamic server client binding information";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       choice show-choice {
+         case address {
+           leaf address {
+             description "IPv6 Prefix, session-id or CID of DHCPv6 client binding";
+             type string;
+           }
+         }
+         case interfaces-wildcard {
+           leaf interfaces-wildcard {
+             description "Interfaces to show bindings on (can be '*' wildcard)";
+             type string {
+             }
+           }
+         }
+         case interfaces-vlan {
+           leaf interfaces-vlan {
+             description "Interface VLAN-ID/SVLAN-ID on which to show bindings";
+             type string {
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-binding-information {
+         uses dhcpv6-server-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-dynamic-server-binding-interface {
+     description "Name of interface on which to show bindings";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-binding-information {
+         uses dhcpv6-server-binding-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-dynamic-server-statistics-information {
+     description "Show DHCPv6 dynamic server statistics";
+     input {
+       leaf level {
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-server-statistics-information {
+         uses dhcpv6-server-statistics-information-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-client-binding-information {
+     description "Show DHCPV6 dhcpv6-client binding information";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+           enum "summary" {
+             description "Display summary information";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-client-binding-information-by-interface {
+     description "Name of interface on which to show bindings";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+         mandatory true;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief information";
+           }
+           enum "detail" {
+             description "Display detailed information";
+           }
+         }
+       }
+     }
+   }
+   rpc get-dhcpv6-client-statistics-information {
+     description "Show DHCPV6 dhcpv6-client statistics";
+     input {
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice lsys-tenant {
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf tenant {
+         description "Name of tenant";
+         type string {
+         }
+       }
+     }
+     output {
+       container dhcpv6-client-statistics-information {
+         uses dhcpv6-client-statistics-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping dhcpv6-relay-binding-information-block {
+     container dhcpv6-binding-summary {
+       leaf dhcpv6-binding-count {
+         type int32;
+         description "Number of bindings in this routing instance";
+       }
+       leaf dhcpv6-init-count {
+         type int32;
+         description "Number of clients in init state";
+       }
+       leaf dhcpv6-bound-count {
+         type int32;
+         description "Number of clients in bound state ";
+       }
+       leaf dhcpv6-selecting-count {
+         type int32;
+         description "Number of clients in selecting state ";
+       }
+       leaf dhcpv6-requesting-count {
+         type int32;
+         description "Number of clients in requesting state ";
+       }
+       leaf dhcpv6-renewing-count {
+         type int32;
+         description "Number of clients in renewing state ";
+       }
+       leaf dhcpv6-rebinding-count {
+         type int32;
+         description "Number of clients in rebinding state ";
+       }
+       leaf dhcpv6-releasing-count {
+         type int32;
+         description "Number of clients in releasing state ";
+       }
+       leaf dhcpv6-restore-count {
+         type int32;
+         description "Number of clients waiting to be restored";
+       }
+     }
+     container dhcpv6-binding-internal-states {
+       leaf dhcpv6-init {
+         type int32;
+         description "Number of clients init state";
+       }
+       leaf dhcpv6-selecting {
+         type int32;
+         description "Number of clients in selecting state";
+       }
+       leaf dhcpv6-requesting {
+         type int32;
+         description "Number of clients in requesting state";
+       }
+       leaf dhcpv6-bound {
+         type int32;
+         description "Number of clients in bound state";
+       }
+       leaf dhcpv6-renewing {
+         type int32;
+         description "Number of clients in renewing state";
+       }
+       leaf dhcpv6-rebinding {
+         type int32;
+         description "Number of clients in rebinding state";
+       }
+       leaf dhcpv6-wait-cm-add {
+         type int32;
+         description "Number of clients in wait-cm-add state";
+       }
+       leaf dhcpv6-wait-cm-add-delete {
+         type int32;
+         description "Number of clients in wait-cm-add-delete state";
+       }
+       leaf dhcpv6-wait-cm-delete {
+         type int32;
+         description "Number of clients in wait-cm-delete state";
+       }
+       leaf dhcpv6-wait-subscr-add {
+         type int32;
+         description "Number of clients in wait-subscr-add state";
+       }
+       leaf dhcpv6-wait-subscr-add-delete {
+         type int32;
+         description "Number of clients in wait-subscr-add-delete state";
+       }
+       leaf dhcpv6-wait-subscr-delete {
+         type int32;
+         description "Number of clients in wait-subscr-delete state";
+       }
+       leaf dhcpv6-wait-cm-update {
+         type int32;
+         description "Number of clients in wait-cm-update state";
+       }
+       leaf dhcpv6-wait-cm-update-delete {
+         type int32;
+         description "Number of clients in wait-cm-update-delete state";
+       }
+       leaf dhcpv6-wait-auth-req {
+         type int32;
+         description "Number of clients in wait-auth-req state";
+       }
+       leaf dhcpv6-wait-auth-req-delete {
+         type int32;
+         description "Number of clients in wait-auth-req-delete state";
+       }
+       leaf dhcpv6-wait-auth-req-release {
+         type int32;
+         description "Number of clients in wait-auth-req-release state";
+       }
+       leaf dhcpv6-wait-auth-req-release-terminated {
+         type int32;
+         description "Number of clients in wait-auth-req-release-terminated state";
+       }
+       leaf dhcpv6-wait-auth-act-prof {
+         type int32;
+         description "Number of clients in wait-auth-act-prof state";
+       }
+       leaf dhcpv6-wait-auth-act-prof-delete {
+         type int32;
+         description "Number of clients in wait-auth-act-prof-delete state";
+       }
+       leaf dhcpv6-wait-service-deactivation {
+         type int32;
+         description "Number of clients in wait-service-deactivation state";
+       }
+       leaf dhcpv6-wait-dual-stack-peer-logout {
+         type int32;
+         description "Number of clients in wait-dual-stack-peer-logout state";
+       }
+       leaf dhcpv6-wait-prof-inst {
+         type int32;
+         description "Number of clients in wait-prof-inst state";
+       }
+       leaf dhcpv6-wait-prof-inst-delete {
+         type int32;
+         description "Number of clients in wait-prof-inst-delete state";
+       }
+       leaf dhcpv6-wait-prof-delete {
+         type int32;
+         description "Number of clients in wait-prof-delete state";
+       }
+       leaf dhcpv6-wait-interface {
+         type int32;
+         description "Number of clients in wait-interface state";
+       }
+       leaf dhcpv6-wait-sdb-init-mirror-req {
+         type int32;
+         description "Number of clients in wait-sdb-init-mirror-req state";
+       }
+       leaf dhcpv6-wait-sdb-init-mirror-req-delete {
+         type int32;
+         description "Number of clients in wait-sdb-init-mirror-req-delete state";
+       }
+       leaf dhcpv6-wait-sdb-active-mirror-req {
+         type int32;
+         description "Number of clients in wait-sdb-active-mirror-req state";
+       }
+       leaf dhcpv6-wait-sdb-active-mirror-req-delete {
+         type int32;
+         description "Number of clients in wait-sdb-active-mirror-req-delete state";
+       }
+       leaf dhcpv6-wait-sdb-terminated-mirror-req {
+         type int32;
+         description "Number of clients in wait-sdb-terminated-mirror-req state";
+       }
+       leaf dhcpv6-wait-sdb-dual-stack-terminating {
+         type int32;
+         description "Number of clients in wait-sdb-dual-stack-terminating state";
+       }
+       leaf dhcpv6-wait-sdb-dual-stack-clear {
+         type int32;
+         description "Number of clients in wait-sdb-dual-stack-clear state";
+       }
+       leaf dhcpv6-bound-on-intf-delete {
+         type int32;
+         description "Number of clients in bound-on-intf-delete state";
+       }
+       leaf dhcpv6-release-wait-server-reply {
+         type int32;
+         description "Number of clients in release-wait-server-reply state";
+       }
+     }
+     list dhcpv6-binding {
+       leaf allocated-address {
+         type jt:ipaddr;
+         description "IPv4 or IPv6 address assigned to the DHCP client";
+       }
+       leaf session-id {
+         type string;
+         description "Session ID of the client";
+       }
+       leaf lease-expires {
+         type int32;
+         description "Number of seconds lease will expire in";
+       }
+       leaf lease-state {
+         type string;
+         description "Status of the address assignment";
+       }
+       leaf interface-name {
+         type string;
+         description "Name of the interface via which the DHCP server transmitted the address assignment";
+       }
+       leaf client-duid {
+         type string;
+         description "Client DUID";
+       }
+       leaf allocated-prefix {
+         type jt:ipaddr;
+         description "IPv6 prefix address assigned to the DHCP client";
+       }
+       leaf excluded-prefix {
+         type jt:ipaddr;
+         description "IPv6 prefix excluded from the allocated prefix";
+       }
+       leaf mac-address {
+         type jt:mac-addr;
+         description "Media access control (hardware) address of the DHCP client";
+       }
+       leaf client-id-len {
+         type int32;
+         description "Number of bytes in client id";
+       }
+       leaf client-id {
+         type string;
+         description "Four bytes of the client id";
+       }
+       leaf alt-client-id-len {
+         type int32;
+         description "Number of bytes in alternate client id";
+       }
+       leaf alt-client-id {
+         type string;
+         description "Four byte of the alternate client id";
+       }
+       leaf lease-end-time {
+         type string;
+         description "Time when the address assignment will expire, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone). The value 'never' indicates that the lease does not expire";
+       }
+       leaf preferred-lease-end-time {
+         type string;
+         description "Prefferred time when the address assignment should expire, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone). The value 'never' indicates that the lease does not expire";
+       }
+       leaf preferred-lease-expires {
+         type int32;
+         description "Number of seconds preferred lease will expire in";
+       }
+       leaf lease-start-time {
+         type string;
+         description "Time when the client obtained the address assignment, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone)";
+       }
+       leaf lease-time-violated {
+         type string;
+         description "Status of lease time validation violation";
+       }
+       leaf last-packet-received-time {
+         type string;
+         description "Time at which the most recent packet from the client was received, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone)";
+       }
+       leaf interface-tag-name {
+         type string;
+         description "Name of the interface tag associated";
+       }
+       leaf vlan-id {
+         type int32;
+         description "Vlan id of the client interface";
+       }
+       leaf svlan-id {
+         type int32;
+         description "Svlan id of the client interface";
+       }
+       leaf demux-interface-name {
+         type string;
+         description "Demux interface name";
+       }
+       leaf server-ip-address {
+         type jt:ipaddr;
+         description "IP address of the DHCP server";
+       }
+       leaf next-hop-server-facing-relay {
+         type jt:ipaddr;
+         description "IP address of the DHCP Relay one hop closer to the Server";
+       }
+       leaf server-interface-name {
+         type string;
+         description "Interface that server was from";
+       }
+       leaf v6-relay-address {
+         type jt:ipaddr;
+         description "IPv6 address of the DHCPv6 relay that relayed the address assigned by the DHCPv6 server";
+       }
+       leaf previous-v6-relay-address {
+         type jt:ipaddr;
+         description "Previous IPv6 address of the DHCPv6 relay that relayed the address assigned by the DHCPv6 server";
+       }
+       leaf pool-name {
+         type string;
+         description "Client pool name";
+       }
+       leaf profile-name {
+         type string;
+         description "Client profile name";
+       }
+       leaf liveness-detection-state {
+         type string;
+         description "Status of the liveness detection session with the client";
+       }
+       leaf liveness-detection-method {
+         type string;
+         description "Method being used for liveness-detection";
+       }
+       leaf dual-stack-group {
+         type string;
+         description "Dual stack group referenece by this client";
+       }
+       leaf dual-stack-key {
+         type string;
+         description "DUAL STACK key";
+       }
+       leaf dual-stack-peer-address {
+         type jt:ipaddr;
+         description "Peer IP or IPV6 address for this dual stack client";
+       }
+       leaf generated-circuit-id {
+         type string;
+         description "Generated circuit id";
+       }
+       leaf generated-remote-id-enterprise-number {
+         type int32;
+         description "Generated remote id enterprise number";
+       }
+       leaf generated-remote-id {
+         type string;
+         description "Generated remote id";
+       }
+       leaf dhcpv6-server-id {
+         type string;
+         description "DHCPv6 server id";
+       }
+       leaf dhcp-lease-binding-type {
+         type string;
+         description "Type of the address assignment";
+       }
+       leaf client-option-type {
+         type string;
+         description "Type option 60 or option 82";
+       }
+       leaf client-option-len {
+         type int32;
+         description "Number of bytes in client option 60 / option 82 data";
+       }
+       leaf client-option-data {
+         type string;
+         description "Hex dump of client option 60 / option 82 data";
+       }
+       leaf option-18-length-from-client {
+         type int32;
+         description "Option 18 length from client";
+       }
+       leaf option-18-data-from-client {
+         type string;
+         description "Option 18 data from client";
+       }
+       leaf hardware-type {
+         type string;
+         description "Client hardware type";
+       }
+       leaf logical-system-routing-instance {
+         type string;
+         description "Client router context logical system and routing instance";
+       }
+       leaf bridge-domain {
+         type string;
+         description "Client router context bridge domain";
+       }
+       leaf authentication-num-servers {
+         type int32;
+         description "Number of servers in authentication group";
+       }
+       leaf client-stale-count {
+         type int32;
+         description "Number of clients in stale list";
+       }
+       leaf auth-client-limit {
+         type int32;
+         description "Client limit from authentication daemon";
+       }
+       leaf auth-relay-server-group {
+         type string;
+         description "Value of pointer to authentication daemon server group";
+       }
+       leaf aci-iflset-name {
+         type string;
+         description "ACI-VLAN iflset name";
+       }
+       leaf aci-iflset-index {
+         type int32;
+         description "ACI-VLAN iflset index";
+       }
+       leaf aci-iflset-session-id {
+         type string;
+         description "ACI-VLAN iflset Session ID";
+       }
+       leaf dhcpv6-relay-id-len {
+         type int32;
+         description "Number of bytes in relay id";
+       }
+       leaf dhcpv6-relay-id {
+         type string;
+         description "DHCPv6 relay-id";
+       }
+     }
+   }
+   grouping dhcpv6-relay-statistics-information-block {
+     leaf v6-dropped-packet-total {
+       type uint32;
+       description "Total number of packets discarded by the DHCPv6 relay because of errors";
+     }
+     leaf v6-dropped-packet-no-safd {
+       type uint32;
+       description "Number of packets discarded for subunit stack address family device match failure";
+     }
+     leaf v6-dropped-packet-no-routing-instance {
+       type uint32;
+       description "Number of packets discarded for routing instance match failure";
+     }
+     leaf v6-dropped-packet-bad-send {
+       type uint32;
+       description "Number of packets discarded due to send error";
+     }
+     leaf v6-dropped-packet-short-packet {
+       type uint32;
+       description "Number of packets discarded because they were too short";
+     }
+     leaf v6-dropped-packet-bad-msgtype {
+       type uint32;
+       description "Number of packets discarded due to bad opcode in packet";
+     }
+     leaf v6-dropped-packet-bad-options {
+       type uint32;
+       description "Number of packets discarded because they specified invalid options";
+     }
+     leaf v6-dropped-packet-bad-srcaddress {
+       type uint32;
+       description "Number of packets discarded because they specified invalid addr family";
+     }
+     leaf v6-dropped-packet-relay-hop-count {
+       type uint32;
+       description "Number of packets discarded due to max relays supported";
+     }
+     leaf v6-dropped-packet-bad-udp-checksum {
+       type uint32;
+       description "Number of packets discarded due to a bad UDP checksum";
+     }
+     leaf v6-dropped-packet-no-client-id {
+       type uint32;
+       description "Number of packets discarded due to missing client id";
+     }
+     leaf v6-dropped-packet-strict-reconfigure {
+       type uint32;
+       description "Number of packets discarded due to strict reconfigure";
+     }
+     leaf v6-dropped-packet-relay-option {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 relay due to relay-option processing";
+     }
+     leaf v6-dropped-packet-option-18 {
+       type uint32;
+       description "Number of packets discarded for option 18 processing failure";
+     }
+     leaf v6-dropped-packet-option-37 {
+       type uint32;
+       description "Number of packets discarded for option 37 processing failure";
+     }
+     leaf v6-dropped-packet-option-79 {
+       type uint32;
+       description "Number of packets discarded for option 79 processing failure";
+     }
+     leaf v6-dropped-packet-authentication {
+       type uint32;
+       description "Number of packets discarded because authentication failed";
+     }
+     leaf v6-dropped-packet-dynamic-profile {
+       type uint32;
+       description "Number of packets discarded because a dynamic profile failed";
+     }
+     leaf v6-dropped-packet-license {
+       type uint32;
+       description "Number of packets discarded because of a license failure";
+     }
+     leaf v6-dropped-packet-inactive-vlan {
+       type uint32;
+       description "Number of packets discarded because of inactive VLAN";
+     }
+     leaf v6-dropped-packet-event-rate-analyzer {
+       type uint32;
+       description "Number of packets discarded because of ERA throttling";
+     }
+     leaf v6-dropped-packet-client-lookup {
+       type uint32;
+       description "Number of packets discarded because no client binding was found";
+     }
+     leaf v6-lease-time-violations-drop {
+       type uint32;
+       description "Packets dropped because of lease time violation";
+     }
+     leaf v6-dropped-packet-short-cycle-protect {
+       type uint32;
+       description "Number of packets discarded because of encapsulation lockout";
+     }
+     leaf v6-dropped-packet-leasequery-repl-no-client-data {
+       type uint32;
+       description "Packets discarded as no client-data in leasequery replies";
+     }
+     leaf v6-dropped-packet-leasequery-repl-no-interfaceid {
+       type uint32;
+       description "Packets discarded as no interface-id in leasequery replies";
+     }
+     leaf v6-dropped-packet-leasequery-repl-with-client-link {
+       type uint32;
+       description "Packets discarded as client-link in leasequery replies";
+     }
+     leaf v6-dropped-packet-leasequery-repl-no-relay-data {
+       type uint32;
+       description "Packets discarded as no relay-data in leasequery replies";
+     }
+     leaf v6-dropped-packet-leasequery-repl-with-hop-cnt {
+       type uint32;
+       description "Packets discarded, leasequery reply with hop count";
+     }
+     leaf v6-dropped-packet-leasequery-repl-with-error-code {
+       type uint32;
+       description "Packets discarded, leasequery reply with error code";
+     }
+     leaf v6-dropped-packet-leasequery-repl-with-query-term {
+       type uint32;
+       description "Packets discarded, leasequery reply with query term";
+     }
+     leaf v6-dropped-packet-older-leasequery-repl {
+       type uint32;
+       description "Packets discarded as older leasequery replies";
+     }
+     leaf v6-dropped-packet-abort-leasequery-repl {
+       type uint32;
+       description "Packets discarded due to abort of leasequery reply processing";
+     }
+     leaf v6-dropped-packet-during-leasequery-repl {
+       type uint32;
+       description "Packets discarded as received during leasequery reply processing";
+     }
+     leaf v6-dropped-packet-relay-source-no-lpbk-interface {
+       type uint32;
+       description "Number of packets discarded as received with relay source config without loopback config";
+     }
+     leaf v6-dropped-packet-dhcpv6-service-total {
+       type uint32;
+       description "Number of packets discarded at dhcpv6-service level";
+     }
+     leaf v6-client-mac-validation-drop {
+       type uint32;
+       description "Packets dropped because of client mac validation";
+     }
+     leaf v6-dropped-packet-load-balance-user-plane {
+       type uint32;
+       description "Packet dropped because of load balancing";
+     }
+     leaf v6-forwarded-packets-total {
+       type uint32;
+       description "Total number of packets forwarded";
+     }
+     leaf v6-forwarded-request-packets {
+       type uint32;
+       description "Number of request packets forwarded";
+     }
+     leaf v6-forwarded-reply-packets {
+       type uint32;
+       description "Number of reply packets forwarded";
+     }
+     leaf dhcpv6-external-server-response-state {
+       type string;
+       description "Set if external server is responding otherwise Clear";
+     }
+     list dhcpv6-message-table {
+       description "Information about one or more DHCPv6 messages sent or received by the DHCPv6 Relay";
+       leaf dhcpv6-message-direction {
+         type string;
+         description "Indicator of whether the DHCPv6 Relay sent or received the messages";
+       }
+       list dhcpv6-message {
+         description "Information about a DHCPv6 message";
+         leaf dhcpv6-message-name {
+           type string;
+           description "Name of the message";
+         }
+         leaf dhcpv6-message-count {
+           type uint32;
+           description "Number of times the DCHPv6 Relay received or sent the message";
+         }
+       }
+     }
+   }
+   grouping dhcp-relay-leasequery-statistics-block {
+     leaf in-flight-leasequeries {
+       type uint32;
+       description "Number of in-flight leasequeries";
+     }
+     leaf total-leasequeries {
+       type uint32;
+       description "Total Number of leasequeries";
+     }
+     leaf total-leasequery-attempts {
+       type uint32;
+       description "Total Number of leasequery attempts";
+     }
+     leaf total-leasequery-repl-packet-retries {
+       type uint32;
+       description "Total Number of packet retries";
+     }
+     leaf total-leasequery-repl-max-retried {
+       type uint32;
+       description "Total Number of leasequery reply maximum retried";
+     }
+     container dhcp-leasequery-info-statistics {
+       leaf leasequery-xid {
+         type uint32;
+         description "Leasequery unique XID";
+       }
+       leaf leasequery-state {
+         type string;
+         description "Leasequery state";
+       }
+       leaf leasequery-confirmed-replies {
+         type uint32;
+         description "Number of confirmed Leasequery replies";
+       }
+       leaf leasequery-unconfirmed-replies {
+         type uint32;
+         description "Numnrt of unconfirmed Leasequery replies";
+       }
+       leaf leasequery-attempts {
+         type uint32;
+         description "Number of Leasequery attempts";
+       }
+       container dhcp-leasequery-server-info-statistics {
+         leaf server-ip-address {
+           type jt:ipaddr;
+           description "IP address of the DHCP server";
+         }
+         leaf leasequery-server-xid {
+           type uint32;
+           description "Leasequery Server unique XID";
+         }
+         leaf leasequery-server-state {
+           type string;
+           description "Leasequery Server state";
+         }
+       }
+     }
+   }
+   grouping dhcp-relay-bulk-leasequery-conn-statistics-block {
+     leaf total-connections-requested {
+       type uint32;
+       description "Number of TCP connections requested";
+     }
+     leaf total-connections-attempted {
+       type uint32;
+       description "Number of TCP connections attempted";
+     }
+     leaf total-connections-connected {
+       type uint32;
+       description "Number of connected TCP connections";
+     }
+     leaf total-connections-terminated-by-server {
+       type uint32;
+       description "Number of connections terminated by server";
+     }
+     leaf total-connections-max-attempted {
+       type uint32;
+       description "Number of requested TCP connections with max attempts reached";
+     }
+     leaf total-connections-closed-due-to-error {
+       type uint32;
+       description "Number of TCP connections closed due to error";
+     }
+     leaf in-flight-connections-connected {
+       type uint32;
+       description "Number of in-flight TCP connections in connected state";
+     }
+     leaf total-bulk-leasequery-repl-packet-retries {
+       type uint32;
+       description "Number of bulk leasequery reply packet retries";
+     }
+     leaf total-bulk-leasequery-repl-max-retried {
+       type uint32;
+       description "Number of bulk leasequery reply max retried";
+     }
+     container dhcp-bulk-leasequery-info-statistics {
+       leaf bulk-leasequery-xid {
+         type uint32;
+         description "Bulk Leasequery unique XID";
+       }
+       leaf bulk-leasequery-total-servers {
+         type uint32;
+         description "Total Bulk Leasequery servers";
+       }
+       container dhcp-bulk-leasequery-server-info-statistics {
+         leaf server-ip-address {
+           type jt:ipaddr;
+           description "IP address of the DHCP server";
+         }
+         leaf bulk-leasequery-server-state {
+           type string;
+           description "Bulk Leasequery Server state";
+         }
+         leaf bulk-leasequery-server-attempts {
+           type uint32;
+           description "Bulk Leasequery Server attempts";
+         }
+       }
+     }
+   }
+   grouping dhcpv6-relay-lockout-entries-information-block {
+     container dhcpv6-relay-lockout-entries-all {
+       leaf dhcp-lockout-index {
+         type int32;
+         description "Index of the lockout entry";
+       }
+       leaf dhcp-lockout-key {
+         type string;
+         description "Key of the lockout entry";
+       }
+       leaf dhcp-lockout-state {
+         type string;
+         description "Lockout state";
+       }
+       leaf dhcp-lockout-expiry {
+         type int32;
+         description "Number of second before timer in current state expires";
+       }
+       leaf dhcp-lockout-elapsed-time {
+         type int32;
+         description "Time elapsed in current state";
+       }
+       leaf dhcp-lockout-count {
+         type int32;
+         description "Number of consecutive lockouts ";
+       }
+     }
+     container dhcpv6-relay-lockout-entry {
+       leaf dhcp-lockout-index {
+         type int32;
+         description "Index of the lockout entry";
+       }
+       leaf dhcp-lockout-key {
+         type string;
+         description "Key of the lockout entry";
+       }
+       leaf dhcp-lockout-state {
+         type string;
+         description "Lockout state";
+       }
+       leaf dhcp-lockout-expiry-time {
+         type string;
+         description "Absolute expiry time of current state ";
+       }
+       leaf dhcp-lockout-expiry-relative-time {
+         type int32;
+         description "Number of second before timer in current state expires ";
+       }
+       leaf dhcp-lockout-count {
+         type int32;
+         description "Number of consecutive lockouts ";
+       }
+       leaf dhcp-lockout-next-time {
+         type int32;
+         description "Next lockout interval ";
+       }
+       leaf dhcp-lockout-min-time {
+         type int32;
+         description "Minimun lockout interval ";
+       }
+       leaf dhcp-lockout-err-code {
+         type int32;
+         description "Lockout error code ";
+       }
+     }
+   }
+   grouping dhcpv6-active-leasequery-neighbors-block {
+     container dhcpv6-active-leasequery-neighbors-all {
+       leaf interface-name {
+         type string;
+         description "Name of the interface via which the DHCP server transmitted the address assignment";
+       }
+       leaf neighbor-address {
+         type jt:ipaddr;
+         description "Active leasequery neighbor address";
+       }
+     }
+   }
+   grouping dhcpv6-service-statistics-information-block {
+     leaf v6-dropped-packet-dhcpv6-service-total {
+       type uint32;
+     }
+     leaf v6-dropped-packet-read-error {
+       type uint32;
+       description "Packets discarded due to read error";
+     }
+     leaf v6-dropped-packet-bad-ip-header {
+       type uint32;
+       description "Packets discarded due to bad IP header";
+     }
+     leaf v6-dropped-packet-short-packet {
+       type uint32;
+       description "Packets discarded because they were too short";
+     }
+     leaf v6-dropped-packet-no-interface {
+       type uint32;
+       description "Packets discarded due to no interface";
+     }
+     leaf v6-dropped-packet-no-safd {
+       type uint32;
+       description "Packets discarded for subunit stack address family device match failure";
+     }
+     leaf v6-dropped-packet-no-routing-instance {
+       type uint32;
+       description "Packets discarded due to no routing instance";
+     }
+     leaf v6-dropped-packet-no-mem {
+       type uint32;
+       description "Packets discarded due to no memory";
+     }
+     leaf v6-dropped-packet-recovery-in-progress {
+       type uint32;
+       description "Packets discarded due to switchover recovery in progress";
+     }
+     leaf v6-clients-marked-for-deletion {
+       type uint32;
+       description "Number of clients marked for deletion";
+     }
+   }
+   grouping dhcpv6-dynamic-pool-addresses-information-block {
+     container dhcpv6-dynamic-pool-addresses-information-detail {
+       container dhcpv6_dynamic-pool-entry {
+         leaf ip-address {
+           type jt:ipaddr;
+           description "IPv4/v6 address/prefix assigned to the client";
+         }
+         leaf client-duid {
+           type string;
+           description "Client DUID";
+         }
+         leaf ia-type {
+           type string;
+           description "IA type";
+         }
+       }
+     }
+   }
+   grouping dhcpv6-dynamic-pool-statistics-block {
+     leaf dynamic-pool-name {
+       type string;
+       description "Pool name";
+     }
+     leaf out-of-memory {
+       type uint64;
+       description "Number of times we have hit an out of memory condition";
+     }
+     leaf out-of-addresses {
+       type uint64;
+       description "Number of times we have hit an out of address condition";
+     }
+     leaf total-addresses {
+       type uint64;
+       description "Number of addresses in pool";
+     }
+     leaf used-addresses {
+       type uint64;
+       description "Number of addresses in use";
+     }
+     leaf pool-usage {
+       type int32;
+       description "Percentage of addesses in use";
+     }
+   }
+   grouping dhcpv6-server-binding-information-block {
+     container dhcpv6-binding-summary {
+       leaf dhcpv6-binding-count {
+         type int32;
+         description "Number of bindings in this routing instance";
+       }
+       leaf dhcpv6-init-count {
+         type int32;
+       }
+       leaf dhcpv6-bound-count {
+         type int32;
+       }
+       leaf dhcpv6-selecting-count {
+         type int32;
+       }
+       leaf dhcpv6-requesting-count {
+         type int32;
+       }
+       leaf dhcpv6-renewing-count {
+         type int32;
+       }
+       leaf dhcpv6-releasing-count {
+         type int32;
+       }
+       leaf dhcpv6-restore-count {
+         type int32;
+         description "Number of clients waiting to be restored";
+       }
+     }
+     container dhcpv6-binding-internal-states {
+       leaf dhcpv6-init {
+         type int32;
+         description "Number of clients init state";
+       }
+       leaf dhcpv6-wait-auth-req {
+         type int32;
+         description "Number of clients in wait-auth-req state";
+       }
+       leaf dhcpv6-selecting {
+         type int32;
+         description "Number of clients in selecting state";
+       }
+       leaf dhcpv6-wait-auth-req-delete {
+         type int32;
+         description "Number of clients in wait-auth-req-delete state";
+       }
+       leaf dhcpv6-wait-auth-req-release {
+         type int32;
+         description "Number of clients in wait-auth-req-release state";
+       }
+       leaf dhcpv6-wait-auth-req-release-terminated {
+         type int32;
+         description "Number of clients in wait-auth-req-release-terminated state";
+       }
+       leaf dhcpv6-wait-cm-add {
+         type int32;
+         description "Number of clients in wait-cm-add state";
+       }
+       leaf dhcpv6-wait-cm-add-delete {
+         type int32;
+         description "Number of clients in wait-cm-add-delete state";
+       }
+       leaf dhcpv6-wait-cm-delete {
+         type int32;
+         description "Number of clients in wait-cm-delete state";
+       }
+       leaf dhcpv6-wait-subscr-add {
+         type int32;
+         description "Number of clients in wait-subscr-add state";
+       }
+       leaf dhcpv6-wait-subscr-add-delete {
+         type int32;
+         description "Number of clients in wait-subscr-add-delete state";
+       }
+       leaf dhcpv6-wait-subscr-delete {
+         type int32;
+         description "Number of clients in wait-subscr-delete state";
+       }
+       leaf dhcpv6-bound {
+         type int32;
+         description "Number of clients in bound state";
+       }
+       leaf dhcpv6-wait-grace-period {
+         type int32;
+         description "Number of clients in wait-grace-period state";
+       }
+       leaf dhcpv6-wait-auth-act-prof {
+         type int32;
+         description "Number of clients in wait-auth-act-prof state";
+       }
+       leaf dhcpv6-wait-auth-act-prof-delete {
+         type int32;
+         description "Number of clients in wait-auth-act-prof-delete state";
+       }
+       leaf dhcpv6-wait-prof-inst {
+         type int32;
+         description "Number of clients in wait-prof-inst state";
+       }
+       leaf dhcpv6-wait-prof-inst-delete {
+         type int32;
+         description "Number of clients in wait-prof-inst-delete state";
+       }
+       leaf dhcpv6-wait-prof-delete {
+         type int32;
+         description "Number of clients in wait-prof-delete state";
+       }
+       leaf dhcpv6-wait-interface {
+         type int32;
+         description "Number of clients in wait-interface state";
+       }
+       leaf dhcpv6-wait-sdb-init-mirror-req {
+         type int32;
+         description "Number of clients in wait-sdb-init-mirror-req state";
+       }
+       leaf dhcpv6-wait-sdb-init-mirror-req-delete {
+         type int32;
+         description "Number of clients in wait-sdb-init-mirror-req-delete state";
+       }
+       leaf dhcpv6-wait-sdb-active-mirror-req {
+         type int32;
+         description "Number of clients in wait-sdb-active-mirror-req state";
+       }
+       leaf dhcpv6-wait-sdb-active-mirror-req-delete {
+         type int32;
+         description "Number of clients in wait-sdb-active-mirror-req-delete state";
+       }
+       leaf dhcpv6-wait-sdb-terminated-mirror-req {
+         type int32;
+         description "Number of clients in wait-sdb-terminated-mirror-req state";
+       }
+       leaf dhcpv6-reconfigure {
+         type int32;
+         description "Number of clients in reconfigure state";
+       }
+       leaf dhcpv6-bound-on-intf-delete {
+         type int32;
+         description "Number of clients in bound-on-intf-delete state";
+       }
+       leaf dhcpv6-addralloc-failed {
+         type int32;
+         description "Number of clients in addralloc-failed state";
+       }
+       leaf dhcpv6-wait-defer-delete {
+         type int32;
+         description "Number of clients in wait-defer-delete state";
+       }
+       leaf dhcpv6-wait-service-deactivation {
+         type int32;
+         description "Number of clients in wait-service-deactivation state";
+       }
+       leaf dhcpv6-wait-dual-stack-peer-logout {
+         type int32;
+         description "Number of clients in wait-dual-stack-peer-logout state";
+       }
+       leaf dhcpv6-wait-sdb-dual-stack-terminating {
+         type int32;
+         description "Number of clients in wait-sdb-dual-stack-terminating state";
+       }
+       leaf dhcpv6-wait-sdb-dual-stack-clear {
+         type int32;
+         description "Number of clients in wait-sdb-dual-stack-clear state";
+       }
+       leaf dhcpv6-wait-auth-addr-on-demand {
+         type int32;
+         description "Number of clients in wait-auth_addr-on-demand state";
+       }
+       leaf dhcpv6-wait-auth-addr-on-demand-delete {
+         type int32;
+         description "Number of clients in wait-auth_addr-on-demand-delete state";
+       }
+     }
+     list dhcpv6-binding {
+       leaf allocated-address {
+         type jt:ipaddr;
+         description "IPv4 or IPv6 address assigned to the DHCP client";
+       }
+       leaf session-id {
+         type string;
+         description "Session ID of the client";
+       }
+       leaf lease-expires {
+         type int32;
+         description "Number of seconds lease will expire in";
+       }
+       leaf lease-state {
+         type string;
+         description "Status of the address assignment";
+       }
+       leaf interface-name {
+         type string;
+         description "Name of the interface via which the DHCP server transmitted the address assignment";
+       }
+       leaf client-duid {
+         type string;
+         description "Client DUID";
+       }
+       leaf server-ip-address {
+         type jt:ipaddr;
+         description "IP address of the DHCP server";
+       }
+       leaf allocated-prefix {
+         type jt:ipaddr;
+         description "IPv6 prefix address assigned to the DHCP client";
+       }
+       leaf excluded-prefix {
+         type jt:ipaddr;
+         description "IPv6 prefix excluded from the allocated prefix";
+       }
+       leaf client-id-len {
+         type int32;
+         description "Number of bytes in client id";
+       }
+       leaf client-id {
+         type string;
+         description "Client id";
+       }
+       leaf alt-client-id-len {
+         type int32;
+         description "Number of bytes in alternate client id";
+       }
+       leaf alt-client-id {
+         type string;
+         description "Alternate client id";
+       }
+       leaf lease-end-time {
+         type string;
+         description "Time when the address assignment will expire, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone). The value 'never' indicates that the lease does not expire";
+       }
+       leaf preferred-lease-end-time {
+         type string;
+         description "Prefferred time when the address assignment should expire, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone). The value 'never' indicates that the lease does not expire";
+       }
+       leaf preferred-lease-expires {
+         type int32;
+         description "Number of seconds preferred lease will expire in";
+       }
+       leaf lease-start-time {
+         type string;
+         description "Time when the client obtained the address assignment, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone)";
+       }
+       leaf lease-time-violated {
+         type string;
+         description "Status of binding wrt lease time validation";
+       }
+       leaf last-packet-received-time {
+         type string;
+         description "Time at which the most recent packet from the client was received, in the format YYYY-MM-DD hh:mm:ss TZ (year, month, date, hour in 24-hour format, minute, second, time zone)";
+       }
+       leaf interface-tag-name {
+         type string;
+         description "Name of the interface tag associated to particular interface";
+       }
+       leaf vlan-id {
+         type int32;
+         description "Vlan id of the client interface";
+       }
+       leaf svlan-id {
+         type int32;
+         description "Svlan id of the client interface";
+       }
+       leaf demux-interface-name {
+         type string;
+         description "Demux interface name";
+       }
+       leaf pool-name {
+         type string;
+         description "Client pool name";
+       }
+       leaf delegated-pool-name {
+         type string;
+         description "Client prefix pool name";
+       }
+       leaf profile-name {
+         type string;
+         description "Client profile name";
+       }
+       leaf liveness-detection-state {
+         type string;
+         description "Status of the liveness detection session with the client";
+       }
+       leaf liveness-detection-method {
+         type string;
+         description "Method being used for liveness-detection";
+       }
+       leaf dual-stack-group {
+         type string;
+         description "Dual stack group referenece by this client";
+       }
+       leaf dual-stack-key {
+         type string;
+         description "DUAL STACK key";
+       }
+       leaf dual-stack-peer-address {
+         type jt:ipaddr;
+         description "Peer IP or IPV6 address for this dual stack client";
+       }
+       leaf dhcpv6-server-id {
+         type string;
+         description "DHCPv6 server id";
+       }
+       leaf dhcp-lease-binding-type {
+         type string;
+         description "Type of the address assignment";
+       }
+       leaf logical-system-routing-instance {
+         type string;
+         description "Client router context logical system and routing instance";
+       }
+       leaf bridge-domain {
+         type string;
+         description "Client router context bridge domain";
+       }
+       leaf client-info {
+         type string;
+         description "General information about the client";
+       }
+       leaf address-pool-drain-info {
+         type string;
+         description "Address pool drain information";
+       }
+       leaf preferred-lifetime-info {
+         type int32;
+         description "Preferred lifetime";
+       }
+       leaf valid-lifetime-info {
+         type int32;
+         description "Valid lifetime";
+       }
+       leaf t1-renewal-time-info {
+         type string;
+         description "T1 renewal time";
+       }
+       leaf t2-rebinding-time-info {
+         type string;
+         description "T2 rebinding time";
+       }
+       leaf reauth-vsa-info {
+         type string;
+         description "Reauthenticate VSA information";
+       }
+       leaf reauth-renew-info {
+         type string;
+         description "Reauthenticate lease-renewal information";
+       }
+       leaf reauth-remote-id-mismatch-info {
+         type string;
+         description "Reauthenticate remote-id-mismatch information";
+       }
+       leaf retail-logical-system-routing-instance {
+         type string;
+         description "L3 wholesale retail client router context logical system and routing instance";
+       }
+       leaf retail-bridge-domain {
+         type string;
+         description "L3 wholesale retail client router context bridge domain";
+       }
+       leaf wholesale-logical-system-routing-instance {
+         type string;
+         description "L3 wholesale client router context logical system and routing instance";
+       }
+       leaf wholesale-bridge-domain {
+         type string;
+         description "L3 wholesale client router context bridge domain";
+       }
+       leaf authentication-num-servers {
+         type int32;
+         description "Number of servers in authentication group";
+       }
+       leaf client-stale-count {
+         type int32;
+         description "Number of clients in stale list";
+       }
+       leaf auth-client-limit {
+         type int32;
+         description "Client limit from authentication daemon";
+       }
+       leaf auth-relay-server-group {
+         type string;
+         description "Value of pointer to authentication daemon server group";
+       }
+       leaf aci-iflset-name {
+         type string;
+         description "ACI-VLAN iflset name";
+       }
+       leaf aci-iflset-index {
+         type int32;
+         description "ACI-VLAN iflset index";
+       }
+       leaf aci-iflset-session-id {
+         type string;
+         description "ACI-VLAN iflset Session ID";
+       }
+       leaf dhcpv6-relay-id-len {
+         type int32;
+         description "Number of bytes in relay id";
+       }
+       leaf dhcpv6-relay-id {
+         type string;
+         description "DHCPv6 relay-id";
+       }
+     }
+   }
+   grouping dhcpv6-server-statistics-information-block {
+     leaf v6-dropped-packet-total {
+       type uint32;
+       description "Total number of packets discarded by the DHCPv6 server because of errors";
+     }
+     leaf v6-dropped-packet-no-safd {
+       type uint32;
+       description "Number of packets discarded for subunit stack address family device match failure";
+     }
+     leaf v6-dropped-packet-no-routing-instance {
+       type uint32;
+       description "Number of packets discarded for routing instance match failure";
+     }
+     leaf v6-dropped-packet-bad-send {
+       type uint32;
+       description "Number of packets discarded due to send error";
+     }
+     leaf v6-dropped-packet-short-packet {
+       type uint32;
+       description "Number of packets discarded because they were too short";
+     }
+     leaf v6-dropped-packet-bad-msgtype {
+       type uint32;
+       description "Number of packets discarded due to bad opcode in packet";
+     }
+     leaf v6-dropped-packet-bad-options {
+       type uint32;
+       description "Number of packets discarded because they specified invalid options";
+     }
+     leaf v6-dropped-packet-bad-srcaddress {
+       type uint32;
+       description "Number of packets discarded because they specified invalid addr family";
+     }
+     leaf v6-dropped-packet-relay-hop-count {
+       type uint32;
+       description "Number of packets discarded due to max relays supported";
+     }
+     leaf v6-dropped-packet-bad-udp-checksum {
+       type uint32;
+       description "Number of packets discarded due to a bad UDP checksum";
+     }
+     leaf v6-dropped-packet-no-client-id {
+       type uint32;
+       description "Number of packets discarded due to missing client id";
+     }
+     leaf v6-dropped-packet-strict-reconfigure {
+       type uint32;
+       description "Number of packets discarded due to strict reconfigure";
+     }
+     leaf v6-dropped-packet-option-18 {
+       type uint32;
+       description "Number of packets discarded for option 18 processing failure";
+     }
+     leaf v6-dropped-packet-authentication {
+       type uint32;
+       description "Number of packets discarded because authentication failed";
+     }
+     leaf v6-dropped-packet-dynamic-profile {
+       type uint32;
+       description "Number of packets discarded because a dynamic profile failed";
+     }
+     leaf v6-dropped-packet-license {
+       type uint32;
+       description "Number of packets discarded because of a license failure";
+     }
+     leaf v6-dropped-packet-inactive-vlan {
+       type uint32;
+       description "Number of packets discarded because of inactive VLAN";
+     }
+     leaf v6-dropped-packet-event-rate-analyzer {
+       type uint32;
+       description "Number of packets discarded because of ERA throttling";
+     }
+     leaf v6-dropped-packet-client-lookup {
+       type uint32;
+       description "Number of packets discarded because no client binding was found";
+     }
+     leaf v6-lease-time-violations-drop {
+       type uint32;
+       description "Packets dropped because of lease time violation";
+     }
+     leaf v6-dropped-packet-short-cycle-protect {
+       type uint32;
+       description "Number of packet discarded because of encap lockout";
+     }
+     leaf v6-dropped-packet-dhcpv6-service-total {
+       type uint32;
+       description "Number of packets discarded at dhcpv6-service level";
+     }
+     leaf v6-client-mac-validation-drop {
+       type uint32;
+       description "Packets dropped because of client MAC validation failure";
+     }
+     list advertise-delay-info {
+       description "Information about offer delay queue status of the DHCP server";
+       leaf advertise-delay-string {
+         type string;
+         description "Indicator of offer delay";
+       }
+       list advertise-queue {
+         description "Information about the Delay Queue status";
+         leaf v6-delay-status {
+           type string;
+           description "Status of packets in delay queue";
+         }
+         leaf v6-delay-count {
+           type uint32;
+           description "Number of packets in this status";
+         }
+       }
+     }
+     list dhcpv6-message-table {
+       description "Information about one or more DHCPv6 messages sent or received by the DHCPv6 server";
+       leaf dhcpv6-message-direction {
+         type string;
+         description "Indicator of whether the DHCPv6 server sent or received the messages";
+       }
+       list dhcpv6-message {
+         description "Information about a DHCPv6 message";
+         leaf dhcpv6-message-name {
+           type string;
+           description "Name of the message";
+         }
+         leaf dhcpv6-message-count {
+           type uint32;
+           description "Number of times the DCHPv6 server received or sent the message";
+         }
+       }
+     }
+   }
+   grouping dhcp-server-bulk-leasequery-conn-statistics-block {
+     leaf total-accepted-tcp-connections {
+       type uint32;
+       description "Number of accepted TCP connections";
+     }
+     leaf total-not-accepted-tcp-connections {
+       type uint32;
+       description "Number of not accepted TCP connections";
+     }
+     leaf tcp-connections-closed-due-to-error {
+       type uint32;
+       description "Number of connections closed due to error";
+     }
+     leaf tcp-connections-closed-due-to-max-empty-replies {
+       type uint32;
+       description "Number of connections closed due to max-empty-replies";
+     }
+     leaf in-flight-tcp-connections {
+       type uint32;
+       description "In-flight TCP connections";
+     }
+   }
+   grouping dhcpv6-server-lockout-entries-information-block {
+     container dhcpv6-server-lockout-entries-all {
+       leaf dhcp-lockout-index {
+         type int32;
+         description "Index of the lockout entry";
+       }
+       leaf dhcp-lockout-key {
+         type string;
+         description "Key of the lockout entry";
+       }
+       leaf dhcp-lockout-state {
+         type string;
+         description "Lockout state";
+       }
+       leaf dhcp-lockout-expiry {
+         type int32;
+         description "Number of second before timer in current state expires";
+       }
+       leaf dhcp-lockout-elapsed-time {
+         type int32;
+         description "Time elapsed in current state";
+       }
+       leaf dhcp-lockout-count {
+         type int32;
+         description "Number of consecutive lockouts ";
+       }
+     }
+     container dhcpv6-server-lockout-entry {
+       leaf dhcp-lockout-index {
+         type int32;
+         description "Index of the lockout entry";
+       }
+       leaf dhcp-lockout-key {
+         type string;
+         description "Key of the lockout entry";
+       }
+       leaf dhcp-lockout-state {
+         type string;
+         description "Lockout state";
+       }
+       leaf dhcp-lockout-expiry-time {
+         type string;
+         description "Absolute expiry time of current state ";
+       }
+       leaf dhcp-lockout-expiry-relative-time {
+         type int32;
+         description "Number of second before timer in current state expires ";
+       }
+       leaf dhcp-lockout-count {
+         type int32;
+         description "Number of consecutive lockouts ";
+       }
+       leaf dhcp-lockout-next-time {
+         type int32;
+         description "Next lockout interval ";
+       }
+       leaf dhcp-lockout-min-time {
+         type int32;
+         description "Minimun lockout interval ";
+       }
+       leaf dhcp-lockout-err-code {
+         type int32;
+         description "Lockout error code ";
+       }
+     }
+   }
+   grouping dhcpv6-client-statistics-information-block {
+     leaf v6-client-dropped-packet-total {
+       type uint32;
+       description "Total number of packets discarded by the DHCPv6 client because of errors";
+     }
+     leaf v6-client-dropped-packet-no-safd {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client due to no safd match";
+     }
+     leaf v6-client-dropped-packet-bad-send {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client due to send error";
+     }
+     leaf v6-client-dropped-packet-short-packet {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client because they were too short";
+     }
+     leaf v6-client-dropped-packet-bad-msgtype {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client due to bad opcode in packet";
+     }
+     leaf v6-client-dropped-packet-bad-options {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client because they specified invalid options";
+     }
+     leaf v6-client-dropped-packet-bad-srcaddress {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client because they specified invalid addr family";
+     }
+     leaf v6-client-dropped-packet-relay-hop-count {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client due to max relays supported";
+     }
+     leaf v6-client-dropped-packet-no-client-id {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client due to missing client id";
+     }
+     leaf v6-client-dropped-packet-strict-reconfigure {
+       type uint32;
+       description "Number of packets discarded by the DHCPv6 client due to strict reconfigure";
+     }
+     list dhcpv6-client-message-table {
+       description "Information about one or more DHCPv6 messages sent or received by the DHCPv6 client";
+       leaf dhcpv6-client-message-direction {
+         type string;
+         description "Indicator of whether the DHCPv6 client sent or received the messages";
+       }
+       list dhcpv6-client-message {
+         description "Information about a DHCPv6 client message";
+         leaf dhcpv6-client-message-name {
+           type string;
+           description "Name of the client message";
+         }
+         leaf dhcpv6-client-message-count {
+           type uint32;
+           description "Number of times the DCHPv6 client received or sent the message";
+         }
+       }
+     }
+   }
+ }
