@@ -1,0 +1,626 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-set {
+   namespace "http://yang.juniper.net/junos-es/rpc/set";
+
+   prefix set;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for set command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc set-cli-working-directory {
+     description "Set working directory";
+     junos:command "set cli directory";
+     input {
+       leaf directory {
+         description "Pathname of working directory";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container cli {
+         uses cli-block;
+       }
+     }
+   }
+   rpc set-logical-router {
+     description "Set default logical system";
+     junos:command "set cli logical-system";
+     input {
+       leaf logical-system {
+         description "Name of logical system";
+         junos:cli-feature "nokeyword";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container cli {
+         uses cli-block;
+       }
+     }
+   }
+   rpc set-tenant {
+     description "Set default tenant";
+     junos:command "set cli tenant";
+     input {
+       leaf tenant-name {
+         description "Name of tenant";
+         junos:cli-feature "nokeyword";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9-]{1,63}$";
+           junos:pattern-message "Tenant name is a string consisting of up to 63 letters, numbers and dashes";
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container cli {
+         uses cli-block;
+       }
+     }
+   }
+   rpc set-system-connectivity-information {
+     description "Set controller properties";
+     junos:command "set system controller-connectivity";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc set-chassis-cluster {
+     junos:command "set chassis cluster";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc set-chassis-cluster-enable {
+     description "Set cluster identifier";
+     junos:command "set chassis cluster cluster-id";
+     input {
+       leaf cluster-id {
+         description "Cluster identifier";
+         junos:cli-feature "nokeyword";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint8;
+         }
+         mandatory true;
+       }
+       leaf node {
+         description "Node identifier";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 1";
+           }
+         }
+         mandatory true;
+       }
+       leaf reboot {
+         description "Reboot the system after setting the identifiers";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc set-chassis-cluster-control-port {
+     description "Set cluster control port attributes";
+     junos:command "set chassis cluster control-port";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc set-chassis-cluster-control-port-speed {
+     description "Speed mode";
+     junos:command "set chassis cluster control-port speed";
+     input {
+       leaf speed_identifier {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "set-chassis-cluster-control-port-speed-10g" {
+             description "Speed 10g";
+           }
+           enum "set-chassis-cluster-control-port-speed-1g" {
+             description "Speed 1g";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc set-chassis-cluster-disable {
+     description "Disable the chassis cluster";
+     junos:command "set chassis cluster disable";
+     input {
+       leaf reboot {
+         description "Reboot the system after disabling the cluster";
+         type empty;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc set-tgm-media-gateway-controller {
+     description "Change TGM information for this FPC";
+     junos:command "set tgm fpc";
+     input {
+       leaf slot {
+         description "FPC slot number";
+         junos:cli-feature "nokeyword";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+         mandatory true;
+       }
+       leaf-list media-gateway-controller {
+         ordered-by user;
+         description "IPv4 address of one or more media gateway controllers";
+         type jt:ipv4addr;
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping cli-block {
+     leaf show-pid {
+       type empty;
+     }
+     leaf banner {
+       type string;
+     }
+     leaf complete-on-space {
+       type string;
+     }
+     leaf force {
+       type empty;
+     }
+     leaf history-mode {
+       type string;
+     }
+     leaf idle-timeout {
+       type int32;
+     }
+     leaf ignore-signals {
+       type string;
+     }
+     leaf log-level {
+       type int32;
+     }
+     leaf log-to-stderr {
+       type string;
+     }
+     leaf logical-system {
+       type string;
+     }
+     leaf clear-logical-system {
+       type string;
+     }
+     leaf tenant {
+       type string;
+     }
+     leaf clear-tenant {
+       type string;
+     }
+     leaf prompt {
+       type string;
+     }
+     leaf prompt-change {
+       type string;
+     }
+     leaf restart-on-upgrade {
+       type string;
+     }
+     leaf screen-length {
+       type int32;
+     }
+     leaf screen-width {
+       type int32;
+     }
+     leaf show-cli {
+       type empty;
+     }
+     leaf stdin-line {
+       type string;
+     }
+     leaf terminal-type {
+       type string;
+     }
+     leaf timestamp-format {
+       type string;
+     }
+     leaf timestamp-disable {
+       type empty;
+     }
+     leaf message-toggle {
+       type string;
+     }
+     leaf version-change {
+       type empty;
+     }
+     leaf json-validate {
+       type empty;
+     }
+     leaf working-directory {
+       type string;
+     }
+     leaf reset-time-zone {
+       type empty;
+     }
+     leaf trace-file-name {
+       type string;
+     }
+     leaf reset-mgd-trace {
+       type empty;
+     }
+     container odl-tag-coverage {
+       leaf show-help {
+         type empty;
+       }
+       leaf start-tool {
+         type empty;
+       }
+       leaf pause-tool {
+         type empty;
+       }
+       leaf resume-tool {
+         type empty;
+       }
+       leaf dump-output {
+         type empty;
+       }
+       leaf dump-output-and-clear {
+         type empty;
+       }
+       leaf show-workspace-dir {
+         type empty;
+       }
+       leaf show-status {
+         type empty;
+       }
+     }
+     container display-version {
+       leaf extensive {
+         type empty;
+       }
+     }
+     container history {
+       leaf count {
+         type int32;
+       }
+     }
+     container monitor {
+       leaf status {
+         type string;
+       }
+       leaf stop-all {
+         type empty;
+       }
+       container start {
+         leaf source-filename {
+           type string;
+         }
+         leaf allow-access {
+           type empty;
+         }
+       }
+       container stop {
+         leaf source-filename {
+           type string;
+         }
+       }
+       container style {
+         leaf header {
+           type empty;
+         }
+         leaf none {
+           type empty;
+         }
+         leaf prepend {
+           type empty;
+         }
+       }
+     }
+     container display-xml-validate-data {
+       leaf root-tag {
+         type string;
+       }
+       leaf hidden-rpc {
+         type empty;
+       }
+     }
+   }
+ }

@@ -1,0 +1,403 @@
+module junos-state-route-validation {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/route-validation";
+  prefix js-rv;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-routing-options {
+    prefix js-ro;
+  }
+
+  import junos-state-route-validation-types {
+    prefix js-rv-types;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "Module to represent multiple instances of named databases containing
+     set of validation records for route ranges.
+
+     This model is intended to represent a restricted set of policies,
+     that can perform validation and filtering of inbound routes from
+     the operator's peer, customer or provider networks.
+
+     Use cases may include validation of path attributes (e.g.,
+     validation of origin-AS) or simply accept or deny a route if its
+     prefix falls within a prefix range. In the future this may be
+     extended to policies that validate other paths of the AS-path such
+     as peer-AS, parts of the AS graph to name a few.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-08-22 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping route-validation-common-family-state {
+    description
+      "Family specific statistics.";
+
+    leaf total-records {
+      type yang:gauge32;
+      description
+        "Number of prefix policy records.";
+      }
+  }
+
+  grouping route-validation-statistics {
+    description
+      "This group can be applied for a database of any policy type or
+       at any partition of a policy database.";
+
+    leaf records-added {
+      type yang:counter64;
+      description
+        "Number of prefix policy records cumulatively added.";
+    }
+
+    leaf records-deleted {
+      type yang:counter64;
+      description
+        "Number of prefix policy records cumulatively deleted.";
+    }
+  }
+
+  grouping route-validation-database-top {
+    description
+      "Top level grouping for validation-database.";
+
+    container route-validation-databases {
+      description
+        "Container for route validation-database.";
+
+      list route-validation-database {
+        key "name";
+        description
+          "Instance of route validation database identified by the name
+           as its key and contains set of validation
+           records/statements.";
+
+        leaf name {
+          type string;
+          description
+            "Name of this database instance.";
+        }
+
+        list record-set {
+          key "validation-type";
+          description
+            "Identified with the type of validation done to walk the
+             DB.";
+
+          leaf validation-type {
+            type identityref {
+              base js-rv-types:prefix-attr-type;
+            }
+            description
+              "This attribute of the prefix is validated using records
+               in this database.";
+          }
+
+          leaf source {
+            type string;
+            description
+              "String representing the source of the records in this
+               record-set.";
+          }
+
+          list record {
+            key "ip-prefix mask-length-lower mask-length-upper attribute-value";
+
+            leaf ip-prefix {
+              type inet:ip-prefix;
+              description
+                "IP Prefix.";
+            }
+
+            leaf mask-length-lower {
+              type uint8;
+              description
+                "The lower mask length for the prefix range.";
+            }
+
+            leaf mask-length-upper {
+              type uint8;
+              description
+                "The upper mask length for the prefix range.";
+            }
+
+            leaf attribute-value {
+              type union {
+                type inet:as-number;
+                type enumeration {
+                  enum NONE {}
+                }
+              }
+              description
+                "The value of the attribute for this prefix/es.
+                 Currently only has an as-number.";
+            }
+          }
+        }
+
+        container ipv4 {
+          description
+            "Statistics for the IPv4 route validation records for this
+             database.";
+
+          uses route-validation-common-family-state;
+
+          container counters {
+            description
+              "Container consisting of the validation-statistics
+               counters.";
+
+            uses route-validation-statistics;
+          }
+        }
+
+        container ipv6 {
+          description
+            "Statistics for the IPv6 route validation records for this
+             database.";
+
+          uses route-validation-common-family-state;
+
+          container counters {
+            description
+              "Container consisting of the validation-statistics
+               counters.";
+
+            uses route-validation-statistics;
+          }
+        }
+      }
+    }
+  }
+
+  grouping validation-record-counters {
+    description
+      "Grouping validation-record-counters.";
+
+    leaf total-records {
+      type yang:gauge32;
+      description
+        "Total records in the database.";
+      }
+  }
+
+  grouping rpki-rtr-top {
+    description
+      "Group under which all RPKI parameters are to be included.";
+
+    container rpki-rtr {
+      description
+        "Container for RPKI parameters.";
+
+      container groups {
+
+        list group {
+          key "name";
+          description
+            "Group under which the RPKI session is configured into.";
+
+          leaf name {
+            type string;
+            description
+              "Represents the group name of the validation session.";
+          }
+
+          container sessions {
+            description
+              "Container resembling the set of sessions.";
+            list session  {
+              key "peer-ip";
+              description
+                "RPKI-RTR peering session with an RPKI-RTR server.";
+
+              leaf peer-ip {
+                type inet:ip-address;
+                description
+                  "The IP address of the RPKI-RTR server.";
+              }
+
+              leaf session-id {
+                type uint16;
+                description
+                  "Session ID for this RPKI-RTR session.";
+                reference "RFC 8210.";
+              }
+
+              leaf version {
+                type uint8;
+                description
+                  "Version number of the RPKI-RTR protocol.";
+                reference "RFC 8210 and 6801";
+              }
+
+              leaf session-state {
+                type identityref {
+                  base js-rv-types:rpki-rtr-session-state;
+                }
+                description
+                  "State of the peer with respect to RPKI session.";
+              }
+
+              leaf refresh-time {
+                type uint32;
+                description
+                  "Refresh time for this session.";
+              }
+
+              leaf hold-time {
+                type uint32;
+                description
+                  "Hold-time for this session.";
+              }
+
+              leaf record-lifetime {
+                type uint32;
+                description
+                  "Record-lifetime this session.";
+              }
+
+              leaf serial-full {
+                type uint32;
+                description
+                  "The serial number of the latest full query.";
+              }
+
+              leaf serial-incremental {
+                type uint32;
+                description
+                  "The serial number of the latest incremental query.";
+              }
+
+              leaf last-session-up-down {
+                type jt:absolute-time-microseconds;
+                description
+                  "This timestamp indicates the time that the RPKI-RTR session
+                   last transitioned in or out of the UP state.
+                   The value is the timestamp in microseconds relative to the
+                   Unix Epoch (Jan 1, 1970 00:00:00 UTC).
+
+                   The RPKI-RTR session uptime can be computed by clients as
+                   the difference between this value and the current time
+                   in UTC (assuming the session is in the UP
+                   state, per the session-state leaf).";
+                reference
+                  "RFC 6810: The Resource Public Key Infrastructure.";
+              }
+
+              leaf last-update {
+                type jt:absolute-time-microseconds;
+                description
+                  "Time instance of last update in microseconds.";
+              }
+
+              leaf last-eod-received {
+                type jt:absolute-time-microseconds;
+                description
+                  "Time in microseconds at which last EOD was received.";
+              }
+
+              leaf last-sent-serial-query {
+                type jt:absolute-time-microseconds;
+                description
+                 "Time in microseconds at which last serial query was sent.";
+              }
+
+              leaf last-sent-reset-query {
+                type jt:absolute-time-microseconds;
+                description
+                  "Time in microseconds at which last reset query was sent.";
+              }
+
+              container rpki-session-counters {
+                description
+                  "Container for all statistics for this session.";
+
+                leaf flaps {
+                  type uint32;
+                  description
+                    "Number of flaps.";
+                }
+
+                leaf total-records {
+                  type uint64;
+                  description
+                    "Number of VRPs withdrawn.";
+                }
+
+                container ipv4-validation-record-counters {
+                  description
+                    "IPv4 validation record counters.";
+
+                  uses validation-record-counters;
+                }
+
+                container ipv6-validation-record-counters {
+                  description
+                      "IPv6 validation record counters.";
+
+                  uses validation-record-counters;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-ro:routing-options" {
+    container route-validation {
+      description
+        "Container for route validation.";
+
+      uses rpki-rtr-top;
+      uses route-validation-database-top;
+    }
+  }
+}

@@ -1,0 +1,1059 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-protection-group {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/protection-group";
+
+   prefix protection-group;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for protection-group command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-protection-group-ethernet-aps {
+     description "Show comamnds related to ethernet APS";
+     input {
+       leaf protocol {
+         description "Associated protocol";
+         type enumeration {
+           enum "ccm" {
+             description "CCM";
+           }
+           enum "G.8031" {
+             description "G.8031";
+           }
+         }
+       }
+       leaf maintenance-domain {
+         description "Name of maintenance domain";
+         type string {
+           length "1 .. 45";
+         }
+       }
+       leaf maintenance-association {
+         description "Name of maintenance association";
+         type string {
+           length "1 .. 45";
+         }
+       }
+       leaf profile {
+         description "Profile name";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container eaps-profile-information {
+         uses eaps-profile-information-block;
+       }
+     }
+   }
+   rpc get-raps-pdu-information {
+     description "Show RAPS PDU information for ethernet ring";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-rpdu-information {
+         uses erp-rpdu-information-block;
+       }
+     }
+   }
+   rpc get-raps-state-machine-information {
+     description "Show RAPS state machine information for ethernet ring";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-raps-information {
+         uses erp-raps-information-block;
+       }
+     }
+   }
+   rpc get-ring-interface-information {
+     description "Show interface information for ethernet ring";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-interface-information {
+         uses erp-interface-information-block;
+       }
+     }
+   }
+   rpc get-ring-statistics {
+     description "Show statistics for ethernet ring";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container ethernet-ring-statistics {
+         uses ethernet-ring-statistics-block;
+       }
+     }
+   }
+   rpc get-ring-data-channel-information {
+     description "Show data channel for ethernet ring";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-data-channel-information {
+         uses erp-data-channel-information-block;
+       }
+     }
+   }
+   rpc get-ring-vlan-information {
+     description "Show VLAN information for ethernet ring data channel";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-ifbd-information {
+         uses erp-ifbd-information-block;
+       }
+     }
+   }
+   rpc get-ring-flush-information {
+     description "Show flush information for ethernet ring ports";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-flush-information {
+         uses erp-flush-information-block;
+       }
+     }
+   }
+   rpc get-ring-config-information {
+     description "Show configuration information for ethernet ring instance";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of protection group";
+         type string;
+       }
+     }
+     output {
+       container erp-config-information {
+         uses erp-config-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping eaps-profile-information-block {
+     list eaps-profile-entry {
+       leaf eaps-profile-name {
+         type string;
+         description "Ethernet APS Profile name";
+       }
+       leaf eaps-profile-protocol {
+         type string;
+       }
+       leaf eaps-working-interface {
+         type string;
+         description "Interface used for Working path";
+       }
+       leaf eaps-working-md {
+         type string;
+         description "Maintenance Domain associated with Ethernet APS";
+       }
+       leaf eaps-working-ma {
+         type string;
+         description "Working Path Maintenance Association";
+       }
+       leaf eaps-working-path-state {
+         type string;
+         description "Current state for Working path";
+       }
+       leaf eaps-working-path-status {
+         type string;
+         description "Working path current status";
+       }
+       leaf eaps-protect-interface {
+         type string;
+         description "Interface used for protect path";
+       }
+       leaf eaps-protect-md {
+         type string;
+         description "Maintenance Domain associated with Ethernet APS";
+       }
+       leaf eaps-protect-ma {
+         type string;
+         description "Protect Path Maintenance Association";
+       }
+       leaf eaps-protect-path-state {
+         type string;
+         description "Current state for protect path";
+       }
+       leaf eaps-protect-path-status {
+         type string;
+         description "Protection path current status";
+       }
+       leaf eaps-time-last-switch {
+         type string;
+         description "Time when last protection switch between working and protect path occured";
+       }
+       leaf eaps-auto-revert {
+         type string;
+         description "Auto reversion configuration";
+       }
+       leaf eaps-reversion-timeout {
+         type uint32;
+         description "Auto Reversion timeout (in seconds)";
+       }
+       leaf eaps-session-fsm-state {
+         type string;
+         description "FSM State for a given session";
+       }
+       leaf eaps-working-failure-severity {
+         type uint32;
+         description "Ethernet APS path failure severity";
+       }
+       leaf eaps-working-failure-flags {
+         type uint32;
+         description "Ethernet APS path failure flags";
+       }
+       leaf eaps-working-sent-tlv-data {
+         type string;
+         description "Ethernet APS sent tlv data";
+       }
+       leaf eaps-working-received-tlv-data {
+         type string;
+         description "Ethernet APS received tlv data";
+       }
+       leaf eaps-protect-failure-severity {
+         type uint32;
+         description "Ethernet APS path failure severity";
+       }
+       leaf eaps-protect-failure-flags {
+         type uint32;
+         description "Ethernet APS path failure flags";
+       }
+       leaf eaps-protect-sent-tlv-data {
+         type string;
+         description "Ethernet APS sent tlv data";
+       }
+       leaf eaps-protect-received-tlv-data {
+         type string;
+         description "Ethernet APS received tlv data";
+       }
+       container eaps-working-path-flags {
+         leaf eaps-path-flag-ready {
+           type empty;
+         }
+         leaf eaps-path-flag-down {
+           type empty;
+         }
+         leaf eaps-path-flag-init {
+           type empty;
+         }
+         leaf eaps-path-flag-ccm-expired {
+           type empty;
+         }
+         leaf eaps-path-flag-rdi {
+           type empty;
+         }
+         leaf eaps-path-flag-frr {
+           type empty;
+         }
+       }
+       container eaps-protection-path-flags {
+         leaf eaps-path-flag-ready {
+           type empty;
+         }
+         leaf eaps-path-flag-down {
+           type empty;
+         }
+         leaf eaps-path-flag-init {
+           type empty;
+         }
+         leaf eaps-path-flag-ccm-expired {
+           type empty;
+         }
+         leaf eaps-path-flag-rdi {
+           type empty;
+         }
+         leaf eaps-path-flag-frr {
+           type empty;
+         }
+       }
+       container eaps-aps-defects {
+         leaf eaps-aps-config-mismatch {
+           type empty;
+         }
+         leaf eaps-aps-protection-mismatch {
+           type empty;
+         }
+         leaf eaps-aps-signal-mismatch {
+           type empty;
+         }
+       }
+       container eaps-local-aps-information {
+         leaf eaps-aps-state {
+           type string;
+           description "APS FSM State";
+         }
+         leaf eaps-time-last-state-change {
+           type string;
+           description "Time when last APS state change occured";
+         }
+         leaf eaps-protection-type {
+           type string;
+           description "APS protection type";
+         }
+         leaf eaps-signalled-aps {
+           type string;
+           description "Signalled APS";
+         }
+         leaf eaps-requested-signal {
+           type string;
+           description "Requested signal";
+         }
+         leaf eaps-bridged-signal {
+           type string;
+           description "Bridged signal";
+         }
+       }
+       container eaps-farend-aps-information {
+         leaf eaps-time-received-message {
+           type string;
+           description "Time since last received  message in seconds";
+         }
+         leaf eaps-protection-type {
+           type string;
+           description "APS protection type";
+         }
+         leaf eaps-signalled-aps {
+           type string;
+           description "Signalled APS";
+         }
+         leaf eaps-requested-signal {
+           type string;
+           description "Requested signal";
+         }
+         leaf eaps-bridged-signal {
+           type string;
+           description "Bridged signal";
+         }
+       }
+     }
+   }
+   grouping erp-rpdu-information-block {
+     list erp-rpdus {
+       container erp-rpdu-entry {
+         leaf protection-group-name {
+           type string;
+           description "Name of protection group";
+         }
+         leaf request-state {
+           type string;
+           description "Request/State of RAPS PDU";
+         }
+         leaf dnf-flag {
+           type string;
+           description "Do not flush bit in the status field of RAPS PDU";
+         }
+         leaf rb-flag {
+           type string;
+           description "Ring protection link blocking bit in the status field of RAPS PDU";
+         }
+         leaf originator {
+           type string;
+           description "This node is the origination of RAPS PDU";
+         }
+         leaf remote-node-id {
+           type string;
+           description "Media access control address of bridge";
+         }
+         leaf bpr-val {
+           type int32;
+           description "Ring protection link blocked port reference bit in the status field of RAPS PDU";
+         }
+       }
+     }
+   }
+   grouping erp-raps-information-block {
+     list erp-raps {
+       container erp-raps-entry {
+         leaf protection-group-name {
+           type string;
+           description "Name of protection group";
+         }
+         leaf aps-state {
+           type string;
+           description "Automatic Protection Switching state";
+         }
+         leaf aps-event {
+           type string;
+           description "Current Automatic Protection Switching event";
+         }
+         leaf rpl-owner {
+           type string;
+           description "Ring protection link owner flag";
+         }
+         leaf wtr-timer {
+           type string;
+           description "Wait to restore timer state";
+         }
+         leaf guard-timer {
+           type string;
+           description "Guard timer state";
+         }
+         leaf operation-state {
+           type string;
+           description "Operation state";
+         }
+         leaf wtb-timer {
+           type string;
+           description "Wait to block timer state";
+         }
+       }
+     }
+   }
+   grouping erp-interface-information-block {
+     list ethernet-ring-pg {
+       leaf erp-protection-group-name {
+         type string;
+         description "Ethernet ring PG name";
+       }
+       list erp-interfaces {
+         description "Information about ring ports";
+         container erp-interface-entry {
+           leaf erp-interface-name {
+             type string;
+             description "Name of ring port physical interface";
+           }
+           leaf forward-state {
+             type string;
+             description "Forward state";
+           }
+           leaf rpl-end {
+             type string;
+             description "Ring potection link end flag";
+           }
+           leaf sf-flag {
+             type string;
+             description "Signal failure flag of the ring port";
+           }
+           leaf erp-interface-state {
+             type string;
+             description "Control interface state";
+           }
+           leaf control-channel-name {
+             type string;
+             description "Name of logical interface of ring port control channel";
+           }
+           leaf erp-interface-direction {
+             type string;
+             description "Direction on the interface (East/West)";
+           }
+           leaf interface-state {
+             type string;
+             description "Control interface state";
+           }
+         }
+       }
+     }
+   }
+   grouping ethernet-ring-statistics-block {
+     list ethernet-ring-pg-statistics {
+       list ethernet-ring-stats {
+         description "Ethernet ring statistics for a ring instance";
+         container ethernet-ring-statistics-entry {
+           leaf protection-group-name {
+             type string;
+             description "Name of protection group";
+           }
+           leaf raps-event-sent {
+             type int32;
+             description "Total number of RAPS PDU sent out";
+           }
+           leaf raps-event-received {
+             type int32;
+             description "Total number of RAPS PDUs received";
+           }
+           leaf raps-local-sf {
+             type int32;
+             description "Total number of Local SF event happened";
+           }
+           leaf raps-remote-sf {
+             type int32;
+             description "Total number of Remote SF event happened";
+           }
+           leaf raps-nr-sent {
+             type int32;
+             description "Total number of NR event sent";
+           }
+           leaf raps-nr-received {
+             type int32;
+             description "Total number of NR event received";
+           }
+           leaf raps-nr-rb-sent {
+             type int32;
+             description "Total number of NR-RB event sent";
+           }
+           leaf raps-nr-rb-received {
+             type int32;
+             description "Total number of NR-RB event received";
+           }
+           leaf raps-local-flush-event {
+             type int32;
+             description "Total number of flush event sent";
+           }
+           leaf raps-remote-flush-event {
+             type int32;
+             description "Total number of flush event received";
+           }
+           leaf raps-local-fs {
+             type int32;
+             description "Total number of local FS event happened";
+           }
+           leaf raps-remote-fs {
+             type int32;
+             description "Total number of remote FS event happened";
+           }
+           leaf raps-local-ms {
+             type int32;
+             description "Total number of local MS event happened";
+           }
+           leaf raps-remote-ms {
+             type int32;
+             description "Total number of remote MS event happened";
+           }
+           leaf raps-pdu-received {
+             type int32;
+             description "Total number of valid raps PDU received";
+           }
+           leaf flush-fdb-counter {
+             type int32;
+             description "Total number of times fdb flush triggered";
+           }
+           leaf flush-logic-triggered-flush {
+             type int32;
+             description "Number of times fdb flush triggered by flush-logic";
+           }
+           leaf raps-gdt-dropped {
+             type int32;
+             description "Total number of raps PDU dropped to to guard-timer";
+           }
+           leaf raps-inv-dropped {
+             type int32;
+             description "Total number of raps PDU dropped due to validity check";
+           }
+           leaf raps-misc-err-dropped {
+             type int32;
+             description "Total number raps PDU dropped due to miscellaneous errors";
+           }
+           leaf raps-self-dropped {
+             type int32;
+             description "Total number of self raps PDU dropped";
+           }
+         }
+       }
+     }
+   }
+   grouping erp-data-channel-information-block {
+     list erp-data-channels {
+       leaf erp-data-channel-protection-group-name {
+         type string;
+         description "Ethernet ring PG name";
+       }
+       list erp-data-channel-interfaces {
+         description "Data channel information about ring ports";
+         list erp-data-channel-entry {
+           leaf data-channel-interface-name {
+             type string;
+             description "Name of ring port physical interface";
+           }
+           leaf data-channel-stp-index {
+             type int32;
+             description "STP index of the interface of ring instance";
+           }
+           leaf data-channel-forward-state {
+             type string;
+             description "Forward state";
+           }
+         }
+       }
+     }
+   }
+   grouping erp-ifbd-information-block {
+     list erp-ifbds {
+       leaf erp-ifbd-protection-group-name {
+         type string;
+         description "Ethernet ring PG name";
+       }
+       list erp-ifbd-entries {
+         description "VLAN information for one specific iring port";
+         list erp-ifbd-entry {
+           leaf erp-ifbd-interface-name {
+             type string;
+             description "Name of ring port physical interface for a IFBD";
+           }
+           leaf erp-ifbd-vlan {
+             type int32;
+             description "VLAN of IFBD";
+           }
+           leaf erp-ifbd-stp-index {
+             type int32;
+             description "STP index on the interface of ring instance";
+           }
+           leaf erp-ifbd-bridge-domain {
+             type string;
+             description "Bridge domain name of IFBD";
+           }
+         }
+       }
+     }
+   }
+   grouping erp-flush-information-block {
+     list ethernet-ring-pg-flush-info {
+       leaf erp-flush-info-pg-name {
+         type string;
+         description "Ethernet ring PG name";
+       }
+       list erp-flushes {
+         description "Flush information about ring ports";
+         container erp-flush-entry {
+           leaf erp-flush-interface-name {
+             type string;
+             description "Name of ring port physical interface";
+           }
+           leaf originator-node-id {
+             type string;
+             description "Media access control address of bridge";
+           }
+           leaf blocked-port-reference {
+             type int32;
+             description "Id of blocked port";
+           }
+         }
+       }
+     }
+   }
+   grouping erp-config-information-block {
+     list ethernet-ring-pg-config-info {
+       list erp-config-infos {
+         description "Config information of ring instance";
+         container erp-config-info-entry {
+           leaf protection-group-name {
+             type string;
+             description "Name of protection group";
+           }
+           leaf erp-version {
+             type int32;
+             description "G.8032 compatible version";
+           }
+           leaf pg-interface0-name {
+             type string;
+             description "Name of the east interface (control channel interface 0)";
+           }
+           leaf pg-interface1-name {
+             type string;
+             description "Name of the west interface (control channel interface 1)";
+           }
+           leaf pg-wtr-timer-interval {
+             type int32;
+             description "Wait to Restore timer interval";
+           }
+           leaf pg-wtb-timer-interval {
+             type int32;
+             description "Wait to Block timer interval";
+           }
+           leaf pg-guard-timer-interval {
+             type int32;
+             description "Guard timer interval";
+           }
+           leaf pg-hold-timer-interval {
+             type int32;
+             description "Hold off timer interval";
+           }
+           leaf pg-node-id {
+             type int32;
+             description "Node id of the protection group";
+           }
+           leaf pg-ring-id {
+             type int32;
+             description "Ring id for the node";
+           }
+           leaf pg-erp-node-role {
+             type string;
+             description "Operating mode of the ring node";
+           }
+           leaf pg-erp-node-rpl-end {
+             type string;
+             description "RPL end port of the node";
+           }
+           leaf pg-revertive-mode {
+             type int32;
+             description "Revertive mode of operation";
+           }
+           leaf pg-dot1p-tx-pri {
+             type int32;
+             description "Dot1p priority used in the transmitted raps";
+           }
+           leaf pg-node-type {
+             type string;
+             description "Type of the ethernet ring node";
+           }
+           leaf pg-major-ring-name {
+             type string;
+             description "Major ring name";
+           }
+           leaf pg-ring-inter-connection-mode {
+             type string;
+             description "Ring inter-connection mode (VC/Non-VC)";
+           }
+           leaf pg-propagate-tc {
+             type int32;
+             description "Propagate Topology Change event to other network";
+           }
+           leaf pg-control-channel-vlan {
+             type int32;
+             description "Vlan id of the control channel";
+           }
+           leaf pg-ring-type {
+             type string;
+             description "Type of the ring (Physical or Logical)";
+           }
+           leaf pg-data-channel-vlans {
+             type string;
+             description "Data channel vlans configured for this ethernet ring";
+           }
+         }
+       }
+     }
+   }
+ }

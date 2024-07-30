@@ -1,0 +1,110 @@
+module junos-state-routing-tables-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/routing-tables/types";
+  prefix js-rtt-types;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS routing tables related typedefs
+    end identities.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-26 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  identity programmed-protocol-name {
+    description
+      "Base identity for programmed protocol name";
+  }
+
+  identity static {
+    base programmed-protocol-name;
+    description
+      "Routes programmed as static protocol";
+  }
+
+  identity bgp-static {
+    base programmed-protocol-name;
+    description
+      "Routes programmed as bgp-static protocol";
+  }
+
+  typedef address-family {
+    type enumeration {
+      enum unspec {
+        value 0;
+      }
+      enum inet;
+      enum iso;
+      enum mpls;
+      enum label-mirror;
+      enum ccc;
+      enum l3vpn;
+      enum inet6;
+      enum l2vpn;
+      enum l2circuit;
+      enum tcc;
+      enum mvpn;
+      enum vpls;
+      enum atmvpn;
+      enum rtarget;
+      enum inetflow;
+      enum invpnflow;
+      enum isovpn;
+      enum l3vpn-inet6;
+      enum transport;
+      enum transport-inet6;
+      enum mvpn-inet6;
+      enum unix;
+      enum i802;
+      enum string;
+      enum dli;
+      enum mdt;
+      enum l2protection;
+      enum evpn;
+      enum lsdist;
+      enum l2id;
+      enum inet6flow;
+      enum in6vpnflow;
+      enum evpn_mcsn;
+      enum inet6_evpn_mcsn;
+      enum inetcolor;
+      enum inet6color;
+      enum inetsrte;
+      enum inet6srte;
+      enum crh;
+      enum inetmcsn;
+      enum inet6mcsn;
+      enum bgpmcast;
+      enum bgpmcast-inet6;
+      enum l2xc;
+      enum bier;
+      enum unsupported;
+    }
+    description
+      "An address-family type. The type determines the address-family of a routing-table.";
+  }
+}

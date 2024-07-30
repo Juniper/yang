@@ -1,0 +1,1293 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-security {
+   namespace "http://yang.juniper.net/junos-ex/rpc/security";
+
+   prefix security;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for security command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-security-alarm-information {
+     description "Show active security alarm information";
+     junos:command "show security alarms";
+     input {
+       leaf alarm-id {
+         description "Alarm ID filter";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf-list alarm-type {
+         ordered-by user;
+         description "Alarm type filter";
+         type enumeration {
+           enum "authentication" {
+             description "Authentication alarms";
+           }
+           enum "cryptographic-self-test" {
+             description "Cryptographic self-test alarms";
+           }
+           enum "decryption-failures" {
+             description "Decryption failure alarms";
+           }
+           enum "encryption-failures" {
+             description "Encryption failure alarms";
+           }
+           enum "ike-phase1-failures" {
+             description "IKE Phase 1 failure alarms";
+           }
+           enum "ike-phase2-failures" {
+             description "IKE Phase 2 failure alarms";
+           }
+           enum "key-generation-self-test" {
+             description "Key generation self-test alarms";
+           }
+           enum "non-cryptographic-self-test" {
+             description "Non-cryptographic self-test alarms";
+           }
+           enum "policy" {
+             description "Policy alarms";
+           }
+           enum "replay-attacks" {
+             description "Replay attack alarms";
+           }
+           enum "idp" {
+             description "IDP attack alarms";
+           }
+         }
+       }
+       leaf newer-than {
+         description "Alarms newer than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf older-than {
+         description "Alarms older than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf process {
+         description "Process that generated the alarm filter";
+         type string;
+       }
+       leaf severity {
+         description "Severity of the alarm filter";
+         type enumeration {
+           enum "alert" {
+             description "Alert severity";
+           }
+           enum "crit" {
+             description "Critical severity";
+           }
+           enum "debug" {
+             description "Debug severity";
+           }
+           enum "emerg" {
+             description "Emergency severity";
+           }
+           enum "err" {
+             description "Error severity";
+           }
+           enum "info" {
+             description "Information severity";
+           }
+           enum "notice" {
+             description "Notice severity";
+           }
+           enum "warning" {
+             description "Warning severity";
+           }
+         }
+       }
+       leaf style {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "detail" {
+             description "Show detail alarm information";
+           }
+         }
+       }
+     }
+     output {
+       container security-alarm-information {
+         uses security-alarm-information-block;
+       }
+     }
+   }
+   rpc get-security-log-information {
+     description "Show auditable security log information";
+     junos:command "show security log";
+     input {
+       leaf destination-address {
+         description "Destination address and optional prefix length";
+         type jt:ipprefix-optional;
+       }
+       leaf destination-port {
+         description "Destination port";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf event-id {
+         description "Event ID filter";
+         type string;
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+       }
+       leaf older-than {
+         description "Events older than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf policy-name {
+         description "Policy name filter";
+         type string;
+       }
+       leaf process {
+         description "Process that generated the event";
+         type string;
+       }
+       leaf protocol {
+         description "Protocol filter";
+         type string;
+       }
+       leaf newer-than {
+         description "Events newer than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf result {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "failure" {
+             description "Event was a failure";
+           }
+           enum "success" {
+             description "Event was successful";
+           }
+         }
+       }
+       leaf severity {
+         description "Severity of the event";
+         type enumeration {
+           enum "alert" {
+             description "Alert severity";
+           }
+           enum "crit" {
+             description "Critical severity";
+           }
+           enum "debug" {
+             description "Debug severity";
+           }
+           enum "emerg" {
+             description "Emergency severity";
+           }
+           enum "err" {
+             description "Error severity";
+           }
+           enum "info" {
+             description "Information severity";
+           }
+           enum "notice" {
+             description "Notice severity";
+           }
+           enum "warning" {
+             description "Warning severity";
+           }
+         }
+       }
+       leaf source-address {
+         description "Source address and optional prefix length";
+         type jt:ipprefix-optional;
+       }
+       leaf source-port {
+         description "Source port";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf username {
+         description "Username filter";
+         type string;
+       }
+       leaf sort-by {
+         description "Sort by selected field";
+         default "time";
+         type enumeration {
+           enum "destination-address" {
+             description "Sort by destination address";
+           }
+           enum "destination-port" {
+             description "Sort by destination port";
+           }
+           enum "interface-name" {
+             description "Sort by interface name";
+           }
+           enum "policy-name" {
+             description "Sort by policy name";
+           }
+           enum "protocol" {
+             description "Sort by protocol";
+           }
+           enum "source-address" {
+             description "Sort by source address";
+           }
+           enum "source-port" {
+             description "Sort by source port";
+           }
+           enum "time" {
+             description "Sort by time of event arrival";
+           }
+           enum "username" {
+             description "Sort by event user name ";
+           }
+         }
+       }
+       leaf direction {
+         junos:cli-feature "nokeyword";
+         default "ascending";
+         type enumeration {
+           enum "ascending" {
+             description "Sort in ascending order";
+           }
+           enum "descending" {
+             description "Sort in descending order";
+           }
+         }
+       }
+       leaf style {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "detail" {
+             description "Show detail alarm information";
+           }
+         }
+       }
+     }
+     output {
+       container security-log-information {
+         uses security-log-information-block;
+       }
+     }
+   }
+   rpc get-pki-certificate-request {
+     description "Show PKCS-10 certificate request information";
+     junos:command "show security pki certificate-request";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf certificate-id {
+         description "Certificate identifier";
+         type string {
+           length "1 .. 32";
+           junos:posix-pattern "![/%. ]";
+           junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-ca-certificate {
+     description "Show certificate-authority certificate information";
+     junos:command "show security pki ca-certificate";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice ca-cert-choice {
+         case ca-profile {
+           leaf ca-profile {
+             description "Certificate authority profile";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+         case ca-profile-group {
+           leaf ca-profile-group {
+             description "Show CA profile group";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-node-local-local-certificate {
+     description "Show router certificate information";
+     junos:command "show security pki node-local local-certificate";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice certificate-choice {
+         case certificate-id {
+           leaf certificate-id {
+             description "Certificate identifier";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+         case system-generated {
+           leaf system-generated {
+             description "Autogenerated self-signed certificate";
+             type empty;
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-node-local-certificate-request {
+     description "Show PKCS-10 certificate request information";
+     junos:command "show security pki node-local certificate-request";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf certificate-id {
+         description "Certificate identifier";
+         type string {
+           length "1 .. 32";
+           junos:posix-pattern "![/%. ]";
+           junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-local-certificate {
+     description "Show router certificate information";
+     junos:command "show security pki local-certificate";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice certificate-choice {
+         case certificate-id {
+           leaf certificate-id {
+             description "Certificate identifier";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+         case system-generated {
+           leaf system-generated {
+             description "Autogenerated self-signed certificate";
+             type empty;
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-crl {
+     description "Show certificate revocation list information";
+     junos:command "show security pki crl";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf ca-profile {
+         description "Certificate authority profile";
+         type string {
+           length "1 .. 32";
+           junos:posix-pattern "![/%. ]";
+           junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pkid-crl-information-list {
+         uses x509-pkid-crl-information-list-block;
+       }
+     }
+   }
+   rpc get-pki-statistics {
+     description "Show PKI related statistics";
+     junos:command "show security pki statistics";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container pki-statistics {
+         uses pki-statistics-block;
+       }
+     }
+   }
+   rpc get-hakr-keychain-information {
+     description "Show all protocols keychain";
+     junos:command "show security keychain";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container hakr-keychain-information {
+         uses hakr-keychain-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping security-alarm-information-block {
+     leaf security-alarms-disabled {
+       type empty;
+       description "Security alarm subsystem disabled";
+     }
+     leaf no-security-alarms-active {
+       type empty;
+       description "No security alarms active";
+     }
+     leaf no-security-alarms-returned {
+       type empty;
+       description "No security alarms returned for this filter";
+     }
+     list security-alarm {
+       leaf security-alarm-id {
+         type string;
+         description "Alarm ID";
+       }
+       leaf security-alarm-time {
+         type string;
+         description "Time of the alarm";
+       }
+       leaf security-alarm-message {
+         type string;
+         description "Full message of the alarm";
+       }
+       leaf security-alarm-type {
+         type string;
+         description "Alarm type";
+       }
+       leaf severity {
+         type string;
+         description "Syslog message severity";
+       }
+       container process {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+       }
+     }
+   }
+   grouping security-log-information-block {
+     leaf security-logs-disabled {
+       type empty;
+       description "Security logging disabled";
+     }
+     leaf no-security-events {
+       type empty;
+       description "No security events have been logged";
+     }
+     leaf no-security-events-returned {
+       type empty;
+       description "No security events were logged matching this filter";
+     }
+     list security-event {
+       leaf security-event-time {
+         type string;
+         description "Time of the event";
+       }
+       leaf security-event-message {
+         type string;
+         description "Full message of the event";
+       }
+       leaf security-event-id {
+         type string;
+         description "Event ID";
+       }
+       leaf severity {
+         type string;
+         description "Syslog message severity";
+       }
+       leaf security-event-result {
+         type string;
+         description "Result of this event (success or failure)";
+       }
+       leaf security-event-username {
+         type string;
+         description "Username associated with event";
+       }
+       leaf security-event-interface-name {
+         type string;
+         description "Interface name associated with event";
+       }
+       leaf security-event-protocol {
+         type string;
+         description "Protocol associated with event";
+       }
+       leaf security-event-policy-name {
+         type string;
+         description "Policy name associated with event";
+       }
+       leaf security-event-destination-address {
+         type string;
+         description "Destination address associated with event";
+       }
+       leaf security-event-destination-port {
+         type int32;
+         description "Destination port associated with event";
+       }
+       leaf security-event-source-address {
+         type string;
+         description "Source address associated with event";
+       }
+       leaf security-event-source-port {
+         type int32;
+         description "Source port associated with event";
+       }
+       container process {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+       }
+     }
+   }
+   grouping x509-pki-certificate-info-list-block {
+     container x509-certificate-info {
+       description "Detailed information about an X.509 certificate";
+       leaf identifier {
+         type string;
+         description "Certificate identifier";
+       }
+       leaf signature-algorithm {
+         type string;
+         description "Algorithm used by the CA to sign the certificate";
+       }
+       leaf status {
+         type string;
+       }
+       container public-key {
+         leaf public-key-algorithm {
+           type string;
+           description "Algorithm used for creating the subject public key";
+         }
+         leaf public-key-length {
+           type int32;
+           description "Length of X.509 public";
+         }
+         leaf public-key-verification-status {
+           type string;
+           description "Verification status of X.509 public key";
+         }
+         leaf public-key-location {
+           type string;
+           description "Keypair generated locally or at cloud HSM";
+         }
+       }
+       list fingerprint {
+         leaf fingerprint-content {
+           type string;
+         }
+         leaf fingerprint-hash-algorithm {
+           type string;
+         }
+       }
+       container issuer {
+         container distinguished-name {
+           leaf-list organization-name {
+             type string;
+             description "Organization";
+           }
+           leaf-list organizational-unit-name {
+             type string;
+             description "Organization unit";
+           }
+           leaf-list country-name {
+             type string;
+             description "Country name";
+           }
+           leaf-list state-or-province-name {
+             type string;
+             description "State";
+           }
+           leaf-list locality-name {
+             type string;
+             description "Locality";
+           }
+           leaf-list common-name {
+             type string;
+             description "Common name";
+           }
+           leaf-list email-address {
+             type string;
+             description "E-mail address";
+           }
+           leaf-list domain-component {
+             type string;
+             description "Domain component";
+           }
+           leaf-list dn-serial-number {
+             type string;
+             description "DN Serial number";
+           }
+         }
+       }
+       container subject {
+         container distinguished-name {
+           leaf-list organization-name {
+             type string;
+             description "Organization";
+           }
+           leaf-list organizational-unit-name {
+             type string;
+             description "Organization unit";
+           }
+           leaf-list country-name {
+             type string;
+             description "Country name";
+           }
+           leaf-list state-or-province-name {
+             type string;
+             description "State";
+           }
+           leaf-list locality-name {
+             type string;
+             description "Locality";
+           }
+           leaf-list common-name {
+             type string;
+             description "Common name";
+           }
+           leaf-list email-address {
+             type string;
+             description "E-mail address";
+           }
+           leaf-list domain-component {
+             type string;
+             description "Domain component";
+           }
+           leaf-list dn-serial-number {
+             type string;
+             description "DN Serial number";
+           }
+         }
+       }
+       leaf certificate-type {
+         type string;
+         description "X.509 certificate type";
+       }
+       leaf ca-profile {
+         type string;
+         description "CA Profile Name";
+       }
+       container issue-info {
+         leaf recipient {
+           type string;
+         }
+         leaf issued-by {
+           type string;
+         }
+       }
+       container validity {
+         leaf not-before {
+           type string;
+           description "Start date of validity period";
+         }
+         leaf not-after {
+           type string;
+           description "End date of validity period";
+         }
+       }
+       leaf version {
+         type string;
+         description "Certificate version";
+       }
+       leaf cert-chain {
+         type string;
+         description "Certificate Chain";
+       }
+       list serial-number-list {
+         leaf serial-number-x509 {
+           type string;
+           description "Serial number of an X.509 certificate";
+         }
+         leaf serial-number-dec-x509 {
+           type string;
+           description "Serial number of an X.509 certificate in decimal";
+         }
+       }
+       list public-key-contents-list {
+         leaf key-contents {
+           type string;
+           description "Contents of an X.509 public key";
+         }
+       }
+       list subject-string-list {
+         leaf subject-string {
+           type string;
+           description "Cerificate's distinguished name";
+         }
+       }
+       list alternate-subject-list {
+         leaf alternate-subject {
+           type string;
+           description "Series of alternate subject in X.509 certificate";
+         }
+       }
+       list key-usage-list {
+         leaf key-usage {
+           type string;
+           description "Purpose for which X.509 key is used";
+         }
+       }
+       list distribution-crl-list {
+         leaf distribution-crl {
+           type string;
+           description "Information about a distribution CRL";
+         }
+       }
+       list authority-information-access-ocsp-list {
+         leaf authority-information-access-ocsp {
+           type string;
+           description "Information about ocsp authority-information-access locations";
+         }
+       }
+       list certificate-policy-list {
+         leaf certificate-policy {
+           type string;
+           description "List of certificate policy identifiers";
+         }
+       }
+       container auto-re-enrollment {
+         leaf auto-re-enrollment-status {
+           type string;
+           description "Auto-re-enrollment information";
+         }
+         leaf auto-re-enrollment-next-trigger-time {
+           type string;
+           description "Auto-re-enrollment next trigger time";
+         }
+       }
+     }
+   }
+   grouping x509-pkid-crl-information-list-block {
+     container pkid-x509-crl-information {
+       description "Detailed information about X.509 certificate revocation list";
+       leaf identifier {
+         type string;
+         description "Certificate identifier";
+       }
+       leaf crl-version {
+         type string;
+         description "CRL version";
+       }
+       leaf crl-number {
+         type string;
+         description "CRL sequence number";
+       }
+       leaf crl-issuer {
+         type string;
+         description "CRL issuer name";
+       }
+       container crl-validity {
+         leaf effective-date {
+           type string;
+           description "Effective date of CRL";
+         }
+         leaf next-update {
+           type string;
+           description "Next update of CRL";
+         }
+         leaf last-download {
+           type string;
+           description "Last Download Time of CRL";
+         }
+       }
+       list crl-revocation-list {
+         leaf revoked-cert-serial-number {
+           type string;
+           description "Serial number of revoked certificate";
+         }
+         leaf crl-revocation-date {
+           type string;
+           description "Revocation date";
+         }
+       }
+     }
+   }
+   grouping pki-statistics-block {
+     leaf statistics-name {
+       type string;
+     }
+     leaf statistics-value {
+       type int32;
+     }
+   }
+   grouping hakr-keychain-information-block {
+     list hakr-keychain {
+       leaf hakr-keychain-name {
+         type string;
+         description "Keychain name";
+       }
+       leaf hakr-keychain-active-send-key {
+         type int32;
+         description "Transmit key ID";
+       }
+       leaf hakr-keychain-active-receive-key {
+         type int32;
+         description "Receive key ID";
+       }
+       leaf hakr-keychain-next-send-key {
+         type string;
+         description "Next transmit key";
+       }
+       leaf hakr-keychain-next-receive-key {
+         type string;
+         description "Next receive key";
+       }
+       leaf hakr-keychain-next-key-time {
+         type string;
+         description "Key transition time";
+       }
+       leaf hakr-keychain-tolerance {
+         type int32;
+         description "Clock skew tolerance";
+       }
+       list hakr-keys {
+         leaf hakr-key-id {
+           type string;
+           description "Authentication element identifier";
+         }
+         leaf hakr-key-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf hakr-key-fallback-algorithm {
+           type string;
+           description "Fallback Authentication algorithm";
+         }
+         leaf hakr-key-state {
+           type string;
+           description "Authentication key operational state";
+         }
+         leaf hakr-key-options {
+           type string;
+           description "Authentication key options";
+         }
+         leaf hakr-key-start-time {
+           type string;
+           description "Time since the current session began (hours:minutes:seconds)";
+         }
+         leaf hakr-key-mode {
+           type string;
+           description "Authentication key mode";
+         }
+         leaf hakr-key-secret {
+           type string;
+           description "Authentication key";
+         }
+       }
+       leaf-list hakr-sa-clients {
+         type string;
+         description "Keychain clients ";
+       }
+     }
+     list hakr-keys {
+       leaf hakr-key-secret {
+         type string;
+         description "Authentication key";
+       }
+       leaf hakr-key-id {
+         type string;
+         description "Authentication element identifier";
+       }
+       leaf hakr-key-algorithm {
+         type string;
+         description "Authentication algorithm";
+       }
+       leaf hakr-key-fallback-algorithm {
+         type string;
+         description "Fallback Authentication algorithm";
+       }
+       leaf hakr-key-state {
+         type string;
+         description "Authentication key operational state";
+       }
+       leaf hakr-key-options {
+         type string;
+         description "Authentication key options";
+       }
+       leaf hakr-key-start-time {
+         type string;
+         description "Time since the current session began (hours:minutes:seconds)";
+       }
+       leaf hakr-key-mode {
+         type string;
+         description "Authentication key mode";
+       }
+     }
+   }
+ }

@@ -1,0 +1,54 @@
+module junos-interface-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/interface/types";
+  prefix junos-intft;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS interface types.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-04 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef base-state-interface-ref {
+    type leafref {
+      path "/js:state/js-if:interfaces/js-if:interface/js-if:name";
+    }
+    description
+      "Reusable type for by-name reference to a base interface. This
+       type may be used in cases where ability to reference a
+       subinterface is not required.";
+  }
+}

@@ -1,0 +1,1047 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-remote-device-management {
+   namespace "http://yang.juniper.net/junos/rpc/remote-device-management";
+
+   prefix remote-device-management;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for remote-device-management command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-rdm-summary {
+     description "Show remote device management summary";
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-statistics-summary {
+     description "Show rdm summary statistics";
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-statistics-sd {
+     description "Show rdm service device statistics";
+     input {
+       leaf device-name {
+         description "Service device name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-service-devices {
+     description "Show service device information";
+     input {
+       leaf device-name {
+         description "Service device name";
+         type string;
+       }
+       leaf level {
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-subscribers {
+     description "Show subscriber service session information";
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-subscriber-session-id {
+     description "By subscriber session id";
+     input {
+       leaf id {
+         description "Subscriber session id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint64 {
+             range "1 .. 18446744073709551615";
+           }
+         }
+         mandatory true;
+       }
+       leaf level {
+         default "terse";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-services {
+     description "Show service session information";
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   rpc get-rdm-service-session-id {
+     description "By service session id";
+     input {
+       leaf id {
+         description "Service session id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint64 {
+             range "1 .. 18446744073709551615";
+           }
+         }
+         mandatory true;
+       }
+       leaf level {
+         default "terse";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container rdm-information {
+         uses rdm-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping rdm-information-block {
+     leaf reload-dictionary {
+       type string;
+       description "Reload dictionary";
+     }
+     container debug {
+       leaf debug-information {
+         type string;
+         description "File name to write debug information";
+       }
+     }
+     container rdm-summary {
+       description "Show remote service management summary information";
+       container service-activations {
+         leaf received-count {
+           type uint64;
+           description "Received count";
+         }
+         leaf ack-count {
+           type uint64;
+           description "Total ack sent";
+         }
+         leaf nack-count {
+           type uint64;
+           description "Total nack sent";
+         }
+         leaf inprogress-count {
+           type uint64;
+           description "In progress count";
+         }
+       }
+       container service-deactivations {
+         leaf received-count {
+           type uint64;
+           description "Received count";
+         }
+         leaf ack-count {
+           type uint64;
+           description "Total ack sent";
+         }
+         leaf nack-count {
+           type uint64;
+           description "Total nack sent";
+         }
+         leaf inprogress-count {
+           type uint64;
+           description "In progress count";
+         }
+       }
+       container sd-by-connection-state {
+         leaf up-count {
+           type uint32;
+           description "Count in up state";
+         }
+         leaf down-count {
+           type uint32;
+           description "Count in down state";
+         }
+       }
+       container service-session-by-state {
+         leaf active-count {
+           type int32;
+           description "Count in active state";
+         }
+         leaf provisioning-count {
+           type int32;
+           description "Count in provisioning states";
+         }
+         leaf deprovisioning-count {
+           type int32;
+           description "Count in deprovisioning states";
+         }
+       }
+     }
+     container services {
+       description "Show remote service management service sessions";
+       list service-session {
+         leaf session-id {
+           type string;
+           description "Service session sdb id";
+         }
+         leaf subscriber-session-id {
+           type string;
+           description "Subscriber session sdb id";
+         }
+         leaf service-state {
+           type string;
+           description "Service state";
+         }
+         leaf service-name {
+           type string;
+           description "Service name";
+         }
+       }
+       list service-device-brief-entry {
+         leaf sd-name {
+           type string;
+           description "Service device name";
+         }
+         leaf sd-state {
+           type string;
+           description "Service device state";
+         }
+         leaf provisioned-state {
+           type string;
+         }
+       }
+     }
+     list subscriber-session {
+       description "Show subscriber session";
+       list service-session {
+         description "Show service session";
+         leaf session-id {
+           type string;
+           description "Service session sdb id";
+         }
+         leaf subscriber-session-id {
+           type string;
+           description "Subscriber session sdb id";
+         }
+         leaf service-state {
+           type string;
+           description "Service state";
+         }
+         leaf service-name {
+           type string;
+           description "Service name";
+         }
+       }
+     }
+     container subscribers {
+       description "Show remote service management subscriber service sessions";
+       list subscriber-session {
+         leaf subscriber-session-id {
+           type string;
+           description "Subscriber session sdb id";
+         }
+         leaf session-id {
+           type string;
+           description "Service session sdb id";
+         }
+         leaf service-state {
+           type string;
+           description "Service state";
+         }
+         leaf service-name {
+           type string;
+           description "Service name";
+         }
+         list service-session {
+           leaf session-id {
+             type string;
+             description "Service session sdb id";
+           }
+           leaf subscriber-session-id {
+             type string;
+             description "Subscriber session sdb id";
+           }
+           leaf service-state {
+             type string;
+             description "Service state";
+           }
+           leaf service-name {
+             type string;
+             description "Service name";
+           }
+         }
+       }
+       list service-session {
+         leaf session-id {
+           type string;
+           description "Service session sdb id";
+         }
+         leaf subscriber-session-id {
+           type string;
+           description "Subscriber session sdb id";
+         }
+         leaf service-state {
+           type string;
+           description "Service state";
+         }
+         leaf service-name {
+           type string;
+           description "Service name";
+         }
+       }
+       list service-device-brief-entry {
+         leaf sd-name {
+           type string;
+           description "Service device name";
+         }
+         leaf sd-state {
+           type string;
+           description "Service device state";
+         }
+         leaf provisioned-state {
+           type string;
+         }
+       }
+     }
+     container service-devices {
+       description "Show remote service management service devices";
+       list service-device {
+         description "Service device information";
+         leaf sd-name {
+           type string;
+           description "Service device name";
+         }
+         leaf sd-state {
+           type string;
+           description "Service device state";
+         }
+         leaf sd-eligible-cnt {
+           type uint32;
+           description "Service device eligible service count";
+         }
+         leaf sd-provisioned-cnt {
+           type uint32;
+           description "Service device provisioned count";
+         }
+         leaf provisioning-method {
+           type string;
+         }
+         container service-device-info {
+           leaf sd-name {
+             type string;
+             description "Service device name";
+           }
+           leaf sd-state {
+             type string;
+             description "Service device state";
+           }
+           leaf routing-instance {
+             type string;
+             description "Routing instance";
+           }
+           leaf sd-address {
+             type string;
+             description "Service device address";
+           }
+           leaf last-state-change-time {
+             type string;
+             description "Last time state changed";
+           }
+           leaf vlan-id-list-raw {
+             type string;
+             description "Vlan id list";
+           }
+           leaf sd-dictionary {
+             type string;
+             description "Dictionary File";
+           }
+           leaf sd-eligible-cnt {
+             type uint32;
+             description "Service device eligible service count";
+           }
+           leaf sd-provisioned-cnt {
+             type uint32;
+             description "Service device provisioned count";
+           }
+         }
+         container provisioning-method-information {
+           leaf provisioning-method {
+             type string;
+           }
+           leaf user-name {
+             type uint32;
+             description "Login user name";
+           }
+           leaf connection-retry-interval {
+             type uint32;
+             description "Connection retry interval";
+           }
+           leaf response-timeout {
+             type uint32;
+             description "Response timeout value";
+           }
+           leaf response-timeout-count {
+             type uint32;
+             description "Response timeout count";
+           }
+           leaf bulk-interval {
+             type uint32;
+             description "Maximum wait interval before bulk commit";
+           }
+           leaf bulk-limit {
+             type uint32;
+             description "Maximum requests per bulk commit";
+           }
+           leaf reconfigure-bulk-limit {
+             type uint32;
+             description "Maximum requests per bulk reconfigure";
+           }
+           leaf port {
+             type uint32;
+             description "TCP port number";
+           }
+         }
+         container bulk-round-trip-time {
+           leaf bulk-rt-min {
+             type uint32;
+             description "Bulk round trip minimum";
+           }
+           leaf bulk-rt-max {
+             type uint32;
+             description "Bulk round trip maximum";
+           }
+           leaf bulk-rt-average {
+             type uint32;
+             description "Bulk round trip average";
+           }
+           leaf bulk-rt-last {
+             type uint32;
+             description "Bulk round trip last";
+           }
+         }
+         container bulk-count-history {
+           leaf bulk-count-min {
+             type uint32;
+             description "Bulk count minimum";
+           }
+           leaf bulk-count-max {
+             type uint32;
+             description "Bulk count maximum";
+           }
+           leaf bulk-count-average {
+             type uint32;
+             description "Bulk count average";
+           }
+           leaf bulk-count-last {
+             type uint32;
+             description "Bulk count last";
+           }
+         }
+         list service-session {
+           leaf session-id {
+             type string;
+             description "Service session sdb id";
+           }
+           leaf subscriber-session-id {
+             type string;
+             description "Subscriber session sdb id";
+           }
+           leaf service-state {
+             type string;
+             description "Service state";
+           }
+           leaf service-name {
+             type string;
+             description "Service name";
+           }
+         }
+         container sd-service-provisioning-stats {
+           leaf attempted {
+             type uint64;
+             description "Attempted count";
+           }
+           leaf succeeded {
+             type uint64;
+             description "Succeeded count";
+           }
+           leaf failed {
+             type uint64;
+             description "Failed count";
+           }
+           leaf reject {
+             type uint32;
+             description "Total reject sent";
+           }
+           leaf timeout {
+             type uint32;
+             description "Total timeout count";
+           }
+           leaf inprogress-count {
+             type uint64;
+             description "In progress count";
+           }
+           leaf reconfigure-pending {
+             type uint32;
+             description "Reconfigure pending count";
+           }
+           leaf queued {
+             type uint32;
+             description "Queued count";
+           }
+         }
+         container sd-service-deprovisioning-stats {
+           leaf attempted {
+             type uint64;
+             description "Attempted count";
+           }
+           leaf succeeded {
+             type uint64;
+             description "Succeeded count";
+           }
+           leaf failed {
+             type uint64;
+             description "Failed count";
+           }
+           leaf reject {
+             type uint32;
+             description "Total reject sent";
+           }
+           leaf timeout {
+             type uint32;
+             description "Total timeout count";
+           }
+           leaf inprogress-count {
+             type uint64;
+             description "In progress count";
+           }
+           leaf queued {
+             type uint32;
+             description "Queued count";
+           }
+         }
+         container sd-reconfigure-stats {
+           leaf received-count {
+             type uint64;
+             description "Received count";
+           }
+           leaf succeeded {
+             type uint64;
+             description "Succeeded count";
+           }
+           leaf failed {
+             type uint64;
+             description "Failed count";
+           }
+           leaf requests-pending {
+             type uint64;
+             description "Reconfigure pending count";
+           }
+         }
+         leaf routing-instance {
+           type string;
+           description "Routing instance";
+         }
+         leaf sd-address {
+           type string;
+           description "Service device address";
+         }
+         leaf last-state-change-time {
+           type string;
+           description "Last time state changed";
+         }
+         leaf vlan-id-list-raw {
+           type string;
+           description "Vlan id list";
+         }
+         leaf sd-dictionary {
+           type string;
+           description "Dictionary File";
+         }
+         leaf user-name {
+           type uint32;
+           description "Login user name";
+         }
+         leaf connection-retry-interval {
+           type uint32;
+           description "Connection retry interval";
+         }
+         leaf response-timeout {
+           type uint32;
+           description "Response timeout value";
+         }
+         leaf response-timeout-count {
+           type uint32;
+           description "Response timeout count";
+         }
+         leaf bulk-interval {
+           type uint32;
+           description "Maximum wait interval before bulk commit";
+         }
+         leaf bulk-limit {
+           type uint32;
+           description "Maximum requests per bulk commit";
+         }
+         leaf reconfigure-bulk-limit {
+           type uint32;
+           description "Maximum requests per bulk reconfigure";
+         }
+         leaf port {
+           type uint32;
+           description "TCP port number";
+         }
+       }
+     }
+     container statistics {
+       description "Show remote service management statistics";
+       container service-activations {
+         leaf received-count {
+           type uint64;
+           description "Received count";
+         }
+         leaf ack-count {
+           type uint64;
+           description "Total ack sent";
+         }
+         leaf nack-count {
+           type uint64;
+           description "Total nack sent";
+         }
+         leaf inprogress-count {
+           type uint64;
+           description "In progress count";
+         }
+         leaf reconfigure-pending {
+           type uint32;
+           description "Reconfigure pending count";
+         }
+         leaf queued {
+           type uint32;
+           description "Queued count";
+         }
+         leaf attempted {
+           type uint64;
+           description "Attempted count";
+         }
+         leaf succeeded {
+           type uint64;
+           description "Succeeded count";
+         }
+         leaf failed {
+           type uint64;
+           description "Failed count";
+         }
+         leaf reject {
+           type uint32;
+           description "Total reject sent";
+         }
+         leaf timeout {
+           type uint32;
+           description "Total timeout count";
+         }
+         leaf requests-pending {
+           type uint64;
+           description "Reconfigure pending count";
+         }
+       }
+       container service-deactivations {
+         leaf received-count {
+           type uint64;
+           description "Received count";
+         }
+         leaf ack-count {
+           type uint64;
+           description "Total ack sent";
+         }
+         leaf nack-count {
+           type uint64;
+           description "Total nack sent";
+         }
+         leaf inprogress-count {
+           type uint64;
+           description "In progress count";
+         }
+       }
+       container bulk-round-trip-time {
+         leaf bulk-rt-min {
+           type uint32;
+           description "Bulk round trip minimum";
+         }
+         leaf bulk-rt-max {
+           type uint32;
+           description "Bulk round trip maximum";
+         }
+         leaf bulk-rt-average {
+           type uint32;
+           description "Bulk round trip average";
+         }
+         leaf bulk-rt-last {
+           type uint32;
+           description "Bulk round trip last";
+         }
+       }
+       container bulk-count-history {
+         leaf bulk-count-min {
+           type uint32;
+           description "Bulk count minimum";
+         }
+         leaf bulk-count-max {
+           type uint32;
+           description "Bulk count maximum";
+         }
+         leaf bulk-count-average {
+           type uint32;
+           description "Bulk count average";
+         }
+         leaf bulk-count-last {
+           type uint32;
+           description "Bulk count last";
+         }
+       }
+       container sd-service-provisioning-stats {
+         leaf attempted {
+           type uint64;
+           description "Attempted count";
+         }
+         leaf succeeded {
+           type uint64;
+           description "Succeeded count";
+         }
+         leaf failed {
+           type uint64;
+           description "Failed count";
+         }
+         leaf reject {
+           type uint32;
+           description "Total reject sent";
+         }
+         leaf timeout {
+           type uint32;
+           description "Total timeout count";
+         }
+         leaf inprogress-count {
+           type uint64;
+           description "In progress count";
+         }
+         leaf reconfigure-pending {
+           type uint32;
+           description "Reconfigure pending count";
+         }
+         leaf queued {
+           type uint32;
+           description "Queued count";
+         }
+         leaf requests-pending {
+           type uint64;
+           description "Reconfigure pending count";
+         }
+       }
+       container sd-service-deprovisioning-stats {
+         leaf attempted {
+           type uint64;
+           description "Attempted count";
+         }
+         leaf succeeded {
+           type uint64;
+           description "Succeeded count";
+         }
+         leaf failed {
+           type uint64;
+           description "Failed count";
+         }
+         leaf reject {
+           type uint32;
+           description "Total reject sent";
+         }
+         leaf timeout {
+           type uint32;
+           description "Total timeout count";
+         }
+         leaf inprogress-count {
+           type uint64;
+           description "In progress count";
+         }
+         leaf queued {
+           type uint32;
+           description "Queued count";
+         }
+       }
+       container sd-reconfigure-stats {
+         leaf received-count {
+           type uint64;
+           description "Received count";
+         }
+         leaf succeeded {
+           type uint64;
+           description "Succeeded count";
+         }
+         leaf failed {
+           type uint64;
+           description "Failed count";
+         }
+         leaf requests-pending {
+           type uint64;
+           description "Reconfigure pending count";
+         }
+       }
+     }
+     container reconfigure {
+       description "Reconfigure remote device";
+       leaf reconfigure-sd {
+         type string;
+         description "Reconfigure service device";
+       }
+     }
+   }
+ }

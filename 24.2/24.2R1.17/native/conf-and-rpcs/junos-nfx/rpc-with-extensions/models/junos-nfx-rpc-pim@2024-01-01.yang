@@ -1,0 +1,2631 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-pim {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/pim";
+
+   prefix pim;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for pim command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-pim-bootstrap-information {
+     description "Show PIM bootstrap routers";
+     junos:command "show pim bootstrap";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+     }
+     output {
+       container pim-bootstrap-information {
+         uses pim-bootstrap-information-block;
+       }
+     }
+   }
+   rpc get-pim-bidir-df-election-information {
+     description "Show PIM bidirectional DF election information";
+     junos:command "show pim bidirectional df-election";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 DF election information";
+           }
+           enum "inet6" {
+             description "Display IPv6 DF election information";
+           }
+         }
+       }
+       leaf rpa {
+         description "Rendezvous Point Address";
+         type jt:ipaddr;
+       }
+     }
+     output {
+       container pim-bidir-df-election-information {
+         uses pim-bidir-df-election-information-block;
+       }
+     }
+   }
+   rpc get-pim-bidir-df-election-interface-information {
+     description "Show PIM bidirectional DF election interface information";
+     junos:command "show pim bidirectional df-election interface";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 DF election interface information";
+           }
+           enum "inet6" {
+             description "Display IPv6 DF election interface information";
+           }
+         }
+       }
+     }
+     output {
+       container pim-bidir-df-election-interface-information {
+         uses pim-bidir-df-election-interface-information-block;
+       }
+     }
+   }
+   rpc get-pim-interfaces-information {
+     description "Show PIM interfaces";
+     junos:command "show pim interfaces";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 interfaces";
+           }
+           enum "inet6" {
+             description "Display IPv6 interfaces";
+           }
+         }
+       }
+     }
+     output {
+       container pim-interfaces-information {
+         uses pim-interfaces-information-block;
+       }
+     }
+   }
+   rpc get-pim-join-information {
+     description "Show PIM join/prune state";
+     junos:command "show pim join";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf group {
+         description "IP address and optional prefix length of group";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+       }
+       leaf exact {
+         description "Show only group that matches exactly";
+         type empty;
+       }
+       leaf source {
+         description "IP address and optional prefix length of source";
+         type jt:ipprefix;
+       }
+       leaf rp {
+         description "IP address and optional prefix length of rendezvous point";
+         type jt:ipprefix;
+       }
+       leaf sparse {
+         description "Show only PIM sparse-mode entries (including SSM)";
+         type empty;
+       }
+       leaf dense {
+         description "Show only PIM dense-mode entries";
+         type empty;
+       }
+       leaf bidirectional {
+         description "Show only bidirectional PIM entries";
+         type empty;
+       }
+       leaf star-g {
+         description "Show only *,G entries";
+         type empty;
+       }
+       leaf sg {
+         description "Show only S,G entries";
+         type empty;
+       }
+       leaf resolve-mvpn-neighbor {
+         description "Display BGP-MVPN neighbor";
+         type empty;
+       }
+       leaf downstream-count {
+         description "Display downstream count instead of list";
+         type empty;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 join/prune state";
+           }
+           enum "inet6" {
+             description "Display IPv6 join/prune state";
+           }
+         }
+       }
+     }
+     output {
+       container pim-join-information {
+         uses pim-join-information-block;
+       }
+     }
+   }
+   rpc get-pim-mvpn-information {
+     description "Show PIM MVPN instances";
+     junos:command "show pim mvpn";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container pim-mvpn-information {
+         uses pim-mvpn-information-block;
+       }
+     }
+   }
+   rpc get-pim-neighbors-information {
+     description "Show PIM neighbors";
+     junos:command "show pim neighbors";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 neighbors";
+           }
+           enum "inet6" {
+             description "Display IPv6 neighbors";
+           }
+         }
+       }
+     }
+     output {
+       container pim-neighbors-information {
+         uses pim-neighbors-information-block;
+       }
+     }
+   }
+   rpc get-pim-rps-information {
+     description "Show PIM rendezvous points";
+     junos:command "show pim rps";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf group-address {
+         description "IP address of group";
+         junos:cli-feature "nokeyword";
+         type jt:ipaddr;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 rendezvous points";
+           }
+           enum "inet6" {
+             description "Display IPv6 rendezvous points";
+           }
+         }
+       }
+     }
+     output {
+       container pim-rps-information {
+         uses pim-rps-information-block;
+       }
+     }
+   }
+   rpc get-pim-source-information {
+     description "Show the PIM source RPF state";
+     junos:command "show pim source";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf resolve-mvpn-neighbor {
+         description "Display BGP-MVPN neighbor";
+         type empty;
+       }
+       leaf source {
+         description "IP address and optional prefix length of source RPFs";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 PIM source RPF state";
+           }
+           enum "inet6" {
+             description "Display IPv6 PIM source RPF state";
+           }
+         }
+       }
+     }
+     output {
+       container pim-source-information {
+         uses pim-source-information-block;
+       }
+     }
+   }
+   rpc get-pim-statistics-information {
+     description "Show PIM statistics";
+     junos:command "show pim statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 PIM statistics";
+           }
+           enum "inet6" {
+             description "Display IPv6 PIM statistics";
+           }
+         }
+       }
+     }
+     output {
+       container pim-statistics-information {
+         uses pim-statistics-information-block;
+       }
+     }
+   }
+   rpc get-pim-mdt-information {
+     description "Show state of PIM multicast data tunnels";
+     junos:command "show pim mdt";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf direction {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "outgoing" {
+             description "Display outgoing multicast data tunnels";
+           }
+           enum "incoming" {
+             description "Display incoming multicast data tunnels";
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf range {
+         description "IP address and optional prefix length of group";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 MDT information";
+           }
+           enum "inet6" {
+             description "Display IPv6 MDT information";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of PIM instance";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container pim-mdt-information {
+         uses pim-mdt-information-block;
+       }
+     }
+   }
+   rpc get-pim-data-mdt-limit {
+     description "Show received PIM data MDT limit";
+     junos:command "show pim mdt data-mdt-limit";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 MDT limit information";
+           }
+           enum "inet6" {
+             description "Display IPv6 MDT limit information";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of PIM instance";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container pim-data-mdt-limit {
+         uses pim-data-mdt-limit-block;
+       }
+     }
+   }
+   rpc get-pim-data-mdt-join-information {
+     description "Show received PIM data-mdt-joins";
+     junos:command "show pim mdt data-mdt-joins";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf family {
+         description "Address family";
+         junos:cli-feature "nokeyword";
+         default "inet";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 MDT join information";
+           }
+           enum "inet6" {
+             description "Display IPv6 MDT join information";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of PIM instance";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container pim-data-mdt-join-information {
+         uses pim-data-mdt-join-information-block;
+       }
+     }
+   }
+   rpc get-pim-snooping-interfaces-information {
+     description "Show PIM snooping interfaces";
+     junos:command "show pim snooping interfaces";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+     }
+     output {
+       container pim-snooping-interfaces-information {
+         uses pim-snooping-interfaces-information-block;
+       }
+     }
+   }
+   rpc get-pim-snooping-join-information {
+     description "Show PIM snooping join";
+     junos:command "show pim snooping join";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         junos:cli-feature "nokeyword";
+         type jt:ipv4prefix;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+     }
+     output {
+       container pim-snooping-join-information {
+         uses pim-snooping-join-information-block;
+       }
+     }
+   }
+   rpc get-pim-snooping-neighbors-information {
+     description "Show PIM snooping neighbors";
+     junos:command "show pim snooping neighbors";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+     }
+     output {
+       container pim-snooping-neighbors-information {
+         uses pim-snooping-neighbors-information-block;
+       }
+     }
+   }
+   rpc get-pim-snooping-statistics-information {
+     description "Show PIM snooping statistics";
+     junos:command "show pim snooping statistics";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+           junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+     }
+     output {
+       container pim-snooping-statistics-information {
+         uses pim-snooping-statistics-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping pim-bootstrap-information-block {
+     leaf pim-instance {
+       type string;
+       description "Name of the PIM instance";
+     }
+     list bootstrap-family {
+       leaf address {
+         type jt:ipaddr;
+       }
+       leaf bootstrap-priority {
+         type int32;
+         description "Priority of bootstrap router";
+       }
+       leaf local-address {
+         type jt:ipaddr;
+       }
+       leaf local-priority {
+         type int32;
+         description "Local priority";
+       }
+       leaf bootstrap-state {
+         type string;
+       }
+       leaf bootstrap-timeout {
+         type int32;
+         description "Bootstrap router timeout";
+       }
+       leaf address-family {
+         type string;
+       }
+     }
+   }
+   grouping pim-bidir-df-election-information-block {
+     list bidir-df-election-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       container bidir-df-election-rpa-list {
+         list bidir-df-election-rp {
+           leaf rpa {
+             type jt:ipaddr;
+           }
+           container bidir-df-election-group-ranges {
+             leaf-list group-range {
+               type jt:ipprefix;
+             }
+           }
+           container bidir-df-election-interface-list {
+             list bidir-df-election-interface {
+               leaf pim-interface-name {
+                 type string;
+                 description "Name of PIM interface";
+               }
+               leaf df-state {
+                 type string;
+                 description "PIM-BIDIR DF election state";
+               }
+               leaf df {
+                 type jt:ipaddr;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping pim-bidir-df-election-interface-information-block {
+     list bidir-df-election-interface-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       list bidir-df-election-interface-interface-list {
+         leaf pim-interface-name {
+           type string;
+           description "Name of PIM interface";
+         }
+         leaf robustness-count {
+           type int32;
+         }
+         leaf offer-period {
+           type int32;
+         }
+         leaf backoff-period {
+           type int32;
+         }
+         list bidir-df-election-interface-rpa-list {
+           leaf rpa {
+             type jt:ipaddr;
+           }
+           leaf df-state {
+             type string;
+             description "PIM-BIDIR DF election state";
+           }
+           leaf df {
+             type jt:ipaddr;
+           }
+         }
+       }
+     }
+   }
+   grouping pim-interfaces-information-block {
+     leaf pim-instance {
+       type string;
+       description "Name of the PIM instance";
+     }
+     list pim-interface {
+       leaf pim-interface-name {
+         type string;
+         description "Name of PIM interface";
+       }
+       leaf status {
+         type string;
+         description "Status of PIM interface";
+       }
+       leaf ip-protocol-version {
+         type int32;
+         description "IP protocol version of PIM interface";
+       }
+       leaf protocol-version {
+         type int32;
+         description "PIM protocol version of PIM interface";
+       }
+       leaf neighbor-count {
+         type int32;
+         description "Number of neighbors on PIM interface";
+       }
+       leaf interface-join-sg-count {
+         type int32;
+         description "Number of (s,g) joins sent on the interface";
+       }
+       leaf interface-join-tsg-count {
+         type int32;
+         description "Number of (*,g) joins sent on the interface";
+       }
+       leaf designated-router-address {
+         type jt:ipaddr;
+         description "Designated router address of PIM interface";
+       }
+       leaf pim-interface-mode {
+         type string;
+         description "Mode of PIM interface";
+       }
+       container pim-interface-mode-abbreviation {
+         leaf pim-interface-mode-s {
+           type empty;
+         }
+         leaf pim-interface-mode-d {
+           type empty;
+         }
+         leaf pim-interface-mode-b {
+           type empty;
+         }
+       }
+       container interface-state {
+         leaf interface-state-evpn-df-election {
+           type empty;
+         }
+         leaf interface-state-dr {
+           type empty;
+         }
+         leaf interface-state-not-dr {
+           type empty;
+         }
+         leaf interface-state-ddr-dr {
+           type empty;
+         }
+         leaf interface-state-ddr-bdr {
+           type empty;
+         }
+         leaf interface-state-distributed-dr {
+           type empty;
+         }
+         leaf interface-state-p2p {
+           type empty;
+         }
+         leaf interface-state-p2mp {
+           type empty;
+         }
+         leaf interface-state-bidir-active {
+           type empty;
+         }
+         leaf interface-state-bidir-not-capable {
+           type empty;
+         }
+       }
+       list pim-neighbor {
+         leaf pim-interface-name {
+           type string;
+           description "Name of PIM interface";
+         }
+         leaf pim-pktcache-count {
+           type int32;
+           description "Number of packets cached from this unknown neighbor";
+         }
+         leaf pim-pktcache-time-remaining {
+           type int32;
+           description "Time remaining before this unknown neighbor times out";
+         }
+         leaf pim-neighbor-address {
+           type jt:ipaddr;
+           description "PIM neighbor address";
+         }
+       }
+       leaf interface-active-join-sg-count {
+         type int32;
+         description "Number of active path (s,g) joins sent on the interface";
+       }
+       leaf interface-mofrr-backup-join-sg-count {
+         type int32;
+         description "Number of mofrr backup path (s,g) joins sent on the interface";
+       }
+       leaf interface-standby-join-sg-count {
+         type int32;
+         description "Number of standby path (s,g) joins sent on the interface";
+       }
+       leaf interface-ephemeral-join-sg-count {
+         type int32;
+         description "Number of ephemeral (s,g) joins on the interface";
+       }
+       leaf interface-static-join-sg-count {
+         type int32;
+         description "Number of static (s,g) joins on the interface";
+       }
+       leaf interface-active-join-tsg-count {
+         type int32;
+         description "Number of active path (*,g) joins sent on the interface";
+       }
+       leaf interface-standby-join-tsg-count {
+         type int32;
+         description "Number of standby path (*,g) joins sent on the interface";
+       }
+       leaf interface-ephemeral-join-tsg-count {
+         type int32;
+         description "Number of ephemeral (*,g) joins on the interface";
+       }
+       leaf interface-static-join-tsg-count {
+         type int32;
+         description "Number of static (*,g) joins on the interface";
+       }
+     }
+   }
+   grouping pim-join-information-block {
+     list join-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       list join-summaries {
+         container join-summary {
+           leaf multicast-route-type {
+             type string;
+           }
+           leaf multicast-route-count {
+             type int32;
+           }
+         }
+       }
+       list join-group {
+         leaf multicast-group-address {
+           type jt:ipaddr;
+           description "Group address";
+         }
+         leaf multicast-source-address {
+           type jt:ipaddr;
+           description "Source address";
+         }
+         leaf upstream-interface-name {
+           type string;
+           description "Upstream interface";
+         }
+         leaf pim-interface-state {
+           type string;
+           description "State of PIM interface";
+         }
+         leaf upstream-neighbor {
+           type jt:ipaddr;
+           description "IP Address of Upstream Neighbor";
+         }
+         leaf upstream-neighbor-rpf-origin {
+           type string;
+           description "Reverse-path forwarding origin of upstream neighbor";
+         }
+         leaf uptime {
+           type string;
+         }
+         leaf downstream-interface-count {
+           type int32;
+         }
+         leaf downstream-neighbor-count {
+           type int32;
+         }
+         container pim-group-flags {
+           leaf sparse {
+             type empty;
+           }
+           leaf bidir {
+             type empty;
+             description "Bidirectional flag";
+           }
+           leaf dense {
+             type empty;
+           }
+           leaf delete {
+             type empty;
+           }
+           leaf rptree {
+             type empty;
+           }
+           leaf wildcard {
+             type empty;
+           }
+           leaf spt {
+             type empty;
+           }
+         }
+         list dense-event {
+           container dense-receive-prune {
+             leaf pim-interface-name {
+               type string;
+               description "Name of PIM interface";
+             }
+             leaf dense-timeout {
+               type int32;
+             }
+           }
+           container dense-send-prune {
+             leaf pim-interface-name {
+               type string;
+               description "Name of PIM interface";
+             }
+             leaf dense-timeout {
+               type int32;
+             }
+           }
+           container dense-join {
+             leaf pim-interface-name {
+               type string;
+               description "Name of PIM interface";
+             }
+             leaf dense-timeout {
+               type int32;
+             }
+           }
+           container dense-graft {
+             leaf pim-interface-name {
+               type string;
+               description "Name of PIM interface";
+             }
+             leaf dense-timeout {
+               type int32;
+             }
+           }
+         }
+         container downstream-interfaces {
+           leaf dummy {
+             type empty;
+           }
+           list downstream-interface {
+             leaf pim-interface-name {
+               type string;
+               description "Name of PIM interface";
+             }
+             leaf pruned-timeout {
+               type int32;
+               description "PIM-DM pruned timeout";
+             }
+             leaf pim-interface-state {
+               type string;
+               description "State of PIM interface";
+             }
+             list downstream-neighbor {
+               leaf neighbor-address {
+                 type jt:ipaddr;
+                 description "IP address of this neighbor";
+               }
+               leaf neighbor-state {
+                 type string;
+               }
+               leaf terse-sparse {
+                 type empty;
+               }
+               leaf terse-rpt {
+                 type empty;
+               }
+               leaf terse-wc {
+                 type empty;
+               }
+               leaf neighbor-timeout {
+                 type int32;
+               }
+               leaf downstream-if-uptime {
+                 type string;
+                 description "Time since first join received on this interface";
+               }
+               leaf downstream-rpf-vector {
+                 type jt:ipaddr;
+                 description "Downstream rpf vector for this downstream neighbor";
+               }
+               container downstream-last-jp {
+                 leaf downstream-last-jp-oper {
+                   type string;
+                 }
+                 leaf downstream-last-jp-time {
+                   type string;
+                 }
+               }
+               leaf terse-bidir {
+                 type empty;
+                 description "Bidirectional flag";
+               }
+             }
+             leaf register-rp {
+               type jt:ipaddr;
+             }
+             leaf register-interface-name {
+               type string;
+             }
+             leaf-list pim-pseudo-downstream-interface-name {
+               type string;
+               description "Downstream pseudo interface representing aggregated IGMP interfaces";
+             }
+             container downstream-assert-neighbor {
+               leaf neighbor-address {
+                 type jt:ipaddr;
+                 description "IP address of this neighbor";
+               }
+               leaf neighbor-assert-metric {
+                 type int32;
+                 description "Metric of the assert winner for reaching a source or RP";
+               }
+               leaf neighbor-assert-preference {
+                 type int32;
+                 description "Preference of the assert winner for reaching a source or RP";
+               }
+               leaf neighbor-assert-timeout {
+                 type int32;
+                 description "Time remaining before assert winner timer expires";
+               }
+             }
+           }
+         }
+         list downstream-interface {
+           list downstream-neighbor {
+           }
+         }
+         leaf rendezvous-point-address {
+           type jt:ipaddr;
+           description "Address of rendezvous point";
+         }
+         leaf upstream-protocol-name {
+           type string;
+           description "Upstream protocol";
+         }
+         leaf upstream-rpf-vector {
+           type jt:ipaddr;
+         }
+         leaf keepalive-timeout {
+           type int32;
+         }
+         leaf no-keepalive-timeout {
+           type empty;
+         }
+         leaf switchover-timeout {
+           type int32;
+         }
+         container active-upstream-path {
+           leaf upstream-protocol-name {
+             type string;
+             description "Upstream protocol";
+           }
+           leaf upstream-interface-name {
+             type string;
+             description "Upstream interface";
+           }
+           leaf pim-interface-state {
+             type string;
+             description "State of PIM interface";
+           }
+           leaf upstream-neighbor {
+             type jt:ipaddr;
+             description "IP Address of Upstream Neighbor";
+           }
+           leaf upstream-neighbor-rpf-origin {
+             type string;
+             description "Reverse-path forwarding origin of upstream neighbor";
+           }
+         }
+         container mofrr-backup-upstream-path {
+           leaf upstream-protocol-name {
+             type string;
+             description "Upstream protocol";
+           }
+           leaf upstream-interface-name {
+             type string;
+             description "Upstream interface";
+           }
+           leaf pim-interface-state {
+             type string;
+             description "State of PIM interface";
+           }
+           leaf upstream-neighbor {
+             type jt:ipaddr;
+             description "IP Address of Upstream Neighbor";
+           }
+           leaf upstream-neighbor-rpf-origin {
+             type string;
+             description "Reverse-path forwarding origin of upstream neighbor";
+           }
+         }
+         container standby-upstream-path {
+           leaf upstream-protocol-name {
+             type string;
+             description "Upstream protocol";
+           }
+           leaf upstream-interface-name {
+             type string;
+             description "Upstream interface";
+           }
+           leaf pim-interface-state {
+             type string;
+             description "State of PIM interface";
+           }
+           leaf upstream-neighbor {
+             type jt:ipaddr;
+             description "IP Address of Upstream Neighbor";
+           }
+           leaf upstream-neighbor-rpf-origin {
+             type string;
+             description "Reverse-path forwarding origin of upstream neighbor";
+           }
+         }
+         container upstream-state-flags {
+           leaf none {
+             type empty;
+           }
+           leaf local-source {
+             type empty;
+           }
+           leaf local-rp {
+             type empty;
+           }
+           leaf join-to-rp {
+             type empty;
+           }
+           leaf join-to-source {
+             type empty;
+           }
+           leaf prune-to-rp {
+             type empty;
+           }
+           leaf no-prune-to-rp {
+             type empty;
+           }
+           leaf prune-to-source {
+             type empty;
+           }
+         }
+         leaf bidir-group-prefix-length {
+           type uint32;
+           description "Bidirectional group prefix length";
+         }
+         list accepting-interface {
+           leaf pim-interface-name {
+             type string;
+             description "Name of PIM interface";
+           }
+           leaf df-state {
+             type string;
+             description "PIM-BIDIR DF election state";
+           }
+         }
+       }
+     }
+   }
+   grouping pim-mvpn-information-block {
+     leaf pim-mvpn-instance-name {
+       type string;
+     }
+     leaf address-family {
+       type string;
+     }
+     leaf pim-mvpn-address {
+       type jt:ipaddr;
+     }
+     leaf pim-mvpn-mode {
+       type string;
+       description "MVPN control protocol";
+     }
+     leaf pim-mvpn-tunnel {
+       type string;
+       description "MVPN Tunnel Type";
+     }
+   }
+   grouping pim-neighbors-information-block {
+     leaf pim-instance {
+       type string;
+       description "Name of the PIM instance";
+     }
+     container neighbor-option-banner {
+       leaf banner-first {
+         type empty;
+       }
+       leaf banner-second {
+         type empty;
+       }
+       leaf banner-third {
+         type empty;
+       }
+       leaf banner-fourth {
+         type empty;
+       }
+     }
+     list pim-interface {
+       leaf pim-interface-mode {
+         type string;
+         description "Mode of PIM interface";
+       }
+       list pim-neighbor {
+         leaf pim-interface-name {
+           type string;
+           description "Name of PIM interface";
+         }
+         leaf ip-protocol-version {
+           type int32;
+           description "IP protocol version of PIM interface";
+         }
+         leaf protocol-version {
+           type int32;
+           description "PIM protocol version of PIM interface";
+         }
+         leaf pim-interface-mode {
+           type string;
+           description "Mode of PIM interface";
+         }
+         leaf pim-neighbor-uptime {
+           type string;
+           description "PIM neighbor uptime";
+         }
+         leaf pim-neighbor-address {
+           type jt:ipaddr;
+           description "PIM neighbor address";
+         }
+         container pim-neighbor-flags {
+           leaf pim-neighbor-hold-time-flag {
+             type empty;
+           }
+           leaf pim-neighbor-priority-flag {
+             type empty;
+           }
+           leaf pim-neighbor-lan-prune-flag {
+             type empty;
+           }
+           leaf pim-neighbor-generation-id-flag {
+             type empty;
+           }
+           leaf pim-neighbor-bidirectional-flag {
+             type empty;
+           }
+           leaf pim-neighbor-t-bit-flag {
+             type empty;
+           }
+           leaf pim-neighbor-a-bit-flag {
+             type empty;
+           }
+         }
+         leaf pim-neighbor-active-join-sg-count {
+           type int32;
+           description "Number of active path (s,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-mofrr-backup-join-sg-count {
+           type int32;
+           description "Number of mofrr backup path (s,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-standby-join-sg-count {
+           type int32;
+           description "Number of standby path (s,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-ephemeral-join-sg-count {
+           type int32;
+           description "Number of ephemeral (s,g) joins on the neighbor";
+         }
+         leaf pim-neighbor-static-join-sg-count {
+           type int32;
+           description "Number of static (s,g) joins on the neighbor";
+         }
+         leaf pim-neighbor-active-join-tsg-count {
+           type int32;
+           description "Number of active path (*,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-standby-join-tsg-count {
+           type int32;
+           description "Number of standby path (*,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-ephemeral-join-tsg-count {
+           type int32;
+           description "Number of ephemeral (*,g) joins on the neighbor";
+         }
+         leaf pim-neighbor-static-join-tsg-count {
+           type int32;
+           description "Number of static (*,g) joins on the neighbor";
+         }
+         leaf pim-neighbor-join-sg-count {
+           type int32;
+           description "Number of (s,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-join-tsg-count {
+           type int32;
+           description "Number of (*,g) joins sent to the neighbor";
+         }
+         leaf pim-neighbor-nexthop-id {
+           type int32;
+           description "PIM neighbor nexthop id";
+         }
+         leaf pim-neighbor-p2mp-hello-tx-timeout {
+           type int32;
+           description "PIM P2MP Hello TX Timeout";
+         }
+         leaf-list pim-neighbor-secondary-address {
+           type jt:ipaddr;
+           description "PIM neighbor secondary address";
+         }
+         leaf hello-holdtime {
+           type int32;
+         }
+         leaf hello-holdtime-remaining {
+           type int32;
+         }
+         leaf hello-default-holdtime {
+           type int32;
+           description "PIM neighbor default holdtime";
+         }
+         leaf hello-default-holdtime-remaining {
+           type int32;
+           description "PIM neighbor timeout from default holdtime";
+         }
+         leaf hello-dr-priority {
+           type int32;
+         }
+         leaf hello-generation-id {
+           type int32;
+         }
+         leaf hello-lanprune-delay {
+           type int32;
+         }
+         leaf hello-override-interval {
+           type int32;
+         }
+         leaf hello-nbr-t-bit {
+           type empty;
+         }
+         leaf hello-join-attribute {
+           type empty;
+         }
+         list pim-neighbor-bfd {
+           leaf configuration-state {
+             type string;
+             description "State (enabled or disabled) of Bidirectional Forwarding Detection for a PIM neighbor";
+           }
+           leaf operational-state {
+             type string;
+             description "Operational state of Bidirectional Forwarding Detection session for a PIM neighbor";
+           }
+         }
+         list pim-neighbor-join {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description "Source address";
+           }
+           leaf join-timeout {
+             type int32;
+           }
+         }
+         list pim-neighbor-assert {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description "Source address";
+           }
+           leaf assert-state {
+             type string;
+           }
+           leaf pim-neighbor-address {
+             type jt:ipaddr;
+             description "PIM neighbor address";
+           }
+           leaf assert-timeout {
+             type int32;
+           }
+         }
+       }
+       leaf pim-interface-name {
+         type string;
+         description "Name of PIM interface";
+       }
+     }
+   }
+   grouping pim-rps-information-block {
+     leaf pim-instance {
+       type string;
+       description "Name of the PIM instance";
+     }
+     list rp-family {
+       leaf address-family {
+         type string;
+       }
+       list rendezvous-point {
+         leaf rendezvous-point-address {
+           type jt:ipaddr;
+           description "Address of rendezvous point";
+         }
+         leaf rp-flag-static {
+           type empty;
+         }
+         leaf rp-flag-embedded-rp {
+           type empty;
+         }
+         leaf rp-flag-autorp {
+           type empty;
+         }
+         leaf rp-flag-bootstrap {
+           type empty;
+         }
+         leaf rp-flag-sparse {
+           type empty;
+         }
+         leaf rp-flag-bidirectional {
+           type empty;
+         }
+         leaf rendezvous-point-holdtime {
+           type int32;
+         }
+         leaf rendezvous-point-timeout {
+           type string;
+         }
+         leaf rendezvous-point-active-groups {
+           type int32;
+         }
+         list rendezvous-point-group-prefixes {
+           leaf multicast-group-prefix {
+             type jt:ipaddr;
+             description "Group prefix";
+           }
+           leaf rp-group-state {
+             type string;
+           }
+           leaf rp-group-timeout {
+             type string;
+             description "Time remaining for RP group prefix";
+           }
+         }
+         container rendezvous-point-active-group-prefixes {
+           leaf rendezvous-point-active-groups {
+             type int32;
+           }
+           list rendezvous-point-active-group-prefix {
+             leaf multicast-group-address {
+               type jt:ipaddr;
+               description "Group address";
+             }
+           }
+         }
+         leaf rendezvous-point-from-address {
+           type jt:ipaddr;
+         }
+         leaf rendezvous-point-static-override {
+           type string;
+         }
+         leaf rendezvous-point-time-active {
+           type string;
+         }
+         leaf rendezvous-point-refcount {
+           type int32;
+         }
+         leaf rendezvous-point-holdtime-remaining {
+           type int32;
+         }
+         leaf rp-interface-device-index {
+           type int32;
+         }
+         leaf rp-interface-device-subunit {
+           type int32;
+         }
+         leaf pim-interface-name {
+           type string;
+           description "Name of PIM interface";
+         }
+         leaf rendezvous-point-anycast-pim-local-address {
+           type jt:ipaddr;
+           description "Local address for replicating register messages to anycast RPs";
+         }
+         list rendezvous-point-register-state {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description "Source address";
+           }
+           leaf first-hop-address {
+             type jt:ipaddr;
+           }
+           leaf rendezvous-point-address {
+             type jt:ipaddr;
+             description "Address of rendezvous point";
+           }
+           leaf pim-register-state {
+             type string;
+           }
+           leaf pim-register-timeout {
+             type int32;
+           }
+         }
+         list rendezvous-point-anycast-pim-rpset {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+         }
+         list rendezvous-point-anycast-register-state {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description "Source address";
+           }
+           leaf pim-anycast-register-state-origin {
+             type string;
+             description "Origin of anycast register state";
+           }
+         }
+       }
+     }
+     container rendezvous-point-address-info {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf rendezvous-point-address {
+         type jt:ipaddr;
+         description "Address of rendezvous point";
+       }
+       leaf rendezvous-point-embedded-rp-address {
+         type empty;
+       }
+       leaf rendezvous-point-no-address {
+         type jt:ipaddr;
+       }
+       leaf rendezvous-point-dm-address {
+         type jt:ipaddr;
+       }
+       leaf rendezvous-point-ssm-address {
+         type jt:ipaddr;
+       }
+       leaf rendezvous-point-asm-override-ssm-address {
+         type jt:ipaddr;
+       }
+       list rendezvous-point-trees {
+         leaf multicast-group-prefix {
+           type jt:ipaddr;
+           description "Group prefix";
+         }
+         list rendezvous-point-addresses {
+           leaf rendezvous-point-address {
+             type jt:ipaddr;
+             description "Address of rendezvous point";
+           }
+           leaf rendezvous-point-mode-bidir {
+             type empty;
+           }
+           leaf rendezvous-point-hash {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   grouping pim-source-information-block {
+     list source-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       list pim-source {
+         leaf multicast-source-address {
+           type jt:ipaddr;
+           description "Source address";
+         }
+         leaf route-prefix {
+           type jt:ipaddr;
+         }
+         leaf upstream-protocol-name {
+           type string;
+           description "Upstream protocol";
+         }
+         leaf upstream-interface-name {
+           type string;
+           description "Upstream interface";
+         }
+         leaf upstream-neighbor {
+           type jt:ipaddr;
+           description "IP Address of Upstream Neighbor";
+         }
+         list upstream-group {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+         }
+       }
+     }
+   }
+   grouping pim-statistics-information-block {
+     list statistics-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       list pim-statistics-interface {
+         leaf pim-interface-name {
+           type string;
+           description "Name of PIM interface";
+         }
+         list pim-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+             description "Total number of errors encountered";
+           }
+         }
+       }
+     }
+     container pim-statistics-all {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       container pim-statistics-global {
+         list pim-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+             description "Total number of errors encountered";
+           }
+         }
+       }
+       container pim-statistics-other {
+         list pim-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+     }
+     container everything {
+       container pim-statistics-global {
+         list pim-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+             description "Total number of errors encountered";
+           }
+         }
+       }
+       container pim-statistics-other {
+         list pim-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   grouping pim-mdt-information-block {
+     list mdt-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       leaf mdt-tunnel-direction {
+         type string;
+       }
+       leaf mdt-tunnel-mode {
+         type string;
+       }
+       leaf mdt-default-group-address {
+         type jt:ipaddr;
+       }
+       leaf mdt-default-source-address {
+         type jt:ipaddr;
+       }
+       leaf mdt-default-interface-name {
+         type string;
+       }
+       leaf mdt-default-tunnel-source {
+         type jt:ipaddr;
+       }
+       leaf mdt-pim-instance {
+         type string;
+       }
+       list mdt-active-tunnel {
+         leaf mdt-customer-group-address {
+           type jt:ipaddr;
+         }
+         leaf mdt-customer-source-address {
+           type jt:ipaddr;
+         }
+         leaf mdt-provider-group-address {
+           type jt:ipaddr;
+         }
+         leaf mdt-tunnel-interface-name {
+           type string;
+         }
+         leaf mdt-tunnel-direction {
+           type string;
+         }
+         leaf mdt-tunnel-mode {
+           type string;
+         }
+         leaf mdt-default-group-address {
+           type jt:ipaddr;
+         }
+         leaf mdt-default-source-address {
+           type jt:ipaddr;
+         }
+         leaf mdt-default-interface-name {
+           type string;
+         }
+         leaf mdt-default-tunnel-source {
+           type jt:ipaddr;
+         }
+         leaf mdt-forwarding-rate-kilobits {
+           type int32;
+         }
+         leaf mdt-forwarding-rate-kilobytes {
+           type int32;
+         }
+         leaf mdt-configured-threshold-rate {
+           type int32;
+         }
+         leaf mdt-tunnel-uptime {
+           type string;
+         }
+       }
+     }
+     list mdt-active-tunnel {
+       leaf mdt-default-tunnel-information {
+         type string;
+       }
+     }
+   }
+   grouping pim-data-mdt-limit-block {
+     list mdt-limit-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       list pim-data-mdt-limit-params {
+         leaf pim-data-mdt-limit-name {
+           type string;
+           description "PIM Data MDT limit ";
+         }
+         leaf pim-data-mdt-limit-value {
+           type uint32;
+           description "PIM Data MDT limit value";
+         }
+       }
+     }
+   }
+   grouping pim-data-mdt-join-information-block {
+     list mdt-join-family {
+       leaf pim-instance {
+         type string;
+         description "Name of the PIM instance";
+       }
+       leaf address-family {
+         type string;
+       }
+       leaf pim-data-mdt-csource-address {
+         type jt:ipaddr;
+       }
+       leaf pim-data-mdt-cgroup-address {
+         type jt:ipaddr;
+       }
+       leaf pim-data-mdt-psource-address {
+         type jt:ipaddr;
+       }
+       leaf pim-data-mdt-pgroup-address {
+         type jt:ipaddr;
+       }
+       leaf pim-data-mdt-timeout {
+         type int32;
+       }
+     }
+   }
+   grouping pim-snooping-interfaces-information-block {
+     list pim-snooping-interfaces-instances {
+       leaf instance-name {
+         type string;
+       }
+       leaf bridge-domain {
+         type string;
+         description "Bridge Domain";
+       }
+       list pim-snooping-interfaces-learning-domains {
+         leaf learning-domain {
+           type string;
+           description "Bridge or VPLS learning domain";
+         }
+         list pim-snooping-interfaces {
+           container pim-snooping-interface {
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf interface-state {
+               type string;
+               description "PIM interface's status";
+             }
+             leaf ip-version {
+               type int32;
+             }
+             leaf neighbor-count {
+               type int32;
+             }
+           }
+         }
+         container pim-snooping-others {
+           leaf pim-snooping-dr-address {
+             type jt:ipaddr;
+             description "PIM snooping DR address";
+           }
+           leaf pim-snooping-dr-flooding {
+             type string;
+             description "PIM snooping DR flooding status";
+           }
+           leaf pim-snooping-relay {
+             type string;
+             description "PIM snooping relay status";
+           }
+           leaf pim-snooping-periodic-join-prune-interval {
+             type int32;
+             description "PIM snooping periodic Join/Prune interval";
+           }
+         }
+       }
+     }
+   }
+   grouping pim-snooping-join-information-block {
+     list pim-snooping-join-instances {
+       leaf instance-name {
+         type string;
+       }
+       leaf bridge-domain {
+         type string;
+         description "Bridge Domain";
+       }
+       list pim-snooping-join-learning-domains {
+         leaf learning-domain {
+           type string;
+           description "Bridge or VPLS learning domain";
+         }
+         list pim-groups {
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description "Source address";
+           }
+           container pim-group-flags {
+             leaf sparse {
+               type empty;
+             }
+             leaf bidir {
+               type empty;
+               description "Bidirectional flag";
+             }
+             leaf dense {
+               type empty;
+             }
+             leaf delete {
+               type empty;
+             }
+             leaf rptree {
+               type empty;
+             }
+             leaf wildcard {
+               type empty;
+             }
+             leaf spt {
+               type empty;
+             }
+           }
+           list upstream-ports {
+             description "Upstream/Incoming interface list";
+             leaf upstream-neighbor-address {
+               type jt:ipaddr;
+               description "Upstream neighbor address";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             list downstream-ports {
+               description "Downstream/Outgoing interface list";
+               leaf interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf interface-state {
+                 type string;
+                 description "PIM interface's status";
+               }
+               list downstream-neighbors {
+                 leaf downstream-neighbor-address {
+                   type jt:ipaddr;
+                 }
+                 leaf neighbor-state {
+                   type string;
+                 }
+                 leaf terse-sparse {
+                   type empty;
+                 }
+                 leaf terse-rpt {
+                   type empty;
+                 }
+                 leaf terse-wc {
+                   type empty;
+                 }
+                 leaf neighbor-timeout {
+                   type int32;
+                 }
+                 leaf terse-bidir {
+                   type empty;
+                   description "Bidirectional flag";
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping pim-snooping-neighbors-information-block {
+     leaf pim-snooping-neighbors-banner {
+       type empty;
+       description "The banner before the show command";
+     }
+     list pim-snooping-neighbors-instances {
+       leaf instance-name {
+         type string;
+       }
+       leaf bridge-domain {
+         type string;
+         description "Bridge Domain";
+       }
+       list pim-snooping-neighbors-learning-domains {
+         leaf learning-domain {
+           type string;
+           description "Bridge or VPLS learning domain";
+         }
+         list pim-neighbors-brief {
+           container pim-neighbor {
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf neighbor-uptime {
+               type string;
+               description "Neighbor uptime";
+             }
+             leaf neighbor-address {
+               type jt:ipaddr;
+               description "Neighbor address";
+             }
+             container pim-neighbor-flags {
+               leaf neighbor-holdtime-flag {
+                 type empty;
+                 description "Neighbor's Hello Options with Holdtime";
+               }
+               leaf neighbor-dr-priority-flag {
+                 type empty;
+                 description "Neighbor's Hello Options with DR Priority";
+               }
+               leaf neighbor-lan-prune-delay-flag {
+                 type empty;
+                 description "Neighbor's Hello Options with LAN Prune Delay";
+               }
+               leaf neighbor-genid-flag {
+                 type empty;
+                 description "Neighbor's Hello Options with GenID";
+               }
+               leaf neighbor-bidirectional-flag {
+                 type empty;
+                 description "Neighbor's Hello Options with Bidirectional-PIM";
+               }
+               leaf neighbor-t-bit-flag {
+                 type empty;
+                 description "Neighbor's Hello Options with Tracking Support";
+               }
+             }
+           }
+         }
+         container pim-neighbors-detail {
+           list pim-neighbors-interfaces {
+             list pim-neighbors {
+               container pim-neighbor {
+                 leaf neighbor-address {
+                   type jt:ipaddr;
+                   description "Neighbor address";
+                 }
+                 leaf neighbor-uptime {
+                   type string;
+                   description "Neighbor uptime";
+                 }
+                 leaf neighbor-holdtime {
+                   type int32;
+                 }
+                 leaf neighbor-holdtime-remaining {
+                   type int32;
+                 }
+                 leaf neighbor-dr-priority {
+                   type int32;
+                 }
+                 leaf neighbor-genid {
+                   type int32;
+                 }
+                 leaf neighbor-bidirectional-capable {
+                   type empty;
+                 }
+                 leaf neighbor-lan-prune-delay {
+                   type int32;
+                 }
+                 leaf neighbor-override-interval {
+                   type int32;
+                 }
+                 leaf neighbor-t-bit {
+                   type empty;
+                 }
+               }
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping pim-snooping-statistics-information-block {
+     list pim-snooping-statistics-instances {
+       leaf instance-name {
+         type string;
+       }
+       leaf bridge-domain {
+         type string;
+         description "Bridge Domain";
+       }
+       list pim-snooping-statistics-learning-domains {
+         leaf learning-domain {
+           type string;
+           description "Bridge or VPLS learning domain";
+         }
+         leaf interface-name {
+           type string;
+           description "Name of interface";
+         }
+         list pim-snooping-statistics-interface {
+           container pim-statistics {
+             leaf statistics-name {
+               type string;
+             }
+             leaf statistics-count {
+               type int32;
+             }
+           }
+         }
+         list pim-snooping-statistics {
+           container pim-statistics {
+             leaf statistics-name {
+               type string;
+             }
+             leaf statistics-count {
+               type int32;
+             }
+           }
+         }
+       }
+     }
+   }
+ }

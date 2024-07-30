@@ -1,0 +1,2022 @@
+module junos-state-oam-cfm {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/oam/cfm";
+  prefix js-oam-cfm;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-routing-types {
+    prefix rt-types;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-oam {
+    prefix js-oam;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     OAM CFM state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-03-30 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef port-status-tlv-type {
+    type enumeration {
+      enum NO_PORT_STATUS_TLV {
+        description
+          "Indicates either that no CCM has been received or that
+           no port status TLV was present in the last CCM received.";
+      }
+      enum BLOCKED {
+        description
+          "Ordinary data cannot pass freely through the port on
+           which the remote MEP resides.";
+      }
+      enum UP {
+        description
+          "Ordinary data can pass freely through the port on which
+           the remote MEP resides.";
+      }
+    }
+    description
+      "An enumerated value from the Port Status TLV from the last CCM
+       received from the last MEP. It indicates the ability of the
+       Bridge Port on which the transmitting MEP resides to pass
+       ordinary data, regardless of the status of the MAC.";
+  }
+
+  typedef interface-status-tlv-type {
+    type enumeration {
+      enum NO_INTERFACE_STATUS_TLV {
+        description
+          "Indicates either that no CCM has been received or that
+           no interface status TLV was present in the last CCM
+           received.";
+      }
+      enum UP {
+        description
+          "The interface is ready to pass packets.";
+      }
+      enum DOWN {
+        description
+          "The interface can not pass packets.";
+      }
+      enum TESTING {
+        description
+          "The interface is in some test mode.";
+      }
+      enum UNKNOWN {
+        description
+          "The interface status cannot be determined for some
+           reason.";
+      }
+      enum DORMANT {
+        description
+          "The interface is not in a state to pass packets but is in
+           a pending state, waiting for some external event.";
+      }
+      enum NOT_PRESENT {
+        description
+          "Some component of the interface is missing.";
+      }
+      enum LOWER_LAYER_DOWN {
+        description
+          "The interface is down due to state of the lower layer
+           interface.";
+      }
+    }
+    description
+      "An enumerated value from the Interface Status TLV from the
+       last CCM received from the last MEP. It indicates the status
+       of the Interface within which the MEP transmitting the CCM
+       is configured, or the next lower Interface in the Interface
+       Stack, if the MEP is not configured within an Interface.";
+  }
+
+  typedef availability-type {
+    type enumeration {
+      enum AVAILABLE {
+        description
+          "Indicates the MEP is available.";
+      }
+      enum UNAVAILABLE {
+        description
+          "Indicates the MEP is unavailable.";
+      }
+      enum UNKNOWN {
+        description
+          "Indicates the availability is not known, for instance because
+           insufficient time has passed to make an availability
+           calculation, the time has been excluded because of a
+           maintenance interval, or because availability measurement is
+           not enabled.";
+      }
+    }
+    description
+      "This enumeration data type defines the availability of a session,
+       measured by a loss measurement session.";
+  }
+
+  grouping cfm-global-top {
+    description
+      "Grouping for global CFM state.";
+
+    leaf enhanced-cfm-mode {
+      type boolean;
+      description
+        "Indicates if CFM Daemon is running in enhanced mode or not.";
+    }
+  }
+
+  grouping cfm-action-profile {
+    description
+      "Grouping of details related to action profile";
+
+    leaf name {
+      type string;
+      description
+        "Name of the action profile which has been configured to the RMEP.";
+    }
+
+    leaf last-event {
+      type enumeration {
+        enum NONE {
+          description
+            "No event has occurred.";
+        }
+        enum ADJACENCY_LOSS {
+          description
+            "CCMs were not received.";
+        }
+        enum INTERFACE_STATUS_TLV_DOWN {
+          description
+            "Received interface status as down in incoming CCMs.";
+        }
+        enum INTERFACE_STATUS_TLV_LOWER_LAYER_DOWN {
+          description
+            "Received interface status as lower layer down in
+             incoming CCMs.";
+        }
+        enum PORT_STATUS_TLV_BLOCKED {
+          description
+            "Received port status as blocked in incoming CCMs.";
+        }
+        enum RDI {
+          description
+            "Received RDI in incoming CCMs by some RMEP.";
+        }
+        enum CONNECTION_PROTECTION_TLV_USING_WORKING_PATH {
+          description
+            "Service traffic is using working path";
+        }
+        enum CONNECTION_PROTECTION_TLV_USING_PROTECTION_PATH {
+          description
+            "Service traffic is using protection path";
+        }
+        enum RECEIVED_AIS {
+          description
+            "Received AIS message.";
+        }
+      }
+      description
+        "The last event which triggered the action profile.";
+    }
+
+    leaf action {
+      type enumeration {
+        enum NONE {
+          description
+            "No action has been taken.";
+        }
+        enum INTERFACE_DOWN {
+          description
+            "Action of interface down has been taken.";
+        }
+        enum REVERTIVE_INTERFACE_DOWN {
+          description
+            "Action of revertive-interface down has been taken.";
+        }
+        enum NON_REVERTIVE_INTERFACE_DOWN {
+          description
+            "Action of non-revertive-interface down has been taken";
+        }
+        enum INTERFACE_GROUP_DOWN {
+          description
+            "Action of interface-group down has been taken.";
+        }
+        enum ASYNCHRONOUS_NOTIFICATION {
+          description
+            "Action of asynchronous-notification has been taken.";
+        }
+      }
+      description
+        "Action taken when action profile has been triggered.";
+    }
+
+    leaf action-time {
+      type rt-types:timeticks64;
+      units "nanoseconds";
+      description
+        "Indicates the time when action profile was triggered. The value is
+         the timestamp in nanoseconds relative to the Unix Epoch.";
+    }
+
+    leaf action-clear-time {
+      type rt-types:timeticks64;
+      units "nanoseconds";
+      description
+        "Indicates the time when last event was cleared.  The value is
+         the timestamp in nanoseconds relative to the Unix Epoch.";
+    }
+  }
+
+  grouping performance-monitoring-session {
+    description
+      "Grouping of details related to the PM session which could be
+       either delay measurement or loss measurement.";
+
+    leaf session-status {
+      type enumeration {
+        enum IDLE {
+          description
+            "PM session is Idle.";
+        }
+        enum RUNNING {
+          description
+            "PM session is running.";
+        }
+        enum STOPPED {
+          description
+            "PM session is stopped.";
+        }
+      }
+      description
+        "This indicates the current status of the PM session";
+    }
+
+    leaf cycle-time {
+      type uint32;
+      units "milliseconds";
+      description
+        "Indicates the interval at which the measurement PDUs need to be
+         sent in milliseconds.";
+    }
+
+    leaf iteration-period {
+      type uint16;
+      description
+        "Indicates maximum services under this iterator profile.";
+    }
+
+    leaf infinite-iterations {
+      type boolean;
+      description
+        "Indicates if this PM session will run infinitely.";
+    }
+
+    leaf reset-time {
+      type rt-types:timeticks64;
+      units "nanoseconds";
+      description
+        "Indicates the time when the counters were reset.  The value is
+         the timestamp in nanoseconds relative to the Unix Epoch.";
+    }
+
+    leaf reset-reason {
+      type enumeration {
+        enum ADJACENCY_FLAP {
+          description
+            "Indicates counters were reset due to adjacency flap.";
+        }
+        enum USER_INITIATED {
+          description
+            "Indicates counters were reset due to user action.";
+        }
+        enum TCR_RECEIVED {
+          description
+            "Indicates counters were reset as counter reset was
+             received for this session.";
+        }
+        enum CONFIG_CHANGE {
+          description
+            "Indicates counters were reset due to config change.";
+        }
+        enum TIMER_NOT_STARTED {
+          description
+            "Indicates counters were reset as timers are not yet
+             started.";
+        }
+      }
+      description
+        "Indicates the reason why the counters were reset.";
+    }
+  }
+
+  grouping performance-monitoring-interval-stats {
+    description
+      "Grouping of Performance monitoring interval statistics.";
+
+    leaf measurement-id {
+      type uint32;
+      description
+        "The identifier for the Measurement Interval within this
+         PM session.";
+    }
+
+    leaf suspect-status {
+      type boolean;
+      description
+        "Whether the Measurement Interval has been marked as suspect.
+         The object is to be set to false at the start of a measurement
+         interval. It is set to true when there is a discontinuity in
+         the performance measurements during the Measurement Interval.";
+    }
+
+    leaf start-time {
+      type rt-types:timeticks64;
+      units "nanoseconds";
+      description
+        "The time that the current Measurement Interval started.
+         The value is the timestamp in nanoseconds relative to the
+         Unix Epoch.";
+    }
+
+    leaf elapsed-time {
+      type uint32 {
+        range "0..2147483647";
+      }
+      units "milliseconds";
+      description
+        "The time in milliseconds that the current Measurement
+         Interval has been running";
+    }
+  }
+
+  grouping delay-measurement-stats {
+    description
+      "Grouping of Delay Measurement statistics for a PM session.";
+
+    container counters {
+      description
+        "Container of Delay Measurement counters for a PM session.";
+
+      leaf soam-pdus-sent {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs sent
+           during this Measurement Interval.";
+      }
+
+      leaf soam-pdus-received {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs
+           received in this Measurement Interval.";
+      }
+    }
+
+    leaf frame-delay-two-way-min {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the minimum two-way frame delay calculated
+         by this MEP for this Measurement Interval.";
+    }
+
+    leaf frame-delay-two-way-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum two-way frame delay calculated
+         by this MEP for this Measurement Interval.";
+    }
+
+    leaf frame-delay-two-way-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average two-way frame delay calculated
+         by this MEP for this Measurement Interval.";
+    }
+
+    leaf frame-delay-forward-min {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the minimum one-way frame delay in the
+         forward direction calculated by this MEP for this Measurement
+         Interval. The value of this object may not be accurate in the
+         absence of sufficiently precise clock synchronization.";
+    }
+
+    leaf frame-delay-forward-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum one-way frame delay in the
+         forward direction calculated by this MEP for this Measurement
+         Interval. The value of this object may not be accurate in the
+         absence of sufficiently precise clock synchronization.";
+    }
+
+    leaf frame-delay-forward-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average one-way frame delay in the
+         forward direction calculated by this MEP for this Measurement
+         Interval. The value of this object may not be accurate in the
+         absence of sufficiently precise clock synchronization.";
+    }
+
+    leaf frame-delay-backward-min {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the minimum one-way frame delay in the
+         backward direction calculated by this MEP for this Measurement
+         Interval. The value of this object may not be accurate in the
+         absence of sufficiently precise clock synchronization.";
+    }
+
+    leaf frame-delay-backward-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum one-way frame delay in the
+         backward direction calculated by this MEP for this Measurement
+         Interval. The value of this object may not be accurate in the
+         absence of sufficiently precise clock synchronization.";
+    }
+
+    leaf frame-delay-backward-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average one-way frame delay in the
+         backward direction calculated by this MEP for this Measurement
+         Interval. The value of this object may not be accurate in the
+         absence of sufficiently precise clock synchronization.";
+    }
+
+    leaf inter-frame-delay-variation-forward-min {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the minimum one-way inter-frame delay
+         interval in the forward direction calculated by this MEP for
+         this Measurement Interval.";
+    }
+
+    leaf inter-frame-delay-variation-forward-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum one-way inter-frame delay
+         interval in the forward direction calculated by this MEP for
+         this Measurement Interval.";
+    }
+
+    leaf inter-frame-delay-variation-forward-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average one-way inter-frame delay
+         interval in the forward direction calculated by this MEP for
+         this Measurement Interval.";
+    }
+
+    leaf inter-frame-delay-variation-backward-min {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the minimum one-way inter-frame delay
+         interval in the backward direction calculated by this MEP for
+         this Measurement Interval.";
+    }
+
+    leaf inter-frame-delay-variation-backward-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum one-way inter-frame delay
+         interval in the backward direction calculated by this MEP for
+         this Measurement Interval.";
+    }
+
+    leaf inter-frame-delay-variation-backward-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average one-way inter-frame delay
+         interval in the backward direction calculated by this MEP for
+         this Measurement Interval.";
+    }
+
+    leaf inter-frame-delay-variation-two-way-min {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the minimum two-way inter-frame delay
+         interval calculated by this MEP for this Measurement
+         Interval.";
+    }
+
+    leaf inter-frame-delay-variation-two-way-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum two-way inter-frame delay
+         interval calculated by this MEP for this Measurement
+         Interval.";
+    }
+
+    leaf inter-frame-delay-variation-two-way-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average two-way inter-frame delay
+         interval calculated by this MEP for this Measurement
+         Interval.";
+    }
+
+    leaf frame-delay-range-forward-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum one-way Frame Delay Range in
+         the forward direction calculated by this MEP for this
+         Measurement Interval.";
+    }
+
+    leaf frame-delay-range-forward-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average one-way Frame Delay Range in
+         the forward direction calculated by this MEP for this
+         Measurement Interval.";
+    }
+
+    leaf frame-delay-range-backward-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum one-way Frame Delay Range in
+         the backward direction calculated by this MEP for this
+         Measurement Interval.";
+    }
+
+    leaf frame-delay-range-backward-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average one-way Frame Delay Range in
+         the backward direction calculated by this MEP for this
+         Measurement Interval.";
+    }
+
+    leaf frame-delay-range-two-way-max {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the maximum two-way Frame Delay Range
+         calculated by this MEP for this Measurement Interval.";
+    }
+
+    leaf frame-delay-range-two-way-average {
+      type uint32;
+      units "microseconds";
+      description
+        "This object contains the average two-way Frame Delay Range
+         calculated by this MEP for this Measurement Interval.";
+    }
+  }
+
+  grouping delay-measurement-bins-content {
+    description
+      "Grouping of measurement bin objects for Delay Measurement
+       session.";
+
+    leaf bin {
+      type uint32;
+      description
+        "This object specifies the bin number for the configured
+         boundary.  The first bin has bin number 1.";
+    }
+
+    leaf lower-bound {
+      type uint32;
+      units "microseconds";
+      description
+        "This object specifies the lower boundary for a measurement bin.
+         The upper boundary is defined by the next bin value or infinite
+         for the last bin defined.  The measurement boundary for each
+         measurement bin is to be larger than the measurement boundary
+         of the preceding measurement bin. By default, the next bin is
+         set to 5000us larger than the lower bin boundary.
+
+         The values in a bin boundary object represents the time range
+         used to segregate delay data into the appropriate statistical
+         data bin. For five bins with default values, each bin has the
+         following time range:
+
+         Bin 1 = 0, range is 0us
+         Bin 2 = 5000, range is 5,000us
+         Bin 3 = 10000, range is 10,000us
+         Bin 4 = 15000, range is 15,000us
+         Bin 5 = 20000, range is 20,000us
+
+         The first bin boundary (number set to 1) always contains the
+         value of 0. Attempting to write a non-zero value to this bin
+         will result in an error.";
+    }
+
+    leaf complete-measurements {
+      type uint32;
+      description
+        "This object contains the count of the number of completed
+         measurements initiated in this Measurement Interval whose value
+         falls within the range specified for this bin (that is, greater
+         than or equal to the measurement boundary for the bin, and
+         (unless the bin is the last bin) less than the measurement
+         boundary for the following bin.";
+    }
+  }
+
+  grouping delay-measurement-bins {
+    description
+      "This grouping contains the top-level structure for the three
+       types of measurements (frame delay, inter frame delay variation,
+       and frame delay range)";
+
+    container bins {
+      description
+        "This container defines the bins content for FD, IFDR, and FDR
+         sessions.";
+
+      list frame-delay {
+        key "type bin";
+
+        description
+          "Data definitions related to frame delay bins content.";
+
+        leaf type {
+          type enumeration {
+            enum TWO_WAY_FRAME_DELAY {
+              description
+                "Indicates a measurement bin for two-way Frame Delay.";
+            }
+            enum FORWARD_FRAME_DELAY {
+              description
+                "Indicates a measurement bin for one-way Frame Delay in
+                 the forward direction.";
+            }
+            enum BACKWARD_FRAME_DELAY {
+              description
+                "Indicates a measurement bin for one-way Frame Delay in
+                 the backward direction.";
+            }
+          }
+          description
+            "This object specifies type of Frame Delay Bin.";
+        }
+
+        uses delay-measurement-bins-content;
+      }
+
+      list inter-frame-delay-variation {
+        key "type bin";
+
+        description
+          "Data definitions related to inter frame delay bins content.";
+
+        leaf type {
+          type enumeration {
+            enum TWO_WAY_INTER_FRAME_DELAY_VARIATION {
+              description
+                "Indicates a measurement bin for two-way Inter-frame
+                 Delay Variation.";
+            }
+            enum FORWARD_INTER_FRAME_DELAY_VARIATION {
+              description
+                "Indicates a measurement bin for one-way Inter-frame
+                 Delay Variation in the forward direction.";
+            }
+            enum BACKWARD_INTER_FRAME_DELAY_VARIATION {
+              description
+                "Indicates a measurement bin for one-way Inter-frame
+                 Delay Variation in the backward direction.";
+            }
+          }
+          description
+            "This object specifies type of Inter Frame Delay Bin.";
+        }
+
+        uses delay-measurement-bins-content;
+      }
+
+      list frame-delay-range {
+        key "type bin";
+        description
+          "Data definitions related to frame delay range bins content.";
+
+        leaf type {
+          type enumeration {
+            enum TWO_WAY_FRAME_DELAY_RANGE {
+              description
+                "Indicates a measurement bin for two-way Frame Delay
+                 Range.";
+            }
+            enum FORWARD_FRAME_DELAY_RANGE {
+              description
+                "Indicates a measurement bin for one-way Frame Delay
+                 Range in the forward direction.";
+            }
+            enum BACKWARD_FRAME_DELAY_RANGE {
+              description
+                "Indicates a measurement bin for one-way Frame Delay
+                 Range in the backward direction.";
+            }
+          }
+          description
+            "This object specifies type of Frame Delay Range.";
+        }
+
+        uses delay-measurement-bins-content;
+      }
+    }
+  }
+
+  grouping delay-measurement-history {
+    description
+      "Grouping of Delay Measurement history records.";
+
+    list history {
+      key id;
+      description
+        "A list of results for history of Delay Measurement over the
+         measurement interval.";
+
+      leaf id {
+        type uint32;
+        description
+          "The identifier for the Measurement Interval within this
+           PM session.";
+      }
+
+      uses performance-monitoring-interval-stats;
+      uses delay-measurement-stats;
+      uses delay-measurement-bins;
+
+      leaf end-time {
+        type rt-types:timeticks64;
+        units "nanoseconds";
+        description
+          "The time that the current Measurement Interval closed.
+           The value is the timestamp in nanoseconds relative to the
+           Unix Epoch.";
+      }
+    }
+  }
+
+  grouping loss-measurement-profile-stats {
+    description
+      "Grouping of Loss Measurement profile statistics for a PM
+       session.";
+
+    container counters {
+      description
+        "Container of Loss Measurement profile counters for a PM
+         session.";
+
+      leaf soam-pdus-skipped-threshold {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs
+           skipped to be sent as threshold was hit. SOAM PDUs will be
+           skipped when no response PDU is received";
+      }
+
+      leaf soam-pdus-skipped-threshold-window {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs
+           skipped for this threshold window";
+      }
+
+      leaf soam-pdus-out-of-sequence {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs
+           which were received out of sequence.";
+      }
+
+      leaf local-tx-frames-last-sent {
+        type yang:counter32;
+        description
+          "This object contains the count of the local TxFCl which was
+           last sent. This is applicable for SLM only.";
+      }
+
+      leaf local-rx-frames-last-sent {
+        type yang:counter32;
+        description
+          "This object contains the count of the local RxFCl which was
+           last sent. This is applicable for SLM only.";
+      }
+
+      leaf forward-tx-frames-last-received {
+        type yang:counter32;
+        description
+          "This object contains the count of the received TxFCl in the
+           SOAM PDU. This is applicable for SLM only.";
+      }
+
+      leaf backward-tx-frames-last-received {
+        type yang:counter32;
+        description
+          "This object contains the count of the received TxFCb in the
+           SOAM PDU. This is applicable for SLM only.";
+      }
+
+      leaf frame-loss-ratio-samples {
+        type yang:counter32;
+        description
+          "This object contains the count of the sample where the
+           frame loss calculation was done";
+      }
+
+      leaf soam-pdus-forwarding-class-mismatch {
+        type yang:counter32;
+        description
+          "This object contains the count of the received SOAM PDUs with
+           a mismatch with the forwading class, This is applicable for
+           LMM only.";
+      }
+    }
+
+    leaf sample-size {
+      type uint32;
+      description
+        "Number of SOAM PDUs considered for availability calculations";
+    }
+
+    leaf last-forward-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the last one-way frame loss ratio in
+         the forward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+
+    leaf last-backward-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the last one-way frame loss ratio in
+         the backward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+  }
+
+  grouping loss-measurement-stats {
+    description
+      "Grouping of Loss Measurement statistics for a PM session.";
+
+    container counters {
+      description
+        "Container of Loss Measurement counters for a PM session.";
+
+      leaf soam-pdus-sent {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs
+           sent during this Measurement Interval.  This object applies
+           when type is lmm, slm or ccm. It indicates the number of LMM,
+           CCM, or SLM SOAM frames transmitted.";
+      }
+
+      leaf soam-pdus-received {
+        type yang:counter32;
+        description
+          "This object contains the count of the number of SOAM PDUs
+           PDUs received in this Measurement Interval.  This object
+           applies when type is lmm, slm, or ccm. This object indicates
+           the number of LMR, CCM, or SLR SOAM frames received.";
+      }
+
+      leaf forward-frames-sent {
+        type yang:counter32;
+        description
+          "This object contains the number of frames transmitted in the
+           forward direction by this MEP.  For a PM Session of types lmm
+           or ccm this includes Ethernet Service Frames and SOAM PDUs
+           that are in a higher MEG level only.  For a PM Session of
+           type slm this includes the count of SOAM ETH-SLM frames
+           only.";
+      }
+
+      leaf forward-frames-received {
+        type yang:counter32;
+        description
+          "This object contains the number of frames received in the
+           forward direction by this MEP.  For a PM Session of types lmm
+           or ccm this includes Ethernet Service Frames and SOAM PDUs
+           that are in a higher MEG level only.  For a PM Session of
+           type slm this includes the count of SOAM ETH-SLM frames
+           only.";
+      }
+
+      leaf backward-frames-sent {
+        type yang:counter32;
+        description
+          "This object contains the number of frames transmitted in the
+           backward direction by this MEP.  For a PM Session of type lmm
+           or ccm this includes Ethernet Service Frames and SOAM PDUs
+           that are in a higher MEG level only.  For a PM Session of
+           type slm this includes the count of SOAM ETH-SLM frames
+           only.";
+      }
+
+      leaf backward-frames-received {
+        type yang:counter32;
+        description
+          "This object contains the number of frames received in the
+           backward direction by this MEP.  For a PM Session of type lmm
+           this includes Ethernet Service Frames and SOAM PDUs that are
+           in a higher MEG level only.  For a PM Session of type slm
+           this includes the count of SOAM ETH-SLM frames only.";
+      }
+
+      leaf forward-frames-lost {
+        type yang:counter32;
+        description
+          "This object contains the number of frames lost in the forward
+           direction by this MEP. For a PM Session of type lmm this
+           includes Ethernet Service Frames and SOAM PDUs that are in a
+           higher MEG level only.  For a PM Session of type slm this
+           includes the count of SOAM ETH-SLM frames only.";
+      }
+
+      leaf backward-frames-lost {
+        type yang:counter32;
+        description
+          "This object contains the number of frames lost in the backward
+           direction by this MEP. For a PM Session of type lmm this
+           includes Ethernet Service Frames and SOAM PDUs that are in
+           a higher MEG level only.  For a PM Session of type slm this
+           includes the count of SOAM ETH-SLM frames only.";
+      }
+    }
+
+    leaf forward-min-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the minimum one-way frame loss ratio in
+         the forward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+
+    leaf forward-max-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the maximum one-way frame loss ratio in
+         the forward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+
+    leaf forward-average-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the average one-way frame loss ratio in
+         the forward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+
+    leaf backward-min-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the minimum one-way frame loss ratio in
+         the backward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+
+    leaf backward-max-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the maximum one-way frame loss ratio in
+         the backward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+
+    leaf backward-average-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the average one-way frame loss ratio in
+         the backward direction calculated by this MEP for this
+         Measurement Interval. The FLR value is a ratio that is
+         expressed as a percent.";
+    }
+  }
+
+  grouping loss-measurement-availability {
+    description
+      "Grouping of Loss Measurement availability statistics.";
+
+    leaf forward-high-loss {
+      type uint32;
+      description
+        "This object is the number of high loss intervals (HLI) over
+         time in the forward direction.  The value starts at 0 and
+         increments for every HLI that occurs.";
+    }
+
+    leaf backward-high-loss {
+      type uint32;
+      description
+        "This object is the number of high loss intervals (HLI) over
+         time in the backward direction.  The value starts at 0 and
+         increments for every HLI that occurs.";
+    }
+
+    leaf forward-consecutive-high-loss {
+      type uint32;
+      description
+        "This object is the number of consecutive high loss intervals
+         (CHLI) over time in the forward direction.  The value starts at
+         0 and increments for every HLI that occurs.";
+    }
+
+    leaf backward-consecutive-high-loss {
+      type uint32;
+      description
+        "This object is the number of consecutive high loss intervals
+         (CHLI) over time in the backward direction.  The value starts
+         at 0 and increments for every HLI that occurs.";
+    }
+
+    leaf forward-available {
+      type uint32;
+      description
+        "This object contains the number of availability indicators
+         during a small time interval evaluated as available (low frame
+         loss) in the forward direction by this MEP during this
+         measurement interval.";
+    }
+
+    leaf backward-available {
+      type uint32;
+      description
+        "This object contains the number of availability indicators
+         during a small time interval evaluated as available (low frame
+         loss) in the backward direction by this MEP during this
+         measurement interval.";
+    }
+
+    leaf forward-unavailable {
+      type uint32;
+      description
+        "This object contains the number of availability indicators
+         during a small time interval evaluated as unavailable (high
+         frame loss) in the forward direction by this MEP during this
+         measurement interval.";
+    }
+
+    leaf backward-unavailable {
+      type uint32;
+      description
+        "This object contains the number of availability indicators
+         during a small time interval evaluated as unavailable (high
+         frame loss) in the backward direction by this MEP during this
+         measurement interval.";
+    }
+
+    leaf forward-min-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the minimum one-way availability flr in
+         the forward direction, from among the set of availability flr
+         values calculated by the MEP in this Measurement Interval.
+         There is one availability flr value for each 'delta_t' time
+         period within the Measurement Interval, as specified in MEF
+         10.2.1. The flr value is a ratio that is expressed as a
+         percent.";
+    }
+
+    leaf forward-max-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the maximum one-way availability flr in
+         the forward direction, from among the set of availability flr
+         values calculated by the MEP in this Measurement Interval.
+         There is one availability flr value for each 'delta_t' time
+         period within the Measurement Interval, as specified in MEF
+         10.2.1. The flr value is a ratio that is expressed as a
+         percent.";
+    }
+
+    leaf forward-average-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the average one-way availability flr in
+         the forward direction, from among the set of availability flr
+         values calculated by the MEP in this Measurement Interval.
+         There is one availability flr value for each 'delta_t' time
+         period within the Measurement Interval, as specified in MEF
+         10.2.1.  The flr value is a ratio that is expressed as a
+         percent.";
+    }
+
+    leaf backward-min-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the minimum one-way availability flr in
+         the backward direction, from among the set of availability flr
+         values calculated by the MEP in this Measurement Interval.
+         There is one availability flr value for each 'delta_t' time
+         period within the Measurement Interval, as specified in MEF
+         10.2.1.  The flr value is a ratio that is expressed as a
+         percent.";
+    }
+
+    leaf backward-max-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the maximum one-way availability flr in
+         the backward direction, from among the set of availability flr
+         values calculated by the MEP in this Measurement Interval.
+         There is one availability flr value for each 'delta_t' time
+         period within the Measurement Interval, as specified in MEF
+         10.2.1.  The flr value is a ratio that is expressed as a
+         percent.";
+    }
+
+    leaf backward-average-frame-loss-ratio {
+      type decimal64 {
+        fraction-digits 3;
+        range "0.0..100.0";
+      }
+      description
+        "This object contains the average one-way availability flr in
+         the backward direction, from among the set of availability flr
+         values calculated by the MEP in this Measurement Interval.
+         There is one availability flr value for each 'delta_t' time
+         period within the Measurement Interval, as specified in MEF
+         10.2.1.  The flr value is a ratio that is expressed as a
+         percent.";
+    }
+  }
+
+  grouping loss-measurement-history {
+    description
+      "Grouping of Loss Measurement history records.";
+
+    list history {
+      key id;
+      description
+        "A list of results for history of Loss Measurement over the
+         measurement interval.";
+
+      leaf id {
+        type uint32;
+        description
+          "The identifier for the Measurement Interval within this
+           PM session.";
+      }
+
+      container loss {
+        description
+          "Enclosing container for Loss Measurement Interval Loss
+           statistics";
+
+        uses performance-monitoring-interval-stats;
+        uses loss-measurement-stats;
+
+        leaf end-time {
+          type rt-types:timeticks64;
+          units "nanoseconds";
+          description
+            "The time that the current Measurement Interval closed.
+             The value is the timestamp in nanoseconds relative to the
+             Unix Epoch.";
+        }
+      }
+
+      container availability {
+        description
+          "Enclosing container for Loss Measurement Interval
+           Availability statistics";
+
+        uses performance-monitoring-interval-stats;
+        uses loss-measurement-availability;
+
+        leaf end-time {
+          type rt-types:timeticks64;
+          units "nanoseconds";
+          description
+            "The time that the current Measurement Interval closed.
+             The value is the timestamp in nanoseconds relative to the
+             Unix Epoch.";
+        }
+      }
+    }
+  }
+
+  grouping cfm-delay-measurements {
+    description
+      "Grouping of Delay measurement (DM) statistics and history
+       records.";
+
+    list delay-measurement {
+      key name;
+      description
+        "A list of Delay Measurement PM Sessions where each instance is
+         uniquely identified by a name";
+
+      leaf name {
+        type string;
+        description
+          "This object uniquely identifies a scheduled measurement.";
+      }
+
+      leaf measurement-type {
+        type enumeration {
+          enum DMM {
+            description
+              "DMM SOAM PDU generated, DMR responses received.";
+          }
+          enum 1DM {
+            description
+               "1DM SOAM PDU generated.";
+          }
+        }
+        description
+          "Indicates the measurement type for delay measurements.";
+      }
+
+      uses performance-monitoring-session;
+
+      container current {
+        description
+          "Enclosing container for Delay Measurement current
+           statistics.";
+
+        uses performance-monitoring-interval-stats;
+        uses delay-measurement-stats;
+        uses delay-measurement-bins;
+      }
+
+      container histories {
+        description
+          "Enclosing container for history measurement intervals for
+           Delay Measurement session.";
+
+        uses delay-measurement-history;
+      }
+    }
+  }
+
+  grouping cfm-loss-measurements {
+    description
+      "Grouping of Loss measurement statistics and history records.";
+
+    list loss-measurement {
+      key name;
+      description
+        "A list of Loss Measurement PM Sessions where each instance is
+         uniquely identified by a name";
+
+      leaf name {
+        type string;
+        description
+          "This object uniquely identifies a scheduled measurement.";
+      }
+
+      leaf measurement-type {
+        type enumeration {
+          enum LMM {
+            description
+              "LMM SOAM PDU generated and received LMR responses
+               tracked.";
+          }
+          enum SLM {
+            description
+               "SLM SOAM PDU generated and received SLR responses
+                tracked.";
+          }
+        }
+        description
+          "Indicates the measurement type for loss measurements.";
+      }
+
+      uses performance-monitoring-session;
+
+      container current {
+        description
+          "Enclosing container for Loss Measurement current
+           statistics.";
+
+        container iterator {
+          description
+            "Enclosing container for Loss Measurement iterator profile
+             statistics";
+          uses loss-measurement-profile-stats;
+        }
+
+        container loss {
+          description
+            "Enclosing container for Loss Measurement Interval Loss
+             statistics";
+
+          uses performance-monitoring-interval-stats;
+          uses loss-measurement-stats;
+        }
+
+        container availability {
+          description
+            "Enclosing container for Loss Measurement Interval
+             Availability statistics";
+
+          uses performance-monitoring-interval-stats;
+          uses loss-measurement-availability;
+
+          leaf last-forward-status {
+            type availability-type;
+            description
+              "This object indicates the availability status (the
+               outcome of the last availability indicator) in the
+               forward direction based upon the last received SOAM
+               PDU.";
+          }
+
+          leaf last-backward-status {
+            type availability-type;
+            description
+              "This object indicates the availability status (the
+               outcome of the last availability indicator) in the
+               backward direction based upon the last received SOAM
+               PDU.";
+          }
+
+          leaf last-forward-transition-time {
+            type rt-types:timeticks64;
+            units "nanoseconds";
+            description
+              "This object indicates the time of the last transition
+               between available and unavailable in the forward
+               direction.  If there have been no transitions since the
+               Loss Measurement Session was started, this is set to 0.
+               The value is the timestamp in nanoseconds relative to the
+               Unix Epoch.";
+          }
+
+          leaf last-backward-transition-time {
+            type rt-types:timeticks64;
+            units "nanoseconds";
+            description
+              "This object indicates the time of the last transition
+               between available and unavailable in the backward
+               direction.  If there have been no transitions since the
+               Loss Measurement Session was started, this is set to 0.
+               The value is the timestamp in nanoseconds relative to the
+               Unix Epoch.";
+          }
+        }
+      }
+
+      container histories {
+        description
+          "Enclosing container for history measurement intervals for
+           Loss Measurement session.";
+
+        uses loss-measurement-history;
+      }
+    }
+  }
+
+  grouping cfm-rmeps {
+    description
+      "Grouping of Remote Maintenance association End Points (RMEPs).";
+
+    list rmep {
+      key id;
+      description
+        "A list of Remote Maintenance association End Points (RMEPs).";
+
+      leaf id {
+        type uint16 {
+          range "1..8191";
+        }
+        description
+          "Remote Maintenance association End Point Identifier, which
+           is either learnt or configured.";
+      }
+
+      leaf status {
+        type enumeration {
+          enum IDLE {
+            description
+              "Momentary state during reset.";
+          }
+          enum START {
+            description
+              "The timer has not expired since the state machine
+              was reset, and no valid CCM has yet been received.";
+          }
+          enum FAILED {
+            description
+              "The timer has expired, both since the state machine was
+              reset, and since a valid CCM was received.";
+          }
+          enum OK {
+            description
+              "The timer has not expired since a valid CCM was
+               received.";
+          }
+        }
+        description
+          "The operational state of the remote MEP state machine.";
+      }
+
+      leaf mac-address {
+        type yang:mac-address;
+        description
+          "The MAC address of the remote MEP.";
+      }
+
+      leaf rmep-type {
+        type enumeration {
+          enum CONFIGURED {
+            description
+              "Remote MEP created by configuration.";
+          }
+          enum LEARNED {
+            description
+              "Remote MEP created by auto-discovery.";
+          }
+        }
+        description
+          "Indicates if the RMEP has been learnt from CCM PDUs
+           or configured.";
+      }
+
+      leaf interface {
+        type string;
+        description
+          "Interface from which the CCMs were received.";
+      }
+
+      leaf last-flapped {
+        type rt-types:timeticks64;
+        units "nanoseconds";
+        description
+          "Time when the session last flapped. If session never went
+           down, 0 will indicate it. The value is the timestamp in
+           nanoseconds relative to the Unix Epoch.";
+      }
+
+      leaf continuity {
+        type uint8 {
+          range "0..100";
+        }
+        description
+          "Indicates in percentage the duration for which the service
+           remained up.";
+      }
+
+      leaf loss-threshold {
+        type uint16;
+        description
+          "Number of continuity-check messages lost before marking
+           endpoint as down";
+      }
+
+      leaf rdi {
+        type boolean;
+        description
+          "An indication of the state of the Remote Defect Indicator
+           (RDI) bit in the last received CCM.";
+      }
+
+      leaf port-status-tlv {
+        type port-status-tlv-type;
+        description
+          "An enumerated value of the Port status TLV received in the
+           last CCM from the remote MEP or the default value indicating
+           either no CCM has been received, or that no port status TLV
+           was received in the last CCM.";
+      }
+
+      leaf interface-status-tlv {
+        type interface-status-tlv-type;
+        description
+          "An enumerated value of the Interface status TLV received in
+           the last CCM from the remote MEP or the default value
+           indicating either no CCM has been received, or that no
+           interface status TLV was received in the last CCM";
+      }
+
+      leaf chassis-id {
+        type string;
+        description
+          "The Chassis ID which will be sent in CCMs if configured.";
+      }
+
+      leaf management-address {
+        type inet:ip-address;
+        description
+          "The IPv4 or IPv6 management address which will be sent in
+           CCMs if configured.";
+      }
+
+      leaf send-id-tlv {
+        type boolean;
+        description
+          "Value indicating if Sender ID TLV is transmitted by MEPs.";
+      }
+
+      container action-profile {
+        description
+          "Enclosing container for any action profile which has
+           been configured on this RMEP.";
+        uses cfm-action-profile;
+      }
+
+      container performance-monitoring {
+        description
+          "Enclosing container for the Performance Monitoring (PM)
+           session of delay measurement or loss measurements configured
+           on this RMEP.";
+
+        container delay-measurements {
+          description
+            "Enclosing container for Delay measurements configured on
+             this RMEP.";
+          uses cfm-delay-measurements;
+        }
+        container loss-measurements {
+          description
+            "Enclosing container for Loss measurements configured on
+             this RMEP.";
+          uses cfm-loss-measurements;
+        }
+      }
+    }
+  }
+
+  grouping cfm-meps {
+    description
+      "Grouping of Maintenance association End Points (MEPs).";
+
+    list mep {
+      key id;
+      description
+        "A list of local Maintenance association End Points (MEPs).";
+
+      leaf id {
+        type uint16 {
+          range "1..8191";
+        }
+        description
+          "Maintenance association End Point Identifier, which is
+           unique over a given Maintenance Association.";
+      }
+
+      leaf mac-address {
+        type yang:mac-address;
+        description
+          "MAC address of the MEP.";
+      }
+
+      leaf direction {
+        type enumeration {
+          enum DOWN {
+            description
+              "Down maintenance point.";
+          }
+          enum UP {
+            description
+              "Up maintenance point.";
+          }
+        }
+        description
+          "The direction in which the MEP faces.";
+      }
+
+      leaf auto-discovery {
+        type boolean;
+        description
+          "Accept continuity-check messages from all remote MEPs";
+      }
+
+      leaf ccm-ltm-priority {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "The priority value for CCMs and LTMs transmitted by
+           the MEP.";
+      }
+
+      leaf interface-status {
+        type enumeration {
+          enum DISABLED {
+            description
+              "Services are not enabled on the interface.";
+          }
+          enum ACTIVE {
+            description
+              "Services are enabled and can run on the interface.";
+          }
+          enum INACTIVE {
+            description
+              "Services are configured, but the interface is not
+               available yet.";
+          }
+          enum UNSUPPORTED {
+            description
+              "Services are configured, but are not supported on this
+               interface.";
+          }
+        }
+        description
+          "Indicates the status of the link. Whether
+           it is active/inactive/unsupported.";
+      }
+
+      leaf link-status {
+        type enumeration {
+          enum UP {
+            description
+              "The interface has an operational link";
+          }
+          enum DOWN {
+            description
+              "The interface does not have an operational link";
+          }
+          enum OAM_DOWN {
+            description
+              "OAM detected a failure, and marked the interface down";
+          }
+        }
+        description
+          "Indicates the status of the link.";
+      }
+
+      leaf port-status-tlv {
+        type port-status-tlv-type;
+        description
+          "An enumerated value of the Port status TLV
+           which will be transmitted in the PDU if enabled.";
+      }
+
+      leaf interface-status-tlv {
+        type interface-status-tlv-type;
+        description
+          "An enumerated value of the Interface status TLV
+           which will be transmitted in the PDU if enabled.";
+      }
+
+      leaf chassis-id {
+        type string;
+        description
+          "The Chassis ID which will be sent in CCMs if configured.";
+      }
+
+      leaf management-address {
+        type inet:ip-address;
+        description
+          "The management address which will be sent in CCMs if
+           configured.";
+      }
+
+      leaf send-id-tlv {
+        type boolean;
+        description
+          "Value indicating if Sender ID TLV is transmitted by MEPs.";
+      }
+
+      container rmeps {
+        description
+          "Enclosing container for Remote Maintenance association End
+           Points (RMEPs).";
+
+        uses cfm-rmeps;
+      }
+    }
+  }
+
+  grouping cfm-maintenance-association {
+    description
+      "Grouping of maintenance associations";
+
+    list maintenance-association {
+      key name;
+      description
+        "Contains the Maintenance Association operational data.";
+
+      leaf name {
+        type string;
+        description
+          "Name of the Maintenance Association.";
+      }
+
+      leaf format {
+        type enumeration {
+          enum VLAN {
+            description
+              "VLAN ID. 12 bits represented in a 2-octet integer.";
+          }
+          enum CHAR_STRING {
+            description
+              "RFC2579 DisplayString, except that the character codes
+               0-31 (decimal) are not used.";
+          }
+          enum 2OCTET {
+            description
+              "2-octet integer.";
+          }
+          enum RFC2865_VPN_ID {
+            description
+              "RFC2685 VPN ID. 3 octet VPN authority Organizationally
+               Unique Identifier followed by 4 octet VPN index
+               identifying VPN according to the OUI.";
+          }
+          enum ICC {
+            description
+              "ITU Carrier Code";
+          }
+        }
+        description
+          "Maintenance Association name format";
+      }
+
+      leaf ccm-interval {
+        type enumeration {
+          enum NONE {
+            description
+              "No Interval specified.";
+          }
+          enum 300HZ {
+            description
+              "CCM PDUs are sent every 3 1/3 milliseconds (300Hz).";
+          }
+          enum 10MS {
+            description
+              "CCM PDUs are sent every 10 milliseconds.";
+          }
+          enum 100MS {
+            description
+              "CCM PDUs are sent every 100 milliseconds.";
+          }
+          enum 1SEC {
+            description
+              "CCM PDUs are sent every second.";
+          }
+          enum 10SEC {
+            description
+              "CCM PDUs are sent every 10 seconds.";
+          }
+          enum 1MIN {
+            description
+              "CCM PDUs are sent every minute.";
+          }
+          enum 10MIN {
+            description
+              "CCM PDUs are sent every 10 minutes.";
+          }
+        }
+        description
+          "The interval between CCM transmissions to be used by all
+           MEPs in the Maintenance Association.";
+      }
+
+      leaf loss-threshold {
+        type uint16 {
+          range "3..256";
+        }
+        description
+          "Number of continuity-check messages lost before marking
+           endpoint as down";
+      }
+
+      leaf continuity-check-status {
+        type boolean;
+        description
+          "Indicates whether the MEP can generate CCMs. If
+           TRUE, the MEP will generate CCM PDUs.";
+      }
+
+      container meps {
+        description
+          "Enclosing container for Maintenance association End Points
+           (MEPs).";
+
+        uses cfm-meps;
+      }
+    }
+  }
+
+  grouping cfm-maintenance-domain {
+    description
+      "Grouping of maintenance domains";
+
+    list maintenance-domain {
+      key name;
+      description
+        "Contains the Maintenance Domain operational data.";
+
+      leaf name {
+        type string;
+        description
+          "Name of the Maintenance Domain";
+      }
+
+      leaf level {
+        type uint8 {
+          range "0..7";
+        }
+        description
+          "Integer identifying the Maintenance Domain Level (MD
+           Level).";
+      }
+
+      leaf format {
+        type enumeration {
+          enum NONE {
+            description
+              "No format specified.";
+          }
+          enum DNS {
+            description
+              "Domain name like string, globally unique text string
+               derived from a DNS name.";
+          }
+          enum MAC_ADDRESS_AND_UINT {
+            description
+              "MAC address plus 2-octet (unsigned) integer.";
+          }
+          enum CHAR_STRING {
+            description
+              "RFC2579 DisplayString, except that the character
+               codes 0-31 (decimal) are not used.";
+          }
+        }
+        description
+        "Maintenance Domain name format";
+      }
+
+      container maintenance-associations {
+        description
+          "Enclosing container for Maintenance Associations under
+           the Maintenance Domain.";
+
+        uses cfm-maintenance-association;
+      }
+    }
+  }
+
+  grouping cfm-interfaces-top {
+    description
+      "Top-level grouping for CFM interface related state";
+
+    container interfaces {
+      description
+        "Enclosing container for list of CFM enabled interfaces";
+
+      list interface {
+        key name;
+        description
+          "List of CFM enabled interfaces";
+
+        leaf name {
+          type string;
+          description
+            "CFM enabled interface name";
+        }
+
+        leaf trunk-vlan {
+          type uint16;
+          description
+            "VLAN-ID if CFM is enabled on trunk interface. If not on
+             a trunk inteface, it will have invalid VLAN ID of 0xFFFF
+             (65535)";
+        }
+
+        container maintenance-domains {
+          description
+            "Enclosing container for Maintenance Domains which are
+             created.";
+
+          uses cfm-maintenance-domain;
+        }
+      }
+    }
+  }
+
+  grouping cfm-top {
+    description
+      "Top-level grouping for CFM state data";
+
+    container connectivity-fault-management {
+      description
+        "Container for CFM state";
+
+
+      uses cfm-global-top;
+      uses cfm-interfaces-top;
+    }
+  }
+
+  augment "/js:state/js-pro:protocols/js-oam:oam/js-oam:ethernet" {
+    description
+      "Adds CFM domain to OAM ethernet protocol state";
+
+    uses cfm-top;
+  }
+}

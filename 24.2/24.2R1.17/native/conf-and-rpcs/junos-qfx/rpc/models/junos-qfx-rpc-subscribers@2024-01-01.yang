@@ -1,0 +1,1777 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-subscribers {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/subscribers";
+
+   prefix subscribers;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for subscribers command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-subscribers {
+     description "Show subscriber information";
+     input {
+       leaf address {
+         description "IPv4 or IPv6 address of subscriber";
+         type string;
+       }
+       leaf interface {
+         description "Interface name, or with wildcards (e.g. fe-0/0/*, fe-0/*/*)";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf physical-interface {
+         description "Physical Interface name";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf user-name {
+         description "User name of subscriber";
+         type string;
+       }
+       leaf logical-system {
+         description "Logical system where subscriber resides";
+         type string;
+       }
+       leaf routing-instance {
+         description "Routing instance where subscriber resides";
+         type string;
+       }
+       leaf profile-name {
+         description "Profile with which subscriber has been activated";
+         type string {
+           length "1 .. 80";
+         }
+       }
+       leaf agent-circuit-identifier {
+         description "Display summary for specified agent circuit identifier";
+         type string;
+       }
+       leaf agent-remote-identifier {
+         description "Display summary for specified agent remote identifier";
+         type string;
+       }
+       leaf aci-interface-set-name {
+         description "Display summary for specified ACI interface set";
+         type string;
+       }
+       leaf aggregation-interface-set-name {
+         description "Display summary for specified aggregation interface set";
+         type string;
+       }
+       leaf stacked-vlan-id {
+         description "Stacked VLAN identifier of subscriber";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint16 {
+             range "1 .. 4094";
+           }
+         }
+       }
+       leaf vlan-id {
+         description "VLAN identifier of subscriber";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint16 {
+             range "1 .. 4094";
+           }
+         }
+       }
+       leaf vpi {
+         description "ATM VPI of subscriber";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint16 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf vci {
+         description "ATM VCI of subscriber";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint16 {
+             range "0 .. 65535";
+           }
+         }
+       }
+       leaf id {
+         description "Identifier of subscriber";
+         type union {
+           type uint64;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf accounting-statistics {
+         description "Display accounting statistics for subscriber";
+         type empty;
+       }
+       leaf mac-address {
+         description "MAC address of subscriber";
+         type jt:mac-addr;
+       }
+       leaf client-type {
+         description "Client type of subscriber";
+         type enumeration {
+           enum "dhcp" {
+             description "DHCP clients only";
+           }
+           enum "vlan" {
+             description "VLAN clients only";
+           }
+           enum "ppp" {
+             description "PPP clients only";
+           }
+           enum "pppoe" {
+             description "PPPoE clients only";
+           }
+           enum "l2tp" {
+             description "L2TP clients only";
+           }
+           enum "static" {
+             description "Static clients only";
+           }
+           enum "vpls-pw" {
+             description "VPLS-PW clients only";
+           }
+           enum "mlppp" {
+             description "MLPPP clients only";
+           }
+           enum "xauth" {
+             description "XAuth clients only";
+           }
+           enum "fwauth" {
+             description "FwAuth clients only";
+           }
+           enum "dot1x" {
+             description "Dot1x clients only";
+           }
+           enum "essm" {
+             description "ESSM clients only";
+           }
+           enum "l2ckt-pw" {
+             description "L2CKT-PW clients only";
+           }
+           enum "gre" {
+             description "GRE clients only";
+           }
+           enum "vlan-oob" {
+             description "VLAN out-of-band clients only";
+           }
+           enum "dyn-ip" {
+             description "Dynamic IP clients only";
+           }
+           enum "hag-tunnel" {
+             description "HAG tunnel clients only";
+           }
+           enum "hag-bundle" {
+             description "HAG bundle clients only";
+           }
+           enum "fixed-wireless-access" {
+             description "Fixed Wireless Access clients only";
+           }
+         }
+       }
+       leaf subscriber-state {
+         description "State of subscriber";
+         type enumeration {
+           enum "init" {
+             description "INIT state only";
+           }
+           enum "configured" {
+             description "CONFIGURED state only";
+           }
+           enum "active" {
+             description "ACTIVE state only";
+           }
+           enum "terminating" {
+             description "TERMINATING state only";
+           }
+           enum "terminated" {
+             description "TERMINATED state only";
+           }
+         }
+       }
+       leaf display {
+         default "terse";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "count" {
+             description "Display number of subscribers";
+           }
+         }
+       }
+     }
+     output {
+       container subscribers-information {
+         uses subscribers-information-block;
+       }
+     }
+   }
+   rpc get-subscriber-license-usage {
+     description "Display last 48 hours License usage";
+     output {
+       container subscriber-lic-information {
+         uses subscriber-lic-information-block;
+       }
+     }
+   }
+   rpc get-subscribers-summary {
+     description "Display subscriber summary";
+     input {
+       leaf logical-system {
+         description "Display summary for specified logical system";
+         type string;
+       }
+       leaf routing-instance {
+         description "Display summary for specified routing instance";
+         type string;
+       }
+       leaf physical-interface {
+         description "Physical Interface name";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf pic {
+         description "Display full subscriber pic summary";
+         type empty;
+       }
+       leaf slot {
+         description "Display full subscriber slot summary";
+         type empty;
+       }
+       leaf all {
+         description "Display full subscriber summary";
+         type empty;
+       }
+     }
+     output {
+       container subscribers-summary-information {
+         uses subscribers-summary-information-block;
+       }
+     }
+   }
+   rpc get-subscribers-port-summary {
+     description "Display full subscriber port summary";
+     input {
+       leaf extensive {
+         description "Display full subscriber port detail";
+         type empty;
+       }
+     }
+     output {
+       container subscribers-summary-information {
+         uses subscribers-summary-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping subscribers-information-block {
+     list subscriber {
+       description "Active subscriber";
+       leaf interface {
+         type string;
+         description "Interface name of subscriber";
+       }
+       leaf ip-address {
+         type string;
+         description "IP address of subscriber";
+       }
+       leaf ipv6-address {
+         type string;
+         description "IPv6 address of subscriber";
+       }
+       leaf stacked-vlan-id {
+         type int32;
+         description "Stacked VLAN identifier";
+       }
+       leaf vlan-id {
+         type int32;
+         description "VLAN identifier";
+       }
+       leaf user-name {
+         type string;
+         description "User name of subscriber";
+       }
+       leaf logical-system {
+         type string;
+         description "Logical system where the subscriber resides";
+       }
+       leaf routing-instance {
+         type string;
+         description "Routing instance where the subscriber resides";
+       }
+       leaf actual-data-rate-upstream {
+         type int32;
+         description "Actual upstream data rate";
+       }
+       leaf actual-data-rate-downstream {
+         type int32;
+         description "Actual downstream data rate";
+       }
+       leaf minimum-data-rate-upstream {
+         type int32;
+         description "Minimum upstream data rate";
+       }
+       leaf minimum-data-rate-downstream {
+         type int32;
+         description "Minimum downstream data rate";
+       }
+       leaf attainable-data-rate-upstream {
+         type int32;
+         description "Attainable upstream data rate";
+       }
+       leaf attainable-data-rate-downstream {
+         type int32;
+         description "Attainable downstream data rate";
+       }
+       leaf maximum-data-rate-upstream {
+         type int32;
+         description "Maximum upstream data rate";
+       }
+       leaf maximum-data-rate-downstream {
+         type int32;
+         description "Maximum downstream data rate";
+       }
+       leaf minimum-net-low-power-data-rate-upstream {
+         type int32;
+         description "Minimum net low power upstream data rate";
+       }
+       leaf minimum-net-low-power-data-rate-downstream {
+         type int32;
+         description "Minimum net low power downstream data rate";
+       }
+       leaf maximum-interleaving-delay-upstream {
+         type int32;
+         description "Maximum interleaving upstream delay";
+       }
+       leaf maximum-interleaving-delay-downstream {
+         type int32;
+         description "Maximum interleaving downstream delay";
+       }
+       leaf actual-interleaving-delay-upstream {
+         type int32;
+         description "Actual interleaving upstream delay";
+       }
+       leaf actual-interleaving-delay-downstream {
+         type int32;
+         description "Actual interleaving downstream delay";
+       }
+       leaf dsl-line-state {
+         type string;
+         description "DSL line state";
+       }
+       leaf access-loop-encapsulation {
+         type string;
+         description "Access loop encapsulation";
+       }
+       leaf ont-onu-average-data-rate-downstream {
+         type int32;
+         description "ONT/ONU average downstream data rate";
+       }
+       leaf ont-onu-peak-data-rate-downstream {
+         type int32;
+         description "ONT/ONU peak downstream data rate";
+       }
+       leaf ont-onu-max-data-rate-upstream {
+         type int32;
+         description "ONT/ONU maximum upstream data rate";
+       }
+       leaf ont-onu-assured-data-rate-upstream {
+         type int32;
+         description "ONT/ONU assured upstream data rate";
+       }
+       leaf pon-tree-max-data-rate-upstream {
+         type int32;
+         description "PON tree maximum upstream data rate";
+       }
+       leaf pon-tree-max-data-rate-downstream {
+         type int32;
+         description "PON tree maximum downstream data rate";
+       }
+       leaf expected-throughput-upstream {
+         type int32;
+         description "Expected throughput upstream";
+       }
+       leaf expected-throughput-downstream {
+         type int32;
+         description "Expected throughput downstream";
+       }
+       leaf attainable-expected-throughput-upstream {
+         type int32;
+         description "Attainable expected throughput upstream";
+       }
+       leaf attainable-expected-throughput-downstream {
+         type int32;
+         description "Attainable expected throughput downstream";
+       }
+       leaf gamma-throughput-upstream {
+         type int32;
+         description "Gamma data rate upstream";
+       }
+       leaf gamma-throughput-downstream {
+         type int32;
+         description "Gamma data rate downstream";
+       }
+       leaf attainable-gamma-throughput-upstream {
+         type int32;
+         description "Attainable gamma data rate upstream";
+       }
+       leaf attainable-gamma-throughput-downstream {
+         type int32;
+         description "Attainable gamma data rate downstream";
+       }
+       leaf interworking-function {
+         type int32;
+         description "Interworking Function";
+       }
+       leaf access-aggregation-circuit-id {
+         type string;
+         description "Access Aggregation Circuit ID";
+       }
+       leaf access-aggregation-circuit-id-binary {
+         type string;
+         description "Access Aggregation Circuit ID Binary";
+       }
+       container access-line-attributes {
+         leaf agent-circuit-id {
+           type string;
+           description "Agent CID for this subscriber";
+         }
+         leaf agent-remote-id {
+           type string;
+           description "Agent RID for this subscriber";
+         }
+         leaf access-aggregation-circuit-id {
+           type string;
+           description "Access Aggregation Circuit ID";
+         }
+         leaf access-aggregation-circuit-id-binary {
+           type string;
+           description "Access Aggregation Circuit ID Binary";
+         }
+         leaf actual-data-rate-upstream {
+           type int32;
+           description "Actual upstream data rate";
+         }
+         leaf actual-data-rate-downstream {
+           type int32;
+           description "Actual downstream data rate";
+         }
+         leaf minimum-data-rate-upstream {
+           type int32;
+           description "Minimum upstream data rate";
+         }
+         leaf minimum-data-rate-downstream {
+           type int32;
+           description "Minimum downstream data rate";
+         }
+         leaf attainable-data-rate-upstream {
+           type int32;
+           description "Attainable upstream data rate";
+         }
+         leaf attainable-data-rate-downstream {
+           type int32;
+           description "Attainable downstream data rate";
+         }
+         leaf maximum-data-rate-upstream {
+           type int32;
+           description "Maximum upstream data rate";
+         }
+         leaf maximum-data-rate-downstream {
+           type int32;
+           description "Maximum downstream data rate";
+         }
+         leaf minimum-net-low-power-data-rate-upstream {
+           type int32;
+           description "Minimum net low power upstream data rate";
+         }
+         leaf minimum-net-low-power-data-rate-downstream {
+           type int32;
+           description "Minimum net low power downstream data rate";
+         }
+         leaf maximum-interleaving-delay-upstream {
+           type int32;
+           description "Maximum interleaving upstream delay";
+         }
+         leaf maximum-interleaving-delay-downstream {
+           type int32;
+           description "Maximum interleaving downstream delay";
+         }
+         leaf actual-interleaving-delay-upstream {
+           type int32;
+           description "Actual interleaving upstream delay";
+         }
+         leaf actual-interleaving-delay-downstream {
+           type int32;
+           description "Actual interleaving downstream delay";
+         }
+         leaf dsl-line-state {
+           type string;
+           description "DSL line state";
+         }
+         leaf access-loop-encapsulation {
+           type string;
+           description "Access loop encapsulation";
+         }
+         leaf dsl-type {
+           type int32;
+           description "DSL type";
+         }
+         leaf pon-type {
+           type int32;
+           description "PON type";
+         }
+         leaf ont-onu-average-data-rate-downstream {
+           type int32;
+           description "ONT/ONU average downstream data rate";
+         }
+         leaf ont-onu-peak-data-rate-downstream {
+           type int32;
+           description "ONT/ONU peak downstream data rate";
+         }
+         leaf ont-onu-max-data-rate-upstream {
+           type int32;
+           description "ONT/ONU maximum upstream data rate";
+         }
+         leaf ont-onu-assured-data-rate-upstream {
+           type int32;
+           description "ONT/ONU assured upstream data rate";
+         }
+         leaf pon-tree-max-data-rate-upstream {
+           type int32;
+           description "PON tree maximum upstream data rate";
+         }
+         leaf pon-tree-max-data-rate-downstream {
+           type int32;
+           description "PON tree maximum downstream data rate";
+         }
+         leaf expected-throughput-upstream {
+           type int32;
+           description "Expected throughput upstream";
+         }
+         leaf expected-throughput-downstream {
+           type int32;
+           description "Expected throughput downstream";
+         }
+         leaf attainable-expected-throughput-upstream {
+           type int32;
+           description "Attainable expected throughput upstream";
+         }
+         leaf attainable-expected-throughput-downstream {
+           type int32;
+           description "Attainable expected throughput downstream";
+         }
+         leaf gamma-throughput-upstream {
+           type int32;
+           description "Gamma data rate upstream";
+         }
+         leaf gamma-throughput-downstream {
+           type int32;
+           description "Gamma data rate downstream";
+         }
+         leaf attainable-gamma-throughput-upstream {
+           type int32;
+           description "Attainable gamma data rate upstream";
+         }
+         leaf attainable-gamma-throughput-downstream {
+           type int32;
+           description "Attainable gamma data rate downstream";
+         }
+         leaf interworking-function {
+           type int32;
+           description "Interworking Function";
+         }
+         container access-line-attribute {
+           leaf attribute-type {
+             type string;
+             description "Attribute type";
+           }
+           leaf attribute-length {
+             type int32;
+             description "Attribute length";
+           }
+           leaf hex-data {
+             type string;
+             description "Hex data";
+           }
+         }
+       }
+       leaf session-id {
+         type string;
+         description "Session ID";
+       }
+       leaf control-plane-instance {
+         type string;
+         description "Control Plane instance";
+       }
+       leaf sgrp-name {
+         type string;
+         description "Subscriber group name";
+       }
+       leaf up-ports {
+         type string;
+         description "User Plane/Port names";
+       }
+       leaf bb-device-id {
+         type string;
+         description "Broadband device identifier";
+       }
+       leaf subscriber-resiliency-state {
+         type string;
+         description "Resiliency State of Subscriber";
+       }
+       leaf-list no-attributes {
+         type string;
+       }
+       leaf access-type {
+         type string;
+         description "Access type of subscriber";
+       }
+       leaf session-type {
+         type string;
+         description "Session type of subscriber";
+       }
+       leaf parent-session-id {
+         type string;
+         description "Parent sesssion Id of subscriber";
+       }
+       leaf ip-netmask {
+         type string;
+         description "IP netmask of subscriber";
+       }
+       leaf ipv6-prefix {
+         type string;
+         description "IPv6 prefix of subscriber";
+       }
+       leaf primary-dns-address {
+         type string;
+         description "Primary DNS address of subscriber";
+       }
+       leaf secondary-dns-address {
+         type string;
+         description "Secondary DNS address of subscriber";
+       }
+       leaf domain-name-server-inet {
+         type string;
+         description "Domain name server inet";
+       }
+       leaf domain-name-server-inet6 {
+         type string;
+         description "Domain name server inet6";
+       }
+       leaf primary-wins-address {
+         type string;
+         description "Primary WINS address of subscriber";
+       }
+       leaf secondary-wins-address {
+         type string;
+         description "Secondary WINS address of subscriber";
+       }
+       leaf ipv6-primary-dns-address {
+         type string;
+         description "IPV6 primary DNS address of subscriber";
+       }
+       leaf ipv6-secondary-dns-address {
+         type string;
+         description "IPV6 secondary DNS address of subscriber";
+       }
+       leaf ipv6-ndra-prefix {
+         type string;
+         description "IPv6 ndra prefix of subscriber";
+       }
+       leaf ipv6-user-prefix {
+         type string;
+         description "IPv6 prefix of subscriber";
+       }
+       leaf active-up-name-port {
+         type string;
+         description "Active User Plane/Port name";
+       }
+       leaf backup-up-name-port {
+         type string;
+         description "Backup User Plane/Port name";
+       }
+       leaf up-id {
+         type int32;
+         description "User Plane identifier";
+       }
+       leaf sgrp-id {
+         type int32;
+         description "Subscriber resiliency group identifier";
+       }
+       leaf tenant-name {
+         type string;
+         description "Tenant name of subscriber";
+       }
+       leaf interface-type {
+         type string;
+         description "Type of Interface subscriber is on";
+       }
+       leaf physical-interface {
+         type string;
+         description "Physical Interface name of subscriber";
+       }
+       leaf stacked-interface-set-name {
+         type string;
+         description "Stacked interface set which the subscriber is part of";
+       }
+       leaf interface-set-name {
+         type string;
+         description "Interface set which the subscriber is part of";
+       }
+       leaf interface-set-session-id {
+         type string;
+         description "Interface Set Session ID";
+       }
+       leaf underlying-interface {
+         type string;
+         description "Underlying Interface";
+       }
+       leaf interface-description {
+         type string;
+         description "Interface description";
+       }
+       leaf core-ifl-name {
+         type string;
+         description "Core Facing Interface Name";
+       }
+       leaf vlan-map-id {
+         type int32;
+         description "VLAN Map identifier for identifying trunk-vlan on core-ifl";
+       }
+       leaf inner-vlan-map-id {
+         type int32;
+         description "Inner VLAN Map identifier for core-ifl";
+       }
+       leaf inner-vlan-tag-protocol-id {
+         type int32;
+         description "Inner VLAN tag protocol id";
+       }
+       leaf atm-vpi-tag {
+         type int32;
+         description "ATM VPI tag";
+       }
+       leaf atm-vci-tag {
+         type int32;
+         description "ATM VCI tag";
+       }
+       leaf profile {
+         type string;
+         description "Dynamic profile with which subscriber is activated";
+       }
+       leaf version-alias {
+         type string;
+         description "Dynamic profile version alias, transmitted to RADIUS during authentication";
+       }
+       leaf profile-version {
+         type int32;
+         description "Dynamic profile version";
+       }
+       leaf mac-address {
+         type string;
+         description "MAC address of subscriber";
+       }
+       leaf agf-mode {
+         type string;
+         description "AGF Mode";
+       }
+       leaf gtpu-local-teid {
+         type int32;
+         description "GTPU Local TEID";
+       }
+       leaf gtpc-local-teid {
+         type int32;
+         description "GTPC Local TEID";
+       }
+       leaf gtpu-remote-teid {
+         type int32;
+         description "GTPU Remote TEID";
+       }
+       leaf gtpc-remote-teid {
+         type int32;
+         description "GTPC Remote TEID";
+       }
+       leaf gtpu-tunnel-remote-ip-address {
+         type string;
+         description "GTPU Tunnel Remote IP Address";
+       }
+       leaf gtpu-tunnel-local-ip-address {
+         type string;
+         description "GTPU Tunnel Local IP Address";
+       }
+       leaf gtpc-remote-ip-address {
+         type string;
+         description "GTPC Remote IP Address";
+       }
+       leaf gtpc-local-ip-address {
+         type string;
+         description "GTPC Local IP Address";
+       }
+       leaf fiveg-qos-flow-identifier {
+         type int32;
+         description "5G-QFI";
+       }
+       leaf access-point-name {
+         type string;
+         description "Access Point Name";
+       }
+       leaf gtpc-ebi {
+         type int32;
+         description "GTPC EBI";
+       }
+       leaf state {
+         type string;
+         description "State of subscriber";
+       }
+       leaf ppp-state {
+         type string;
+         description "PPP protocol state";
+       }
+       leaf l2tp-state {
+         type string;
+         description "L2TP protocol state";
+       }
+       leaf l2tp-tunnel-switch-profile-name {
+         type string;
+         description "Tunnel switch profile used by subscriber";
+       }
+       leaf local-ip-address {
+         type jt:ipaddr;
+         description "Local IP address of tunneled subscriber";
+       }
+       leaf remote-ip-address {
+         type jt:ipaddr;
+         description "Remote IP address of tunneled subscriber";
+       }
+       leaf gw-address {
+         type string;
+         description "DHCP Gateway IP address of subscriber";
+       }
+       leaf radius-accounting-id {
+         type string;
+         description "Radius Accounting ID of subscriber";
+       }
+       leaf underlying-session-id {
+         type string;
+         description "Underlying Session ID of DHCPv6 session over PPPoe";
+       }
+       leaf bundle-session-id {
+         type string;
+         description "Bundle Session ID of MLPPP member subscriber";
+       }
+       leaf pfe-flow-id {
+         type int32;
+         description "PFE Flow ID";
+       }
+       leaf hag-session-id {
+         type int32;
+         description "HAG Session ID";
+       }
+       leaf hag-tunnel-type {
+         type string;
+         description "HAG Tunnel Type";
+       }
+       leaf session-timeout {
+         type int32;
+         description "Session longevity of subscriber";
+       }
+       leaf idle-timeout {
+         type int32;
+         description "Session idle timeout of subscriber";
+       }
+       leaf idle-timeout-ingress-only {
+         type string;
+         description "Session idle timeout of subscriber is ingress only";
+       }
+       leaf reauthentication-capable {
+         type string;
+         description "Subscriber has re-authentication capability enabled";
+       }
+       leaf login-time {
+         type string;
+         description "Login time of subscriber";
+       }
+       leaf agent-circuit-id {
+         type string;
+         description "Agent CID for this subscriber";
+       }
+       leaf agent-remote-id {
+         type string;
+         description "Agent RID for this subscriber";
+       }
+       leaf aggregation-interface-set-name {
+         type string;
+         description "Aggregation interface set name";
+       }
+       leaf hex-data {
+         type string;
+         description "Hex data";
+       }
+       leaf number-of-service-sessions {
+         type int32;
+         description "Number of service sessions for this subscriber";
+       }
+       leaf dhcp-options {
+         type string;
+         description "DHCP options received from DHCP client";
+       }
+       leaf server-dhcp-options {
+         type string;
+         description "DHCP options returned from RADIUS server";
+       }
+       leaf dhcpv6-options {
+         type string;
+         description "DHCPv6 options received from DHCP client";
+       }
+       leaf server-dhcpv6-options {
+         type string;
+         description "DHCPv6 options returned from RADIUS server";
+       }
+       leaf dhcp-header {
+         type string;
+         description "DHCP header received from DHCP client";
+       }
+       leaf dhcpv6-header {
+         type string;
+         description "DHCPv6 header received from DHCPv6 client";
+       }
+       leaf on-demand-ip-address {
+         type string;
+         description "On-Demand IP address status for this session";
+       }
+       leaf service-group-name {
+         type string;
+         description "Service group AVP from access-accept";
+       }
+       leaf ipv4-input-filter-name {
+         type string;
+         description "IPv4 input filter name for this session";
+       }
+       leaf ipv4-output-filter-name {
+         type string;
+         description "IPv4 output filter name for this session";
+       }
+       leaf ipv6-input-filter-name {
+         type string;
+         description "IPv6 input filter name for this session";
+       }
+       leaf ipv6-output-filter-name {
+         type string;
+         description "IPv6 output filter name for this session";
+       }
+       leaf ifl-input-filter-name {
+         type string;
+         description "IFL input filter name for this session";
+       }
+       leaf ifl-output-filter-name {
+         type string;
+         description "IFL output filter name for this session";
+       }
+       leaf adfv4-input-filter-name {
+         type string;
+         description "ADF IPv4 input filter name for this session";
+       }
+       leaf adfv4-input-rule {
+         type string;
+         description "ADF IPv4 input rule for this session";
+       }
+       leaf adfv4-input-rule-decoded {
+         type string;
+         description "Decoded ADF IPv4 input rule for this session";
+       }
+       leaf adfv4-output-filter-name {
+         type string;
+         description "ADF IPv4 output filter name for this session";
+       }
+       leaf adfv4-output-rule {
+         type string;
+         description "ADF IPv4 output rule for this session";
+       }
+       leaf adfv4-output-rule-decoded {
+         type string;
+         description "Decoded ADF IPv4 output rule for this session";
+       }
+       leaf adfv6-input-filter-name {
+         type string;
+         description "ADF IPv6 input filter name for this session";
+       }
+       leaf adfv6-input-rule {
+         type string;
+         description "ADF IPv6 input rule for this session";
+       }
+       leaf adfv6-input-rule-decoded {
+         type string;
+         description "Decoded ADF IPv6 input rule for this session";
+       }
+       leaf adfv6-output-filter-name {
+         type string;
+         description "ADF IPv6 output filter name for this session";
+       }
+       leaf adfv6-output-rule {
+         type string;
+         description "ADF IPv6 output rule for this session";
+       }
+       leaf adfv6-output-rule-decoded {
+         type string;
+         description "Decoded ADF IPv6 output rule for this session";
+       }
+       leaf vpls-input-filter-name {
+         type string;
+         description "Vpls input filter name for this session";
+       }
+       leaf vpls-output-filter-name {
+         type string;
+         description "Vpls output filter name for this session";
+       }
+       leaf l2pol-input-filter-name {
+         type string;
+         description "L2 Policer input filter name for this session";
+       }
+       leaf l2pol-output-filter-name {
+         type string;
+         description "L2 Policer output filter name for this session";
+       }
+       leaf ipv4-rpf-check-fail-filter-name {
+         type string;
+         description "IPv4 rpf-check Fail Filter Name";
+       }
+       leaf ipv6-rpf-check-fail-filter-name {
+         type string;
+         description "IPv6 rpf-check Fail Filter Name";
+       }
+       leaf sgrp-refcnt {
+         type int32;
+         description "Subscriber resiliency group refcnt";
+       }
+       leaf session-generation {
+         type int32;
+         description "Subscriber resiliency session generation";
+       }
+       leaf ip-address-pool {
+         type string;
+         description "IP address pool name";
+       }
+       leaf ipv6-delegated-pool {
+         type string;
+         description "IPv6 delegated address pool name";
+       }
+       leaf ipv6-address-pool {
+         type string;
+         description "IPv6 address pool name";
+       }
+       leaf ipv6-interface-address {
+         type string;
+         description "IPv6 interface address of subscriber";
+       }
+       leaf ipv6-framed-interface-id {
+         type string;
+         description "IPv6 framed interface id";
+       }
+       leaf effective-shaping-rate {
+         type uint32;
+         description "Effective shaping-rate for this subscriber";
+       }
+       leaf accounting-interval {
+         type int32;
+         description "Accounting interval";
+       }
+       leaf ipv4-input-service-set {
+         type string;
+         description "IPv4 input service set for this session";
+       }
+       leaf ipv4-output-service-set {
+         type string;
+         description "IPv4 output service set for this session";
+       }
+       leaf ipv6-input-service-set {
+         type string;
+         description "IPv6 input service set for this session";
+       }
+       leaf ipv6-output-service-set {
+         type string;
+         description "IPv6 output service set for this session";
+       }
+       leaf pcef-profile {
+         type string;
+         description "PCEF profile for this session";
+       }
+       leaf pcef-rule {
+         type string;
+         description "PCEF rule or rulebase for this session";
+       }
+       leaf dsl-type {
+         type int32;
+         description "DSL type";
+       }
+       leaf pon-type {
+         type int32;
+         description "PON type";
+       }
+       leaf calculated-data-rate-upstream {
+         type int32;
+         description "Calculated upstream data rate";
+       }
+       leaf calculated-data-rate-downstream {
+         type int32;
+         description "Calculated downstream data rate";
+       }
+       leaf adjusted-data-rate-downstream {
+         type int32;
+         description "Adjusted downstream data rate";
+       }
+       leaf adjusted-aggregation-data-rate-downstream {
+         type int32;
+         description "Adjusted aggregation downstream data rate";
+       }
+       leaf overhead-accounting-mode {
+         type string;
+         description "Overhead accounting mode";
+       }
+       leaf overhead-accounting-bytes {
+         type int32;
+         description "Overhead accounting bytes";
+       }
+       leaf next-hop-mac-address {
+         type string;
+         description "Next Hop MAC address";
+       }
+       leaf next-hop-ipv6-mac-address {
+         type string;
+         description "Next Hop Ipv6 MAC address";
+       }
+       leaf service-session-id {
+         type string;
+         description "Session ID of service";
+       }
+       leaf service-session-name {
+         type string;
+         description "Name of service session";
+       }
+       leaf extensible-service-name {
+         type string;
+         description "Name of extensible service";
+       }
+       leaf service-session-version {
+         type int32;
+         description "Version of service session";
+       }
+       leaf service-session-type {
+         type string;
+         description "Session type of service";
+       }
+       leaf service-session-family {
+         type string;
+         description "Address family enabled on service session";
+       }
+       leaf service-activation-time {
+         type string;
+         description "Service Activation time";
+       }
+       leaf accounting-interval-service {
+         type int32;
+         description "Accounting interval";
+       }
+       leaf subscriber-id {
+         type string;
+         description "Session ID of subscriber";
+       }
+       leaf service-session-ids {
+         type string;
+         description "List of service session IDs for subscriber";
+       }
+       leaf private-data {
+         type string;
+         description "Private data";
+       }
+       leaf number-of-subscribers {
+         type int32;
+         description "Number of subscribers that match with search criteria";
+       }
+       leaf number-of-active-subscribers {
+         type int32;
+         description "Number of active subscribers that match with search criteria";
+       }
+       leaf acc-input-bytes {
+         type int32;
+         description "Input bytes for the subscriber";
+       }
+       leaf acc-output-bytes {
+         type int32;
+         description "Ouput bytes for the subscriber";
+       }
+       leaf acc-input-packets {
+         type int32;
+         description "Input packets for the subscriber";
+       }
+       leaf acc-output-packets {
+         type int32;
+         description "Output packets for the subscriber";
+       }
+     }
+     container error {
+       leaf pcef-input-error-message {
+         type string;
+         description "Input error message";
+       }
+       leaf pcef-error-message {
+         type string;
+         description "Error message";
+       }
+       leaf input-error-message {
+         type string;
+         description "Input error message";
+       }
+     }
+     container status {
+       leaf db-status-message {
+         type string;
+         description "Database status message";
+       }
+     }
+   }
+   grouping subscriber-lic-information-block {
+     list subscriber-license-hourly-usage {
+       description "Hourly license usage count for last 48 hours";
+       list subscriber-license-type {
+         description "Subscriber license type";
+         leaf subscriber-license {
+           type string;
+           description "Subscriber License name";
+         }
+       }
+       list subscriber-license-time-and-usage {
+         description "Hourly license usage count and time when it was collected";
+         leaf subscriber-usage-at-time {
+           type string;
+           description "Subscriber License Usage at time";
+         }
+         leaf subscriber-usage {
+           type uint32;
+           description "Subscriber License Usage at time";
+         }
+       }
+     }
+   }
+   grouping subscribers-summary-information-block {
+     list counters {
+       description "Session Summary";
+       leaf session-subsystem-agf {
+         type int32;
+         description "Total AGF sessions";
+       }
+       leaf session-subsystem-bng {
+         type int32;
+         description "Total BNG sessions";
+       }
+       leaf session-subsystem-total {
+         type int32;
+         description "Total subsystem sessions";
+       }
+       leaf session-total {
+         type int32;
+         description "Total sessions";
+       }
+       leaf session-state-init {
+         type int32;
+         description "Total init-state sessions";
+       }
+       leaf session-state-configured {
+         type int32;
+         description "Total configured-state sessions";
+       }
+       leaf session-state-active {
+         type int32;
+         description "Total active-state sessions";
+       }
+       leaf session-state-terminating {
+         type int32;
+         description "Total terminating-state sessions";
+       }
+       leaf session-state-terminated {
+         type int32;
+         description "Total terminated-state sessions";
+       }
+       leaf session-state-unknown {
+         type int32;
+         description "Total unknown-state sessions";
+       }
+       leaf session-state-total {
+         type int32;
+         description "Total state sessions";
+       }
+       leaf resiliency-state-active {
+         type int32;
+         description "Active resiliency state sessions";
+       }
+       leaf resiliency-state-backup {
+         type int32;
+         description "Backup resiliency state sessions";
+       }
+       leaf resiliency-state-total {
+         type int32;
+         description "Total resiliency state sessions";
+       }
+       leaf port-name {
+         type string;
+         description "Port name of subscriber";
+       }
+       leaf port-count {
+         type int32;
+         description "Number of subscribers in this port";
+       }
+       leaf session-type-none {
+         type int32;
+         description "Total none-type sessions";
+       }
+       leaf session-type-dhcp {
+         type int32;
+         description "Total dhcp-type sessions";
+       }
+       leaf session-type-vlan {
+         type int32;
+         description "Total vlan-type sessions";
+       }
+       leaf session-type-vlan-oob {
+         type int32;
+         description "Total out-of-band vlan type sessions";
+       }
+       leaf session-type-generic {
+         type int32;
+         description "Total generic-type sessions";
+       }
+       leaf session-type-mobileip {
+         type int32;
+         description "Total mobileip-type sessions";
+       }
+       leaf session-type-vpls-pw {
+         type int32;
+         description "Total vpls-pw-type sessions";
+       }
+       leaf session-type-ppp {
+         type int32;
+         description "Total ppp-type sessions";
+       }
+       leaf session-type-pppoe {
+         type int32;
+         description "Total pppoe-type sessions";
+       }
+       leaf session-type-l2tp {
+         type int32;
+         description "Total l2tp-type sessions";
+       }
+       leaf session-type-static {
+         type int32;
+         description "Total static-type sessions";
+       }
+       leaf session-type-mlppp {
+         type int32;
+         description "Total mlppp-type sessions";
+       }
+       leaf session-type-xauth {
+         type int32;
+         description "Total xauth-type sessions";
+       }
+       leaf session-type-fwauth {
+         type int32;
+         description "Total fwauth-type sessions";
+       }
+       leaf session-type-dot1x {
+         type int32;
+         description "Total fwauth-type sessions";
+       }
+       leaf session-type-essm {
+         type int32;
+         description "Total essm-type sessions";
+       }
+       leaf session-type-hag-bundle {
+         type int32;
+         description "Total hag-bundle-type sessions";
+       }
+       leaf session-type-hag-tunnel {
+         type int32;
+         description "Total hag-tunnel-type sessions";
+       }
+       leaf session-type-fixed-wireless-access {
+         type int32;
+         description "Total fixed wireless access sessions";
+       }
+       leaf session-type-unknown {
+         type int32;
+         description "Total unknown-type sessions";
+       }
+       leaf session-type-total {
+         type int32;
+         description "Total type sessions";
+       }
+       leaf tunneled-count {
+         type int32;
+         description "Total tunneled sessions";
+       }
+       leaf terminated-count {
+         type int32;
+         description "Total terminated sessions";
+       }
+       leaf cross-connected-count {
+         type int32;
+         description "Total cross-connected sessions";
+       }
+       leaf session-type-l2ckt-pw {
+         type int32;
+         description "Total l2ckt-pw-type sessions";
+       }
+       leaf session-type-gre {
+         type int32;
+         description "Total gre-type sessions";
+       }
+       leaf session-type-dyn-ip {
+         type int32;
+         description "Total dyn-ip type sessions";
+       }
+       leaf ifl-type-none {
+         type int32;
+         description "Total none type ifl";
+       }
+       leaf ifl-type-static {
+         type int32;
+         description "Total static type ifl";
+       }
+       leaf ifl-type-dynamic {
+         type int32;
+         description "Total dynamic type ifl";
+       }
+       leaf ifl-type-unknown {
+         type int32;
+         description "Total unknown type ifl";
+       }
+       leaf config-bit-interface {
+         type int32;
+         description "Total interface config bit";
+       }
+       leaf config-bit-inet {
+         type int32;
+         description "Total inet config bit";
+       }
+       leaf config-bit-inet-filter {
+         type int32;
+         description "Total inet filter config bit";
+       }
+       leaf config-bit-inet-service {
+         type int32;
+         description "Total inet service config bit";
+       }
+       leaf config-bit-routing-instance {
+         type int32;
+         description "Total routing instance config bit";
+       }
+       leaf config-bit-routing-options {
+         type int32;
+         description "Total routing options config bit";
+       }
+       leaf config-bit-igmp {
+         type int32;
+         description "Total IGMP config bit";
+       }
+       leaf config-bit-cos {
+         type int32;
+         description "Total COS config bit";
+       }
+       leaf config-bit-inet6 {
+         type int32;
+         description "Total inet6 config bit";
+       }
+       leaf config-bit-inet6-filter {
+         type int32;
+         description "Total inet6 filter config bit";
+       }
+       leaf config-bit-inet6-service {
+         type int32;
+         description "Total inet6 service config bit";
+       }
+       leaf config-bit-mld {
+         type int32;
+         description "Total MLD config bit";
+       }
+       leaf config-bit-li {
+         type int32;
+         description "Total LI config bit";
+       }
+       leaf config-bit-ra {
+         type int32;
+         description "Total RA config bit";
+       }
+       leaf config-bit-ifl-filter {
+         type int32;
+         description "Total IFL filter config bit";
+       }
+       leaf config-bit-access-internal {
+         type int32;
+         description "Total access internal config bit";
+       }
+       leaf config-bit-iflset {
+         type int32;
+         description "Total iflset config bit";
+       }
+       leaf config-bit-vpls {
+         type int32;
+         description "Total vpls config bit";
+       }
+       leaf config-bit-unknown {
+         type int32;
+         description "Total unknown config bit";
+       }
+       leaf lsri-name {
+         type string;
+         description "LS:RI";
+       }
+       leaf lsri-count {
+         type int32;
+         description "Number of subscribers in this LS:RI";
+       }
+       leaf lsri-total {
+         type int32;
+         description "Total sessions in LS:RIs";
+       }
+       leaf port-total {
+         type int32;
+         description "Total sessions in port";
+       }
+     }
+   }
+ }

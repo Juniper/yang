@@ -1,0 +1,783 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-dhcp-security {
+   namespace "http://yang.juniper.net/junos/rpc/dhcp-security";
+
+   prefix dhcp-security;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for dhcp-security command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-dhcp-security-arp-inspection-statistics {
+     description "Show DHCP security ARP inspection statistics";
+     junos:command "show dhcp-security arp inspection statistics";
+     output {
+       container dhcp-dai-information {
+         uses dhcp-dai-information-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-binding {
+     description "Show dhcp-security bindings";
+     junos:command "show dhcp-security binding";
+     output {
+       container dhcp-security-binding {
+         uses dhcp-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-binding-interface {
+     description "Name of interface on which to show bindings";
+     junos:command "show dhcp-security binding interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container dhcp-security-binding {
+         uses dhcp-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-binding-vlan {
+     description "Name of vlan on which to show bindings";
+     junos:command "show dhcp-security binding vlan";
+     input {
+       leaf vlan-name {
+         description "Name of vlan";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcp-security-binding {
+         uses dhcp-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-binding-ip-address {
+     description "Ip-address to show bindings";
+     junos:command "show dhcp-security binding ip-address";
+     input {
+       leaf ip-address {
+         description "Ip-address";
+         junos:cli-feature "nokeyword";
+         type jt:ipv4addr;
+         mandatory true;
+       }
+     }
+     output {
+       container dhcp-security-binding {
+         uses dhcp-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-binding-statistics {
+     description "Show DHCP snooping statistics";
+     junos:command "show dhcp-security binding statistics";
+     output {
+       container jdhcp-snooping-statistics {
+         uses jdhcp-snooping-statistics-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-ip-source-guard {
+     description "Show IP Source Guard information";
+     junos:command "show dhcp-security binding ip-source-guard";
+     output {
+       container dhcp-security-binding {
+         uses dhcp-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-binding-detail {
+     description "Show dhcp-security bindings detail";
+     junos:command "show dhcp-security binding detail";
+     output {
+       container dhcp-security-binding {
+         uses dhcp-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-nd-inspection-statistics {
+     description "Show neighbor discovery inspection statistics";
+     junos:command "show dhcp-security neighbor-discovery-inspection statistics";
+     output {
+       container dhcp-ndi-information {
+         uses dhcp-ndi-information-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-ndi-interface {
+     description "Name of interface for which to show statistics";
+     junos:command "show dhcp-security neighbor-discovery-inspection statistics interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+   }
+   rpc get-dhcp-ipv6-statistics {
+     description "Show DHCPv6 snooping statistics";
+     junos:command "show dhcp-security ipv6 statistics";
+   }
+   rpc get-dhcpv6-security-binding {
+     description "Show DHCPv6 security bindings";
+     junos:command "show dhcp-security ipv6 binding";
+     output {
+       container dhcpv6-security-binding {
+         uses dhcpv6-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-security-binding-interface {
+     description "Name of interface on which to show bindings";
+     junos:command "show dhcp-security ipv6 binding interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+         mandatory true;
+       }
+     }
+     output {
+       container dhcpv6-security-binding {
+         uses dhcpv6-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-security-binding-vlan {
+     description "Name of vlan on which to show bindings";
+     junos:command "show dhcp-security ipv6 binding vlan";
+     input {
+       leaf vlan-name {
+         description "Name of vlan";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dhcpv6-security-binding {
+         uses dhcpv6-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-security-binding-ip-address {
+     description "IPv6 address to show bindings";
+     junos:command "show dhcp-security ipv6 binding ipv6-address";
+     input {
+       leaf ipv6-address {
+         description "IPv6 address";
+         junos:cli-feature "nokeyword";
+         type jt:ipv6addr;
+         mandatory true;
+       }
+     }
+     output {
+       container dhcpv6-security-binding {
+         uses dhcpv6-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcpv6-security-binding-detail {
+     description "Show DHCPv6 security bindings detail";
+     junos:command "show dhcp-security ipv6 binding detail";
+     output {
+       container dhcpv6-security-binding {
+         uses dhcpv6-security-binding-block;
+       }
+     }
+   }
+   rpc get-dhcp-security-statistics {
+     description "Show DHCP security statistics";
+     junos:command "show dhcp-security statistics";
+     output {
+       container dhcp-security-statistics {
+         uses dhcp-security-statistics-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping dhcp-dai-information-block {
+     container dai-summary {
+       list dai-entry {
+         leaf ifd-name {
+           type string;
+           description "Interface name on which DAI stat collected";
+         }
+         leaf packets {
+           type uint64;
+         }
+         leaf pass {
+           type uint64;
+         }
+         leaf fail {
+           type uint64;
+         }
+       }
+     }
+   }
+   grouping dhcp-security-binding-block {
+     container dhcp-security-entries {
+       list dhcp-security-entry {
+         leaf ip-address {
+           type jt:ipaddr;
+           description "IP address of the client";
+         }
+         leaf hw-address {
+           type string;
+           description "MAC address of the client";
+         }
+         leaf vlan-name {
+           type string;
+           description "Vlan name of the client";
+         }
+         leaf lease-expiry {
+           type int32;
+           description "Lease expiry time in seconds";
+         }
+         leaf state {
+           type string;
+           description "State of the client";
+         }
+         leaf intf-name {
+           type string;
+           description "Input interface name";
+         }
+         container dhcp-client-options {
+           list dhcp-option {
+             leaf dhcp-option-code {
+               type int32;
+               description "Numeric code assigned to the DHCP option";
+             }
+             leaf dhcp-option-len {
+               type int32;
+               description "Length of the data in the DHCP option";
+             }
+             leaf dhcp-option-data {
+               type string;
+               description "Value of the DHCP option";
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping jdhcp-snooping-statistics-block {
+     leaf successful-transfers {
+       type int32;
+       description "Successful transfers";
+     }
+     leaf failed-transfers {
+       type int32;
+       description "Failed transfers";
+     }
+     leaf successful-reads {
+       type int32;
+       description "Successful reads";
+     }
+     leaf failed-reads {
+       type int32;
+       description "Failed reads";
+     }
+     leaf successful-writes {
+       type int32;
+       description "Successful writes";
+     }
+     leaf failed-writes {
+       type int32;
+       description "Failed writes";
+     }
+   }
+   grouping dhcp-ndi-information-block {
+     container ndi-summary {
+       list ndi-entry {
+         leaf ifd-name {
+           type string;
+           description "Interface name on which DAI stat collected";
+         }
+         leaf packets {
+           type uint64;
+         }
+         leaf pass {
+           type uint64;
+         }
+         leaf fail {
+           type uint64;
+         }
+       }
+     }
+   }
+   grouping dhcpv6-security-binding-block {
+     container dhcpv6-security-entries {
+       list dhcpv6-security-entry {
+         leaf ipv6-address {
+           type jt:ipv6addr;
+           description "IPv6 address of the client";
+         }
+         leaf hw-address {
+           type string;
+           description "MAC address of the client";
+         }
+         leaf vlan-name {
+           type string;
+           description "Vlan name of the client";
+         }
+         leaf lease-expiry {
+           type int32;
+           description "Lease expiry time in seconds";
+         }
+         leaf state {
+           type string;
+           description "State of the client";
+         }
+         leaf intf-name {
+           type string;
+           description "Input interface name";
+         }
+         container dhcp-client-options {
+           list dhcp-option {
+             leaf dhcp-option-code {
+               type int32;
+               description "Numeric code assigned to the DHCP option";
+             }
+             leaf dhcp-option-len {
+               type int32;
+               description "Length of the data in the DHCP option";
+             }
+             leaf dhcp-option-data {
+               type string;
+               description "Value of the DHCP option";
+             }
+           }
+         }
+         leaf ia-type {
+           type string;
+           description "Type of the client/snoop binding";
+         }
+       }
+     }
+   }
+   grouping dhcp-security-statistics-block {
+     leaf total {
+       type int32;
+     }
+     leaf discover {
+       type int32;
+     }
+     leaf offer {
+       type int32;
+     }
+     leaf request {
+       type int32;
+     }
+     leaf decline {
+       type int32;
+     }
+     leaf ack {
+       type int32;
+     }
+     leaf nack {
+       type int32;
+     }
+     leaf release {
+       type int32;
+     }
+     leaf inform {
+       type int32;
+     }
+     leaf force-renew {
+       type int32;
+     }
+     leaf renew {
+       type int32;
+     }
+     leaf rebind {
+       type int32;
+     }
+     leaf total-ce-mac-mismatch {
+       type int32;
+     }
+     leaf total-trans-stale-timer_expiry {
+       type int32;
+     }
+     leaf succ-updated-snoop-binding {
+       type int32;
+     }
+     leaf total-current-transient-ce {
+       type int32;
+     }
+     leaf request-learnt-on-trusted-port {
+       type int32;
+     }
+     leaf total-dropped {
+       type int32;
+     }
+     leaf no-cfg {
+       type int32;
+     }
+     leaf no-vlan {
+       type int32;
+     }
+     leaf no-ifl {
+       type int32;
+     }
+     leaf request-on-trusted-port {
+       type int32;
+     }
+     leaf server-id-mismatch {
+       type int32;
+     }
+     leaf first-packet-time {
+       type string;
+     }
+     leaf last-packet-time {
+       type string;
+     }
+     leaf process-time-in-seconds {
+       type int32;
+     }
+     leaf first-client-time {
+       type string;
+     }
+     leaf last-client-time {
+       type string;
+     }
+     leaf client-process-time-in-seconds {
+       type int32;
+     }
+     leaf mclag_rcvd_request {
+       type int32;
+     }
+     leaf mclag_rcvd_decline {
+       type int32;
+     }
+     leaf mclag_rcvd_ack {
+       type int32;
+     }
+     leaf mclag_rcvd_nack {
+       type int32;
+     }
+     leaf mclag_rcvd_release {
+       type int32;
+     }
+     leaf mclag_rcvd_snoop_binding {
+       type int32;
+     }
+     leaf mclag_rcvd_req_snoop_binding {
+       type int32;
+     }
+     leaf mclag_sent_request {
+       type int32;
+     }
+     leaf mclag_sent_decline {
+       type int32;
+     }
+     leaf mclag_sent_ack {
+       type int32;
+     }
+     leaf mclag_sent_nack {
+       type int32;
+     }
+     leaf mclag_sent_release {
+       type int32;
+     }
+     leaf mclag_sent_snoop_binding {
+       type int32;
+     }
+     leaf mclag_sent_req_snoop_binding {
+       type int32;
+     }
+     container mclag_redundancy_groups {
+       list mclag_redundancy_group_state {
+         leaf rg_id {
+           type int32;
+         }
+         leaf lr_id {
+           type int32;
+         }
+         leaf lr_name {
+           type string;
+         }
+         leaf ref_count {
+           type int32;
+         }
+         leaf connected {
+           type int32;
+         }
+         leaf up_time {
+           type int32;
+         }
+         leaf db_state {
+           type string;
+         }
+       }
+     }
+   }
+ }

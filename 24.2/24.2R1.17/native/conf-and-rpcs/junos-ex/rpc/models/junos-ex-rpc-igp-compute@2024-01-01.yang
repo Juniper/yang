@@ -1,0 +1,1353 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-igp-compute {
+   namespace "http://yang.juniper.net/junos-ex/rpc/igp-compute";
+
+   prefix igp-compute;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for igp-compute command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-igp-compute-database-information {
+     description "Database ";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-database-information {
+         uses igp-spf-compute-database-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-database-info-ospf {
+     description "OSPF protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-database-information {
+         uses igp-spf-compute-database-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-database-info-isis {
+     description "IS-IS protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-database-information {
+         uses igp-spf-compute-database-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-prefix-information {
+     description "Prefix ";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf destination {
+         description "Prefix";
+         type jt:ipprefix;
+       }
+     }
+     output {
+       container igp-spf-compute-prefixes-information {
+         uses igp-spf-compute-prefixes-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-prefix-info-isis {
+     description "IS-IS protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf destination {
+         description "Prefix";
+         type jt:ipprefix;
+       }
+     }
+     output {
+       container igp-spf-compute-prefixes-information {
+         uses igp-spf-compute-prefixes-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-prefix-info-ospf {
+     description "OSPF protocol";
+     input {
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf destination {
+         description "Prefix ";
+         type jt:ipprefix;
+       }
+     }
+     output {
+       container igp-spf-compute-prefixes-information {
+         uses igp-spf-compute-prefixes-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-results-information {
+     description "SPF results";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-spf-results-information {
+         uses igp-spf-compute-spf-results-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-results-info-isis {
+     description "IS-IS protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-spf-results-information {
+         uses igp-spf-compute-spf-results-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-results-info-ospf {
+     description "OSPF protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-spf-results-information {
+         uses igp-spf-compute-spf-results-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-backup-results-information {
+     description "Backup SPF results";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-spf-backup-results-information {
+         uses igp-spf-compute-spf-backup-results-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-backup-results-info-isis {
+     description "IS-IS protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-spf-backup-results-information {
+         uses igp-spf-compute-spf-backup-results-information-block;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-backup-results-info-ospf {
+     description "OSPF protocol";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         type string;
+       }
+     }
+     output {
+       container igp-spf-compute-spf-backup-results-information {
+         uses igp-spf-compute-spf-backup-results-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping igp-spf-compute-database-information-block {
+     container igp-spf-compute-database-summary {
+       leaf igp-spf-compute-topo-name {
+         type string;
+       }
+       leaf igp-spf-compute-topo-node-count {
+         type uint32;
+       }
+     }
+     container igp-spf-compute-database {
+       description "IGP SPF compute database";
+       list igp-spf-compute-database-node {
+         leaf igp-spf-compute-node-id {
+           type string;
+         }
+         leaf igp-spf-compute-router-id {
+           type string;
+         }
+         leaf igp-spf-compute-node-type {
+           type string;
+         }
+         leaf igp-spf-compute-node-links {
+           type uint32;
+         }
+         list igp-spf-compute-database-neighbor {
+           leaf igp-spf-compute-neighbor-node-id {
+             type string;
+           }
+           leaf igp-spf-compute-neighbor-router-id {
+             type string;
+           }
+           leaf igp-spf-compute-intf-ipv4-local {
+             type jt:ipaddr;
+           }
+           leaf igp-spf-compute-intf-ipv4-remote {
+             type jt:ipaddr;
+           }
+           leaf igp-spf-compute-intf-ipv6-local {
+             type jt:ipv6addr;
+           }
+           leaf igp-spf-compute-intf-ipv6-remote {
+             type jt:ipv6addr;
+           }
+           leaf igp-spf-compute-intf-metric {
+             type uint32;
+           }
+           leaf igp-spf-compute-intf-inv-nbr {
+             type string;
+           }
+           leaf igp-spf-compute-intf-idx-local {
+             type uint32;
+           }
+           leaf igp-spf-compute-intf-flags {
+             type string;
+           }
+           leaf igp-spf-compute-intf-fad-cons-fail {
+             type string;
+           }
+           container igp-spf-compute-intf-srlg {
+             leaf igp-spf-compute-intf-srlg.heading {
+               type string;
+             }
+             leaf-list igp-spf-compute-intf-srlg-name {
+               type string;
+             }
+           }
+           container igp-spf-compute-intf-fate-sharing {
+             leaf igp-spf-compute-intf-fate-sharing.heading {
+               type string;
+             }
+             leaf-list igp-spf-compute-intf-fate-sharing-id {
+               type uint32;
+             }
+           }
+           container igp-spf-compute-intf-mpls-adj-sid {
+             leaf igp-spf-compute-intf-mpls-adj-sid.heading {
+               type string;
+             }
+             leaf igp-spf-compute-intf-mpls-v4-adj-sid {
+               type uint32;
+             }
+             leaf igp-spf-compute-intf-mpls-v4-adj-sid-flags {
+               type string;
+             }
+             leaf igp-spf-compute-intf-mpls-v6-adj-sid {
+               type uint32;
+             }
+             leaf igp-spf-compute-intf-mpls-v6-adj-sid-flags {
+               type string;
+             }
+           }
+           container igp-spf-compute-intf-srv6-end-x-sid {
+             leaf igp-spf-compute-intf-srv6-end-x-sid.heading {
+               type string;
+             }
+             leaf igp-spf-compute-intf-srv6-end-x-sid-addr {
+               type jt:ipv6addr;
+             }
+             leaf igp-spf-compute-intf-srv6-end-x-sid-flavor {
+               type string;
+             }
+             leaf igp-spf-compute-intf-srv6-end-x-sid-flags {
+               type string;
+             }
+           }
+         }
+         container igp-spf-compute-srv6-locator {
+           leaf igp-spf-compute-srv6-locator.heading {
+             type string;
+           }
+           leaf igp-spf-compute-srv6-locator-addr {
+             type jt:ipv6addr;
+           }
+           leaf igp-spf-compute-prefix-type {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-isis-attributes {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-ospf-attributes {
+             type string;
+           }
+           container igp-spf-compute-srv6-end-sid {
+             leaf igp-spf-compute-srv6-end-sid.heading {
+               type string;
+             }
+             leaf igp-spf-compute-srv6-end-sid-addr {
+               type jt:ipv6addr;
+             }
+             leaf igp-spf-compute-srv6-end-sid-flavor {
+               type string;
+             }
+           }
+         }
+         container igp-spf-compute-database-prefixes {
+           list igp-spf-compute-database-prefix {
+             leaf igp-spf-compute-prefix-address {
+               type string;
+             }
+             leaf igp-spf-compute-prefix-metric {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-type {
+               type string;
+             }
+             leaf igp-spf-compute-prefix-isis-attributes {
+               type string;
+             }
+             leaf igp-spf-compute-prefix-ospf-attributes {
+               type string;
+             }
+             leaf igp-spf-compute-prefix-srv6-locator {
+               type string;
+             }
+             container igp-spf-compute-prefix-seg {
+               leaf igp-spf-compute-prefix-seg-label {
+                 type uint32;
+               }
+               leaf igp-spf-compute-prefix-seg-index {
+                 type uint32;
+               }
+               leaf igp-spf-compute-prefix-seg-algo {
+                 type uint32;
+               }
+               leaf igp-spf-compute-prefix-seg-flags {
+                 type string;
+               }
+             }
+           }
+           leaf igp-spf-compute-database-prefixes.heading {
+             type string;
+           }
+         }
+         leaf igp-spf-compute-node-flags {
+           type string;
+         }
+         container igp-spf-compute-mpls-node-sid {
+           leaf igp-spf-compute-mpls-node-sid.heading {
+             type string;
+           }
+           leaf igp-spf-compute-mpls-v4-node-sid {
+             type uint32;
+           }
+           leaf igp-spf-compute-mpls-v6-node-sid {
+             type uint32;
+           }
+         }
+         container igp-spf-compute-srgb {
+           leaf igp-spf-compute-srgb.heading {
+             type string;
+           }
+           leaf igp-spf-compute-srgb-block-start {
+             type uint32;
+           }
+           leaf igp-spf-compute-srgb-block-range {
+             type uint32;
+           }
+         }
+         container igp-spf-compute-mpls-mpsvr-node-sid {
+           leaf igp-spf-compute-mpls-mpsvr-node-sid.heading {
+             type string;
+           }
+           leaf igp-spf-compute-mpls-mpsvr-v4-node-sid {
+             type uint32;
+           }
+           leaf igp-spf-compute-mpls-mpsvr-v6-node-sid {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping igp-spf-compute-prefixes-information-block {
+     container igp-spf-compute-prefixes-summary {
+       leaf igp-spf-compute-topo-name {
+         type string;
+       }
+       leaf igp-spf-compute-topo-prefix-count {
+         type uint32;
+       }
+       leaf igp-spf-compute-topo-node-count {
+         type uint32;
+       }
+     }
+     container igp-spf-compute-prefixes {
+       list igp-spf-compute-prefix {
+         leaf igp-spf-compute-prefix-address {
+           type string;
+         }
+         container igp-spf-compute-prefix-mpsvr-seg {
+           leaf igp-spf-compute-prefix-mpsvr-range {
+             type uint32;
+           }
+           leaf igp-spf-compute-prefix-mpsvr-flags {
+             type string;
+           }
+           container igp-spf-compute-prefix-seg {
+             leaf igp-spf-compute-prefix-seg-label {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-seg-index {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-seg-algo {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-seg-flags {
+               type string;
+             }
+           }
+         }
+         list igp-spf-compute-prefix-node {
+           leaf igp-spf-compute-node-id {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-metric {
+             type uint32;
+           }
+           leaf igp-spf-compute-prefix-type {
+             type string;
+           }
+           leaf igp-spf-compute-router-id {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-isis-attributes {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-ospf-attributes {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-route-type {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-mpsvr-node-flags {
+             type string;
+           }
+           leaf igp-spf-compute-prefix-srv6-locator {
+             type string;
+           }
+           container igp-spf-compute-prefix-seg {
+             leaf igp-spf-compute-prefix-seg-label {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-seg-index {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-seg-algo {
+               type uint32;
+             }
+             leaf igp-spf-compute-prefix-seg-flags {
+               type string;
+             }
+           }
+           container igp-spf-compute-srv6-end-sid {
+             leaf igp-spf-compute-srv6-end-sid.heading {
+               type string;
+             }
+             leaf igp-spf-compute-srv6-end-sid-addr {
+               type jt:ipv6addr;
+             }
+             leaf igp-spf-compute-srv6-end-sid-flavor {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping igp-spf-compute-spf-results-information-block {
+     container igp-spf-compute-database-summary {
+       leaf igp-spf-compute-topo-name {
+         type string;
+       }
+       leaf igp-spf-compute-topo-node-count {
+         type uint32;
+       }
+     }
+     container igp-spf-compute-spf-results {
+       container igp-spf-compute-spf-summary {
+         leaf igp-spf-compute-spf-root-id {
+           type string;
+         }
+         leaf igp-spf-compute-spf-direction {
+           type string;
+         }
+         leaf igp-spf-compute-spf-flags {
+           type string;
+         }
+       }
+       list igp-spf-compute-spf-result {
+         leaf igp-spf-compute-node-id {
+           type string;
+         }
+         leaf igp-spf-compute-spf-result-pathmetric {
+           type uint32;
+         }
+         container igp-spf-compute-spf-path {
+           leaf igp-spf-compute-spf-fh-intf-name {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   grouping igp-spf-compute-spf-backup-results-information-block {
+     container igp-spf-compute-database-summary {
+       leaf igp-spf-compute-topo-name {
+         type string;
+       }
+       leaf igp-spf-compute-topo-node-count {
+         type uint32;
+       }
+     }
+     container igp-spf-compute-spf-backup-results {
+       container igp-spf-compute-spf-backup-summary {
+         leaf igp-spf-compute-spf-failure-intf-id {
+           type string;
+         }
+         leaf igp-spf-compute-spf-fh-intf-name {
+           type string;
+         }
+         leaf igp-spf-compute-spf-flags {
+           type string;
+         }
+         leaf igp-spf-compute-spf-protection-flags {
+           type string;
+         }
+         leaf igp-spf-compute-spf-node-protection-cost {
+           type uint32;
+         }
+       }
+       container igp-spf-compute-spf-backup-result {
+         leaf igp-spf-compute-node-id {
+           type string;
+         }
+         leaf igp-spf-compute-spf-result-pathmetric {
+           type uint32;
+         }
+         list igp-spf-compute-spf-backup-path {
+           leaf igp-spf-compute-spf-backup-sid-list-type {
+             type string;
+           }
+           leaf igp-spf-compute-spf-backup-sid-count {
+             type string;
+           }
+           leaf igp-spf-compute-spf-fh-intf-name {
+             type string;
+           }
+           list igp-spf-compute-spf-backup-sid-list {
+             container igp-spf-compute-spf-backup-sid {
+               leaf igp-spf-compute-spf-backup-sid-label {
+                 type uint32;
+               }
+               leaf igp-spf-compute-spf-backup-sid-srv6 {
+                 type jt:ipaddr;
+               }
+               leaf igp-spf-compute-spf-backup-sid-type {
+                 type string;
+               }
+               leaf igp-spf-compute-spf-backup-sid-node-id {
+                 type string;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-local-node-id {
+                 type string;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-remote-node-id {
+                 type string;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-local-v4-addr {
+                 type jt:ipaddr;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-remote-v4-addr {
+                 type jt:ipaddr;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-local-v6-addr {
+                 type jt:ipv6addr;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-remote-v6-addr {
+                 type jt:ipv6addr;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-local-unnumbered-id {
+                 type string;
+               }
+               leaf igp-spf-compute-spf-backup-sid-adj-remote-unnumbered-id {
+                 type string;
+               }
+             }
+           }
+           leaf igp-spf-compute-spf-backup-path-id {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+ }

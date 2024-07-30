@@ -1,0 +1,354 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-pgm {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/pgm";
+
+   prefix pgm;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for pgm command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-pgm-nak {
+     description "Show PGM negative acknowledgments";
+   }
+   rpc get-pgm-source-path-messages {
+     description "Show PGM source path messages";
+   }
+   rpc get-pgm-statistics {
+     description "Show PGM packet statistics";
+     output {
+       container pgm-statistics-information {
+         uses pgm-statistics-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping pgm-statistics-information-block {
+     container packet-counters {
+       container spm {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container poll {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container polr {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container rdata {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container nak {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container nullnak {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container ncf {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container spmr {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container other {
+         leaf received {
+           type uint32;
+         }
+         leaf sent {
+           type uint32;
+         }
+       }
+       container errors {
+         leaf short-pgm-header {
+           type uint32;
+         }
+         leaf bad-checksum {
+           type uint32;
+         }
+         leaf zero-checksum {
+           type uint32;
+         }
+         leaf bad-tsdu-length {
+           type uint32;
+         }
+         leaf bad-spm-length {
+           type uint32;
+         }
+         leaf bad-spm-family {
+           type uint32;
+         }
+         leaf bad-nak-length {
+           type uint32;
+         }
+         leaf bad-nak-family {
+           type uint32;
+         }
+         leaf nak-unknown-tsi {
+           type uint32;
+         }
+         leaf nak-throttled {
+           type uint32;
+         }
+         leaf bad-ncf-length {
+           type uint32;
+         }
+         leaf bad-ncf-family {
+           type uint32;
+         }
+         leaf ncf-unknown-tsi {
+           type uint32;
+         }
+         leaf bad-rdata-length {
+           type uint32;
+         }
+         leaf rdata-unknown-tsi {
+           type uint32;
+         }
+         leaf odata-with-ra {
+           type uint32;
+         }
+       }
+     }
+   }
+ }
