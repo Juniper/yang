@@ -1,0 +1,668 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-vmhost {
+   namespace "http://yang.juniper.net/junos-ex/rpc/vmhost";
+
+   prefix vmhost;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for vmhost command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-vmhost-status {
+     description "Show RE vmhost status";
+     junos:command "show vmhost status";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container vmhost-health-status {
+         uses vmhost-health-status-block;
+       }
+     }
+   }
+   rpc get-vmhost-information {
+     description "Show RE vmhost information";
+     junos:command "show vmhost information";
+     input {
+       uses command-forwarding;
+     }
+   }
+   rpc get-vmhost-hardware {
+     description "Show RE hardware";
+     junos:command "show vmhost hardware";
+     input {
+       uses command-forwarding;
+     }
+   }
+   rpc get-vmhost-resource-usage-information {
+     description "Show RE vmhost resource usage";
+     junos:command "show vmhost resource-usage";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-vmhost-processes-information {
+     description "Show RE vmhost processes";
+     junos:command "show vmhost processes";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-vmhost-uptime {
+     description "Show RE vmhost uptime and reboot reason ";
+     junos:command "show vmhost uptime";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container vmmd-host-uptime {
+         uses vmmd-host-uptime-block;
+       }
+     }
+   }
+   rpc get-vmhost-netstat {
+     description "Show RE vmhost netstat";
+     junos:command "show vmhost netstat";
+     input {
+       uses command-forwarding;
+     }
+   }
+   rpc get-vmhost-bridge-information {
+     description "Show RE vmhost bridge";
+     junos:command "show vmhost bridge";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-vmhost-crash-information {
+     description "Show RE vmhost crash information";
+     junos:command "show vmhost crash";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-vmhost-logs-information {
+     description "Show RE vmhost trace logs";
+     junos:command "show vmhost logs";
+     input {
+       uses command-forwarding;
+       leaf filename {
+         description "Filename to show";
+         junos:cli-feature "nokeyword";
+         type string {
+           junos:posix-pattern "^[a-zA-Z0-9/+._-]+$";
+           junos:pattern-message "Invalid file name";
+         }
+       }
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-vmhost-version-information {
+     description "Show vmhost version information";
+     junos:command "show vmhost version";
+     input {
+       uses command-forwarding;
+       leaf detail {
+         description "Information on all versions installed";
+         type empty;
+       }
+     }
+     output {
+       container vmhost-version-information {
+         uses vmhost-version-information-block;
+       }
+     }
+   }
+   rpc get-vmhost-snapshot-information {
+     description "Show vmhost snapshot information";
+     junos:command "show vmhost snapshot";
+     input {
+       uses command-forwarding;
+     }
+   }
+   rpc get-vmhost-management-if-info {
+     description "Display details of the host's management interface";
+     junos:command "show vmhost management-if";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container vmmd-management-if-info {
+         uses vmmd-management-if-info-block;
+       }
+     }
+   }
+   rpc get-vmhost-hard-disk-test {
+     description "Run smartd self tests on hard disks";
+     junos:command "show vmhost hard-disk-test";
+     input {
+       choice test-type {
+         case status {
+           leaf status {
+             description "Display status of test";
+             type empty;
+             mandatory true;
+           }
+         }
+       }
+       leaf disk {
+         description "Name of hard disk";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container raid-information {
+         uses raid-information-block;
+       }
+     }
+   }
+   rpc get-vmhost-management-if-summary {
+     description "Show summary of management interface";
+     junos:command "show vmhost interface summary";
+     input {
+       leaf interface-name {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "management-if0" {
+             description "Management interface <if0>";
+           }
+           enum "management-if1" {
+             description "Management interface <if1>";
+           }
+         }
+       }
+     }
+     output {
+       container vmhost-management-interface {
+         uses vmhost-management-interface-block;
+       }
+     }
+   }
+   rpc get-vmhost-jdm-status {
+     description "Show status of the vmhost JDM";
+     junos:command "show vmhost jdm status";
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-lkg-bios-version {
+     description "Show last known bios version";
+     junos:command "show vmhost lkg-bios-version";
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping vmhost-health-status-block {
+     container virtualization-info {
+       list virtualization-ps-info {
+         leaf virtualization-ps-name {
+           type string;
+         }
+         leaf virtualization-status {
+           type string;
+         }
+       }
+     }
+     container cpu-list-info {
+       list cpu-info {
+         leaf cpu-name {
+           type string;
+         }
+         leaf cpu-user {
+           type string;
+         }
+         leaf cpu-nice {
+           type string;
+         }
+         leaf cpu-sys {
+           type string;
+         }
+         leaf cpu-iowait {
+           type string;
+         }
+         leaf cpu-irq {
+           type string;
+         }
+         leaf cpu-soft {
+           type string;
+         }
+         leaf cpu-steal {
+           type string;
+         }
+         leaf cpu-guest {
+           type string;
+         }
+         leaf cpu-gnice {
+           type string;
+         }
+         leaf cpu-idle {
+           type string;
+         }
+       }
+     }
+     container device-list-info {
+       list device-info {
+         leaf device-name {
+           type string;
+         }
+         leaf device-tps {
+           type string;
+         }
+         leaf device-read-sec {
+           type string;
+         }
+         leaf device-write-sec {
+           type string;
+         }
+         leaf device-readn {
+           type string;
+         }
+         leaf device-writen {
+           type string;
+         }
+       }
+     }
+   }
+   grouping sdk-vmmd-output-block {
+     list output-compute-cluster {
+       leaf output-compute-cluster-name {
+         type string;
+         description "Compute cluster name";
+       }
+       leaf output-compute-cluster-meta {
+         type string;
+         description "Compute cluster meta data";
+       }
+       list output-compute-node {
+         leaf output-compute-node-name {
+           type string;
+           description "Compute node name";
+         }
+         leaf output-compute-node-note {
+           type string;
+           description "Compute node note message";
+         }
+         leaf output-compute-node-error {
+           type string;
+           description "Compute node error";
+         }
+         leaf output-compute-node-data {
+           type string;
+           description "Compute node data";
+         }
+       }
+     }
+   }
+   grouping vmmd-host-uptime-block {
+     leaf vmhost-current-time {
+       type string;
+       description "Vmhost node time detail";
+     }
+     leaf vmhost-uptime {
+       type string;
+       description "VMhost uptime detail";
+     }
+     leaf vmhost-reboot-reason {
+       type string;
+       description "VMhost reboot reason detail";
+     }
+   }
+   grouping vmhost-version-information-block {
+     leaf current-boot-disk {
+       type string;
+       description "Current boot disk";
+     }
+     leaf current-root-set {
+       type string;
+       description "Current root details";
+     }
+     leaf uefi-version {
+       type string;
+       description "UEFI version details";
+     }
+     leaf primary-disk-upgrade-time {
+       type string;
+       description "Primary disk upgrade time";
+     }
+     container current-root {
+       leaf current-root-device {
+         type string;
+         description "Current root device";
+       }
+       leaf current-root-label {
+         type string;
+         description "Current root label";
+       }
+       leaf current-root-partition {
+         type string;
+         description "Current root partition";
+       }
+     }
+     list set-disk-info {
+       leaf set-disk-name {
+         type string;
+         description "Disk name";
+       }
+       leaf set-vmhost-version {
+         type string;
+         description "VMHost version";
+       }
+       leaf set-vmhost-root {
+         type string;
+         description "VMHost root details";
+       }
+       leaf set-vmhost-core {
+         type string;
+         description "VMHost core details";
+       }
+       leaf set-vmhost-kernel-version {
+         type string;
+         description "VMHost kernel version";
+       }
+       leaf set-junos-version {
+         type string;
+         description "Junos version";
+       }
+       leaf set-vmhost-diag-version {
+         type string;
+         description "VMhost diag version";
+       }
+     }
+   }
+   grouping vmmd-management-if-info-block {
+     leaf vmhost-management-if-admin-status {
+       type string;
+       description "Administrative status";
+     }
+     leaf vmhost-management-if-link-status {
+       type string;
+       description "Link status";
+     }
+     leaf vmhost-management-if-speed {
+       type string;
+       description "Link speed";
+     }
+     leaf vmhost-management-if-linkmode {
+       type string;
+       description "Link operational mode";
+     }
+   }
+   grouping raid-information-block {
+     leaf raid-status {
+       type string;
+     }
+     list raid-members {
+       leaf raid-member-device {
+         type string;
+       }
+       leaf raid-member-format {
+         type string;
+       }
+       leaf raid-member-name {
+         type string;
+       }
+       leaf raid-member-type {
+         type string;
+       }
+       leaf raid-member-status {
+         type string;
+       }
+       leaf raid-member-size {
+         type string;
+       }
+       leaf raid-member-offset {
+         type string;
+       }
+     }
+   }
+   grouping vmhost-management-interface-block {
+     container summary {
+       leaf output {
+         type string;
+       }
+     }
+   }
+ }

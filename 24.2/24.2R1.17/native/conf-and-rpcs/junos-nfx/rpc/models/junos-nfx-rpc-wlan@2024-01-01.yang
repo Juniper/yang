@@ -1,0 +1,540 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-wlan {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/wlan";
+
+   prefix wlan;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for wlan command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-wlan-access-points-list {
+     description "Show Wireless LAN access points information";
+     input {
+       leaf wlan-access-point-name {
+         description "Name of the access point";
+         type string {
+         }
+       }
+       choice filter {
+         case options {
+           leaf options {
+             type enumeration {
+               enum "client-associations" {
+                 description "Show access point client associations";
+               }
+               enum "neighbors" {
+                 description "Show access point neighbors";
+               }
+             }
+           }
+         }
+         case virtual-access-points {
+           leaf virtual-access-points {
+             description "Show virtual access point information";
+             type enumeration {
+               enum "all" {
+                 description "All VAP";
+               }
+               enum "0" {
+                 description "VAP identifier 0";
+               }
+               enum "1" {
+                 description "VAP identifier 1";
+               }
+               enum "2" {
+                 description "VAP identifier 2";
+               }
+               enum "3" {
+                 description "VAP identifier 3";
+               }
+               enum "4" {
+                 description "VAP identifier 4";
+               }
+               enum "5" {
+                 description "VAP identifier 5";
+               }
+               enum "6" {
+                 description "VAP identifier 6";
+               }
+               enum "7" {
+                 description "VAP identifier 7";
+               }
+             }
+           }
+         }
+       }
+       leaf radio {
+         description "Show access point radio information";
+         type enumeration {
+           enum "1" {
+             description "Radio index 1";
+           }
+           enum "2" {
+             description "Radio index 2";
+           }
+         }
+       }
+       choice display {
+         case detail {
+           leaf detail {
+             description "Show detailed output";
+             type empty;
+           }
+         }
+         case summary {
+           leaf summary {
+             description "Show summary output";
+             type empty;
+           }
+         }
+         case ha {
+           leaf ha {
+             description "Show Wireless LAN ha status";
+             type enumeration {
+               enum "status" {
+                 description "Ha status";
+               }
+             }
+           }
+         }
+       }
+     }
+     output {
+       container wlan-access-points-list {
+         uses wlan-access-points-list-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping wlan-access-points-list-block {
+     list access-points {
+       leaf access-point-name {
+         type string;
+         description "Access point name";
+       }
+       leaf access-point-type {
+         type string;
+         description "Access point type";
+       }
+       leaf access-interface {
+         type string;
+         description "Interface to connect the access point";
+       }
+       leaf radio-mode-channel {
+         type string;
+         description "Radio mode and channel";
+       }
+       list radio-information {
+         leaf radio-id {
+           type int32;
+           description "Radio id";
+         }
+         leaf radio-mode {
+           type string;
+           description "Radio mode";
+         }
+         leaf channel {
+           type string;
+           description "Channel";
+         }
+         leaf bandwidth {
+           type string;
+           description "Bandwidth";
+         }
+       }
+       list radio-status-information {
+         leaf radio-id {
+           type int32;
+           description "Radio id";
+         }
+         leaf status {
+           type string;
+           description "Status of the radio or vap";
+         }
+         leaf mac-address {
+           type string;
+           description "MAC address of the access point or radio or vap";
+         }
+         leaf temperature {
+           type string;
+           description "Temperature";
+         }
+         leaf radio-mode {
+           type string;
+           description "Radio mode";
+         }
+         leaf channel {
+           type string;
+           description "Channel";
+         }
+         leaf bandwidth {
+           type string;
+           description "Bandwidth";
+         }
+         leaf transmit-power {
+           type string;
+           description "Transmit Power";
+         }
+       }
+       list ethernet-port-information {
+         leaf mac-address {
+           type string;
+           description "MAC address of the access point or radio or vap";
+         }
+         leaf access-ipv4-address {
+           type string;
+           description "Access point IPv4 address";
+         }
+         leaf access-ipv6-address {
+           type string;
+           description "Access point IPv6 address";
+         }
+       }
+       container captive-portal-information {
+         leaf dhcp-gateway {
+           type string;
+           description "Dhcp gateway";
+         }
+         leaf dhcp-port {
+           type string;
+           description "Dhcp port";
+         }
+         leaf dhcp-relay-agent {
+           type string;
+           description "Dhcp relay agent";
+         }
+         leaf captive-portal-authentication {
+           type string;
+           description "Captive portal authentication";
+         }
+         leaf place-holder {
+           type string;
+           description "Place holder";
+         }
+         leaf page-print-title {
+           type string;
+           description "Captive portal page print";
+         }
+         leaf color-title {
+           type string;
+           description "Color";
+         }
+         leaf font-size-title {
+           type string;
+           description "Font size";
+         }
+         leaf page-print-header {
+           type string;
+           description "Captive portal page print";
+         }
+         leaf color-header {
+           type string;
+           description "Color";
+         }
+         leaf font-size-header {
+           type string;
+           description "Font size";
+         }
+         leaf page-print-footer {
+           type string;
+           description "Captive portal page print";
+         }
+         leaf color-footer {
+           type string;
+           description "Color";
+         }
+         leaf font-size-footer {
+           type string;
+           description "Font size";
+         }
+         leaf splash-background {
+           type string;
+           description "Splash page background";
+         }
+         leaf captive-portal-ssl {
+           type string;
+           description "Captive portal ssl status";
+         }
+         leaf captive-portal-session-timeout {
+           type int32;
+           description "Captive portal session timeout";
+         }
+         leaf captive-portal-idle-timeout {
+           type int32;
+           description "Captive portal idle timeout";
+         }
+       }
+       leaf access-point-description {
+         type string;
+         description "Access point description";
+       }
+       leaf access-ipv4-address {
+         type string;
+         description "Access point IPv4 address";
+       }
+       leaf access-ipv6-address {
+         type string;
+         description "Access point IPv6 address";
+       }
+       leaf access-point-status {
+         type string;
+         description "Access point management status";
+       }
+       leaf pcap-status {
+         type string;
+         description "Packet capture status";
+       }
+       leaf location {
+         type string;
+         description "Location of the access point";
+       }
+       leaf serial-number {
+         type int32;
+         description "Serial number";
+       }
+       leaf firmware-version {
+         type string;
+         description "Firmware version";
+       }
+       leaf alt-firmware-version {
+         type string;
+         description "Alternate firmware version";
+       }
+       leaf regulatory-domain {
+         type string;
+         description "Regulatory domain";
+       }
+       leaf country {
+         type string;
+         description "Country regulations access point adheres to";
+       }
+       leaf system-time {
+         type string;
+         description "Access point system time";
+       }
+       leaf capture-interface {
+         type string;
+         description "Interface on which the packet capture is enabled";
+       }
+       leaf capture-file {
+         type string;
+         description "Path to store the file captured";
+       }
+       leaf capture-duration {
+         type uint32;
+         description "Duration upto which the packet capture is enabled";
+       }
+       leaf capture-file-size {
+         type uint32;
+         description "Maximum packet capture file size";
+       }
+     }
+     leaf node-id {
+       type int32;
+       description "Node id";
+     }
+   }
+ }

@@ -1,0 +1,206 @@
+module junos-error-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/error/types";
+  prefix junos-err-types;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of common JUNOS error data
+     types.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-03 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef error-code {
+    type enumeration {
+      enum OK {
+      }
+      enum NOT_PERMITTED {
+      }
+      enum NO_ENTRY {
+      }
+      enum INTERRUPTED {
+      }
+      enum RETRY_OP {
+      }
+      enum NO_MEMORY {
+      }
+      enum NO_RESOURCE {
+      }
+      enum NO_BUFFER {
+      }
+      enum FUNCTION_NOT_IMPLEMENTED {
+      }
+      enum INVALID_ARGUMENT {
+      }
+      enum WOULD_BLOCK {
+      }
+      enum BAD_MESSAGE {
+      }
+      enum NO_PROCESS {
+      }
+      enum IO_ERROR {
+      }
+      enum TOO_BIG {
+      }
+      enum BAD_FILE_DESCRIPTOR {
+      }
+      enum NO_CHILD_PROCESS {
+      }
+      enum PERMISSION_DENIED {
+      }
+      enum BAD_ADDRESS {
+      }
+      enum DEVICE_BUSY {
+      }
+      enum ENTRY_EXIST {
+      }
+      enum NO_DEVICE {
+      }
+      enum NOT_DIRECTORY {
+      }
+      enum IS_DIRECTORY {
+      }
+      enum TOO_MANY_FILES {
+      }
+      enum TOO_MANY_FILES_OPEN {
+      }
+      enum INVALID_IO_OP {
+      }
+      enum TEXT_FILE_BUSY {
+      }
+      enum FILE_TOO_LARGE {
+      }
+      enum INVALID_SEEK {
+      }
+      enum READ_ONLY {
+      }
+      enum TOO_MANY_LINKS {
+      }
+      enum BROKEN_PIPE {
+      }
+      enum ARG_OUT_OF_RANGE {
+      }
+      enum RESULT_OUT_OF_RANGE {
+      }
+      enum RESOURCE_DEADLOCK {
+      }
+      enum NAME_TOO_LONG {
+      }
+      enum NO_LOCK_AVAILABLE {
+      }
+      enum NOT_EMPTY {
+      }
+      enum NO_MESSAGE {
+      }
+      enum IDENTIFIER_REMOVED {
+      }
+      enum NOT_STREAM {
+      }
+      enum NO_MESSAGE_AVAILABLE {
+      }
+      enum STREAM_TIMEOUT {
+      }
+      enum NO_STREAM_RESOURCE {
+      }
+      enum NO_LINK {
+      }
+      enum PROTOCOL_ERROR {
+      }
+      enum TOO_LARGE {
+      }
+      enum ILLEGAL_BYTE_SEQ {
+      }
+      enum TOO_MANY_USERS {
+      }
+      enum NOT_SOCKET {
+      }
+      enum DEST_ADDR_REQUIRED {
+      }
+      enum WRONG_MESSAGE_SIZE {
+      }
+      enum WRONG_PROTOCOL_TYPE {
+      }
+      enum NO_PROTOCOL_OPTION {
+      }
+      enum PROTOCOL_NOT_SUPPORTED {
+      }
+      enum SOCKET_NOT_SUPPORTED {
+      }
+      enum ADDR_IN_USE {
+      }
+      enum CONNECTION_ABORTED {
+      }
+      enum NOT_CONNECTED {
+      }
+      enum TIMED_OUT {
+      }
+      enum CONNECTION_REFUSED {
+      }
+      enum HOST_UNREACHABLE {
+      }
+      enum IN_PROGRESS {
+      }
+      enum CANCELLED {
+      }
+      enum CONNECTION_IN_PROGRESS {
+      }
+      enum CONNECTION_RESET {
+      }
+      enum ADDR_FAMILY_NOT_SUPPORTED {
+      }
+      enum ADDR_NOT_AVAILABLE {
+      }
+      enum ALREADY_CONNECTED {
+      }
+      enum CROSS_DEVICE_LINK {
+      }
+      enum EXECUTABLE_FORMAT_ERROR {
+      }
+      enum NETWORK_DOWN {
+      }
+      enum NETWORK_RESET {
+      }
+      enum NETWORK_UNREACHABLE {
+      }
+      enum NO_SUCH_DEVICE_OR_ADDRESS {
+      }
+      enum NOT_SUPPORTED {
+      }
+      enum OPERATION_NOT_SUPPORTED {
+      }
+      enum OWNER_DEAD {
+      }
+      enum NOT_RECOVERABLE {
+      }
+      enum TOO_MANY_SYM_LINKS {
+      }
+    }
+    description
+      "Base error codes loosely based on errno";
+  }
+}

@@ -1,0 +1,338 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-agent {
+   namespace "http://yang.juniper.net/junos-ex/rpc/agent";
+
+   prefix agent;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for agent command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc sensor-information {
+     description "Show agentd's installed sensor information";
+     junos:command "show agent sensors";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container sensor-information {
+         uses sensor-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping sensor-information-block {
+     list sensor {
+       description "Show sensor details";
+       leaf sensor-name {
+         type string;
+         description "Sensor name";
+       }
+       leaf resource-name {
+         type string;
+         description "Resource name";
+       }
+       leaf sensor-version {
+         type string;
+         description "Sensor version";
+       }
+       leaf sensor-id {
+         type uint32;
+         description "Sensor-ID Derived from Sensor name";
+       }
+       leaf resource-filter {
+         type string;
+         description "Resource filter";
+       }
+       leaf subscription-id {
+         type uint64;
+         description "Telemetry subscription ID";
+       }
+       leaf parent-sensor-name {
+         type string;
+         description "Parent sensor to which this sensor belongs, Not applicable otherwise";
+       }
+       leaf components {
+         type string;
+         description "Component(s) to which this sensor belongs, Not applicable otherwise";
+       }
+       container server-information {
+         description "Show server Information";
+         leaf server-name {
+           type string;
+           description "Server name";
+         }
+         leaf scope-id {
+           type string;
+           description "Scope-id";
+         }
+         leaf remote-address {
+           type string;
+           description "Address of the physical interface.";
+         }
+         leaf remote-port {
+           type uint32;
+           description "Port";
+         }
+         leaf transport {
+           type string;
+           description "Transport";
+         }
+       }
+       container profile-information {
+         description "Show Profile Information";
+         leaf profile-name {
+           type string;
+           description "Profilename";
+         }
+         leaf rep-interval {
+           type int32;
+           description "Reporting interval (in seconds)";
+         }
+         leaf payload-size {
+           type int32;
+           description "Payload size";
+         }
+         leaf local-address {
+           type string;
+           description "Address of the physical interface.";
+         }
+         leaf local-port {
+           type uint32;
+           description "Port";
+         }
+         leaf timestamp {
+           type string;
+           description "Timestamp";
+         }
+         leaf serverformat {
+           type string;
+           description "Format";
+         }
+         leaf dscp {
+           type string;
+           description "DSCP";
+         }
+         leaf forwarding-class {
+           type string;
+           description "Forwarding-class";
+         }
+         leaf loss-priority {
+           type string;
+           description "Loss priority";
+         }
+       }
+     }
+   }
+ }

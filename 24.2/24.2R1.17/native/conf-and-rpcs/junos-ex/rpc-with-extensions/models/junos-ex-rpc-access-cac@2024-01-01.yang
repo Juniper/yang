@@ -1,0 +1,397 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-access-cac {
+   namespace "http://yang.juniper.net/junos-ex/rpc/access-cac";
+
+   prefix access-cac;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for access-cac command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc get-access-cac-pools-summary {
+     description "Show access cac pool information summary";
+     junos:command "show access-cac pool summary";
+     output {
+       container access-cac-pools-summary {
+         uses access-cac-pools-summary-block;
+       }
+     }
+   }
+   rpc get-access-cac-session {
+     description "Show access cac session";
+     junos:command "show access-cac session";
+     output {
+       container access-cac-session {
+         uses access-cac-session-block;
+       }
+     }
+   }
+   rpc get-access-cac-session-id {
+     description "Session id";
+     junos:command "show access-cac session session-id";
+     input {
+       leaf id {
+         description "Session id";
+         junos:cli-feature "nokeyword";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint64 {
+             range "1 .. 18446744073709551615";
+           }
+         }
+         mandatory true;
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Show brief output";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container access-cac-session {
+         uses access-cac-session-block;
+       }
+     }
+   }
+   rpc get-access-cac-iflset {
+     description "Show access cac interface-set info";
+     junos:command "show access-cac interface-set";
+     input {
+       leaf interface-set-name {
+         description "Name of interface-set";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf display-style {
+         description "Display style";
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container access-cac-iflset {
+         uses access-cac-iflset-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping access-cac-pools-summary-block {
+     leaf total-subscribers-with-pools {
+       type uint32;
+       description "Number of subscribers configured with bandwidth pools";
+     }
+     leaf total-mcast-video-pools {
+       type uint32;
+       description "Number of mcast video pools configured";
+     }
+     leaf total-video-pools {
+       type uint32;
+       description "Number of video pools configured";
+     }
+     leaf total-mcast-channels-subscribered {
+       type uint32;
+       description "Number of total mcast-channels subscribered";
+     }
+   }
+   grouping access-cac-session-block {
+     leaf session-not-available {
+       type empty;
+     }
+     leaf access-cac-session-id {
+       type uint64;
+       description "Access cac session id";
+     }
+     leaf session-cfg-mcast-bandwidth {
+       type uint64;
+       description "Configured mcast video pool size";
+     }
+     leaf session-consumed-mcast-bandwidth {
+       type uint64;
+       description "Consumed mcast video bandwidth";
+     }
+     leaf session-cfg-video-bandwidth {
+       type uint64;
+       description "Configured shared video bandwidth";
+     }
+     leaf session-consumed-video-bandwidth {
+       type uint64;
+       description "Consumed shared video bandwidth";
+     }
+     list mcast-source-group {
+       leaf mcast-source {
+         type jt:ipaddr;
+         description "Source address";
+       }
+       leaf mcast-group {
+         type jt:ipaddr;
+         description "Group address";
+       }
+       leaf channel-configured-rate {
+         type uint64;
+         description "Channel configured rate (bps)";
+       }
+       leaf channel-measured-rate {
+         type uint64;
+         description "Channel measured rate (bps)";
+       }
+       leaf measured-rate-not-available {
+         type empty;
+       }
+     }
+   }
+   grouping access-cac-iflset-block {
+     leaf access-cac-iflset-name {
+       type string;
+       description "Access cac tracked iflset name";
+     }
+     leaf access-cac-iflset-total-adjust {
+       type uint64;
+       description "Total current adjustment on iflset";
+     }
+     list mcast-source-group {
+       leaf mcast-source {
+         type jt:ipaddr;
+         description "Source address";
+       }
+       leaf mcast-group {
+         type jt:ipaddr;
+         description "Group address";
+       }
+       leaf channel-configured-rate {
+         type uint64;
+         description "Channel configured rate (bps)";
+       }
+       leaf channel-measured-rate {
+         type uint64;
+         description "Channel measured rate (bps)";
+       }
+       leaf measured-rate-not-available {
+         type empty;
+       }
+     }
+   }
+ }

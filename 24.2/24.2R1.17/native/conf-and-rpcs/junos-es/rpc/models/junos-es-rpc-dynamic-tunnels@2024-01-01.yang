@@ -1,0 +1,766 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-dynamic-tunnels {
+   namespace "http://yang.juniper.net/junos-es/rpc/dynamic-tunnels";
+
+   prefix dynamic-tunnels;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for dynamic-tunnels command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.17";
+   }
+
+   rpc pfe-tunnel-localization {
+     description "Show the tunnel PFE localization database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container pfe-tunnel-localization {
+         uses pfe-tunnel-localization-block;
+       }
+     }
+   }
+   rpc get-dynamic-tunnels-database {
+     description "Show the dynamic tunnel database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       leaf table {
+         description "Show all the tunnels belonging to this table";
+         type string;
+       }
+       leaf destination {
+         description "IP or IP-color<c> address with optional prefix length of destination";
+         type string;
+       }
+       leaf chain-type {
+         description "Show all the tunnels with given next-hop type";
+         type enumeration {
+           enum "v4" {
+             description "V4 next-hops";
+           }
+           enum "v6" {
+             description "V6 next-hops";
+           }
+         }
+       }
+       leaf tunnel-type {
+         description "Show all the tunnels with given tunnel type";
+         type enumeration {
+           enum "ipoip" {
+             description "IPIP tunnel type";
+           }
+           enum "gre" {
+             description "GRE tunnel type";
+           }
+           enum "udp" {
+             description "UDP tunnel type";
+           }
+           enum "rsvp" {
+             description "RSVP tunnel type";
+           }
+           enum "ipv6" {
+             description "IPv6 tunnel type";
+           }
+           enum "grev6" {
+             description "GRE v6 tunnel type";
+           }
+           enum "udpv6" {
+             description "UDP v6 tunnel type";
+           }
+         }
+       }
+       leaf tunnel-id {
+         description "Show all the tunnels with given tunnel-id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf level {
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+         }
+       }
+     }
+     output {
+       container dynamic-tunnels-information {
+         uses dynamic-tunnels-information-block;
+       }
+     }
+   }
+   rpc get-dynamic-tunnel-summary {
+     description "Summary of dynamic tunnel";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container dynamic-tunnels-information {
+         uses dynamic-tunnels-information-block;
+       }
+     }
+   }
+   rpc get-dynamic-tunnel-statistics {
+     description "Statistics of dynamic tunnel";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf destination {
+         description "IPv4 address and optional prefix length of destination or tunnel-endpoint";
+         type string;
+       }
+       leaf tunnel-type {
+         description "Show statistics of all the tunnels with given tunnel type";
+         type enumeration {
+           enum "ipoip" {
+             description "IPIP tunnel type";
+           }
+           enum "gre" {
+             description "GRE tunnel type";
+           }
+           enum "udp" {
+             description "UDP tunnel type";
+           }
+           enum "ipv6" {
+             description "IPv6 tunnel type";
+           }
+           enum "grev6" {
+             description "GRE v6 tunnel type";
+           }
+           enum "udpv6" {
+             description "UDP v6 tunnel type";
+           }
+         }
+       }
+       leaf tunnel-id {
+         description "Show statistics with given tunnel-id";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container dynamic-tunnels-information {
+         uses dynamic-tunnels-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping pfe-tunnel-localization-block {
+     list pfe-localization-information {
+       leaf pfe-name {
+         type string;
+       }
+       leaf pfe-refcount {
+         type uint32;
+       }
+       list pfe-gencfg {
+         leaf pfe-gencfg-keyid {
+           type uint32;
+         }
+         leaf pfe-gencfg-tunnel-type {
+           type string;
+         }
+         leaf pfe-gencfg-last-ifd-index {
+           type int32;
+         }
+         leaf pfe-gencfg-current-ifd-index {
+           type int32;
+         }
+         leaf pfe-gencfg-last-ifd-state {
+           type string;
+         }
+         leaf pfe-gencfg-current-ifd-state {
+           type string;
+         }
+         leaf pfe-gencfg-v6-src {
+           type string;
+         }
+         leaf pfe-gencfg-backup-lock {
+           type uint32;
+         }
+         leaf pfe-gencfg-kqp {
+           type uint32;
+         }
+         leaf pfe-gencfg-refcnt {
+           type uint32;
+         }
+       }
+       list pfe-aggr-prefix {
+         leaf pfe-aggr-prefix-address {
+           type string;
+         }
+         leaf pfe-aggr-prefix-refcount {
+           type uint32;
+         }
+       }
+       list pfe-v6src-prefix {
+         leaf pfe-v6src-prefix-address {
+           type string;
+         }
+         leaf pfe-v6src-prefix-refcount {
+           type uint32;
+         }
+       }
+     }
+   }
+   grouping dynamic-tunnels-information-block {
+     container dynamic-tunnel-statistics {
+       leaf dyn-total-count {
+         type int32;
+       }
+       leaf dyn-ifl-type {
+         type empty;
+       }
+       leaf dyn-tunnel-mode-gre {
+         type string;
+       }
+       leaf dyn-total-count-ifl {
+         type int32;
+       }
+       leaf dyn-up-count-ifl {
+         type int32;
+       }
+       leaf dyn-down-count-ifl {
+         type int32;
+       }
+       leaf dyn-total-count-gre-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-gre-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-gre-nhb {
+         type string;
+       }
+       leaf dyn-rsvp-auto {
+         type empty;
+       }
+       leaf dyn-total-count-rsvp {
+         type int32;
+       }
+       leaf dyn-spring-te {
+         type empty;
+       }
+       leaf dyn-total-count-spring-te {
+         type uint32;
+       }
+       leaf dyn-up-count-spring-te {
+         type uint32;
+       }
+       leaf dyn-down-count-spring-te {
+         type uint32;
+       }
+       leaf dyn-nhb-udp {
+         type empty;
+       }
+       leaf dyn-tunnel-mode-udp {
+         type string;
+       }
+       leaf dyn-total-count-udp-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-udp-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-udp-nhb {
+         type string;
+       }
+       leaf dyn-nhb-ipip {
+         type empty;
+       }
+       leaf dyn-tunnel-mode-ipip {
+         type string;
+       }
+       leaf dyn-total-count-ipip-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-ipip-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-ipip-nhb {
+         type string;
+       }
+       leaf dyn-nhb-gre-ip6 {
+         type empty;
+       }
+       leaf dyn-tunnel-mode-gre-ip6 {
+         type string;
+       }
+       leaf dyn-total-count-gre-ip6-ifl {
+         type int32;
+       }
+       leaf dyn-up-count-gre-ip6-ifl {
+         type int32;
+       }
+       leaf dyn-down-count-gre-ip6-ifl {
+         type string;
+       }
+       leaf dyn-total-count-gre-ip6-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-gre-ip6-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-gre-ip6-nhb {
+         type string;
+       }
+       leaf dyn-nhb-udp-ip6 {
+         type empty;
+       }
+       leaf dyn-total-count-udp-ip6-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-udp-ip6-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-udp-ip6-nhb {
+         type string;
+       }
+       leaf dyn-nhb-ipip-ip6 {
+         type empty;
+       }
+       leaf dyn-total-count-ipip-ip6-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-ipip-ip6-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-ipip-ip6-nhb {
+         type string;
+       }
+       leaf dyn-nhb-srv6 {
+         type empty;
+       }
+       leaf dyn-total-count-srv6-nhb {
+         type int32;
+       }
+       leaf dyn-up-count-srv6-nhb {
+         type int32;
+       }
+       leaf dyn-down-count-srv6-nhb {
+         type int32;
+       }
+       leaf dyn-tunnel-mode-udp-ip6 {
+         type string;
+       }
+       leaf dyn-tunnel-mode-ipip-ip6 {
+         type string;
+       }
+     }
+     list dynamic-tunnel-encap-pkt-stats {
+       leaf tunnel-encap-str-terse {
+         type string;
+         description "Tunnel encapsulation strings";
+       }
+       leaf tunnel-encap-pkts-terse {
+         type uint64;
+         description "Outgoing traffic packets on the tunnel";
+       }
+       leaf tunnel-encap-bytes-terse {
+         type uint64;
+         description "Outgoing traffic bytes on the tunnel";
+       }
+       leaf tunnel-encap-info-terse {
+         type string;
+         description "Tunnel information";
+       }
+     }
+     list dynamic-tunnel-table {
+       leaf table-name {
+         type string;
+         description "Unicast routing table";
+       }
+       list destination-network {
+         leaf prefix {
+           type jt:ipaddr;
+         }
+         leaf destination-network-deleted {
+           type empty;
+           description "Whether this destination network has been unconfigured";
+         }
+         list dynamic-tunnel {
+           leaf tunnel-destination {
+             type jt:ipaddr;
+             description "Tunnel destination";
+           }
+           leaf tunnel-state {
+             type string;
+             description "State of the tunnel";
+           }
+           leaf tunnel-expiry {
+             type int32;
+             description "Time after which the tunnel will be removed";
+           }
+           leaf tunnel-reference-count {
+             type int32;
+             description "Number of references on this tunnel";
+           }
+           leaf tunnel-aggr-traffic-stats-str {
+             type empty;
+           }
+           leaf tunnel-aggr-traffic-encap-str {
+             type string;
+             description "Aggregate traffic statistics encap info.";
+           }
+           leaf tunnel-aggr-traffic-stats {
+             type string;
+             description "Nexthop based tunnel out-going aggregate traffic statistics";
+           }
+           list tunnel-nexthop {
+             leaf tunnel-nh-type {
+               type string;
+               description "Type of next hop";
+             }
+             leaf tunnel-nh-subtype {
+               type string;
+               description "Tunnel Subtype";
+             }
+             leaf via {
+               type string;
+               description "Reachable via a local interface";
+             }
+             leaf tunnel-nh-info {
+               type string;
+               description "Nexthop information";
+             }
+             leaf tunnel-nh-src {
+               type jt:ipaddr;
+               description "Source address for this tunnel next hop";
+             }
+             leaf tunnel-id-index {
+               type int32;
+               description "Tunnel Index";
+             }
+             leaf tunnel-gre-key {
+               type int32;
+               description "RFC 2890 GRE Key applied via export policy";
+             }
+             leaf tunnel-attr-anchor-pfe {
+               type string;
+               description "TCNH localized PFE name";
+             }
+             leaf tunnel-attr-vpn-label {
+               type string;
+               description "VPN label for L3VPN over dynamic tunnel";
+             }
+             leaf tunnel-attr-reference-count {
+               type int32;
+               description "Number of references on this tunnel-attr";
+             }
+             leaf tunnel-forwarding-ingress-route {
+               type string;
+               description "Forwarding nexthop information for nexthop based tunnel";
+             }
+             leaf tunnel-endpoint-forwarding-ingress-route {
+               type string;
+               description "Forwarding nexthop information for nexthop based tunnel";
+             }
+             leaf tunnel-traffic-stats {
+               type string;
+               description "Nexthop based tunnel out-going traffic statistics";
+             }
+             leaf tunnel-nh-state {
+               type string;
+               description "State of the tunnel next hop";
+             }
+             leaf tunnel-nh-reason {
+               type string;
+               description "Reason why the tunnel next hop is not up";
+             }
+             leaf tunnel-nh-lsp-name {
+               type string;
+               description "Name of the LSP nexthop of this tunnel";
+             }
+           }
+           list tunnel-recursive-nexthop {
+             leaf tunnel-nh-info {
+               type string;
+               description "Nexthop information";
+             }
+             leaf tunnel-traffic-stats {
+               type string;
+               description "Nexthop based tunnel out-going traffic statistics";
+             }
+           }
+         }
+         list dynamic-tunnel-terse {
+           leaf tunnel-dest-terse {
+             type jt:ipaddr;
+           }
+           leaf tunnel-src-terse {
+             type jt:ipaddr;
+           }
+           leaf tunnel-nh-terse {
+             type string;
+           }
+           leaf tunnel-type-terse {
+             type string;
+           }
+           leaf tunnel-state-terse {
+             type string;
+           }
+           leaf tunnel-nh-reason-terse {
+             type string;
+           }
+         }
+       }
+     }
+   }
+ }
