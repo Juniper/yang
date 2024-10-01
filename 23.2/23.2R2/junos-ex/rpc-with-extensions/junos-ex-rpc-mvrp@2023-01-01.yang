@@ -1,0 +1,689 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-mvrp {
+   namespace "http://yang.juniper.net/junos-ex/rpc/mvrp";
+
+   prefix mvrp;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for mvrp command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R2.21";
+   }
+
+   rpc get-mvrp-information {
+     description "Show MVRP Protocol information";
+     junos:command "show mvrp";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+       }
+     }
+     output {
+       container mvrp-information {
+         uses mvrp-information-block;
+       }
+     }
+   }
+   rpc get-mvrp-interface-information {
+     description "Show MVRP interface information";
+     junos:command "show mvrp interface";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+     output {
+       container mvrp-interface-information {
+         uses mvrp-interface-information-block;
+       }
+     }
+   }
+   rpc get-mvrp-registration-state {
+     description "Show MVRP registration state ";
+     junos:command "show mvrp registration-state";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan {
+         description "VLAN ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mvrp-registration-information {
+         uses mvrp-registration-information-block;
+       }
+     }
+   }
+   rpc get-mvrp-applicant-information {
+     description "Show MVRP applicant state ";
+     junos:command "show mvrp applicant-state";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan {
+         description "VLAN ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mvrp-applicant-information {
+         uses mvrp-applicant-information-block;
+       }
+     }
+   }
+   rpc get-mvrp-interface-statistics {
+     description "Show MVRP interface statistics";
+     junos:command "show mvrp statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+     }
+     output {
+       container mvrp-interface-statistics {
+         uses mvrp-interface-statistics-block;
+       }
+     }
+   }
+   rpc get-mvrp-dynamic-vlan-memberships {
+     description "Show MVRP dynamic VLAN memberships";
+     junos:command "show mvrp dynamic-vlan-memberships";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+           junos:posix-pattern "!^((__.*__)|(all)|(.*[ ].*)|(\"\")|(.{129,}))$";
+           junos:pattern-message "Must be a non-reserved string of 128 characters or less with no spaces.";
+         }
+       }
+       leaf vlan {
+         description "VLAN ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "1 .. 4094";
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+     }
+     output {
+       container mvrp-vlan-information {
+         uses mvrp-vlan-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping mvrp-information-block {
+     container mvrp-information-entry {
+       leaf mvrp-dynamic-vlan {
+         type string;
+         description "MVRP dynamic VLAN creation";
+       }
+       leaf mvrp-bpdu-mac-address {
+         type string;
+         description "MVRP BPDU destination MAC address";
+       }
+       leaf mvrp-routing-instance-name {
+         type string;
+         description "Name of routing instance";
+       }
+       list mvrp-interface-timers {
+         leaf mvrp-interface-name {
+           type string;
+           description "Name of interface";
+         }
+         leaf mvrp-timer-join {
+           type uint32;
+           description "Join timer";
+         }
+         leaf mvrp-timer-leave {
+           type uint32;
+           description "Leave timer";
+         }
+         leaf mvrp-timer-leaveall {
+           type uint32;
+           description "LeaveAll timer";
+         }
+       }
+     }
+   }
+   grouping mvrp-interface-information-block {
+     list mvrp-interface-instance {
+       leaf mvrp-routing-instance-name {
+         type string;
+         description "Name of routing instance";
+       }
+       container mvrp-interface-entry {
+         leaf mvrp-interface-name {
+           type string;
+           description "Name of interface";
+         }
+         leaf mvrp-interface-status {
+           type string;
+           description "MVRP interface operational status";
+         }
+         leaf mvrp-interface-registration-mode {
+           type string;
+           description "MVRP interface registration mode";
+         }
+         leaf mvrp-interface-applicant-mode {
+           type string;
+           description "MVRP interface applicant mode";
+         }
+       }
+     }
+   }
+   grouping mvrp-registration-information-block {
+     list mvrp-registration-instance {
+       leaf mvrp-routing-instance-name {
+         type string;
+         description "Name of routing instance";
+       }
+       list mvrp-registration-vlan-entry {
+         description "Registration state information";
+         leaf mvrp-vlan-id {
+           type int32;
+           description "VLAN ID";
+         }
+         list mvrp-registration-interface-entry {
+           leaf mvrp-interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf mvrp-registration-state {
+             type string;
+             description "Registration state";
+           }
+           leaf mvrp-registration-forced-state {
+             type string;
+             description "Forced state";
+           }
+           leaf mvrp-registration-manage-state {
+             type string;
+             description "Management state";
+           }
+           leaf mvrp-registration-stp-state {
+             type string;
+             description "STP state";
+           }
+         }
+       }
+     }
+   }
+   grouping mvrp-applicant-information-block {
+     list mvrp-applicant-instance {
+       leaf mvrp-routing-instance-name {
+         type string;
+         description "Name of routing instance";
+       }
+       list mvrp-applicant-vlan-entry {
+         description "Applicant state information";
+         leaf mvrp-vlan-id {
+           type int32;
+           description "VLAN ID";
+         }
+         list mvrp-applicant-interface-entry {
+           leaf mvrp-interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf mvrp-applicant-state {
+             type string;
+             description "Applicant state";
+           }
+         }
+       }
+     }
+   }
+   grouping mvrp-interface-statistics-block {
+     list mvrp-statistics-instance {
+       leaf mvrp-routing-instance-name {
+         type string;
+         description "Name of routing instance";
+       }
+       list mvrp-statistics-interface-entry {
+         description "Statistics information";
+         leaf mvrp-interface-name {
+           type string;
+           description "Name of interface";
+         }
+         leaf mvrp-statistics-vlan-registered {
+           type int32;
+           description "MAC Registered";
+         }
+         leaf mvrp-statistics-sent-pdu {
+           type int32;
+           description "Number of Sent MVRP PDUs";
+         }
+         leaf mvrp-statistics-received-pdu {
+           type int32;
+           description "Number of Received MVRP PDUs without error";
+         }
+         leaf mvrp-statistics-error-pdu {
+           type int32;
+           description "Number of Received MVRP PDUs with error";
+         }
+         leaf mvrp-join-empty-transmit {
+           type int32;
+           description "Join Empty transmitted";
+         }
+         leaf mvrp-leaveall-transmit {
+           type int32;
+           description "Leave All Transmitted";
+         }
+         leaf mvrp-join-in-transmit {
+           type int32;
+           description "Join In Transmitted";
+         }
+         leaf mvrp-empty-transmit {
+           type int32;
+           description "Empty Transmitted";
+         }
+         leaf mvrp-leave-transmit {
+           type int32;
+           description "Leave Transmitted";
+         }
+         leaf mvrp-in-transmit {
+           type int32;
+           description "In transmitted";
+         }
+         leaf mvrp-new-transmit {
+           type int32;
+           description "New Transmitted";
+         }
+         leaf mvrp-join-in-received {
+           type int32;
+           description "Join In Received";
+         }
+         leaf mvrp-leave-all-received {
+           type int32;
+           description "Leave All received";
+         }
+         leaf mvrp-leave-received {
+           type int32;
+           description "Leave Received";
+         }
+         leaf mvrp-in-received {
+           type int32;
+           description "In Received";
+         }
+         leaf mvrp-empty-received {
+           type int32;
+           description "Empty Received";
+         }
+         leaf mvrp-join-empty-received {
+           type int32;
+           description "Join Empty Received";
+         }
+         leaf mvrp-new-received {
+           type int32;
+           description "New Received";
+         }
+       }
+     }
+   }
+   grouping mvrp-vlan-information-block {
+     list mvrp-vlan-instance {
+       leaf mvrp-routing-instance-name {
+         type string;
+         description "Name of routing instance";
+       }
+       list mvrp-vlan-entry {
+         description "Dynamic vlan information";
+         leaf mvrp-vlan-id {
+           type int32;
+           description "VLAN ID";
+         }
+         leaf mvrp-static-vlan {
+           type empty;
+           description "Statically configured vlan";
+         }
+         list mvrp-vlan-interface-entry {
+           leaf mvrp-interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf mvrp-fixed-registration {
+             type empty;
+             description "Fixed registration vlan";
+           }
+         }
+       }
+     }
+   }
+ }

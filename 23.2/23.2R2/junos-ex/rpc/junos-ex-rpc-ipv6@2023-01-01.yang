@@ -1,0 +1,652 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-ipv6 {
+   namespace "http://yang.juniper.net/junos-ex/rpc/ipv6";
+
+   prefix ipv6;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for ipv6 command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R2.21";
+   }
+
+   rpc get-ipv6-nd-information {
+     description "Show IPv6 neighbor cache information";
+     input {
+       leaf host {
+         description "Neighbor host IPV6 address";
+         type string;
+       }
+       leaf interface {
+         description "Name of the interface";
+         type string;
+       }
+       leaf logical-system {
+         description "Name of logical system";
+         type string;
+       }
+       leaf vpn {
+         description "Name of VPN routing table";
+         type string;
+       }
+       leaf reference-count {
+         description "Next hop reference count";
+         type empty;
+       }
+       leaf flags {
+         description "Next hop flags";
+         type empty;
+       }
+     }
+     output {
+       container ipv6-nd-information {
+         uses ipv6-nd-information-block;
+       }
+     }
+   }
+   rpc get-ipv6-ra-information {
+     description "Show IPv6 router advertisement information";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf conflicts {
+         description "Display conflicting information";
+         type empty;
+       }
+       leaf prefix {
+         description "Prefix and optional prefix length";
+         type jt:ipv6prefix;
+       }
+       leaf virtual-router {
+         description "Display only virtual-interface information";
+         type empty;
+       }
+     }
+     output {
+       container ipv6-ra-information {
+         uses ipv6-ra-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping ipv6-nd-information-block {
+     leaf ipv6-nd-total {
+       type int32;
+       description "Total number of cache entries";
+     }
+     list ipv6-nd-entry {
+       leaf ipv6-nd-neighbor-address {
+         type jt:ipv6addr;
+         description "Address of the neighbor";
+       }
+       leaf ipv6-nd-neighbor-l2-address {
+         type string;
+         description "Layer 2 address of the neighbor";
+       }
+       leaf ipv6-nd-state {
+         type string;
+       }
+       leaf ipv6-nd-expire {
+         type int32;
+       }
+       leaf ipv6-nd-isrouter {
+         type string;
+       }
+       leaf ipv6-nd-issecure {
+         type string;
+       }
+       leaf ipv6-nd-interface-name {
+         type string;
+         description "Name of the interface";
+       }
+       leaf ipv6-nd-total {
+         type int32;
+         description "Total number of cache entries";
+       }
+       leaf ipv6-nd-reference-count {
+         type int32;
+       }
+       container ipv6-nd-table-entry-flags {
+         leaf none {
+           type empty;
+           description "ND entry has no flags";
+         }
+         leaf permanent {
+           type empty;
+           description "ND entry is permanent";
+         }
+         leaf published {
+           type empty;
+           description "ND entry is published";
+         }
+         leaf dead {
+           type empty;
+           description "ND entry is dead";
+         }
+         leaf free {
+           type empty;
+           description "ND entry is free";
+         }
+         leaf virtual-gateway-address {
+           type empty;
+           description "ND entry is for virtual gateway address";
+         }
+         leaf remotely-learnt-address {
+           type empty;
+           description "ND entry learnt from remote and installed by protocol";
+         }
+       }
+     }
+   }
+   grouping ipv6-ra-information-block {
+     list ipv6-ra-interface {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf ipv6-ra-advertisements-sent {
+         type int32;
+         description "Number of router advertisements sent";
+       }
+       leaf ipv6-ra-advertisement-sent-time {
+         type string;
+         description "How long since the last router advertisement was sent";
+       }
+       leaf ipv6-ra-solicits-received {
+         type int32;
+         description "Number of router solicitations received";
+       }
+       leaf ipv6-ra-solicit-receive-time {
+         type string;
+         description "How long since the last router solicitation was received";
+       }
+       leaf ipv6-ra-solicits-sent {
+         type int32;
+         description "Number of router solicitations sent";
+       }
+       leaf ipv6-ra-solicit-sent-time {
+         type string;
+         description "How long since the last router solicitation was sent";
+       }
+       leaf ipv6-ra-advertisements-received {
+         type int32;
+         description "Number of router advertisements received";
+       }
+       leaf ipv6-ra-solicit-router-advertisement-unicast {
+         type int32;
+         description "Enable forwarding IPv6 Solicited Router Advert as unicast";
+       }
+       leaf ipv6-ra-solicit-router-advertisement-preference {
+         type string;
+         description "Preference for Router Selection based on RA";
+       }
+       leaf ipv6-ra-passive-mode {
+         type int32;
+         description "Passive mode";
+       }
+       leaf ipv6-ra-proxy-parameter-preference {
+         type string;
+         description "Preference to select configured or proxied parameters for downstream interface";
+       }
+       leaf ipv6-ra-proxy-blackout-timer {
+         type string;
+         description "Proxy blackout timer";
+       }
+       leaf ipv6-ra-proxy-downstream-mode {
+         type int32;
+         description "Proxy downstream interface mode";
+       }
+       leaf ipv6-ra-proxy-upstream-mode {
+         type int32;
+         description "Proxy upstream interface";
+       }
+       leaf-list ipv6-ra-proxy-downstream {
+         type string;
+         description "Proxy downstream interface";
+       }
+       container vrrp-group {
+         leaf vrrp-group-id {
+           type int32;
+           description "Group ID of the configured VRRP group";
+         }
+         leaf vrrp-advertisements-sent {
+           type int32;
+           description "Number of advertisements sent";
+         }
+         leaf vrrp-advertisement-sent-time {
+           type string;
+           description "How long since the last advertisement was sent";
+         }
+         leaf vrrp-solicits-received {
+           type int32;
+           description "Number of router solicitations received";
+         }
+         leaf vrrp-solicit-receive-time {
+           type string;
+           description "How long since the last solicitation was sent";
+         }
+         leaf vrrp-advertisements-received {
+           type int32;
+           description "Number of advertisements received";
+         }
+       }
+       list ipv6-ra-advertisement {
+         leaf ipv6-source-address {
+           type jt:ipv6addr;
+           description "Sender of the advertisement";
+         }
+         leaf ipv6-ra-time-since {
+           type string;
+           description "How long since the advertisement was received";
+         }
+         leaf ipv6-ra-managed-flag {
+           type int32;
+           description "Advertised managed flag";
+         }
+         leaf ipv6-ra-managed-flag-conflict {
+           type int32;
+           description "Conflict with the advertised managed flag";
+         }
+         leaf ipv6-ra-other-config-flag {
+           type int32;
+           description "Advertised other configuration flag";
+         }
+         leaf ipv6-ra-other-config-flag-conflict {
+           type int32;
+           description "Conflict with the advertised other configuration flag";
+         }
+         leaf ipv6-ra-link-mtu {
+           type int32;
+           description "Advertised link MTU";
+         }
+         leaf ipv6-ra-link-mtu-conflict {
+           type int32;
+           description "Conflict with the advertised link MTU";
+         }
+         leaf ipv6-ra-reachable-time {
+           type int32;
+           description "Advertised reachable time";
+         }
+         leaf ipv6-ra-reachable-time-conflict {
+           type int32;
+           description "Conflict with the advertised reachable time";
+         }
+         leaf ipv6-ra-default-lifetime {
+           type int32;
+           description "Advertised default lifetime flag";
+         }
+         leaf ipv6-ra-default-lifetime-conflict {
+           type int32;
+           description "Conflict with the advertised default lifetime flag";
+         }
+         leaf ipv6-ra-retransmit-timer {
+           type int32;
+           description "Advertised retransmit timer flag";
+         }
+         leaf ipv6-ra-retransmit-timer-conflict {
+           type int32;
+           description "Conflict with the advertised retransmit timer flag";
+         }
+         leaf ipv6-ra-current-hop-limit {
+           type int32;
+           description "Advertised current hop limit flag";
+         }
+         leaf ipv6-ra-current-hop-limit-conflict {
+           type int32;
+           description "Conflict with the advertised current hop limit flag";
+         }
+         list ipv6-ra-rdnss {
+           leaf ipv6-ra-rdnss-address {
+             type jt:ipv6addr;
+             description "Advertised RDNSS address";
+           }
+           leaf ipv6-ra-rdnss-lifetime {
+             type int32;
+             description "Advertised lifetime of the RDNSS address";
+           }
+           leaf ipv6-ra-rdnss-lifetime-conflict {
+             type int32;
+             description "Conflict with the advertised lifetime of the RDNSS address";
+           }
+         }
+         list ipv6-ra-prefix {
+           leaf ipv6-ra-prefix-address {
+             type jt:ipv6prefix;
+             description "Advertised prefix";
+           }
+           leaf ipv6-ra-prefix-valid-lifetime {
+             type int32;
+             description "Advertised valid lifetime of the prefix";
+           }
+           leaf ipv6-ra-prefix-valid-lifetime-conflict {
+             type int32;
+             description "Conflict with the advertised valid lifetime of the prefix";
+           }
+           leaf ipv6-ra-prefix-preferred-lifetime {
+             type int32;
+             description "Advertised preferred lifetime of the prefix";
+           }
+           leaf ipv6-ra-prefix-preferred-lifetime-conflict {
+             type int32;
+             description "Conflict with the advertised preferred lifetime of the prefix";
+           }
+           leaf ipv6-ra-prefix-on-link {
+             type int32;
+             description "Advertised on-link flag of the prefix";
+           }
+           leaf ipv6-ra-prefix-on-link-conflict {
+             type int32;
+             description "Conflict with the advertised on-link flag of the prefix";
+           }
+           leaf ipv6-ra-prefix-autonomous {
+             type int32;
+             description "Advertised autonomous flag of the prefix";
+           }
+           leaf ipv6-ra-prefix-autonomous-conflict {
+             type int32;
+             description "Conflict with the advertised autonomous flag of the prefix";
+           }
+         }
+         list ipv6-ra-heard-dnssl {
+           leaf ipv6-ra-heard-dnssl-name {
+             type string;
+             description "Heard DNSSL suffix";
+           }
+           leaf ipv6-ra-heard-dnssl-lifetime {
+             type int32;
+             description "Heard DNSSL lifetime";
+           }
+         }
+         list ipv6-ra-route {
+           leaf ipv6-ra-route-address {
+             type string;
+             description "Route information received in router advertisements";
+           }
+           leaf ipv6-ra-route-prefix-length {
+             type int32;
+             description "Prefix length";
+           }
+           leaf ipv6-ra-route-preference {
+             type string;
+             description "Route preference received in router advertisements";
+           }
+           leaf ipv6-ra-route-lifetime {
+             type string;
+             description "Route lifetime received in router advertisements";
+           }
+         }
+         list ipv6-ra-nat {
+           leaf ipv6-ra-nat-address {
+             type string;
+             description "NAT prefix";
+           }
+           leaf ipv6-ra-nat-prefix-length {
+             type int32;
+             description "NAT prefix length";
+           }
+           leaf ipv6-ra-nat-lifetime {
+             type string;
+             description "NAT prefix lifetime";
+           }
+         }
+       }
+       list ipv6-ra-dnssl {
+         leaf ipv6-ra-dnssl-name {
+           type string;
+           description "Advertised DNSSL suffix";
+         }
+         leaf ipv6-ra-dnssl-lifetime {
+           type int32;
+           description "Advertised DNSSL lifetime";
+         }
+       }
+       list ipv6-ra-config-route {
+         leaf ipv6-ra-config-route-address {
+           type string;
+           description "Route information received in router advertisements";
+         }
+         leaf ipv6-ra-config-route-prefix-length {
+           type int32;
+           description "Prefix length";
+         }
+         leaf ipv6-ra-config-route-preference {
+           type string;
+           description "Route preference configured";
+         }
+         leaf ipv6-ra-config-route-lifetime {
+           type string;
+           description "Route lifetime configured";
+         }
+       }
+       list ipv6-ra-config-nat {
+         leaf ipv6-ra-config-nat-address {
+           type string;
+           description "NAT prefix";
+         }
+         leaf ipv6-ra-config-nat-prefix-length {
+           type int32;
+           description "NAT prefix length";
+         }
+         leaf ipv6-ra-config-nat-lifetime {
+           type string;
+           description "NAT prefix lifetime";
+         }
+       }
+     }
+   }
+ }

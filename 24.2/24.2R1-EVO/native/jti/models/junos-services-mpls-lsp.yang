@@ -1,0 +1,56 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-services-mpls-lsp {
+  yang-version "1";
+  namespace "http://juniper.net/yang/srvs-mpls-lsp";
+  prefix junos-srvs-mpls-lsp;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     lsp label switched path.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-10-18 {
+    description
+      "Initial revision";
+  }
+
+  grouping jnx-srvs-mpls-lsp-top {
+     container junos {
+        description "JunOS OS container";
+
+        container services {
+            description "Junos services";
+
+            container label-switched-path {
+                description "Junos Lsp container";
+
+                container usage {
+                    description "Junos usage container";
+                }
+            }
+        }
+     }
+  }
+  uses jnx-srvs-mpls-lsp-top;
+}

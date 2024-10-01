@@ -1,0 +1,62 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-linecard-packet-usage {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/lc-pkt-usg";
+  prefix junos-lc-pkt-usg;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     linecard packet usage sensor.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-04-17 {
+    description
+      "Initial revision";
+  }
+
+   grouping jnx-lc-pkt-usg-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container system {
+                description "Junos System container";
+                list linecard {
+                    description "Resources related to a linecard";
+                    leaf name {
+                        description "The name of the FPC for which this packet usage record is being exported";
+                        type string;
+                    }
+                    key name;
+                    container packet {
+                        description "Junos Linecard Packet container";
+                        container usage {
+                            description "Junos Linecard Packet usage container";
+                        }
+                    }
+                }
+           }
+       }
+   }
+   uses jnx-lc-pkt-usg-top;
+}

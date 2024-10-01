@@ -1,0 +1,68 @@
+ module junos-genstate-mvrp-applicant-information {
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-applicant-information";
+   prefix jgmai;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mvrp-applicant-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping mvrp-applicant-information-top {
+     description "Top-level grouping";
+     container mvrp-applicant-information {
+       config false;
+       description "Information about MVRP Applicant state";
+       list mvrp-applicant-instance {
+         leaf mvrp-routing-instance-name {
+           type string;
+           description "Name of routing instance";
+         }
+         list mvrp-applicant-vlan-entry {
+           description "Applicant state information";
+           leaf mvrp-vlan-id {
+             type int32;
+             description "VLAN ID";
+           }
+           list mvrp-applicant-interface-entry {
+             leaf mvrp-interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf mvrp-applicant-state {
+               type string;
+               description "Applicant state";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mvrp-applicant-information to top-level genstate";
+     uses mvrp-applicant-information-top;
+   }
+ }

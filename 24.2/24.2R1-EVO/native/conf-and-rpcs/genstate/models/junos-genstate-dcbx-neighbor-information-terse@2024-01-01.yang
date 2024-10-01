@@ -1,0 +1,71 @@
+ module junos-genstate-dcbx-neighbor-information-terse {
+   namespace "http://yang.juniper.net/junos/genstate/dcbx-neighbor-information-terse";
+   prefix jgdnit;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dcbx-neighbor-information-terse";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping dcbx-neighbor-information-terse-top {
+     description "Top-level grouping";
+     container dcbx-neighbor-information-terse {
+       config false;
+       description "Top-level container";
+       list dcbx-neighbor-info {
+         description "DCBX neighbor information for interface";
+         leaf dcbx-interface-name {
+           type string;
+         }
+         leaf dcbx-parent-interface-name {
+           type string;
+           description "Parent interface name";
+         }
+         leaf dcbx-feature-pfc-state {
+           type string;
+           description "PFC state for the priority";
+         }
+         leaf dcbx-feature-ets-state {
+           type string;
+         }
+         leaf ieee-dcbx-feature-ets-recommendation-state {
+           type string;
+         }
+         leaf dcbx-version {
+           type string;
+         }
+         leaf dcbx-feature-application-state {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dcbx-neighbor-information-terse to top-level genstate";
+     uses dcbx-neighbor-information-terse-top;
+   }
+ }

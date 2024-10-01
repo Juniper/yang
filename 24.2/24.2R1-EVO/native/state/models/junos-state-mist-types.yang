@@ -1,0 +1,337 @@
+module junos-state-mist-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/mist/types";
+  prefix js-mist-types;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS Mist Cloud data types.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-03-14 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef connectivity-state {
+    type enumeration {
+      enum DAY0_PHC_CONNECTING {
+        value 1;
+        description
+          "Day-0: Status: PHC connecting";
+      }
+      enum DAY0_NO_IP_ADDRESS_ASSIGNED {
+        value 2;
+        description
+          "Day-0: Failure: No IP address assigned";
+      }
+      enum DAY0_NO_DEFAULT_GATEWAY {
+        value 3;
+        description
+          "Day-0: Failure: No default gateway";
+      }
+      enum DAY0_DEFAULT_GATEWAY_UNREACHABLE {
+        value 4;
+        description
+          "Day-0: Failure: Default gateway unreachable";
+      }
+      enum DAY0_NO_DNS {
+        value 5;
+        description
+          "Day-0: Failure: No DNS";
+      }
+      enum DAY0_NO_DNS_RESPONSE {
+        value 6;
+        description
+          "Day-0: Failure: No DNS response";
+      }
+      enum DAY0_EMPTY_DNS_RESPONSE {
+        value 7;
+        description
+          "Day-0: Failure: Empty DNS response";
+      }
+      enum DAY0_CLOUD_UNREACHABLE {
+        value 8;
+        description
+          "Day-0: Failure: Cloud unreachable";
+      }
+      enum DAY0_NO_RESPONSE_FROM_PHS {
+        value 9;
+        description
+          "Day-0: Failure: No response from PHS";
+      }
+      enum DAY0_CLOUD_CERTIFICATE_NOT_FOUND {
+        value 10;
+        description
+          "Day-0: Failure: Cloud certificate not found";
+      }
+      enum DAY0_CLOUD_CERTIFICATE_INVALID {
+        value 11;
+        description
+          "Day-0: Failure: Cloud certificate invalid";
+      }
+      enum DAY0_ACTIVATION_CODE_FAILURE {
+        value 12;
+        description
+          "Day-0: Failure: Activation code failure";
+      }
+      enum DAY0_CONFIG_NOT_FOUND {
+        value 13;
+        description
+          "Day-0: Failure: Config not found";
+      }
+      enum DAY0_CONFIGURATION_COMMIT_FAILURE {
+        value 14;
+        description
+          "Day-0: Failure: Configuration Commit failure";
+      }
+      enum DAY0_BOOT_CONFIG_SAVE_FAILURE {
+        value 15;
+        description
+          "Day-0: Failure: Boot config save failure";
+      }
+      enum DAY0_PHS_REACHABLE {
+        value 16;
+        description
+          "Day-0: Success: PHS reachable";
+      }
+      enum DAY0_BOOTSTRAP_COMPLETED {
+        value 17;
+        description
+          "Day-0: Success: Bootstrap completed";
+      }
+      enum DAY0_PHC_UPGRADING {
+        value 18;
+        description
+          "Day-0: Status: PHC upgrading";
+      }
+      enum DAY0_PHCD_UPGRADE_FAILURE {
+        value 19;
+        description
+          "Day-0: Failure: PHC upgrade failure";
+      }
+      enum DAY0_BOOT_COMPLETE {
+        value 21;
+        description
+          "Day-0: Success: Boot complete";
+      }
+      enum DAY0_DNS_LOOKUP_FAILED {
+        value 22;
+        description
+          "Day-0: Failure: DNS lookup failed";
+      }
+      enum DAY0_NO_DNS_RESPONSE_FOR_REDIRECT_SERVER {
+        value 23;
+        description
+          "Day-0: Failure: No DNS response for redirect server";
+      }
+      enum DAY0_EMPTY_DNS_RESPONSE_FOR_REDIRECT_SERVER {
+        value 24;
+        description
+          "Day-0: Failure: Empty DNS response for redirect server";
+      }
+      enum DAY0_PHC_CANNOT_MAKE_CONNECTION_TO_REDIRECT_SERVER {
+        value 25;
+        description
+          "Day-0: Failure: PHC cannot make connection to redirect
+           server";
+      }
+      enum DAY0_UNABLE_TO_CONNECT_TO_TCP_PORT_2200_OR_443 {
+        value 26;
+        description
+          "Day-0: Failure: Unable to conect to TCP/443 or TCP/2200";
+      }
+      enum DAY0_PHC_CONNECTED_TO_REDIRECT_SERVER {
+        value 27;
+        description
+          "Day-0: Success: PHC connected to redirect server";
+      }
+      enum DAY0_REDIRECT_SERVER_PROVIDED_CONFIG_SERVER_DETAILS {
+        value 28;
+        description
+          "Day-0: Success: Redirect server provided config server
+           details";
+      }
+      enum DAY0_REDIRECT_SERVER_DID_NOT_PROVIDE_VALID_CONFIG_SERVER_DETAILS {
+        value 29;
+        description
+          "Day-0: Failure: Redirect server did not provide valid config
+           server details";
+      }
+      enum DAY0_REDIRECT_SERVER_PROVIDED_TRUST_ANCHOR {
+        value 30;
+        description
+          "Day-0: Success: Redirect server provided trust anchor";
+      }
+      enum DAY0_PHC_RECEIVED_CERTIFICATE_WITH_BAD_TIME {
+        value 31;
+        description
+          "Day-0: Failure: PHC received certificate with bad time";
+      }
+      enum DAY0_SERVER_CERTIFICATE_VALIDATION_FAILED {
+        value 32;
+        description
+          "Day-0: Failure: Server certificate validation failed";
+      }
+      enum DAY0_DNS_FAILURE_WITH_CONFIG_SERVER {
+        value 33;
+        description
+          "Day-0: Failure: DNS failure with config server";
+      }
+      enum DAY0_EMPTY_DNS_RESPONSE_FROM_CONFIG_SERVER {
+        value 34;
+        description
+          "Day-0: Failure: Empty DNS response from config server";
+      }
+      enum DAY0_PHC_CONNECTED_TO_CONFIG_SERVER {
+        value 35;
+        description
+          "Day-0: Success: PHC connected to config server";
+      }
+      enum DAY0_PHC_CANNOT_MAKE_CONNECTION_TO_CONFIG_SERVER_URL {
+        value 36;
+        description
+          "Day-0: Failure: PHC cannot make connection to config server
+           URL";
+      }
+      enum DAY0_PHC_RECEIVED_INVALID_OR_CORRUPTED_CONFIGURATION_FILE {
+        value 37;
+        description
+          "Day-0: Failure: PHC received invalid or corrupted
+           configuration file";
+      }
+      enum DAY0_SW_DOWNLOAD_FAILURE {
+        value 38;
+        description
+          "Day-0: Failure: SW download failure (JUNOS, jfirmware, Mist
+           SW)";
+      }
+      enum DAY0_SW_DOWNLOAD_SUCCESS {
+        value 39;
+        description
+          "Day-0: SUCCESS: SW download success (JUNOS, jfirmware, Mist
+           SW)";
+      }
+      enum BOOT_COMPLETE {
+        value 101;
+        description
+          "Day-1: Success: Boot complete";
+      }
+      enum NO_DHCP_LEASE_RECEIVED_ON_ANY_INTERFACE {
+        value 102;
+        description
+          "Day-1: Failure: No DHCP lease received on any interface";
+      }
+      enum NO_DEFAULT_GATEWAY {
+        value 103;
+        description
+          "Day-1: Failure: No default gateway";
+      }
+      enum GATEWAY_UNREACHABLE {
+        value 104;
+        description
+          "Day-1: Failure: Gateway unreachable";
+      }
+      enum NO_DNS_SERVER {
+        value 105;
+        description
+          "Day-1: Failure: No DNS server";
+      }
+      enum DNS_LOOKUP_FAILED {
+        value 106;
+        description
+          "Day-1: Failure: DNS lookup failed";
+      }
+      enum AGENT_CONNECT_SENT_TO_CONTROLLER {
+        value 107;
+        description
+          "Day-1: Success: Agent connect sent to controller";
+      }
+      enum AGENT_CAN_NOT_CONNECT_TO_CONTROLLER {
+        value 108;
+        description
+          "Day-1: Failure: Agent cannot connect to controller";
+      }
+      enum AUTHENTICATION_FAILED {
+        value 109;
+        description
+          "Day-1: Failure: Authentication failed";
+      }
+      enum UNDERLYING_SERVICES_IS_DOWN {
+        value 110;
+        description
+          "Day-1: Failure: Underlying services (i.e. Netconf/SSH/HTTPS)
+           is down";
+      }
+      enum AGENT_CONNECTED_TO_CONTROLLER {
+        value 111;
+        description
+          "Day-1: Success: Agent connected to controller";
+      }
+      enum PACKET_LOSS_OR_LATENCY_ON_CONNECTION_TO_CONTROLLER {
+        value 112;
+        description
+          "Day-1: Failure: Packet loss or latency on connection to
+           controller";
+      }
+      enum DNS_FAILURE_WITH_MIST_CLOUD {
+        value 113;
+        description
+          "Day-1: Failure: DNS failure with Mist cloud";
+      }
+      enum EMPTY_DNS_RESPONSE_WITH_MIST_CLOUD {
+        value 114;
+        description
+          "Day-1: Failure: Empty DNS response with Mist cloud";
+      }
+      enum SOFTWARE_DOWNLOAD_FAILURE {
+        value 115;
+        description
+          "Day-1: Failure: Software download failure (JUNOS, jfirmware,
+           Mist SW)";
+      }
+      enum SOFTWARE_INSTALL_FAILURE {
+        value 116;
+        description
+          "Day-1: Failure: Software install failure (JUNOS, jfirmware,
+           Mist SW)";
+      }
+      enum SOFTWARE_UPGRADE_IN_PROGRESS {
+        value 117;
+        description
+          "Day-1: Status: Software upgrade in progress (JUNOS,
+           jfirmware, Mist SW)";
+      }
+      enum SOFTWARE_DOWNLOAD_SUCCESS {
+        value 118;
+        description
+          "Day-1: Success: Software download success (JUNOS, jfirmware,
+           Mist SW)";
+      }
+    }
+    description
+      "This value represents the current Mist cloud connectivity state
+       of the system.";
+  }
+}

@@ -1,0 +1,530 @@
+module jnx-aug-openconfig-ni-mpls {
+
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/ni-mpls";
+
+  prefix "jnx-oc-ni-mpls";
+
+  import ietf-inet-types { prefix inet; }
+  import openconfig-yang-types { prefix oc-yang; }
+  import openconfig-network-instance { prefix oc-ni; }
+
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains JUNOS augments to the OpenConfig NI MPLS modules";
+
+  revision "2021-07-09" {
+    description
+      "Added new grouping to support lsp-instances under p2p-secondary-paths";
+  }
+
+  revision "2019-08-05" {
+    description
+      "Add a new module to capture JUNOS augments to the OpenConfig NI MPLS modules";
+  }
+
+  // JUNOS MPLS Augments - groupings
+
+
+  grouping jnx-mpls-te-interface-bandwidth-measurement {
+    container bandwidth-measurement {
+      container state {
+        leaf last-calculated-sr-utilisation {
+          type uint64;
+          description
+            "The last calculated value of the Segment Routing utilisation
+             (taken post any averaging or adjustment that occurs). This
+             value is updated regardless of whether the value was flooded
+             or not.";
+        }
+        leaf last-sample-measured-sr-util {
+          type uint64;
+          units "kbps";
+          description
+            "The measured Segment Routing bandwidth utilisation at the
+             last sample.";
+        }
+      }
+    }
+  }
+
+  grouping jnx-mpls-rsvp-explicit-route-object-state {
+    description
+      "Grouping to hold information relating to explicit route
+       objects relevant to the path of a traffic engineering LSP.";
+
+    leaf address {
+      type inet:ip-address;
+      description
+        "IP router hop for ERO entry";
+    }
+
+    leaf hop-type {
+      type enumeration {
+        enum LOOSE {
+          description
+            "loose hop in an explicit path";
+        }
+        enum STRICT {
+          description
+            "strict hop in an explicit path";
+        }
+      }
+      description
+        "enumerated type for specifying the type of the hop";
+    }
+  }
+
+  grouping jnx-mpls-rsvp-interface-bw-res-state {
+    leaf static-bandwidth {
+      type uint64;
+      units "bps";
+      description 
+        "Maximum Reservable (Static) Bandwidth.";
+    }
+  }
+
+  grouping jnx-mpls-tunnel-state {
+    leaf inherited-metric {
+      type uint32;
+      description
+         "Inherited metric.";
+    }
+    leaf tunnel-id {
+      type uint32;
+      description
+        "tunnel-id";
+    }
+  }
+
+  grouping jnx-mpls-tunnel-counters {
+    leaf last-transition-time {
+      type oc-yang:date-and-time;
+      description
+        "Indicates the last transition time for the tunnel.
+         Equivalent MIB - mplsLspInfoLastTransition.";
+    }
+  }
+
+  grouping jnx-mpls-tunnel-auto-bandwidth-state {
+    leaf max-average-bw {
+      type uint64;
+      units "Bytes per second";
+      description
+        "Maximum Average Bandwidth";
+    }
+  }
+
+  grouping jnx-mpls-tunnel-p2p-primary-path-state {
+    description
+      "Grouping for capturing the CSPF specific fields.
+       These are rendered only for the primary path.";
+
+    leaf cspf-status {
+      type enumeration {
+        enum CSPF_REOPTIMIZATION_PENDING {
+          description
+            "CSPF reoptimization pending";
+        }
+        enum CSPF_ENQUEUED {
+          description
+            "CSPF already enqueued";
+        }
+        enum CSPF_WILL_BE_ENQUEUED {
+          description
+            "CSPF will be enqueued";
+        }
+        enum CSPF_NO_COMPUTED_ERO {
+          description
+            "CSPF ERO not available";
+        }
+        enum CSPF_COMPUTED_ERO_AVAILABLE {
+          description
+            "CSPF ERO computed successfully";
+        }
+      }
+      description
+        "Current CSPF Status";
+    }
+  }
+
+  grouping jnx-mpls-rsvp-interface-admin-status {
+    leaf admin-status {
+      type enumeration {
+        enum ENABLED {
+          description
+            "RSVP is enabled on the interface";
+        }
+        enum DISABLED {
+          description
+            "RSVP is disabled on the interface";
+        }
+      }
+    }
+  }
+
+
+  grouping jnx-mpls-rsvp-error-counters {
+    description
+      "Top-level structure grouping for RSVP error counters.";
+
+    container error-counters {
+      description
+        "Enclosing container for RSVP error counters.";
+
+      leaf bad-packet-length {
+        type uint64;
+        description 
+          "Number of packets with bad length.";
+      }
+      leaf bad-packet-version {
+        type uint64;
+        description 
+          "Number of packets with bad version.";
+      }
+      leaf authentication-fail {
+        type uint64;
+        description 
+          "Number of packets that failed authentication.";
+      }
+      leaf bad-checksum {
+        type uint64;
+        description 
+          "Number of packets with bad checksum.";
+      }
+      leaf bad-packet-format {
+        type uint64;
+        description 
+          "Number of packets with bad format.";
+      }
+      leaf recv-pkt-disabled-intf {
+        type uint64;
+        description 
+          "Number of packets received on disabled interface.";
+      }
+      leaf state-timeout {
+        type uint64;
+        description 
+          "Number of times state timed out.";
+      }
+      leaf message-out-of-order {
+        type uint64;
+        description 
+          "Number of messages received out of order.";
+      }
+      leaf unknown-ack {
+        type uint64;
+        description 
+          "Number of unknown ack messages received.";
+      }
+      leaf unknown-nack {
+        type uint64;
+        description 
+          "Number of unknown nack messages received.";
+      }
+      leaf received-nack {
+        type uint64;
+        description 
+          "Number of nack messages received.";
+      }
+      leaf send-failure {
+        type uint64;
+        description 
+          "Number of times send failed.";
+      }
+    }
+  }
+
+  grouping jnx-rsvp-session-state {
+    leaf notify-status {
+      type string;
+    }
+  }
+
+  grouping jnx-mpls-tunnel-p2p-path-notify-state {
+    leaf notify-status {
+      type string;
+    }
+  }
+
+  grouping jnx-mpls-tunnel-p2p-path-lsp-instances-state {
+    list lsp-instances {
+      key "local-index";
+
+      leaf local-index {
+        type leafref {
+          path "../state/local-index";
+        }
+      }
+
+      container state {
+        leaf local-index {
+          type uint32;
+        }
+        leaf notify-status {
+          type string;
+        }
+        leaf metric {
+          type int32;
+        }
+        leaf bandwidth {
+          type uint64;
+        }
+        leaf max-avg-bandwidth {
+          type uint64;
+        }
+      }
+    }
+  }
+
+  grouping jnx-container-tunnels {
+
+      container container-tunnels {
+
+          list container-tunnel {
+              key "name";
+              leaf name {
+                  type string;
+              }
+              container state {
+                  leaf name {
+                      type string;
+                  }
+                  leaf oper-state {
+                      type enumeration {
+                          enum CONTAINER_TUNNEL_UP {
+                              description
+                                  "container-tunnel up";
+                          }
+                          enum CONTAINER_TUNNEL_DOWN {
+                              description
+                                  "container-tunnel down";
+                          }
+                      }
+                  }
+                  leaf normalization-status {
+                      type string;
+                  }
+                  leaf member-count {
+                      type uint32;
+                  }
+                  leaf minimum-lsp-count {
+                      type uint32;
+                  }
+                  leaf maximum-lsp-count {
+                      type uint32;
+                  }
+                  leaf normalize-timer {
+                      type uint32;
+                  }
+                  leaf normalize-threshold {
+                      type uint32;
+                  }
+                  leaf aggregate-bandwidth {
+                      type uint64;
+                  }
+                  leaf sampled-aggregate-bandwidth {
+                      type uint64;
+                  }
+                  leaf max-signaling-bandwidth {
+                      type uint64;
+                  }
+                  leaf min-signaling-bandwidth {
+                      type uint64;
+                  }
+                  leaf splitting-bandwidth {
+                      type uint64;
+                  }
+                  leaf merging-bandwidth {
+                      type uint64;
+                  }
+                  leaf time-to-normalize {
+                      type uint64;
+                  }
+                  leaf incremental-normalization {
+                      type boolean;
+                  }
+                  leaf failover-normalization {
+                      type boolean;
+                  }
+                  container sampling {
+                      leaf sampling-outlier-cutoff {
+                          type uint32;
+                      }
+                      leaf sampling-mode {
+                          type enumeration {
+                              enum SAMPLE_MODE_NONE {
+                                  description
+                                      "NO sampling";
+                              }
+                              enum SAMPLE_MODE_AVERAGE_AGGREGATE {
+                                  description
+                                      "Average Aggregate sampling";
+                              }
+                              enum SAMPLE_MODE_MAX_AGGREGATE {
+                                  description
+                                      "Maximum Aggregate sampling";
+                              }
+                              enum SAMPLE_MODE_PERCENTILE_BASED {
+                                  description
+                                      "Percentile based sampling";
+                              }
+                          }
+                      }
+                      leaf sampling-percentile {
+                          type uint32;
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+  grouping jnx-mpls-tunnel-p2p-sec-path-lsp-instances-state {
+    list lsp-instances {
+      key "local-index";
+      description
+        "LSP path instances for the p2p-secondary-paths";
+
+      leaf local-index {
+        type leafref {
+          path "../state/local-index";
+        }
+        description
+          "Local index of the LSP path instance";
+      }
+
+      container state {
+        leaf local-index {
+          type uint32;
+          description
+            "Notification type for the p2p-secondary-path";
+        }
+        leaf notify-status {
+          type string;
+          description
+            "Indicates self-ping-success or failure";
+        }
+        leaf reason {
+          type string;
+          description
+            "Specifies the reason for self-ping-failed";
+        }
+      }
+      leaf lsp-id {
+        type uint32;
+        description
+          "Specifies the LSP id of the secondary path";
+      }
+    }
+  }
+
+  // NI MPLS Augments
+
+
+  // TE Interfaces - Augments
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:te-interface-attributes/oc-ni:interface" {
+
+    uses jnx-mpls-te-interface-bandwidth-measurement;
+  }
+
+
+  // RSVP - Augments
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:signaling-protocols/oc-ni:rsvp-te/" +
+    "oc-ni:sessions/oc-ni:session/oc-ni:explicit-route-objects/" +
+    "oc-ni:explicit-route-object/oc-ni:state"{
+
+     uses jnx-mpls-rsvp-explicit-route-object-state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:signaling-protocols/oc-ni:rsvp-te/" +
+    "oc-ni:global/oc-ni:state" {
+
+    uses jnx-mpls-rsvp-error-counters;
+  }
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:signaling-protocols/oc-ni:rsvp-te/" +
+    "oc-ni:interface-attributes/oc-ni:interface" {
+
+    uses jnx-mpls-rsvp-interface-admin-status;
+  }
+
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:signaling-protocols/oc-ni:rsvp-te/" +
+    "oc-ni:interface-attributes/oc-ni:interface/oc-ni:state" {
+
+    uses jnx-mpls-rsvp-error-counters;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:signaling-protocols/oc-ni:rsvp-te/" +
+    "oc-ni:interface-attributes/oc-ni:interface/oc-ni:bandwidth-reservations/" +
+    "oc-ni:bandwidth-reservation/oc-ni:state" {
+
+    uses jnx-mpls-rsvp-interface-bw-res-state;
+  }
+
+
+  // Tunnels - Augments
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:mpls/" +
+      "oc-ni:lsps/oc-ni:constrained-path" {
+      uses jnx-container-tunnels;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:lsps/oc-ni:constrained-path/" +
+    "oc-ni:tunnels/oc-ni:tunnel/oc-ni:state" {
+
+    uses jnx-mpls-tunnel-state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:lsps/oc-ni:constrained-path/" +
+    "oc-ni:tunnels/oc-ni:tunnel/oc-ni:state/oc-ni:counters" {
+
+    uses jnx-mpls-tunnel-counters;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:lsps/oc-ni:constrained-path/" +
+    "oc-ni:tunnels/oc-ni:tunnel/oc-ni:bandwidth/" +
+    "oc-ni:auto-bandwidth/oc-ni:state" {
+
+    uses jnx-mpls-tunnel-auto-bandwidth-state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:lsps/oc-ni:constrained-path/" +
+    "oc-ni:tunnels/oc-ni:tunnel/oc-ni:p2p-tunnel-attributes/" +
+    "oc-ni:p2p-primary-path/oc-ni:p2p-primary-path" {
+
+    uses jnx-mpls-tunnel-p2p-path-lsp-instances-state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:lsps/oc-ni:constrained-path/" +
+    "oc-ni:tunnels/oc-ni:tunnel/oc-ni:p2p-tunnel-attributes/" +
+    "oc-ni:p2p-primary-path/oc-ni:p2p-primary-path/oc-ni:state" {
+
+    uses jnx-mpls-tunnel-p2p-primary-path-state;
+    uses jnx-mpls-tunnel-p2p-path-notify-state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:lsps/oc-ni:constrained-path/" +
+    "oc-ni:tunnels/oc-ni:tunnel/oc-ni:p2p-tunnel-attributes/" +
+    "oc-ni:p2p-secondary-paths/oc-ni:p2p-secondary-path" {
+
+    uses jnx-mpls-tunnel-p2p-sec-path-lsp-instances-state;
+  }
+}

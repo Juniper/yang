@@ -1,0 +1,148 @@
+/*
+ * YANG definition for RSVP interfaces
+ *
+ * Copyright (c) 2017, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module jnx-tel-RE-rsvp-interface {
+  yang-version 1;
+
+  // namespace
+  namespace "http://juniper.net/yang/jnx-tel-RE-rsvp-interface";
+
+  prefix "jnx-tel-rsvp-intf";
+
+  import jnx-tel-top { prefix junos; }
+
+  import ietf-yang-types { prefix yang; }
+
+  // meta
+  organization "Juniper Networks";
+
+  contact "support@juniper.net";
+
+  description "Yang definition for RSVP Interfaces";
+  revision "2017-04-09" {
+    description "Initial yang file";
+  }
+
+  grouping jnx-rsvp-interface-state {
+    leaf interface-name {
+      type string;
+    }
+    leaf index {
+      type uint32;
+    }
+    leaf rsvp-status {
+      type string;
+    }
+    leaf authentication-flag {
+      type string;
+    }
+    leaf aggregate-flag {
+      type string;
+    }
+    leaf ack-flag {
+      type string;
+    }
+    leaf protect-flag {
+      type string;
+    }
+    leaf hello-interval {
+      type uint32;
+    }
+    leaf interface-address {
+      type yang:dotted-quad;
+    }
+  }
+ 
+  grouping jnx-rsvp-interface-message-stats {
+    leaf rsvp-message {
+      type string;
+    }
+    leaf message-sent {
+      type yang:counter32;
+    }
+    leaf messages-received {
+      type yang:counter32;
+    }
+    leaf messages-sent-5seconds {
+      type yang:counter32;
+    }
+    leaf messages-received-5seconds {
+      type yang:counter32;
+    }
+  }
+
+  grouping jnx-rsvp-interface-telink-state {
+    leaf active-reservation {
+      type uint32;
+    }
+    leaf preemption-count {
+      type uint32;
+    }
+    leaf update-threshold {
+      type uint32;
+    }
+    leaf subscription {
+      type uint32;
+    }
+    leaf static-bandwidth {
+      type uint64;
+    }
+    leaf available-bandwidth {
+      type uint64;
+    }
+  }
+
+  grouping jnx-rsvp-interface-reserved-bandwidth-state {
+    leaf bandwidth-priority {
+      type uint32;
+    }
+    leaf total-reserved-bandwidth {
+      type uint64;
+    }
+  }
+
+  grouping rsvp-interface-top {
+    leaf active-count {
+      type uint32;
+    }
+    list rsvp-interface {
+      key interface-name;
+      description
+        "The list of RSVP interfaces on this device";
+      
+      uses jnx-rsvp-interface-state;
+
+      list message-statistics {
+        key rsvp-message;
+        description
+          "Counters of different messages sent/received on interface";
+
+        uses jnx-rsvp-interface-message-stats;
+        
+        container rsvp-telink {
+          config false;
+          uses jnx-rsvp-interface-telink-state;
+
+          list reserved-bandwidth {
+            key bandwidth-priority;
+            description
+              "Reserved bandwidth state";
+  
+            uses jnx-rsvp-interface-reserved-bandwidth-state;
+          }
+        }
+      }
+    }
+  }
+
+  augment "/junos:junos" {
+    container rsvp-interface-information {
+      config false;
+      uses rsvp-interface-top;
+    }
+  }
+} 

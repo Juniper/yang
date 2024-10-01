@@ -1,0 +1,5155 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-security {
+   namespace "http://yang.juniper.net/junos-ex/rpc/security";
+
+   prefix security;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for security command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R2.21";
+   }
+
+   rpc get-security-alarm-information {
+     description "Show active security alarm information";
+     input {
+       leaf alarm-id {
+         description "Alarm ID filter";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf-list alarm-type {
+         ordered-by user;
+         description "Alarm type filter";
+         type enumeration {
+           enum "authentication" {
+             description "Authentication alarms";
+           }
+           enum "cryptographic-self-test" {
+             description "Cryptographic self-test alarms";
+           }
+           enum "decryption-failures" {
+             description "Decryption failure alarms";
+           }
+           enum "encryption-failures" {
+             description "Encryption failure alarms";
+           }
+           enum "ike-phase1-failures" {
+             description "IKE Phase 1 failure alarms";
+           }
+           enum "ike-phase2-failures" {
+             description "IKE Phase 2 failure alarms";
+           }
+           enum "key-generation-self-test" {
+             description "Key generation self-test alarms";
+           }
+           enum "non-cryptographic-self-test" {
+             description "Non-cryptographic self-test alarms";
+           }
+           enum "policy" {
+             description "Policy alarms";
+           }
+           enum "replay-attacks" {
+             description "Replay attack alarms";
+           }
+           enum "idp" {
+             description "IDP attack alarms";
+           }
+         }
+       }
+       leaf newer-than {
+         description "Alarms newer than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf older-than {
+         description "Alarms older than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf process {
+         description "Process that generated the alarm filter";
+         type string;
+       }
+       leaf severity {
+         description "Severity of the alarm filter";
+         type enumeration {
+           enum "alert" {
+             description "Alert severity";
+           }
+           enum "crit" {
+             description "Critical severity";
+           }
+           enum "debug" {
+             description "Debug severity";
+           }
+           enum "emerg" {
+             description "Emergency severity";
+           }
+           enum "err" {
+             description "Error severity";
+           }
+           enum "info" {
+             description "Information severity";
+           }
+           enum "notice" {
+             description "Notice severity";
+           }
+           enum "warning" {
+             description "Warning severity";
+           }
+         }
+       }
+       leaf style {
+         type enumeration {
+           enum "detail" {
+             description "Show detail alarm information";
+           }
+         }
+       }
+     }
+     output {
+       container security-alarm-information {
+         uses security-alarm-information-block;
+       }
+     }
+   }
+   rpc get-security-log-information {
+     description "Show auditable security log information";
+     input {
+       leaf destination-address {
+         description "Destination address and optional prefix length";
+         type jt:ipprefix-optional;
+       }
+       leaf destination-port {
+         description "Destination port";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf event-id {
+         description "Event ID filter";
+         type string;
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+       }
+       leaf older-than {
+         description "Events older than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf policy-name {
+         description "Policy name filter";
+         type string;
+       }
+       leaf process {
+         description "Process that generated the event";
+         type string;
+       }
+       leaf protocol {
+         description "Protocol filter";
+         type string;
+       }
+       leaf newer-than {
+         description "Events newer than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf result {
+         type enumeration {
+           enum "failure" {
+             description "Event was a failure";
+           }
+           enum "success" {
+             description "Event was successful";
+           }
+         }
+       }
+       leaf severity {
+         description "Severity of the event";
+         type enumeration {
+           enum "alert" {
+             description "Alert severity";
+           }
+           enum "crit" {
+             description "Critical severity";
+           }
+           enum "debug" {
+             description "Debug severity";
+           }
+           enum "emerg" {
+             description "Emergency severity";
+           }
+           enum "err" {
+             description "Error severity";
+           }
+           enum "info" {
+             description "Information severity";
+           }
+           enum "notice" {
+             description "Notice severity";
+           }
+           enum "warning" {
+             description "Warning severity";
+           }
+         }
+       }
+       leaf source-address {
+         description "Source address and optional prefix length";
+         type jt:ipprefix-optional;
+       }
+       leaf source-port {
+         description "Source port";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf username {
+         description "Username filter";
+         type string;
+       }
+       leaf sort-by {
+         description "Sort by selected field";
+         default "time";
+         type enumeration {
+           enum "destination-address" {
+             description "Sort by destination address";
+           }
+           enum "destination-port" {
+             description "Sort by destination port";
+           }
+           enum "interface-name" {
+             description "Sort by interface name";
+           }
+           enum "policy-name" {
+             description "Sort by policy name";
+           }
+           enum "protocol" {
+             description "Sort by protocol";
+           }
+           enum "source-address" {
+             description "Sort by source address";
+           }
+           enum "source-port" {
+             description "Sort by source port";
+           }
+           enum "time" {
+             description "Sort by time of event arrival";
+           }
+           enum "username" {
+             description "Sort by event user name ";
+           }
+         }
+       }
+       leaf direction {
+         default "ascending";
+         type enumeration {
+           enum "ascending" {
+             description "Sort in ascending order";
+           }
+           enum "descending" {
+             description "Sort in descending order";
+           }
+         }
+       }
+       leaf style {
+         type enumeration {
+           enum "detail" {
+             description "Show detail alarm information";
+           }
+         }
+       }
+     }
+     output {
+       container security-log-information {
+         uses security-log-information-block;
+       }
+     }
+   }
+   rpc get-pki-certificate-request {
+     description "Show PKCS-10 certificate request information";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf certificate-id {
+         description "Certificate identifier";
+         type string {
+           length "1 .. 32";
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-ca-certificate {
+     description "Show certificate-authority certificate information";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice ca-cert-choice {
+         case ca-profile {
+           leaf ca-profile {
+             description "Certificate authority profile";
+             type string {
+               length "1 .. 32";
+             }
+           }
+         }
+         case ca-profile-group {
+           leaf ca-profile-group {
+             description "Show CA profile group";
+             type string {
+               length "1 .. 32";
+             }
+           }
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-node-local-local-certificate {
+     description "Show router certificate information";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice certificate-choice {
+         case certificate-id {
+           leaf certificate-id {
+             description "Certificate identifier";
+             type string {
+               length "1 .. 32";
+             }
+           }
+         }
+         case system-generated {
+           leaf system-generated {
+             description "Autogenerated self-signed certificate";
+             type empty;
+           }
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-node-local-certificate-request {
+     description "Show PKCS-10 certificate request information";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf certificate-id {
+         description "Certificate identifier";
+         type string {
+           length "1 .. 32";
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-local-certificate {
+     description "Show router certificate information";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice certificate-choice {
+         case certificate-id {
+           leaf certificate-id {
+             description "Certificate identifier";
+             type string {
+               length "1 .. 32";
+             }
+           }
+         }
+         case system-generated {
+           leaf system-generated {
+             description "Autogenerated self-signed certificate";
+             type empty;
+           }
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-crl {
+     description "Show certificate revocation list information";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf ca-profile {
+         description "Certificate authority profile";
+         type string {
+           length "1 .. 32";
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pkid-crl-information-list {
+         uses x509-pkid-crl-information-list-block;
+       }
+     }
+   }
+   rpc get-pki-statistics {
+     description "Show PKI related statistics";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container pki-statistics {
+         uses pki-statistics-block;
+       }
+     }
+   }
+   rpc get-gvpn-security-associations-information {
+     description "Show IPSec security association information";
+     input {
+       uses command-forwarding;
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf show-gvpn-index-ipsec-security-association {
+         description "Index of security association";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "10001 .. 20000";
+           }
+         }
+       }
+       leaf group-id {
+         description "Group VPN identification number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4294967295";
+           }
+         }
+       }
+       leaf service-set {
+         description "Service set name";
+         type string {
+         }
+       }
+     }
+     output {
+       container ipsec-security-associations-information {
+         uses ipsec-security-associations-information-block;
+       }
+     }
+   }
+   rpc get-gvpn-ipsec-statistics-information {
+     description "Show IPSec statistics";
+     input {
+       uses command-forwarding;
+       leaf fpc {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+       leaf pic {
+         description "PIC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+       leaf show-gvpn-index-ipsec-statistics {
+         description "Index of Security Association";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "10001 .. 20000";
+           }
+         }
+       }
+     }
+     output {
+       container usp-ipsec-total-statistics-information {
+         uses usp-ipsec-total-statistics-information-block;
+       }
+     }
+   }
+   rpc get-gvpn-inactive-tunnels {
+     description "Inactive-tunnels";
+     input {
+       uses command-forwarding;
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-id {
+         description "Group VPN identification number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4294967295";
+           }
+         }
+       }
+       leaf service-set {
+         description "Service set name";
+         type string {
+         }
+       }
+     }
+     output {
+       container ipsec-unestablished-tunnel-information {
+         uses ipsec-unestablished-tunnel-information-block;
+       }
+     }
+   }
+   rpc get-gvpn-ike-security-associations-information {
+     description "Show IKE security association information";
+     input {
+       uses command-forwarding;
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Show brief output (default)";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+         }
+       }
+       leaf peer-address {
+         description "IP address of the peer";
+         type jt:ipaddr;
+       }
+       leaf index {
+         description "Index of security association";
+         default "0";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf service-set {
+         description "Service set name";
+         type string {
+         }
+       }
+     }
+     output {
+       container ike-security-associations-information {
+         uses ike-security-associations-information-block;
+       }
+     }
+   }
+   rpc get-gvpn-kek-security-associations-information {
+     description "Show KEK security association information";
+     input {
+       uses command-forwarding;
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Show brief output (default)";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+         }
+       }
+       leaf peer-address {
+         description "IP address of the peer";
+         type jt:ipaddr;
+       }
+       leaf index {
+         description "Index of security association";
+         default "0";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       choice groupchoice {
+         description "Specify a group by name or ID";
+         case group-id {
+           leaf group-id {
+             description "Group VPN identification number";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type uint32 {
+                 range "1 .. 4294967295";
+               }
+             }
+           }
+         }
+         case vpn {
+           leaf vpn {
+             description "Group VPN Name";
+             type string {
+               length "1 .. 32";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container gvpn-kek-security-associations-information {
+         uses gvpn-kek-security-associations-information-block;
+       }
+     }
+   }
+   rpc get-hakr-keychain-information {
+     description "Show all protocols keychain";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container hakr-keychain-information {
+         uses hakr-keychain-information-block;
+       }
+     }
+   }
+   rpc get-mka-session-information {
+     description "Show MKA sessions information";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container mka-session-information {
+         uses mka-session-information-block;
+       }
+     }
+   }
+   rpc get-mka-session-interface-information {
+     description "Show MKA session on this interface";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Show MKA session for this interface";
+         default "all";
+         type string {
+         }
+       }
+     }
+     output {
+       container mka-session-information {
+         uses mka-session-information-block;
+       }
+     }
+   }
+   rpc get-mka-statistics {
+     description "Show MKA statistics";
+     output {
+       container mka-statistics {
+         uses mka-statistics-block;
+       }
+     }
+   }
+   rpc get-mka-interface-statistics {
+     description "Show MKA statistics on this interface";
+     input {
+       leaf interface-name {
+         description "Show MKA statistics for this interface";
+         default "all";
+         type string {
+         }
+       }
+     }
+     output {
+       container mka-statistics {
+         uses mka-statistics-block;
+       }
+     }
+   }
+   rpc get-macsec-connection-information {
+     description "Show MAC Security connections information";
+     output {
+       container macsec-connection-information {
+         uses macsec-connection-information-block;
+       }
+     }
+   }
+   rpc get-macsec-connection-interface-information {
+     description "Show MAC security connections on this interface";
+     input {
+       leaf interface-name {
+         description "Show MAC security connections for this interface";
+         default "all";
+         type string {
+         }
+       }
+     }
+     output {
+       container macsec-connection-information {
+         uses macsec-connection-information-block;
+       }
+     }
+   }
+   rpc get-macsec-statistics {
+     description "Show MAC Security statistics";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container macsec-statistics {
+         uses macsec-statistics-block;
+       }
+     }
+   }
+   rpc get-macsec-interface-statistics {
+     description "Show MAC security statistics on this interface";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Show MAC security statistics for this interface";
+         default "all";
+         type string {
+         }
+       }
+     }
+     output {
+       container macsec-statistics {
+         uses macsec-statistics-block;
+       }
+     }
+   }
+   rpc get-macsec-crypto-algorithms {
+     description "Show fips validated algorithms used by MACsec module from crypto library";
+     output {
+       container macsec-crypto-algorithms {
+         uses macsec-crypto-algorithms-block;
+       }
+     }
+   }
+   rpc get-macsec-crypto-version {
+     description "Show version of crypto library used by MACsec module";
+     output {
+       container macsec-crypto-version {
+         uses macsec-crypto-version-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping security-alarm-information-block {
+     leaf security-alarms-disabled {
+       type empty;
+       description "Security alarm subsystem disabled";
+     }
+     leaf no-security-alarms-active {
+       type empty;
+       description "No security alarms active";
+     }
+     leaf no-security-alarms-returned {
+       type empty;
+       description "No security alarms returned for this filter";
+     }
+     list security-alarm {
+       leaf security-alarm-id {
+         type string;
+         description "Alarm ID";
+       }
+       leaf security-alarm-time {
+         type string;
+         description "Time of the alarm";
+       }
+       leaf security-alarm-message {
+         type string;
+         description "Full message of the alarm";
+       }
+       leaf security-alarm-type {
+         type string;
+         description "Alarm type";
+       }
+       leaf severity {
+         type string;
+         description "Syslog message severity";
+       }
+       container process {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+       }
+     }
+   }
+   grouping security-log-information-block {
+     leaf security-logs-disabled {
+       type empty;
+       description "Security logging disabled";
+     }
+     leaf no-security-events {
+       type empty;
+       description "No security events have been logged";
+     }
+     leaf no-security-events-returned {
+       type empty;
+       description "No security events were logged matching this filter";
+     }
+     list security-event {
+       leaf security-event-time {
+         type string;
+         description "Time of the event";
+       }
+       leaf security-event-message {
+         type string;
+         description "Full message of the event";
+       }
+       leaf security-event-id {
+         type string;
+         description "Event ID";
+       }
+       leaf severity {
+         type string;
+         description "Syslog message severity";
+       }
+       leaf security-event-result {
+         type string;
+         description "Result of this event (success or failure)";
+       }
+       leaf security-event-username {
+         type string;
+         description "Username associated with event";
+       }
+       leaf security-event-interface-name {
+         type string;
+         description "Interface name associated with event";
+       }
+       leaf security-event-protocol {
+         type string;
+         description "Protocol associated with event";
+       }
+       leaf security-event-policy-name {
+         type string;
+         description "Policy name associated with event";
+       }
+       leaf security-event-destination-address {
+         type string;
+         description "Destination address associated with event";
+       }
+       leaf security-event-destination-port {
+         type int32;
+         description "Destination port associated with event";
+       }
+       leaf security-event-source-address {
+         type string;
+         description "Source address associated with event";
+       }
+       leaf security-event-source-port {
+         type int32;
+         description "Source port associated with event";
+       }
+       container process {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+       }
+     }
+   }
+   grouping x509-pki-certificate-info-list-block {
+     container x509-certificate-info {
+       description "Detailed information about an X.509 certificate";
+       leaf identifier {
+         type string;
+         description "Certificate identifier";
+       }
+       leaf signature-algorithm {
+         type string;
+         description "Algorithm used by the CA to sign the certificate";
+       }
+       leaf status {
+         type string;
+       }
+       container public-key {
+         leaf public-key-algorithm {
+           type string;
+           description "Algorithm used for creating the subject public key";
+         }
+         leaf public-key-length {
+           type int32;
+           description "Length of X.509 public";
+         }
+         leaf public-key-verification-status {
+           type string;
+           description "Verification status of X.509 public key";
+         }
+         leaf public-key-location {
+           type string;
+           description "Keypair generated locally or at cloud HSM";
+         }
+       }
+       list fingerprint {
+         leaf fingerprint-content {
+           type string;
+         }
+         leaf fingerprint-hash-algorithm {
+           type string;
+         }
+       }
+       container issuer {
+         container distinguished-name {
+           leaf-list organization-name {
+             type string;
+             description "Organization";
+           }
+           leaf-list organizational-unit-name {
+             type string;
+             description "Organization unit";
+           }
+           leaf-list country-name {
+             type string;
+             description "Country name";
+           }
+           leaf-list state-or-province-name {
+             type string;
+             description "State";
+           }
+           leaf-list locality-name {
+             type string;
+             description "Locality";
+           }
+           leaf-list common-name {
+             type string;
+             description "Common name";
+           }
+           leaf-list email-address {
+             type string;
+             description "E-mail address";
+           }
+           leaf-list domain-component {
+             type string;
+             description "Domain component";
+           }
+           leaf-list dn-serial-number {
+             type string;
+             description "DN Serial number";
+           }
+         }
+       }
+       container subject {
+         container distinguished-name {
+           leaf-list organization-name {
+             type string;
+             description "Organization";
+           }
+           leaf-list organizational-unit-name {
+             type string;
+             description "Organization unit";
+           }
+           leaf-list country-name {
+             type string;
+             description "Country name";
+           }
+           leaf-list state-or-province-name {
+             type string;
+             description "State";
+           }
+           leaf-list locality-name {
+             type string;
+             description "Locality";
+           }
+           leaf-list common-name {
+             type string;
+             description "Common name";
+           }
+           leaf-list email-address {
+             type string;
+             description "E-mail address";
+           }
+           leaf-list domain-component {
+             type string;
+             description "Domain component";
+           }
+           leaf-list dn-serial-number {
+             type string;
+             description "DN Serial number";
+           }
+         }
+       }
+       leaf certificate-type {
+         type string;
+         description "X.509 certificate type";
+       }
+       leaf ca-profile {
+         type string;
+         description "CA Profile Name";
+       }
+       container issue-info {
+         leaf recipient {
+           type string;
+         }
+         leaf issued-by {
+           type string;
+         }
+       }
+       container validity {
+         leaf not-before {
+           type string;
+           description "Start date of validity period";
+         }
+         leaf not-after {
+           type string;
+           description "End date of validity period";
+         }
+       }
+       leaf version {
+         type string;
+         description "Certificate version";
+       }
+       leaf cert-chain {
+         type string;
+         description "Certificate Chain";
+       }
+       list serial-number-list {
+         leaf serial-number-x509 {
+           type string;
+           description "Serial number of an X.509 certificate";
+         }
+         leaf serial-number-dec-x509 {
+           type string;
+           description "Serial number of an X.509 certificate in decimal";
+         }
+       }
+       list public-key-contents-list {
+         leaf key-contents {
+           type string;
+           description "Contents of an X.509 public key";
+         }
+       }
+       list subject-string-list {
+         leaf subject-string {
+           type string;
+           description "Cerificate's distinguished name";
+         }
+       }
+       list alternate-subject-list {
+         leaf alternate-subject {
+           type string;
+           description "Series of alternate subject in X.509 certificate";
+         }
+       }
+       list key-usage-list {
+         leaf key-usage {
+           type string;
+           description "Purpose for which X.509 key is used";
+         }
+       }
+       list distribution-crl-list {
+         leaf distribution-crl {
+           type string;
+           description "Information about a distribution CRL";
+         }
+       }
+       list authority-information-access-ocsp-list {
+         leaf authority-information-access-ocsp {
+           type string;
+           description "Information about ocsp authority-information-access locations";
+         }
+       }
+       list certificate-policy-list {
+         leaf certificate-policy {
+           type string;
+           description "List of certificate policy identifiers";
+         }
+       }
+       container auto-re-enrollment {
+         leaf auto-re-enrollment-status {
+           type string;
+           description "Auto-re-enrollment information";
+         }
+         leaf auto-re-enrollment-next-trigger-time {
+           type string;
+           description "Auto-re-enrollment next trigger time";
+         }
+       }
+     }
+   }
+   grouping x509-pkid-crl-information-list-block {
+     container pkid-x509-crl-information {
+       description "Detailed information about X.509 certificate revocation list";
+       leaf identifier {
+         type string;
+         description "Certificate identifier";
+       }
+       leaf crl-version {
+         type string;
+         description "CRL version";
+       }
+       leaf crl-number {
+         type string;
+         description "CRL sequence number";
+       }
+       leaf crl-issuer {
+         type string;
+         description "CRL issuer name";
+       }
+       container crl-validity {
+         leaf effective-date {
+           type string;
+           description "Effective date of CRL";
+         }
+         leaf next-update {
+           type string;
+           description "Next update of CRL";
+         }
+         leaf last-download {
+           type string;
+           description "Last Download Time of CRL";
+         }
+       }
+       list crl-revocation-list {
+         leaf revoked-cert-serial-number {
+           type string;
+           description "Serial number of revoked certificate";
+         }
+         leaf crl-revocation-date {
+           type string;
+           description "Revocation date";
+         }
+       }
+     }
+   }
+   grouping pki-statistics-block {
+     leaf statistics-name {
+       type string;
+     }
+     leaf statistics-value {
+       type int32;
+     }
+   }
+   grouping ipsec-security-associations-information-block {
+     leaf total-active-tunnels {
+       type int32;
+       description "Total number of active tunnels";
+     }
+     leaf total-ipsec-sas {
+       type int32;
+       description "Total number of ipsec sas";
+     }
+     container ipsec-security-associations {
+       leaf sa-installation-state {
+         type string;
+         description "SA Installation State in Kernel";
+       }
+       leaf sa-nego-num {
+         type int32;
+         description "SA nego num";
+       }
+       leaf sa-nego-fail {
+         type int32;
+         description "SA nego fail num";
+       }
+       leaf sa-del-num {
+         type int32;
+         description "SA defer delete count";
+       }
+       leaf stats-name {
+         type string;
+       }
+       leaf sa-flag {
+         type int32;
+         description "SA flags";
+       }
+       leaf sa-tunnel-event-time {
+         type string;
+         description "Tunnel event occurred time";
+       }
+       container sa-pair-location {
+         leaf sa-pair-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf sa-pair-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf sa-pair-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+       container sa-pair-anchorship {
+         leaf sa-pair-anchor-thread {
+           type uint32;
+           description "Thread anchorship information for SA";
+         }
+       }
+       container sa-ipsec-tunnel-event-list {
+       }
+     }
+     container ipsec-security-associations-block {
+       leaf sa-configuration-type {
+         type string;
+         description "Type of security association configuration";
+       }
+       leaf sa-tunnel-event {
+         type string;
+         description "Tunnel event description";
+       }
+       leaf sa-tunnel-event-num-times {
+         type int32;
+         description "Number of times tunnel event occurred";
+       }
+       container sa-advpn-info {
+         leaf sa-type {
+           type string;
+           description "SA Type";
+         }
+         leaf sa-negotiation-role {
+           type string;
+           description "Negotiation Role of our end";
+         }
+       }
+       container sa-df-bit-policy-name {
+         leaf sa-df-bit {
+           type string;
+           description "Fragmentation bit";
+         }
+         leaf sa-copy-outer-dscp {
+           type string;
+           description "Copying outer IP Header DSCP & ECN to Inner IP Header";
+         }
+         leaf sa-bind-interface {
+           type string;
+           description "VPN bind-interface";
+         }
+         leaf sa-tunnel-mtu {
+           type int32;
+           description "MTU of the IPSec Tunnel";
+         }
+         leaf sa-policy-name {
+           type string;
+           description "Policy name";
+         }
+         leaf sa-anchor-interface {
+           type string;
+           description "VPN Anchor interface";
+         }
+       }
+       container sa-dev-info {
+         leaf stats-name {
+           type string;
+         }
+         leaf sa-port {
+           type int32;
+           description "Port";
+         }
+         leaf sa-nego-num {
+           type int32;
+           description "SA nego num";
+         }
+         leaf sa-nego-fail {
+           type int32;
+           description "SA nego fail num";
+         }
+         leaf sa-del-num {
+           type int32;
+           description "SA defer delete count";
+         }
+         leaf sa-flag {
+           type int32;
+           description "SA flags";
+         }
+       }
+       container multi-sa-info {
+         leaf multi-sa-cfg-sas {
+           type int32;
+           description "Number of SA configured for negitiation";
+         }
+         leaf multi-sa-nego-sas {
+           type int32;
+           description "Number of SAs negitiated with peer";
+         }
+       }
+       container sa-ha-link-encryption {
+         leaf sa-ha-link-type {
+           type string;
+           description "Type of HA Link encryption";
+         }
+       }
+       container sa-anchorship {
+         leaf sa-anchor-thread {
+           type uint32;
+           description "Thread anchorship information for SA";
+         }
+       }
+       container ipsec-security-associations {
+         leaf sa-direction {
+           type string;
+           description "Direction of the security association";
+         }
+         leaf sa-tunnel-index {
+           type int32;
+           description "Tunnel index";
+         }
+         leaf sa-protocol {
+           type string;
+           description "IPSec security protocol";
+         }
+         leaf sa-esp-encryption-algorithm {
+           type string;
+           description "ESP Encryption Algorithm";
+         }
+         leaf sa-hmac-algorithm {
+           type string;
+           description "HMAC Authentication Algorithm";
+         }
+         leaf sa-spi {
+           type string;
+           description "Security Parameter Index";
+         }
+         leaf sa-hard-lifetime {
+           type string;
+           description "Remaining lifetime, in seconds or kilobytes, before hard lifetime expires";
+         }
+         leaf sa-lifesize-remaining {
+           type string;
+           description "Lifetime Remaining in Kilo Bytes";
+         }
+         leaf sa-vpn-monitoring-state {
+           type string;
+           description "VPN Monitoring State";
+         }
+         leaf sa-virtual-system {
+           type string;
+           description "Virtual System";
+         }
+         leaf sa-port {
+           type int32;
+           description "Port";
+         }
+         leaf sa-remote-gateway {
+           type jt:ipaddr;
+           description "Remote gateway address";
+         }
+         leaf sa-installation-state {
+           type string;
+           description "SA Installation State in Kernel";
+         }
+         leaf sa-nego-num {
+           type int32;
+           description "SA nego num";
+         }
+         leaf sa-nego-fail {
+           type int32;
+           description "SA nego fail num";
+         }
+         leaf sa-del-num {
+           type int32;
+           description "SA defer delete count";
+         }
+         leaf stats-name {
+           type string;
+         }
+         leaf sa-flag {
+           type int32;
+           description "SA flags";
+         }
+         leaf sa-tunnel-event-time {
+           type string;
+           description "Tunnel event occurred time";
+         }
+         container sa-pair-location {
+           leaf sa-pair-fpc {
+             type int32;
+             description "FPC number";
+           }
+           leaf sa-pair-pic {
+             type int32;
+             description "PIC number";
+           }
+           leaf sa-pair-kmd-instance {
+             type int32;
+             description "KMD instance number";
+           }
+         }
+         container sa-pair-anchorship {
+           leaf sa-pair-anchor-thread {
+             type uint32;
+             description "Thread anchorship information for SA";
+           }
+         }
+         container sa-ipsec-tunnel-event-list {
+         }
+         leaf sa-aux-spi {
+           type string;
+           description "Auxiliary Security Parameter Index";
+         }
+         leaf sa-mode {
+           type string;
+           description "Mode of the security association";
+         }
+         leaf sa-type {
+           type string;
+           description "SA Type";
+         }
+         leaf sa-state {
+           type string;
+           description "Status of the SA";
+         }
+         leaf sa-authentication-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf sa-encryption-algorithm {
+           type string;
+           description "Encryption algorithm";
+         }
+         leaf sa-soft-lifetime {
+           type string;
+           description "Remaining lifetime, in seconds or kilobytes, before soft lifetime expires";
+         }
+         leaf sa-anti-replay-service {
+           type string;
+           description "Anti-replay service";
+         }
+         leaf sa-replay-window-size {
+           type int32;
+           description "Replay window size";
+         }
+         leaf sa-fc-name {
+           type int32;
+           description "COS Forward class Name";
+         }
+         leaf sa-extended-seq-number {
+           type string;
+           description "Extended-Sequnce-Number";
+         }
+         leaf sa-tunnel-establishment {
+           type string;
+           description "IPsec Establish tunnels option";
+         }
+         leaf sa-ike-index {
+           type int32;
+           description "IKE SA index";
+         }
+       }
+       container sa-location {
+         leaf sa-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf sa-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf sa-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+       leaf sa-tunnel-dist-key {
+         type string;
+         description "IPsec tunnel distribution key";
+       }
+       leaf sa-tunnel-event-description {
+         type string;
+         description "Tunnel event description";
+       }
+       list sa-ts-remote-identity {
+         leaf sa-ts-protocol {
+           type string;
+           description "Sa Ts Protocol";
+         }
+         leaf sa-ts-port {
+           type string;
+           description "Sa Ts Port";
+         }
+         leaf sa-ts-ip {
+           type string;
+           description "Sa Ts IP";
+         }
+       }
+       list sa-ts-local-identity {
+         leaf sa-ts-protocol {
+           type string;
+           description "Sa Ts Protocol";
+         }
+         leaf sa-ts-port {
+           type string;
+           description "Sa Ts Port";
+         }
+         leaf sa-ts-ip {
+           type string;
+           description "Sa Ts IP";
+         }
+       }
+       container sa-tunnel-dist {
+         leaf sa-tunnel-dist-key {
+           type string;
+           description "IPsec tunnel distribution key";
+         }
+       }
+       container sa-ipsec-tunnel-event {
+         leaf sa-tunnel-event-time {
+           type string;
+           description "Tunnel event occurred time";
+         }
+         leaf sa-tunnel-event-description {
+           type string;
+           description "Tunnel event description";
+         }
+         leaf sa-tunnel-event-num-times {
+           type int32;
+           description "Number of times tunnel event occurred";
+         }
+         leaf sa-tunnel-event-repeat-seq-description {
+           type string;
+           description "Tunnel event repeat sequence description";
+         }
+       }
+       leaf iked-svc-set-name {
+         type string;
+         description "Name of the service set";
+       }
+       leaf sa-tunnel-index {
+         type int32;
+         description "Tunnel index";
+       }
+       leaf sa-virtual-system {
+         type string;
+         description "Virtual System";
+       }
+       leaf sa-vpn-name {
+         type string;
+         description "VPN Name";
+       }
+       leaf sa-local-gateway {
+         type jt:ipaddr;
+         description "Local gateway address";
+       }
+       leaf sa-remote-gateway {
+         type jt:ipaddr;
+         description "Remote gateway address";
+       }
+       leaf sa-traffic-selector-name {
+         type string;
+         description "Traffic Selector Name";
+       }
+       leaf sa-local-identity {
+         type string;
+         description "Local identity information";
+       }
+       leaf sa-remote-identity {
+         type string;
+         description "Remote identity information";
+       }
+       leaf sa-ike-version {
+         type string;
+         description "IKE version number used in negotiation";
+       }
+       container sa-ipsec-tunnel-events {
+         leaf sa-tunnel-event-time {
+           type string;
+           description "Tunnel event occurred time";
+         }
+         leaf sa-tunnel-event {
+           type string;
+           description "Tunnel event description";
+         }
+         leaf sa-tunnel-event-num-times {
+           type int32;
+           description "Number of times tunnel event occurred";
+         }
+       }
+       leaf sa-ts-type {
+         type string;
+       }
+       leaf sa-is-quantum-secured {
+         type string;
+         description "Quantum security state of the SA: Indicates whether the IPsec SAs are quantum-secured or not";
+       }
+       leaf sa-pfs-group {
+         type string;
+         description "PFS group";
+       }
+       leaf sa-srg-id {
+         type int32;
+         description "SRG ID";
+       }
+       leaf sa-passive-mode-tunneling {
+         type string;
+         description "Passive mode tunneling";
+       }
+       leaf sa-bypass-traffic-selector-match {
+         type string;
+         description "Bypass traffic selector match lookup for passive mode tunnel";
+       }
+     }
+     container ipsec-gvpn-security-associations-block {
+       leaf sa-configuration-type {
+         type string;
+         description "Type of security association configuration";
+       }
+       container ipsec-gvpn-sa-stats {
+         container ipsec-sa-stats {
+           leaf pull-succeeded {
+             type int32;
+             description "Pull Succeeded";
+           }
+           leaf pull-failed {
+             type int32;
+             description "Pull Failed";
+           }
+           leaf pull-timeout {
+             type int32;
+             description "Pull Timeout";
+           }
+           leaf pull-aborted {
+             type int32;
+             description "Pull Aborted";
+           }
+           leaf push-succeeded {
+             type int32;
+             description "Push Succeeded";
+           }
+           leaf push-failed {
+             type int32;
+             description "Push Failed";
+           }
+           leaf server-failover {
+             type int32;
+             description "Server Failover";
+           }
+           leaf delete-received {
+             type int32;
+             description "Delete Received";
+           }
+           leaf maximum-keys {
+             type int32;
+             description "Maximum Keys";
+           }
+           leaf exceed-maximum-keys {
+             type int32;
+             description "Exceed Maximum Keys";
+           }
+           leaf maximum-policies {
+             type int32;
+             description "Maximum Policies";
+           }
+           leaf exceed-maximum-policies {
+             type int32;
+             description "Exceed Maximum Policies";
+           }
+           leaf unsupported-algo {
+             type int32;
+             description "Unsupported Algo";
+           }
+         }
+       }
+       container ipsec-security-associations {
+         leaf sa-direction {
+           type string;
+           description "Direction of the security association";
+         }
+         leaf sa-tunnel-index {
+           type int32;
+           description "Tunnel index";
+         }
+         leaf sa-gvpn-server {
+           type string;
+           description "Group VPN Server Address";
+         }
+         leaf sa-port {
+           type int32;
+           description "Port";
+         }
+         leaf sa-protocol {
+           type string;
+           description "IPSec security protocol";
+         }
+         leaf sa-esp-encryption-algorithm {
+           type string;
+           description "ESP Encryption Algorithm";
+         }
+         leaf sa-hmac-algorithm {
+           type string;
+           description "HMAC Authentication Algorithm";
+         }
+         leaf sa-spi {
+           type string;
+           description "Security Parameter Index";
+         }
+         leaf sa-hard-lifetime {
+           type string;
+           description "Remaining lifetime, in seconds or kilobytes, before hard lifetime expires";
+         }
+         leaf sa-lifesize-remaining {
+           type string;
+           description "Lifetime Remaining in Kilo Bytes";
+         }
+         leaf sa-gvpn-groupid {
+           type int32;
+           description "Group VPN Group Id";
+         }
+         leaf sa-virtual-system {
+           type string;
+           description "Virtual System";
+         }
+         leaf sa-installation-state {
+           type string;
+           description "SA Installation State in Kernel";
+         }
+         leaf sa-nego-num {
+           type int32;
+           description "SA nego num";
+         }
+         leaf sa-nego-fail {
+           type int32;
+           description "SA nego fail num";
+         }
+         leaf sa-del-num {
+           type int32;
+           description "SA defer delete count";
+         }
+         leaf stats-name {
+           type string;
+         }
+         leaf sa-flag {
+           type int32;
+           description "SA flags";
+         }
+         leaf sa-tunnel-event-time {
+           type string;
+           description "Tunnel event occurred time";
+         }
+         container sa-pair-location {
+           leaf sa-pair-fpc {
+             type int32;
+             description "FPC number";
+           }
+           leaf sa-pair-pic {
+             type int32;
+             description "PIC number";
+           }
+           leaf sa-pair-kmd-instance {
+             type int32;
+             description "KMD instance number";
+           }
+         }
+         container sa-pair-anchorship {
+           leaf sa-pair-anchor-thread {
+             type uint32;
+             description "Thread anchorship information for SA";
+           }
+         }
+         container sa-ipsec-tunnel-event-list {
+         }
+         leaf sa-aux-spi {
+           type string;
+           description "Auxiliary Security Parameter Index";
+         }
+         leaf sa-mode {
+           type string;
+           description "Mode of the security association";
+         }
+         leaf sa-type {
+           type string;
+           description "SA Type";
+         }
+         leaf sa-state {
+           type string;
+           description "Status of the SA";
+         }
+         leaf sa-soft-lifetime {
+           type string;
+           description "Remaining lifetime, in seconds or kilobytes, before soft lifetime expires";
+         }
+         leaf sa-activate-lifetime {
+           type string;
+           description "Activate time";
+         }
+         leaf sa-anti-replay-service {
+           type string;
+           description "Anti-replay service";
+         }
+       }
+       container sa-child-tunnel-id-policy {
+         leaf sa-tunnel-id {
+           type int32;
+           description "Tunnel id";
+         }
+         container sa-child-policy-list {
+           leaf sa-policy-source-prefix {
+             type string;
+             description "Group VPN child SA policy source prefix";
+           }
+           leaf sa-policy-dest-prefix {
+             type string;
+             description "Group VPN child SA policy destination prefix";
+           }
+         }
+       }
+       leaf sa-virtual-system {
+         type string;
+         description "Virtual System";
+       }
+       leaf sa-vpn-name {
+         type string;
+         description "VPN Name";
+       }
+       leaf sa-local-gateway {
+         type jt:ipaddr;
+         description "Local gateway address";
+       }
+       leaf sa-remote-gateway {
+         type jt:ipaddr;
+         description "Remote gateway address";
+       }
+       leaf sa-local-identity {
+         type string;
+         description "Local identity information";
+       }
+       leaf sa-remote-identity {
+         type string;
+         description "Remote identity information";
+       }
+       leaf sa-gvpn-groupid {
+         type int32;
+         description "Group VPN Group Id";
+       }
+       leaf sa-match-dir {
+         type string;
+         description "Group VPN rule match direction";
+       }
+       leaf sa-tunnel-mtu {
+         type int32;
+         description "MTU of the IPSec Tunnel";
+       }
+       leaf sa-gvpn-vrf-name {
+         type string;
+         description "SA routing instance name";
+       }
+       leaf sa-recovery-probe {
+         type int32;
+         description "SA recover probe enabled";
+       }
+       container sa-df-bit-policy-name {
+         leaf sa-df-bit {
+           type string;
+           description "Fragmentation bit";
+         }
+       }
+       container ipsec-gvpn-sa-flags {
+         leaf sa-rekey-needed {
+           type string;
+           description "SA rekey needed";
+         }
+       }
+       container sa-location {
+         leaf sa-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf sa-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf sa-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+       leaf sa-gvpn-forward-policy-mismatch {
+         type string;
+         description "State of fowarding policy mismatch packets";
+       }
+     }
+   }
+   grouping usp-ipsec-total-statistics-information-block {
+     container esp-statistics {
+       leaf esp-encrypted-bytes {
+         type uint64;
+         description "ESP encrypted bytes information";
+       }
+       leaf esp-decrypted-bytes {
+         type uint64;
+         description "ESP decrypted bytes information";
+       }
+       leaf esp-encrypted-packets {
+         type uint64;
+         description "ESP encrypted packets information";
+       }
+       leaf esp-decrypted-packets {
+         type uint64;
+         description "ESP decrypted packets information";
+       }
+     }
+     container ah-statistics {
+       leaf ah-input-bytes {
+         type uint64;
+         description "AH input bytes information";
+       }
+       leaf ah-output-bytes {
+         type uint64;
+         description "AH output bytes information";
+       }
+       leaf ah-input-packets {
+         type uint64;
+         description "AH input packets information";
+       }
+       leaf ah-output-packets {
+         type uint64;
+         description "AH output packets information";
+       }
+     }
+     container multisa-statistics {
+       leaf multisa-fc-name {
+         type string;
+         description "COS Forward Class Name";
+       }
+       leaf multisa-encrypted-pkts {
+         type uint64;
+         description "SA Encrypted packets";
+       }
+       leaf multisa-decrypted-pkts {
+         type uint64;
+         description "SA Decrypted packets";
+       }
+       leaf multisa-encrypted-bytes {
+         type uint64;
+         description "SA Encrypted bytes";
+       }
+       leaf multisa-decrypted-bytes {
+         type uint64;
+         description "SA Decrypted bytes";
+       }
+     }
+     container multinode-link-enc-statistics-block {
+       container multinode-link-enc-statistics {
+         description "Information about single processing unit";
+         leaf multinode-link-enc-fpc-num {
+           type int32;
+           description "FPC";
+         }
+         leaf multinode-link-enc-pic-num {
+           type int32;
+           description "PIC";
+         }
+         list multinode-link-enc-thread-statistics {
+           description "Statistics for ha-link encryption tunnel from one processing unit";
+           leaf multinode-link-enc-thread-id {
+             type int32;
+             description "Thread ID of the PIC";
+           }
+           leaf multinode-link-enc-encrypted-pkts {
+             type uint64;
+             description "SA Encrypted packets";
+           }
+           leaf multinode-link-enc-decrypted-pkts {
+             type uint64;
+             description "SA Decrypted packets";
+           }
+           leaf multinode-link-enc-encrypted-bytes {
+             type uint64;
+             description "SA Encrypted bytes";
+           }
+           leaf multinode-link-enc-decrypted-bytes {
+             type uint64;
+             description "SA Decrypted bytes";
+           }
+         }
+       }
+     }
+     container error-statistics {
+       leaf ah-authentication-failures {
+         type int32;
+         description "AH authentication failures information";
+       }
+       leaf replay-errors {
+         type int32;
+         description "Replay error information";
+       }
+       leaf esp-authentication-failures {
+         type int32;
+         description "ESP authentication failures information";
+       }
+       leaf esp-decryption-failures {
+         type int32;
+         description "ESP decryption failures information";
+       }
+       leaf bad-headers {
+         type int32;
+         description "Bad header information";
+       }
+       leaf bad-trailers {
+         type int32;
+         description "Bad trailer information";
+       }
+       leaf invalid-spi-errors {
+         type int32;
+         description "Invalid SPI error information";
+       }
+       leaf ts-check-fail-errors {
+         type int32;
+         description "TS check fail error information";
+       }
+       leaf discard-errors {
+         type int32;
+         description "Discard error information";
+       }
+       leaf exceeds-tunnel-mtu {
+         type int32;
+         description "Exceeds Tunnel MTU";
+       }
+     }
+     container d3p-statistics {
+       leaf d3p-too-old-pkts {
+         type uint64;
+         description "D3P too old packets information";
+       }
+       leaf d3p-too-new-pkts {
+         type uint64;
+         description "D3P too new packets information";
+       }
+       leaf d3p-no-timestamp-pkts {
+         type uint64;
+         description "D3P no timestamp packets information";
+       }
+       leaf d3p-unexpected-pkts {
+         type uint64;
+         description "D3P unexpected packets information";
+       }
+       leaf d3p-type-err-pkts {
+         type uint64;
+         description "D3P wrong type packets information";
+       }
+       leaf d3p-len-err-pkts {
+         type uint64;
+         description "D3P wrong length information";
+       }
+       leaf d3p-next-hdr-err-pkts {
+         type uint64;
+         description "D3P wrong next header packets information";
+       }
+     }
+     container exclude-statistics {
+       leaf exclude-created-sess {
+         type uint64;
+         description "Exclude rule created sessions information";
+       }
+       leaf exclude-invalidated-sess {
+         type uint64;
+         description "Exclude rule invalidated sessions information";
+       }
+     }
+     container dynamic-policy-statistics {
+       leaf dynamic-policy-created-sess {
+         type uint64;
+         description "Dynamic policy created sessions information";
+       }
+       leaf dynamic-policy-invalidated-sess {
+         type uint64;
+         description "Dynamic policy invalidated sessions information";
+       }
+     }
+     container failopen-statistics {
+       leaf failopen-created-sess {
+         type uint64;
+         description "Fail-open rule created sessions information";
+       }
+       leaf failopen-invalidated-sess {
+         type uint64;
+         description "Fail-open rule invalidated sessions information";
+       }
+     }
+     container failclose-statistics {
+       leaf failclose-dropped-pkts {
+         type uint64;
+         description "Fail-close rule dropped packets information";
+       }
+     }
+     leaf pic-name {
+       type string;
+       description "PIC name";
+     }
+     leaf service-set-name {
+       type string;
+       description "Service set name";
+     }
+     leaf local-gateway {
+       type jt:ipaddr;
+       description "Local gateway address";
+     }
+     leaf remote-gateway {
+       type jt:ipaddr;
+       description "Remote gateway address";
+     }
+     leaf tunnel-index {
+       type int32;
+       description "Tunnel index";
+     }
+     container usp-ipsec-service-set-statistics {
+       leaf pic-name {
+         type string;
+         description "PIC name";
+       }
+       leaf service-set-name {
+         type string;
+         description "Service set name";
+       }
+       leaf local-gateway {
+         type jt:ipaddr;
+         description "Local gateway address";
+       }
+       leaf remote-gateway {
+         type jt:ipaddr;
+         description "Remote gateway address";
+       }
+       leaf tunnel-index {
+         type int32;
+         description "Tunnel index";
+       }
+       container forward-policy-mismatch-statistics {
+         leaf policy-mismatch-packets-received {
+           type uint64;
+           description "Policy mismatch packets information";
+         }
+         leaf policy-mismatch-packets-sent {
+           type uint64;
+           description "Policy mismatch packets information";
+         }
+       }
+       container esp-statistics {
+         leaf esp-encrypted-bytes {
+           type uint64;
+           description "ESP encrypted bytes information";
+         }
+         leaf esp-decrypted-bytes {
+           type uint64;
+           description "ESP decrypted bytes information";
+         }
+         leaf esp-encrypted-packets {
+           type uint64;
+           description "ESP encrypted packets information";
+         }
+         leaf esp-decrypted-packets {
+           type uint64;
+           description "ESP decrypted packets information";
+         }
+       }
+       container ah-statistics {
+         leaf ah-input-bytes {
+           type uint64;
+           description "AH input bytes information";
+         }
+         leaf ah-output-bytes {
+           type uint64;
+           description "AH output bytes information";
+         }
+         leaf ah-input-packets {
+           type uint64;
+           description "AH input packets information";
+         }
+         leaf ah-output-packets {
+           type uint64;
+           description "AH output packets information";
+         }
+       }
+       container d3p-statistics {
+         leaf d3p-old-packets {
+           type uint64;
+           description "D3p packets information";
+         }
+         leaf d3p-new-packets {
+           type uint64;
+           description "D3p packets information";
+         }
+         leaf d3p-no-header-packets {
+           type uint64;
+           description "D3p packets information";
+         }
+         leaf d3p-unexpected-header-packets {
+           type uint64;
+           description "D3p packets information";
+         }
+       }
+       container fail-open-statistics {
+         leaf fail-open-packets-received {
+           type uint64;
+           description "Fail open packets information";
+         }
+         leaf fail-open-packets-sent {
+           type uint64;
+           description "Fail open packets information";
+         }
+       }
+       container error-statistics {
+         leaf ah-authentication-failures {
+           type int32;
+           description "AH authentication failures information";
+         }
+         leaf replay-errors {
+           type int32;
+           description "Replay error information";
+         }
+         leaf esp-authentication-failures {
+           type int32;
+           description "ESP authentication failures information";
+         }
+         leaf esp-decryption-failures {
+           type int32;
+           description "ESP decryption failures information";
+         }
+         leaf bad-headers {
+           type int32;
+           description "Bad header information";
+         }
+         leaf bad-trailers {
+           type int32;
+           description "Bad trailer information";
+         }
+         leaf replay-before-window-drops {
+           type int32;
+           description "Replay before window drop information";
+         }
+         leaf replay-pkts {
+           type int32;
+           description "Replayed pkt information";
+         }
+         leaf rule-lookup-fail {
+           type int32;
+           description "Rule lookup failure information";
+         }
+         leaf no-sa-errors {
+           type int32;
+           description "No SA error information";
+         }
+         leaf ip-integrity-errors {
+           type int32;
+           description "IP Integrity error information";
+         }
+         leaf exceeds-tunnel-mtu {
+           type int32;
+           description "Exceeds Tunnel MTU";
+         }
+         leaf flow-errors {
+           type int32;
+           description "Flow error information";
+         }
+         leaf misc-errors {
+           type int32;
+           description "Misc error information";
+         }
+         leaf discard-errors {
+           type int32;
+           description "Discard error information";
+         }
+         leaf invalid-spi-errors {
+           type int32;
+           description "Invalid SPI error information";
+         }
+         leaf ts-check-fail-errors {
+           type int32;
+           description "TS check fail error information";
+         }
+       }
+     }
+   }
+   grouping ipsec-unestablished-tunnel-information-block {
+     leaf total-inactive-tunnels {
+       type int32;
+       description "Total number of inactive tunnels";
+     }
+     leaf total-inactive-tunnels-with-establish-immediately {
+       type int32;
+       description "Total number of inactive tunnels";
+     }
+     container ipsec-security-associations {
+       leaf sa-installation-state {
+         type string;
+         description "SA Installation State in Kernel";
+       }
+       leaf sa-nego-num {
+         type int32;
+         description "SA nego num";
+       }
+       leaf sa-nego-fail {
+         type int32;
+         description "SA nego fail num";
+       }
+       leaf sa-del-num {
+         type int32;
+         description "SA defer delete count";
+       }
+       leaf stats-name {
+         type string;
+       }
+       leaf sa-flag {
+         type int32;
+         description "SA flags";
+       }
+       leaf sa-tunnel-event-time {
+         type string;
+         description "Tunnel event occurred time";
+       }
+       container sa-pair-location {
+         leaf sa-pair-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf sa-pair-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf sa-pair-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+       container sa-pair-anchorship {
+         leaf sa-pair-anchor-thread {
+           type uint32;
+           description "Thread anchorship information for SA";
+         }
+       }
+       container sa-ipsec-tunnel-event-list {
+       }
+     }
+     container ipsec-security-associations-block {
+       leaf sa-configuration-type {
+         type string;
+         description "Type of security association configuration";
+       }
+       leaf sa-tunnel-event {
+         type string;
+         description "Tunnel event description";
+       }
+       leaf sa-tunnel-event-num-times {
+         type int32;
+         description "Number of times tunnel event occurred";
+       }
+       container sa-advpn-info {
+         leaf sa-type {
+           type string;
+           description "SA Type";
+         }
+         leaf sa-negotiation-role {
+           type string;
+           description "Negotiation Role of our end";
+         }
+       }
+       container sa-df-bit-policy-name {
+         leaf sa-df-bit {
+           type string;
+           description "Fragmentation bit";
+         }
+         leaf sa-copy-outer-dscp {
+           type string;
+           description "Copying outer IP Header DSCP & ECN to Inner IP Header";
+         }
+         leaf sa-bind-interface {
+           type string;
+           description "VPN bind-interface";
+         }
+         leaf sa-tunnel-mtu {
+           type int32;
+           description "MTU of the IPSec Tunnel";
+         }
+         leaf sa-policy-name {
+           type string;
+           description "Policy name";
+         }
+       }
+       container sa-dev-info {
+         leaf stats-name {
+           type string;
+         }
+         leaf sa-port {
+           type int32;
+           description "Port";
+         }
+         leaf sa-nego-num {
+           type int32;
+           description "SA nego num";
+         }
+         leaf sa-nego-fail {
+           type int32;
+           description "SA nego fail num";
+         }
+         leaf sa-del-num {
+           type int32;
+           description "SA defer delete count";
+         }
+         leaf sa-flag {
+           type int32;
+           description "SA flags";
+         }
+       }
+       container multi-sa-info {
+         leaf multi-sa-cfg-sas {
+           type int32;
+           description "Number of SA configured for negitiation";
+         }
+         leaf multi-sa-nego-sas {
+           type int32;
+           description "Number of SAs negitiated with peer";
+         }
+       }
+       container sa-ha-link-encryption {
+         leaf sa-ha-link-type {
+           type string;
+           description "Type of HA Link encryption";
+         }
+       }
+       container sa-anchorship {
+         leaf sa-anchor-thread {
+           type uint32;
+           description "Thread anchorship information for SA";
+         }
+       }
+       container ipsec-security-associations {
+         leaf sa-tunnel-index {
+           type int32;
+           description "Tunnel index";
+         }
+         leaf sa-port {
+           type int32;
+           description "Port";
+         }
+         leaf sa-remote-gateway {
+           type jt:ipaddr;
+           description "Remote gateway address";
+         }
+         leaf sa-pending-sas {
+           type int32;
+           description "Pending sas to negotiate with Peer";
+         }
+         leaf sa-tunnel-event {
+           type string;
+           description "Tunnel event description";
+         }
+         leaf sa-tunnel-event-num-times {
+           type int32;
+           description "Number of times tunnel event occurred";
+         }
+         leaf sa-installation-state {
+           type string;
+           description "SA Installation State in Kernel";
+         }
+         leaf sa-nego-num {
+           type int32;
+           description "SA nego num";
+         }
+         leaf sa-nego-fail {
+           type int32;
+           description "SA nego fail num";
+         }
+         leaf sa-del-num {
+           type int32;
+           description "SA defer delete count";
+         }
+         leaf stats-name {
+           type string;
+         }
+         leaf sa-flag {
+           type int32;
+           description "SA flags";
+         }
+         leaf sa-tunnel-event-time {
+           type string;
+           description "Tunnel event occurred time";
+         }
+         container sa-pair-location {
+           leaf sa-pair-fpc {
+             type int32;
+             description "FPC number";
+           }
+           leaf sa-pair-pic {
+             type int32;
+             description "PIC number";
+           }
+           leaf sa-pair-kmd-instance {
+             type int32;
+             description "KMD instance number";
+           }
+         }
+         container sa-pair-anchorship {
+           leaf sa-pair-anchor-thread {
+             type uint32;
+             description "Thread anchorship information for SA";
+           }
+         }
+         container sa-ipsec-tunnel-event-list {
+           container sa-ipsec-tunnel-event {
+             leaf sa-tunnel-event-description {
+               type string;
+               description "Tunnel event description";
+             }
+             leaf sa-tunnel-event-num-times {
+               type int32;
+               description "Number of times tunnel event occurred";
+             }
+           }
+         }
+         leaf sa-direction {
+           type string;
+           description "Direction of the security association";
+         }
+         leaf sa-spi {
+           type string;
+           description "Security Parameter Index";
+         }
+         leaf sa-aux-spi {
+           type string;
+           description "Auxiliary Security Parameter Index";
+         }
+         leaf sa-mode {
+           type string;
+           description "Mode of the security association";
+         }
+         leaf sa-type {
+           type string;
+           description "SA Type";
+         }
+         leaf sa-state {
+           type string;
+           description "Status of the SA";
+         }
+         leaf sa-vpn-monitoring-state {
+           type string;
+           description "VPN Monitoring State";
+         }
+         leaf sa-protocol {
+           type string;
+           description "IPSec security protocol";
+         }
+         leaf sa-authentication-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf sa-encryption-algorithm {
+           type string;
+           description "Encryption algorithm";
+         }
+         leaf sa-soft-lifetime {
+           type string;
+           description "Remaining lifetime, in seconds or kilobytes, before soft lifetime expires";
+         }
+         leaf sa-hard-lifetime {
+           type string;
+           description "Remaining lifetime, in seconds or kilobytes, before hard lifetime expires";
+         }
+         leaf sa-lifesize-remaining {
+           type string;
+           description "Lifetime Remaining in Kilo Bytes";
+         }
+         leaf sa-anti-replay-service {
+           type string;
+           description "Anti-replay service";
+         }
+         leaf sa-replay-window-size {
+           type int32;
+           description "Replay window size";
+         }
+         leaf sa-extended-seq-number {
+           type string;
+           description "Extended-Sequnce-Number";
+         }
+         leaf sa-fc-name {
+           type int32;
+           description "COS Forward class Name";
+         }
+         leaf sa-tunnel-establishment {
+           type string;
+           description "IPsec Establish tunnels option";
+         }
+         leaf sa-ike-index {
+           type int32;
+           description "IKE SA index";
+         }
+       }
+       container sa-location {
+         leaf sa-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf sa-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf sa-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+       leaf sa-tunnel-dist-key {
+         type string;
+         description "IPsec tunnel distribution key";
+       }
+       leaf sa-tunnel-event-description {
+         type string;
+         description "Tunnel event description";
+       }
+       list sa-ts-remote-identity {
+         leaf sa-ts-protocol {
+           type string;
+           description "Sa Ts Protocol";
+         }
+         leaf sa-ts-port {
+           type string;
+           description "Sa Ts Port";
+         }
+         leaf sa-ts-ip {
+           type string;
+           description "Sa Ts IP";
+         }
+       }
+       list sa-ts-local-identity {
+         leaf sa-ts-protocol {
+           type string;
+           description "Sa Ts Protocol";
+         }
+         leaf sa-ts-port {
+           type string;
+           description "Sa Ts Port";
+         }
+         leaf sa-ts-ip {
+           type string;
+           description "Sa Ts IP";
+         }
+       }
+       container sa-tunnel-dist {
+         leaf sa-tunnel-dist-key {
+           type string;
+           description "IPsec tunnel distribution key";
+         }
+       }
+       container sa-ipsec-tunnel-event {
+         leaf sa-tunnel-event-time {
+           type string;
+           description "Tunnel event occurred time";
+         }
+         leaf sa-tunnel-event-description {
+           type string;
+           description "Tunnel event description";
+         }
+         leaf sa-tunnel-event-num-times {
+           type int32;
+           description "Number of times tunnel event occurred";
+         }
+         leaf sa-tunnel-event-repeat-seq-description {
+           type string;
+           description "Tunnel event repeat sequence description";
+         }
+       }
+     }
+     container ipsec-gvpn-inactive-tunnel-info-block {
+       leaf sa-gvpn-server {
+         type string;
+         description "Group VPN Server Address";
+       }
+       leaf sa-port {
+         type int32;
+         description "Port";
+       }
+       leaf sa-gvpn-groupid {
+         type int32;
+         description "Group VPN Group Id";
+       }
+       leaf sa-virtual-system {
+         type string;
+         description "Virtual System";
+       }
+       leaf sa-down-reason {
+         type string;
+         description "Ipsec SA down reason";
+       }
+       leaf sa-configuration-type {
+         type string;
+         description "Type of security association configuration";
+       }
+       leaf sa-local-gateway {
+         type jt:ipaddr;
+         description "Local gateway address";
+       }
+       leaf sa-remote-gateway {
+         type jt:ipaddr;
+         description "Remote gateway address";
+       }
+       leaf sa-local-identity {
+         type string;
+         description "Local identity information";
+       }
+       leaf sa-remote-identity {
+         type string;
+         description "Remote identity information";
+       }
+       leaf sa-vpn-name {
+         type string;
+         description "VPN Name";
+       }
+       leaf sa-match-dir {
+         type string;
+         description "Group VPN rule match direction";
+       }
+       leaf sa-tunnel-mtu {
+         type int32;
+         description "MTU of the IPSec Tunnel";
+       }
+       leaf sa-recovery-probe {
+         type int32;
+         description "SA recover probe enabled";
+       }
+       leaf sa-rekey-needed {
+         type string;
+         description "SA rekey needed";
+       }
+       container ipsec-gvpn-sa-stats {
+         container ipsec-sa-stats {
+           leaf pull-succeeded {
+             type int32;
+             description "Pull Succeeded";
+           }
+           leaf pull-failed {
+             type int32;
+             description "Pull Failed";
+           }
+           leaf pull-timeout {
+             type int32;
+             description "Pull Timeout";
+           }
+           leaf pull-aborted {
+             type int32;
+             description "Pull Aborted";
+           }
+           leaf push-succeeded {
+             type int32;
+             description "Push Succeeded";
+           }
+           leaf push-failed {
+             type int32;
+             description "Push Failed";
+           }
+           leaf server-failover {
+             type int32;
+             description "Server Failover";
+           }
+           leaf delete-received {
+             type int32;
+             description "Delete Received";
+           }
+           leaf maximum-keys {
+             type int32;
+             description "Maximum Keys";
+           }
+           leaf exceed-maximum-keys {
+             type int32;
+             description "Exceed Maximum Keys";
+           }
+           leaf maximum-policies {
+             type int32;
+             description "Maximum Policies";
+           }
+           leaf exceed-maximum-policies {
+             type int32;
+             description "Exceed Maximum Policies";
+           }
+           leaf unsupported-algo {
+             type int32;
+             description "Unsupported Algo";
+           }
+         }
+       }
+       container sa-df-bit-policy-name {
+         leaf sa-df-bit {
+           type string;
+           description "Fragmentation bit";
+         }
+       }
+       container gvpn-sa-down-reason {
+         leaf sa-down-reason {
+           type string;
+           description "Ipsec SA down reason";
+         }
+       }
+     }
+   }
+   grouping ike-security-associations-information-block {
+     list ike-security-associations {
+       leaf ike-sa-remote-address {
+         type jt:ipaddr;
+         description "Remote address";
+       }
+       leaf ike-sa-state {
+         type string;
+         description "Status of the SA";
+       }
+       leaf ike-sa-initiator-cookie {
+         type string;
+         description "IKE SA initiator cookie";
+       }
+       leaf ike-sa-responder-cookie {
+         type string;
+         description "IKE SA responder cookie";
+       }
+       leaf ike-sa-exchange-type {
+         type string;
+         description "Exchange type";
+       }
+       leaf ike-sa-reauthlifetime {
+         type string;
+         description "Remaining IKE Hard lifetime before re-authentication, in seconds";
+       }
+       leaf ike-sa-ike-frag {
+         type string;
+         description "IKE Fragmentation Flag";
+       }
+       leaf ike-sa-frag-size {
+         type int32;
+         description "IKE Fragmentation Size";
+       }
+       container ike-sa-algorithms {
+         leaf ike-sa-sig-key-length {
+           type uint32;
+           description "Signature Key Length";
+         }
+       }
+       container ike-sa-traffic-statistics {
+         leaf ike-sa-input-frag-packets {
+           type int32;
+           description "Input fragmentation packets, including retransmissions";
+         }
+         leaf ike-sa-output-frag-packets {
+           type int32;
+           description "Output fragmentation packets, including retransmissions";
+         }
+         leaf ike-sa-output-invalid-spi-packets {
+           type int32;
+           description "Number of invalid SPI notifications send";
+         }
+         leaf ike-sa-input-invalid-spi-packets {
+           type int32;
+           description "Number of invalid SPI notifications received";
+         }
+       }
+       container ike-sa-misc {
+         leaf ike-sa-num-ipsec-rekeys {
+           type int32;
+           description "Number of IPSec rekeys using this SA";
+         }
+         leaf ike-sa-exchange-type {
+           type string;
+           description "Exchange type";
+         }
+       }
+       container ike-sa-payload-statistics {
+         leaf ike-sa-delete-payloads-received {
+           type int32;
+           description "Number of delete payloads received";
+         }
+         leaf ike-sa-delete-payloads-sent {
+           type int32;
+           description "Number of delete payloads sent";
+         }
+         leaf ike-sa-r-u-there-payloads-received {
+           type int32;
+           description "Number of DPD R-U-THERE payloads received";
+         }
+         leaf ike-sa-r-u-there-payloads-sent {
+           type int32;
+           description "Number of DPD R-U-THERE payloads sent";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-received {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads received";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-sent {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads sent";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-missed {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads missed";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-maximum-delay {
+           type int32;
+           description "Worst case delay for the DPD R-U-THERE-ACK";
+         }
+         leaf ike-sa-r-u-there-ack-seq-payloads-missed {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads missed in sequence";
+         }
+         leaf ike-sa-dpd-request-payloads-received {
+           type int32;
+           description "Number of DPD request payloads received";
+         }
+         leaf ike-sa-dpd-request-payloads-sent {
+           type int32;
+           description "Number of DPD request payloads sent";
+         }
+         leaf ike-sa-dpd-response-payloads-received {
+           type int32;
+           description "Number of DPD response payloads received";
+         }
+         leaf ike-sa-dpd-response-payloads-sent {
+           type int32;
+           description "Number of DPD response payloads sent";
+         }
+         leaf ike-sa-dpd-response-payloads-missed {
+           type int32;
+           description "Number of DPD response payloads missed";
+         }
+         leaf ike-sa-dpd-response-payloads-maximum-delay {
+           type int32;
+           description "Worst case delay for the DPD response";
+         }
+         leaf ike-sa-dpd-response-seq-payloads-missed {
+           type int32;
+           description "Number of DPD response payloads missed in sequence";
+         }
+         leaf ike-sa-invalid-spi-notifications-received {
+           type int32;
+           description "Number of invalid SPI notifications received";
+         }
+         leaf ike-sa-invalid-spi-notifications-sent {
+           type int32;
+           description "Number of invalid SPI notifications sent";
+         }
+       }
+       leaf ike-sa-index {
+         type uint32;
+         description "Index";
+       }
+       leaf ike-sa-routing-instance {
+         type string;
+         description "Local-gateway routing instance";
+       }
+       leaf ike-sa-local-gateway-interface {
+         type string;
+         description "Local gateway  interface";
+       }
+       leaf ike-ike-id {
+         type string;
+         description "IKE ID";
+       }
+       container ike-sa-stats-information {
+       }
+     }
+     container ike-security-associations-block {
+       list ike-security-associations {
+         leaf ike-sa-reauthlifetime {
+           type string;
+           description "Remaining IKE Hard lifetime before re-authentication, in seconds";
+         }
+         leaf ike-sa-ike-frag {
+           type string;
+           description "IKE Fragmentation Flag";
+         }
+         leaf ike-sa-frag-size {
+           type int32;
+           description "IKE Fragmentation Size";
+         }
+         container ike-sa-algorithms {
+           leaf ike-sa-sig-key-length {
+             type uint32;
+             description "Signature Key Length";
+           }
+           leaf ike-sa-authentication-algorithm {
+             type string;
+             description "Authentication algorithm";
+           }
+           leaf ike-sa-encryption-algorithm {
+             type string;
+             description "Encryption algorithm";
+           }
+           leaf ike-sa-prf-algorithm {
+             type string;
+             description "PRF algorithm";
+           }
+           leaf ike-sa-dhgroup {
+             type string;
+             description "DH group";
+           }
+         }
+         container ike-sa-traffic-statistics {
+           leaf ike-sa-input-frag-packets {
+             type int32;
+             description "Input fragmentation packets, including retransmissions";
+           }
+           leaf ike-sa-output-frag-packets {
+             type int32;
+             description "Output fragmentation packets, including retransmissions";
+           }
+           leaf ike-sa-output-invalid-spi-packets {
+             type int32;
+             description "Number of invalid SPI notifications send";
+           }
+           leaf ike-sa-input-invalid-spi-packets {
+             type int32;
+             description "Number of invalid SPI notifications received";
+           }
+           leaf ike-sa-input-bytes {
+             type int32;
+             description "Input bytes, including retransmissions";
+           }
+           leaf ike-sa-output-bytes {
+             type int32;
+             description "Output bytes, including retransmissions";
+           }
+           leaf ike-sa-input-packets {
+             type int32;
+             description "Input packets, including retransmissions";
+           }
+           leaf ike-sa-output-packets {
+             type int32;
+             description "Output packets, including retransmissions";
+           }
+         }
+         container ike-sa-misc {
+           leaf ike-sa-num-ipsec-rekeys {
+             type int32;
+             description "Number of IPSec rekeys using this SA";
+           }
+           leaf ike-sa-exchange-type {
+             type string;
+             description "Exchange type";
+           }
+           leaf ike-sa-flags {
+             type string;
+             description "IKE SA flags";
+           }
+           leaf ike-sa-num-ipsec-sas-created {
+             type int32;
+             description "Number of IPSec SAs created using this SA";
+           }
+           leaf ike-sa-num-ipsec-sas-deleted {
+             type int32;
+             description "Number of IPSec SAs deleted using this SA";
+           }
+           leaf ike-sa-num-phase2-negotiations {
+             type int32;
+             description "Number of negotiations in progress on this SA";
+           }
+           leaf ike-ipsec-sa-tunnel-ids {
+             type string;
+             description "Ipsec SA tunnel Indexes";
+           }
+         }
+         container ike-sa-payload-statistics {
+           leaf ike-sa-delete-payloads-received {
+             type int32;
+             description "Number of delete payloads received";
+           }
+           leaf ike-sa-delete-payloads-sent {
+             type int32;
+             description "Number of delete payloads sent";
+           }
+           leaf ike-sa-r-u-there-payloads-received {
+             type int32;
+             description "Number of DPD R-U-THERE payloads received";
+           }
+           leaf ike-sa-r-u-there-payloads-sent {
+             type int32;
+             description "Number of DPD R-U-THERE payloads sent";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-received {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads received";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-sent {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads sent";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-missed {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads missed";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-maximum-delay {
+             type int32;
+             description "Worst case delay for the DPD R-U-THERE-ACK";
+           }
+           leaf ike-sa-r-u-there-ack-seq-payloads-missed {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads missed in sequence";
+           }
+           leaf ike-sa-dpd-request-payloads-received {
+             type int32;
+             description "Number of DPD request payloads received";
+           }
+           leaf ike-sa-dpd-request-payloads-sent {
+             type int32;
+             description "Number of DPD request payloads sent";
+           }
+           leaf ike-sa-dpd-response-payloads-received {
+             type int32;
+             description "Number of DPD response payloads received";
+           }
+           leaf ike-sa-dpd-response-payloads-sent {
+             type int32;
+             description "Number of DPD response payloads sent";
+           }
+           leaf ike-sa-dpd-response-payloads-missed {
+             type int32;
+             description "Number of DPD response payloads missed";
+           }
+           leaf ike-sa-dpd-response-payloads-maximum-delay {
+             type int32;
+             description "Worst case delay for the DPD response";
+           }
+           leaf ike-sa-dpd-response-seq-payloads-missed {
+             type int32;
+             description "Number of DPD response payloads missed in sequence";
+           }
+           leaf ike-sa-invalid-spi-notifications-received {
+             type int32;
+             description "Number of invalid SPI notifications received";
+           }
+           leaf ike-sa-invalid-spi-notifications-sent {
+             type int32;
+             description "Number of invalid SPI notifications sent";
+           }
+         }
+         leaf ike-sa-routing-instance {
+           type string;
+           description "Local-gateway routing instance";
+         }
+         leaf ike-sa-local-gateway-interface {
+           type string;
+           description "Local gateway  interface";
+         }
+         leaf ike-ike-id {
+           type string;
+           description "IKE ID";
+         }
+         container ike-sa-stats-information {
+           container ikev2-ipsec-sa-rekey-stats {
+             leaf ikev2-initiator-ipsec-sa-rekey-request-out {
+               type int32;
+               description "Number of IPsec SA rekey CREATE_CHILD_SA request sent by Initiator";
+             }
+             leaf ikev2-responder-ipsec-sa-rekey-request-in {
+               type int32;
+               description "Number of IPsec SA rekey CREATE_CHILD_SA request recv by Responder";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-response-in {
+               type int32;
+               description "Number of IPsec SA rekey CREATE_CHILD_SA response recv by Initiator";
+             }
+             leaf ikev2-responder-ipsec-sa-rekey-response-out {
+               type int32;
+               description "Number of IPsec SA rekey CREATE_CHILD_SA response sent by Responder";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-no-proposal-chosen-in {
+               type int32;
+               description "Number of IPsec SA rekey NO_PROPSAL_CHOSEN notify recv by Initiator";
+             }
+             leaf ikev2-responder-ipsec-sa-rekey-no-proposal-chosen-out {
+               type int32;
+               description "Number of IPsec SA rekey NO_PROPSAL_CHOSEN notify sent by Responder";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-invalid-key-in {
+               type int32;
+               description "Number of IPsec SA rekey INVALID_KE_PAYLOAD notify recv by Initiator";
+             }
+             leaf ikev2-responder-ipsec-sa-rekey-invalid-key-out {
+               type int32;
+               description "Number of IPsec SA rekey INVALID_KE_PAYLOAD notify sent by Responder";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-ts-unacceptable-in {
+               type int32;
+               description "Number of IPsec SA rekey TS_UNACCEPTABLE notify recv by Initiator";
+             }
+             leaf ikev2-responder-ipsec-sa-rekey-ts-unacceptable-out {
+               type int32;
+               description "Number of IPsec SA rekey TS_UNACCEPTABLE notify sent by Responder";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-res-dh-compute-key-fail {
+               type int32;
+               description "Number of IPsec SA rekey response, DH compute key failed at Initiator";
+             }
+             leaf ikev2-responder-ipsec-sa-rekey-res-dh-compute-key-fail {
+               type int32;
+               description "Number of IPsec SA rekey response, DH compute key failed at Responder";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-res-verify-sa-fail {
+               type int32;
+               description "Number of IPsec SA rekey response, verify of peer SA failed at Initiator";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-res-verify-dh-group-fail {
+               type int32;
+               description "Number of IPsec SA rekey response, verify of DH group failed at Initiator";
+             }
+             leaf ikev2-initiator-ipsec-sa-rekey-res-verify-ts-fail {
+               type int32;
+               description "Number of IPsec SA rekey response, verify of TS failed at Initiator";
+             }
+           }
+         }
+         leaf ike-sa-role {
+           type string;
+           description "Role of our end";
+         }
+         leaf ike-sa-state {
+           type string;
+           description "Status of the SA";
+         }
+         leaf ike-sa-initiator-cookie {
+           type string;
+           description "IKE SA initiator cookie";
+         }
+         leaf ike-sa-responder-cookie {
+           type string;
+           description "IKE SA responder cookie";
+         }
+         leaf ike-sa-exchange-type {
+           type string;
+           description "Exchange type";
+         }
+         leaf ike-sa-authentication-method {
+           type string;
+         }
+         leaf ike-sa-local-address {
+           type jt:ipaddr;
+           description "Local address";
+         }
+         leaf ike-sa-local-port {
+           type int32;
+           description "Local port";
+         }
+         leaf ike-sa-remote-address {
+           type jt:ipaddr;
+           description "Remote address";
+         }
+         leaf ike-sa-remote-port {
+           type int32;
+           description "Remote port";
+         }
+         leaf ike-sa-lifetime {
+           type string;
+           description "Remaining lifetime before expiration, in seconds or kilobytes";
+         }
+         list ike-sa-phase2-information {
+           leaf ike-sa-phase2-type {
+             type string;
+             description "Type of phase 2 negotiation";
+           }
+           leaf ike-sa-role {
+             type string;
+             description "Role of our end";
+           }
+           leaf ike-sa-msg-id {
+             type int32;
+             description "Message ID of the quick mode negotiation";
+           }
+           leaf ike-sa-local-address {
+             type jt:ipaddr;
+             description "Local address";
+           }
+           leaf ike-sa-local-port {
+             type int32;
+             description "Local port";
+           }
+           leaf ike-sa-remote-address {
+             type jt:ipaddr;
+             description "Remote address";
+           }
+           leaf ike-sa-remote-port {
+             type int32;
+             description "Remote port";
+           }
+           leaf ike-sa-local-id {
+             type string;
+             description "Local end identity in phase 2";
+           }
+           leaf ike-sa-remote-id {
+             type string;
+             description "Remote end identity in phase 2";
+           }
+           leaf ike-sa-flags {
+             type string;
+             description "IKE SA flags";
+           }
+         }
+         leaf ike-sa-remote-client-info {
+           type string;
+           description "Remote access client information ";
+         }
+         leaf ike-trusted-ca-profile-name {
+           type string;
+           description "Trusted CA profile";
+         }
+         leaf ike-trusted-ca-group-name {
+           type string;
+           description "Trusted CA group";
+         }
+         container ike-xauth-user-info {
+           leaf ike-ike-id {
+             type string;
+             description "IKE ID";
+           }
+           leaf ike-xauth-username {
+             type string;
+             description "AAA username";
+           }
+           leaf ike-xauth-user-assigned-ip {
+             type jt:ipaddr;
+             description "IP assigned to AAA user";
+           }
+           leaf ike-xauth-user-assigned-ipv6 {
+             type jt:ipaddr;
+             description "IPv6 assigned to AAA user";
+           }
+         }
+         leaf ike-sa-srg-id {
+           type int32;
+           description "SRG ID";
+         }
+         container ike-ppk-profile {
+           leaf ike-ppk-profile-name {
+             type string;
+             description "Indicates the PPK profile name configured for IKE Peer";
+           }
+           leaf ike-ppk-profile-optional {
+             type string;
+             description "Indicates whether PPK profile is configured as optional or not ";
+           }
+           leaf ike-ppk-profile-state {
+             type string;
+             description "Indicates whether PPK is used for IKE SA after negotiation";
+           }
+         }
+       }
+       leaf ike-sa-remote-address {
+         type jt:ipaddr;
+         description "Remote address";
+       }
+       leaf ike-sa-index {
+         type uint32;
+         description "Index";
+       }
+       leaf ike-gw-name {
+         type string;
+         description "Gateway Name";
+       }
+       container ike-sa-location {
+         leaf ike-sa-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf ike-sa-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf ike-sa-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+       container ike-sa-advpn-info {
+         leaf ike-sa-type {
+           type string;
+           description "SA Type";
+         }
+         leaf ike-sa-advpn-local-capability {
+           type string;
+           description "Shortcut Local Capability";
+         }
+         leaf ike-sa-advpn-peer-capability {
+           type string;
+           description "Shortcut Peer Capability";
+         }
+       }
+       container ike-sa-advpn-suggester-shortcut-statistics {
+         leaf ike-sa-advpn-shortcut-suggestions-sent {
+           type int32;
+           description "Number of Shortcut Suggestions sent";
+         }
+         leaf ike-sa-advpn-shortcut-suggestions-response-accepted {
+           type int32;
+           description "Number of Responses accepted for Shortcut Suggestions sent";
+         }
+         leaf ike-sa-advpn-shortcut-suggestions-response-declined {
+           type int32;
+           description "Number of Responses declined for Shortcut Suggestions sent";
+         }
+       }
+       container ike-sa-advpn-partner-shortcut-statistics {
+         leaf ike-sa-advpn-shortcut-suggestions-received {
+           type int32;
+           description "Number of Shortcut Suggestions received";
+         }
+         leaf ike-sa-advpn-shortcut-suggestions-accepted {
+           type int32;
+           description "Number of Shortcut Suggestions accepted";
+         }
+         leaf ike-sa-advpn-shortcut-suggestions-declined {
+           type int32;
+           description "Number of Shortcut Suggestions declined";
+         }
+       }
+     }
+     container ike-sa-stats-information {
+     }
+   }
+   grouping gvpn-kek-security-associations-information-block {
+     container kek-security-associations {
+       leaf security-association-index {
+         type uint32;
+         description "Index";
+       }
+       leaf server-address {
+         type jt:ipaddr;
+         description "Server address";
+       }
+       leaf life-remaining {
+         type uint32;
+         description "Remaining life";
+       }
+       leaf initiator-cookie {
+         type string;
+         description "Initiator cookie";
+       }
+       leaf responder-cookie {
+         type string;
+         description "Responder cookie";
+       }
+       leaf group-id {
+         type uint32;
+         description "Group Id";
+       }
+     }
+     container gvpn-server-kek-security-associations {
+       leaf security-association-index {
+         type uint32;
+         description "Index";
+       }
+       leaf life-remaining {
+         type uint32;
+         description "Remaining life";
+       }
+       leaf initiator-cookie {
+         type string;
+         description "Initiator cookie";
+       }
+       leaf responder-cookie {
+         type string;
+         description "Responder cookie";
+       }
+       leaf group-id {
+         type uint32;
+         description "Group Id";
+       }
+     }
+     container gvpn-server-kek-security-associations-block {
+       container kek-sa-group-info {
+         leaf kek-sa-group-replay-window {
+           type uint32;
+           description "Server Replay Window";
+         }
+         leaf kek-sa-group-activation-delay {
+           type uint32;
+           description "Server Activation Delay";
+         }
+         leaf kek-sa-group-multicast-group {
+           type string;
+           description "Server Member Communication";
+         }
+       }
+       leaf security-association-index {
+         type uint32;
+         description "Index";
+       }
+       leaf group-name {
+         type string;
+         description "Group Name";
+       }
+       leaf group-id {
+         type uint32;
+         description "Group Id";
+       }
+       leaf initiator-cookie {
+         type string;
+         description "Initiator cookie";
+       }
+       leaf responder-cookie {
+         type string;
+         description "Responder cookie";
+       }
+       leaf kek-sa-authentication-method {
+         type string;
+         description "Authentication method";
+       }
+       leaf lifetime-remaining {
+         type string;
+         description "Remaining lifetime before expiration, in seconds";
+       }
+       leaf act-time-remaining {
+         type string;
+         description "Remaining lifetime before activation";
+       }
+       leaf rekey-time-remaining {
+         type string;
+         description "Remaining lifetime before rekey";
+       }
+       container kek-sa-algorithms {
+         leaf kek-sa-authentication-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf kek-sa-encryption-algorithm {
+           type string;
+           description "Encrption algorithm";
+         }
+       }
+       container kek-sa-traffic-statistics {
+         leaf kek-sa-input-bytes {
+           type int32;
+           description "Input bytes, including retransmissions";
+         }
+         leaf kek-sa-output-bytes {
+           type int32;
+           description "Output bytes, including retransmissions";
+         }
+         leaf kek-sa-input-packets {
+           type int32;
+           description "Input packets, including retransmissions";
+         }
+         leaf kek-sa-output-packets {
+           type int32;
+           description "Output packets, including retransmissions";
+         }
+       }
+       container kek-sa-misc {
+         leaf kek-sa-sequence-number {
+           type uint32;
+           description "Sequence Number";
+         }
+       }
+       container kek-sa-server-info {
+         leaf kek-sa-server-retrans-period {
+           type uint32;
+           description "Server Retransmission Period";
+         }
+         leaf kek-sa-server-retrans-number {
+           type uint32;
+           description "Number of retransimissions";
+         }
+       }
+       container kek-sa-negotiations {
+         leaf kek-sa-num-of-negotiations {
+           type int32;
+           description "Number of PUSH negotiations";
+         }
+       }
+       list kek-sa-phase2-information {
+         leaf kek-sa-phase2-type {
+           type string;
+           description "Type of phase 2 negotiation";
+         }
+         leaf kek-sa-msg-id {
+           type int32;
+           description "Message ID of the phase 2 negotation";
+         }
+       }
+     }
+     container kek-security-associations-block {
+       list ike-security-associations {
+         leaf ike-sa-routing-instance {
+           type string;
+           description "Local-gateway routing instance";
+         }
+         leaf ike-sa-local-gateway-interface {
+           type string;
+           description "Local gateway  interface";
+         }
+         leaf ike-ike-id {
+           type string;
+           description "IKE ID";
+         }
+         leaf ike-sa-reauthlifetime {
+           type string;
+           description "Remaining IKE Hard lifetime before re-authentication, in seconds";
+         }
+         leaf ike-sa-ike-frag {
+           type string;
+           description "IKE Fragmentation Flag";
+         }
+         leaf ike-sa-frag-size {
+           type int32;
+           description "IKE Fragmentation Size";
+         }
+         container ike-sa-traffic-statistics {
+           leaf ike-sa-input-frag-packets {
+             type int32;
+             description "Input fragmentation packets, including retransmissions";
+           }
+           leaf ike-sa-output-frag-packets {
+             type int32;
+             description "Output fragmentation packets, including retransmissions";
+           }
+           leaf ike-sa-output-invalid-spi-packets {
+             type int32;
+             description "Number of invalid SPI notifications send";
+           }
+           leaf ike-sa-input-invalid-spi-packets {
+             type int32;
+             description "Number of invalid SPI notifications received";
+           }
+           leaf ike-sa-input-bytes {
+             type int32;
+             description "Input bytes, including retransmissions";
+           }
+           leaf ike-sa-output-bytes {
+             type int32;
+             description "Output bytes, including retransmissions";
+           }
+           leaf ike-sa-input-packets {
+             type int32;
+             description "Input packets, including retransmissions";
+           }
+           leaf ike-sa-output-packets {
+             type int32;
+             description "Output packets, including retransmissions";
+           }
+         }
+         container ike-sa-misc {
+           leaf ike-sa-num-ipsec-rekeys {
+             type int32;
+             description "Number of IPSec rekeys using this SA";
+           }
+           leaf ike-sa-exchange-type {
+             type string;
+             description "Exchange type";
+           }
+         }
+         container ike-sa-payload-statistics {
+           leaf ike-sa-delete-payloads-received {
+             type int32;
+             description "Number of delete payloads received";
+           }
+           leaf ike-sa-delete-payloads-sent {
+             type int32;
+             description "Number of delete payloads sent";
+           }
+           leaf ike-sa-r-u-there-payloads-received {
+             type int32;
+             description "Number of DPD R-U-THERE payloads received";
+           }
+           leaf ike-sa-r-u-there-payloads-sent {
+             type int32;
+             description "Number of DPD R-U-THERE payloads sent";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-received {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads received";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-sent {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads sent";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-missed {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads missed";
+           }
+           leaf ike-sa-r-u-there-ack-payloads-maximum-delay {
+             type int32;
+             description "Worst case delay for the DPD R-U-THERE-ACK";
+           }
+           leaf ike-sa-r-u-there-ack-seq-payloads-missed {
+             type int32;
+             description "Number of DPD R-U-THERE-ACK payloads missed in sequence";
+           }
+           leaf ike-sa-dpd-request-payloads-received {
+             type int32;
+             description "Number of DPD request payloads received";
+           }
+           leaf ike-sa-dpd-request-payloads-sent {
+             type int32;
+             description "Number of DPD request payloads sent";
+           }
+           leaf ike-sa-dpd-response-payloads-received {
+             type int32;
+             description "Number of DPD response payloads received";
+           }
+           leaf ike-sa-dpd-response-payloads-sent {
+             type int32;
+             description "Number of DPD response payloads sent";
+           }
+           leaf ike-sa-dpd-response-payloads-missed {
+             type int32;
+             description "Number of DPD response payloads missed";
+           }
+           leaf ike-sa-dpd-response-payloads-maximum-delay {
+             type int32;
+             description "Worst case delay for the DPD response";
+           }
+           leaf ike-sa-dpd-response-seq-payloads-missed {
+             type int32;
+             description "Number of DPD response payloads missed in sequence";
+           }
+           leaf ike-sa-invalid-spi-notifications-received {
+             type int32;
+             description "Number of invalid SPI notifications received";
+           }
+           leaf ike-sa-invalid-spi-notifications-sent {
+             type int32;
+             description "Number of invalid SPI notifications sent";
+           }
+         }
+         leaf ike-sa-role {
+           type string;
+           description "Role of our end";
+         }
+         leaf ike-sa-state {
+           type string;
+           description "Status of the SA";
+         }
+         leaf ike-sa-initiator-cookie {
+           type string;
+           description "IKE SA initiator cookie";
+         }
+         leaf ike-sa-responder-cookie {
+           type string;
+           description "IKE SA responder cookie";
+         }
+         leaf ike-sa-authentication-method {
+           type string;
+         }
+         leaf ike-sa-local-address {
+           type jt:ipaddr;
+           description "Local address";
+         }
+         leaf ike-sa-local-port {
+           type int32;
+           description "Local port";
+         }
+         leaf ike-sa-remote-address {
+           type jt:ipaddr;
+           description "Remote address";
+         }
+         leaf ike-sa-remote-port {
+           type int32;
+           description "Remote port";
+         }
+         leaf ike-sa-lifetime {
+           type string;
+           description "Remaining lifetime before expiration, in seconds or kilobytes";
+         }
+         container ike-sa-algorithms {
+           leaf ike-sa-authentication-algorithm {
+             type string;
+             description "Authentication algorithm";
+           }
+           leaf ike-sa-sig-key-length {
+             type uint32;
+             description "Signature Key Length";
+           }
+           leaf ike-sa-encryption-algorithm {
+             type string;
+             description "Encryption algorithm";
+           }
+         }
+         list ike-sa-phase2-information {
+           leaf ike-sa-phase2-type {
+             type string;
+             description "Type of phase 2 negotiation";
+           }
+           leaf ike-sa-role {
+             type string;
+             description "Role of our end";
+           }
+           leaf ike-sa-msg-id {
+             type int32;
+             description "Message ID of the quick mode negotiation";
+           }
+           leaf ike-sa-local-address {
+             type jt:ipaddr;
+             description "Local address";
+           }
+           leaf ike-sa-local-port {
+             type int32;
+             description "Local port";
+           }
+           leaf ike-sa-remote-address {
+             type jt:ipaddr;
+             description "Remote address";
+           }
+           leaf ike-sa-remote-port {
+             type int32;
+             description "Remote port";
+           }
+           leaf ike-sa-local-id {
+             type string;
+             description "Local end identity in phase 2";
+           }
+           leaf ike-sa-remote-id {
+             type string;
+             description "Remote end identity in phase 2";
+           }
+         }
+         container kek-sa-misc {
+           leaf kek-sa-sequence-number {
+             type uint32;
+             description "Sequence Number";
+           }
+         }
+         container kek-sa-group-info {
+           leaf group-id {
+             type uint32;
+             description "Group Id";
+           }
+           leaf kek-sa-group-name {
+             type string;
+             description "Group Name";
+           }
+           leaf kek-sa-group-server-version {
+             type uint32;
+             description "Server Version Number";
+           }
+           leaf kek-sa-group-heartbeat-interval {
+             type uint32;
+             description "Server Heartbeat Interval";
+           }
+           leaf kek-sa-group-heartbeat-threshold {
+             type uint32;
+             description "Member Heartbeat Threshold";
+           }
+           leaf kek-sa-group-heartbeat-timeout-left {
+             type uint32;
+             description "Number of seconds till heartbeat timeout";
+           }
+           leaf kek-sa-group-activation-delay {
+             type uint32;
+             description "Server Activation Delay";
+           }
+           leaf kek-sa-group-multicast-group {
+             type string;
+             description "Server Multicast Group";
+           }
+           leaf kek-sa-group-replay-window {
+             type uint32;
+             description "Server Replay Window";
+           }
+         }
+         container kek-sa-server-info {
+           leaf kek-sa-server-retrans-period {
+             type uint32;
+             description "Server Retransmission Period";
+           }
+           leaf kek-sa-server-retrans-number {
+             type uint32;
+             description "Number of retransimissions";
+           }
+           leaf kek-sa-server-lifetime-secs {
+             type uint32;
+             description "Lifetime seconds";
+           }
+           leaf kek-sa-server-certificate {
+             type string;
+             description "Certificate";
+           }
+         }
+       }
+       leaf security-association-index {
+         type uint32;
+         description "Index";
+       }
+       leaf group-id {
+         type uint32;
+         description "Group Id";
+       }
+       leaf group-vpn-name {
+         type string;
+         description "Group VPN Name";
+       }
+       leaf local-address {
+         type jt:ipaddr;
+         description "Local address";
+       }
+       leaf server-address {
+         type jt:ipaddr;
+         description "Server address";
+       }
+       leaf initiator-cookie {
+         type string;
+         description "Initiator cookie";
+       }
+       leaf responder-cookie {
+         type string;
+         description "Responder cookie";
+       }
+       leaf lifetime-remaining {
+         type string;
+         description "Remaining lifetime before expiration, in seconds";
+       }
+       leaf push-sequence-number {
+         type uint32;
+         description "Group key Push sequence number";
+       }
+       container kek-sa-algorithms {
+         leaf kek-sa-authentication-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf kek-sa-encryption-algorithm {
+           type string;
+           description "Encrption algorithm";
+         }
+       }
+       container kek-sa-traffic-statistics {
+         leaf kek-sa-input-bytes {
+           type int32;
+           description "Input bytes, including retransmissions";
+         }
+         leaf kek-sa-output-bytes {
+           type int32;
+           description "Output bytes, including retransmissions";
+         }
+         leaf kek-sa-input-packets {
+           type int32;
+           description "Input packets, including retransmissions";
+         }
+         leaf kek-sa-output-packets {
+           type int32;
+           description "Output packets, including retransmissions";
+         }
+       }
+       container gvpn-kek-security-association-statistics {
+         leaf-list kek-security-association-statistics {
+           type string;
+           description "KEK SA statistics";
+         }
+       }
+       container ike-sa-location {
+         leaf ike-sa-fpc {
+           type int32;
+           description "FPC number";
+         }
+         leaf ike-sa-pic {
+           type int32;
+           description "PIC number";
+         }
+         leaf ike-sa-kmd-instance {
+           type int32;
+           description "KMD instance number";
+         }
+       }
+     }
+     list ike-security-associations {
+       leaf ike-sa-routing-instance {
+         type string;
+         description "Local-gateway routing instance";
+       }
+       leaf ike-sa-local-gateway-interface {
+         type string;
+         description "Local gateway  interface";
+       }
+       leaf ike-ike-id {
+         type string;
+         description "IKE ID";
+       }
+       leaf ike-sa-reauthlifetime {
+         type string;
+         description "Remaining IKE Hard lifetime before re-authentication, in seconds";
+       }
+       leaf ike-sa-ike-frag {
+         type string;
+         description "IKE Fragmentation Flag";
+       }
+       leaf ike-sa-frag-size {
+         type int32;
+         description "IKE Fragmentation Size";
+       }
+       container ike-sa-traffic-statistics {
+         leaf ike-sa-input-frag-packets {
+           type int32;
+           description "Input fragmentation packets, including retransmissions";
+         }
+         leaf ike-sa-output-frag-packets {
+           type int32;
+           description "Output fragmentation packets, including retransmissions";
+         }
+         leaf ike-sa-output-invalid-spi-packets {
+           type int32;
+           description "Number of invalid SPI notifications send";
+         }
+         leaf ike-sa-input-invalid-spi-packets {
+           type int32;
+           description "Number of invalid SPI notifications received";
+         }
+       }
+       container ike-sa-misc {
+         leaf ike-sa-num-ipsec-rekeys {
+           type int32;
+           description "Number of IPSec rekeys using this SA";
+         }
+         leaf ike-sa-exchange-type {
+           type string;
+           description "Exchange type";
+         }
+       }
+       container ike-sa-payload-statistics {
+         leaf ike-sa-delete-payloads-received {
+           type int32;
+           description "Number of delete payloads received";
+         }
+         leaf ike-sa-delete-payloads-sent {
+           type int32;
+           description "Number of delete payloads sent";
+         }
+         leaf ike-sa-r-u-there-payloads-received {
+           type int32;
+           description "Number of DPD R-U-THERE payloads received";
+         }
+         leaf ike-sa-r-u-there-payloads-sent {
+           type int32;
+           description "Number of DPD R-U-THERE payloads sent";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-received {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads received";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-sent {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads sent";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-missed {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads missed";
+         }
+         leaf ike-sa-r-u-there-ack-payloads-maximum-delay {
+           type int32;
+           description "Worst case delay for the DPD R-U-THERE-ACK";
+         }
+         leaf ike-sa-r-u-there-ack-seq-payloads-missed {
+           type int32;
+           description "Number of DPD R-U-THERE-ACK payloads missed in sequence";
+         }
+         leaf ike-sa-dpd-request-payloads-received {
+           type int32;
+           description "Number of DPD request payloads received";
+         }
+         leaf ike-sa-dpd-request-payloads-sent {
+           type int32;
+           description "Number of DPD request payloads sent";
+         }
+         leaf ike-sa-dpd-response-payloads-received {
+           type int32;
+           description "Number of DPD response payloads received";
+         }
+         leaf ike-sa-dpd-response-payloads-sent {
+           type int32;
+           description "Number of DPD response payloads sent";
+         }
+         leaf ike-sa-dpd-response-payloads-missed {
+           type int32;
+           description "Number of DPD response payloads missed";
+         }
+         leaf ike-sa-dpd-response-payloads-maximum-delay {
+           type int32;
+           description "Worst case delay for the DPD response";
+         }
+         leaf ike-sa-dpd-response-seq-payloads-missed {
+           type int32;
+           description "Number of DPD response payloads missed in sequence";
+         }
+         leaf ike-sa-invalid-spi-notifications-received {
+           type int32;
+           description "Number of invalid SPI notifications received";
+         }
+         leaf ike-sa-invalid-spi-notifications-sent {
+           type int32;
+           description "Number of invalid SPI notifications sent";
+         }
+       }
+     }
+   }
+   grouping hakr-keychain-information-block {
+     list hakr-keychain {
+       leaf hakr-keychain-name {
+         type string;
+         description "Keychain name";
+       }
+       leaf hakr-keychain-active-send-key {
+         type int32;
+         description "Transmit key ID";
+       }
+       leaf hakr-keychain-active-receive-key {
+         type int32;
+         description "Receive key ID";
+       }
+       leaf hakr-keychain-next-send-key {
+         type string;
+         description "Next transmit key";
+       }
+       leaf hakr-keychain-next-receive-key {
+         type string;
+         description "Next receive key";
+       }
+       leaf hakr-keychain-next-key-time {
+         type string;
+         description "Key transition time";
+       }
+       leaf hakr-keychain-tolerance {
+         type int32;
+         description "Clock skew tolerance";
+       }
+       list hakr-keys {
+         leaf hakr-key-id {
+           type string;
+           description "Authentication element identifier";
+         }
+         leaf hakr-key-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf hakr-key-fallback-algorithm {
+           type string;
+           description "Fallback Authentication algorithm";
+         }
+         leaf hakr-key-state {
+           type string;
+           description "Authentication key operational state";
+         }
+         leaf hakr-key-options {
+           type string;
+           description "Authentication key options";
+         }
+         leaf hakr-key-start-time {
+           type string;
+           description "Time since the current session began (hours:minutes:seconds)";
+         }
+         leaf hakr-key-mode {
+           type string;
+           description "Authentication key mode";
+         }
+         leaf hakr-key-secret {
+           type string;
+           description "Authentication key";
+         }
+       }
+       leaf-list hakr-sa-clients {
+         type string;
+         description "Keychain clients ";
+       }
+     }
+     list hakr-keys {
+       leaf hakr-key-secret {
+         type string;
+         description "Authentication key";
+       }
+       leaf hakr-key-id {
+         type string;
+         description "Authentication element identifier";
+       }
+       leaf hakr-key-algorithm {
+         type string;
+         description "Authentication algorithm";
+       }
+       leaf hakr-key-fallback-algorithm {
+         type string;
+         description "Fallback Authentication algorithm";
+       }
+       leaf hakr-key-state {
+         type string;
+         description "Authentication key operational state";
+       }
+       leaf hakr-key-options {
+         type string;
+         description "Authentication key options";
+       }
+       leaf hakr-key-start-time {
+         type string;
+         description "Time since the current session began (hours:minutes:seconds)";
+       }
+       leaf hakr-key-mode {
+         type string;
+         description "Authentication key mode";
+       }
+     }
+   }
+   grouping mka-session-information-block {
+     leaf interface-name {
+       type string;
+     }
+   }
+   grouping mka-statistics-block {
+     container mka-interface-statistics {
+       leaf interface-name {
+         type string;
+       }
+       leaf received-packets {
+         type uint32;
+         description "Number of MKA packets received";
+       }
+       leaf sent-packets {
+         type uint32;
+         description "Number of MKA packets sent";
+       }
+       leaf version-error {
+         type uint32;
+         description "Number of MKA packets with version mismatch";
+       }
+       leaf cak-error {
+         type uint32;
+         description "Number of MKA packets with CAK invalid or mismatch";
+       }
+       leaf integrity-check-value-mismatch {
+         type uint32;
+         description "Number of MKA packets with integrity check value mismatch";
+       }
+       leaf duplicate-message-identifier {
+         type uint32;
+         description "Number of MKA packets with duplicate message identifier";
+       }
+       leaf duplicate-message-number {
+         type uint32;
+         description "Number of MKA packets with duplicate message number";
+       }
+       leaf duplicate-address {
+         type uint32;
+         description "Number of MKA packets with duplicate address";
+       }
+       leaf invalid-destination {
+         type uint32;
+         description "Number of MKA packets with invalid destination";
+       }
+       leaf format-error {
+         type uint32;
+         description "Number of MKA packets with format errors";
+       }
+       leaf old-message-number {
+         type uint32;
+         description "Number of MKA packets with old or replayed message number";
+       }
+     }
+   }
+   grouping macsec-connection-information-block {
+     leaf interface-name {
+       type string;
+     }
+     leaf connectivity-association-name {
+       type string;
+       description "Connectivity association name";
+     }
+     leaf cipher-suite {
+       type string;
+       description "Cipher suite name";
+     }
+     leaf encryption {
+       type string;
+       description "MAC security encryption status";
+     }
+     leaf offset {
+       type uint32;
+       description "MAC security offset";
+     }
+     leaf include-sci {
+       type string;
+       description "MAC security SCI inclusion status";
+     }
+     leaf replay-protect {
+       type string;
+       description "MAC replay protect status";
+     }
+     leaf replay-protect-window {
+       type uint32;
+       description "MAC security replay protect window size";
+     }
+     leaf sci {
+       type string;
+       description "MKA outbound secure channel identifier";
+     }
+     leaf outgoing-packet-number {
+       type uint64;
+       description "MAC security outgoing packet number";
+     }
+     leaf lowest-accepted-packet-number {
+       type uint32;
+       description "MAC security lowest accepted packet number";
+     }
+     leaf association-number {
+       type uint32;
+       description "MAC security association number";
+     }
+     leaf member-identifier {
+       type string;
+       description "MKA member identifier";
+     }
+     leaf key-number {
+       type uint32;
+       description "MKA key number being used";
+     }
+     leaf association-number-status {
+       type string;
+       description "MAC security association number status";
+     }
+     leaf start-time {
+       type string;
+       description "MAC security association number using start time";
+     }
+     list macsec-interface-common-information {
+       leaf interface-name {
+         type string;
+       }
+       leaf connectivity-association-name {
+         type string;
+         description "Connectivity association name";
+       }
+       leaf cipher-suite {
+         type string;
+         description "Cipher suite name";
+       }
+       leaf encryption {
+         type string;
+         description "MAC security encryption status";
+       }
+       leaf offset {
+         type uint32;
+         description "MAC security offset";
+       }
+       leaf include-sci {
+         type string;
+         description "MAC security SCI inclusion status";
+       }
+       leaf replay-protect {
+         type string;
+         description "MAC replay protect status";
+       }
+       leaf replay-protect-window {
+         type uint32;
+         description "MAC security replay protect window size";
+       }
+     }
+     list outbound-secure-channel {
+       leaf sci {
+         type string;
+         description "MKA outbound secure channel identifier";
+       }
+       leaf outgoing-packet-number {
+         type uint64;
+         description "MAC security outgoing packet number";
+       }
+       list outbound-secure-association {
+         leaf association-number {
+           type uint32;
+           description "MAC security association number";
+         }
+         leaf association-number-status {
+           type string;
+           description "MAC security association number status";
+         }
+         leaf create-time {
+           type string;
+           description "MAC security association number creation time";
+         }
+         leaf member-identifier {
+           type string;
+           description "MKA member identifier";
+         }
+         leaf key-number {
+           type uint32;
+           description "MKA key number being used";
+         }
+         leaf start-time {
+           type string;
+           description "MAC security association number using start time";
+         }
+       }
+     }
+     list inbound-secure-channel {
+       leaf sci {
+         type string;
+         description "MKA outbound secure channel identifier";
+       }
+       leaf lowest-accepted-packet-number {
+         type uint32;
+         description "MAC security lowest accepted packet number";
+       }
+       list inbound-secure-association {
+         leaf association-number {
+           type uint32;
+           description "MAC security association number";
+         }
+         leaf association-number-status {
+           type string;
+           description "MAC security association number status";
+         }
+         leaf create-time {
+           type string;
+           description "MAC security association number creation time";
+         }
+         leaf member-identifier {
+           type string;
+           description "MKA member identifier";
+         }
+         leaf key-number {
+           type uint32;
+           description "MKA key number being used";
+         }
+         leaf start-time {
+           type string;
+           description "MAC security association number using start time";
+         }
+       }
+     }
+   }
+   grouping macsec-statistics-block {
+     leaf interface-name {
+       type string;
+     }
+     leaf encrypted-packets {
+       type uint64;
+       description "Macsec encrypted packets sent";
+     }
+     leaf encrypted-bytes {
+       type uint64;
+       description "Macsec encrypted bytes sent";
+     }
+     leaf protected-packets {
+       type uint64;
+       description "Macsec packets sent with only integrity protection";
+     }
+     leaf protected-bytes {
+       type uint64;
+       description "Macsec bytes sent with only integrity protection";
+     }
+     leaf ok-packets {
+       type uint64;
+       description "Macsec packets accepted";
+     }
+     leaf decrypted-bytes {
+       type uint64;
+       description "Macsec received bytes decrypted";
+     }
+     leaf decrypted-packets {
+       type uint64;
+       description "Macsec received packets decrypted";
+     }
+     leaf validated-packets {
+       type uint64;
+       description "Macsec received packets validated";
+     }
+     leaf validated-bytes {
+       type uint64;
+       description "Macsec received bytes validated";
+     }
+     leaf untagged-packets {
+       type uint64;
+       description "Macsec untagged packets";
+     }
+     leaf toolong-packets {
+       type uint64;
+       description "Macsec too long packets transmitted on a secure channel";
+     }
+     leaf control-packets {
+       type uint64;
+       description "Macsec control packets received on a secure channel";
+     }
+     leaf tagged-miss-packets {
+       type uint64;
+       description "Macsec tagged miss packets received on a secure channel";
+     }
+     leaf untagged-hit-packets {
+       type uint64;
+       description "Macsec untagged hit packets received on a secure channel";
+     }
+     leaf notag-packets {
+       type uint64;
+       description "Macsec no tag packets received on a secure channel";
+     }
+     leaf badtag-packets {
+       type uint64;
+       description "Macsec bad tag packets received on a secure channel";
+     }
+     leaf unknown-sci-packets {
+       type uint64;
+       description "Macsec unknown sci packets received on a secure channel";
+     }
+     leaf no-sci-packets {
+       type uint64;
+       description "Macsec no sci packets received on a secure channel";
+     }
+     leaf control-pass-packets {
+       type uint64;
+       description "Macsec allowed control packets received on a secure channel";
+     }
+     leaf uncontrol-pass-packets {
+       type uint64;
+       description "Macsec allowed uncontrol packets received on a secure channel";
+     }
+     leaf control-fail-packets {
+       type uint64;
+       description "Macsec dropped control packets received on a secure channel";
+     }
+     leaf uncontrol-fail-packets {
+       type uint64;
+       description "Macsec dropped uncontrol packets received on a secure channel";
+     }
+     leaf hit-dropped-packets {
+       type uint64;
+       description "Macsec hit dropped packets received on a security channel";
+     }
+     leaf notusing-sa-packets {
+       type uint64;
+       description "Macsec not using sa packets received on a security channel";
+     }
+     leaf unused-sa-packets {
+       type uint64;
+       description "Macsec unused sa packets received on a security channel";
+     }
+     leaf late-packets {
+       type uint64;
+       description "Macsec late packets dropped on a security channel";
+     }
+     leaf delayed-packets {
+       type uint64;
+       description "Macsec delayed packets accepted on a security channel";
+     }
+     leaf unchecked-packets {
+       type uint64;
+       description "Macsec unchecked packets accepted on a security channel";
+     }
+     leaf notvalid-packets {
+       type uint64;
+       description "Macsec not valid packets dropped on a security channel";
+     }
+     leaf invalid-packets {
+       type uint64;
+       description "Macsec invalid packets accepted on a security channel";
+     }
+     list secure-channel-sent {
+       leaf encrypted-packets {
+         type uint64;
+         description "Macsec encrypted packets sent";
+       }
+       leaf encrypted-bytes {
+         type uint64;
+         description "Macsec encrypted bytes sent";
+       }
+       leaf protected-packets {
+         type uint64;
+         description "Macsec packets sent with only integrity protection";
+       }
+       leaf protected-bytes {
+         type uint64;
+         description "Macsec bytes sent with only integrity protection";
+       }
+     }
+     list secure-association-sent {
+       leaf encrypted-packets {
+         type uint64;
+         description "Macsec encrypted packets sent";
+       }
+       leaf encrypted-bytes {
+         type uint64;
+         description "Macsec encrypted bytes sent";
+       }
+       leaf protected-packets {
+         type uint64;
+         description "Macsec packets sent with only integrity protection";
+       }
+       leaf protected-bytes {
+         type uint64;
+         description "Macsec bytes sent with only integrity protection";
+       }
+     }
+     list secure-channel-received {
+       leaf ok-packets {
+         type uint64;
+         description "Macsec packets accepted";
+       }
+       leaf decrypted-packets {
+         type uint64;
+         description "Macsec received packets decrypted";
+       }
+       leaf decrypted-bytes {
+         type uint64;
+         description "Macsec received bytes decrypted";
+       }
+       leaf validated-packets {
+         type uint64;
+         description "Macsec received packets validated";
+       }
+       leaf validated-bytes {
+         type uint64;
+         description "Macsec received bytes validated";
+       }
+     }
+     list secure-association-received {
+       leaf ok-packets {
+         type uint64;
+         description "Macsec packets accepted";
+       }
+       leaf decrypted-packets {
+         type uint64;
+         description "Macsec received packets decrypted";
+       }
+       leaf decrypted-bytes {
+         type uint64;
+         description "Macsec received bytes decrypted";
+       }
+       leaf validated-packets {
+         type uint64;
+         description "Macsec received packets validated";
+       }
+       leaf validated-bytes {
+         type uint64;
+         description "Macsec received bytes validated";
+       }
+     }
+     list macsec-error-information {
+       list secure-channel-sent-errors {
+         leaf untagged-packets {
+           type uint64;
+           description "Macsec untagged packets";
+         }
+         leaf toolong-packets {
+           type uint64;
+           description "Macsec too long packets transmitted on a secure channel";
+         }
+       }
+       list secure-channel-received-errors {
+         leaf control-packets {
+           type uint64;
+           description "Macsec control packets received on a secure channel";
+         }
+         leaf tagged-miss-packets {
+           type uint64;
+           description "Macsec tagged miss packets received on a secure channel";
+         }
+         leaf untagged-hit-packets {
+           type uint64;
+           description "Macsec untagged hit packets received on a secure channel";
+         }
+         leaf untagged-packets {
+           type uint64;
+           description "Macsec untagged packets";
+         }
+         leaf notag-packets {
+           type uint64;
+           description "Macsec no tag packets received on a secure channel";
+         }
+         leaf badtag-packets {
+           type uint64;
+           description "Macsec bad tag packets received on a secure channel";
+         }
+         leaf unknown-sci-packets {
+           type uint64;
+           description "Macsec unknown sci packets received on a secure channel";
+         }
+         leaf no-sci-packets {
+           type uint64;
+           description "Macsec no sci packets received on a secure channel";
+         }
+         leaf control-pass-packets {
+           type uint64;
+           description "Macsec allowed control packets received on a secure channel";
+         }
+         leaf control-fail-packets {
+           type uint64;
+           description "Macsec dropped control packets received on a secure channel";
+         }
+         leaf uncontrol-pass-packets {
+           type uint64;
+           description "Macsec allowed uncontrol packets received on a secure channel";
+         }
+         leaf uncontrol-fail-packets {
+           type uint64;
+           description "Macsec dropped uncontrol packets received on a secure channel";
+         }
+       }
+       list secure-channel-received-extended {
+         leaf hit-dropped-packets {
+           type uint64;
+           description "Macsec hit dropped packets received on a security channel";
+         }
+         leaf invalid-packets {
+           type uint64;
+           description "Macsec invalid packets accepted on a security channel";
+         }
+         leaf late-packets {
+           type uint64;
+           description "Macsec late packets dropped on a security channel";
+         }
+         leaf delayed-packets {
+           type uint64;
+           description "Macsec delayed packets accepted on a security channel";
+         }
+         leaf unchecked-packets {
+           type uint64;
+           description "Macsec unchecked packets accepted on a security channel";
+         }
+         leaf notvalid-packets {
+           type uint64;
+           description "Macsec not valid packets dropped on a security channel";
+         }
+         leaf notusing-sa-packets {
+           type uint64;
+           description "Macsec not using sa packets received on a security channel";
+         }
+         leaf unused-sa-packets {
+           type uint64;
+           description "Macsec unused sa packets received on a security channel";
+         }
+         leaf untagged-hit-packets {
+           type uint64;
+           description "Macsec untagged hit packets received on a secure channel";
+         }
+       }
+     }
+     leaf macsec-tx-sc-protected {
+       type int32;
+       description "Protected Secure Channel MACSec packets transmitted";
+     }
+     leaf macsec-tx-sc-encrypted {
+       type int32;
+       description "Encrypted Secure Channel MACSec packets transmitted";
+     }
+     leaf macsec-tx-sc-protectedbytes {
+       type int32;
+       description "Protected Secure Channel MACSec bytes transmitted";
+     }
+     leaf macsec-tx-sc-encryptedbytes {
+       type int32;
+       description "Encrypted Secure Channel MACSec bytes transmitted";
+     }
+     leaf macsec-rx-sc-ok {
+       type int32;
+       description "OK Secure Association MACSec packets received";
+     }
+     leaf macsec-rx-sc-validatedbytes {
+       type int32;
+       description "Validated Secure Association MACSec bytes received";
+     }
+     leaf macsec-rx-sc-decryptedbytes {
+       type int32;
+       description "Validated Secure Association MACSec bytes received";
+     }
+   }
+   grouping macsec-crypto-algorithms-block {
+     leaf fips-validated-algorithms {
+       type string;
+       description "Fips validated algorithms used by MACsec module";
+     }
+   }
+   grouping macsec-crypto-version-block {
+     leaf crypto-version {
+       type string;
+       description "Version of crypto library used by MACsec module";
+     }
+   }
+ }
