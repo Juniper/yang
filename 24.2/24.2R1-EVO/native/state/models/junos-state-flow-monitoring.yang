@@ -1,0 +1,352 @@
+module junos-state-flow-monitoring {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/flow-monitoring";
+  prefix js-fm;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-sampling {
+    prefix js-sampling;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-sampling-types {
+    prefix jsmpt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     flow-monitoring (NetFlow/IPFIX) state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping flow-common-counters {
+    description
+      "Describes the flow counters common for the family";
+
+    leaf flow-packets {
+      type yang:counter64;
+      description
+        "Indicates number of packets sampled";
+    }
+
+    leaf flow-bytes {
+      type yang:counter64;
+      description
+        "Indicates number of bytes sampled";
+    }
+
+    leaf flows-total {
+      type yang:counter64;
+      description
+        "Indicates total flows created";
+    }
+
+    leaf flows-active {
+      type yang:counter64;
+      description
+        "Indicates total number of active flows";
+    }
+
+    leaf flows-exported {
+      type yang:counter64;
+      description
+        "Indicates total number of flows exported to collector";
+    }
+
+    leaf packets-exported {
+      type yang:counter64;
+      description
+        "Indicates total number of packets exported to collector";
+    }
+
+    leaf flows-inactive-timed-out {
+      type yang:counter64;
+      description
+        "Indicates flows exported due to inactive time out";
+    }
+
+    leaf flows-active-timed-out {
+      type yang:counter64;
+      description
+        "Indicates flows exported due to active time out";
+    }
+
+    leaf flows-inserted {
+      type yang:counter64;
+      description
+        "Indicates number of flows inserted";
+    }
+
+    leaf flow-create-failures {
+      type yang:counter64;
+      description
+        "Indicates total number of flow creation failures (flow insert
+         failure)";
+    }
+
+    leaf route-lookup-failures {
+      type yang:counter64;
+      description
+        "Indicates total number of route lookup failures";
+    }
+
+    leaf autonomous-system-lookup-failures {
+      type yang:counter64;
+      description
+        "Indicates total number of Autonomous System (AS) lookup
+         failures";
+    }
+
+    leaf flow-packet-export-failures {
+      type yang:counter64;
+      description
+        "Indicates total number of flow packet export failures";
+    }
+  }
+
+  grouping flow-common-state {
+    description
+      "Grouping of flow states common for the family";
+
+    leaf export-format {
+      type jsmpt:flow-format;
+      description
+        "Version of exported flow records";
+    }
+
+    leaf observation-domain-id {
+      type uint32;
+      description
+        "Configured Observation Domain ID value";
+    }
+
+    leaf flow-table-utilization {
+      type jt:percentage-dec2;
+      description
+        "Indicates the percentage of Flow table utilized by the family";
+    }
+
+    leaf max-flows-supported {
+      type yang:counter64;
+      description
+        "Indicates the maximum number of flows supported";
+    }
+  }
+
+  grouping flow-counters {
+    description
+      "Top-level grouping for flow-monitoring flow counters";
+
+    leaf memory-allocation-failures {
+      type yang:counter64;
+      description
+        "Total number of heap memory allocation failures";
+    }
+
+    leaf memory-overload-failures {
+      type boolean;
+      description
+        "Indicates whether memory overload failures occured";
+    }
+  }
+
+  grouping route-state {
+    description
+      "Grouping for flow-monitoring route records for the family";
+
+    leaf route-records {
+      type yang:counter64;
+      description
+        "Total number of route records for the family";
+    }
+  }
+
+  grouping pfe-state {
+    description
+      "Grouping of PFE status with respect to the flow-monitoring
+       configuration";
+
+    leaf service-status {
+      type jsmpt:flow-status-code;
+      description
+        "Indicates the status of flow-monitoring configuration for this
+         PFE";
+    }
+  }
+
+  grouping flow-monitoring-top {
+    description
+      "Top-level grouping for flow-monitoring state data";
+
+    container flow-monitoring {
+      description
+        "JUNOS flow-monitoring service statistics for Netflow v9 and IPFIX";
+
+      list type {
+        description
+          "Lists the flow-monitoring Chassis level statistics";
+
+        key name;
+
+        leaf name {
+          type string;
+          description
+            "Indicates the name of the Chassis";
+        }
+
+        list slot {
+          description
+            "Lists the FPC slot flow-monitoring statistics";
+
+          key name;
+
+          leaf name {
+            type string;
+            description
+              "Indicates the name of the FPC slot";
+          }
+
+          list pfe {
+            description
+              "Lists the flow-monitoring PFE NPU state";
+
+            key name;
+
+            leaf name {
+              type string;
+              description
+                "Indicates name of PFE instance";
+            }
+
+            uses pfe-state;
+          }
+
+          leaf flexible-flow-sizing {
+            type boolean;
+            description
+              "Indicates flexible flow sizing is enabled";
+          }
+
+          leaf use-extended-flow-memory {
+            type boolean;
+            description
+              "Indicates whether to use extended flow memory is
+               enabled";
+          }
+
+          leaf route-set {
+            type boolean;
+            description
+              "Indicates route is set";
+          }
+
+          leaf config-set {
+            type boolean;
+            description
+              "Indicates flow-monitoring config is set";
+          }
+
+          leaf autonomous-system-records {
+            type yang:gauge64;
+            description
+              "Total number of Autonomous System (AS) records
+               available";
+          }
+
+          leaf max-flow-table-size {
+            type yang:counter64;
+            description
+              "Maximum flow table size available";
+          }
+
+          leaf ipv6-extended-attribute {
+            type boolean;
+            description
+              "Indicates IPv6 Extended attribute is set";
+          }
+
+          leaf last-clear {
+            type jt:absolute-time-seconds;
+            description
+              "Indicates the timestamp when the flow-monitoring stats
+               counter was last cleared";
+          }
+
+          container counters {
+            description
+              "Container for common flow-monitoring stats counters";
+
+            uses flow-counters;
+          }
+
+          list family {
+            description
+              "List of counters and statistics for each flow-monitoring
+               family";
+
+            key name;
+            leaf name {
+              type jsmpt:flow-family;
+              description
+                "Common flow-monitoring supported protocol families";
+            }
+
+            uses flow-common-state;
+            uses route-state;
+
+            container counters {
+              description
+                "Container for flow-monitoring family counters";
+
+              uses flow-common-counters;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-sampling:sampling" {
+    description
+      "Adds flow-monitoring domain to sampling state";
+
+    uses flow-monitoring-top;
+  }
+}
+

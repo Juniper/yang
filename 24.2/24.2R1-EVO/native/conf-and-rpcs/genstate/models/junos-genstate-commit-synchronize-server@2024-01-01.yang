@@ -1,0 +1,64 @@
+ module junos-genstate-commit-synchronize-server {
+   namespace "http://yang.juniper.net/junos/genstate/commit-synchronize-server";
+   prefix jgcss;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for commit-synchronize-server";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping commit-synchronize-server-top {
+     description "Top-level grouping";
+     container commit-synchronize-server {
+       config false;
+       description "Show commit synchronize server information";
+       list commit-sync-jobs {
+         description "Commit sync jobs details";
+         leaf job-id {
+           type int32;
+           description "Job id";
+         }
+         leaf commit-sync-model {
+           type string;
+           description "Commit synchronize model";
+         }
+         leaf database {
+           type string;
+           description "Type of database";
+         }
+         leaf database-version {
+           type string;
+           description "New commit version";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds commit-synchronize-server to top-level genstate";
+     uses commit-synchronize-server-top;
+   }
+ }

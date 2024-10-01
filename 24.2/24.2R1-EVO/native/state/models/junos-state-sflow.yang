@@ -1,0 +1,340 @@
+module junos-state-sflow {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/sflow";
+  prefix js-sflow;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-sflow-types {
+    prefix js-sflow-types;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     sFlow state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-25 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping sflow-interface-counters {
+    description
+      "Top-level grouping for sFlow interface counters";
+
+    leaf sampled-packets {
+      type yang:counter64;
+      description
+        "Total number of packets sampled from the interface";
+    }
+  }
+
+  grouping sflow-collector-counters {
+    description
+      "Top-level grouping for sFlow collector counters";
+
+    leaf sent-packets {
+      type yang:counter64;
+      description
+        "Total number of packets sampled and sent to the collector";
+    }
+
+    leaf sent-counter-samples {
+      type yang:counter64;
+      description
+        "Total number of counter samples collected";
+    }
+
+    leaf sent-flow-samples {
+      type yang:counter64;
+      description
+        "Total number of flow samples collected";
+    }
+
+    leaf sent-datagrams {
+      type yang:counter64;
+      description
+        "Total number of datagrams collected";
+    }
+  }
+
+  grouping sflow-adaptive-sample-state {
+    description
+      "Top-level grouping for sFlow adaptive sampling state";
+
+    container adaptive-sample-rate {
+      description
+        "Enclosing container for adaptive sampling";
+
+      leaf sample-rate {
+        type uint32;
+        description
+        "Adaptive packet sampling rate expressed as an integer N, where
+         the intended sampling rate is 1:N packets";
+      }
+
+      leaf fallback {
+        type boolean;
+        description
+          "Reverts back to the previously configured adaptive sample
+           rate.  Adaptive fallback is triggered when the number of
+           samples per second for each FPC is less than the
+           sample-limit threshold value.  This option is disabled by
+           default";
+      }
+
+      leaf sample-limit-threshold {
+        type uint32;
+        description
+          "Threshold value that is explicitly configured for adaptive
+           sampling fallback";
+      }
+    }
+  }
+
+  grouping sflow-sample-rate {
+    description
+      "Common grouping for ingress/egress sample rates";
+
+    leaf sample-rate {
+      type uint32;
+      description
+        "Packet sampling rate expressed as an integer N, where the
+         intended sampling rate is 1:N packets";
+    }
+
+    leaf status {
+      type js-sflow-types:status-code;
+      description
+        "Indicates the respective ingress/egress sample rate
+         operational status";
+    }
+  }
+
+  grouping sflow-common-state {
+    description
+      "Common grouping for sFlow related state";
+
+    leaf polling-interval {
+      type uint32 {
+        range "0 .. 3600";
+      }
+      description
+        "Interval at which the sFlow agent polls the interface";
+    }
+
+    container ingress {
+      description
+        "Enclosing container for ingress sampling rates";
+
+      uses sflow-sample-rate;
+    }
+
+    container egress {
+      description
+        "Enclosing container for egress sampling rates";
+
+      uses sflow-sample-rate;
+    }
+  }
+
+  grouping sflow-interfaces-top {
+    description
+      "Top-level grouping for sFlow interface related state";
+
+    container interfaces {
+      description
+        "Enclosing container for list of sFlow enabled interfaces";
+
+      list interface {
+        key "name";
+        description
+          "List of sFlow enabled interfaces";
+
+        leaf name {
+          type string;
+          description
+            "Interface name";
+        }
+
+        uses sflow-common-state;
+
+        container adapted-sample-rate {
+          description
+            "Enclosing container for adaptive sampling rates";
+
+          leaf ingress {
+            type uint32;
+            description
+              "Adapted rate at which ingress packets are sampled";
+          }
+
+          leaf egress {
+            type uint32;
+            description
+              "Adapted rate at which egress packets are sampled";
+          }
+        }
+
+        container counters {
+          description
+            "Collection of sFlow interface related counters";
+
+          uses sflow-interface-counters;
+        }
+      }
+    }
+  }
+
+  grouping sflow-collectors-top {
+    description
+      "Top-level grouping for data related to sFlow collectors";
+
+    container collectors {
+      description
+        "Enclosing container for list of sFlow collectors";
+
+      list collector {
+        key "address";
+        description
+          "List of sFlow collectors to send sampling data.  Packet
+           samples are sent to all collectors";
+
+        leaf address {
+          type inet:ip-address;
+          description
+            "IPv4 or IPv6 address of the sFlow collector";
+        }
+
+        leaf udp-port {
+          type inet:port-number;
+          description
+            "UDP port number for the sFlow collector";
+        }
+
+        leaf dscp {
+          type inet:dscp;
+          description
+            "Differentiated Services Code Point (DSCP) values applied
+             to all packets for the collector";
+        }
+
+        leaf forwarding-class {
+          type string;
+          description
+            "Forwarding class values applied to all packets destined
+             for the collector";
+        }
+
+        container counters {
+          description
+            "Collection of sFlow collector related counters";
+
+          uses sflow-collector-counters;
+        }
+      }
+    }
+  }
+
+  grouping sflow-global-top {
+    description
+      "Top-level grouping for global sFlow state data";
+
+    container agent-id {
+      description
+        "Agent identifier state data";
+
+      leaf inet {
+        type inet:ipv4-address;
+        description
+          "sFlow agent identifier for IPv4 PDUs";
+      }
+
+      leaf inet6 {
+        type inet:ipv6-address;
+        description
+          "sFlow agent identifier for IPv6 PDUs";
+      }
+    }
+
+    container source-ip {
+      description
+        "IPv4 and IPv6 source address related state data";
+
+      leaf inet {
+        type inet:ipv4-address;
+        description
+          "The IPv4 source address for sFlow datagrams set to sFlow
+           collectors";
+      }
+
+      leaf inet6 {
+        type inet:ipv6-address;
+        description
+          "The IPv6 source address for sFlow datagrams set to sFlow
+           collectors";
+      }
+    }
+
+    uses sflow-common-state;
+    uses sflow-adaptive-sample-state;
+  }
+
+  grouping sflow-top {
+    description
+      "Top-level grouping for sFlow state data";
+
+    container sflow {
+      description
+        "Container for sFlow state";
+
+      uses sflow-global-top;
+      uses sflow-collectors-top;
+      uses sflow-interfaces-top;
+    }
+  }
+
+  augment "/js:state/js-pro:protocols" {
+    description
+      "Adds sFlow domain to protocol state";
+
+    uses sflow-top;
+  }
+}

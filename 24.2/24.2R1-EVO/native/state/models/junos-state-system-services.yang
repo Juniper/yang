@@ -1,0 +1,63 @@
+module junos-state-system-services {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/services";
+  prefix js-sys-svc;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     system state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-07-20 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping system-services-top {
+    description
+      "Top-level grouping for JUNOS system state data";
+
+    container services {
+      description
+        "Encapsulating container for all JUNOS system state";
+
+    }
+  }
+
+  augment "/js:state/js-sys:system" {
+    description
+      "Adds services domain to top-level system state";
+
+    uses system-services-top;
+  }
+}

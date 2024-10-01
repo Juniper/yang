@@ -1,0 +1,355 @@
+ module junos-genstate-interface-information {
+   namespace "http://yang.juniper.net/junos/genstate/interface-information";
+   prefix jgii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for interface-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping interface-information-top {
+     description "Top-level grouping";
+     container interface-information {
+       config false;
+       description "Top-level container";
+       list physical-interface {
+         leaf name {
+           type string;
+           description "Name of this item";
+         }
+         leaf oper-status {
+           type string;
+           description "Current operational state of the interface";
+         }
+         leaf local-index {
+           type int32;
+           description "Local kernel index for this interface";
+         }
+         leaf snmp-index {
+           type int32;
+           description "SNMP ifIndex for this interface";
+         }
+         leaf generation {
+           type string;
+           description "Generation number used to distinguish between successive instances of this interface";
+         }
+         leaf description {
+           type string;
+           description "Description of this interface";
+         }
+         leaf if-type {
+           type string;
+         }
+         leaf link-level-type {
+           type string;
+           description "Encapsulation being used on the physical interface";
+         }
+         leaf mtu {
+           type string;
+           description "MTU size on this interface";
+         }
+         leaf mru {
+           type string;
+           description "MRU size on this interface";
+         }
+         leaf sonet-mode {
+           type string;
+           description "Whether the interface is in SDH or SONET mode";
+         }
+         leaf link-mode {
+           type string;
+           description "Link mode of the interface";
+         }
+         leaf speed {
+           type string;
+           description "Speed at which the interface is running";
+         }
+         leaf loopback {
+           type string;
+           description "Whether loopback is enabled and the type of loopback";
+         }
+         leaf if-auto-negotiation {
+           type string;
+           description "Status of auto-negotiation";
+         }
+         leaf current-physical-address {
+           type string;
+           description "Configured physical address for this interface";
+         }
+         leaf hardware-physical-address {
+           type string;
+           description "Hardware physical address for this interface";
+         }
+         container if-config-flags {
+           leaf iff-none {
+             type empty;
+           }
+           leaf iff-hardware-down {
+             type empty;
+           }
+           leaf iff-down {
+             type empty;
+           }
+           leaf iff-up {
+             type empty;
+           }
+           leaf iff-admin-down {
+             type empty;
+           }
+           leaf iff-admin-up {
+             type empty;
+           }
+           leaf iff-link-down {
+             type empty;
+           }
+           leaf iff-device-down {
+             type empty;
+           }
+           leaf iff-point-to-point {
+             type empty;
+           }
+           leaf iff-point-to-multipoint {
+             type empty;
+           }
+           leaf plp-to-clp {
+             type empty;
+           }
+           leaf iff-multiaccess {
+             type empty;
+           }
+           leaf iff-snmp-traps {
+             type empty;
+           }
+           leaf iff-looped {
+             type empty;
+           }
+           leaf iff-framing-conflict {
+             type empty;
+           }
+           leaf internal-flags {
+             type string;
+             description "Hexadecimal value of internal flag bits";
+           }
+         }
+         list logical-interface {
+           leaf name {
+             type string;
+             description "Name of this item";
+           }
+           leaf local-index {
+             type int32;
+             description "Local kernel index for this interface";
+           }
+           leaf snmp-index {
+             type int32;
+             description "SNMP ifIndex for this interface";
+           }
+           leaf generation {
+             type string;
+             description "Generation number used to distinguish between successive instances of this interface";
+           }
+           leaf description {
+             type string;
+             description "Description of this interface";
+           }
+           leaf link-address {
+             type string;
+             description "Link address on this logical interface";
+           }
+           leaf encapsulation {
+             type string;
+             description "Encapsulation on the logical interface";
+           }
+           leaf subunit {
+             type int32;
+             description "Subunit for this interface";
+           }
+           container if-config-flags {
+             leaf iff-none {
+               type empty;
+             }
+             leaf iff-hardware-down {
+               type empty;
+             }
+             leaf iff-down {
+               type empty;
+             }
+             leaf iff-up {
+               type empty;
+             }
+             leaf iff-admin-down {
+               type empty;
+             }
+             leaf iff-admin-up {
+               type empty;
+             }
+             leaf iff-link-down {
+               type empty;
+             }
+             leaf iff-device-down {
+               type empty;
+             }
+             leaf iff-point-to-point {
+               type empty;
+             }
+             leaf iff-point-to-multipoint {
+               type empty;
+             }
+             leaf plp-to-clp {
+               type empty;
+             }
+             leaf iff-multiaccess {
+               type empty;
+             }
+             leaf iff-snmp-traps {
+               type empty;
+             }
+             leaf iff-looped {
+               type empty;
+             }
+             leaf iff-framing-conflict {
+               type empty;
+             }
+             leaf internal-flags {
+               type string;
+               description "Hexadecimal value of internal flag bits";
+             }
+           }
+           leaf admin-status {
+             type string;
+             description "Desired state of the interface";
+           }
+           leaf oper-status {
+             type string;
+             description "Current operational state of the interface";
+           }
+         }
+         leaf admin-status {
+           type string;
+           description "Desired state of the interface";
+         }
+       }
+       list logical-interface {
+         leaf name {
+           type string;
+           description "Name of this item";
+         }
+         leaf local-index {
+           type int32;
+           description "Local kernel index for this interface";
+         }
+         leaf snmp-index {
+           type int32;
+           description "SNMP ifIndex for this interface";
+         }
+         leaf generation {
+           type string;
+           description "Generation number used to distinguish between successive instances of this interface";
+         }
+         leaf description {
+           type string;
+           description "Description of this interface";
+         }
+         leaf link-address {
+           type string;
+           description "Link address on this logical interface";
+         }
+         leaf encapsulation {
+           type string;
+           description "Encapsulation on the logical interface";
+         }
+         leaf subunit {
+           type int32;
+           description "Subunit for this interface";
+         }
+         container if-config-flags {
+           leaf iff-none {
+             type empty;
+           }
+           leaf iff-hardware-down {
+             type empty;
+           }
+           leaf iff-down {
+             type empty;
+           }
+           leaf iff-up {
+             type empty;
+           }
+           leaf iff-admin-down {
+             type empty;
+           }
+           leaf iff-admin-up {
+             type empty;
+           }
+           leaf iff-link-down {
+             type empty;
+           }
+           leaf iff-device-down {
+             type empty;
+           }
+           leaf iff-point-to-point {
+             type empty;
+           }
+           leaf iff-point-to-multipoint {
+             type empty;
+           }
+           leaf plp-to-clp {
+             type empty;
+           }
+           leaf iff-multiaccess {
+             type empty;
+           }
+           leaf iff-snmp-traps {
+             type empty;
+           }
+           leaf iff-looped {
+             type empty;
+           }
+           leaf iff-framing-conflict {
+             type empty;
+           }
+           leaf internal-flags {
+             type string;
+             description "Hexadecimal value of internal flag bits";
+           }
+         }
+         leaf admin-status {
+           type string;
+           description "Desired state of the interface";
+         }
+         leaf oper-status {
+           type string;
+           description "Current operational state of the interface";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds interface-information to top-level genstate";
+     uses interface-information-top;
+   }
+ }

@@ -1,0 +1,74 @@
+ module junos-genstate-lldp-statistics {
+   namespace "http://yang.juniper.net/junos/genstate/lldp-statistics";
+   prefix jgls;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lldp-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping lldp-statistics-top {
+     description "Top-level grouping";
+     container lldp-statistics {
+       config false;
+       description "Top-level container";
+       list lldp-interface-statistics {
+         description "Interface statistics";
+         leaf lldp-statistics-interface-name {
+           type string;
+         }
+         leaf lldp-parent-intf-name {
+           type string;
+           description "Parent interface for which statistics are shown";
+         }
+         leaf lldp-receive-packet-count {
+           type uint32;
+         }
+         leaf lldp-receive-packet-unknown-tlvs {
+           type uint32;
+           description "Number of received LLDP packets with unknown TLVs";
+         }
+         leaf lldp-receive-packet-error-count {
+           type uint32;
+         }
+         leaf lldp-receive-tlv-discard-count {
+           type uint32;
+         }
+         leaf lldp-transmit-packet-count {
+           type uint32;
+         }
+         leaf lldp-transmit-packet-error-count {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lldp-statistics to top-level genstate";
+     uses lldp-statistics-top;
+   }
+ }

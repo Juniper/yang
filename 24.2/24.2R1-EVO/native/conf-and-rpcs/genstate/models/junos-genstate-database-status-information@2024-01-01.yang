@@ -1,0 +1,80 @@
+ module junos-genstate-database-status-information {
+   namespace "http://yang.juniper.net/junos/genstate/database-status-information";
+   prefix jgdsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for database-status-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping database-status-information-top {
+     description "Top-level grouping";
+     container database-status-information {
+       config false;
+       description "Top-level container";
+       list database-status {
+         leaf user {
+           type string;
+           description "User name executing this script";
+         }
+         leaf terminal {
+           type string;
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+         leaf start-time {
+           type string;
+         }
+         leaf idle-time {
+           type string;
+           description "Time since the user last typed anything";
+         }
+         leaf commit-at {
+           type empty;
+         }
+         leaf commit-script-running {
+           type empty;
+         }
+         leaf exclusive {
+           type empty;
+         }
+         leaf edit-path {
+           type string;
+         }
+         leaf waiting-for-user-input {
+           type empty;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds database-status-information to top-level genstate";
+     uses database-status-information-top;
+   }
+ }

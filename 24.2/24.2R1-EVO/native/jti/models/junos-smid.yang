@@ -1,0 +1,568 @@
+module junos-smid {
+  yang-version 1;
+  namespace "http://juniper.net/yang/smid";
+  prefix junos-smid;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of Junos native smid yang model.";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  typedef role {
+    description
+      "Role for MX chassis or RE's";
+    type enumeration {
+      enum MASTER {
+        value 0;
+      }
+      enum BACKUP;
+      enum LINECARD;
+    }
+  }
+
+  typedef member-id {
+    description
+      "A index value for chassis";
+    type uint8 {
+      range "0..1";
+    }
+  }
+
+  typedef re-index {
+    description
+      "A index value for routing engines";
+    type uint8 {
+      range "0..1";
+    }
+  }
+
+  typedef percent {
+    description
+      "percent 0.0 to 100.0";
+    type decimal64 {
+      fraction-digits 3;
+      range "0.0..100.0";
+    }
+  }
+
+  grouping sdb-statistics-state-group {
+    description
+      "The set of statistics related to sdb state";
+    leaf init-state-count {
+      description
+        "The count of subscribers in init state";
+      type uint32;
+    }
+    leaf configured-state-count {
+      description
+        "The count of subscribers in configured state";
+      type uint32;
+    }
+    leaf active-state-count {
+      description
+        "The count of subscribers in active state";
+      type uint32;
+    }
+    leaf terminating-state-count {
+      description
+        "The count of subscribers in terminating state";
+      type uint32;
+    }
+    leaf terminated-state-count {
+      description
+        "The count of subscribers in terminated state";
+      type uint32;
+    }
+    leaf total-state-count {
+      description
+        "Total state count";
+      type uint32;
+    }
+  }
+
+  grouping sdb-statistics-client-group {
+    description
+      "The set of statistics associated with sdb client";
+    leaf dhcp-client-count {
+      description
+        "The count of DHCP clients";
+      type uint32;
+    }
+    leaf vlan-client-count {
+      description
+        "The count of VLAN clients";
+      type uint32;
+    }
+    leaf ppp-client-count {
+      description
+        "The count of PPP clients";
+      type uint32;
+    }
+    leaf pppoe-client-count {
+      description
+        "The count of PPPoE clients";
+      type uint32;
+    }
+    leaf l2tp-client-count {
+      description
+        "The count of L2TP clients";
+      type uint32;
+    }
+    leaf static-client-count {
+      description
+        "The count of static clients";
+      type uint32;
+    }
+    leaf vpls-pw-client-count {
+      description
+        "The count of VPLS PW clients";
+      type uint32;
+    }
+    leaf mlppp-client-count {
+      description
+        "The count of MLPPP clients";
+      type uint32;
+    }
+    leaf essm-client-count {
+      description
+        "The count of ESSM clients";
+      type uint32;
+    }
+    leaf total-client-count {
+      description
+        "The total client count";
+      type uint32;
+    }
+  }
+
+  grouping sdb-statistics-subsystem-group {
+    description
+      "The set of sdb statistics for subsystem group";
+    leaf session-subsystem-agf {
+      description
+        "Session subsystem agf";
+      type uint32;
+    }
+    leaf session-subsystem-bng {
+      description
+        "Session subsystem bng";
+      type uint32;
+    }
+  }
+
+  grouping smid-rsmon-fpc-statistics {
+    description
+      "The set of smid rsmon fpc statistics";
+    leaf heap-memory-used {
+      description
+        "Heap memory used";
+      type uint32;
+    }
+    leaf client-session-denied-count {
+      description
+        "Count of denied client sessions";
+      type uint32;
+    }
+    leaf service-session-denied-count {
+      description
+        "Count of denied service sessions";
+      type uint32;
+    }
+    leaf rtt-throttled-sub-count-client {
+      description
+        "rtt throttled client sub-count";
+      type uint32;
+    }
+    leaf rtt-throttled-sub-count-service {
+      description
+        "rtt throttled service sub-count";
+      type uint32;
+    }
+  }
+
+  grouping smid-rsmon-fpc-thresholds {
+    description
+      "Counts of FPC memory threshold crossing events - above(exceeded) and below(nominal)";
+    leaf mem-heap-exceeded {
+      type uint32;
+      description
+        "Count of FPC heap-memory threshold exceeded crossing events";
+    }
+    leaf mem-heap-nominal {
+      type uint32;
+      description
+        "Count of FPC heap-memory threshold nominal crossing events";
+    }
+  }
+
+  grouping smid-rsmon-pfe-statistics {
+    description
+      "The set of statistics for smid rsmon pfe";
+    leaf filter-memory-used {
+      description
+        "Filter memory used";
+      type uint32;
+    }
+    leaf ifl-memory-used {
+      description
+        "IFL memory used";
+      type uint32;
+    }
+    leaf expansion-memory-used {
+      description
+        "Expansion memory used";
+      type uint32;
+    }
+    leaf nh-memory-free {
+      description
+        "NH memory free";
+      type uint32;
+    }
+    leaf fw-memory-free {
+      description
+        "FW memory free";
+      type uint32;
+    }
+  }
+
+  grouping smid-rsmon-pfe-thresholds {
+    description
+      "Counts of PFE memory threshold crossing events - above(exceeded) and below(nominal)";
+    leaf mem-ifl-exceeded {
+      type uint32;
+      description
+        "Count of IFL-memory threshold exceeded crossing events";
+    }
+    leaf mem-ifl-nominal {
+      type uint32;
+      description
+        "Count of IFL-memory threshold nominal crossing events";
+    }
+    leaf mem-expansion-exceeded {
+      type uint32;
+      description
+        "Count of expansion-memory threshold exceeded crossing events";
+    }
+    leaf mem-expansion-nominal {
+      type uint32;
+      description
+        "Count of expansion-memory threshold nominal crossing events";
+    }
+  }
+
+  grouping smid-rsmon-sched-block-statistics {
+    description
+      "Statistics associated with queue utilization for a PFE's scheduler block";
+    leaf queues-max {
+      type uint32;
+      description
+        "The total number of queues in this scheduler block";
+    }
+    leaf queues-allocated {
+      type uint32;
+      description
+        "The total number of queues in use from this scheduler block";
+    }
+  }
+
+  grouping smid-subscriber-limit-statistics {
+    description
+      "Statistics associated with subscriber usage against provisioned subscriber limits";
+    leaf configured-subscriber-limit {
+      type uint32;
+      description
+        "The configured number of subscribers allowed for this hardware container. A value
+         of 0 indicates that no limit has been configured for this hardware container.";
+    }
+    leaf current-subscriber-count {
+      type uint32;
+      description
+        "The current number of subscribers associated with this hardware container";
+    }
+  }
+
+  grouping smid-rsmon-sched-block-thresholds {
+    description
+      "Counts of CoS utilization threshold crossing events - above(exceeded) and below(nominal)";
+    leaf cos-utilization-exceeded {
+      type uint32;
+      description
+        "Count of CoS utilization threshold exceeded crossing events";
+    }
+    leaf cos-utilization-nominal {
+      type uint32;
+      description
+        "Count of CoS utilization threshold nominal crossing events";
+    }
+  }
+
+  grouping smid-subscriber-limit-threshold-statistics {
+    description
+      "Counts of subscriber limit threshold crossing events - above(exceeded) and below(nominal)";
+    leaf subscriber-limit-exceeded {
+      type uint32;
+      description
+        "Count of subscriber limit threshold exceeded crossing events";
+    }
+    leaf subscriber-limit-nominal {
+      type uint32;
+      description
+        "Count of subscriber limit threshold nominal crossing events";
+    }
+  }
+
+  grouping process-statistics {
+    description
+      "health/utilization statistics to collect for daemons";
+    leaf cpu-utilization {
+      description
+        "CPU utilization";
+      type percent;
+    }
+    leaf memory-utilization {
+      description
+        "utilization";
+      type percent;
+    }
+  }
+
+  grouping smid-top {
+    description
+      "Top level grouping for smid";
+    container junos {
+      description
+        "Junos container";
+      config false;
+      container system {
+        description
+          "System container";
+        container subscriber-management {
+          description
+            "Subscriber management container";
+          container infra {
+            description
+              "Infra container";
+            container sdb {
+              description
+                "SDB container";
+              container statistics {
+                description
+                  "Statistics container";
+                container state {
+                  description
+                    "State container";
+                  uses sdb-statistics-state-group;
+                }
+                container client-type {
+                  description
+                    "Client-type container";
+                  uses sdb-statistics-client-group;
+                }
+                container subsystem {
+                  description
+                    "Subsystem container";
+                  uses sdb-statistics-subsystem-group;
+                }
+              }
+            }
+            container resource-monitor {
+              description
+                "Resource-monitor container";
+              container chassis {
+                description
+                  "Chassis container";
+                uses smid-subscriber-limit-statistics;
+                uses smid-subscriber-limit-threshold-statistics;
+              }
+              container fpcs {
+                description
+                  "FPCs container";
+                list fpc {
+                  description
+                    "List of FPCs";
+                  key "slot";
+                  leaf slot {
+                    description
+                      "List of slots";
+                    type uint32;
+                  }
+                  container statistics {
+                    description
+                      "Statistics container";
+                    uses smid-rsmon-fpc-statistics;
+                    uses smid-subscriber-limit-statistics;
+                    uses smid-rsmon-fpc-thresholds;
+                    uses smid-subscriber-limit-threshold-statistics;
+                    container pfes {
+                      description
+                        "PFEs container";
+                      list pfe {
+                        description
+                          "List of PFEs";
+                        key "pfe-no";
+                        leaf pfe-no {
+                          description
+                            "PFE number";
+                          type uint32;
+                        }
+                        uses smid-rsmon-pfe-statistics;
+                        uses smid-rsmon-pfe-thresholds;
+                        container sched-blocks {
+                          description
+                            "Sched-blocks container";
+                          list sched-block {
+                            description
+                              "Sched-block";
+                            key "sblock-no";
+                            leaf sblock-no {
+                              description
+                                "Sblock number";
+                              type uint32;
+                            }
+                            uses smid-rsmon-sched-block-statistics;
+                            uses smid-rsmon-sched-block-thresholds;
+                          }
+                        }
+                      }
+                    }
+                  }
+                  container pics {
+                    description
+                      "PICs container";
+                    list pic {
+                      description
+                        "PIC";
+                      key "pic-no";
+                      leaf pic-no {
+                        description
+                          "PIC number";
+                        type uint32;
+                      }
+                      uses smid-subscriber-limit-statistics;
+                      uses smid-subscriber-limit-threshold-statistics;
+                      container ports {
+                        description
+                          "Ports container";
+                        list port {
+                          description
+                            "List of ports";
+                          key "port-no";
+                          leaf port-no {
+                            description
+                              "Port number";
+                            type uint32;
+                          }
+                          uses smid-subscriber-limit-statistics;
+                          uses smid-subscriber-limit-threshold-statistics;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          list chassis {
+            description
+              "Chassis";
+            key "member-id";
+            leaf member-id {
+              type member-id;
+              description
+                "In non-MXVC systems there will only be one index with value '0'";
+            }
+            leaf role {
+              type role;
+              description
+                "In non-MXVC systems there will only be one role with value 'master'";
+            }
+            container routing-engines {
+              description
+                "Routing engines container>";
+              list routing-engine {
+                description
+                  "Routing engine";
+                key "re-index";
+                leaf re-index {
+                  description
+                    "The RE index in this chassis";
+                  type re-index;
+                }
+                leaf role {
+                  description
+                    "Role of the RE";
+                  type role;
+                }
+                leaf db-synced {
+                  description
+                    "Whether the current RE DB is synced and ready for a graceful switchover";
+                  type boolean;
+                }
+                container process-status {
+                  description
+                    "Process status container";
+                  container subscriber-management-processes {
+                    description
+                      "Subscriber management processes container";
+                    list subscriber-management-process {
+                      description
+                        "Subscriber management process";
+                      key "process-name";
+                      leaf process-name {
+                        description
+                          "Name of the process/daemon";
+                        type string;
+                      }
+                      leaf pid {
+                        description
+                          "Process ID of process/daemon running";
+                        type uint64;
+                      }
+                      leaf runtime {
+                        description
+                          "Real runtime in microsec";
+                        type uint64;
+                      }
+                      leaf cpu-utilization {
+                        description
+                          "CPU utilization";
+                        type decimal64 {
+                          fraction-digits 3;
+                          range "0.0..100.0";
+                        }
+                      }
+                      leaf memory-utilization {
+                        description
+                          "Memory utilization";
+                        type decimal64 {
+                          fraction-digits 3;
+                          range "0.0..100.0";
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses smid-top;
+}

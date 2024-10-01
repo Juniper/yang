@@ -1,0 +1,513 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-app-engine {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/app-engine";
+
+   prefix app-engine;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for app-engine command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R2.21";
+   }
+
+   rpc get-compute-node-arp-information {
+     description "Show compute node arp";
+     input {
+       leaf compute-cluster {
+         description "Compute cluster name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+       leaf compute-node {
+         description "Compute node name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-compute-node-netsta-informationt {
+     description "Show compute node netstat";
+     input {
+       leaf compute-cluster {
+         description "Compute cluster name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+       leaf compute-node {
+         description "Compute node name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-compute-node-bridge-information {
+     description "Show compute node bridge";
+     input {
+       leaf compute-cluster {
+         description "Compute cluster name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+       leaf compute-node {
+         description "Compute node name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-compute-node-crash-information {
+     description "Show compute node crash";
+     input {
+       leaf compute-cluster {
+         description "Compute cluster name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+       leaf compute-node {
+         description "Compute node name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-compute-node-logs-information {
+     description "Show compute node logs";
+     input {
+       leaf compute-cluster {
+         description "Compute cluster name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+       leaf compute-node {
+         description "Compute node name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+     }
+     output {
+       container sdk-vmmd-output {
+         uses sdk-vmmd-output-block;
+       }
+     }
+   }
+   rpc get-virtual-machine-package-remote {
+     description "Remote status of virtual machine packages";
+     input {
+       leaf compute-cluster {
+         description "Compute cluster name";
+         type string {
+           length "1 .. 15";
+         }
+       }
+       leaf package-name {
+         description "Name of virtual machine package";
+         type string;
+       }
+     }
+   }
+   rpc get-virtual-machine-package-system {
+     description "Local status of virtual machine packages";
+     input {
+       leaf package-name {
+         description "Name of virtual machine package";
+         type string;
+       }
+     }
+   }
+   rpc get-virtual-machine-information {
+     description "Show virtual-machine instance information";
+     input {
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed status";
+           }
+           enum "brief" {
+             description "Display brief status (default)";
+           }
+         }
+       }
+       leaf instance-name {
+         description "Virtual-machine instance name";
+         type string;
+       }
+     }
+     output {
+       container sdk-vmmd-vm-information {
+         uses sdk-vmmd-vm-information-block;
+       }
+     }
+   }
+   rpc get-virtual-machine-package-information {
+     description "Show virtual-machine package information";
+     input {
+       leaf package-name {
+         description "Name of virtual machine package";
+         type string;
+       }
+     }
+     output {
+       container sdk-vmmd-vm-pkg-information {
+         uses sdk-vmmd-vm-pkg-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping sdk-vmmd-output-block {
+     list output-compute-cluster {
+       leaf output-compute-cluster-name {
+         type string;
+         description "Compute cluster name";
+       }
+       leaf output-compute-cluster-meta {
+         type string;
+         description "Compute cluster meta data";
+       }
+       list output-compute-node {
+         leaf output-compute-node-name {
+           type string;
+           description "Compute node name";
+         }
+         leaf output-compute-node-note {
+           type string;
+           description "Compute node note message";
+         }
+         leaf output-compute-node-error {
+           type string;
+           description "Compute node error";
+         }
+         leaf output-compute-node-data {
+           type string;
+           description "Compute node data";
+         }
+       }
+     }
+   }
+   grouping sdk-vmmd-vm-information-block {
+     list ve-vm-instance {
+       leaf sdk-vmmd-vm-name {
+         type string;
+         description "Virtual machine name";
+       }
+       leaf sdk-vmmd-vm-compute-cluster {
+         type string;
+         description "Compute cluster name";
+       }
+       leaf sdk-vmmd-vm-error {
+         type string;
+         description "Virtual machine error message";
+       }
+       leaf sdk-vmmd-vm-compute-node {
+         type string;
+         description "Compute node name";
+       }
+       leaf sdk-vmmd-vm-status {
+         type string;
+         description "VM active or inactive status";
+       }
+       leaf sdk-vmmd-vm-uuid {
+         type string;
+         description "VM UUID";
+       }
+       leaf sdk-vmmd-vm-image {
+         type string;
+         description "VM disk image";
+       }
+       leaf sdk-vmmd-vm-cpus {
+         type uint32;
+         description "Number of CPUs for the VM";
+       }
+       leaf sdk-vmmd-vm-memory {
+         type uint32;
+         description "VM memory in GB";
+       }
+       leaf sdk-vmmd-vm-console {
+         type string;
+         description "VM console";
+       }
+       leaf sdk-vmmd-vm-pid {
+         type uint32;
+         description "PID of the VM";
+       }
+       list sdk-vmmd-vm-intf {
+         leaf sdk-vmmd-vm-intf-ip {
+           type string;
+           description "Interfaces of the VM";
+         }
+       }
+       list sdk-vmmd-vm-disk {
+         leaf sdk-vmmd-vm-disk-size {
+           type string;
+           description "Disks of the VM";
+         }
+       }
+       list sdk-vmmd-vm-route {
+         leaf sdk-vmmd-vm-route-info {
+           type string;
+           description "Routing table of the VM";
+         }
+       }
+     }
+   }
+   grouping sdk-vmmd-vm-pkg-information-block {
+     list sdk-vmmd-vm-package {
+       leaf sdk-vmmd-pkg-name {
+         type string;
+         description "VM package name";
+       }
+       leaf sdk-vmmd-img-name {
+         type string;
+         description "VM disk image name";
+       }
+       leaf sdk-vmmd-pkg-overall {
+         type string;
+         description "VM package overall download status";
+       }
+       list sdk-vmmd-pkg-download {
+         leaf sdk-vmmd-pkg-compute-cluster {
+           type string;
+           description "Compute cluster name";
+         }
+         leaf sdk-vmmd-pkg-download-status {
+           type string;
+           description "Package download status";
+         }
+       }
+     }
+   }
+ }
