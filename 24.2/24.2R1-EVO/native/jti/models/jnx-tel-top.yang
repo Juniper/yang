@@ -1,0 +1,22 @@
+module jnx-tel-top {
+    yang-version 1;
+
+    // namespace
+    namespace "http://yang.juniper.net/yang/jnx-telemetry-top";
+
+    prefix "jnx-tel-top";
+
+    // meta
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "Yang definition for top Junos hierarchy";
+    revision "2017-05-17" {
+        description "Initial revision";
+    }
+
+    container junos {
+        config false;
+    }
+}

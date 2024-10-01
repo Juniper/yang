@@ -1,0 +1,90 @@
+ module junos-genstate-lldp-neighbors-vlan-name-tlv-list {
+   namespace "http://yang.juniper.net/junos/genstate/lldp-neighbors-vlan-name-tlv-list";
+   prefix jglnvntl;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lldp-neighbors-vlan-name-tlv-list";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping lldp-neighbors-vlan-name-tlv-list-top {
+     description "Top-level grouping";
+     container lldp-neighbors-vlan-name-tlv-list {
+       config false;
+       description "Top-level container";
+       list lldp-interface-information-list {
+         leaf lldp-local-interface-name {
+           type string;
+         }
+         list lldp-remote-interface-information {
+           leaf lldp-remote-chassis-id-subtype {
+             type string;
+             description "LLDP remote chassis ID subtype";
+           }
+           leaf lldp-remote-chassis-id {
+             type string;
+             description "LLDP remote chassis ID";
+           }
+           leaf lldp-remote-port-description {
+             type string;
+             description "LLDP remote port ID";
+           }
+           leaf lldp-remote-system-name {
+             type string;
+             description "Administratively assigned host name of remote neighbor";
+           }
+           leaf lldp-vlan-name-tlv-oui {
+             type string;
+             description "Organizationally Unique Identifier globally unique assignednumber of the information received from the remote system";
+           }
+           leaf lldp-vlan-name-tlv-subtype {
+             type string;
+             description "IEEE 802.1 VLAN name subtype VLAN name value of theorganizationally defined information received from the remote system";
+           }
+           list lldp-neighbor-vlan-name-tlv-list {
+             leaf lldp-vlan-name-tlv-tag {
+               type uint32;
+               description "VLAN tag";
+             }
+             leaf lldp-vlan-name-tlv-name {
+               type string;
+               description "VLAN name";
+             }
+             leaf lldp-vlan-name-tlv-remote-index {
+               type uint32;
+               description "Value used by agent to identify a particular unrecognizedorganizationally defined information";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lldp-neighbors-vlan-name-tlv-list to top-level genstate";
+     uses lldp-neighbors-vlan-name-tlv-list-top;
+   }
+ }

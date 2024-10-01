@@ -1,0 +1,69 @@
+ module junos-genstate-mvrp-interface-information {
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-interface-information";
+   prefix jgmii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mvrp-interface-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping mvrp-interface-information-top {
+     description "Top-level grouping";
+     container mvrp-interface-information {
+       config false;
+       description "Top-level container";
+       list mvrp-interface-instance {
+         leaf mvrp-routing-instance-name {
+           type string;
+           description "Name of routing instance";
+         }
+         list mvrp-interface-entry {
+           leaf mvrp-interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf mvrp-interface-status {
+             type string;
+             description "MVRP interface operational status";
+           }
+           leaf mvrp-interface-registration-mode {
+             type string;
+             description "MVRP interface registration mode";
+           }
+           leaf mvrp-interface-applicant-mode {
+             type string;
+             description "MVRP interface applicant mode";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mvrp-interface-information to top-level genstate";
+     uses mvrp-interface-information-top;
+   }
+ }

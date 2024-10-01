@@ -1,0 +1,894 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-vrrp {
+   namespace "http://yang.juniper.net/junos/rpc/vrrp";
+
+   prefix vrrp;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for vrrp command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   rpc get-vrrp-information {
+     description "Show Virtual Router Redundancy Protocol information";
+     junos:command "show vrrp";
+     input {
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "nsr" {
+             description "Display VRRP state of Master RE.";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container vrrp-information {
+         uses vrrp-information-block;
+       }
+     }
+   }
+   rpc get-vrrp-interface-information {
+     description "Show VRRP interface";
+     junos:command "show vrrp interface";
+     input {
+       leaf interface-name {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type string;
+         mandatory true;
+       }
+       leaf group {
+         description "Number of VRRP group";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type int32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container vrrp-information {
+         uses vrrp-information-block;
+       }
+     }
+   }
+   rpc get-vrrp-track-interfaces {
+     description "Show VRRP track interfaces";
+     junos:command "show vrrp track";
+     input {
+       leaf tracked-object {
+         junos:cli-feature "nokeyword";
+         default "all";
+         type enumeration {
+           enum "interfaces" {
+             description "Show all VRRP track interfaces";
+           }
+           enum "routes" {
+             description "Show all VRRP track routes";
+           }
+           enum "all" {
+             description "Show all VRRP track interfaces and routes";
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container vrrp-information {
+         uses vrrp-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping vrrp-information-block {
+     list vrrp-interface {
+       leaf interface {
+         type string;
+         description "Name of the logical interface.";
+       }
+       leaf interface-state {
+         type string;
+         description "State of the interface.";
+       }
+       leaf group {
+         type int32;
+         description "Identifies the VRRP group.(0-255).";
+       }
+       leaf vrrp-state {
+         type string;
+         description "VRRP state information.";
+       }
+       leaf vrrp-mode {
+         type string;
+         description "VRRP mode information.";
+       }
+       leaf local-interface-address {
+         type string;
+         description "Local interface address.";
+       }
+       leaf virtual-ip-address {
+         type string;
+         description "Virtual Router IP Address .";
+       }
+       leaf preempt {
+         type string;
+         description "Allow the master router to be preempted.";
+       }
+       leaf accept-data-mode {
+         type string;
+         description "Accept packets destined for the virtual IP address.";
+       }
+       leaf vip-count {
+         type int32;
+         description "Number of virtual IP addresses configured on the interface.";
+       }
+       leaf-list vip {
+         type string;
+         description "List of virtual IP addresses configured on the interface.";
+       }
+       leaf preempt-hold-time {
+         type int32;
+         description "Seconds before a backup router preempts the master router.";
+       }
+       leaf active-node {
+         type string;
+         description "VRRP active node information.";
+       }
+       leaf active-group {
+         type int32;
+         description "VRRP active group ";
+       }
+       container vrrp-vlan {
+         leaf physical-interface {
+           type string;
+           description "Name of the physical interface.";
+         }
+         leaf unit {
+           type int32;
+           description "Logical unit number.";
+         }
+         leaf vlan-id {
+           type int32;
+           description "A valid VLAN identifier.";
+         }
+         leaf vlan-address {
+           type string;
+           description "Virtual Lan IP address and mask.";
+         }
+         leaf vlan-tag {
+           type string;
+           description "VLAN tag ID for a logical interface.";
+         }
+       }
+       list bandwidth {
+         leaf bandwidth-threshold {
+           type string;
+           description "Threshold for the tracked interface.";
+         }
+         leaf bandwidth-priority-cost {
+           type int32;
+           description "Cost to reduce if tracked interface's bandwidth drops beyond threshold";
+         }
+         leaf bandwidth-active {
+           type string;
+           description "Check if threshold is active for a given tracked interface.";
+         }
+         leaf priority-down-status {
+           type string;
+           description "Display the status when the interface is down.";
+         }
+         leaf priority-cost {
+           type int32;
+           description "The value subtracted from the configured VRRP priority.";
+         }
+         leaf priority-active {
+           type string;
+           description "Display if priority is active(when down-priority cost > 0).";
+         }
+       }
+       container group-vrrp-pdu-statistics {
+         leaf advertisement-sent {
+           type int32;
+           description "Number of VRRP advertisement that the interface has transmitted.";
+         }
+         leaf advertisement-received {
+           type int32;
+           description "Number of VRRP advertisement PDUs received from an interface.";
+         }
+       }
+       container group-vrrp-pdu-error-statistics {
+         leaf bad-authentication-type-received {
+           type int32;
+           description "Number of VRRP PDUs received with an invalid authentication type.";
+         }
+         leaf bad-password-received {
+           type int32;
+           description "Number of VRRP PDUs received with an invalid password.";
+         }
+         leaf bad-md5-digest-received {
+           type int32;
+           description "Number of invalid digest received from VRRP PDUs.";
+         }
+         leaf bad-advertisement-timer-received {
+           type int32;
+           description "Number of invalid advertisments timers recieved from VRRP PDUs.";
+         }
+         leaf bad-vip-count-received {
+           type int32;
+           description "Number of invalid virtual IP count recevied from VRRP PDUs.";
+         }
+         leaf bad-vipaddr-received {
+           type int32;
+           description "Number of invalid virtual IP addresses received from VRRP PDUs.";
+         }
+       }
+       container group-vrrp-state-transition-statistics {
+         leaf idle-master-transitions {
+           type int32;
+           description "VRRP instances transitioned from the idle to the master state.";
+         }
+         leaf idle-backup-transitions {
+           type int32;
+           description "VRRP instances transitioned from the idle to the backup state.";
+         }
+         leaf backup-master-transitions {
+           type int32;
+           description "VRRP instance transitioned from the backup to the master state.";
+         }
+         leaf master-backup-transitions {
+           type int32;
+           description "VRRP instances transitioned from the master to the backup state.";
+         }
+       }
+       container preempt-hold {
+         leaf preempt {
+           type string;
+           description "Allow the master router to be preempted.";
+         }
+         leaf preempt-hold-time {
+           type int32;
+           description "Seconds before a backup router preempts the master router.";
+         }
+         leaf accept-data-mode {
+           type string;
+           description "Accept packets destined for the virtual IP address.";
+         }
+         leaf vip-count {
+           type int32;
+           description "Number of virtual IP addresses configured on the interface.";
+         }
+         leaf-list vip {
+           type string;
+           description "List of virtual IP addresses configured on the interface.";
+         }
+       }
+       list track-route-node-information {
+         leaf route-addr {
+           type string;
+           description "IP route to be tracked.";
+         }
+         leaf route-instance {
+           type string;
+           description "Route tracking instance(value is Default).";
+         }
+         leaf route-state {
+           type string;
+           description "State of an IP route or the reachability of a route.";
+         }
+         leaf route-priority {
+           type int32;
+           description "Based on the tracked IP route state changes VRRP priority.";
+         }
+       }
+       list track-vrrpd-interface {
+         leaf tracked-interface {
+           type string;
+           description "VRRP tracked name and unit number.";
+         }
+         leaf interface-state {
+           type string;
+           description "State of the interface.";
+         }
+         leaf interface-speed {
+           type string;
+           description "The speed on an physical interface.";
+         }
+         leaf current-priority-cost {
+           type int32;
+           description "Current cost to lower the priority of the VRRP master.";
+         }
+         list bandwidth {
+           leaf bandwidth-threshold {
+             type string;
+             description "Threshold for the tracked interface.";
+           }
+           leaf bandwidth-priority-cost {
+             type int32;
+             description "Cost to reduce if tracked interface's bandwidth drops beyond threshold";
+           }
+           leaf bandwidth-active {
+             type string;
+             description "Check if threshold is active for a given tracked interface.";
+           }
+           leaf priority-down-status {
+             type string;
+             description "Display the status when the interface is down.";
+           }
+           leaf priority-cost {
+             type int32;
+             description "The value subtracted from the configured VRRP priority.";
+           }
+           leaf priority-active {
+             type string;
+             description "Display if priority is active(when down-priority cost > 0).";
+           }
+         }
+       }
+       list track-route-entry {
+         leaf route-addr {
+           type string;
+           description "IP route to be tracked.";
+         }
+         leaf route-state {
+           type string;
+           description "State of an IP route or the reachability of a route.";
+         }
+         leaf route-priority {
+           type int32;
+           description "Based on the tracked IP route state changes VRRP priority.";
+         }
+         leaf interface {
+           type string;
+           description "Name of the logical interface.";
+         }
+         leaf group {
+           type int32;
+           description "Identifies the VRRP group.(0-255).";
+         }
+         leaf configured-priority {
+           type int32;
+           description "Priority configured to track an interface of a virtual router.";
+         }
+         leaf current-priority {
+           type int32;
+           description "The current VRRP priority for the VRID.";
+         }
+         leaf vrrp-state {
+           type string;
+           description "VRRP state information.";
+         }
+       }
+       container vrrp-message {
+         leaf message {
+           type string;
+           description "Message to be displayed in case of error conditions.";
+         }
+       }
+       container active-inherit {
+         leaf vrrp-mode {
+           type string;
+           description "VRRP mode information.";
+         }
+         leaf active-node {
+           type string;
+           description "VRRP active node information.";
+         }
+         leaf active-group {
+           type int32;
+           description "VRRP active group ";
+         }
+         leaf accept-data-mode {
+           type string;
+           description "Accept packets destined for the virtual IP address.";
+         }
+         leaf vip-count {
+           type int32;
+           description "Number of virtual IP addresses configured on the interface.";
+         }
+         leaf-list vip {
+           type string;
+           description "List of virtual IP addresses configured on the interface.";
+         }
+         leaf active-router-ip {
+           type string;
+           description "IP address of the interface that is acting as the active.";
+         }
+         leaf virtual-mac {
+           type int32;
+           description "MAC address associated with the virtual IP address.";
+         }
+         leaf preferred {
+           type string;
+           description "This is the preferred group within the subnet.";
+         }
+       }
+       leaf nsr {
+         type string;
+         description "VRRP NSR valid or not";
+       }
+       leaf rpd-nsr {
+         type string;
+         description "RPD NSR valid or not";
+       }
+       leaf timer-name {
+         type string;
+         description "VRRP timer name.";
+       }
+       leaf timer-value {
+         type string;
+         description "VRRP timer information.";
+       }
+       leaf master-router-ip {
+         type string;
+         description "IP address of the interface that is acting as the master.";
+       }
+       leaf active-router-ip {
+         type string;
+         description "IP address of the interface that is acting as the active.";
+       }
+       leaf physical-interface {
+         type string;
+         description "Name of the physical interface.";
+       }
+       leaf unit {
+         type int32;
+         description "Logical unit number.";
+       }
+       leaf address {
+         type string;
+         description "Address of the physical interface.";
+       }
+       leaf index {
+         type string;
+         description "Physical interface's index number(initialization sequence).";
+       }
+       leaf snmp-interface-index {
+         type string;
+         description "SNMP index number for the physical interface.";
+       }
+       leaf vrrp-traps {
+         type string;
+         description "Status of VRRP traps: Enabled or Disabled.";
+       }
+       leaf vrrp-version {
+         type int32;
+         description "VRRP version.";
+       }
+       leaf group-priority {
+         type int32;
+         description "Value used to elect the master virtual router in the VRRP group.";
+       }
+       leaf advertisement-interval {
+         type string;
+         description "Advertisement interval for sending advertisement packets.";
+       }
+       leaf authentication-type {
+         type string;
+         description "Configured VRRP authentication type(none, simple, or md5).";
+       }
+       leaf advertisement-threshold {
+         type int32;
+         description "Advertisements missed before marking master down.";
+       }
+       leaf computed-send-rate {
+         type int32;
+         description "The advertisement send rate in packets per second.";
+       }
+       leaf dead-timer {
+         type string;
+         description "How long until the Master Is Dead.";
+       }
+       leaf master-priority {
+         type string;
+         description "Priority value of the router acting as the master.";
+       }
+       leaf advertisement-timer {
+         type string;
+         description "How long, in seconds, until the advertisement timer expires.";
+       }
+       leaf master-router {
+         type string;
+         description "IP address of the interface that is acting as the master.";
+       }
+       leaf router-ip {
+         type string;
+         description "IP address of the router.";
+       }
+       leaf virtual-router-uptime {
+         type string;
+         description "How long, in seconds, that the virtual router has been up";
+       }
+       leaf master-router-uptime {
+         type string;
+         description "How long, in seconds, that the master router has been up.";
+       }
+       leaf virtual-mac {
+         type int32;
+         description "MAC address associated with the virtual IP address.";
+       }
+       leaf preferred {
+         type string;
+         description "This is the preferred group within the subnet.";
+       }
+       leaf tracking {
+         type string;
+         description "Whether tracking is enabled or disabled";
+       }
+       leaf current-priority {
+         type int32;
+         description "The current VRRP priority for the VRID.";
+       }
+       leaf configured-priority {
+         type int32;
+         description "Priority configured to track an interface of a virtual router.";
+       }
+       leaf priority-hold-time {
+         type string;
+         description "Time that must elapse between dynamic priority changes.";
+       }
+       leaf remaining-time {
+         type string;
+         description "Predicts the time remaining before it becomes master.";
+       }
+       leaf pending-priority {
+         type int32;
+         description "Priority to decrease if incoming VRRP packet priority is higher.";
+       }
+       leaf interface-tracking-state {
+         type string;
+         description "State of the interface being tracked.";
+       }
+       leaf interface-count {
+         type int32;
+         description "Number of tracked interfaces.";
+       }
+       leaf route-tracking-state {
+         type string;
+         description "State of the route being tracked.";
+       }
+       leaf route-count {
+         type int32;
+         description "Number of tracked IP routes.";
+       }
+       leaf interface-index {
+         type string;
+         description "Interface index.";
+       }
+       leaf groups {
+         type int32;
+         description "Total number of VRRP groups configured on the interface.";
+       }
+       leaf active {
+         type int32;
+         description "Total number of VRRP groups that are active.";
+       }
+       leaf advertisement-sent {
+         type int32;
+         description "Number of VRRP advertisement that the interface has transmitted.";
+       }
+       leaf advertisement-received {
+         type int32;
+         description "Number of VRRP advertisement PDUs received from an interface.";
+       }
+       leaf packets-received {
+         type int32;
+         description "Number of VRRP packets received for VRRP groups on the interface.";
+       }
+       leaf no-group-match-received {
+         type int32;
+         description "Packets received for nonexistant VRRP groups on the interface.";
+       }
+       leaf invalid-ipah-next-type-received {
+         type int32;
+         description "Number of packets received that use IPAH.";
+       }
+       leaf invalid-vrrp-ttl-value-received {
+         type int32;
+         description "Number of packets received whose IP TTL value is not 255.";
+       }
+       leaf invalid-vrrp-version-received {
+         type int32;
+         description "Number of packets received whose VRRP version is not 2.";
+       }
+       leaf invalid-vrrp-pdu-type-received {
+         type int32;
+         description "Number of packets received whose VRRP PDU type is not 1.";
+       }
+       leaf invalid-vrrp-authentication-type-received {
+         type int32;
+         description "Packets received with invalid VRRP authentication type.";
+       }
+       leaf invalid-vrrp-ip-count-received {
+         type int32;
+         description "Number of packets received whose VRRP IP count exceeds 8.";
+       }
+       leaf invalid-vrrp-checksum-received {
+         type int32;
+         description "Packets received with invalid VRRP checksum.";
+       }
+       leaf tracked-interface {
+         type string;
+         description "VRRP tracked name and unit number.";
+       }
+       leaf interface-speed {
+         type string;
+         description "The speed on an physical interface.";
+       }
+       leaf current-priority-cost {
+         type int32;
+         description "Current cost to lower the priority of the VRRP master.";
+       }
+     }
+   }
+ }

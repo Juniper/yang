@@ -1,0 +1,36 @@
+ module junos-genstate {
+   namespace "http://yang.juniper.net/junos/genstate/";
+   prefix jgs;
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+     "This module contains a collection of top level nodes for JUNOS genstate data.
+
+      Copyright (c) 2023 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping genstate-top {
+     description "Top-level grouping for JUNOS genstate data";
+     container genstate {
+       description "Encapsulating top-level state container for all JUNOS genstate data";
+       config false;
+     }
+   }
+   uses genstate-top;
+ }

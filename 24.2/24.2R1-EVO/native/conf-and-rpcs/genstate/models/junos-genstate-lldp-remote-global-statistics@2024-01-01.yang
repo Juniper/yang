@@ -1,0 +1,65 @@
+ module junos-genstate-lldp-remote-global-statistics {
+   namespace "http://yang.juniper.net/junos/genstate/lldp-remote-global-statistics";
+   prefix jglrgs;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lldp-remote-global-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   grouping lldp-remote-global-statistics-top {
+     description "Top-level grouping";
+     container lldp-remote-global-statistics {
+       config false;
+       description "Top-level container";
+       leaf lldp-last-change-time {
+         type string;
+         description "LLDP last change time";
+       }
+       leaf lldp-inserts {
+         type uint32;
+         description "LLDP inserts";
+       }
+       leaf lldp-deletes {
+         type uint32;
+         description "LLDP deletes";
+       }
+       leaf lldp-drops {
+         type uint32;
+         description "LLDP drops";
+       }
+       leaf lldp-ageouts {
+         type uint32;
+         description "LLDP ageouts";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lldp-remote-global-statistics to top-level genstate";
+     uses lldp-remote-global-statistics-top;
+   }
+ }

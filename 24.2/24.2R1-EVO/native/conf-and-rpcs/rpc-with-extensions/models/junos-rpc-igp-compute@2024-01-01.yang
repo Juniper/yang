@@ -1,0 +1,923 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-igp-compute {
+   namespace "http://yang.juniper.net/junos/rpc/igp-compute";
+
+   prefix igp-compute;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for igp-compute command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.2R1.18-EVO";
+   }
+
+   rpc get-igp-compute-database-information {
+     description "Database ";
+     junos:command "show igp-compute database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-database-info-ospf {
+     description "OSPF protocol";
+     junos:command "show igp-compute database protocol ospf";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-database-info-isis {
+     description "IS-IS protocol";
+     junos:command "show igp-compute database protocol isis";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-prefix-information {
+     description "Prefix ";
+     junos:command "show igp-compute prefix";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf destination {
+         description "Prefix";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc get-igp-compute-prefix-info-isis {
+     description "IS-IS protocol";
+     junos:command "show igp-compute prefix protocol isis";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf destination {
+         description "Prefix";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc get-igp-compute-prefix-info-ospf {
+     description "OSPF protocol";
+     junos:command "show igp-compute prefix protocol ospf";
+     input {
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf destination {
+         description "Prefix ";
+         junos:cli-feature "nokeyword";
+         type jt:ipprefix;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-results-information {
+     description "SPF results";
+     junos:command "show igp-compute spf results";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-results-info-isis {
+     description "IS-IS protocol";
+     junos:command "show igp-compute spf results protocol isis";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-results-info-ospf {
+     description "OSPF protocol";
+     junos:command "show igp-compute spf results protocol ospf";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-backup-results-information {
+     description "Backup SPF results";
+     junos:command "show igp-compute spf backup results";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-backup-results-info-isis {
+     description "IS-IS protocol";
+     junos:command "show igp-compute spf backup results protocol isis";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf level {
+         description "Number of IS-IS level";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 2";
+           }
+         }
+       }
+       leaf igp-instance {
+         description "Name of igp-instance";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   rpc get-igp-compute-spf-backup-results-info-ospf {
+     description "OSPF protocol";
+     junos:command "show igp-compute spf backup results protocol ospf";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+       }
+       leaf flex-algorithm-id {
+         description "Flex Algorithm id";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "128 .. 255";
+           }
+         }
+       }
+       leaf area {
+         description "Area ID";
+         type jt:areaid;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf node-id {
+         description "Node ID";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+ }

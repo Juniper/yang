@@ -1,0 +1,311 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-packet-capture {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/packet-capture";
+
+   prefix packet-capture;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for packet-capture command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.2R2.21";
+   }
+
+   rpc request-packet-capture-show {
+     description "Show packet-capture status";
+     output {
+       container request-packet-capture-show-result {
+         uses request-packet-capture-show-result-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping request-packet-capture-show-result-block {
+     leaf request-packet-capture-show-status {
+       type string;
+     }
+     leaf enable_status {
+       type uint32;
+     }
+     leaf packet-capture-count {
+       type uint32;
+       description "The counters that will stop the packet capture";
+     }
+     leaf capture-file-filename {
+       type string;
+       description "The filename of capture file";
+     }
+     leaf capture-file-size {
+       type uint32;
+     }
+     leaf capture-file-rotate {
+       type uint32;
+     }
+     leaf capture-file-snap {
+       type uint32;
+     }
+     leaf packet-capture-bidirect {
+       type uint32;
+     }
+     leaf mutex_status {
+       type uint32;
+     }
+     list packet-capture-filter-entry {
+       leaf filter-flag {
+         type uint32;
+         description "The flag of packet capture filters";
+       }
+       leaf filter-proto {
+         type string;
+         description "The protocol of packet capture filters";
+       }
+       leaf source-address {
+         type jt:ipaddr;
+         description "Source address";
+       }
+       leaf source-address-mask {
+         type jt:ipaddr;
+         description "Source address mask";
+       }
+       leaf source-address-mask-vx {
+         type uint32;
+         description "Source address mask";
+       }
+       leaf packet-capture-source-port-low {
+         type uint32;
+         description "Start of the range of source port";
+       }
+       leaf packet-capture-source-port-high {
+         type uint32;
+         description "End of the range of source port";
+       }
+       leaf destination-address {
+         type jt:ipaddr;
+         description "Destination address";
+       }
+       leaf destination-address-mask {
+         type jt:ipaddr;
+         description "Destination address mask";
+       }
+       leaf destination-address-mask-vx {
+         type uint32;
+         description "Destination address mask";
+       }
+       leaf packet-capture-destination-port-low {
+         type uint32;
+         description "Start of the range of destination port";
+       }
+       leaf packet-capture-destination-port-high {
+         type uint32;
+         description "End of the range of destination port";
+       }
+       leaf interface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf interface-ifl {
+         type uint32;
+         description "Interface ifl";
+       }
+     }
+   }
+ }

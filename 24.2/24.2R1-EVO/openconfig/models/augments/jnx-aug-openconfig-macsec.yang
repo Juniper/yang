@@ -1,0 +1,267 @@
+module jnx-aug-openconfig-macsec {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/macsec";
+
+  prefix "jnx-oc-macsec";
+
+  import openconfig-yang-types { prefix oc-ytypes; }
+  import openconfig-macsec-types { prefix oc-macsec-types; }
+  import openconfig-macsec { prefix oc-macsec; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig macsec model";
+
+  revision "2021-09-09" {
+    description "Adding support for extended secure channel transmit and receive error counters";
+    reference "0.0.2";
+  }
+
+  revision "2021-04-01" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  grouping macsec_interface_scsa_rx_counters {
+      leaf jnx-rx-sc-validated-bytes {
+         type uint64;
+         description
+            "Macsec received bytes validated on a secure channel";
+        }
+      leaf jnx-rx-sc-decrypted-bytes {
+         type uint64;
+         description
+            "Macsec received bytes decrypted on a secure channel";
+        }
+      leaf jnx-rx-sa-validated-bytes {
+         type uint64;
+         description
+            "Macsec received bytes validated on a secure association";
+        }
+      leaf jnx-rx-sa-decrypted-bytes {
+         type uint64;
+         description
+            "Macsec bytes sent with only integrity protection sent on a secure association";
+        }
+   }
+
+  grouping macsec_interface_scsa_tx_counters {
+      leaf jnx-tx-encrypted-bytes {
+         type uint64;
+         description
+            "Macsec encrypted bytes sent on a secure channel";
+        }
+      leaf jnx-tx-protected-bytes {
+         type uint64;
+         description
+            "Macsec bytes sent with only integrity protection sent on a secure channel";
+        }
+   }
+
+  grouping macsec_interface_state_tx_sc {
+      leaf jnx-tx-toolong-packets {
+         type uint64;
+         description
+            "Macsec transmit packets which are larger than the configured mtu on the interface";
+        }
+  }
+
+  grouping macsec_interface_state_rx_sc {
+      leaf jnx-rx-notag-packets {
+         type uint64;
+         description
+            "Macsec no tag packets received on a secure channel";
+        }
+      leaf jnx-rx-control-packets {
+         type uint64;
+         description
+            "Macsec control packets received on a secure channel";
+        }
+      leaf jnx-rx-tagged-miss-packets {
+         type uint64;
+         description
+            "Macsec tagged miss packets received on a secure channel";
+        }
+      leaf jnx-rx-untagged-hit-packets {
+         type uint64;
+         description
+            "Macsec untagged hit packets received on a secure channel";
+        }
+      leaf jnx-rx-control-pass-packets {
+         type uint64;
+         description
+            "Macsec allowed control packets received on a secure channel";
+        }
+      leaf jnx-rx-control-fail-packets {
+         type uint64;
+         description
+            "Macsec dropped control packets received on a secure channel";
+        }
+      leaf jnx-rx-uncontrol-pass-packets {
+         type uint64;
+         description
+            "Macsec allowed uncontrol packets received on a secure channel";
+        }
+      leaf jnx-rx-uncontrol-fail-packets {
+         type uint64;
+         description
+            "Macsec dropped uncontrol packets received on a secure channel";
+        }
+      leaf jnx-rx-hit-dropped-packets {
+         type uint64;
+         description
+            "Macsec hit dropped packets received on a security channel";
+        }
+      leaf jnx-rx-late-packets {
+         type uint64;
+         description
+            "Macsec late packets dropped on a security channel";
+        }
+      leaf jnx-rx-delayed-packets {
+         type uint64;
+         description
+            "Macsec delayed packets accepted on a security channel";
+        }
+      leaf jnx-rx-unchecked-packets {
+         type uint64;
+         description
+            "Macsec unchecked packets accepted on a security channel";
+        }
+      leaf jnx-rx-notvalid-packets {
+         type uint64;
+         description
+            "Macsec not valid packets dropped on a security channel";
+        }
+      leaf jnx-rx-notusing-sa-packets {
+         type uint64;
+         description
+            "Macsec not using sa packets received on a security channel";
+        }
+      leaf jnx-rx-unused-sa-packets {
+         type uint64;
+         description
+            "Macsec unused sa packets received on a security channel";
+        }
+    }
+    grouping macsec_interface_mka_counters {
+      leaf jnx-version-error {
+         type uint32;
+         description
+            "Number of MKA packets with version mismatch";
+        }
+      leaf jnx-cak-error {
+         type uint32;
+         description
+            "Number of MKA packets with CAK invalid or mismatch";
+        }
+      leaf jnx-integrity-check-value-mismatch {
+         type uint32;
+         description
+            "Number of MKA packets with integrity check value mismatch";
+        }
+      leaf jnx-duplicate-message-identifier {
+         type uint32;
+         description
+            "Number of MKA packets with duplicate message identifier";
+        }
+      leaf jnx-duplicate-message-number {
+         type uint32;
+         description
+            "Number of MKA packets with duplicate message number";
+        }
+      leaf jnx-duplicate-address {
+         type uint32;
+         description
+            "Number of MKA packets with duplicate address";
+        }
+      leaf jnx-invalid-destination {
+         type uint32;
+         description
+            "Number of MKA packets with invalid destination";
+        }
+      leaf jnx-format-error {
+         type uint32;
+         description
+            "Number of MKA packets with format errors";
+        }
+      leaf jnx-old-message-number {
+         type uint32;
+         description
+            "Number of MKA packets with old or replayed message number";
+        }
+    }
+    grouping macsec_interface_mka_state {
+      leaf jnx-latest-sak-an {
+         type uint32;
+         description
+            "MKA latest security association key's association number";
+        }
+      leaf jnx-key-server {
+         type string;
+         description
+            "MKA key server status";
+        }
+      leaf jnx-fail-open-mode {
+         type string;
+         description
+            "Fail open mode configuration for MKA protocol.If enabled and if the MKA session is not established,
+             traffic is still allowed in cleartext without the MACsec header.
+             If the MKA session is established successfully, traffic is allowed with MACsec headers.";
+        }
+      leaf jnx-latest-sak-ki {
+         type oc-ytypes:hex-string;
+         description
+            "MKA latest security association key's key identifier";
+        }
+      leaf jnx-cak-type {
+         type string;
+         description
+            "MKA key type - primary or preceding or fallback";
+        }
+      leaf jnx-cak-name {
+         type string;
+         description
+            "Connectivity association key name";
+        }
+      leaf jnx-member-id {
+         type oc-ytypes:hex-string;
+         description
+            "MKA member identifier";
+        }
+      leaf jnx-cipher-suit {
+         type string;
+         description
+            "Cipher suite(s) for SAK derivation";
+        }
+    }
+    augment "/oc-macsec:macsec/oc-macsec:interfaces/oc-macsec:interface/oc-macsec:mka/oc-macsec:state" {
+        description
+	       "Augmentation to add JUNOS specific operational mka state per interface";
+	uses macsec_interface_mka_state;
+    }
+    augment "/oc-macsec:macsec/oc-macsec:interfaces/oc-macsec:interface/oc-macsec:mka/oc-macsec:state/oc-macsec:counters" {
+        description
+	       "Augmentation to add JUNOS specific mka counters per interface";
+	uses macsec_interface_mka_counters;
+    }
+    augment "/oc-macsec:macsec/oc-macsec:interfaces/oc-macsec:interface/oc-macsec:state/oc-macsec:counters" {
+        description
+	       "Augmentation to add JUNOS specific RX secure channnel states per interface";
+	uses macsec_interface_state_rx_sc;
+	uses macsec_interface_state_tx_sc;
+    }
+    augment "/oc-macsec:macsec/oc-macsec:interfaces/oc-macsec:interface/oc-macsec:scsa-tx/oc-macsec:scsa-tx/oc-macsec:state/oc-macsec:counters" {
+        description
+	       "Augmentation to add JUNOS specific TX secure association counters per interface";
+	uses macsec_interface_scsa_tx_counters;
+    }
+    augment "/oc-macsec:macsec/oc-macsec:interfaces/oc-macsec:interface/oc-macsec:scsa-rx/oc-macsec:scsa-rx/oc-macsec:state/oc-macsec:counters" {
+        description
+	       "Augmentation to add JUNOS specific RX secure association counters per interface";
+	uses macsec_interface_scsa_rx_counters;
+    }
+}
+
