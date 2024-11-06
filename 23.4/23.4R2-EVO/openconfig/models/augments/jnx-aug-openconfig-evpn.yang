@@ -1,0 +1,456 @@
+module jnx-aug-openconfig-evpn {
+
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/evpn";
+
+  prefix "jnx-oc-evpn";
+
+  import openconfig-network-instance { prefix oc-ni; }
+  import openconfig-yang-types { prefix yang; }
+
+  // meta
+  organization "Juniper Networks";
+
+  description "
+    Legacy augment module for OpenConfig EVPN
+  ";
+
+  revision "2023-03-11" {
+      description "Temporarily relocate/rename evpn container from protocols to jnx-evpn at network-instance list root in preparation for augment deprecation";
+      reference "0.0.2";
+  }
+
+  revision "2019-11-28" {
+    description "Initial version";
+    reference "0.0.1";
+  }
+
+  grouping rend-evpn-instance-info {
+    leaf label-allocation-mode {
+      type string;
+    }
+  }
+
+  grouping rend-evpn-instance-statistics {
+     leaf num-peers         {
+       type uint16;
+       description "Number of peers with EVPN family";
+     }
+
+     leaf num-interfaces    {
+       type uint32;
+       description "Number of local interfaces";
+     }
+     leaf num-interfaces-up {
+       type uint32;
+       description "Number of local interfaces with status UP";
+     }
+
+     leaf num-irb-interfaces    {
+       type uint16;
+       description "Number of irb interfaces";
+     }
+     leaf num-irb-interfaces-up {
+       type uint16;
+       description "Number of irb interfaces with status UP";
+     }
+
+     leaf num-remote-macs      {
+       type uint32;
+       description "Number of macs learned from remote peers";
+     }
+     leaf num-remote-mac-ip-v4   {
+       type uint32;
+       description "Number of ipv4 macs-ip routes learned from remote peers";
+     }
+     leaf num-remote-mac-ip-v6   {
+       type uint32;
+       description "Number of ipv6 macs-ip routes learned from remote peers";
+     }
+
+     leaf num-remote-irb-macs  {
+       type uint32;
+       description "Number of irb macs learned from remote peers";
+     }
+
+     leaf num-ethernet-segments {
+       type uint32;
+       description "Number of ethernet-segment routes received from remote peers";
+     }
+
+     uses rend-evpn-instance-info;
+   }
+
+  grouping rend-interface-group {
+    leaf name {
+      type string;
+      description "Interface name";
+    }
+    leaf esi  {
+      type string;
+      description "Ethernet Segment Interface";
+    }
+    leaf mode {
+      type string;
+      description "Multihoming mode";
+    }
+    leaf status {
+      type string;
+      description "Resolution status";
+    }
+  }
+
+ grouping rend-irb-interface-group {
+   leaf name {
+     type string;
+     description "IRB Interface name";
+   }
+   leaf virtual-gateway-esi {
+     type string;
+     description "Virtual Gateway ESI";
+   }
+   leaf status {
+     type string;
+     description "Status";
+   }
+   leaf l3-context {
+     type string;
+     description "L3 context name";
+   }
+ }
+
+  grouping rend-peer-group {
+    leaf peer-address   {
+      type string;
+      description "Peer address";
+    }
+    leaf num-auto-discovery-routes  {
+      type uint32;
+      description "Number of auto-discovery i.e Type 1 routes received from peer";
+    }
+    leaf num-multicast-routes  {
+      type uint32;
+      description "Number of multicast i.e Type 3 routes received from peer";
+    }
+    leaf num-ethernet-segment-routes   {
+      type uint32;
+      description "Number of ethernet-segment routes i.e Type 4 routes received from peer";
+    }
+    leaf num-mac-routes {
+      type uint32;
+      description "Number of Type 2 MAC routes received from peer";
+    }
+    leaf num-mac-ip-routes {
+      type uint32;
+      description "Number of Type 2 MAC+IP routes received from peer";
+    }
+    leaf num-selective-multicast-routes {
+      type uint32;
+      description "Number of selective multicast i.e Type 6 routes received from peer";
+    }
+  }
+
+  grouping remote-pe-group {
+    leaf ip-address {
+      type string;
+      description "Remote peer address";
+    }
+    leaf mode {
+      type string;
+      description "Multihoming Mode";
+    }
+  }
+
+  grouping esi-remote-pe-group {
+    list remote-pe {
+      description "Remote peers";
+      key "ip-address";
+      uses remote-pe-group;
+    }
+  }
+
+  grouping esi-df-group {
+    leaf df-election-algorithm {
+      type string;
+      description "Designated forwarder algorithm in use";
+    }
+    leaf designated-forwarder {
+      type string;
+      description "Elected designated forwarder address";
+    }
+  }
+
+  grouping esi-local-intf-group {
+    leaf local-intf-name {
+      type string;
+      description "ethernet segment interface name";
+    }
+    leaf local-intf-status {
+      type string;
+      description "ethernet segment interface status";
+    }
+  }
+
+
+/* IGMP/MLD snooping database  */
+
+  grouping sgdb-esi-group  {
+
+   leaf esi {
+      type string;
+      description "Ethernet Segment Interface";
+    }
+
+    leaf local-intf-name {
+      type string;
+      description "Interface name";
+    }
+
+    leaf join-sync-status {
+      type string;
+      description "Join sync route Type 7 status";
+    }
+
+    leaf join-sync-last-updated {
+      type yang:date-and-time;
+      description "Join sync route Type 7 last status change time";
+    }
+
+    leaf leave-sync-status {
+      type string;
+      description "Leave sync route Type 8 status";
+    }
+
+    leaf leave-sync-last-updated {
+      type yang:date-and-time;
+      description "Leave sync route Type 8 last status change time";
+    }
+
+  }
+
+  grouping rend-sgdb-esi-group  {
+    list sgdb-esi {
+      description "Multicast source group database esi list";
+      key "esi";
+      uses sgdb-esi-group;
+    }
+  }
+
+
+  grouping rend-sgdb-group {
+    leaf ethernet-tag-id {
+      type uint32;
+      description "Ethernet tag identifier VNI value";
+    }
+    leaf group  {
+      type string;
+      description "Multicast group address";
+    }
+    leaf source {
+      type string;
+      description "Multicast source address";
+    }
+    leaf total-esi-fanout {
+      type uint32;
+      description "Number of ESI interested in the multicast group";
+    }
+    leaf total-local-fanout {
+      type uint32;
+      description "Number of local interface interested in the multicast group";
+    }
+    leaf total-remote-fanout {
+      type uint32;
+      description "Number of remote peers interested in the multicast group";
+    }
+
+    uses rend-sgdb-esi-group;
+  }
+
+
+  grouping rend-ethernet-segment-group {
+    leaf esi {
+      type string;
+      description "Ethernet segment interface";
+    }
+    leaf status {
+      type string;
+      description "Status";
+    }
+    uses esi-local-intf-group;
+    uses esi-df-group;
+    uses esi-remote-pe-group;
+  }
+
+
+  grouping ar-nexthops {
+
+    leaf nexthop-index {
+      type uint32;
+      description "Nexthop index value";
+    }
+
+    leaf vni-id {
+      type uint32;
+      description "Virtual network identifier";
+    }
+    leaf interface {
+      type string;
+      description "Interface name";
+    }
+    leaf replicator-ip {
+      type string;
+      description "Replicator peer address value";
+    }
+    leaf is-designated-node {
+      type boolean;
+      description "True if replicator is designated forwarder";
+    }
+  }
+
+  grouping rend-ar-nexthops {
+    list nexthops {
+      description "Nexthops";
+      key "nexthop-index";
+      uses ar-nexthops;
+    }
+  }
+
+  grouping rend-ar-l2-domain {
+      list l2-domain {
+        description "L2 domains";
+        key "vni-id";
+
+        leaf vni-id {
+          type uint32;
+          description "Virtual network identifier";
+        }
+        uses rend-ar-nexthops;
+      }
+  }
+  grouping rend-assisted-replication {
+    leaf role {
+      type string;
+      description "Assisted replication role leaf or replicator";
+    }
+    uses rend-ar-l2-domain;
+  }
+
+  typedef vtep-state {
+    type enumeration {
+      enum IF-DOWN {
+        description
+          "VTEP is DOWN";
+      }
+      enum IF-UP {
+        description
+          "VTEP is UP and Created";
+      }
+    }
+    description
+      "Describes the VTEP state UP and DOWN";
+   }
+
+  typedef vtep-mode {
+    type enumeration {
+      enum RNVE {
+        description
+          "Virtual Tunnel End point is of type Regular NVE";
+      }
+      enum AR-REPLICATOR {
+        description
+          "Virtual Tunnel End point is of type Assisted Replicator";
+      }
+      enum AR-LEAF {
+        description
+          "Virtual Tunnel End point is of type Assisted Replicator Leaf";
+      }
+    }
+    description
+      "Describes the VTEP type Regular, AR-Leaf and AR-Replicator";
+  }
+
+
+
+  grouping remote-vtep-top {
+
+      leaf remote-ip-address {
+        type string;
+        description
+          "Remote IP of the Remote VTEP";
+      }
+
+      leaf source-ip-address {
+        type string;
+        description
+          "Source IP of the Remote VTEP";
+      }
+      leaf status {
+        type vtep-state;
+        default IF-UP;
+        description
+          "state of the Remote VTEP";
+      }
+      leaf mode {
+        type vtep-mode;
+        default RNVE;
+        description
+          "Mode of the Remote VTEP";
+      }
+      leaf nexthop {
+        type uint32;
+        description
+          "Nexthop Index of the Remote VTEP";
+      }
+      leaf source-interface {
+        type string;
+        description
+          "Source Interface name of Remote VTEP";
+      }
+  }
+
+  augment  "/oc-ni:network-instances/oc-ni:network-instance"
+  {
+      container jnx-evpn {
+          uses rend-evpn-instance-statistics;
+
+          list interfaces {
+              description "Interfaces";
+              key "name";
+              uses rend-interface-group;
+          }
+
+          list irb-interfaces {
+              description "IRB interfaces";
+              key "name";
+              uses rend-irb-interface-group;
+          }
+
+          list peer {
+              description "Remote evpn peers";
+              key "peer-address";
+              uses rend-peer-group;
+          }
+          list sg-db {
+              description "Multicast source groups";
+              key "ethernet-tag-id group source";
+              uses rend-sgdb-group;
+          }
+
+          list ethernet-segment {
+              description "Ethernet segment identifiers";
+              key "esi";
+              uses rend-ethernet-segment-group;
+          }
+
+          container assisted-replication {
+              uses rend-assisted-replication;
+          }
+          list vxlan-tunnel-end-point {
+              key "remote-ip-address";
+              description "Remote VTEPs";
+              uses remote-vtep-top;
+          }
+      }
+  }
+}

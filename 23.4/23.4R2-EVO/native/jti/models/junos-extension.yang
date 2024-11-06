@@ -1,0 +1,299 @@
+/*
+ * Copyright (c) 2016 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-extension {
+  namespace "http://yang.juniper.net/yang/1.1/je";
+  prefix junos;
+
+  organization "Juniper Networks, Inc.";
+
+  description "This module contains definitions for Junos YANG extensions.";
+
+  revision "2020-01-01" {
+      description "Initial version";
+  }
+
+  extension secret {
+    description "flag secret";
+  }
+
+  extension must {
+    argument "stmt-algebra";
+    description "
+      expression of configuration-statement paths having special
+      keywords like any, all, unique";
+  }
+  extension must-message {
+    argument "message-string";
+    description "
+      When specifying the junos:must constraint, a must-message should
+      also be specified so that when the contraint is not met,the
+      warning message informs users what the constraints are.
+
+      If the must-message is missing, the input file will compile,
+      but the warning message will say (null) which won't be
+      helpful for users to fix the problem";
+  }
+
+  /*
+   * Junos DDL supports 'match' statement which is similar to Yang 'pattern'
+   * statement. The difference is that DDL match statement supports Posix
+   * Regex, where as Yang pattern supports XSD Type regular expression (XML
+   * Schema Regular Expression).
+   *
+   * Providing the DDL match statement as a Junos Extension (for external or
+   * internal) to help 3rd party Yang users with using Posix Style Regex
+   * wherever needed.
+   *
+   * Usage Example
+   * =============
+   *
+   *    leaf foo {
+   *         description "Test leaf with name foo";
+   *         type string {
+   *             junos:posix-pattern "^([[:alnum:]_-]+|[*])$" {
+   *                 junos:pattern-message "Must be a string of alphanumericals, dashes or underscores";
+   *             }
+   *         }
+   *    }
+   *
+   * Note: As of now only one 'junos:posix-pattern' is supported under any
+   * leaf or leaf-list. Multiple "junos:posix-pattern" are not supported, this
+   * limitation comes from Junos DDL match statement.
+   *
+   * Junos DDL supports only one match statement. Basically this
+   * junos:posix-pattern gets translated/converted to Junos DDL
+   * match statement internally, hence the limitation.
+   */
+  extension posix-pattern {
+    argument "value";
+    description "expression of pattern in posix format";
+  }
+  extension pattern-message {
+    argument "value";
+    description "Error message in case of mismatch";
+  }
+
+  /*
+   * This extension allows to add a setof Junos products which supports the
+   * given node (can be a 'config true' or 'config false' node).
+   *
+   * Example
+   * ======
+   *
+   *  leaf bar {
+   *      junos:product "mx240 mx960";
+   *      junos:product "qfx5210";
+   *  }
+   */
+  extension product {
+      description "The product statement specifies the product or products on
+                   which the given node is supported";
+      argument "value";
+  }
+
+  /*
+   * This extension allows to add a setof Junos products which does not
+   * support the given node (can be a 'config true' or 'config false' node).
+   *
+   * Example
+   * ======
+   *
+   *  leaf bar {
+   *      junos:product-exclude "mx240 mx960";
+   *      junos:product-exclude "qfx5210";
+   *  }
+   */
+  extension product-exclude {
+      description "The product-exclude statement specifies the product or
+                   products on which the given node is not supported";
+      argument "value";
+  }
+
+  extension command {
+    argument "command";
+    description "The junos cli command for this rpc";
+  }
+  extension action-execute {
+    description "The junos action execute for rpc";
+  }
+
+  /*
+   * Junos DDL supports "action expand" statement.
+   * The action expand statement gets invoked during
+   * command completion (when users enter '?', Space, or Tab)
+   * in the CLI. It inserts choices into the completion mechanism.
+   * Providing action expand as Junos extension for Yang.
+   * This will invoke a python script which is specified
+   * in implementation.
+   * We support python script only as of now.
+   *
+   * Usage Example
+   * =============
+   *
+   * leaf ip {
+   *   description "IP for host to check";
+   *   type string;
+   *   junos:action-expand {
+   *     junos:script "expand.py";
+   *   }
+   * }
+   *
+   * Note: This will invoke expand.py
+   * python script which is present at path /var/db/scripts/action
+   * User can write implementation logic
+   * in python script.
+   */
+  extension action-expand {
+    description "The junos action expand to show choices during
+                 command completion";
+  }
+
+  /*
+   * A new extension action-validate is added in yang which
+   * is similar to existing action validate in mgd.
+   * When the user input values cannot be validated using simple ddl
+   * syntax check (using flags or regular-expression check using match),
+   * a python script can be defined to allow additional validations.
+   * We support python script only as of now.
+   *
+   * Usage Example
+   * =============
+   *
+   * leaf ip {
+   *   description "IP for host to check";
+   *   type string;
+   *   junos:action-validate {
+   *     junos:script "validate.py";
+   *   }
+   * }
+   *
+   * Note: This will invoke validate.py
+   * python script which is present at path /var/db/scripts/action
+   * User can write implementation logic
+   * in python script.
+   */
+  extension action-validate {
+    description "The junos action validate to do validation
+                 for rpc";
+  }
+
+  /*
+   * A new extension action-mandatory is added in yang which
+   * is similar to existing action mandatory in mgd.
+   * When a mandatory configuration statement depends on criteria that
+   * cannot be easily determined using simple DDL syntax,
+   * a python script can be defined to make the decision.
+   * A new extension action-mandatory is added in
+   * junos-extenions.yang file.
+   * We support python script only as of now.
+   *
+   * Usage Example
+   * =============
+   *
+   * leaf verify_toggle  {
+   *   description "Verify toggle behavior";
+   *   type empty;
+   *   junos:action-mandatory {
+   *     junos:script "mandatory.py";
+   *   }
+   * }
+   * Note: This will invoke mandatory.py
+   * python script which is present at path /var/db/scripts/action
+   * User can write implementation logic
+   * in python script.
+   */
+  extension action-mandatory {
+    description "the junos action mandatory";
+  }
+
+  extension action-drend {
+    description "The junos action for showing dynamic-render op-state";
+  }
+  extension use-juniper-netconf-get {
+    description "True if using rpc juniper-netconf-get for output";
+  }
+  extension base-path {
+    argument "base-path";
+    description "
+      The base path from which the output is obtained for action-drend";
+  }
+  extension script {
+    argument "script";
+    description "The junos action execute script for rpc";
+  }
+  extension function {
+    argument "function";
+    description "The function name to call for this rpc";
+  }
+  extension cpp-class {
+    argument "cpp-class";
+    description "The class name to associate with this rpc";
+  }
+  extension confirm {
+    argument "confirm";
+    description "Confirm this command in CLI";
+  }
+  extension nokeyword {
+    description "flag nokeyword";
+  }
+  extension translation-script {
+    argument "value";
+    description "
+      List of space seperated translation scripts invoked by associated
+      hierarchy";
+  }
+  /* hidden bits */
+  extension hidden-from-xml {
+    description "Hidden from XML. Visible from CLI";
+  }
+  extension hidden-from-cli {
+    description "Hidden from CLI. Visible from XML";
+  }
+  extension hidden-deprecated {
+    description "Deprecated command. Placed under undocumented tag in XML.
+      Hidden from CLI";
+  }
+  extension hidden-dangerous {
+    description "Dangerous command. Some of these commands cause the router to
+      drop packets. Placed under undocumented tag in XML. Hidden from CLI";
+  }
+  extension hidden-internal {
+    description "Internal command. Placed under undocumented tag in XML.
+      Hidden from CLI";
+  }
+  extension hidden-unreleased {
+    description "Unreleased command. Placed under undocumented tag in XML.
+      Hidden from CLI";
+  }
+  extension hidden-guru {
+    description "Advanced guru-ish command. Placed under undocumented tag in
+      XML. Hidden from CLI";
+  }
+  extension hidden-support {
+    description "Customer support command. Placed under undocumented tag in
+      XML. Hidden from CLI";
+  }
+  extension product-linecard {
+      description "The product-linecard statement specifies the product or
+                   products linecard node is supported ";
+      argument "value";
+  }
+  extension product-linecard-exclude {
+      description "The product-linecard-exclude statement specifies the product or
+                   products linecard node is not supported ";
+      argument "value";
+  }
+  extension product-tvp {
+      description "The product-tvp statement specifies the tvp product or
+                   products node is supported ";
+      argument "value";
+  }
+  extension product-tvp-exclude {
+      description "The product-tvp-exclude statement specifies the tvp product or
+                   products node is not supported ";
+      argument "value";
+  }
+}

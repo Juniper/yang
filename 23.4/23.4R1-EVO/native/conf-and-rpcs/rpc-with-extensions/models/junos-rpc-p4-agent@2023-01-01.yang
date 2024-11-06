@@ -1,0 +1,564 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-p4-agent {
+   namespace "http://yang.juniper.net/junos/rpc/p4-agent";
+
+   prefix p4-agent;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for p4-agent command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10-EVO";
+   }
+
+   rpc get-p4-agent-statistics {
+     description "Show P4 Agent statistics";
+     junos:command "show p4-agent statistics";
+     output {
+       container p4-agent-statistics {
+         uses p4-agent-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-agent-statistics-ip {
+     description "Display IPv4 statistics";
+     junos:command "show p4-agent statistics ip";
+     output {
+       container p4-agent-ipv4-statistics {
+         uses p4-agent-ipv4-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-agent-statistics-ip6 {
+     description "Display IPv6 statistics";
+     junos:command "show p4-agent statistics ip6";
+     output {
+       container p4-agent-ipv6-statistics {
+         uses p4-agent-ipv6-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-agent-statistics-l2 {
+     description "Display Layer 2 statistics";
+     junos:command "show p4-agent statistics l2";
+     output {
+       container p4-agent-l2-statistics {
+         uses p4-agent-l2-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-agent-statistics-traceroute {
+     description "Display traceroute statistics";
+     junos:command "show p4-agent statistics traceroute";
+     output {
+       container p4-agent-traceroute-statistics {
+         uses p4-agent-traceroute-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-agent-port-map {
+     description "Show P4 Agent port map";
+     junos:command "show p4-agent port-map";
+     output {
+       container p4-agent-port-map {
+         uses p4-agent-port-map-block;
+       }
+     }
+   }
+   rpc get-p4-agent-reverse-map {
+     description "Show P4 Agent reverse map";
+     junos:command "show p4-agent reverse-map";
+     output {
+       container p4-agent-reverse-map {
+         uses p4-agent-reverse-map-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping p4-agent-statistics-block {
+     leaf p4-agent-ipv4-type {
+       type string;
+       description "P4 Agent IPv4 packet type";
+     }
+     leaf p4-agent-ipv4-punt-packets {
+       type uint32;
+       description "P4 Agent IPv4 punt packets";
+     }
+     leaf p4-agent-ipv4-punt-bytes {
+       type uint32;
+       description "P4 Agent IPv4 punt bytes";
+     }
+     leaf p4-agent-ipv4-punt-drops {
+       type uint32;
+       description "P4 Agent IPv4 punt packet drops";
+     }
+     leaf p4-agent-ipv4-inject-packets {
+       type uint32;
+       description "P4 Agent IPv4 inject packets";
+     }
+     leaf p4-agent-ipv4-inject-bytes {
+       type uint32;
+       description "P4 Agent IPv4 inject bytes";
+     }
+     leaf p4-agent-ipv4-inject-drops {
+       type uint32;
+       description "P4 Agent IPv4 inject packet drops";
+     }
+     leaf p4-agent-ipv6-type {
+       type string;
+       description "P4 Agent IPv6 packet type";
+     }
+     leaf p4-agent-ipv6-punt-packets {
+       type uint32;
+       description "P4 Agent IPv6 punt packets";
+     }
+     leaf p4-agent-ipv6-punt-bytes {
+       type uint32;
+       description "P4 Agent IPv6 punt bytes";
+     }
+     leaf p4-agent-ipv6-punt-drops {
+       type uint32;
+       description "P4 Agent IPv6 punt packet drops";
+     }
+     leaf p4-agent-ipv6-inject-packets {
+       type uint32;
+       description "P4 Agent IPv6 inject packets";
+     }
+     leaf p4-agent-ipv6-inject-bytes {
+       type uint32;
+       description "P4 Agent IPv6 inject bytes";
+     }
+     leaf p4-agent-ipv6-inject-drops {
+       type uint32;
+       description "P4 Agent IPv6 inject packet drops";
+     }
+     leaf p4-agent-l2-type {
+       type string;
+       description "P4 Agent L2 packet type";
+     }
+     leaf p4-agent-l2-punt-packets {
+       type uint32;
+       description "P4 Agent L2 punt packets";
+     }
+     leaf p4-agent-l2-punt-bytes {
+       type uint32;
+       description "P4 Agent L2 punt bytes";
+     }
+     leaf p4-agent-l2-punt-drops {
+       type uint32;
+       description "P4 Agent L2 punt packet drops";
+     }
+     leaf p4-agent-l2-inject-packets {
+       type uint32;
+       description "P4 Agent L2 inject packets";
+     }
+     leaf p4-agent-l2-inject-bytes {
+       type uint32;
+       description "P4 Agent L2 inject bytes";
+     }
+     leaf p4-agent-l2-inject-drops {
+       type uint32;
+       description "P4 Agent L2 inject packet drops";
+     }
+     leaf p4-agent-traceroute-type {
+       type string;
+       description "P4 Agent Traceroute packet type";
+     }
+     leaf p4-agent-traceroute-punt-packets {
+       type uint32;
+       description "P4 Agent Traceroute punt packets";
+     }
+     leaf p4-agent-traceroute-punt-bytes {
+       type uint32;
+       description "P4 Agent Traceroute punt bytes";
+     }
+     leaf p4-agent-traceroute-punt-drops {
+       type uint32;
+       description "P4 Agent Traceroute punt packet drops";
+     }
+     leaf p4-agent-traceroute-inject-packets {
+       type uint32;
+       description "P4 Agent Traceroute inject packets";
+     }
+     leaf p4-agent-traceroute-inject-bytes {
+       type uint32;
+       description "P4 Agent Traceroute inject bytes";
+     }
+     leaf p4-agent-traceroute-inject-drops {
+       type uint32;
+       description "P4 Agent Traceroute inject packet drops";
+     }
+     leaf p4-agent-unknown-type {
+       type string;
+       description "P4 Agent Unknown packet type";
+     }
+     leaf p4-agent-unknown-punt-packets {
+       type uint32;
+       description "P4 Agent Unknown punt packets";
+     }
+     leaf p4-agent-unknown-punt-bytes {
+       type uint32;
+       description "P4 Agent Unknown punt bytes";
+     }
+     leaf p4-agent-unknown-punt-drops {
+       type uint32;
+       description "P4 Agent Unknown punt packet drops";
+     }
+     leaf p4-agent-unknown-inject-packets {
+       type uint32;
+       description "P4 Agent Unknown inject packets";
+     }
+     leaf p4-agent-unknown-inject-bytes {
+       type uint32;
+       description "P4 Agent Unknown inject bytes";
+     }
+     leaf p4-agent-unknown-inject-drops {
+       type uint32;
+       description "P4 Agent Unknown inject packet drops";
+     }
+   }
+   grouping p4-agent-ipv4-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-agent-ipv6-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-agent-l2-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-agent-traceroute-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-agent-port-map-block {
+     list p4-agent-map {
+       leaf p4-agent-if-idx {
+         type uint32;
+         description "P4 Agent If index";
+       }
+       leaf p4-agent-port-num {
+         type uint32;
+         description "P4 Agent Port Number";
+       }
+       leaf p4-agent-device-num {
+         type uint32;
+         description "P4 Agent Device Number";
+       }
+     }
+   }
+   grouping p4-agent-reverse-map-block {
+     list p4-agent-rev-map {
+       leaf p4-agent-rev-ifd-idx {
+         type uint32;
+         description "P4 Agent Ifd index";
+       }
+       leaf p4-agent-rev-vlan-id {
+         type uint32;
+         description "P4 Agent Vlan Id";
+       }
+       leaf p4-agent-rev-ifl-idx {
+         type uint32;
+         description "P4 Agent Ifl index";
+       }
+     }
+   }
+ }

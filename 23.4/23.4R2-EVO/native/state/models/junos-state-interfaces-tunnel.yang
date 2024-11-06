@@ -1,0 +1,147 @@
+module junos-state-interfaces-tunnel {
+  yang-version "1.1";
+  namespace "http://yang.juniper.net/junos/state/interfaces/tunnel";
+  prefix js-if-tun;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of Tunnel related nodes for
+     JUNOS Interface state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-07-17 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping tunnel-top {
+    description
+      "Top-level grouping for parameters related to a tunnel
+       interface.";
+
+    container tunnel {
+      description
+        "The operational state parameters for the logical tunnel interface
+         are specified within this subtree.";
+
+      uses tunnel-state;
+    }
+  }
+
+  grouping tunnel-state {
+    description
+      "Grouping of state parameters related to a tunnel interface";
+
+    leaf source-address {
+      type inet:ip-address;
+      description
+        "The source address that is used for the tunnel/outer-header";
+    }
+
+    leaf destination-address {
+      type inet:ip-address;
+      description
+        "The destination address that is used for the
+         tunnel/outer-header";
+    }
+
+    leaf ttl {
+      type uint8 {
+        range "1..255";
+      }
+      description
+        "The time-to-live (ttl) indicates the number of hops that an IP
+         packet used for the tunnel transport is set to exist inside a
+         network before being discarded by a router.";
+    }
+
+    leaf gre-key {
+      type uint32;
+      description
+        "For GRE encapsulated tunnels, the key to be specified for the
+         tunnel. The key is used to identify a traffic flow within a
+         tunnel.";
+      reference
+        "RFC2890: Key and Sequence Number Extensions to GRE";
+    }
+
+    leaf bypass-loopback {
+      type boolean;
+      description
+        "This operational state indicates the loopback functionality of
+         the device, true value denotes the device functions in the non
+         loopback mode, and false value denotes the device functions in
+         loopback mode";
+    }
+
+    leaf allow-fragmentation {
+      type boolean;
+      description
+        "Allow IP packets to be fragmented whose size exceeds the
+         maximum transmission unit (MTU) value of a link that the packet
+         passes through";
+    }
+
+    leaf encapsulation {
+      type enumeration {
+        enum gre {
+          description
+            "Generic Routing Encapsulation (GRE) - Protocol 47";
+        }
+        enum ipip {
+          description
+            "IP-in-IP Encapsulation (IPIP) - IPv4 Protocol 4, IPv6
+             Protocol 41";
+        }
+        enum udp {
+          description
+            "UDP Encapsulation - Protocol 17";
+        }
+      }
+      description
+        "The encapsultation type used for the tunnel
+         interface/outer-header";
+    }
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface/js-if:units" +
+          "/js-if:unit" {
+    description
+      "Adds tunnel related state to interfaces";
+
+    uses tunnel-top;
+  }
+}

@@ -1,0 +1,113 @@
+module junos-evpn {
+  yang-version 1;
+  namespace "http://juniper.net/yang/junos-evpn";
+  prefix "junos-evpn";
+
+  description
+    "Juniper Networks definition for EVPN information kept at global level";
+
+    // meta
+    organization "Juniper Networks";
+    contact "yang-support@juniper.net";
+
+    revision "2022-12-17" {
+        description "Initial yang file";
+    }
+
+  grouping ip-prefix-database-group {
+    description
+      "IP prefix database group";
+    leaf ip-prefix {
+      description
+        "IP prefix";
+      type string;
+    }
+    leaf route-status {
+      description
+        "Status of EVPN route in the IP prefix database";
+      type string;
+    }
+  }
+
+  grouping l3-context-group {
+    description
+      "Container for EVPN database information for 
+       Layer 3 virtual routing and forwarding (VRF) instances";
+    leaf context-name {
+      description
+        "Name of VRF instance";
+      type string;
+    }
+    leaf encapsulation {
+      description
+        "Type of encapsulation";
+      type string;
+    }
+    leaf advertisement-mode {
+      description
+        "Type of forwarding route.";
+      type string;
+    }
+    leaf multicast-routing-mode {
+      description
+        "Type of multicast routing mode";
+      type string;
+    }
+  }
+
+  grouping evpn-smet-forwarding-group {
+    description
+      "Selective Multicast Ethernet Tag  resource information";
+    leaf enabled {
+      description
+        "True if enabled";
+      type boolean;
+    }
+    leaf nexthop-limit {
+      description
+        "Max nexthop limit ";
+      type uint32;
+    }
+    leaf nexthop-usage {
+      description
+        "Current nexthop usage count";
+      type uint32;
+    }
+  }
+
+  grouping rpd-evpn-global-render-top {
+    description
+      "Container to hold information for evpn at global level";
+    container junos {
+      description
+        "JunOS OS";
+      config false;
+      container evpn {
+        description
+          "Container to hold evpn information at global level";
+        container evpn-smet-forwarding {
+          description
+            "Container to hold evpn selective multicast 
+             forwarding information";
+          uses evpn-smet-forwarding-group;
+        }
+        list l3-context {
+          description
+            "Collection of EVPN database information for 
+             Layer 3 virtual routing and forwarding (VRF) instances";
+          key "context-name";
+          uses l3-context-group;
+          list ip-prefix-database {
+            description
+              "Collection of ip prefixes";
+            key "ip-prefix";
+            uses ip-prefix-database-group;
+          }
+        }
+      }
+    }
+  }
+
+  uses rpd-evpn-global-render-top;
+}
+

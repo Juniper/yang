@@ -1,0 +1,82 @@
+module junos-state-ddos-protection-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/ddos-protection/types";
+  prefix js-ddos-types;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS DDoS protection data
+     types.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-24 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef violation-status-code {
+    type enumeration {
+      enum NEVER_VIOLATED {
+        value 0;
+        description
+          "Policer has never been violated";
+      }
+      enum WAS_VIOLATED {
+        value 2;
+        description
+          "Policer has been previously violated";
+      }
+      enum IS_VIOLATED {
+        value 4;
+        description
+          "Policer is currently being violated";
+      }
+      enum WAS_AND_IS_VIOLATED {
+        value 6;
+        description
+          "Policer has been previously violated and is currently being
+           violated";
+      }
+    }
+    description
+      "This value represents the current DDoS violation status code";
+  }
+
+  typedef locale {
+    type enumeration {
+      enum FPC {
+        value 0;
+        description
+          "Instance is on FPC";
+      }
+      enum RE {
+        value 255;
+        description
+          "Instance is on RE";
+      }
+    }
+    description
+      "This value represents the origin of the DDoS instance violation";
+  }
+}

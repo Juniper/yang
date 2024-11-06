@@ -1,0 +1,361 @@
+module jnx-aug-openconfig-isis {
+
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/isis";
+
+  prefix "jnx-oc-isis";
+
+  import ietf-yang-types { prefix "yang"; }
+  import openconfig-network-instance { prefix oc-ni; }
+  import openconfig-inet-types { prefix "oc-inet"; }
+  import openconfig-isis-types { prefix "oc-isis-types"; }
+
+
+  // meta
+  organization "Juniper Networks";
+
+  description
+    "This module contains JUNOS augments to OpenConfig isis model";
+
+  revision "2017-06-25" {
+    description "Initial version";
+    reference "0.0.1";
+  }
+
+
+  augment  "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol" +
+  "/oc-ni:isis/oc-ni:levels/oc-ni:level/oc-ni:link-state-database/oc-ni:lsp/oc-ni:state" {
+    leaf lsp-install-time {
+      type yang:timestamp;
+      description
+        "Lsp install time.";
+    } 
+  }
+
+
+  augment  "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol" +
+  "/oc-ni:isis/oc-ni:interfaces/oc-ni:interface" {
+      container packet-counters {
+          description
+              "This container defines ISIS interface packet counters.";
+          
+          container lsp {
+              description
+                  "This container defines LSP packet counters.";
+
+              container state {
+                  config false;
+                  description
+                      "This container defines LSP PDU counters.";
+
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  }
+              }
+          }
+
+          container iih {
+              description
+                  "This container defines IIH packet counters.";
+
+              container state {
+                  config false;
+                  description
+                      "Operational counters relating to IIH PDUs";
+
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  } 
+              }
+          }
+      
+          container ish {
+              description
+                  "This container defines ISH packet counters.";
+
+              container state {
+                  config false;
+                  description
+                      "Operational state relating to ISH PDUs.";
+                  
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  }  
+              }
+          }
+      
+          container esh {
+              description
+                  "This container defines ESH packet counters.";
+              container state {
+                  config false;
+                  description
+                      "Operational state relating to ESH PDUs";
+                  
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  } 
+              }
+          }
+
+          container psnp {
+              description
+                  "This container defines PSNP packet counters.";
+
+              container state {
+                  config false;
+                  description
+                      "Packet counters relating to PSNPs.";
+                  
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  } 
+              }
+          }
+          
+          container csnp {
+              description
+                  "Operational state parameters relating to CSNPs.";
+
+              container state {
+                  config false;
+                  description
+                      "Packet counters relating to CSNPs.";
+
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  } 
+
+              }
+          }
+
+          container unknown {
+              description
+                  "Operational state parameters relating to IS-IS PDUs that are not
+                  otherwise classified - referred to as Unknown PDUs.";
+
+              container state {
+                  config false;
+                  description
+                      "Packet counters relating to unknown PDUs.";
+                 
+                  leaf received {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface.";
+                  }
+                  leaf processed {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been processed by the local system.";
+                  }
+                  leaf dropped {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU received on the interface
+                          that have been dropped.";
+                  }
+
+                  leaf sent {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that have been sent by the
+                          local system on the interface.";
+                  }
+
+                  leaf retransmit {
+                      type yang:counter32;
+                      description
+                          "The number of the specified type of PDU that that have been
+                          retransmitted by the local system on the interface.";
+                  } 
+              }
+          }
+      }
+  }
+  
+  augment  "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol" +
+  "/oc-ni:isis/oc-ni:levels/oc-ni:level/oc-ni:link-state-database/oc-ni:lsp/oc-ni:tlvs" +
+  "/oc-ni:tlv/oc-ni:ipv4-te-router-id/oc-ni:state" {
+    leaf te-router-id {
+      type oc-inet:ipv4-address;
+      description
+        "IPv4 Traffic Engineering router ID of the node. For
+         traffic engineering, it guarantees that we have a
+         single stable address that can always be referenced in
+         a path that will be reachable from multiple hops away,
+         regardless of the state of the node's interfaces.";
+    }
+  }
+}
+

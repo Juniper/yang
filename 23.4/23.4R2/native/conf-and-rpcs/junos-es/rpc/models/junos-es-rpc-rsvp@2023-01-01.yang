@@ -1,0 +1,4863 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-rsvp {
+   namespace "http://yang.juniper.net/junos-es/rpc/rsvp";
+
+   prefix rsvp;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for rsvp command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R2.13";
+   }
+
+   rpc get-rsvp-interface-information {
+     description "Show RSVP interfaces";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+           enum "link-management" {
+             description "Display RSVP interfaces created by LMP";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of logical interface";
+         type string;
+       }
+     }
+     output {
+       container rsvp-interface-information {
+         uses rsvp-interface-information-block;
+       }
+     }
+   }
+   rpc get-rsvp-neighbor-information {
+     description "Show RSVP neighbors";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container rsvp-neighbor-information {
+         uses rsvp-neighbor-information-block;
+       }
+     }
+   }
+   rpc get-rsvp-session-information {
+     description "Show active RSVP sessions";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+       leaf session-type {
+         type enumeration {
+           enum "ingress" {
+             description "Display RSVP sessions originating at this router";
+           }
+           enum "egress" {
+             description "Display RSVP sessions ending at this router";
+           }
+           enum "transit" {
+             description "Display RSVP sessions transiting this router";
+           }
+         }
+       }
+       leaf session-lsp {
+         type enumeration {
+           enum "lsp" {
+             description "Display RSVP sessions used to set up LSPs";
+           }
+           enum "nolsp" {
+             description "Display RSVP sessions not used to set up LSPs";
+           }
+         }
+       }
+       leaf lsp-state {
+         type enumeration {
+           enum "up" {
+             description "Display active LSPs";
+           }
+           enum "down" {
+             description "Display inactive LSPs";
+           }
+         }
+       }
+       leaf lsp-direction {
+         type enumeration {
+           enum "unidirectional" {
+             description "Display unidirectional RSVP sessions";
+           }
+           enum "bidirectional" {
+             description "Display bidirectional RSVP sessions";
+           }
+           enum "p2mp" {
+             description "Display point-to-multipoint RSVP sessions";
+           }
+           enum "externally-provisioned" {
+             description "Display externally provisioned LSPs";
+           }
+         }
+       }
+       leaf enhanced-frr-state {
+         type enumeration {
+           enum "enhanced-frr" {
+             description "Display enhanced FRR enabled RSVP sessions";
+           }
+         }
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf lsp-stat {
+         type enumeration {
+           enum "statistics" {
+             description "Display packet statistics";
+           }
+         }
+       }
+       leaf bypass-lsp {
+         type enumeration {
+           enum "bypass" {
+             description "Display RSVP sessions used to protect LSPs";
+           }
+         }
+       }
+       leaf activeroutes {
+         type enumeration {
+           enum "count-active-routes" {
+             description "Show active routes for RSVP sessions";
+           }
+         }
+       }
+       leaf protection-state {
+         type enumeration {
+           enum "protected" {
+             description "Display RSVP sessions with local protection";
+           }
+           enum "unprotected" {
+             description "Display RSVP sessions with no local protection";
+           }
+         }
+       }
+       leaf multiple-lsp-state {
+         type enumeration {
+           enum "multiple-lsp-sessions" {
+             description "Display LSPs with multiple RSVP sessions";
+           }
+         }
+       }
+       leaf fr-state {
+         type enumeration {
+           enum "fr-ingress" {
+             description "Display flood reflector ingress RSVP sessions";
+           }
+         }
+       }
+       leaf session-name {
+         description "Name of RSVP session";
+         type string;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf te-link {
+         description "Name of traffic engineering link";
+         type string;
+       }
+     }
+     output {
+       container rsvp-session-information {
+         uses rsvp-session-information-block;
+       }
+     }
+   }
+   rpc get-rsvp-statistics-information {
+     description "Show RSVP statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container rsvp-statistics-information {
+         uses rsvp-statistics-information-block;
+       }
+     }
+   }
+   rpc get-rsvp-version-information {
+     description "Show RSVP version";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container rsvp-version-information {
+         uses rsvp-version-information-block;
+       }
+     }
+   }
+   rpc get-rsvp-route-session-id-information {
+     description "Show RSVP Ingress Route Session IDs";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container rsvp-route-session-id-information {
+         uses rsvp-route-session-id-information-block;
+       }
+     }
+   }
+   rpc get-rsvp-pop-and-fwd-information {
+     description "Show RSVP pop-and-forward info";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+       leaf level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf shared-label {
+         description "Shared-label";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container rsvp-pop-and-fwd-information {
+         uses rsvp-pop-and-fwd-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping rsvp-interface-information-block {
+     leaf active-count {
+       type int32;
+       description "Number of active RSVP interfaces";
+     }
+     list rsvp-interface {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf rsvp-status {
+         type string;
+         description "Administrative or per-interface status of RSVP";
+       }
+       container rsvp-telink {
+         leaf active-reservation {
+           type int32;
+           description "Number of active reservations";
+         }
+         leaf subscription {
+           type int32;
+           description "Percentage of link capacity available for bandwidth reservations";
+         }
+         leaf static-bandwidth {
+           type string;
+           description "Static bandwidth capacity of the link with units appended";
+         }
+         leaf available-bandwidth {
+           type string;
+           description "Amount of bandwidth available for reservations with units appended";
+         }
+         leaf total-reserved-bandwidth {
+           type string;
+           description "Total amount of bandwidth currently reserved with units appended";
+         }
+         leaf high-watermark {
+           type string;
+           description "Maximum bandwidth that was ever reserved with units appended";
+         }
+         leaf static-bandwidth-bps {
+           type uint64;
+           description "Static bandwidth capacity of the link in bits per second";
+         }
+         leaf available-bandwidth-bps {
+           type uint64;
+           description "Amount of bandwidth available for reservations in bits per second";
+         }
+         leaf max-available-bandwidth-bps {
+           type uint64;
+           description "Maximum amount of bandwidth available for reservations, including the subscription factor in bits per second";
+         }
+         leaf static-bc-bandwidth-bps {
+           type uint64;
+           description "Static bandwidth capacity for a bandwidth constraint in bits per second";
+         }
+         leaf total-reserved-bandwidth-bps {
+           type uint64;
+           description "Total amount of bandwidth currently reserved in bits per second";
+         }
+         leaf ct-bw0 {
+           type string;
+         }
+         leaf ct-bw0-bps {
+           type uint64;
+         }
+         leaf ct-bw1 {
+           type string;
+         }
+         leaf ct-bw1-bps {
+           type uint64;
+         }
+         leaf ct-bw2 {
+           type string;
+         }
+         leaf ct-bw2-bps {
+           type uint64;
+         }
+         leaf ct-bw3 {
+           type string;
+         }
+         leaf ct-bw3-bps {
+           type uint64;
+         }
+         leaf ct-bw4 {
+           type string;
+         }
+         leaf ct-bw4-bps {
+           type uint64;
+         }
+         leaf ct-bw5 {
+           type string;
+         }
+         leaf ct-bw5-bps {
+           type uint64;
+         }
+         leaf ct-bw6 {
+           type string;
+         }
+         leaf ct-bw6-bps {
+           type uint64;
+         }
+         leaf ct-bw7 {
+           type string;
+         }
+         leaf ct-bw7-bps {
+           type uint64;
+         }
+         leaf high-watermark-bps {
+           type uint64;
+           description "Maximum bandwidth that was ever reserved in bps";
+         }
+         leaf update-threshold-value-bps {
+           type uint64;
+           description "Change in reserved bandwidth to trigger IGP update in bits per second";
+         }
+         leaf update-threshold-max-reservable-bps {
+           type uint64;
+           description "Change in non-rsvp bandwidth to trigger IGP update in bits per second";
+         }
+         container priority-subscription {
+           leaf priority-subscription.heading {
+             type string;
+           }
+           list priority-subscription-pair {
+             leaf priority-value {
+               type int32;
+               description "Priority value corresponding to bandwidth subscription reserved";
+             }
+             leaf priority-subscription-percent {
+               type int32;
+               description "Percentage of link capacity available for specific priority";
+             }
+           }
+         }
+         list reserved-bandwidth {
+           leaf total-reserved-bandwidth-bps {
+             type uint64;
+             description "Total amount of bandwidth currently reserved in bits per second";
+           }
+           leaf bandwidth-priority {
+             type int32;
+           }
+           leaf total-reserved-bandwidth {
+             type string;
+             description "Total amount of bandwidth currently reserved with units appended";
+           }
+         }
+         list reserved-ct-bandwidth {
+           leaf ct-bw0 {
+             type string;
+           }
+           leaf ct-bw1 {
+             type string;
+           }
+           leaf ct-bw2 {
+             type string;
+           }
+           leaf ct-bw3 {
+             type string;
+           }
+           leaf ct-bw4 {
+             type string;
+           }
+           leaf ct-bw5 {
+             type string;
+           }
+           leaf ct-bw6 {
+             type string;
+           }
+           leaf ct-bw7 {
+             type string;
+           }
+           leaf ct-class {
+             type int32;
+             description "Class type (0..7)";
+           }
+           leaf ct-bw0-bps {
+             type uint64;
+           }
+           leaf ct-bw1-bps {
+             type uint64;
+           }
+           leaf ct-bw2-bps {
+             type uint64;
+           }
+           leaf ct-bw3-bps {
+             type uint64;
+           }
+           leaf ct-bw4-bps {
+             type uint64;
+           }
+           leaf ct-bw5-bps {
+             type uint64;
+           }
+           leaf ct-bw6-bps {
+             type uint64;
+           }
+           leaf ct-bw7-bps {
+             type uint64;
+           }
+         }
+         list detour-bandwidth {
+           leaf total-reserved-bandwidth-bps {
+             type uint64;
+             description "Total amount of bandwidth currently reserved in bits per second";
+           }
+           leaf bandwidth-priority {
+             type int32;
+           }
+           leaf total-reserved-bandwidth {
+             type string;
+             description "Total amount of bandwidth currently reserved with units appended";
+           }
+           leaf-list interface-address {
+             type jt:ipaddr;
+           }
+         }
+         list overbooked-bandwidth {
+           leaf total-reserved-bandwidth-bps {
+             type uint64;
+             description "Total amount of bandwidth currently reserved in bits per second";
+           }
+           leaf bandwidth-priority {
+             type int32;
+           }
+           leaf total-reserved-bandwidth {
+             type string;
+             description "Total amount of bandwidth currently reserved with units appended";
+           }
+         }
+         list overbooked-ct-bandwidth {
+           leaf ct-bw0-bps {
+             type uint64;
+           }
+           leaf ct-bw1-bps {
+             type uint64;
+           }
+           leaf ct-bw2-bps {
+             type uint64;
+           }
+           leaf ct-bw3-bps {
+             type uint64;
+           }
+           leaf ct-bw4-bps {
+             type uint64;
+           }
+           leaf ct-bw5-bps {
+             type uint64;
+           }
+           leaf ct-bw6-bps {
+             type uint64;
+           }
+           leaf ct-bw7-bps {
+             type uint64;
+           }
+           leaf ct-class {
+             type int32;
+             description "Class type (0..7)";
+           }
+           leaf ct-bw0 {
+             type string;
+           }
+           leaf ct-bw1 {
+             type string;
+           }
+           leaf ct-bw2 {
+             type string;
+           }
+           leaf ct-bw3 {
+             type string;
+           }
+           leaf ct-bw4 {
+             type string;
+           }
+           leaf ct-bw5 {
+             type string;
+           }
+           leaf ct-bw6 {
+             type string;
+           }
+           leaf ct-bw7 {
+             type string;
+           }
+         }
+         leaf preemption-count {
+           type int32;
+           description "Number of preemptions that occurred on an interface";
+         }
+         leaf soft-preemption-count {
+           type int32;
+           description "Number of soft preemptions that occurred on an interface";
+         }
+         leaf update-threshold-max-reservable {
+           type string;
+           description "Change in non-rsvp bandwidth to trigger IGP update with units appended";
+         }
+         leaf update-threshold-max-reservable-percent {
+           type int32;
+           description "Percentage change in max-reservable bandwidth to trigger IGP update";
+         }
+         leaf update-threshold {
+           type jt:unsigned-float;
+           description "Percentage change in reserved bandwidth to trigger IGP update";
+         }
+         leaf update-threshold-value {
+           type string;
+           description "Change in reserved bandwidth to trigger IGP update with appended units";
+         }
+         leaf sr-subscription {
+           type int32;
+           description "Percentage of link capacity available after spring traffic";
+         }
+         leaf soft-preemption-pending {
+           type int32;
+           description "Number of soft preemptions pending on an interface";
+         }
+         leaf bc {
+           type int32;
+           description "Bandwidth constraint (0..7)";
+         }
+         leaf bc-description {
+           type string;
+           description "Description of the bandwidth constraint";
+         }
+         leaf static-bc-bandwidth {
+           type string;
+           description "Static bandwidth capacity for a bandwidth constraint with units appended";
+         }
+         leaf ct-class {
+           type int32;
+           description "Class type (0..7)";
+         }
+         leaf ct-subscription {
+           type int32;
+           description "Subscription percentage per traffic class";
+         }
+         leaf max-available-bandwidth {
+           type string;
+           description "Maximum amount of bandwidth available for reservations, including the subscription factor, with units appended";
+         }
+         leaf max-available-description {
+           type string;
+           description "Description of the computation of the maximum available bandwidth";
+         }
+         leaf telink-name {
+           type string;
+           description "Name of the TE link";
+         }
+         leaf telink-local-id {
+           type int32;
+           description "Local identifier of TE link";
+         }
+         leaf telink-state {
+           type string;
+           description "State of the TE link";
+         }
+       }
+       container bypass-info {
+         leaf lp-status {
+           type string;
+           description "Link-protection status";
+         }
+         leaf total-bypass {
+           type int32;
+           description "Number of bypass activated";
+         }
+         leaf lp-requested {
+           type int32;
+           description "Number of LSPs requesting protection";
+         }
+         leaf lp-granted {
+           type int32;
+           description "Number of LSPs granted protection";
+         }
+         leaf lp-failure {
+           type int32;
+           description "Number of LSPs not granted protection";
+         }
+         leaf bypass-name {
+           type string;
+           description "Name of the bypass";
+         }
+         leaf bypass-state {
+           type string;
+           description "Bypass up/down status";
+         }
+         leaf bypass-type {
+           type string;
+           description "Whether bypass type is link-protect or node-protect";
+         }
+         leaf rsvp-lp-psb-cnt {
+           type int32;
+           description "Number of sessions tunneled through this bypass";
+         }
+         leaf rsvp-lp-backup-lsp-cnt {
+           type int32;
+           description "Number of backup RSVP LSPs tunneled through this bypass";
+         }
+         list lp-history {
+           leaf sequence-number {
+             type int64;
+             description "History event number";
+           }
+           leaf time {
+             type string;
+             description "Time of the event";
+           }
+           leaf log {
+             type string;
+             description "Supplemental information of the event";
+           }
+           leaf route {
+             type string;
+             description "Latest RRO contents, as reported by RSVP";
+           }
+         }
+       }
+       list cos-info {
+         leaf tx-rate-bps {
+           type uint64;
+         }
+         leaf queue-number {
+           type int32;
+           description "HW queue number";
+         }
+         leaf tx-rate {
+           type string;
+         }
+         leaf tx-rate-percent {
+           type string;
+         }
+         leaf high-priority {
+           type string;
+           description "High/Low WRR priority";
+         }
+         leaf bw-exact {
+           type string;
+           description "Exact bandwidth allocation";
+         }
+       }
+       leaf index {
+         type int32;
+       }
+       leaf active-control-channel {
+         type string;
+         description "Currently active control channel for the peer";
+       }
+       leaf control-channel-unusable {
+         type empty;
+         description "Control channel does not have RSVP enabled on it";
+       }
+       leaf dynamic-bidirectional-transport {
+         type string;
+         description "Specifies template to be used for dynamic bidirectional LSP";
+       }
+       leaf authentication-flag {
+         type string;
+       }
+       leaf aggregate-flag {
+         type string;
+       }
+       leaf ack-flag {
+         type string;
+       }
+       leaf protect-flag {
+         type string;
+       }
+       leaf hello-interval {
+         type int32;
+         description "Interval between two successive hellos";
+       }
+       leaf forward-rsvp {
+         type empty;
+         description "Forward RSVP packets coming on RSVP-disabled interface";
+       }
+       leaf-list interface-address {
+         type jt:ipaddr;
+       }
+       leaf loopback-address {
+         type jt:ipaddr;
+       }
+       list rsvp-interface-statistics {
+         leaf interface-event-name {
+           type string;
+         }
+         leaf interface-event-count {
+           type uint32;
+         }
+       }
+       list message-statistics {
+         leaf rsvp-message {
+           type string;
+         }
+         leaf messages-sent {
+           type int32;
+           description "Total number of messages sent";
+         }
+         leaf messages-received {
+           type int32;
+           description "Total number of messages received";
+         }
+         leaf messages-sent-5seconds {
+           type int32;
+           description "Number of messages sent in the last 5 seconds";
+         }
+         leaf messages-received-5seconds {
+           type int32;
+           description "Number of messages received in the last 5 seconds";
+         }
+       }
+     }
+   }
+   grouping rsvp-neighbor-information-block {
+     leaf rsvp-neighbor-count {
+       type int32;
+       description "Number of RSVP neighbors learned";
+     }
+     container rsvp-neighbor {
+       leaf rsvp-neighbor-address {
+         type jt:ipaddr;
+       }
+       leaf neighbor-idle {
+         type string;
+         description "Length of time this neighbor has been idle";
+       }
+       leaf neighbor-up-count {
+         type int32;
+         description "Number of times neighbor came up";
+       }
+       leaf neighbor-down-count {
+         type int32;
+         description "Number of times neighbor went down";
+       }
+       leaf last-changed-time {
+         type string;
+         description "Time this neighbor last changed state";
+       }
+       leaf hello-interval {
+         type int32;
+         description "Interval between two successive hellos";
+       }
+       leaf hellos-sent {
+         type int32;
+         description "Number of hellos sent";
+       }
+       leaf hellos-received {
+         type int32;
+         description "Number of hellos received";
+       }
+       leaf messages-received {
+         type int32;
+         description "Total number of messages received";
+       }
+       leaf rsvp-message {
+         type string;
+       }
+       container rsvp-graceful-restart {
+         leaf restart-status {
+           type string;
+         }
+         leaf helper-status {
+           type string;
+         }
+         leaf restart-time {
+           type int32;
+           description "Restart time advertised";
+         }
+         leaf recovery-time {
+           type int32;
+           description "Recovery time advertised";
+         }
+       }
+       leaf rsvp-neighbor-interface {
+         type string;
+         description "Local interface name";
+       }
+       leaf rsvp-neighbor-status {
+         type string;
+       }
+       leaf rsvp-neighbor-remote {
+         type empty;
+         description "Address represents an RSVP remote neighbor";
+       }
+       leaf rsvp-neighbor-node {
+         type empty;
+         description "Address represents a RSVP node neighbor";
+       }
+       leaf rsvp-neighbor-remote-node {
+         type empty;
+         description "Address of RSVP remote node neighbor";
+       }
+       leaf rsvp-neighbor-remote-instance {
+         type int32;
+         description "Remote instance";
+       }
+       leaf rsvp-neighbor-local-instance {
+         type int32;
+         description "Local instance";
+       }
+       leaf rsvp-refresh-reduct-status {
+         type string;
+       }
+       leaf rsvp-refresh-reduct-remote-status {
+         type string;
+       }
+       leaf rsvp-refresh-reduct-ack-status {
+         type string;
+       }
+       container rsvp-nbr-enh-local-protection {
+         leaf rsvp-nbr-enh-lp-status {
+           type string;
+           description "Enhanced FRR local protection status on Neighbor";
+         }
+         leaf rsvp-nbr-flow-control-status {
+           type string;
+           description "RSVP flow control support on neighbor";
+         }
+         leaf rsvp-nbr-enh-lp-total-lsp-count {
+           type uint32;
+           description "Number of LSPs associated with this Neighbor";
+         }
+         leaf rsvp-nbr-enh-lp-phop-lsp-count {
+           type uint32;
+           description "Number of LSPs for which this is Phop Neighbor";
+         }
+         leaf rsvp-nbr-enh-lp-pphop-lsp-count {
+           type uint32;
+           description "Number of LSPs for which this is PPhop Neighbor";
+         }
+         leaf rsvp-nbr-enh-lp-nhop-lsp-count {
+           type uint32;
+           description "Number of LSPs for which this is Nhop Neighbor";
+         }
+         leaf rsvp-nbr-enh-lp-nnhop-lsp-count {
+           type uint32;
+           description "Number of LSPs for which this is NNhop Neighbor";
+         }
+       }
+       container rsvp-nbr-label {
+         leaf rsvp-nbr-label.heading {
+           type string;
+         }
+         leaf rsvp-nbr-label-unprotected {
+           type uint32;
+           description "Pop and forward label for the neighbor";
+         }
+         leaf rsvp-nbr-label-link-protected {
+           type uint32;
+           description "Pop and forward link-protected label";
+         }
+       }
+     }
+   }
+   grouping rsvp-session-information-block {
+     list rsvp-session-data {
+       leaf session-type {
+         type string;
+         description "Type of session with respect to this router";
+       }
+       leaf count {
+         type int32;
+       }
+       leaf detours {
+         type int32;
+         description "Number of detour sessions";
+       }
+       leaf display-count {
+         type int32;
+         description "Number of sessions displayed";
+       }
+       leaf up-count {
+         type int32;
+         description "Number of sessions in up state";
+       }
+       leaf down-count {
+         type int32;
+         description "Number of sessions in down state";
+       }
+       list rsvp-session {
+         description "Single RSVP session";
+         leaf destination-address {
+           type jt:ipaddr;
+           description "Session destination address";
+         }
+         leaf source-address {
+           type jt:ipaddr;
+         }
+         leaf lsp-state {
+           type string;
+           description "State of an LSP";
+         }
+         leaf route-count {
+           type int32;
+           description "Number of active routes";
+         }
+         leaf rsb-count {
+           type int32;
+           description "Number of RSBs";
+         }
+         leaf resv-style {
+           type string;
+         }
+         leaf label-in {
+           type string;
+           description "Incoming label";
+         }
+         leaf label-out {
+           type string;
+           description "Outgoing label";
+         }
+         leaf name {
+           type string;
+         }
+         leaf bidirectional {
+           type empty;
+           description "LSP is bidirectional";
+         }
+         leaf associated-bidirectional {
+           type empty;
+           description "LSP is associated-bidirectional";
+         }
+         leaf entropy-label {
+           type string;
+           description "Entropy label";
+         }
+         leaf p2mp-self-id {
+           type string;
+           description "Statistics identifier for RSVP P2MP path state control block";
+         }
+         container rsvp-lp-bw-optimize-info {
+           leaf rsvp-lp-bw-optimize-info.heading {
+             type string;
+           }
+           leaf rsvp-lp-path-avail-bw {
+             type string;
+             description "Bandwidth available on the bypass path";
+           }
+           leaf rsvp-lp-optimize-interval {
+             type int32;
+             description "Optimization interval for the bypass";
+           }
+         }
+         container packet-information {
+           leaf packet-information.heading {
+             type string;
+             description "RSVP packets sent or received per session";
+           }
+           leaf previous-hop {
+             type jt:ipaddr;
+             description "Previous-hop address";
+           }
+           leaf next-hop {
+             type jt:ipaddr;
+             description "Next-hop address";
+           }
+           leaf interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf count {
+             type int32;
+           }
+           leaf notify-destination {
+             type jt:ipaddr;
+             description "Notify address";
+           }
+           leaf entropy-label {
+             type string;
+             description "Entropy label";
+           }
+           leaf in-message-handle {
+             type string;
+             description "RSVP I/O handle for incoming message";
+           }
+           leaf in-message-id {
+             type uint32;
+             description "Incoming Message ID";
+           }
+           leaf in-epoch {
+             type uint32;
+             description "Incoming Epoch";
+           }
+           leaf out-message-state {
+             type string;
+             description "RSVP I/O state for outgoing message";
+           }
+           leaf out-message-id {
+             type uint32;
+             description "Outgoing Message ID";
+           }
+           leaf out-epoch {
+             type uint32;
+             description "Outgoing Epoch";
+           }
+         }
+         container explicit-route {
+           leaf explicit-route.heading {
+             type string;
+             description "Explicit Route Object (ERO)";
+           }
+           container explicit-route-element {
+             leaf address {
+               type jt:ipaddr;
+             }
+             leaf explicit-route-type {
+               type string;
+             }
+             leaf telink-id {
+               type int32;
+               description "Link identifier of unnumbered link";
+             }
+           }
+         }
+         container rsvp-telink {
+           leaf static-bandwidth-bps {
+             type uint64;
+             description "Static bandwidth capacity of the link in bits per second";
+           }
+           leaf available-bandwidth-bps {
+             type uint64;
+             description "Amount of bandwidth available for reservations in bits per second";
+           }
+           leaf max-available-bandwidth-bps {
+             type uint64;
+             description "Maximum amount of bandwidth available for reservations, including the subscription factor in bits per second";
+           }
+           leaf static-bc-bandwidth-bps {
+             type uint64;
+             description "Static bandwidth capacity for a bandwidth constraint in bits per second";
+           }
+           leaf total-reserved-bandwidth-bps {
+             type uint64;
+             description "Total amount of bandwidth currently reserved in bits per second";
+           }
+           leaf ct-bw0 {
+             type string;
+           }
+           leaf ct-bw0-bps {
+             type uint64;
+           }
+           leaf ct-bw1 {
+             type string;
+           }
+           leaf ct-bw1-bps {
+             type uint64;
+           }
+           leaf ct-bw2 {
+             type string;
+           }
+           leaf ct-bw2-bps {
+             type uint64;
+           }
+           leaf ct-bw3 {
+             type string;
+           }
+           leaf ct-bw3-bps {
+             type uint64;
+           }
+           leaf ct-bw4 {
+             type string;
+           }
+           leaf ct-bw4-bps {
+             type uint64;
+           }
+           leaf ct-bw5 {
+             type string;
+           }
+           leaf ct-bw5-bps {
+             type uint64;
+           }
+           leaf ct-bw6 {
+             type string;
+           }
+           leaf ct-bw6-bps {
+             type uint64;
+           }
+           leaf ct-bw7 {
+             type string;
+           }
+           leaf ct-bw7-bps {
+             type uint64;
+           }
+           leaf high-watermark-bps {
+             type uint64;
+             description "Maximum bandwidth that was ever reserved in bps";
+           }
+           leaf update-threshold-value-bps {
+             type uint64;
+             description "Change in reserved bandwidth to trigger IGP update in bits per second";
+           }
+           leaf update-threshold-max-reservable-bps {
+             type uint64;
+             description "Change in non-rsvp bandwidth to trigger IGP update in bits per second";
+           }
+           container priority-subscription {
+             leaf priority-subscription.heading {
+               type string;
+             }
+             list priority-subscription-pair {
+               leaf priority-value {
+                 type int32;
+                 description "Priority value corresponding to bandwidth subscription reserved";
+               }
+               leaf priority-subscription-percent {
+                 type int32;
+                 description "Percentage of link capacity available for specific priority";
+               }
+             }
+           }
+           list reserved-bandwidth {
+             leaf total-reserved-bandwidth-bps {
+               type uint64;
+               description "Total amount of bandwidth currently reserved in bits per second";
+             }
+           }
+           list reserved-ct-bandwidth {
+             leaf ct-bw0 {
+               type string;
+             }
+             leaf ct-bw1 {
+               type string;
+             }
+             leaf ct-bw2 {
+               type string;
+             }
+             leaf ct-bw3 {
+               type string;
+             }
+             leaf ct-bw4 {
+               type string;
+             }
+             leaf ct-bw5 {
+               type string;
+             }
+             leaf ct-bw6 {
+               type string;
+             }
+             leaf ct-bw7 {
+               type string;
+             }
+             leaf ct-class {
+               type int32;
+               description "Class type (0..7)";
+             }
+             leaf ct-bw0-bps {
+               type uint64;
+             }
+             leaf ct-bw1-bps {
+               type uint64;
+             }
+             leaf ct-bw2-bps {
+               type uint64;
+             }
+             leaf ct-bw3-bps {
+               type uint64;
+             }
+             leaf ct-bw4-bps {
+               type uint64;
+             }
+             leaf ct-bw5-bps {
+               type uint64;
+             }
+             leaf ct-bw6-bps {
+               type uint64;
+             }
+             leaf ct-bw7-bps {
+               type uint64;
+             }
+           }
+           list detour-bandwidth {
+             leaf total-reserved-bandwidth-bps {
+               type uint64;
+               description "Total amount of bandwidth currently reserved in bits per second";
+             }
+           }
+           list overbooked-bandwidth {
+             leaf total-reserved-bandwidth-bps {
+               type uint64;
+               description "Total amount of bandwidth currently reserved in bits per second";
+             }
+           }
+           list overbooked-ct-bandwidth {
+             leaf ct-bw0-bps {
+               type uint64;
+             }
+             leaf ct-bw1-bps {
+               type uint64;
+             }
+             leaf ct-bw2-bps {
+               type uint64;
+             }
+             leaf ct-bw3-bps {
+               type uint64;
+             }
+             leaf ct-bw4-bps {
+               type uint64;
+             }
+             leaf ct-bw5-bps {
+               type uint64;
+             }
+             leaf ct-bw6-bps {
+               type uint64;
+             }
+             leaf ct-bw7-bps {
+               type uint64;
+             }
+           }
+           leaf active-reservation {
+             type int32;
+             description "Number of active reservations";
+           }
+           leaf preemption-count {
+             type int32;
+             description "Number of preemptions that occurred on an interface";
+           }
+           leaf update-threshold-max-reservable {
+             type string;
+             description "Change in non-rsvp bandwidth to trigger IGP update with units appended";
+           }
+           leaf update-threshold-max-reservable-percent {
+             type int32;
+             description "Percentage change in max-reservable bandwidth to trigger IGP update";
+           }
+           leaf update-threshold {
+             type jt:unsigned-float;
+             description "Percentage change in reserved bandwidth to trigger IGP update";
+           }
+           leaf update-threshold-value {
+             type string;
+             description "Change in reserved bandwidth to trigger IGP update with appended units";
+           }
+           leaf subscription {
+             type int32;
+             description "Percentage of link capacity available for bandwidth reservations";
+           }
+           leaf sr-subscription {
+             type int32;
+             description "Percentage of link capacity available after spring traffic";
+           }
+           leaf bc {
+             type int32;
+             description "Bandwidth constraint (0..7)";
+           }
+           leaf bc-description {
+             type string;
+             description "Description of the bandwidth constraint";
+           }
+           leaf static-bc-bandwidth {
+             type string;
+             description "Static bandwidth capacity for a bandwidth constraint with units appended";
+           }
+           leaf ct-class {
+             type int32;
+             description "Class type (0..7)";
+           }
+           leaf static-bandwidth {
+             type string;
+             description "Static bandwidth capacity of the link with units appended";
+           }
+           leaf available-bandwidth {
+             type string;
+             description "Amount of bandwidth available for reservations with units appended";
+           }
+           leaf ct-subscription {
+             type int32;
+             description "Subscription percentage per traffic class";
+           }
+           leaf max-available-bandwidth {
+             type string;
+             description "Maximum amount of bandwidth available for reservations, including the subscription factor, with units appended";
+           }
+           leaf max-available-description {
+             type string;
+             description "Description of the computation of the maximum available bandwidth";
+           }
+         }
+         container detour {
+           container explicit-route {
+             leaf explicit-route.heading {
+               type string;
+               description "Explicit Route Object (ERO)";
+             }
+             container explicit-route-element {
+               leaf address {
+                 type jt:ipaddr;
+               }
+               leaf explicit-route-type {
+                 type string;
+               }
+               leaf telink-id {
+                 type int32;
+                 description "Link identifier of unnumbered link";
+               }
+             }
+           }
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf sender-tspec {
+             type string;
+             description "Sender TSpec";
+           }
+           leaf lsp-diffserv-info {
+             type string;
+             description "LSP DiffServ info";
+           }
+           leaf ct-bw {
+             type string;
+             description "Per-class bandwidth requested for E-LSPs and L-LSPs";
+           }
+           leaf adspec {
+             type string;
+             description "Adspec data element in an RSVP Path message";
+           }
+           leaf path-mtu {
+             type int32;
+             description "The value of the path MTU, as negotiated by the network";
+           }
+           leaf path-mtu-in-kernel {
+             type int32;
+             description "The value of the MTU used locally for forwarding";
+           }
+           leaf label-out {
+             type string;
+             description "Outgoing label";
+           }
+           container packet-information {
+             leaf packet-information.heading {
+               type string;
+               description "RSVP packets sent or received per session";
+             }
+             leaf previous-hop {
+               type jt:ipaddr;
+               description "Previous-hop address";
+             }
+             leaf next-hop {
+               type jt:ipaddr;
+               description "Next-hop address";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf count {
+               type int32;
+             }
+             leaf notify-destination {
+               type jt:ipaddr;
+               description "Notify address";
+             }
+             leaf entropy-label {
+               type string;
+               description "Entropy label";
+             }
+             leaf in-message-handle {
+               type string;
+               description "RSVP I/O handle for incoming message";
+             }
+             leaf in-message-id {
+               type uint32;
+               description "Incoming Message ID";
+             }
+             leaf in-epoch {
+               type uint32;
+               description "Incoming Epoch";
+             }
+             leaf out-message-state {
+               type string;
+               description "RSVP I/O state for outgoing message";
+             }
+             leaf out-message-id {
+               type uint32;
+               description "Outgoing Message ID";
+             }
+             leaf out-epoch {
+               type uint32;
+               description "Outgoing Epoch";
+             }
+           }
+           container record-route {
+             leaf record-route.heading {
+               type string;
+               description "Record Route Object (RRO)";
+             }
+             leaf address {
+               type jt:ipaddr;
+             }
+             leaf telink-id {
+               type int32;
+               description "Link identifier of unnumbered link";
+             }
+             leaf self {
+               type empty;
+             }
+             leaf incomplete {
+               type empty;
+             }
+           }
+         }
+         container detour-branch {
+           container explicit-route {
+             leaf explicit-route.heading {
+               type string;
+               description "Explicit Route Object (ERO)";
+             }
+             container explicit-route-element {
+               leaf address {
+                 type jt:ipaddr;
+               }
+               leaf explicit-route-type {
+                 type string;
+               }
+               leaf telink-id {
+                 type int32;
+                 description "Link identifier of unnumbered link";
+               }
+             }
+           }
+           leaf source-address {
+             type jt:ipaddr;
+           }
+           leaf skip-address {
+             type jt:ipaddr;
+             description "Address of node or link to be skipped";
+           }
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf sender-tspec {
+             type string;
+             description "Sender TSpec";
+           }
+           leaf adspec {
+             type string;
+             description "Adspec data element in an RSVP Path message";
+           }
+           leaf path-mtu {
+             type int32;
+             description "The value of the path MTU, as negotiated by the network";
+           }
+           container record-route {
+             leaf record-route.heading {
+               type string;
+               description "Record Route Object (RRO)";
+             }
+             leaf address {
+               type jt:ipaddr;
+             }
+             leaf telink-id {
+               type int32;
+               description "Link identifier of unnumbered link";
+             }
+             leaf self {
+               type empty;
+             }
+             leaf incomplete {
+               type empty;
+             }
+           }
+           container packet-information {
+             leaf packet-information.heading {
+               type string;
+               description "RSVP packets sent or received per session";
+             }
+             leaf previous-hop {
+               type jt:ipaddr;
+               description "Previous-hop address";
+             }
+             leaf next-hop {
+               type jt:ipaddr;
+               description "Next-hop address";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf count {
+               type int32;
+             }
+             leaf notify-destination {
+               type jt:ipaddr;
+               description "Notify address";
+             }
+             leaf entropy-label {
+               type string;
+               description "Entropy label";
+             }
+             leaf in-message-handle {
+               type string;
+               description "RSVP I/O handle for incoming message";
+             }
+             leaf in-message-id {
+               type uint32;
+               description "Incoming Message ID";
+             }
+             leaf in-epoch {
+               type uint32;
+               description "Incoming Epoch";
+             }
+             leaf out-message-state {
+               type string;
+               description "RSVP I/O state for outgoing message";
+             }
+             leaf out-message-id {
+               type uint32;
+               description "Outgoing Message ID";
+             }
+             leaf out-epoch {
+               type uint32;
+               description "Outgoing Epoch";
+             }
+           }
+           container detour-branch-labels {
+             leaf label-in {
+               type string;
+               description "Incoming label";
+             }
+             leaf label-out {
+               type string;
+               description "Outgoing label";
+             }
+           }
+         }
+         container mpls-lsp {
+           leaf destination-address {
+             type jt:ipaddr;
+             description "Session destination address";
+           }
+           leaf source-address {
+             type jt:ipaddr;
+           }
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf route-count {
+             type int32;
+             description "Number of active routes";
+           }
+           leaf is-primary {
+             type empty;
+             description "Path is a primary path";
+           }
+           leaf active-path {
+             type string;
+             description "Path that the LSP is currently using";
+           }
+           leaf name {
+             type string;
+           }
+           leaf bidirectional {
+             type empty;
+             description "LSP is bidirectional";
+           }
+           leaf associated-bidirectional {
+             type empty;
+             description "LSP is associated-bidirectional";
+           }
+           leaf ext-assoc-bidir {
+             type empty;
+             description "Extended associated bidirectional LSP";
+           }
+           leaf lsp-packets {
+             type string;
+             description "LSP packet counters";
+           }
+           leaf lsp-bytes {
+             type string;
+             description "LSP byte counters";
+           }
+           container mpls-lsp-path {
+             leaf path-active {
+               type empty;
+               description "Whether the path is active or not";
+             }
+             leaf title {
+               type string;
+             }
+             leaf name {
+               type string;
+             }
+             leaf received-rro {
+               type string;
+               description "RRO returned by the signaling protocol";
+             }
+             container admin-groups {
+               leaf admin-groups.heading {
+                 type string;
+               }
+               leaf color {
+                 type int32;
+               }
+               leaf no-group-flag {
+                 type empty;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container admin-groups-extended {
+               leaf admin-groups-extended.heading {
+                 type string;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container srlg {
+               leaf srlg.heading {
+                 type string;
+               }
+               leaf-list srlg-name {
+                 type string;
+                 description "Name of the srlg";
+               }
+             }
+             container mpls-lsp-upstream-label {
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+             container explicit-route {
+               leaf explicit-route.heading {
+                 type string;
+                 description "Explicit Route Object (ERO)";
+               }
+               container explicit-route-element {
+                 leaf address {
+                   type jt:ipaddr;
+                 }
+                 leaf explicit-route-type {
+                   type string;
+                 }
+                 leaf telink-id {
+                   type int32;
+                   description "Link identifier of unnumbered link";
+                 }
+               }
+             }
+             container oam-state {
+               leaf oam-bfd-session-state {
+                 type string;
+               }
+               leaf oam-lsp-ping-state {
+                 type string;
+               }
+             }
+             list path-history {
+               leaf sequence-number {
+                 type int64;
+                 description "History event number";
+               }
+               leaf time {
+                 type string;
+                 description "Time of the event";
+               }
+               leaf log {
+                 type string;
+                 description "Supplemental information of the event";
+               }
+               leaf route {
+                 type string;
+                 description "Latest RRO contents, as reported by RSVP";
+               }
+             }
+             container path-available-bandwidth {
+               leaf path-available-bandwidth.heading {
+                 type string;
+                 description "Available bandwidth on an LSP path";
+               }
+               leaf bandwidth {
+                 type int32;
+               }
+               leaf class-type {
+                 type int32;
+               }
+               leaf class-bandwidth {
+                 type int32;
+               }
+             }
+             container layer2-connection {
+               leaf neighbor-address {
+                 type jt:ipaddr;
+                 description "IP address of this neighbor";
+               }
+               leaf interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf vc-id {
+                 type int32;
+               }
+               container connection-bandwidth {
+                 leaf connection-bandwidth.heading {
+                   type string;
+                   description "Bandwidth of a layer 2 connection";
+                 }
+                 leaf bandwidth {
+                   type int32;
+                 }
+                 leaf class-type {
+                   type int32;
+                 }
+                 leaf class-bandwidth {
+                   type int32;
+                 }
+               }
+             }
+             leaf path-state {
+               type string;
+               description "State of the MPLS path";
+             }
+             leaf cos {
+               type int32;
+               description "CoS value";
+             }
+             leaf no-decrement-ttl {
+               type empty;
+               description "TTL";
+             }
+             leaf preference {
+               type int32;
+               description "Preference for the route";
+             }
+             leaf path-soft-preemption-pending {
+               type empty;
+               description "Soft preemption pending for this path";
+             }
+             leaf setup-priority {
+               type int32;
+               description "Priority with respect to taking resources";
+             }
+             leaf hold-priority {
+               type int32;
+               description "Priority with respect to holding resources";
+             }
+             leaf actual-setup-priority {
+               type int32;
+             }
+             leaf actual-hold-priority {
+               type int32;
+             }
+             leaf non-active-hold-priority {
+               type int32;
+               description "Signaled hold priority for non-active path";
+             }
+             leaf external-lsp-cspf-type {
+               type string;
+             }
+             leaf bandwidth {
+               type int32;
+             }
+             leaf actual-bandwidth {
+               type int32;
+             }
+             leaf per-class-bandwidth-heading {
+               type string;
+             }
+             leaf bandwidth_ct0 {
+               type int32;
+             }
+             leaf bandwidth_ct1 {
+               type int32;
+             }
+             leaf bandwidth_ct2 {
+               type int32;
+             }
+             leaf bandwidth_ct3 {
+               type int32;
+             }
+             leaf path-adaptive {
+               type empty;
+               description "LSP is adaptive";
+             }
+             leaf path-no-recordroute {
+               type empty;
+               description "Record route disabled";
+             }
+             leaf hoplimit {
+               type int32;
+               description "Maximum number of hops that can be traversed";
+             }
+             leaf optimize-timer {
+               type int32;
+               description "Optimize timer";
+             }
+             leaf smart-optimize-timer {
+               type int32;
+               description "Smart optimize timer";
+             }
+             leaf retry-timer {
+               type int32;
+             }
+             leaf retry-limit {
+               type int32;
+             }
+             leaf path-flap-count {
+               type int32;
+             }
+             leaf path-mbb-count {
+               type int32;
+             }
+             leaf path-in-place-update-count {
+               type int32;
+             }
+             leaf external-cspf-status {
+               type string;
+               description "Status provided by External CSPF computation";
+             }
+             leaf cspf-status {
+               type string;
+               description "Status returned by CSPF computation";
+             }
+             container mpls-srlg {
+               leaf-list srlg-name {
+                 type string;
+                 description "Name of the srlg";
+               }
+               leaf srlg-value {
+                 type uint32;
+                 description "Value of the srlg";
+               }
+               leaf srlg-cost {
+                 type uint32;
+                 description "Cost of the srlg";
+               }
+             }
+           }
+           container mpls-lsp-attributes {
+             container mpls-lsp-upstream-label {
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+             leaf signal-type {
+               type string;
+             }
+             leaf encoding-type {
+               type string;
+               description "LSP encoding type";
+             }
+             leaf switching-type {
+               type string;
+               description "LSP switching capability";
+             }
+             leaf gpid {
+               type string;
+               description "LSP generalized PID";
+             }
+             leaf-list protection-type {
+               type string;
+               description "LSP protection desired";
+             }
+           }
+           leaf lsp-description {
+             type string;
+             description "LSP description string (up to 80 characters)";
+           }
+           leaf lsp-pktbytes {
+             type string;
+             description "LSP packet and byte counters";
+           }
+           leaf lsp-id {
+             type string;
+           }
+           leaf lsp-type {
+             type string;
+             description "Type of LSP";
+           }
+           leaf egress-label-operation {
+             type string;
+             description "Label advertised by egress";
+           }
+           leaf lsp-control-status {
+             type string;
+             description "Control status of LSP configured to be externally controlled";
+           }
+           leaf lsp-selfping-status {
+             type string;
+           }
+           leaf lsp-diffserv-te-info {
+             type string;
+             description "LSP support of DiffServ-TE extensions";
+           }
+           leaf lsp-associated-lspname {
+             type string;
+             description "Associated LSP name";
+           }
+           leaf lsp-associated-lspsrc {
+             type string;
+             description "Associated LSP source address";
+           }
+           leaf ext-assoc-bidir-direction {
+             type string;
+             description "Ext-Assoc-Bidir direction";
+           }
+           leaf aggregate-lsp-pktbytes {
+             type string;
+             description "Aggregate LSP packet and byte counters";
+           }
+           leaf no-statistics {
+             type empty;
+             description "No statistics are available for this session";
+           }
+           leaf mpls-p2mp-name {
+             type string;
+           }
+           leaf is-fastreroute {
+             type empty;
+             description "Fast reroute (one-to-one backup) is desired";
+           }
+           leaf is-linkprotection {
+             type empty;
+             description "Link protection (facility backup) is desired";
+           }
+           leaf is-nodeprotection {
+             type empty;
+             description "Link-Node protection (facility backup) is desired";
+           }
+           leaf is-inter-domain-path {
+             type empty;
+             description "Inter-domain LSP";
+           }
+           leaf load-balance {
+             type string;
+             description "Load-balancing algorithm chosen";
+           }
+           leaf metric {
+             type int32;
+           }
+           leaf metric-follows-igp {
+             type empty;
+             description "LSP routes follow the destination IGP metric";
+           }
+           leaf metric-follows-igp-conditionally {
+             type empty;
+             description "LSP routes follow the destination IGP metric conditionally";
+           }
+           leaf actual-metric {
+             type int32;
+           }
+           leaf track-install-prefix-igp-metric {
+             type string;
+             description "Install prefixes tracking their IGP metric";
+           }
+           leaf revert-timer {
+             type string;
+             description "Hold-down time before reverting to primary path.";
+           }
+           leaf revert-timer-remain {
+             type string;
+             description "Time remaining before reverting:";
+           }
+           leaf optimize-protection-timer {
+             type int32;
+             description "Optimize protection timer";
+           }
+           leaf lsp-creation-time {
+             type string;
+             description "Time when the LSP was created";
+           }
+           leaf lsp-soft-preemption-counter {
+             type int32;
+             description "Number of times the LSP was soft preempted";
+           }
+           leaf lsp-soft-preemption-time {
+             type string;
+             description "Time when the LSP was last soft preempted";
+           }
+           leaf retry-timer {
+             type int32;
+           }
+           leaf retry-limit {
+             type int32;
+           }
+           container admin-groups {
+             leaf admin-groups.heading {
+               type string;
+             }
+             leaf color {
+               type int32;
+             }
+             leaf no-group-flag {
+               type empty;
+             }
+             leaf-list admin-group-name {
+               type string;
+               description "Name of the admin group";
+             }
+             leaf admin-group-number {
+               type int32;
+               description "Number of the admin group";
+             }
+           }
+           container admin-groups-extended {
+             leaf admin-groups-extended.heading {
+               type string;
+             }
+             leaf-list admin-group-name {
+               type string;
+               description "Name of the admin group";
+             }
+             leaf admin-group-number {
+               type int32;
+               description "Number of the admin group";
+             }
+           }
+           container mpls-srlg {
+             leaf-list srlg-name {
+               type string;
+               description "Name of the srlg";
+             }
+             leaf srlg-value {
+               type uint32;
+               description "Value of the srlg";
+             }
+             leaf srlg-cost {
+               type uint32;
+               description "Cost of the srlg";
+             }
+           }
+           container mpls-lsp-autobandwidth {
+             leaf monitor-lsp-bandwidth {
+               type empty;
+               description "Enable the bandwidth monitoring mode";
+             }
+             leaf minimum-bandwidth {
+               type int32;
+               description "Configured LSP minimum bandwidth";
+             }
+             leaf maximum-bandwidth {
+               type int32;
+               description "Configured LSP maximum bandwidth";
+             }
+             leaf dynamic-minimum-bandwidth {
+               type int32;
+               description "LSP dynamic minimum bandwidth (or last Max Avg Bw)";
+             }
+             leaf adjust-timer {
+               type int32;
+               description "Configured LSP adjust timer";
+             }
+             leaf adjust-threshold {
+               type int32;
+               description "Percentage change in average LSP utilization to trigger autoadjustment";
+             }
+             leaf adjust-threshold-absolute {
+               type int32;
+               description "Configured LSP Adjustment Threshold Absolute Bandwidth value";
+             }
+             leaf adjust-threshold-activate-bandwidth {
+               type int32;
+               description "Configured LSP adjust threshold bandwidth";
+             }
+             leaf maximum-average-bandwidth {
+               type int32;
+               description "Maximum Average BW";
+             }
+             leaf time-to-adjust {
+               type int32;
+               description "Time in which LSP will autoadjust bandwidth";
+             }
+             leaf autobw-minimum-bandwidth-adjust-interval {
+               type int32;
+             }
+             leaf autobw-minimum-bandwidth-adjust-threshold-percent {
+               type int32;
+             }
+             leaf autobw-minimum-bandwidth-adjust-threshold-value {
+               type int32;
+             }
+             leaf time-to-expire-minimum-bandwidth-adjust {
+               type int32;
+               description "Time in which LSP will start changing minimum bandwidth";
+             }
+             leaf overflow-limit {
+               type int32;
+               description "Configured limit of consecutive overflow samples for LSP";
+             }
+             leaf overflow-sample-count {
+               type int32;
+               description "Number of consecutive overflow samples encountered";
+             }
+             leaf underflow-limit {
+               type int32;
+               description "Configured limit of consecutive underflow samples for LSP";
+             }
+             leaf underflow-sample-count {
+               type int32;
+               description "Number of consecutive underflow samples encountered";
+             }
+             leaf underflow-max-avg-bandwidth {
+               type int32;
+               description "Highest average bandwidth recorded so far for underflow samples";
+             }
+           }
+         }
+         leaf lsp-description {
+           type string;
+           description "LSP description string (up to 80 characters)";
+         }
+         leaf lsp-pktbytes {
+           type string;
+           description "LSP packet and byte counters";
+         }
+         leaf lsp-id {
+           type string;
+         }
+         leaf p2mp-branch-id {
+           type uint32;
+         }
+         leaf xc-psb-list {
+           type string;
+           description "List of PSBs part of the RSVP xc";
+         }
+         leaf xc-rsb-list {
+           type string;
+           description "List of RSBs part of the RSVP xc";
+         }
+         leaf is-detour {
+           type empty;
+           description "Session is a detour session";
+         }
+         leaf lsp-path-type {
+           type string;
+           description "Primary or secondary LSP path";
+         }
+         leaf graceful-deletion-triggered {
+           type empty;
+           description "Initiated graceful deletion procedure for the LSP";
+         }
+         leaf mpls-lsp-type {
+           type string;
+           description "Type of LSP";
+         }
+         leaf source-tna-address {
+           type jt:ipaddr;
+           description "Source TNA address for the connection";
+         }
+         leaf destination-tna-address {
+           type jt:ipaddr;
+           description "Destination TNA address for the connection";
+         }
+         leaf upstream-label-in {
+           type string;
+           description "Incoming upstream label";
+         }
+         leaf upstream-label-out {
+           type string;
+           description "Outgoing upstream label";
+         }
+         leaf lsp-associated-lspname {
+           type string;
+           description "Associated LSP name";
+         }
+         leaf lsp-associated-lspsrc {
+           type string;
+           description "Associated LSP source address";
+         }
+         leaf mpls-p2mp-lsp-name {
+           type string;
+         }
+         leaf p2mp-remerge-state {
+           type string;
+           description "Re-merge status of the P2MP sub-LSP";
+         }
+         leaf lsp-aggregation {
+           type string;
+           description "Supports LSP aggregation";
+         }
+         leaf suggested-label-in {
+           type int32;
+           description "Suggested label received";
+         }
+         leaf suggested-label-out {
+           type int32;
+           description "Suggested label sent";
+         }
+         leaf recovery-label-in {
+           type int32;
+         }
+         leaf recovery-label-out {
+           type int32;
+         }
+         leaf no-statistics {
+           type empty;
+           description "No statistics are available for this session";
+         }
+         leaf psb-lifetime {
+           type int32;
+           description "Lifetime for a PSB after which the entry expires";
+         }
+         leaf psb-creation-time {
+           type string;
+           description "Time when this PSB was created";
+         }
+         leaf path-mtu {
+           type int32;
+           description "The value of the path MTU, as negotiated by the network";
+         }
+         leaf path-mtu-in-kernel {
+           type int32;
+           description "The value of the MTU used locally for forwarding";
+         }
+         leaf sender-tspec {
+           type string;
+           description "Sender TSpec";
+         }
+         leaf resv-fspec {
+           type string;
+           description "Resv FSpec";
+         }
+         leaf session-priority {
+           type string;
+           description "Setup/hold Priority";
+         }
+         leaf adspec {
+           type string;
+           description "Adspec data element in an RSVP Path message";
+         }
+         leaf lsp-diffserv-info {
+           type string;
+           description "LSP DiffServ info";
+         }
+         leaf ct-bw {
+           type string;
+           description "Per-class bandwidth requested for E-LSPs and L-LSPs";
+         }
+         leaf tunnel-id {
+           type int32;
+         }
+         leaf proto-id {
+           type int32;
+         }
+         leaf p2mp-subgroup-orig {
+           type jt:ipaddr;
+         }
+         leaf self-id {
+           type string;
+           description "Statistics identifier for RSVP path state control block";
+         }
+         leaf nh-statistics-id {
+           type string;
+           description "Nexthop statistics identifier for RSVP path at ingress";
+         }
+         leaf route-statistics-id {
+           type string;
+           description "Route statistics identifier for RSVP path at egress";
+         }
+         leaf nh-traffic-class-statistics {
+           type empty;
+           description "Traffic class statistics are enabled at ingress";
+         }
+         leaf route-traffic-class-statistics {
+           type empty;
+           description "Traffic class statistics are enabled at egress";
+         }
+         leaf session-id {
+           type int32;
+           description "Unique identifier for RSVP session";
+         }
+         leaf is-fastreroute {
+           type empty;
+           description "Fast reroute (one-to-one backup) is desired";
+         }
+         leaf is-linkprotection {
+           type empty;
+           description "Link protection (facility backup) is desired";
+         }
+         leaf is-nodeprotection {
+           type empty;
+           description "Link-Node protection (facility backup) is desired";
+         }
+         leaf ep-plr-protector {
+           type string;
+         }
+         leaf is-soft-preemption {
+           type empty;
+           description "Soft-preemption is desired";
+         }
+         leaf rsvp-path-status {
+           type string;
+         }
+         leaf bypass-name {
+           type string;
+           description "Name of the bypass";
+         }
+         leaf rsvp-lp-backup-route-cnt {
+           type int32;
+           description "Number of routes tunneled through this bypass";
+         }
+         leaf rsvp-lp-backup-lsp-cnt {
+           type int32;
+           description "Number of backup RSVP LSPs tunneled through this bypass";
+         }
+         leaf rsvp-lp-psb-cnt {
+           type int32;
+           description "Number of sessions tunneled through this bypass";
+         }
+         leaf explicit-hop-expanded {
+           type string;
+           description "Explicit hop(s) expanded by this LSR";
+         }
+         container layer2-tspec {
+           leaf switching-granularity {
+             type string;
+             description "Layer 2 switching granularity";
+           }
+           leaf mtu {
+             type int32;
+             description "MTU along an interface";
+           }
+           leaf atm-vp-bundle-size {
+             type int32;
+             description "VP bundle size";
+           }
+           leaf atm-cell-bundle-size {
+             type int32;
+             description "Maximum cell bundle size";
+           }
+         }
+         container rsvp-lsp-enh-local-prot-status {
+           leaf rsvp-lsp-enh-local-prot-admin-status {
+             type string;
+             description "Enhanced FRR local protection admin status";
+           }
+           leaf rsvp-lsp-enh-local-prot-disabled-reason {
+             type string;
+             description "Enhanced FRR local protection disabled reason";
+           }
+           leaf rsvp-lsp-enh-local-prot-refresh-interval {
+             type string;
+             description "Enhanced FRR refresh interval set for LSP";
+           }
+         }
+         container rsvp-lsp-enh-local-prot-upstream {
+           leaf rsvp-lsp-enh-lp-upstream-status {
+             type string;
+             description "Enhanced FRR local protection status upstream";
+           }
+           leaf rsvp-lsp-enh-lp-upstream-lp {
+             type string;
+             description "The node is LP-MP for Phop";
+           }
+           leaf rsvp-lsp-enh-lp-phop-addr {
+             type jt:ipaddr;
+             description "Phop PLR for which this node is LP-MP";
+           }
+           leaf rsvp-lsp-enh-lp-upstream-lp-status {
+             type string;
+             description "Current upstream LP-MP status";
+           }
+           leaf rsvp-lsp-enh-lp-upstream-np {
+             type string;
+             description "The node is NP-MP for PPhop";
+           }
+           leaf rsvp-lsp-enh-lp-pphop-addr {
+             type jt:ipaddr;
+             description "PPhop PLR for which this node is NP-MP";
+           }
+           leaf rsvp-lsp-enh-lp-upstream-np-status {
+             type string;
+             description "Current upstream NP-MP status";
+           }
+           leaf rsvp-lsp-enh-lp-upstream-disabled-reason {
+             type string;
+             description "Reason enhanced local protection is disabled upstream";
+           }
+           leaf rsvp-lsp-enh-local-prot-refresh-interval {
+             type string;
+             description "Enhanced FRR refresh interval set for LSP";
+           }
+         }
+         container rsvp-lsp-enh-local-prot-downstream {
+           leaf rsvp-lsp-enh-lp-downstream-status {
+             type string;
+             description "Enhanced FRR local protection status downstream";
+           }
+           leaf rsvp-lsp-enh-lp-downstream-lp {
+             type string;
+             description "The node has made link protection available";
+           }
+           leaf rsvp-lsp-enh-lp-nhop-addr {
+             type jt:ipaddr;
+             description "Nhop MP neigbor address";
+           }
+           leaf rsvp-lsp-enh-lp-downstream-np {
+             type string;
+             description "The node has made node protection available";
+           }
+           leaf rsvp-lsp-enh-lp-nnhop-addr {
+             type jt:ipaddr;
+             description "NNhop MP neighbor address";
+           }
+           leaf rsvp-lsp-enh-lp-current-status {
+             type string;
+             description "Current downstream protection status";
+           }
+           leaf rsvp-lsp-enh-lp-downstream-disabled-reason {
+             type string;
+             description "Reason enhanced local protection is disabled downstream";
+           }
+           leaf rsvp-lsp-enh-local-prot-refresh-interval {
+             type string;
+             description "Enhanced FRR refresh interval set for LSP";
+           }
+         }
+         container record-route {
+           leaf record-route.heading {
+             type string;
+             description "Record Route Object (RRO)";
+           }
+           leaf address {
+             type jt:ipaddr;
+           }
+           leaf telink-id {
+             type int32;
+             description "Link identifier of unnumbered link";
+           }
+           leaf self {
+             type empty;
+           }
+           leaf incomplete {
+             type empty;
+           }
+         }
+         container rsvp-lsp-pop-and-fwd {
+           leaf rsvp-lsp-pop-and-fwd.heading {
+             type string;
+           }
+           leaf etld-in {
+             type uint32;
+             description "Incoming effective transport label stack depth";
+           }
+           leaf etld-out {
+             type uint32;
+             description "Outgoing effective transport label stack depth";
+           }
+           leaf delegation-hop {
+             type string;
+             description "Delegation state";
+           }
+         }
+         container lsp-attribute-flags {
+           leaf non-php {
+             type empty;
+             description "Non-PHP";
+           }
+           leaf oob {
+             type empty;
+             description "Out-of-band mapping";
+           }
+         }
+         list lp-history {
+           leaf sequence-number {
+             type int64;
+             description "History event number";
+           }
+           leaf time {
+             type string;
+             description "Time of the event";
+           }
+           leaf log {
+             type string;
+             description "Supplemental information of the event";
+           }
+           leaf route {
+             type string;
+             description "Latest RRO contents, as reported by RSVP";
+           }
+         }
+         container protection-attribute {
+           leaf protect-lsp-type {
+             type string;
+             description "Type of LSP for protection purposes";
+           }
+           leaf protect-lsp-role {
+             type string;
+             description "Role of LSP for protection purposes";
+           }
+           leaf protect-protection-type {
+             type string;
+             description "Type of protection being used";
+           }
+           leaf protect-secondary-operational {
+             type empty;
+             description "Protecting LSP is operational and carrying protected traffic";
+           }
+         }
+         container association-attribute {
+           leaf association-type {
+             type string;
+             description "Type of association object";
+           }
+           leaf association-source {
+             type jt:ipaddr;
+             description "Source node defining the association";
+           }
+           leaf association-id {
+             type int32;
+             description "Identifier for the association";
+           }
+         }
+       }
+       container mpls-p2mp-lsp {
+         leaf mpls-p2mp-name {
+           type string;
+         }
+         leaf mpls-p2mp-branch-count {
+           type string;
+         }
+       }
+       container mpls-container-lsp {
+         description "MPLS container-label-switched path information";
+         leaf mpls-container-lsp-name {
+           type string;
+         }
+         leaf mpls-container-lsp-state {
+           type string;
+         }
+         leaf mpls-container-member-count {
+           type string;
+         }
+         leaf container-active-path {
+           type string;
+           description "Path that the member LSP is currently using";
+         }
+         leaf container-is-primary {
+           type empty;
+           description "Path is a primary path";
+         }
+         leaf lsp-packets {
+           type string;
+           description "LSP packet counters";
+         }
+         leaf lsp-bytes {
+           type string;
+           description "LSP byte counters";
+         }
+         leaf lsp-control-status {
+           type string;
+           description "Control status of LSP configured to be externally controlled";
+         }
+         leaf lsp-selfping-status {
+           type string;
+         }
+         container mpls-lsp-path {
+           description "Primary or secondary LSP path";
+           leaf received-rro {
+             type string;
+             description "RRO returned by the signaling protocol";
+           }
+           container admin-groups {
+             leaf admin-groups.heading {
+               type string;
+             }
+             leaf color {
+               type int32;
+             }
+             leaf no-group-flag {
+               type empty;
+             }
+             leaf-list admin-group-name {
+               type string;
+               description "Name of the admin group";
+             }
+             leaf admin-group-number {
+               type int32;
+               description "Number of the admin group";
+             }
+           }
+           container admin-groups-extended {
+             leaf admin-groups-extended.heading {
+               type string;
+             }
+             leaf-list admin-group-name {
+               type string;
+               description "Name of the admin group";
+             }
+             leaf admin-group-number {
+               type int32;
+               description "Number of the admin group";
+             }
+           }
+           container srlg {
+             leaf srlg.heading {
+               type string;
+             }
+             leaf-list srlg-name {
+               type string;
+               description "Name of the srlg";
+             }
+           }
+           container mpls-lsp-upstream-label {
+             description "Upstream label configured for the LSP";
+             leaf vlan-id-label {
+               type uint32;
+               description "VLAN ID label configured for the LSP";
+             }
+           }
+           container explicit-route {
+             description "Explicit Route Object (ERO)";
+             leaf explicit-route.heading {
+               type string;
+               description "Explicit Route Object (ERO)";
+             }
+             container explicit-route-element {
+               leaf address {
+                 type jt:ipaddr;
+               }
+               leaf explicit-route-type {
+                 type string;
+               }
+               leaf telink-id {
+                 type int32;
+                 description "Link identifier of unnumbered link";
+               }
+             }
+           }
+           container oam-state {
+             description "OAM state information";
+             leaf oam-bfd-session-state {
+               type string;
+             }
+             leaf oam-lsp-ping-state {
+               type string;
+             }
+           }
+           list path-history {
+             description "Log over time of LSP path-related events";
+             leaf sequence-number {
+               type int64;
+               description "History event number";
+             }
+             leaf time {
+               type string;
+               description "Time of the event";
+             }
+             leaf log {
+               type string;
+               description "Supplemental information of the event";
+             }
+             leaf route {
+               type string;
+               description "Latest RRO contents, as reported by RSVP";
+             }
+           }
+           container path-available-bandwidth {
+             description "Available bandwidth on an LSP path";
+             leaf path-available-bandwidth.heading {
+               type string;
+               description "Available bandwidth on an LSP path";
+             }
+             leaf bandwidth {
+               type int32;
+             }
+             leaf class-type {
+               type int32;
+             }
+             leaf class-bandwidth {
+               type int32;
+             }
+           }
+           container layer2-connection {
+             description "Layer 2 connection using the LSP path";
+             leaf neighbor-address {
+               type jt:ipaddr;
+               description "IP address of this neighbor";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf vc-id {
+               type int32;
+             }
+             container connection-bandwidth {
+               description "Bandwidth of a layer 2 connection";
+               leaf connection-bandwidth.heading {
+                 type string;
+                 description "Bandwidth of a layer 2 connection";
+               }
+               leaf bandwidth {
+                 type int32;
+               }
+               leaf class-type {
+                 type int32;
+               }
+               leaf class-bandwidth {
+                 type int32;
+               }
+             }
+           }
+         }
+         container mpls-container-lsp-splitting-merging {
+           leaf minimum-member-lsps {
+             type int32;
+             description "Configured minimum LSPs";
+           }
+           leaf maximum-member-lsps {
+             type int32;
+             description "Configured maximum LSPs";
+           }
+           leaf aggregate-bandwidth {
+             type int32;
+             description "Aggregate bandwidth";
+           }
+           leaf current-bandwidth {
+             type int32;
+             description "Sampled Aggregate bandwidth";
+           }
+           leaf normalize-interval {
+             type int32;
+             description "Configured LSP normalize timer";
+           }
+           leaf splitting-merging-threshold {
+             type int32;
+             description "Percentage change in aggregate LSP utilization to trigger normalization";
+           }
+           leaf maximum-signaling-bandwidth {
+             type int32;
+             description "Configured signaling maximum bandwidth";
+           }
+           leaf minimum-signaling-bandwidth {
+             type int32;
+             description "Configured signaling minimum bandwidth";
+           }
+           leaf maximum-splitting-bandwidth {
+             type int32;
+             description "Configured splitting maximum bandwidth";
+           }
+           leaf minimum-splitting-bandwidth {
+             type int32;
+             description "Configured splitting minimum bandwidth";
+           }
+           leaf normalization-mode {
+             type string;
+           }
+           leaf sampling-mode {
+             type string;
+             description "Sampling Attributes";
+           }
+           leaf time-to-normalize {
+             type int32;
+             description "Time in which LSP will normalize";
+           }
+           leaf aggregate-packets {
+             type int32;
+             description "Aggregate packets";
+           }
+           leaf aggregate-bytes {
+             type int32;
+             description "Aggregate bytes";
+           }
+         }
+         container mpls-container-lsp-history {
+           description "Log over time of container LSP related events";
+           leaf sequence-number {
+             type int64;
+             description "History event number";
+           }
+           leaf time {
+             type string;
+             description "Time of the event";
+           }
+           leaf log {
+             type string;
+             description "Supplemental information of the event";
+           }
+           leaf route {
+             type string;
+             description "Latest RRO contents, as reported by RSVP";
+           }
+         }
+         container mpls-lsp-attributes {
+           container mpls-lsp-upstream-label {
+             description "Upstream label configured for the LSP";
+             leaf vlan-id-label {
+               type uint32;
+               description "VLAN ID label configured for the LSP";
+             }
+           }
+         }
+       }
+       container mpls-container-lsp-member-summary {
+         container mpls-container-lsp {
+           description "MPLS container-label-switched path information";
+           leaf mpls-container-lsp-name {
+             type string;
+           }
+           leaf mpls-container-lsp-state {
+             type string;
+           }
+           leaf mpls-container-member-count {
+             type string;
+           }
+           leaf container-active-path {
+             type string;
+             description "Path that the member LSP is currently using";
+           }
+           leaf container-is-primary {
+             type empty;
+             description "Path is a primary path";
+           }
+           leaf lsp-packets {
+             type string;
+             description "LSP packet counters";
+           }
+           leaf lsp-bytes {
+             type string;
+             description "LSP byte counters";
+           }
+           leaf lsp-control-status {
+             type string;
+             description "Control status of LSP configured to be externally controlled";
+           }
+           leaf lsp-selfping-status {
+             type string;
+           }
+           container mpls-lsp-path {
+             description "Primary or secondary LSP path";
+             leaf received-rro {
+               type string;
+               description "RRO returned by the signaling protocol";
+             }
+             container admin-groups {
+               leaf admin-groups.heading {
+                 type string;
+               }
+               leaf color {
+                 type int32;
+               }
+               leaf no-group-flag {
+                 type empty;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container admin-groups-extended {
+               leaf admin-groups-extended.heading {
+                 type string;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container srlg {
+               leaf srlg.heading {
+                 type string;
+               }
+               leaf-list srlg-name {
+                 type string;
+                 description "Name of the srlg";
+               }
+             }
+             container mpls-lsp-upstream-label {
+               description "Upstream label configured for the LSP";
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+             container explicit-route {
+               description "Explicit Route Object (ERO)";
+               leaf explicit-route.heading {
+                 type string;
+                 description "Explicit Route Object (ERO)";
+               }
+               container explicit-route-element {
+                 leaf address {
+                   type jt:ipaddr;
+                 }
+                 leaf explicit-route-type {
+                   type string;
+                 }
+                 leaf telink-id {
+                   type int32;
+                   description "Link identifier of unnumbered link";
+                 }
+               }
+             }
+             container oam-state {
+               description "OAM state information";
+               leaf oam-bfd-session-state {
+                 type string;
+               }
+               leaf oam-lsp-ping-state {
+                 type string;
+               }
+             }
+             list path-history {
+               description "Log over time of LSP path-related events";
+               leaf sequence-number {
+                 type int64;
+                 description "History event number";
+               }
+               leaf time {
+                 type string;
+                 description "Time of the event";
+               }
+               leaf log {
+                 type string;
+                 description "Supplemental information of the event";
+               }
+               leaf route {
+                 type string;
+                 description "Latest RRO contents, as reported by RSVP";
+               }
+             }
+             container path-available-bandwidth {
+               description "Available bandwidth on an LSP path";
+               leaf path-available-bandwidth.heading {
+                 type string;
+                 description "Available bandwidth on an LSP path";
+               }
+               leaf bandwidth {
+                 type int32;
+               }
+               leaf class-type {
+                 type int32;
+               }
+               leaf class-bandwidth {
+                 type int32;
+               }
+             }
+             container layer2-connection {
+               description "Layer 2 connection using the LSP path";
+               leaf neighbor-address {
+                 type jt:ipaddr;
+                 description "IP address of this neighbor";
+               }
+               leaf interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf vc-id {
+                 type int32;
+               }
+               container connection-bandwidth {
+                 description "Bandwidth of a layer 2 connection";
+                 leaf connection-bandwidth.heading {
+                   type string;
+                   description "Bandwidth of a layer 2 connection";
+                 }
+                 leaf bandwidth {
+                   type int32;
+                 }
+                 leaf class-type {
+                   type int32;
+                 }
+                 leaf class-bandwidth {
+                   type int32;
+                 }
+               }
+             }
+           }
+           container mpls-container-lsp-splitting-merging {
+             leaf minimum-member-lsps {
+               type int32;
+               description "Configured minimum LSPs";
+             }
+             leaf maximum-member-lsps {
+               type int32;
+               description "Configured maximum LSPs";
+             }
+             leaf aggregate-bandwidth {
+               type int32;
+               description "Aggregate bandwidth";
+             }
+             leaf current-bandwidth {
+               type int32;
+               description "Sampled Aggregate bandwidth";
+             }
+             leaf normalize-interval {
+               type int32;
+               description "Configured LSP normalize timer";
+             }
+             leaf splitting-merging-threshold {
+               type int32;
+               description "Percentage change in aggregate LSP utilization to trigger normalization";
+             }
+             leaf maximum-signaling-bandwidth {
+               type int32;
+               description "Configured signaling maximum bandwidth";
+             }
+             leaf minimum-signaling-bandwidth {
+               type int32;
+               description "Configured signaling minimum bandwidth";
+             }
+             leaf maximum-splitting-bandwidth {
+               type int32;
+               description "Configured splitting maximum bandwidth";
+             }
+             leaf minimum-splitting-bandwidth {
+               type int32;
+               description "Configured splitting minimum bandwidth";
+             }
+             leaf normalization-mode {
+               type string;
+             }
+             leaf sampling-mode {
+               type string;
+               description "Sampling Attributes";
+             }
+             leaf time-to-normalize {
+               type int32;
+               description "Time in which LSP will normalize";
+             }
+             leaf aggregate-packets {
+               type int32;
+               description "Aggregate packets";
+             }
+             leaf aggregate-bytes {
+               type int32;
+               description "Aggregate bytes";
+             }
+           }
+           container mpls-container-lsp-history {
+             description "Log over time of container LSP related events";
+             leaf sequence-number {
+               type int64;
+               description "History event number";
+             }
+             leaf time {
+               type string;
+               description "Time of the event";
+             }
+             leaf log {
+               type string;
+               description "Supplemental information of the event";
+             }
+             leaf route {
+               type string;
+               description "Latest RRO contents, as reported by RSVP";
+             }
+           }
+           container mpls-lsp-attributes {
+             container mpls-lsp-upstream-label {
+               description "Upstream label configured for the LSP";
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+           }
+         }
+       }
+       container container-rsvp-session {
+         container mpls-container-lsp {
+           leaf destination-address {
+             type jt:ipaddr;
+             description "Session destination address";
+           }
+           leaf source-address {
+             type jt:ipaddr;
+           }
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf route-count {
+             type int32;
+             description "Number of active routes";
+           }
+           leaf is-primary {
+             type empty;
+             description "Path is a primary path";
+           }
+           leaf active-path {
+             type string;
+             description "Path that the LSP is currently using";
+           }
+           leaf container-member-name {
+             type string;
+             description "Path that the member LSP is currently using";
+           }
+           leaf label-out {
+             type string;
+             description "Outgoing label";
+           }
+           container explicit-route {
+             leaf explicit-route.heading {
+               type string;
+               description "Explicit Route Object (ERO)";
+             }
+             container explicit-route-element {
+               leaf address {
+                 type jt:ipaddr;
+               }
+               leaf explicit-route-type {
+                 type string;
+               }
+               leaf telink-id {
+                 type int32;
+                 description "Link identifier of unnumbered link";
+               }
+             }
+           }
+           leaf lsp-description {
+             type string;
+             description "LSP description string (up to 80 characters)";
+           }
+           leaf container-active-path {
+             type string;
+             description "Path that the member LSP is currently using";
+           }
+           leaf container-is-primary {
+             type empty;
+             description "Path is a primary path";
+           }
+           leaf lsp-packets {
+             type string;
+             description "LSP packet counters";
+           }
+           leaf lsp-bytes {
+             type string;
+             description "LSP byte counters";
+           }
+           leaf lsp-control-status {
+             type string;
+             description "Control status of LSP configured to be externally controlled";
+           }
+           leaf lsp-selfping-status {
+             type string;
+           }
+           container mpls-lsp-path {
+             leaf name {
+               type string;
+             }
+             leaf received-rro {
+               type string;
+               description "RRO returned by the signaling protocol";
+             }
+             container admin-groups {
+               leaf admin-groups.heading {
+                 type string;
+               }
+               leaf color {
+                 type int32;
+               }
+               leaf no-group-flag {
+                 type empty;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container admin-groups-extended {
+               leaf admin-groups-extended.heading {
+                 type string;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container srlg {
+               leaf srlg.heading {
+                 type string;
+               }
+               leaf-list srlg-name {
+                 type string;
+                 description "Name of the srlg";
+               }
+             }
+             container mpls-lsp-upstream-label {
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+             container explicit-route {
+               leaf explicit-route.heading {
+                 type string;
+                 description "Explicit Route Object (ERO)";
+               }
+               container explicit-route-element {
+                 leaf address {
+                   type jt:ipaddr;
+                 }
+                 leaf explicit-route-type {
+                   type string;
+                 }
+                 leaf telink-id {
+                   type int32;
+                   description "Link identifier of unnumbered link";
+                 }
+               }
+             }
+             container oam-state {
+               leaf oam-bfd-session-state {
+                 type string;
+               }
+               leaf oam-lsp-ping-state {
+                 type string;
+               }
+             }
+             list path-history {
+               leaf sequence-number {
+                 type int64;
+                 description "History event number";
+               }
+               leaf time {
+                 type string;
+                 description "Time of the event";
+               }
+               leaf log {
+                 type string;
+                 description "Supplemental information of the event";
+               }
+               leaf route {
+                 type string;
+                 description "Latest RRO contents, as reported by RSVP";
+               }
+             }
+             container path-available-bandwidth {
+               leaf path-available-bandwidth.heading {
+                 type string;
+                 description "Available bandwidth on an LSP path";
+               }
+               leaf bandwidth {
+                 type int32;
+               }
+               leaf class-type {
+                 type int32;
+               }
+               leaf class-bandwidth {
+                 type int32;
+               }
+             }
+             container layer2-connection {
+               leaf neighbor-address {
+                 type jt:ipaddr;
+                 description "IP address of this neighbor";
+               }
+               leaf interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf vc-id {
+                 type int32;
+               }
+               container connection-bandwidth {
+                 leaf connection-bandwidth.heading {
+                   type string;
+                   description "Bandwidth of a layer 2 connection";
+                 }
+                 leaf bandwidth {
+                   type int32;
+                 }
+                 leaf class-type {
+                   type int32;
+                 }
+                 leaf class-bandwidth {
+                   type int32;
+                 }
+               }
+             }
+             leaf path-active {
+               type empty;
+               description "Whether the path is active or not";
+             }
+             leaf title {
+               type string;
+             }
+           }
+           container mpls-container-lsp-splitting-merging {
+             leaf minimum-member-lsps {
+               type int32;
+               description "Configured minimum LSPs";
+             }
+             leaf maximum-member-lsps {
+               type int32;
+               description "Configured maximum LSPs";
+             }
+             leaf aggregate-bandwidth {
+               type int32;
+               description "Aggregate bandwidth";
+             }
+             leaf current-bandwidth {
+               type int32;
+               description "Sampled Aggregate bandwidth";
+             }
+             leaf normalize-interval {
+               type int32;
+               description "Configured LSP normalize timer";
+             }
+             leaf splitting-merging-threshold {
+               type int32;
+               description "Percentage change in aggregate LSP utilization to trigger normalization";
+             }
+             leaf maximum-signaling-bandwidth {
+               type int32;
+               description "Configured signaling maximum bandwidth";
+             }
+             leaf minimum-signaling-bandwidth {
+               type int32;
+               description "Configured signaling minimum bandwidth";
+             }
+             leaf maximum-splitting-bandwidth {
+               type int32;
+               description "Configured splitting maximum bandwidth";
+             }
+             leaf minimum-splitting-bandwidth {
+               type int32;
+               description "Configured splitting minimum bandwidth";
+             }
+             leaf normalization-mode {
+               type string;
+             }
+             leaf sampling-mode {
+               type string;
+               description "Sampling Attributes";
+             }
+             leaf time-to-normalize {
+               type int32;
+               description "Time in which LSP will normalize";
+             }
+             leaf aggregate-packets {
+               type int32;
+               description "Aggregate packets";
+             }
+             leaf aggregate-bytes {
+               type int32;
+               description "Aggregate bytes";
+             }
+           }
+           container mpls-container-lsp-history {
+             leaf sequence-number {
+               type int64;
+               description "History event number";
+             }
+             leaf time {
+               type string;
+               description "Time of the event";
+             }
+             leaf log {
+               type string;
+               description "Supplemental information of the event";
+             }
+             leaf route {
+               type string;
+               description "Latest RRO contents, as reported by RSVP";
+             }
+           }
+           container mpls-lsp-attributes {
+             container mpls-lsp-upstream-label {
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+           }
+           leaf lsp-pktbytes {
+             type string;
+             description "LSP packet and byte counters";
+           }
+           leaf name {
+             type string;
+           }
+           leaf bidirectional {
+             type empty;
+             description "LSP is bidirectional";
+           }
+           leaf associated-bidirectional {
+             type empty;
+             description "LSP is associated-bidirectional";
+           }
+           leaf lsp-type {
+             type string;
+             description "Type of LSP";
+           }
+           leaf egress-label-operation {
+             type string;
+             description "Label advertised by egress";
+           }
+           leaf lsp-diffserv-te-info {
+             type string;
+             description "LSP support of DiffServ-TE extensions";
+           }
+           leaf aggregate-lsp-pktbytes {
+             type string;
+             description "Aggregate LSP packet and byte counters";
+           }
+           leaf no-statistics {
+             type empty;
+             description "No statistics are available for this session";
+           }
+           leaf mpls-container-name {
+             type string;
+             description "Name of the container LSP";
+           }
+           leaf is-fastreroute {
+             type empty;
+             description "Fast reroute (one-to-one backup) is desired";
+           }
+           leaf is-linkprotection {
+             type empty;
+             description "Link protection (facility backup) is desired";
+           }
+           leaf is-nodeprotection {
+             type empty;
+             description "Link-Node protection (facility backup) is desired";
+           }
+           leaf is-inter-domain-path {
+             type empty;
+             description "Inter-domain LSP";
+           }
+           leaf load-balance {
+             type string;
+             description "Load-balancing algorithm chosen";
+           }
+           leaf metric {
+             type int32;
+           }
+           leaf optimize-protection-timer {
+             type int32;
+             description "Optimize protection timer";
+           }
+           leaf lsp-creation-time {
+             type string;
+             description "Time when the LSP was created";
+           }
+           leaf lsp-soft-preemption-counter {
+             type int32;
+             description "Number of times the LSP was soft preempted";
+           }
+           leaf lsp-soft-preemption-time {
+             type string;
+             description "Time when the LSP was last soft preempted";
+           }
+           leaf retry-timer {
+             type int32;
+           }
+           leaf retry-limit {
+             type int32;
+           }
+           leaf received-rro {
+             type string;
+             description "RRO returned by the signaling protocol";
+           }
+           container admin-groups {
+             leaf admin-groups.heading {
+               type string;
+             }
+             leaf color {
+               type int32;
+             }
+             leaf no-group-flag {
+               type empty;
+             }
+             leaf-list admin-group-name {
+               type string;
+               description "Name of the admin group";
+             }
+             leaf admin-group-number {
+               type int32;
+               description "Number of the admin group";
+             }
+           }
+           container admin-groups-extended {
+             leaf admin-groups-extended.heading {
+               type string;
+             }
+             leaf-list admin-group-name {
+               type string;
+               description "Name of the admin group";
+             }
+             leaf admin-group-number {
+               type int32;
+               description "Number of the admin group";
+             }
+           }
+           container srlg {
+             leaf srlg.heading {
+               type string;
+             }
+             leaf-list srlg-name {
+               type string;
+               description "Name of the srlg";
+             }
+           }
+           container mpls-lsp-upstream-label {
+             leaf vlan-id-label {
+               type uint32;
+               description "VLAN ID label configured for the LSP";
+             }
+           }
+           container oam-state {
+             leaf oam-bfd-session-state {
+               type string;
+             }
+             leaf oam-lsp-ping-state {
+               type string;
+             }
+           }
+           list path-history {
+             leaf sequence-number {
+               type int64;
+               description "History event number";
+             }
+             leaf time {
+               type string;
+               description "Time of the event";
+             }
+             leaf log {
+               type string;
+               description "Supplemental information of the event";
+             }
+             leaf route {
+               type string;
+               description "Latest RRO contents, as reported by RSVP";
+             }
+           }
+           container path-available-bandwidth {
+             leaf path-available-bandwidth.heading {
+               type string;
+               description "Available bandwidth on an LSP path";
+             }
+             leaf bandwidth {
+               type int32;
+             }
+             leaf class-type {
+               type int32;
+             }
+             leaf class-bandwidth {
+               type int32;
+             }
+           }
+           container layer2-connection {
+             leaf neighbor-address {
+               type jt:ipaddr;
+               description "IP address of this neighbor";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf vc-id {
+               type int32;
+             }
+             container connection-bandwidth {
+               leaf connection-bandwidth.heading {
+                 type string;
+                 description "Bandwidth of a layer 2 connection";
+               }
+               leaf bandwidth {
+                 type int32;
+               }
+               leaf class-type {
+                 type int32;
+               }
+               leaf class-bandwidth {
+                 type int32;
+               }
+             }
+           }
+           container mpls-srlg {
+             leaf-list srlg-name {
+               type string;
+               description "Name of the srlg";
+             }
+             leaf srlg-value {
+               type uint32;
+               description "Value of the srlg";
+             }
+             leaf srlg-cost {
+               type uint32;
+               description "Cost of the srlg";
+             }
+           }
+         }
+         container mpls-lsp {
+           leaf destination-address {
+             type jt:ipaddr;
+             description "Session destination address";
+           }
+           leaf source-address {
+             type jt:ipaddr;
+           }
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf label-out {
+             type string;
+             description "Outgoing label";
+           }
+           container explicit-route {
+           }
+           leaf name {
+             type string;
+           }
+           leaf lsp-description {
+             type string;
+             description "LSP description string (up to 80 characters)";
+           }
+           leaf lsp-packets {
+             type string;
+             description "LSP packet counters";
+           }
+           leaf lsp-bytes {
+             type string;
+             description "LSP byte counters";
+           }
+           container mpls-lsp-path {
+             leaf path-active {
+               type empty;
+               description "Whether the path is active or not";
+             }
+             leaf title {
+               type string;
+             }
+             leaf name {
+               type string;
+             }
+             leaf received-rro {
+               type string;
+               description "RRO returned by the signaling protocol";
+             }
+             container admin-groups {
+               leaf admin-groups.heading {
+                 type string;
+               }
+               leaf color {
+                 type int32;
+               }
+               leaf no-group-flag {
+                 type empty;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container admin-groups-extended {
+               leaf admin-groups-extended.heading {
+                 type string;
+               }
+               leaf-list admin-group-name {
+                 type string;
+                 description "Name of the admin group";
+               }
+               leaf admin-group-number {
+                 type int32;
+                 description "Number of the admin group";
+               }
+             }
+             container srlg {
+               leaf srlg.heading {
+                 type string;
+               }
+               leaf-list srlg-name {
+                 type string;
+                 description "Name of the srlg";
+               }
+             }
+             container mpls-lsp-upstream-label {
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+             container explicit-route {
+               leaf explicit-route.heading {
+                 type string;
+                 description "Explicit Route Object (ERO)";
+               }
+               container explicit-route-element {
+                 leaf address {
+                   type jt:ipaddr;
+                 }
+                 leaf explicit-route-type {
+                   type string;
+                 }
+                 leaf telink-id {
+                   type int32;
+                   description "Link identifier of unnumbered link";
+                 }
+               }
+             }
+             container oam-state {
+               leaf oam-bfd-session-state {
+                 type string;
+               }
+               leaf oam-lsp-ping-state {
+                 type string;
+               }
+             }
+             list path-history {
+               leaf sequence-number {
+                 type int64;
+                 description "History event number";
+               }
+               leaf time {
+                 type string;
+                 description "Time of the event";
+               }
+               leaf log {
+                 type string;
+                 description "Supplemental information of the event";
+               }
+               leaf route {
+                 type string;
+                 description "Latest RRO contents, as reported by RSVP";
+               }
+             }
+             container path-available-bandwidth {
+               leaf path-available-bandwidth.heading {
+                 type string;
+                 description "Available bandwidth on an LSP path";
+               }
+               leaf bandwidth {
+                 type int32;
+               }
+               leaf class-type {
+                 type int32;
+               }
+               leaf class-bandwidth {
+                 type int32;
+               }
+             }
+             container layer2-connection {
+               leaf neighbor-address {
+                 type jt:ipaddr;
+                 description "IP address of this neighbor";
+               }
+               leaf interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf vc-id {
+                 type int32;
+               }
+               container connection-bandwidth {
+                 leaf connection-bandwidth.heading {
+                   type string;
+                   description "Bandwidth of a layer 2 connection";
+                 }
+                 leaf bandwidth {
+                   type int32;
+                 }
+                 leaf class-type {
+                   type int32;
+                 }
+                 leaf class-bandwidth {
+                   type int32;
+                 }
+               }
+             }
+           }
+           container mpls-lsp-attributes {
+             container mpls-lsp-upstream-label {
+               leaf vlan-id-label {
+                 type uint32;
+                 description "VLAN ID label configured for the LSP";
+               }
+             }
+           }
+           leaf lsp-pktbytes {
+             type string;
+             description "LSP packet and byte counters";
+           }
+           leaf bidirectional {
+             type empty;
+             description "LSP is bidirectional";
+           }
+           leaf associated-bidirectional {
+             type empty;
+             description "LSP is associated-bidirectional";
+           }
+           leaf path-mtu {
+             type int32;
+             description "The value of the path MTU, as negotiated by the network";
+           }
+           leaf path-mtu-in-kernel {
+             type int32;
+             description "The value of the MTU used locally for forwarding";
+           }
+           leaf sender-tspec {
+             type string;
+             description "Sender TSpec";
+           }
+           leaf adspec {
+             type string;
+             description "Adspec data element in an RSVP Path message";
+           }
+           leaf lsp-diffserv-info {
+             type string;
+             description "LSP DiffServ info";
+           }
+           leaf ct-bw {
+             type string;
+             description "Per-class bandwidth requested for E-LSPs and L-LSPs";
+           }
+           container packet-information {
+             leaf packet-information.heading {
+               type string;
+               description "RSVP packets sent or received per session";
+             }
+             leaf previous-hop {
+               type jt:ipaddr;
+               description "Previous-hop address";
+             }
+             leaf next-hop {
+               type jt:ipaddr;
+               description "Next-hop address";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf count {
+               type int32;
+             }
+             leaf notify-destination {
+               type jt:ipaddr;
+               description "Notify address";
+             }
+             leaf entropy-label {
+               type string;
+               description "Entropy label";
+             }
+             leaf in-message-handle {
+               type string;
+               description "RSVP I/O handle for incoming message";
+             }
+             leaf in-message-id {
+               type uint32;
+               description "Incoming Message ID";
+             }
+             leaf in-epoch {
+               type uint32;
+               description "Incoming Epoch";
+             }
+             leaf out-message-state {
+               type string;
+               description "RSVP I/O state for outgoing message";
+             }
+             leaf out-message-id {
+               type uint32;
+               description "Outgoing Message ID";
+             }
+             leaf out-epoch {
+               type uint32;
+               description "Outgoing Epoch";
+             }
+           }
+         }
+         container detour {
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf label-out {
+             type string;
+             description "Outgoing label";
+           }
+           container explicit-route {
+           }
+           leaf sender-tspec {
+             type string;
+             description "Sender TSpec";
+           }
+           leaf lsp-diffserv-info {
+             type string;
+             description "LSP DiffServ info";
+           }
+           leaf ct-bw {
+             type string;
+             description "Per-class bandwidth requested for E-LSPs and L-LSPs";
+           }
+           leaf adspec {
+             type string;
+             description "Adspec data element in an RSVP Path message";
+           }
+           leaf path-mtu {
+             type int32;
+             description "The value of the path MTU, as negotiated by the network";
+           }
+           leaf path-mtu-in-kernel {
+             type int32;
+             description "The value of the MTU used locally for forwarding";
+           }
+           container packet-information {
+             leaf packet-information.heading {
+               type string;
+               description "RSVP packets sent or received per session";
+             }
+             leaf previous-hop {
+               type jt:ipaddr;
+               description "Previous-hop address";
+             }
+             leaf next-hop {
+               type jt:ipaddr;
+               description "Next-hop address";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf count {
+               type int32;
+             }
+             leaf notify-destination {
+               type jt:ipaddr;
+               description "Notify address";
+             }
+             leaf entropy-label {
+               type string;
+               description "Entropy label";
+             }
+             leaf in-message-handle {
+               type string;
+               description "RSVP I/O handle for incoming message";
+             }
+             leaf in-message-id {
+               type uint32;
+               description "Incoming Message ID";
+             }
+             leaf in-epoch {
+               type uint32;
+               description "Incoming Epoch";
+             }
+             leaf out-message-state {
+               type string;
+               description "RSVP I/O state for outgoing message";
+             }
+             leaf out-message-id {
+               type uint32;
+               description "Outgoing Message ID";
+             }
+             leaf out-epoch {
+               type uint32;
+               description "Outgoing Epoch";
+             }
+           }
+         }
+         container detour-branch {
+           container explicit-route {
+           }
+           container detour-branch-labels {
+             leaf label-in {
+               type string;
+               description "Incoming label";
+             }
+             leaf label-out {
+               type string;
+               description "Outgoing label";
+             }
+             container explicit-route {
+             }
+             leaf path-mtu {
+               type int32;
+               description "The value of the path MTU, as negotiated by the network";
+             }
+             leaf path-mtu-in-kernel {
+               type int32;
+               description "The value of the MTU used locally for forwarding";
+             }
+             leaf sender-tspec {
+               type string;
+               description "Sender TSpec";
+             }
+             leaf adspec {
+               type string;
+               description "Adspec data element in an RSVP Path message";
+             }
+             leaf lsp-diffserv-info {
+               type string;
+               description "LSP DiffServ info";
+             }
+             leaf ct-bw {
+               type string;
+               description "Per-class bandwidth requested for E-LSPs and L-LSPs";
+             }
+             container packet-information {
+               leaf packet-information.heading {
+                 type string;
+                 description "RSVP packets sent or received per session";
+               }
+               leaf previous-hop {
+                 type jt:ipaddr;
+                 description "Previous-hop address";
+               }
+               leaf next-hop {
+                 type jt:ipaddr;
+                 description "Next-hop address";
+               }
+               leaf interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf count {
+                 type int32;
+               }
+               leaf notify-destination {
+                 type jt:ipaddr;
+                 description "Notify address";
+               }
+               leaf entropy-label {
+                 type string;
+                 description "Entropy label";
+               }
+               leaf in-message-handle {
+                 type string;
+                 description "RSVP I/O handle for incoming message";
+               }
+               leaf in-message-id {
+                 type uint32;
+                 description "Incoming Message ID";
+               }
+               leaf in-epoch {
+                 type uint32;
+                 description "Incoming Epoch";
+               }
+               leaf out-message-state {
+                 type string;
+                 description "RSVP I/O state for outgoing message";
+               }
+               leaf out-message-id {
+                 type uint32;
+                 description "Outgoing Message ID";
+               }
+               leaf out-epoch {
+                 type uint32;
+                 description "Outgoing Epoch";
+               }
+             }
+           }
+           leaf source-address {
+             type jt:ipaddr;
+           }
+           leaf skip-address {
+             type jt:ipaddr;
+             description "Address of node or link to be skipped";
+           }
+           leaf lsp-state {
+             type string;
+             description "State of an LSP";
+           }
+           leaf sender-tspec {
+             type string;
+             description "Sender TSpec";
+           }
+           leaf adspec {
+             type string;
+             description "Adspec data element in an RSVP Path message";
+           }
+           leaf path-mtu {
+             type int32;
+             description "The value of the path MTU, as negotiated by the network";
+           }
+           container packet-information {
+             leaf packet-information.heading {
+               type string;
+               description "RSVP packets sent or received per session";
+             }
+             leaf previous-hop {
+               type jt:ipaddr;
+               description "Previous-hop address";
+             }
+             leaf next-hop {
+               type jt:ipaddr;
+               description "Next-hop address";
+             }
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf count {
+               type int32;
+             }
+             leaf notify-destination {
+               type jt:ipaddr;
+               description "Notify address";
+             }
+             leaf entropy-label {
+               type string;
+               description "Entropy label";
+             }
+             leaf in-message-handle {
+               type string;
+               description "RSVP I/O handle for incoming message";
+             }
+             leaf in-message-id {
+               type uint32;
+               description "Incoming Message ID";
+             }
+             leaf in-epoch {
+               type uint32;
+               description "Incoming Epoch";
+             }
+             leaf out-message-state {
+               type string;
+               description "RSVP I/O state for outgoing message";
+             }
+             leaf out-message-id {
+               type uint32;
+               description "Outgoing Message ID";
+             }
+             leaf out-epoch {
+               type uint32;
+               description "Outgoing Epoch";
+             }
+           }
+         }
+         container packet-information {
+           leaf packet-information.heading {
+             type string;
+             description "RSVP packets sent or received per session";
+           }
+           leaf previous-hop {
+             type jt:ipaddr;
+             description "Previous-hop address";
+           }
+           leaf next-hop {
+             type jt:ipaddr;
+             description "Next-hop address";
+           }
+           leaf interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf count {
+             type int32;
+           }
+           leaf notify-destination {
+             type jt:ipaddr;
+             description "Notify address";
+           }
+           leaf entropy-label {
+             type string;
+             description "Entropy label";
+           }
+           leaf in-message-handle {
+             type string;
+             description "RSVP I/O handle for incoming message";
+           }
+           leaf in-message-id {
+             type uint32;
+             description "Incoming Message ID";
+           }
+           leaf in-epoch {
+             type uint32;
+             description "Incoming Epoch";
+           }
+           leaf out-message-state {
+             type string;
+             description "RSVP I/O state for outgoing message";
+           }
+           leaf out-message-id {
+             type uint32;
+             description "Outgoing Message ID";
+           }
+           leaf out-epoch {
+             type uint32;
+             description "Outgoing Epoch";
+           }
+         }
+       }
+     }
+   }
+   grouping rsvp-statistics-information-block {
+     list message-statistics {
+       description "Statistics per RSVP message type";
+       leaf rsvp-message {
+         type string;
+       }
+       leaf messages-sent {
+         type int32;
+         description "Total number of messages sent";
+       }
+       leaf messages-received {
+         type int32;
+         description "Total number of messages received";
+       }
+       leaf messages-sent-5seconds {
+         type int32;
+         description "Number of messages sent in the last 5 seconds";
+       }
+       leaf messages-received-5seconds {
+         type int32;
+         description "Number of messages received in the last 5 seconds";
+       }
+     }
+     list rsvp-error {
+       leaf error-message {
+         type string;
+       }
+       leaf error-count {
+         type int32;
+         description "Total number of errors encountered";
+       }
+       leaf error-count-5seconds {
+         type int32;
+         description "Number of errors encountered in the last 5 seconds";
+       }
+     }
+     list rsvp-enhanced-frr {
+       leaf enhanced-frr-count-type {
+         type string;
+       }
+       leaf enhanced-frr-count {
+         type int32;
+         description "Total number of enhanced FRR states";
+       }
+       leaf enhanced-frr-count-5seconds {
+         type int32;
+         description "Total number of enhanced FRR states last 5 seconds";
+       }
+     }
+   }
+   grouping rsvp-version-information-block {
+     container rsvp-version {
+       leaf rsvp-status {
+         type string;
+         description "Administrative or per-interface status of RSVP";
+       }
+       leaf rsvp-restart-flag {
+         type int32;
+         description "RSVP restart is in progress";
+       }
+       leaf refresh-timer {
+         type int32;
+         description "Refresh interval (R)";
+       }
+       leaf keep-multiplier {
+         type int32;
+         description "Keep Multiplier (K)";
+       }
+       leaf rsvp-node-hello-status {
+         type string;
+         description "Node-ID based Hello status";
+       }
+       leaf rsvp-hello-ack-status {
+         type string;
+         description "Hello acknowledgements status";
+       }
+       leaf preemption-type {
+         type string;
+         description "Type of preemption scheme";
+       }
+       leaf soft-preemption-cleanup-timer {
+         type int32;
+         description "Soft-preemption cleanup timer";
+       }
+       leaf graceful-deletion-timeout {
+         type int32;
+         description "RSVP graceful deletion timeout";
+       }
+       leaf rsvp-nsr-mode {
+         type string;
+         description "RSVP nonstop-routing mode";
+       }
+       leaf rsvp-nsr-state {
+         type string;
+         description "RSVP nonstop-routing state";
+       }
+       leaf rsvp-enh-local-prot-status {
+         type string;
+         description "Enhanced FRR local protection status";
+       }
+       leaf rsvp-local-reversion-status {
+         type string;
+         description "FRR local reversion status";
+       }
+       leaf rsvp-setup-protection {
+         type string;
+         description "State of setup protection";
+       }
+       leaf rsvp-p2mp-remerge-permission {
+         type string;
+         description "State of p2mp remerge permission";
+       }
+       leaf rsvp-cross-cred-cspf-status {
+         type string;
+         description "RSVP cross credibility CSPF status";
+       }
+       leaf ingress-route-session-id-count {
+         type int32;
+         description "RSVP Ingress route session id count";
+       }
+       leaf rsvp-assoc-bidir-lsp-config-state {
+         type string;
+         description "Configuration state for support of associated bidirectional LSP";
+       }
+       container rsvp-graceful-restart {
+         leaf restart-status {
+           type string;
+         }
+         leaf helper-status {
+           type string;
+         }
+         leaf maximum-helper-restart-time {
+           type uint32;
+           description "Maximum wait time from down event to neighbor dead";
+         }
+         leaf maximum-helper-recovery-time {
+           type uint32;
+           description "Maximum state re-synchronization time for restarting neighbor";
+         }
+         leaf restart-time {
+           type int32;
+           description "Restart time advertised";
+         }
+         leaf recovery-time {
+           type int32;
+           description "Recovery time advertised";
+         }
+       }
+       container rsvp-transit-nexthop-chaining-mode {
+         leaf p2p-transit-lsp-nexthop-mode {
+           type string;
+         }
+         leaf p2mp-transit-lsp-nexthop-mode {
+           type string;
+         }
+       }
+     }
+   }
+   grouping rsvp-route-session-id-information-block {
+     container rsvp-route-session-id {
+       leaf rsvp-ingress-route-destination {
+         type string;
+         description "Ingress route destination";
+       }
+       leaf rsvp-ingress-route-preference {
+         type uint32;
+         description "Ingress route preference";
+       }
+       leaf rsvp-ingress-route-metric1 {
+         type uint32;
+         description "Ingress route metric1";
+       }
+       leaf rsvp-ingress-route-metric2 {
+         type uint32;
+         description "Ingress route metric2";
+       }
+       leaf rsvp-ingress-route-session-id {
+         type uint32;
+         description "Ingress route session id";
+       }
+       leaf rsvp-ingress-route-session-id-version {
+         type uint32;
+         description "Version";
+       }
+     }
+   }
+   grouping rsvp-pop-and-fwd-information-block {
+     leaf rsvp-pop-shared-label-count {
+       type uint32;
+       description "Number of pop-and-forward shared labels";
+     }
+     container rsvp-pop-and-fwd {
+       leaf rsvp-pop-shared-label {
+         type uint32;
+         description "Label shared by pop-and-forward LSPs";
+       }
+       leaf rsvp-pop-seg-hop-count {
+         type uint32;
+         description "Outgoing segment hop count";
+       }
+       leaf rsvp-pop-seg-next-label {
+         type uint32;
+         description "Next-label downstream of outgoing segment";
+       }
+       leaf rsvp-pop-seg-protection {
+         type string;
+         description "Outgoing segment protection type";
+       }
+       leaf rsvp-pop-sessions-count {
+         type uint32;
+         description "Number of RSVP sessions sharing the label";
+       }
+       container rsvp-pop-seg-id {
+         leaf rsvp-pop-seg-id.heading {
+           type string;
+         }
+         list rsvp-pop-seg-hop {
+           leaf-list rsvp-pop-seg-hop.heading {
+             type string;
+           }
+           leaf rsvp-pop-seg-hop-ip {
+             type jt:ipaddr;
+             description "Outgoing segment hop IP address";
+           }
+           leaf rsvp-pop-seg-hop-label {
+             type uint32;
+             description "Outgoing segment hop label";
+           }
+         }
+       }
+       container rsvp-pop-seg-route {
+         leaf rsvp-pop-seg-route.heading {
+           type string;
+         }
+         leaf rsvp-pop-seg-route-primary-nh {
+           type jt:ipaddr;
+           description "Segment route primary next-hop";
+         }
+         leaf rsvp-pop-seg-route-primary-if {
+           type string;
+           description "Segment route primary interface";
+         }
+         leaf rsvp-pop-seg-route-bypass-name {
+           type string;
+           description "Segment route using bypass LSP";
+         }
+         leaf rsvp-pop-seg-route-self-id {
+           type string;
+           description "Segment route self-id";
+         }
+       }
+       container rsvp-pop-seg-session-list {
+         leaf rsvp-pop-seg-session-list.heading {
+           type string;
+         }
+         list rsvp-pop-seg-session-info {
+           leaf rsvp-pop-seg-session-name {
+             type string;
+             description "PSB session name using shared label";
+           }
+           leaf rsvp-pop-seg-session-dst {
+             type jt:ipaddr;
+             description "PSB session dst IP using shared label";
+           }
+           leaf rsvp-pop-seg-session-src {
+             type jt:ipaddr;
+             description "PSB session src IP using shared label";
+           }
+           leaf rsvp-pop-seg-session-lspid {
+             type uint32;
+             description "PSB session lsp ID using shared label";
+           }
+         }
+       }
+       container rsvp-pop-and-fwd-seg-info {
+         leaf rsvp-pop-shared-label {
+           type uint32;
+           description "Label shared by pop-and-forward LSPs";
+         }
+         leaf rsvp-pop-seg-next-label {
+           type uint32;
+           description "Next-label downstream of outgoing segment";
+         }
+         leaf rsvp-pop-seg-hop-count {
+           type uint32;
+           description "Outgoing segment hop count";
+         }
+         leaf rsvp-pop-seg-protection {
+           type string;
+           description "Outgoing segment protection type";
+         }
+         leaf rsvp-pop-sessions-count {
+           type uint32;
+           description "Number of RSVP sessions sharing the label";
+         }
+       }
+     }
+   }
+ }

@@ -1,0 +1,1723 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-fibd {
+   namespace "http://yang.juniper.net/junos/rpc/fibd";
+
+   prefix fibd;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for fibd command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R2.14-EVO";
+   }
+
+   rpc show-fibd-statistics {
+     description "Show fibd statistics";
+     output {
+       container fibd-statistics {
+         uses fibd-statistics-block;
+       }
+     }
+   }
+   rpc show-fibd-statistics-filtered {
+     description "Show fibd filtered statistics";
+     output {
+       container fibd-filtered-statistics {
+         uses fibd-filtered-statistics-block;
+       }
+     }
+   }
+   rpc show-fibd-statistics-rates {
+     description "Show fibd statistics rates";
+     output {
+       container fibd-statistics-rates {
+         uses fibd-statistics-rates-block;
+       }
+     }
+   }
+   rpc show-fibd-statistics-rates-filtered {
+     description "Show fibd filtered rates";
+     output {
+       container fibd-statistics-filtered-rates {
+         uses fibd-statistics-filtered-rates-block;
+       }
+     }
+   }
+   rpc fibd-status {
+     description "Current status of fibd";
+     output {
+       container fibd-status {
+         uses fibd-status-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping fibd-statistics-block {
+     leaf app-tcp-conn-accepted {
+       type uint64;
+       description "Number of TCP applications connected to fibd in total";
+     }
+     leaf app-tcp-conn-closed {
+       type uint64;
+       description "Number of TCP applications closed connection to fibd";
+     }
+     leaf app-tcp-conn-active {
+       type uint64;
+       description "Number of TCP applications actively connected to fibd";
+     }
+     leaf tx-ttp-hdr-success {
+       type uint64;
+       description "TTP TX header response success";
+     }
+     leaf tx-ttp-hdr-error {
+       type uint64;
+       description "TTP TX header response error";
+     }
+     leaf tx-ttp-hdr-request {
+       type uint64;
+       description "TTP TX header requests total";
+     }
+     leaf ctrl-tcp-success {
+       type uint64;
+       description "TCP control response success";
+     }
+     leaf ctrl-tcp-error {
+       type uint64;
+       description "TCP control response error";
+     }
+     leaf ctrl-tcp-request {
+       type uint64;
+       description "TCP control requests total";
+     }
+     leaf ctrl-success {
+       type uint64;
+       description "Success responses for socket bind or delete request";
+     }
+     leaf ctrl-error {
+       type uint64;
+       description "Error responses for socket bind or delete request";
+     }
+     leaf ctrl-request {
+       type uint64;
+       description "Total requests for socket bind or socket delete";
+     }
+     leaf ctrl-ifx-success {
+       type uint64;
+       description "Success responses for interface index request";
+     }
+     leaf ctrl-ifx-error {
+       type uint64;
+       description "Error responses for interface index request";
+     }
+     leaf ctrl-ifx-request {
+       type uint64;
+       description "Interface index request for a pfe interface";
+     }
+     leaf ctrl-ifls-success {
+       type uint64;
+       description "Success responses for IFL indices request";
+     }
+     leaf ctrl-ifls-error {
+       type uint64;
+       description "Error responses for IFL indices request";
+     }
+     leaf ctrl-ifls-request {
+       type uint64;
+       description "Request IFL indices for an IFD";
+     }
+     leaf tx-ttp-hdr-ra-success {
+       type uint64;
+       description "TTP header success responses for router alert";
+     }
+     leaf tx-ttp-hdr-ra-error {
+       type uint64;
+       description "TTP header error responses for router alert";
+     }
+     leaf tx-ttp-hdr-ra-request {
+       type uint64;
+       description "Total number of TTP header requests for router alert";
+     }
+     leaf si-sync-total {
+       type uint64;
+       description "Total number of SI_SYNC notifications sent to SI";
+     }
+     leaf jtd-upcalls-syn {
+       type uint64;
+       description "Number of JTD syn upcalls";
+     }
+     leaf jtd-upcalls-syn-duplicate {
+       type uint64;
+       description "Number of ignored JTD syn duplicate upcalls";
+     }
+     leaf jtd-upcalls-delete {
+       type uint64;
+       description "Number of JTD delete upcalls";
+     }
+     leaf jtd-upcalls-no-matching-server {
+       type uint64;
+       description "Number of ignored JTD syn no matching server upcalls";
+     }
+     leaf jtd-upcalls-no-matching-local-intf {
+       type uint64;
+       description "Number of ignored JTD syn no matching local interface upcalls";
+     }
+     leaf jtd-upcalls-no-vrf {
+       type uint64;
+       description "Number of ignored no matching vrf upcalls";
+     }
+     leaf jtd-upcalls-failed-to-create-flow {
+       type uint64;
+       description "Number of ignored JTD syn upcalls for which we failed to create a flow";
+     }
+     leaf jtd-upcalls-no-meta-flow {
+       type uint64;
+       description "Number of ignored JTD syn upcalls for which resulting flow didn't contain JTD_META_FLOW cmsg";
+     }
+     leaf jtd-upcalls-unknown {
+       type uint64;
+       description "Number of JTD unknown upcalls";
+     }
+     leaf jtd-upcalls-total {
+       type uint64;
+       description "Total number of JTD upcalls";
+     }
+     leaf tcp-flows-program-si-req {
+       type uint64;
+       description "Number of tcp flows programmed in SI request context";
+     }
+     leaf tcp6-flows-program-si-req {
+       type uint64;
+       description "Number of tcp6 flows programmed in SI request context";
+     }
+     leaf jtd-flows-program-si-req {
+       type uint64;
+       description "Number of jtd flows programmed in SI request context";
+     }
+     leaf tcp-flows-program-syn-upcall {
+       type uint64;
+       description "Number of tcp flows programmed in syn upcall context";
+     }
+     leaf tcp6-flows-program-syn-upcall {
+       type uint64;
+       description "Number of tcp6 flows programmed in syn upcall context";
+     }
+     leaf jtd-flows-program-syn-upcall {
+       type uint64;
+       description "Number of jtd flows programmed in syn upcall context";
+     }
+     leaf tcp-flows-program-bg-task {
+       type uint64;
+       description "Number of tcp flows programmed in background task context";
+     }
+     leaf tcp6-flows-program-bg-task {
+       type uint64;
+       description "Number of tcp6 flows programmed in background task context";
+     }
+     leaf jtd-flows-program-bg-task {
+       type uint64;
+       description "Number of jtd flows programmed in background task context";
+     }
+     leaf tcp-flows-disabled {
+       type uint64;
+       description "Number of tcp flows disabled";
+     }
+     leaf tcp6-flows-disabled {
+       type uint64;
+       description "Number of tcp6 flows disabled";
+     }
+     leaf jtd-flows-disabled {
+       type uint64;
+       description "Number of jtd flows disabled";
+     }
+     leaf rtt-add {
+       type uint64;
+       description "Number of route table DDS objects added";
+     }
+     leaf rtt-chg {
+       type uint64;
+       description "Number of route table DDS objects changed";
+     }
+     leaf rtt-del {
+       type uint64;
+       description "Number of route table DDS objects deleted";
+     }
+     leaf rtt-active {
+       type uint64;
+       description "Number of route table DDS objects active";
+     }
+     leaf rt-add {
+       type uint64;
+       description "Number of route DDS objects added";
+     }
+     leaf rt-chg {
+       type uint64;
+       description "Number of route DDS objects changed";
+     }
+     leaf rt-del {
+       type uint64;
+       description "Number of route DDS objects deleted";
+     }
+     leaf rt-active {
+       type uint64;
+       description "Number of route DDS objects active";
+     }
+     leaf nh-add {
+       type uint64;
+       description "Number of next-hop DDS objects added";
+     }
+     leaf nh-chg {
+       type uint64;
+       description "Number of next-hop DDS objects changed";
+     }
+     leaf nh-del {
+       type uint64;
+       description "Number of next-hop DDS objects deleted";
+     }
+     leaf nh-active {
+       type uint64;
+       description "Number of next-hop DDS objects active";
+     }
+     leaf ifd-add {
+       type uint64;
+       description "Number of IFD DDS objects added";
+     }
+     leaf ifd-chg {
+       type uint64;
+       description "Number of IFD DDS objects changed";
+     }
+     leaf ifd-del {
+       type uint64;
+       description "Number of IFD DDS objects deleted";
+     }
+     leaf ifd-active {
+       type uint64;
+       description "Number of IFD DDS objects active";
+     }
+     leaf ifl-add {
+       type uint64;
+       description "Number of IFL DDS objects added";
+     }
+     leaf ifl-chg {
+       type uint64;
+       description "Number of IFL DDS objects changed";
+     }
+     leaf ifl-del {
+       type uint64;
+       description "Number of IFL DDS objects deleted";
+     }
+     leaf ifl-active {
+       type uint64;
+       description "Number of IFL DDS objects active";
+     }
+     leaf iff-add {
+       type uint64;
+       description "Number of IFF DDS objects added";
+     }
+     leaf iff-chg {
+       type uint64;
+       description "Number of IFF DDS objects changed";
+     }
+     leaf iff-del {
+       type uint64;
+       description "Number of IFF DDS objects deleted";
+     }
+     leaf iff-active {
+       type uint64;
+       description "Number of IFF DDS objects active";
+     }
+     leaf ifa-add {
+       type uint64;
+       description "Number of IFA DDS objects added";
+     }
+     leaf ifa-chg {
+       type uint64;
+       description "Number of IFA DDS objects changed";
+     }
+     leaf ifa-del {
+       type uint64;
+       description "Number of IFA DDS objects deleted";
+     }
+     leaf ifa-active {
+       type uint64;
+       description "Number of IFA DDS objects active";
+     }
+     leaf dds-tcp-sess-add {
+       type uint64;
+       description "Number of DDS TCP session objects added";
+     }
+     leaf dds-tcp-sess-chg {
+       type uint64;
+       description "Number of DDS TCP session objects changed";
+     }
+     leaf dds-tcp-sess-del {
+       type uint64;
+       description "Number of DDS TCP session objects deleted";
+     }
+     leaf dds-tcp-sess-active {
+       type uint64;
+       description "Number of DDS TCP session objects active";
+     }
+     leaf dds-tcp-server-add {
+       type uint64;
+       description "Number of DDS TCP server objects added";
+     }
+     leaf dds-tcp-server-chg {
+       type uint64;
+       description "Number of DDS TCP server objects changed";
+     }
+     leaf dds-tcp-server-del {
+       type uint64;
+       description "Number of DDS TCP server objects deleted";
+     }
+     leaf dds-tcp-server-active {
+       type uint64;
+       description "Number of DDS TCP server objects active";
+     }
+     leaf dds-tcp-sess-publish {
+       type uint64;
+       description "Number of DDS TCP session objects created and published";
+     }
+     leaf dds-tcp-sess-republish {
+       type uint64;
+       description "Number of DDS TCP session objects modified and published";
+     }
+     leaf dds-tcp-sess-unpublish {
+       type uint64;
+       description "Number of DDS TCP session objects unpublished";
+     }
+     leaf dds-tcp-server-publish {
+       type uint64;
+       description "Number of DDS TCP server objects created and published";
+     }
+     leaf dds-tcp-server-republish {
+       type uint64;
+       description "Number of DDS TCP server objects modified and published";
+     }
+     leaf dds-tcp-server-unpublish {
+       type uint64;
+       description "Number of DDS TCP server objects unpublished";
+     }
+     leaf tcp-sess-add {
+       type uint64;
+       description "Number of TCP session objects added";
+     }
+     leaf tcp-sess-chg {
+       type uint64;
+       description "Number of TCP session objects changed";
+     }
+     leaf tcp-sess-del {
+       type uint64;
+       description "Number of TCP session objects deleted";
+     }
+     leaf tcp-sess-active {
+       type uint64;
+       description "Number of TCP session objects active";
+     }
+     leaf tcp-server-add {
+       type uint64;
+       description "Number of TCP server objects added";
+     }
+     leaf tcp-server-chg {
+       type uint64;
+       description "Number of TCP server objects changed";
+     }
+     leaf tcp-server-del {
+       type uint64;
+       description "Number of TCP server objects deleted";
+     }
+     leaf tcp-server-active {
+       type uint64;
+       description "Number of TCP server objects active";
+     }
+     leaf jtd-flows-program-total {
+       type uint64;
+       description "Total number of JTD flows programmed";
+     }
+     leaf tcp-flows-program-total {
+       type uint64;
+       description "Total number of tcp flows programmed";
+     }
+     leaf tcp6-flows-program-total {
+       type uint64;
+       description "Total number of tcp6 flows programmed";
+     }
+   }
+   grouping fibd-filtered-statistics-block {
+     leaf fibd-filter-request {
+       type string;
+       description "Set fibd filter request";
+     }
+     leaf app-tcp-conn-accepted {
+       type uint64;
+       description "Number of TCP applications connected to fibd in total";
+     }
+     leaf app-tcp-conn-closed {
+       type uint64;
+       description "Number of TCP applications closed connection to fibd";
+     }
+     leaf app-tcp-conn-active {
+       type uint64;
+       description "Number of TCP applications actively connected to fibd";
+     }
+     leaf tx-ttp-hdr-success {
+       type uint64;
+       description "TTP TX header response success";
+     }
+     leaf tx-ttp-hdr-error {
+       type uint64;
+       description "TTP TX header response error";
+     }
+     leaf tx-ttp-hdr-request {
+       type uint64;
+       description "TTP TX header requests total";
+     }
+     leaf ctrl-tcp-success {
+       type uint64;
+       description "TCP control response success";
+     }
+     leaf ctrl-tcp-error {
+       type uint64;
+       description "TCP control response error";
+     }
+     leaf ctrl-tcp-request {
+       type uint64;
+       description "TCP control requests total";
+     }
+     leaf ctrl-success {
+       type uint64;
+       description "Success responses for socket bind or delete request";
+     }
+     leaf ctrl-error {
+       type uint64;
+       description "Error responses for socket bind or delete request";
+     }
+     leaf ctrl-request {
+       type uint64;
+       description "Total requests for socket bind or socket delete";
+     }
+     leaf ctrl-ifx-success {
+       type uint64;
+       description "Success responses for interface index request";
+     }
+     leaf ctrl-ifx-error {
+       type uint64;
+       description "Error responses for interface index request";
+     }
+     leaf ctrl-ifx-request {
+       type uint64;
+       description "Interface index request for a pfe interface";
+     }
+     leaf ctrl-ifls-success {
+       type uint64;
+       description "Success responses for IFL indices request";
+     }
+     leaf ctrl-ifls-error {
+       type uint64;
+       description "Error responses for IFL indices request";
+     }
+     leaf ctrl-ifls-request {
+       type uint64;
+       description "Request IFL indices for an IFD";
+     }
+     leaf tx-ttp-hdr-ra-success {
+       type uint64;
+       description "TTP header success responses for router alert";
+     }
+     leaf tx-ttp-hdr-ra-error {
+       type uint64;
+       description "TTP header error responses for router alert";
+     }
+     leaf tx-ttp-hdr-ra-request {
+       type uint64;
+       description "Total number of TTP header requests for router alert";
+     }
+     leaf si-sync-total {
+       type uint64;
+       description "Total number of SI_SYNC notifications sent to SI";
+     }
+     leaf jtd-upcalls-syn {
+       type uint64;
+       description "Number of JTD syn upcalls";
+     }
+     leaf jtd-upcalls-syn-duplicate {
+       type uint64;
+       description "Number of ignored JTD syn duplicate upcalls";
+     }
+     leaf jtd-upcalls-delete {
+       type uint64;
+       description "Number of JTD delete upcalls";
+     }
+     leaf jtd-upcalls-no-matching-server {
+       type uint64;
+       description "Number of ignored JTD syn no matching server upcalls";
+     }
+     leaf jtd-upcalls-no-matching-local-intf {
+       type uint64;
+       description "Number of ignored JTD syn no matching local interface upcalls";
+     }
+     leaf jtd-upcalls-no-vrf {
+       type uint64;
+       description "Number of ignored no matching vrf upcalls";
+     }
+     leaf jtd-upcalls-failed-to-create-flow {
+       type uint64;
+       description "Number of ignored JTD syn upcalls for which we failed to create a flow";
+     }
+     leaf jtd-upcalls-no-meta-flow {
+       type uint64;
+       description "Number of ignored JTD syn upcalls for which resulting flow didn't contain JTD_META_FLOW cmsg";
+     }
+     leaf jtd-upcalls-unknown {
+       type uint64;
+       description "Number of JTD unknown upcalls";
+     }
+     leaf jtd-upcalls-total {
+       type uint64;
+       description "Total number of JTD upcalls";
+     }
+     leaf tcp-flows-program-si-req {
+       type uint64;
+       description "Number of tcp flows programmed in SI request context";
+     }
+     leaf tcp6-flows-program-si-req {
+       type uint64;
+       description "Number of tcp6 flows programmed in SI request context";
+     }
+     leaf jtd-flows-program-si-req {
+       type uint64;
+       description "Number of jtd flows programmed in SI request context";
+     }
+     leaf tcp-flows-program-syn-upcall {
+       type uint64;
+       description "Number of tcp flows programmed in syn upcall context";
+     }
+     leaf tcp6-flows-program-syn-upcall {
+       type uint64;
+       description "Number of tcp6 flows programmed in syn upcall context";
+     }
+     leaf jtd-flows-program-syn-upcall {
+       type uint64;
+       description "Number of jtd flows programmed in syn upcall context";
+     }
+     leaf tcp-flows-program-bg-task {
+       type uint64;
+       description "Number of tcp flows programmed in background task context";
+     }
+     leaf tcp6-flows-program-bg-task {
+       type uint64;
+       description "Number of tcp6 flows programmed in background task context";
+     }
+     leaf jtd-flows-program-bg-task {
+       type uint64;
+       description "Number of jtd flows programmed in background task context";
+     }
+     leaf tcp-flows-disabled {
+       type uint64;
+       description "Number of tcp flows disabled";
+     }
+     leaf tcp6-flows-disabled {
+       type uint64;
+       description "Number of tcp6 flows disabled";
+     }
+     leaf jtd-flows-disabled {
+       type uint64;
+       description "Number of jtd flows disabled";
+     }
+     leaf rtt-add {
+       type uint64;
+       description "Number of route table DDS objects added";
+     }
+     leaf rtt-chg {
+       type uint64;
+       description "Number of route table DDS objects changed";
+     }
+     leaf rtt-del {
+       type uint64;
+       description "Number of route table DDS objects deleted";
+     }
+     leaf rtt-active {
+       type uint64;
+       description "Number of route table DDS objects active";
+     }
+     leaf rt-add {
+       type uint64;
+       description "Number of route DDS objects added";
+     }
+     leaf rt-chg {
+       type uint64;
+       description "Number of route DDS objects changed";
+     }
+     leaf rt-del {
+       type uint64;
+       description "Number of route DDS objects deleted";
+     }
+     leaf rt-active {
+       type uint64;
+       description "Number of route DDS objects active";
+     }
+     leaf nh-add {
+       type uint64;
+       description "Number of next-hop DDS objects added";
+     }
+     leaf nh-chg {
+       type uint64;
+       description "Number of next-hop DDS objects changed";
+     }
+     leaf nh-del {
+       type uint64;
+       description "Number of next-hop DDS objects deleted";
+     }
+     leaf nh-active {
+       type uint64;
+       description "Number of next-hop DDS objects active";
+     }
+     leaf ifd-add {
+       type uint64;
+       description "Number of IFD DDS objects added";
+     }
+     leaf ifd-chg {
+       type uint64;
+       description "Number of IFD DDS objects changed";
+     }
+     leaf ifd-del {
+       type uint64;
+       description "Number of IFD DDS objects deleted";
+     }
+     leaf ifd-active {
+       type uint64;
+       description "Number of IFD DDS objects active";
+     }
+     leaf ifl-add {
+       type uint64;
+       description "Number of IFL DDS objects added";
+     }
+     leaf ifl-chg {
+       type uint64;
+       description "Number of IFL DDS objects changed";
+     }
+     leaf ifl-del {
+       type uint64;
+       description "Number of IFL DDS objects deleted";
+     }
+     leaf ifl-active {
+       type uint64;
+       description "Number of IFL DDS objects active";
+     }
+     leaf iff-add {
+       type uint64;
+       description "Number of IFF DDS objects added";
+     }
+     leaf iff-chg {
+       type uint64;
+       description "Number of IFF DDS objects changed";
+     }
+     leaf iff-del {
+       type uint64;
+       description "Number of IFF DDS objects deleted";
+     }
+     leaf iff-active {
+       type uint64;
+       description "Number of IFF DDS objects active";
+     }
+     leaf ifa-add {
+       type uint64;
+       description "Number of IFA DDS objects added";
+     }
+     leaf ifa-chg {
+       type uint64;
+       description "Number of IFA DDS objects changed";
+     }
+     leaf ifa-del {
+       type uint64;
+       description "Number of IFA DDS objects deleted";
+     }
+     leaf ifa-active {
+       type uint64;
+       description "Number of IFA DDS objects active";
+     }
+     leaf dds-tcp-sess-add {
+       type uint64;
+       description "Number of DDS TCP session objects added";
+     }
+     leaf dds-tcp-sess-chg {
+       type uint64;
+       description "Number of DDS TCP session objects changed";
+     }
+     leaf dds-tcp-sess-del {
+       type uint64;
+       description "Number of DDS TCP session objects deleted";
+     }
+     leaf dds-tcp-sess-active {
+       type uint64;
+       description "Number of DDS TCP session objects active";
+     }
+     leaf dds-tcp-server-add {
+       type uint64;
+       description "Number of DDS TCP server objects added";
+     }
+     leaf dds-tcp-server-chg {
+       type uint64;
+       description "Number of DDS TCP server objects changed";
+     }
+     leaf dds-tcp-server-del {
+       type uint64;
+       description "Number of DDS TCP server objects deleted";
+     }
+     leaf dds-tcp-server-active {
+       type uint64;
+       description "Number of DDS TCP server objects active";
+     }
+     leaf dds-tcp-sess-publish {
+       type uint64;
+       description "Number of DDS TCP session objects created and published";
+     }
+     leaf dds-tcp-sess-republish {
+       type uint64;
+       description "Number of DDS TCP session objects modified and published";
+     }
+     leaf dds-tcp-sess-unpublish {
+       type uint64;
+       description "Number of DDS TCP session objects unpublished";
+     }
+     leaf dds-tcp-server-publish {
+       type uint64;
+       description "Number of DDS TCP server objects created and published";
+     }
+     leaf dds-tcp-server-republish {
+       type uint64;
+       description "Number of DDS TCP server objects modified and published";
+     }
+     leaf dds-tcp-server-unpublish {
+       type uint64;
+       description "Number of DDS TCP server objects unpublished";
+     }
+     leaf tcp-sess-add {
+       type uint64;
+       description "Number of TCP session objects added";
+     }
+     leaf tcp-sess-chg {
+       type uint64;
+       description "Number of TCP session objects changed";
+     }
+     leaf tcp-sess-del {
+       type uint64;
+       description "Number of TCP session objects deleted";
+     }
+     leaf tcp-sess-active {
+       type uint64;
+       description "Number of TCP session objects active";
+     }
+     leaf tcp-server-add {
+       type uint64;
+       description "Number of TCP server objects added";
+     }
+     leaf tcp-server-chg {
+       type uint64;
+       description "Number of TCP server objects changed";
+     }
+     leaf tcp-server-del {
+       type uint64;
+       description "Number of TCP server objects deleted";
+     }
+     leaf tcp-server-active {
+       type uint64;
+       description "Number of TCP server objects active";
+     }
+   }
+   grouping fibd-statistics-rates-block {
+     leaf app-tcp-conn-accepted-rate {
+       type string;
+       description "Number of TCP applications connected to fibd in total per second";
+     }
+     leaf app-tcp-conn-closed-rate {
+       type string;
+       description "Number of TCP applications closed connection to fibd per second";
+     }
+     leaf tx-ttp-hdr-success-rate {
+       type string;
+       description "TTP TX header response successes per second";
+     }
+     leaf tx-ttp-hdr-error-rate {
+       type string;
+       description "TTP TX header response errors per second";
+     }
+     leaf tx-ttp-hdr-request-rate {
+       type string;
+       description "TTP TX header requests per second";
+     }
+     leaf ctrl-tcp-success-rate {
+       type string;
+       description "TCP control response success per second";
+     }
+     leaf ctrl-tcp-error-rate {
+       type string;
+       description "TCP control response errors per second";
+     }
+     leaf ctrl-tcp-request-rate {
+       type string;
+       description "TCP control requests per second";
+     }
+     leaf ctrl-success-rate {
+       type string;
+       description "Success responses for socket bind or delete requests per second";
+     }
+     leaf ctrl-error-rate {
+       type string;
+       description "Error responses for socket bind or delete requests per second";
+     }
+     leaf ctrl-request-rate {
+       type string;
+       description "Requests for socket bind or socket delete per second";
+     }
+     leaf ctrl-ifx-success-rate {
+       type string;
+       description "Success responses for interface index request per second";
+     }
+     leaf ctrl-ifx-error-rate {
+       type string;
+       description "Error responses for interface index request per second";
+     }
+     leaf ctrl-ifx-request-rate {
+       type string;
+       description "Interface index requests for a pfe interface per second";
+     }
+     leaf ctrl-ifls-success-rate {
+       type string;
+       description "Success responses for IFL indices request per second";
+     }
+     leaf ctrl-ifls-error-rate {
+       type string;
+       description "Error responses for IFL indices request per second";
+     }
+     leaf ctrl-ifls-request-rate {
+       type string;
+       description "Request IFL indices for an IFD per second";
+     }
+     leaf tx-ttp-hdr-ra-success-rate {
+       type string;
+       description "TTP header success responses for router alerts per second";
+     }
+     leaf tx-ttp-hdr-ra-error-rate {
+       type string;
+       description "TTP header error responses for router alerts per second";
+     }
+     leaf tx-ttp-hdr-ra-request-rate {
+       type string;
+       description "Total number of TTP header requests for router alerts per second";
+     }
+     leaf si-sync-total-rate {
+       type string;
+       description "Total number of SI_SYNC notifications sent to SI per second";
+     }
+     leaf jtd-upcalls-syn-rate {
+       type string;
+       description "Number of JTD syn upcalls per second";
+     }
+     leaf jtd-upcalls-syn-duplicate-rate {
+       type string;
+       description "Number of JTD syn duplicate upcalls per second";
+     }
+     leaf jtd-upcalls-delete-rate {
+       type string;
+       description "Number of JTD delete upcalls per second";
+     }
+     leaf jtd-upcalls-no-matching-server-rate {
+       type uint64;
+       description "Number of ignored JTD syn no matching server upcalls per second";
+     }
+     leaf jtd-upcalls-no-matching-local-intf-rate {
+       type uint64;
+       description "Number of ignored JTD syn no matching local interface upcalls per second";
+     }
+     leaf jtd-upcalls-no-vrf-rate {
+       type uint64;
+       description "Number of ignored no matching vrf upcalls per second";
+     }
+     leaf jtd-upcalls-failed-to-create-flow-rate {
+       type uint64;
+       description "Number of ignored JTD syn upcalls per second for which we failed to create a flow";
+     }
+     leaf jtd-upcalls-no-meta-flow-rate {
+       type uint64;
+       description "Number of ignored JTD syn upcalls per second for which resulting flow didn't contain JTD_META_FLOW cmsg";
+     }
+     leaf jtd-upcalls-unknown-rate {
+       type string;
+       description "Number of JTD unknown upcalls per second";
+     }
+     leaf jtd-upcalls-total-rate {
+       type string;
+       description "Total number of JTD upcalls per second";
+     }
+     leaf tcp-flows-program-si-req-rate {
+       type string;
+       description "Number of tcp flows programmed in SI request context per second";
+     }
+     leaf tcp6-flows-program-si-req-rate {
+       type string;
+       description "Number of tcp6 flows programmed in SI request context per second";
+     }
+     leaf jtd-flows-program-si-req-rate {
+       type string;
+       description "Number of jtd flows programmed in SI request context per second";
+     }
+     leaf tcp-flows-program-syn-upcall-rate {
+       type string;
+       description "Number of tcp flows programmed in syn upcall context per second";
+     }
+     leaf tcp6-flows-program-syn-upcall-rate {
+       type string;
+       description "Number of tcp6 flows programmed in syn upcall context per second";
+     }
+     leaf jtd-flows-program-syn-upcall-rate {
+       type string;
+       description "Number of jtd flows programmed in syn upcall context per second";
+     }
+     leaf tcp-flows-program-bg-task-rate {
+       type string;
+       description "Number of tcp flows programmed in background task context per second";
+     }
+     leaf tcp6-flows-program-bg-task-rate {
+       type string;
+       description "Number of tcp6 flows programmed in background task context per second";
+     }
+     leaf jtd-flows-program-bg-task-rate {
+       type string;
+       description "Number of jtd flows programmed in background task context per second";
+     }
+     leaf tcp-flows-disabled-rate {
+       type string;
+       description "Number of tcp flows disabled per second";
+     }
+     leaf tcp6-flows-disabled-rate {
+       type string;
+       description "Number of tcp6 flows disabled per second";
+     }
+     leaf jtd-flows-disabled-rate {
+       type string;
+       description "Number of jtd flows disabled per second";
+     }
+     leaf rtt-add-rate {
+       type string;
+       description "Number of route table DDS objects added per second";
+     }
+     leaf rtt-chg-rate {
+       type string;
+       description "Number of route table DDS objects changed per second";
+     }
+     leaf rtt-del-rate {
+       type string;
+       description "Number of route table DDS objects deleted per second";
+     }
+     leaf rt-add-rate {
+       type string;
+       description "Number of route DDS objects added per second";
+     }
+     leaf rt-chg-rate {
+       type string;
+       description "Number of route DDS objects changed per second";
+     }
+     leaf rt-del-rate {
+       type string;
+       description "Number of route DDS objects deleted per second";
+     }
+     leaf nh-add-rate {
+       type string;
+       description "Number of next-hop DDS objects added per second";
+     }
+     leaf nh-chg-rate {
+       type string;
+       description "Number of next-hop DDS objects changed per second";
+     }
+     leaf nh-del-rate {
+       type string;
+       description "Number of next-hop DDS objects deleted per second";
+     }
+     leaf ifd-add-rate {
+       type string;
+       description "Number of IFD DDS objects added per second";
+     }
+     leaf ifd-chg-rate {
+       type string;
+       description "Number of IFD DDS objects changed per second";
+     }
+     leaf ifd-del-rate {
+       type string;
+       description "Number of IFD DDS objects deleted per second";
+     }
+     leaf ifl-add-rate {
+       type string;
+       description "Number of IFL DDS objects added per second";
+     }
+     leaf ifl-chg-rate {
+       type string;
+       description "Number of IFL DDS objects changed per second";
+     }
+     leaf ifl-del-rate {
+       type string;
+       description "Number of IFL DDS objects deleted per second";
+     }
+     leaf iff-add-rate {
+       type string;
+       description "Number of IFF DDS objects added per second";
+     }
+     leaf iff-chg-rate {
+       type string;
+       description "Number of IFF DDS objects changed per second";
+     }
+     leaf iff-del-rate {
+       type string;
+       description "Number of IFF DDS objects deleted per second";
+     }
+     leaf ifa-add-rate {
+       type string;
+       description "Number of IFA DDS objects added per second";
+     }
+     leaf ifa-chg-rate {
+       type string;
+       description "Number of IFA DDS objects changed per second";
+     }
+     leaf ifa-del-rate {
+       type string;
+       description "Number of IFA DDS objects deleted per second";
+     }
+     leaf dds-tcp-sess-add-rate {
+       type string;
+       description "Number of DDS TCP session objects added per second";
+     }
+     leaf dds-tcp-sess-chg-rate {
+       type string;
+       description "Number of DDS TCP session objects changed per second";
+     }
+     leaf dds-tcp-sess-del-rate {
+       type string;
+       description "Number of DDS TCP session objects deleted per second";
+     }
+     leaf dds-tcp-server-add-rate {
+       type string;
+       description "Number of DDS TCP server objects added per second";
+     }
+     leaf dds-tcp-server-chg-rate {
+       type string;
+       description "Number of DDS TCP server objects changed per second";
+     }
+     leaf dds-tcp-server-del-rate {
+       type string;
+       description "Number of DDS TCP server objects deleted per second";
+     }
+     leaf dds-tcp-sess-publish-rate {
+       type string;
+       description "Number of DDS TCP session objects created and published per second";
+     }
+     leaf dds-tcp-sess-republish-rate {
+       type string;
+       description "Number of DDS TCP session objects modified and published per second";
+     }
+     leaf dds-tcp-sess-unpublish-rate {
+       type string;
+       description "Number of DDS TCP session objects unpublished per second";
+     }
+     leaf dds-tcp-server-publish-rate {
+       type string;
+       description "Number of DDS TCP server objects created and published per second";
+     }
+     leaf dds-tcp-server-republish-rate {
+       type string;
+       description "Number of DDS TCP server objects modified and published per second";
+     }
+     leaf dds-tcp-server-unpublish-rate {
+       type string;
+       description "Number of DDS TCP server objects unpublished per second";
+     }
+     leaf tcp-sess-add-rate {
+       type string;
+       description "Number of TCP session objects added per second";
+     }
+     leaf tcp-sess-chg-rate {
+       type string;
+       description "Number of TCP session objects changed per second";
+     }
+     leaf tcp-sess-del-rate {
+       type string;
+       description "Number of TCP session objects deleted per second";
+     }
+     leaf tcp-server-add-rate {
+       type string;
+       description "Number of TCP server objects added per second";
+     }
+     leaf tcp-server-chg-rate {
+       type string;
+       description "Number of TCP server objects changed per second";
+     }
+     leaf tcp-server-del-rate {
+       type string;
+       description "Number of TCP server objects deleted per second";
+     }
+     leaf jtd-flows-program-total-rate {
+       type string;
+       description "Total number of JTD flows programmed per second";
+     }
+     leaf tcp-flows-program-total-rate {
+       type string;
+       description "Total number of tcp flows programmed per second";
+     }
+     leaf tcp6-flows-program-total-rate {
+       type string;
+       description "Total number of tcp6 flows programmed per second";
+     }
+   }
+   grouping fibd-statistics-filtered-rates-block {
+     leaf fibd-filter-request {
+       type string;
+       description "Set fibd filter request";
+     }
+     leaf app-tcp-conn-accepted-rate {
+       type string;
+       description "Number of TCP applications connected to fibd in total per second";
+     }
+     leaf app-tcp-conn-closed-rate {
+       type string;
+       description "Number of TCP applications closed connection to fibd per second";
+     }
+     leaf tx-ttp-hdr-success-rate {
+       type string;
+       description "TTP TX header response successes per second";
+     }
+     leaf tx-ttp-hdr-error-rate {
+       type string;
+       description "TTP TX header response errors per second";
+     }
+     leaf tx-ttp-hdr-request-rate {
+       type string;
+       description "TTP TX header requests per second";
+     }
+     leaf ctrl-tcp-success-rate {
+       type string;
+       description "TCP control response success per second";
+     }
+     leaf ctrl-tcp-error-rate {
+       type string;
+       description "TCP control response errors per second";
+     }
+     leaf ctrl-tcp-request-rate {
+       type string;
+       description "TCP control requests per second";
+     }
+     leaf ctrl-success-rate {
+       type string;
+       description "Success responses for socket bind or delete requests per second";
+     }
+     leaf ctrl-error-rate {
+       type string;
+       description "Error responses for socket bind or delete requests per second";
+     }
+     leaf ctrl-request-rate {
+       type string;
+       description "Requests for socket bind or socket delete per second";
+     }
+     leaf ctrl-ifx-success-rate {
+       type string;
+       description "Success responses for interface index request per second";
+     }
+     leaf ctrl-ifx-error-rate {
+       type string;
+       description "Error responses for interface index request per second";
+     }
+     leaf ctrl-ifx-request-rate {
+       type string;
+       description "Interface index requests for a pfe interface per second";
+     }
+     leaf ctrl-ifls-success-rate {
+       type string;
+       description "Success responses for IFL indices request per second";
+     }
+     leaf ctrl-ifls-error-rate {
+       type string;
+       description "Error responses for IFL indices request per second";
+     }
+     leaf ctrl-ifls-request-rate {
+       type string;
+       description "Request IFL indices for an IFD per second";
+     }
+     leaf tx-ttp-hdr-ra-success-rate {
+       type string;
+       description "TTP header success responses for router alerts per second";
+     }
+     leaf tx-ttp-hdr-ra-error-rate {
+       type string;
+       description "TTP header error responses for router alerts per second";
+     }
+     leaf tx-ttp-hdr-ra-request-rate {
+       type string;
+       description "Total number of TTP header requests for router alerts per second";
+     }
+     leaf si-sync-total-rate {
+       type string;
+       description "Total number of SI_SYNC notifications sent to SI per second";
+     }
+     leaf jtd-upcalls-syn-rate {
+       type string;
+       description "Number of JTD syn upcalls per second";
+     }
+     leaf jtd-upcalls-syn-duplicate-rate {
+       type string;
+       description "Number of JTD syn duplicate upcalls per second";
+     }
+     leaf jtd-upcalls-delete-rate {
+       type string;
+       description "Number of JTD delete upcalls per second";
+     }
+     leaf jtd-upcalls-no-matching-server-rate {
+       type uint64;
+       description "Number of ignored JTD syn no matching server upcalls per second";
+     }
+     leaf jtd-upcalls-no-matching-local-intf-rate {
+       type uint64;
+       description "Number of ignored JTD syn no matching local interface upcalls per second";
+     }
+     leaf jtd-upcalls-no-vrf-rate {
+       type uint64;
+       description "Number of ignored no matching vrf upcalls per second";
+     }
+     leaf jtd-upcalls-failed-to-create-flow-rate {
+       type uint64;
+       description "Number of ignored JTD syn upcalls per second for which we failed to create a flow";
+     }
+     leaf jtd-upcalls-no-meta-flow-rate {
+       type uint64;
+       description "Number of ignored JTD syn upcalls per second for which resulting flow didn't contain JTD_META_FLOW cmsg";
+     }
+     leaf jtd-upcalls-unknown-rate {
+       type string;
+       description "Number of JTD unknown upcalls per second";
+     }
+     leaf jtd-upcalls-total-rate {
+       type string;
+       description "Total number of JTD upcalls per second";
+     }
+     leaf tcp-flows-program-si-req-rate {
+       type string;
+       description "Number of tcp flows programmed in SI request context per second";
+     }
+     leaf tcp6-flows-program-si-req-rate {
+       type string;
+       description "Number of tcp6 flows programmed in SI request context per second";
+     }
+     leaf jtd-flows-program-si-req-rate {
+       type string;
+       description "Number of jtd flows programmed in SI request context per second";
+     }
+     leaf tcp-flows-program-syn-upcall-rate {
+       type string;
+       description "Number of tcp flows programmed in syn upcall context per second";
+     }
+     leaf tcp6-flows-program-syn-upcall-rate {
+       type string;
+       description "Number of tcp6 flows programmed in syn upcall context per second";
+     }
+     leaf jtd-flows-program-syn-upcall-rate {
+       type string;
+       description "Number of jtd flows programmed in syn upcall context per second";
+     }
+     leaf tcp-flows-program-bg-task-rate {
+       type string;
+       description "Number of tcp flows programmed in background task context per second";
+     }
+     leaf tcp6-flows-program-bg-task-rate {
+       type string;
+       description "Number of tcp6 flows programmed in background task context per second";
+     }
+     leaf jtd-flows-program-bg-task-rate {
+       type string;
+       description "Number of jtd flows programmed in background task context per second";
+     }
+     leaf tcp-flows-disabled-rate {
+       type string;
+       description "Number of tcp flows disabled per second";
+     }
+     leaf tcp6-flows-disabled-rate {
+       type string;
+       description "Number of tcp6 flows disabled per second";
+     }
+     leaf jtd-flows-disabled-rate {
+       type string;
+       description "Number of jtd flows disabled per second";
+     }
+     leaf rtt-add-rate {
+       type string;
+       description "Number of route table DDS objects added per second";
+     }
+     leaf rtt-chg-rate {
+       type string;
+       description "Number of route table DDS objects changed per second";
+     }
+     leaf rtt-del-rate {
+       type string;
+       description "Number of route table DDS objects deleted per second";
+     }
+     leaf rt-add-rate {
+       type string;
+       description "Number of route DDS objects added per second";
+     }
+     leaf rt-chg-rate {
+       type string;
+       description "Number of route DDS objects changed per second";
+     }
+     leaf rt-del-rate {
+       type string;
+       description "Number of route DDS objects deleted per second";
+     }
+     leaf nh-add-rate {
+       type string;
+       description "Number of next-hop DDS objects added per second";
+     }
+     leaf nh-chg-rate {
+       type string;
+       description "Number of next-hop DDS objects changed per second";
+     }
+     leaf nh-del-rate {
+       type string;
+       description "Number of next-hop DDS objects deleted per second";
+     }
+     leaf ifd-add-rate {
+       type string;
+       description "Number of IFD DDS objects added per second";
+     }
+     leaf ifd-chg-rate {
+       type string;
+       description "Number of IFD DDS objects changed per second";
+     }
+     leaf ifd-del-rate {
+       type string;
+       description "Number of IFD DDS objects deleted per second";
+     }
+     leaf ifl-add-rate {
+       type string;
+       description "Number of IFL DDS objects added per second";
+     }
+     leaf ifl-chg-rate {
+       type string;
+       description "Number of IFL DDS objects changed per second";
+     }
+     leaf ifl-del-rate {
+       type string;
+       description "Number of IFL DDS objects deleted per second";
+     }
+     leaf iff-add-rate {
+       type string;
+       description "Number of IFF DDS objects added per second";
+     }
+     leaf iff-chg-rate {
+       type string;
+       description "Number of IFF DDS objects changed per second";
+     }
+     leaf iff-del-rate {
+       type string;
+       description "Number of IFF DDS objects deleted per second";
+     }
+     leaf ifa-add-rate {
+       type string;
+       description "Number of IFA DDS objects added per second";
+     }
+     leaf ifa-chg-rate {
+       type string;
+       description "Number of IFA DDS objects changed per second";
+     }
+     leaf ifa-del-rate {
+       type string;
+       description "Number of IFA DDS objects deleted per second";
+     }
+     leaf dds-tcp-sess-add-rate {
+       type string;
+       description "Number of DDS TCP session objects added per second";
+     }
+     leaf dds-tcp-sess-chg-rate {
+       type string;
+       description "Number of DDS TCP session objects changed per second";
+     }
+     leaf dds-tcp-sess-del-rate {
+       type string;
+       description "Number of DDS TCP session objects deleted per second";
+     }
+     leaf dds-tcp-server-add-rate {
+       type string;
+       description "Number of DDS TCP server objects added per second";
+     }
+     leaf dds-tcp-server-chg-rate {
+       type string;
+       description "Number of DDS TCP server objects changed per second";
+     }
+     leaf dds-tcp-server-del-rate {
+       type string;
+       description "Number of DDS TCP server objects deleted per second";
+     }
+     leaf dds-tcp-sess-publish-rate {
+       type string;
+       description "Number of DDS TCP session objects created and published per second";
+     }
+     leaf dds-tcp-sess-republish-rate {
+       type string;
+       description "Number of DDS TCP session objects modified and published per second";
+     }
+     leaf dds-tcp-sess-unpublish-rate {
+       type string;
+       description "Number of DDS TCP session objects unpublished per second";
+     }
+     leaf dds-tcp-server-publish-rate {
+       type string;
+       description "Number of DDS TCP server objects created and published per second";
+     }
+     leaf dds-tcp-server-republish-rate {
+       type string;
+       description "Number of DDS TCP server objects modified and published per second";
+     }
+     leaf dds-tcp-server-unpublish-rate {
+       type string;
+       description "Number of DDS TCP server objects unpublished per second";
+     }
+     leaf tcp-sess-add-rate {
+       type string;
+       description "Number of TCP session objects added per second";
+     }
+     leaf tcp-sess-chg-rate {
+       type string;
+       description "Number of TCP session objects changed per second";
+     }
+     leaf tcp-sess-del-rate {
+       type string;
+       description "Number of TCP session objects deleted per second";
+     }
+     leaf tcp-server-add-rate {
+       type string;
+       description "Number of TCP server objects added per second";
+     }
+     leaf tcp-server-chg-rate {
+       type string;
+       description "Number of TCP server objects changed per second";
+     }
+     leaf tcp-server-del-rate {
+       type string;
+       description "Number of TCP server objects deleted per second";
+     }
+     leaf jtd-flows-program-total-rate {
+       type string;
+       description "Total number of JTD flows programmed per second";
+     }
+     leaf tcp-flows-program-total-rate {
+       type string;
+       description "Total number of tcp flows programmed per second";
+     }
+     leaf tcp6-flows-program-total-rate {
+       type string;
+       description "Total number of tcp6 flows programmed per second";
+     }
+   }
+   grouping fibd-status-block {
+     leaf status-resp {
+       type string;
+     }
+   }
+ }

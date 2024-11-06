@@ -1,0 +1,53 @@
+module junos-state-sflow-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/sflow/types";
+  prefix js-sflow-types;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS sFlow data types.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-25 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef status-code {
+    type enumeration {
+      enum ENABLED {
+        value 0;
+        description
+          "Indicates the status is enabled";
+      }
+      enum DISABLED {
+        value 1;
+        description
+          "Indicates the status is disabled";
+      }
+    }
+    description
+      "Common operational state modes for sFlow related attributes";
+  }
+}

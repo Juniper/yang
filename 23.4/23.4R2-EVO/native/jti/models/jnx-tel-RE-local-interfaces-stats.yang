@@ -1,0 +1,136 @@
+/*
+ * Yang model corresponding to xpaths in xmlproxyd_show_local_interface_OC.yang file.
+ *
+ * Copyright (c) 2017, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module jnx-tel-RE-local-interfaces-stats {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/jnx-tel-RE-local-interfaces-stats";
+
+    prefix "jnx-tel-li";
+    import ietf-yang-types { prefix yang; }
+
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "streaming RE local physical/logical interface stats counters";
+    revision "2017-04-12" {
+        description "";
+    }
+
+    grouping jnx-interface-in-errors {
+        leaf in-drops {
+            type yang:counter64;
+        }
+
+        leaf in-frame-errors {
+            type yang:counter64;
+        }
+
+        leaf in-runts {
+            type yang:counter64;
+        }
+
+        leaf in-giants {
+            type yang:counter64;
+        }
+        leaf in-resource-errors {
+            type yang:counter64;
+        }
+    }
+
+    grouping jnx-interface-out-errors {
+        leaf out-drops {
+            type yang:counter64;
+        }
+
+        leaf carrier-transitions {
+            type yang:counter64;
+        }
+
+        leaf mtu-errors {
+            type yang:counter64;
+        }
+
+        leaf out-resource-errors {
+            type yang:counter64;
+        }
+    }
+
+    grouping subinterfaces-top {
+        container subinterfaces {
+            list subinterface {
+                key index;
+                leaf index {
+                    type uint32;
+                }
+                container state {
+                    config false;
+                    uses interface-counters-state;
+                }
+            }
+        }
+    }
+
+    grouping interface-counters-state {
+        container counters {
+            leaf in-octets {
+                type yang:counter64;
+            }
+            leaf in-pkts {
+                type yang:counter64;
+            }
+
+            leaf in-discards {
+                type yang:counter64;
+            }
+            leaf in-errors {
+                type yang:counter64;
+            }
+            uses jnx-interface-in-errors;
+            leaf out-octets {
+                type yang:counter64;
+            }
+            leaf out-pkts {
+                type yang:counter64;
+            }
+
+            leaf out-discards {
+                type yang:counter64;
+            }
+            leaf out-errors {
+                type yang:counter64;
+            }
+            uses jnx-interface-out-errors;
+            leaf last-clear {
+                type string;
+            }
+        }
+    }
+
+    grouping physical-interface-group {
+        list interface {
+            key name;
+            description
+                "The list of named interfaces on the device.";
+
+            leaf name {
+                type string;
+            }
+            container state {
+                config false;
+                uses interface-counters-state;
+            }
+            uses subinterfaces-top;
+        }
+    }
+
+    container interfaces {
+        uses physical-interface-group;
+    }
+}

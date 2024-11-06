@@ -1,0 +1,719 @@
+module junos-state-dhcp-security {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/dhcp/security";
+  prefix js-dhcp-sec;
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-forwarding-options {
+    prefix js-fwd;
+  }
+
+  import junos-state-access-security {
+    prefix js-as;
+  }
+
+  import junos-state-dhcp-common {
+    prefix js-dhcp-common;
+  }
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of DHCP snooping state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-06-28 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping dhcp-security-drop-counters {
+    description
+      "Grouping for DHCP Security drop counters. These counters
+       exist for both DHCPv4 and DHCPv6 security";
+
+    leaf pdus-dropped-total {
+      type yang:zero-based-counter32;
+      description
+        "Total number of PDUs dropped";
+    }
+    leaf pdus-dropped-no-configuration {
+      type yang:zero-based-counter32;
+      description
+        "Total number of PDUs dropped due to no configuration";
+    }
+    leaf pdus-dropped-server-id-mismatch {
+      type yang:zero-based-counter32;
+      description
+        "Total number of PDUs dropped due to server ID mismatch";
+    }
+  }
+
+  grouping dhcp-security-client-counters {
+    description
+      "Grouping for DHCP Security binding related counters that exist
+       both for DHCPv4 and DHCPv6 security bindings";
+
+    leaf clients-with-mac-mismatch {
+      type yang:zero-based-counter32;
+      description
+        "Total number of clients with mac mismatch";
+    }
+    leaf clients-with-successful-mac-update {
+      type yang:zero-based-counter32;
+      description
+        "Total number of clients with mac mismatch for which
+         the mac update was successful";
+    }
+  }
+
+  grouping dhcp-security-misc-counters {
+    description
+      "Grouping for common DHCP Security counters that exist for both
+       DHCPv4 and DHCPv6 security";
+
+    leaf requests-on-trusted-port {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Requests received on trusted ports";
+    }
+  }
+
+  grouping dhcp-security-iapd-stats {
+    description
+      "Grouping for DHCPv6 Security counters related to prefix
+       delegation";
+
+    leaf pdus-snooped-solicit-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Solicit PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+    leaf pdus-snooped-advertise-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Advertise PDUs with only IA_PD or both IA_NA
+         and IA_PD";
+    }
+    leaf pdus-snooped-request-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Request PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+    leaf pdus-snooped-reply-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Reply PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+    leaf pdus-snooped-decline-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Decline PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+    leaf pdus-snooped-release-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Release PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+    leaf pdus-snooped-renew-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Renew PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+    leaf pdus-snooped-rebind-with-iapd {
+      type yang:zero-based-counter32;
+      description
+        "Total number of Rebind PDUs with only IA_PD or both IA_NA and
+         IA_PD";
+    }
+  }
+
+  grouping dhcp-security-v4-stats {
+    description
+      "Grouping for IPv4 DHCP Security counters";
+
+    leaf pdus-snooped-total {
+      type yang:zero-based-counter32;
+      description
+        "Total number of IPv4 DHCP PDUs snooped";
+    }
+    leaf pdus-snooped-discover {
+      type yang:zero-based-counter32;
+      description
+        "The number of DISCOVER PDUs snooped";
+    }
+    leaf pdus-snooped-offer {
+      type yang:zero-based-counter32;
+      description
+        "The number of OFFER PDUs snooped";
+    }
+    leaf pdus-snooped-request {
+      type yang:zero-based-counter32;
+      description
+        "The number of IPv4 REQUEST PDUs snooped";
+    }
+    leaf pdus-snooped-decline {
+      type yang:zero-based-counter32;
+      description
+        "The number of DECLINE PDUs snooped";
+    }
+    leaf pdus-snooped-ack {
+      type yang:zero-based-counter32;
+      description
+        "The number of ACK PDUs snooped";
+    }
+    leaf pdus-snooped-nack {
+      type yang:zero-based-counter32;
+      description
+        "The number of NACK PDUs snooped";
+    }
+    leaf pdus-snooped-release {
+      type yang:zero-based-counter32;
+      description
+        "The number of RELEASE PDUs snooped";
+    }
+    leaf pdus-snooped-inform {
+      type yang:zero-based-counter32;
+      description
+        "The number of INFORM PDUs snooped";
+    }
+    leaf pdus-snooped-renew {
+      type yang:zero-based-counter32;
+      description
+        "The number of RENEW PDUs snooped";
+    }
+    leaf pdus-snooped-rebind {
+      type yang:zero-based-counter32;
+      description
+        "The number of REBIND PDUs snooped";
+    }
+    leaf pdus-snooped-force-renew {
+      type yang:zero-based-counter32;
+      description
+        "The number of Force RENEW PDUs snooped";
+    }
+
+    uses dhcp-security-client-counters;
+    uses dhcp-security-misc-counters;
+    uses dhcp-security-drop-counters;
+  }
+
+  grouping dhcp-security-v6-stats {
+    description
+      "Grouping for DHCPv6 Security counters";
+
+    leaf pdus-snooped-total {
+      type yang:zero-based-counter32;
+      description
+        "Total number of DHCPv6 packets snooped";
+    }
+    leaf pdus-snooped-solicit {
+      type yang:zero-based-counter32;
+      description
+        "The number of SOLICIT PDUs snooped.  These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-advertise {
+      type yang:zero-based-counter32;
+      description
+        "The number of ADVERTISE PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-request {
+      type yang:zero-based-counter32;
+      description
+        "The number of DHCPv6 REQUEST PDUs snooped. These include PDUs
+         with IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-reply {
+      type yang:zero-based-counter32;
+      description
+        "The number of REPLY PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-confirm {
+      type yang:zero-based-counter32;
+      description
+        "The number of CONFIRM PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-decline {
+      type yang:zero-based-counter32;
+      description
+        "The number of DHCPv6 DECLINE PDUs snooped. These include PDUs
+         with IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-release {
+      type yang:zero-based-counter32;
+      description
+        "The number of RELEASE PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-renew {
+      type yang:zero-based-counter32;
+      description
+        "The number of RENEW PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-rebind {
+      type yang:zero-based-counter32;
+      description
+        "The number of REBIND PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-relay-forward {
+      type yang:zero-based-counter32;
+      description
+        "The number of Relay Forward PDUs snooped. These include PDUs
+         with IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-relay-reply {
+      type yang:zero-based-counter32;
+      description
+        "The number of Relay Reply PDUs snooped. These include PDUs with
+         IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-information-request {
+      type yang:zero-based-counter32;
+      description
+        "The number of Information Request PDUs snooped. These include
+        PDUs with IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+    leaf pdus-snooped-reconfigure {
+      type yang:zero-based-counter32;
+      description
+        "The number of Reconfigure PDUs snooped. These include PDUs with
+        IA_NA, IA_PD and IA_NA with IA_PD";
+    }
+
+    uses dhcp-security-iapd-stats;
+    uses dhcp-security-client-counters;
+    uses dhcp-security-misc-counters;
+    uses dhcp-security-drop-counters;
+  }
+
+  grouping dhcp-security-dai-ndi-counters {
+    description
+      "Grouping for counters that exist both for Dynamic ARP Inspection (DAI)
+       and Neighbor Discovery Inspection (NDI).";
+
+    leaf in-packets {
+      type yang:zero-based-counter64;
+      description
+        "Total number of packets (ARP or ND) subjected to inspection";
+    }
+    leaf passed-packets {
+      type yang:zero-based-counter64;
+      description
+        "Total number of packets (ARP or ND) passed inspection";
+    }
+    leaf failed-packets {
+      type yang:zero-based-counter64;
+      description
+        "Total number of packets (ARP or ND) failed inspection";
+    }
+  }
+
+  grouping dhcp-security-v4-client-options {
+    description
+      "Grouping for DHCP Security client options related data";
+
+    container client-options {
+      description
+        "Container for all the DHCPv4 client options related data for a
+         specific dhcp-security IPv4 binding.";
+
+      leaf buffer {
+        type binary;
+        description
+          "The raw DHCP client options buffer received for a specific
+           dhcp-security IPv4 binding.";
+      }
+      leaf buffer-length {
+        type uint16;
+        description
+          "The length of the client options buffer.";
+      }
+    }
+  }
+
+  grouping dhcp-security-v6-client-options {
+    description
+      "Grouping for DHCPv6 Security client options";
+
+    container client-options {
+      when "../type = 'IA_NA'" {
+        description
+          "Include this for DHCPv6 bindings of type IA_NA only.
+           For DHCPv6 static/IA_PD/link-local bindings no options
+           data are streamed.";
+      }
+      description
+        "Container for all the DHCPv6 client options related data for a
+         specific dhcp-security IPv6 binding.";
+
+      leaf buffer {
+        type binary;
+        description
+          "Raw DHCP client options buffer received for a specific
+           dhcp-security IPv6 binding.";
+      }
+
+      leaf buffer-length {
+        type uint16;
+        description
+          "The length of the client options buffer.";
+      }
+    }
+  }
+
+  grouping dhcp-security-v4-binding {
+    description
+      "Current state of the DHCPv4 security binding";
+
+    uses js-dhcp-common:dhcpv4-binding-common;
+
+    leaf status {
+      type enumeration {
+        enum INIT {
+          description
+            "Client is in Init state";
+        }
+        enum REQUESTING {
+          description
+            "Client is in Requesting state";
+        }
+        enum BOUND {
+          description
+            "Client is in Bound state";
+        }
+        enum RENEWING {
+          description
+            "Client is in Renewing state";
+        }
+        enum REBINDING {
+          description
+            "Client is in Rebinding state";
+        }
+        enum STATIC {
+          description
+            "This is a static IPv4 binding";
+        }
+        enum INVALID {
+          description
+            "Client is in Invalid state";
+        }
+      }
+      description
+        "Status of the IPv4 dhcp-security binding";
+    }
+
+    uses dhcp-security-v4-client-options;
+  }
+
+  grouping dhcp-security-v6-binding {
+    description
+      "Current state of the DHCPv6 security binding";
+
+    uses js-dhcp-common:dhcpv6-binding-common;
+
+    leaf mac-address {
+      type yang:mac-address;
+      description
+        "The MAC Address associated with the client device";
+    }
+
+    leaf type {
+      type enumeration {
+        enum IA_NA {
+          description
+            "This is an IA_NA binding";
+        }
+        enum IA_PD {
+          description
+            "This is an IA_PD binding";
+        }
+        enum LINK_LOCAL {
+          description
+            "This binding is associated with the link local address
+             of the client";
+        }
+        enum STATIC {
+          description
+            "This is a static IPv6 binding";
+        }
+      }
+      description
+        "Type of binding, IA_NA/IA_PD/static/link-local";
+    }
+
+    leaf status {
+      type enumeration {
+        enum INIT {
+          description
+            "Client is in Init state";
+        }
+        enum WAIT {
+          description
+            "Client is in Wait state";
+        }
+        enum REQUESTING {
+          description
+            "Client is in Requesting state";
+        }
+        enum BOUND {
+          description
+            "Client is in Bound state";
+        }
+        enum RENEWING {
+          description
+            "Client is in Renewing state";
+        }
+        enum REBINDING {
+          description
+            "Client is in Rebinding state";
+        }
+        enum STATIC {
+          description
+            "This is a static IPv6 binding";
+        }
+        enum CONFIRMING {
+          description
+            "Client is in Confirming state";
+        }
+      }
+      description
+        "Status of the IPv6 dhcp-security binding";
+    }
+
+    uses dhcp-security-v6-client-options;
+  }
+
+  grouping dhcp-security-ipv4-bindings-top {
+    description
+      "Top-level grouping for IPv4 dhcp-security bindings";
+
+    container ipv4 {
+      description
+        "Container for IPv4 dhcp-security binding specific information";
+
+      container bindings {
+        description
+          "Container for all IPv4 dhcp-security bindings";
+
+        list binding {
+          key "address";
+
+          uses dhcp-security-v4-binding;
+        }
+      }
+    }
+  }
+
+  grouping dhcp-security-ipv6-bindings-top {
+    description
+      "Top-level grouping for IPv6 dhcp-security bindings";
+
+    container ipv6 {
+      description
+        "Container for IPv6 dhcp-security binding specific information";
+
+      container bindings {
+        description
+          "Container for all IPv6 dhcp-security bindings";
+
+        list binding {
+          key "address";
+
+          uses dhcp-security-v6-binding;
+        }
+      }
+    }
+  }
+
+  grouping dhcp-security-vlans-top {
+    description
+      "Top-level grouping for vlans configured with dhcp-security";
+
+    container vlans {
+      description
+        "Container for configured vlans";
+
+      list vlan {
+        key "name";
+        description
+          "Configured VLANs keyed by vlan name";
+
+        leaf name {
+          type string;
+          description
+            "VLAN name in which the dhcp-security binding is learnt";
+        }
+        uses dhcp-security-ipv4-bindings-top;
+        uses dhcp-security-ipv6-bindings-top;
+      }
+    }
+  }
+
+  grouping dhcp-security-dai-top {
+    description
+      "Top-level grouping for Dynamic ARP Inspection Information";
+
+    container dynamic-arp-inspection {
+      description
+        "Container for Dynamic ARP Inspection information";
+
+      uses dhcp-security-dai-ndi-counters;
+    }
+  }
+
+  grouping dhcp-security-ndi-top {
+    description
+      "Top-level grouping for Neighbor Discovery Inspection Information";
+
+    container neighbor-discovery-inspection {
+      description
+        "Container for Neighbor Discovery Inspection information";
+
+      uses dhcp-security-dai-ndi-counters;
+    }
+  }
+
+  grouping dhcp-security-interfaces-top {
+    container interfaces {
+      description
+        "Container for interfaces keyed by ifl name";
+
+      list interface {
+        key "name";
+        description
+          "The interface which is subjected to either Neighbor Discovery
+           Inspection or Dynamic ARP Inspection or both";
+
+        leaf name {
+          type string;
+          description
+            "Name of the logical interface";
+        }
+
+        uses dhcp-security-dai-top;
+        uses dhcp-security-ndi-top;
+      }
+    }
+  }
+
+  grouping dhcp-security-ipv4-counters-top {
+    description
+      "Top-level grouping for IPv4 dhcp-security related statistics";
+
+    container ipv4 {
+      description
+        "Container for IPv4 dhcp-security specific information";
+
+      container counters {
+        description
+          "Container for dhcp-security counters";
+
+        uses dhcp-security-v4-stats;
+      }
+    }
+  }
+
+  grouping dhcp-security-ipv6-counters-top {
+    description
+      "Top-level grouping for IPv6 dhcp-security related statistics";
+
+    container ipv6 {
+      description
+        "Container for IPv6 dhcp-security specific information";
+
+      container counters {
+        description
+          "Container for dhcp-security counters";
+
+        uses dhcp-security-v6-stats;
+      }
+    }
+  }
+
+  grouping dhcp-security-counters-top {
+    description
+      "Top-level grouping for dhcp-security related statistics";
+
+    uses dhcp-security-ipv4-counters-top;
+    uses dhcp-security-ipv6-counters-top;
+  }
+
+  grouping dhcp-security-top {
+    container dhcp-security {
+      description
+        "Container for dhcp-security specific information";
+
+      uses dhcp-security-counters-top;
+      uses dhcp-security-interfaces-top;
+      uses dhcp-security-vlans-top;
+    }
+  }
+
+  grouping dhcp-security-ri-top {
+    container dhcp-security {
+      description
+        "Container for dhcp-security specific information";
+
+      uses dhcp-security-vlans-top;
+    }
+  }
+
+  augment "/js:state/js-fwd:forwarding-options/js-as:access-security" {
+    description
+      "Adds dhcp-security to access-security state";
+
+    uses dhcp-security-top;
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+    "/js-fwd:forwarding-options/js-as:access-security" {
+
+    description
+      "Adds dhcp-security to access-security state";
+
+    uses dhcp-security-ri-top;
+  }
+}
+
