@@ -1,0 +1,557 @@
+module junos-bbe-statsd-telemetry {
+  yang-version 1;
+  namespace "http://juniper.net/yang/bbe-statsd";
+  prefix junos-bbe-statsd-telemetry;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net.";
+  description
+    "Juniper Networks definition of Junos native bbe-smgd telemetry stats yang model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  typedef bbe-index {
+    type uint32;
+    description
+      "A flow or container reference used by the forwarding component";
+  }
+
+  typedef vlan-tag {
+    type uint16 {
+      range "1..4094";
+    }
+    description
+      "An 802.1Q VLAN tag";
+  }
+
+  typedef interfaceSetType {
+    type enumeration {
+      enum svlan {
+        value 0;
+      }
+      enum cvlan;
+      enum phyIfd;
+      enum ponId;
+      enum staticName;
+      enum opaque;
+      enum underlyingPhysicalDevice;
+    }
+    description
+      "An interface-set type.  The type determines the construction or formatting of the interface-set name.";
+  }
+
+  typedef session-identifier {
+    type uint64;
+    description
+      "A unique identifier for a session in this intsance of subscriber-management";
+  }
+
+  typedef family-type {
+    type enumeration {
+      enum inet {
+        value 1;
+      }
+      enum inet6;
+      enum l2;
+    }
+    description
+      "The family type denotes the protocol family associated with service statistics.";
+  }
+
+  typedef client-session-type {
+    type enumeration {
+      enum none {
+        value 0;
+      }
+      enum dhcp;
+      enum vlan;
+      enum generic;
+      enum mobileIp;
+      enum vplsPw;
+      enum ppp;
+      enum pppoe;
+      enum l2tp;
+      enum static;
+      enum mlppp;
+      enum xauth;
+      enum fwXauth;
+      enum dot1x;
+      enum essm;
+      enum l2ald;
+      enum gre;
+      enum vlanOob;
+      enum l2CktPw;
+      enum dynIp;
+      enum hagTunnel;
+      enum hagBundle;
+    }
+  }
+
+  typedef unix-time {
+    type uint32;
+    description
+      "Timestamp expressed in seconds since January 1st 1970 UTC.";
+  }
+
+  grouping service-filter-statistics {
+    description
+      "Service accounting statistics for a service filter";
+    leaf packets {
+      description
+        "The number of packets matched and accepted by this filter";
+      type uint64;
+    }
+    leaf bytes {
+      description
+        "The number of bytes matched and accepted by this filter";
+      type uint64;
+    }
+  }
+
+  grouping interface-information {
+    description
+      "The set of meta-data for interface correlation";
+    leaf interface-index {
+      type bbe-index;
+      description
+        "The flow identifier for this interface.";
+    }
+    leaf session-type {
+      type client-session-type;
+      description
+        "The type of client session (e.g VLAN, DHCP, PPPOE, etc.";
+    }
+    leaf user-name {
+      type string;
+      description
+        "The login name for this interface/session.";
+    }
+    leaf profile-name {
+      type string;
+      description
+        "The name of the client profile used to create this interface";
+    }
+    leaf interface-name {
+      type string;
+      description
+        "The name of the associated interface";
+    }
+    leaf interface-set-name {
+      type string;
+      description
+        "The name of the associated interface set name";
+    }
+    leaf underlying-interface-name {
+      type string;
+      description
+        "The name of the associated underlying interface";
+    }
+    leaf cvlan-tag {
+      type vlan-tag;
+      description
+        "The innermost VLAN tag value associated with this interface or interface-set";
+    }
+    leaf svlan-tag {
+      type vlan-tag;
+      description
+        "The outermost VLAN tag value associated with this interface or interface-set";
+    }
+  }
+
+  grouping interface-set-information {
+    description
+      "Interface set information";
+    leaf interface-set-name {
+      type string;
+      description
+        "The name of the interface-set as supplied by AAA or as constructed by the topology
+         relationship (ACI string or interface stacking)";
+    }
+    leaf interface-set-type {
+      type interfaceSetType;
+      description
+        "The type of interface-set (determines structure of interface-set-name).";
+    }
+    leaf device-name {
+      type string;
+      description
+        "The name of the underlying device or port, e.g. ge-1/0/0
+         or ae1. Empty if the interface-set type is not a
+         physical interface-set type.";
+    }
+    leaf stag {
+      type vlan-tag;
+      description
+        "The outer VLAN tag, 0 if interface-set type is not a VLAN type";
+    }
+    leaf ctag {
+      type vlan-tag;
+      description
+        "The inner VLAN tag, 0 if interface-set type is not a VLAN type";
+    }
+    leaf cos-egress-tcp-name {
+      type string;
+      description
+        "The egress traffic control profile associated with this interface-set";
+    }
+    leaf cos-egress-tcp-remainder-name {
+      type string;
+      description
+        "The egress remainder traffic control profile associated with this interface-set";
+    }
+    leaf interface-set-member-count {
+      type uint32;
+      description
+        "number of members in the IFL set";
+    }
+  }
+
+  grouping queue-statistics {
+    description
+      "The set of statistics reported for a queue.";
+    leaf transmitted-packets {
+      type uint64;
+      description
+        "Total packets enqueued for this queue";
+    }
+    leaf transmitted-bytes {
+      type uint64;
+      description
+        "Total bytes enqueued for this queue";
+    }
+    leaf dropped-packets {
+      type uint64;
+      description
+        "Total packets dropped (because of RED, rate-limited,
+         tail-drop, etc.) for this queue";
+    }
+    leaf dropped-bytes {
+      type uint64;
+      description
+        "Total bytes dropped (because of RED, rate-limited, tail-
+         drop, etc.) for this queue";
+    }
+  }
+
+  grouping actual-transit-statistics {
+    description
+      "The set of subscriber statistics for an interface.";
+    leaf ip-in-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 packets received by this interface.";
+    }
+    leaf ip-out-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 packets sent to this interface.";
+    }
+    leaf ip-in-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 bytes received by this interface.";
+    }
+    leaf ip-out-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 bytes sent to this interface.";
+    }
+    leaf ipv6-in-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv6 packets received by this interface.";
+    }
+    leaf ipv6-out-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv6 packets sent to this interface.";
+    }
+    leaf ipv6-in-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv6 bytes received by this interface.";
+    }
+    leaf ipv6-out-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv6 bytes sent to this interface.";
+    }
+  }
+
+  grouping bbe-statsd-telemetry-top {
+    description
+      "Top level grouping for bbe telemetry stats";
+    container junos {
+      description
+        "JunOS OS";
+      config false;
+      container system {
+        description
+          "Junos System";
+        container subscriber-management {
+          description
+            "Subscriber management data";
+          container dynamic-interfaces {
+            description
+              "Dynamic interfaces data";
+            container interfaces {
+              description
+                "Interfaces related data";
+              leaf max-polling-interfaces {
+                description
+                  "Max number of polling interfaces";
+                type uint32;
+              }
+              leaf current-polling-interfaces {
+                description
+                  "No of current polling interfaces";
+                type uint32;
+              }
+              container meta-data {
+                description
+                  "Interface Metadata";
+                list interface {
+                  description
+                    "List of interfaces";
+                  key "sid";
+                  leaf sid {
+                    description
+                      "session id for this interface";
+                    type session-identifier;
+                  }
+                  uses interface-information;
+                }
+              }
+              container queue-statistics {
+                description
+                  "Queue statistics";
+                list interface {
+                  description
+                    "List of interfaces";
+                  key "sid";
+                  leaf sid {
+                    type session-identifier;
+                    description
+                      "The session-ID for this interface.";
+                  }
+                  leaf polling-enabled {
+                    type boolean;
+                    description
+                      "Whether polling is enabled for this interface";
+                  }
+                  container fpcs {
+                    description
+                      "FCPS related information";
+                    list fpc {
+                      description
+                        "list of fpc";
+                      key "slot";
+                      leaf slot {
+                        type uint32;
+                        description
+                          "The slot number representing this entry";
+                      }
+                      leaf last-update-time {
+                        type unix-time;
+                        description
+                          "Time whe fpc queue stats was last updated, expressed as Unix time; seconds since Jan 1st, 1970 UTC";
+                      }
+                      container queues {
+                        description
+                          "Contanier for queues";
+                        list queue {
+                          description
+                            "Queue instance";
+                          key "queue-no";
+                          leaf queue-no {
+                            type uint8;
+                            description
+                              "The queue index (0..n) for this queue";
+                          }
+                          uses queue-statistics;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              container subscriber-statistics {
+                description
+                  "Subscriber statistics";
+                list interface {
+                  description
+                    "Interface instance";
+                  key "sid";
+                  leaf sid {
+                    type session-identifier;
+                    description
+                      "The associated session ID for this interface";
+                  }
+                  uses actual-transit-statistics;
+                }
+              }
+              container services {
+                description
+                  "Services related information";
+                list interface {
+                  description
+                    "list of interface";
+                  key "sid";
+                  leaf sid {
+                    type uint64;
+                    description
+                      "The associated session ID for this interface";
+                  }
+                  container service-statistics {
+                    description
+                      "Service statistics related data";
+                    list service {
+                      description
+                        "list of Services";
+                      key "ssid";
+                      leaf ssid {
+                        type uint64;
+                        description
+                          "The associated session ID for this service";
+                      }
+                      leaf service-instance-name {
+                        type string;
+                        description
+                          "The name of a service profile instance for this subscriber";
+                      }
+                      container families {
+                        description
+                          "Container for families";
+                        list family {
+                          description
+                            "Instances of family";
+                          key "families-present";
+                          leaf families-present {
+                            description
+                              "The type of families present";
+                            type family-type;
+                          }
+                          container filter-directions {
+                            description
+                              "Container for filter directions";
+                            list filter-direction {
+                              description
+                                "Instances of filter-direction";
+                              key "direction";
+                              leaf direction {
+                                description
+                                  "Direction of the filter";
+                                type uint8;
+                              }
+                              uses service-filter-statistics;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            container interface-sets {
+              description
+                "Container for interface-set";
+              leaf max-polling-interfaces {
+                description
+                  "No of Max polling interfaces";
+                type uint32;
+              }
+              leaf current-polling-interfaces {
+                description
+                  "No of current polling interfaces";
+                type uint32;
+              }
+              container meta-data {
+                description
+                  "Meta data information of interface-set";
+                list interface-set {
+                  description
+                    "List of interface-set ";
+                  key "container-id";
+                  leaf container-id {
+                    description
+                      "Key for the interface-set instance";
+                    type bbe-index;
+                  }
+                  uses interface-set-information;
+                }
+              }
+              container queue-statistics {
+                description
+                  "Queue statistics related information";
+                list interface-set {
+                  description
+                    "List of interface-set";
+                  key "container-id";
+                  leaf container-id {
+                    type bbe-index;
+                    description
+                      "The flow index for this interface-set";
+                  }
+                  leaf polling-enabled {
+                    type boolean;
+                    description
+                      "Whether polling is enabled for this interface-set";
+                  }
+                  container fpcs {
+                    description
+                      "fpcs related information";
+                    list fpc {
+                      description
+                        "List of fpc's";
+                      key "slot";
+                      leaf slot {
+                        type uint32;
+                        description
+                          "The slot number representing this entry";
+                      }
+                      leaf last-update-time {
+                        type unix-time;
+                        description
+                          "Time the fpc queue stats was last updated, expressed as Unix time; seconds since Jan 1st, 1970 UTC";
+                      }
+                      container queues {
+                        description
+                          "fpc related queue information";
+                        list queue {
+                          description
+                            "List of queues";
+                          key "queue-no";
+                          leaf queue-no {
+                            type uint8;
+                            description
+                              "The queue index (0..n) for this queue";
+                          }
+                          uses queue-statistics;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses bbe-statsd-telemetry-top;
+}

@@ -1,0 +1,284 @@
+module jnx-aug-openconfig-gribi-statistics {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/gribi-statistics";
+
+  prefix "jnx-oc-gribi-stats";
+
+  import ietf-yang-types { prefix "yang"; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module defines the gRIBI statistics model. It is used to collect
+    information related to the gRIBI daemon's health and performance
+    statistics.
+    gribi-statistics
+      +--> config
+      |  +--> [Gribi stats config]
+      +-->state
+      | +--> [Global level Gribi stats]
+      +-->clients
+          +--> client(list)
+            +--> client-id
+            +--> state
+                +--> [Client level statistics]";
+
+  revision "2021-10-12" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  grouping gribi-stats-config {
+    description
+      "Config fields for gRIBI statistics";
+    leaf stats-aggregation-interval {
+      type uint32 {
+        range 60..3600;
+      }
+      units seconds;
+      default 60;
+      description
+        "The value of this leaf specifies the aggregation
+        time interval to be used for calculation of aggregates like count
+        and mean for various gRIBI specific statistics";
+    }
+    leaf stats-sampling-interval {
+      type uint32 {
+        range 30..3600;
+      }
+      units seconds;
+      default 30;
+      description
+        "The value of this leaf specifies the sampling
+        time interval to be used for sampling data like queue-size and
+        and later aggregated based on stats-aggregation-interval";
+    }
+  }
+  grouping gribi-stats-state {
+    description
+      "State fields for gRIBI statistics";
+    uses gribi-stats-config;
+    uses global-statistics-state;
+    uses common-statistics-state;
+  }
+  grouping clients-stats-top {
+    description
+      "gRIBI client statistics grouping";
+    list client {
+      key "client-id";
+      description
+        "List of gRIBI clients";
+      leaf client-id {
+        type string;
+        description
+          "Client identifier";
+      }
+      container state {
+        description
+          "State information associated with gRIBI client statistics";
+        uses common-statistics-state;
+        uses client-statistics-state;
+      }
+    }
+  }
+  grouping stat-value {
+    description
+      "Statistics value grouping";
+    leaf min {
+      type uint32;
+      description
+        "Represents the minimum value of the parent container
+        aggregated over the trailing aggregation-interval";
+    }
+    leaf max {
+      type uint32;
+      description
+        "Represents the maximum value of the parent container
+        aggregated over the trailing aggregation-interval";
+    }
+    leaf mean {
+      type uint32;
+      description
+        "Represents the mean value of the parent container
+        aggregated over the trailing aggregation-interval";
+    }
+  }
+
+  grouping stat-value-time {
+    description
+      "Statistics time value grouping";
+    leaf min {
+      type uint32;
+      units microseconds;
+      description
+        "Represents the minimum time value of the parent container
+        aggregated over the trailing aggregation-interval";
+    }
+    leaf max {
+      type uint32;
+      units microseconds;
+      description
+        "Represents the maximum time value of the parent container
+        aggregated over the trailing aggregation-interval";
+    }
+    leaf mean {
+      type uint32;
+      units microseconds;
+      description
+        "Represents the mean time value of the parent container
+        aggregated over the trailing aggregation-interval";
+    }
+  }
+  grouping entry-type-stats {
+    description
+      "Statistics maintained per entry-type";
+    leaf ipv4 {
+      type uint32;
+      description
+        "Statistics specific for ipv4 route type";
+    }
+    leaf ipv6 {
+      type uint32;
+      description
+        "Statistics specific for ipv6 route type";
+    }
+    leaf next-hop {
+      type uint32;
+      description
+        "Statistics specific for next-hop type";
+    }
+    leaf next-hop-group {
+      type uint32;
+      description
+        "Statistics specific for next-hop-group type";
+    }
+  }
+  grouping global-statistics-state {
+    description
+      "Global statistics state grouping";
+    leaf num-clients {
+      type uint32;
+      description
+        "Number of gRIBI clients";
+    }
+  }
+  grouping client-statistics-state {
+    description
+      "Client statistics state grouping";
+    leaf up-time {
+      type yang:timestamp;
+      description
+        "Client up time";
+    }
+  }
+  grouping common-statistics-state {
+    description
+      "Common statistics state grouping";
+    leaf client-flaps {
+      type uint32;
+      description
+        "Number of client flaps";
+    }
+    leaf programmed-route-count {
+      type uint32;
+      description
+        "Programmed route count";
+    }
+    leaf connection-termination-errors {
+        type uint32;
+        description
+          "Number of termination errors
+          in the trailing aggregation interval";
+    }
+    leaf fib-ack-failures {
+        type uint32;
+        description
+          "Number of fib-ack-failures
+          in the trailing aggregation interval";
+    }
+    container add-operations {
+      description
+        "Number of Add operations
+        in the trailing aggregation interval";
+      uses entry-type-stats;
+    }
+    container replace-operations {
+      description
+        "Number of replace operations
+        in the trailing aggregation interval";
+      uses entry-type-stats;
+    }
+    container delete-operations {
+      description
+        "Number of Delete operations
+        in the trailing aggregation interval";
+      uses entry-type-stats;
+    }
+    container get-operations {
+      description
+        "Number of Get operations
+        in the trailing aggregation interval";
+      uses entry-type-stats;
+    }
+    container mod-req-queue-size {
+      description
+        "Min, Max and Mean value of the mod request queue-size
+        in the trailing aggregation interval";
+      uses stat-value;
+    }
+    container get-req-queue-size {
+      description
+        "Min, Max and Mean value of the get request queue-size
+        in the trailing aggregation interval";
+      uses stat-value;
+    }
+    container add-operation-batch-size {
+      description
+        "Min, Max and Mean value of number add operations per request
+        in the trailing aggregation interval";
+      uses stat-value;
+    }
+    container replace-operation-batch-size {
+      description
+        "Min, Max and Mean value of number replace operations per request
+        in the trailing aggregation interval";
+        uses stat-value;
+    }
+    container delete-operation-batch-size {
+      description
+        "Min, Max and Mean value of number delete operations per request
+        in the trailing aggregation interval";
+        uses stat-value;
+    }
+    container fib-response-time {
+        description
+          "Min, Max and Mean value of fib response time in microseconds
+          in the trailing aggregation interval";
+        uses stat-value-time;
+    }
+  }
+  container gribi-statistics {
+    description
+      "gRIBI statistics container";
+
+    container config {
+      description
+        "Configuration parameters associated with gRIBI statistics";
+      uses gribi-stats-config;
+    }
+    container state {
+      config false;
+      description
+        "State information associated with gRIBI statistics";
+      uses gribi-stats-state;
+    }
+    container clients {
+      description
+        "Client level gRIBI statistics";
+      uses clients-stats-top;
+    }
+  }
+}
+

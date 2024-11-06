@@ -1,0 +1,715 @@
+module junos-state-interfaces {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/interfaces";
+  prefix js-if;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     interfaces state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-06-03 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping interface-top {
+    description
+      "Top-level grouping for interface family";
+
+    leaf local-index {
+      type uint32;
+      description
+        "Index number of the physical interface, which reflects its
+         initialization sequence";
+    }
+
+    leaf media-type {
+      type enumeration {
+        enum COPPER {
+          description
+            "Interface media type copper";
+        }
+        enum FIBER {
+          description
+            "Interface media type fiber";
+        }
+      }
+      description
+        "Interface media type";
+    }
+
+    leaf link-level-type {
+      type enumeration {
+        enum IFML_ETHER {
+          description
+            "Ethernet";
+        }
+        enum IFML_FDDI {
+          description
+            "FDDI";
+        }
+	      enum IFML_TOKENRING {
+          description
+            "Token-Ring";
+        }
+        enum IFML_PPP {
+          description
+            "PPP";
+        }
+        enum IFML_FRAMERELAY {
+          description
+            "Frame-Relay";
+        }
+        enum IFML_FRAMERELAY_FLEX {
+          description
+            "Flexible-Frame-Relay";
+        }
+        enum IFML_CISCOHDLC {
+          description
+            "Cisco-HDLC";
+        }
+        enum IFML_SMDSDXI {
+          description
+            "SMDS-DXI";
+        }
+        enum IFML_ATMPVC {
+          description
+            "ATM-PVC";
+        }
+        enum IFML_PPP_CCC {
+          description
+            "PPP-CCC";
+        }
+        enum IFML_FRAMERELAY_CCC {
+          description
+            "Frame-Relay-CCC";
+        }
+        enum IFML_FRAMERELAY_EXT_CCC {
+          description
+            "Extended-Frame-Relay-CCC";
+        }
+        enum IFML_FR_PORT_CCC {
+          description
+            "Frame-Relay-Port-CCC";
+        }
+        enum IFML_IPIP {
+          description
+            "IP-over-IP";
+        }
+        enum IFML_GRE {
+          description
+            "GRE";
+        }
+        enum IFML_VLAN {
+          description
+            "VLAN";
+        }
+        enum IFML_MGMTVLAN {
+          description
+            "Mgmt-VLAN";
+        }
+        enum IFML_PIM {
+          description
+            "PIM-Encapsulator";
+        }
+        enum IFML_PIMD {
+          description
+            "PIM-Decapsulator";
+        }
+        enum IFML_CISCOHDLC_CCC {
+          description
+            "Cisco-HDLC-CCC";
+        }
+        enum IFML_VLAN_CCC {
+          description
+            "VLAN-CCC";
+        }
+        enum IFML_MLPPP {
+          description
+            "Multilink-PPP";
+        }
+        enum IFML_MLPP {
+          description
+            "Multilink-FR";
+        }
+        enum IFML_ML {
+          description
+            "Multilink";
+        }
+        enum IFML_SLPPP {
+          description
+            "Singlelink-PPP";
+        }
+        enum IFML_LS {
+          description
+            "LinkService";
+        }
+        enum IFML_MFR {
+          description
+            "Multilink-FR-UNI-NNI";
+        }
+        enum IFML_LSI {
+          description
+            "LSI";
+        }
+        enum IFML_ATM_CELLRELAY_CCC {
+          description
+            "ATM-CCC-Cell-Relay";
+        }
+        enum IFML_CRYPTO {
+          description
+            "IPSEC-over-IP";
+        }
+        enum IFML_GGSN {
+          description
+            "GGSN";
+        }
+        enum IFML_LSI_PPP {
+          description
+            "LSI-Enabled-PPP";
+        }
+        enum IFML_LSI_CISCOHDLC {
+          description
+            "LSI-Enabled-HDLC";
+        }
+        enum IFML_PPP_TCC {
+          description
+            "PPP-TCC";
+        }
+        enum IFML_FRAMERELAY_TCC {
+          description
+            "Frame-Relay-TCC";
+        }
+        enum IFML_FRAMERELAY_EXT_TCC {
+          description
+            "Extended-Frame-Relay-TCC";
+        }
+        enum IFML_CISCOHDLC_TCC {
+          description
+            "Cisco-HDLC-TCC";
+        }
+        enum IFML_ETHERNET_CCC {
+          description
+            "Ethernet-CCC";
+        }
+        enum IFML_VT {
+          description
+            "Virtual-loopback-tunnel";
+        }
+        enum IFML_EXTENDED_VLAN_CCC {
+          description
+            "Extended-VLAN-CCC";
+        }
+        enum IFML_ETHER_OVER_ATM {
+          description
+            "Ethernet-over-ATM";
+        }
+        enum IFML_ETHER_VPLS_OVER_ATM {
+          description
+            "Ethernet-VPLS-over-ATM";
+        }
+        enum IFML_PICPEER {
+          description
+            "PIC-Peer";
+        }
+        enum IFML_ETHERNET_TCC {
+          description
+            "Ethernet-TCC";
+        }
+        enum IFML_VLAN_TCC {
+          description
+            "VLAN-TCC";
+        }
+        enum IFML_EXTENDED_VLAN_TCC {
+          description
+            "Extended-VLAN-TCC";
+        }
+        enum IFML_CONTROLLER {
+          description
+            "Controller";
+        }
+        enum IFML_ETHERNET_VPLS {
+          description
+            "Ethernet-VPLS";
+        }
+        enum IFML_ETHERNET_VLAN_VPLS {
+          description
+            "VLAN-VPLS";
+        }
+        enum IFML_ETHERNET_EXTENDED_VLAN_VPLS {
+          description
+            "Extended-VLAN-VPLS";
+        }
+        enum IFML_SERVICES {
+          description
+            "Adaptive-Services";
+        }
+        enum IFML_GGSNI {
+          description
+            "GGSN-Inspection";
+        }
+        enum IFML_LT {
+          description
+            "Logical-tunnel";
+        }
+        enum IFML_UT {
+          description
+            "Uplink-tunnel";
+        }
+        enum IFML_XT {
+          description
+            "Inter-PSD-tunnel";
+        }
+        enum IFML_COLLECTOR {
+          description
+            "Flow-collection";
+        }
+        enum IFML_DFC {
+          description
+            "Dynamic-Flow-Capture";
+        }
+        enum IFML_PPPOE {
+          description
+            "PPPoE";
+        }
+        enum IFML_PPP_SUBORDINATE {
+          description
+            "PPP-Subordinate";
+        }
+        enum IFML_CISCOHDLC_SUBORDINATE {
+          description
+            "Cisco-HDLC-Subordinate";
+        }
+        enum IFML_VP {
+          description
+            "VP-AV";
+        }
+        enum IFML_ST {
+          description
+            "Secure-Tunnel";
+        }
+        enum IFML_VS {
+          description
+            "Secure-Tunnel";
+        }
+        enum IFML_OTHER {
+          description
+            "Interface-Specific";
+        }
+        enum IFML_FR_ETHER {
+          description
+            "Frame-Relay-Ether-Type";
+        }
+        enum IFML_FR_ETHER_TCC {
+          description
+            "Frame-Relay-Ether-Type-TCC";
+        }
+        enum IFML_FR_ETHER_EXT_TCC {
+          description
+            "Frame-Relay-Ether-Type-EXT-TCC";
+        }
+        enum IFML_VLAN_VCI_CCC {
+          description
+            "VLAN-VCI-CCC";
+        }
+        enum IFML_TDM_CESOPSN_CCC {
+          description
+            "TDM-CCC-CESoPSN";
+        }
+        enum IFML_ETHER_VPLS_OVER_PPP {
+          description
+            "ETHER-VPLS-PPP";
+        }
+        enum IFML_TDM_IMA {
+          description
+            "IMA-Link";
+        }
+        enum IFML_UDPT {
+          description
+            "UDP-tunnel";
+        }
+        enum IFML_ETHERNET_FLEX {
+          description
+            "Flexible-Ethernet";
+        }
+        enum IFML_VTEP {
+          description
+            "VxLAN-Tunnel-Endpoint";
+        }
+        enum IFML_VCP {
+          description
+            "Virtual-Chassis-Interface";
+        }
+        enum IFML_RBEB {
+          description
+            "Remote-BEB";
+        }
+        enum IFML_FTI {
+          description
+            "Flexible-tunnel-Interface";
+        }
+        enum IFML_UNSPEC {
+          description
+            "Unspecified";
+        }
+      }
+      description
+        "Encapsulation used on the physical interface";
+    }
+
+    container flags {
+      description
+        "Encapsulating container for domain specific interface flags";
+
+      leaf-list config {
+        type enumeration {
+          enum IFF_HARDDOWN {
+            description
+              "Interface non-functional";
+          }
+          enum IFF_LINKDOWN {
+            description
+              "Link-Layer-Down";
+          }
+          enum IFF_DOWN {
+            description
+              "Interface configured inactive";
+          }
+          enum DK_NOT_IFF_DOWN {
+            description
+              "Interface configured active";
+          }
+          enum IFF_ADMINDOWN {
+            description
+              "Routing is administratively disabled on the interface";
+          }
+          enum DK_NOT_IFF_ADMINDOWN {
+            description
+              "Routing is administratively enabled on the interface";
+          }
+          enum IFF_POINTOPOINT {
+            description
+              "P2P interface, logical only";
+          }
+          enum IFF_NOMULTI {
+            description
+              "No multicast capabilities on the interface";
+          }
+          enum DK_NOT_IFF_NOMULTI {
+            description
+              "Interface is multicast capable";
+          }
+          enum IFF_PROMISC {
+            description
+              "All packets received on the interface are sent to the
+               central point or Services Processing Unit regardless of
+               the destination MAC address of the packet";
+          }
+          enum IFF_ALLMULTI {
+            description
+              "Interface can receive all multicast packets";
+          }
+          enum IFF_TRAPENABLE {
+            description
+              "SNMP traps are enabled on the interface";
+          }
+          enum IFF_INARP {
+            description
+              "Do Inverse ARP";
+          }
+          enum IFF_RX_DISABLE {
+            description
+              "Receive - disabled";
+          }
+          enum IFF_TX_DISABLE {
+            description
+              "Transmit - disabled";
+          }
+          enum IFF_CCCDOWN {
+            description
+              "CCC/TCC/L2VPN LSP down";
+          }
+          enum IFF_CLEARDF {
+            description
+              "Clear DF bit (AS PIC only)";
+          }
+          enum IFF_REASSEM {
+            description
+              "Reassembly of Tunnel packets enabled";
+          }
+          enum IFF_ACFC {
+            description
+              "Negotiated addr/ctrl field compression successfully";
+          }
+          enum IFF_PFC {
+            description
+              "Negotiated protocol field compression successfully";
+          }
+          enum IFF_RDD {
+            description
+              "Interface flag set on redundant devices";
+          }
+          enum IFF_LOOPED {
+            description
+              "Logical detected a loopback";
+          }
+        }
+        description
+          "Interface config flags";
+      }
+
+      leaf-list specific-config {
+        type enumeration {
+          enum IFDSPF_MULTICAST_STATISTICS {
+            description
+              "Interface Multicast Statistics Configuration";
+          }
+          enum IFDSPF_OAM_ON_SVLAN {
+            description
+              "Ethernet OAM state of SVLAN will propagate
+              to CVLANS";
+          }
+          enum IFDSPF_RPF_COUNTER {
+            description
+              "Indicates support of RPF counters on an interface/IFD
+               level";
+          }
+        }
+        description
+          "Interface/IFD specific config flags";
+      }
+
+      leaf-list media {
+        type enumeration {
+          enum IFMF_NONE {
+            description
+              "None";
+          }
+          enum IFMF_AUTOSELECT {
+            description
+              "AutoSelect Media";
+          }
+          enum IFMF_SCHEDULER {
+            description
+              "DLCI/VLAN scheduler turned on";
+          }
+          enum IFMF_SHARED_SCHEDULER {
+            description
+              "Shared-Scheduler turned ON";
+          }
+          enum IFMF_NOKEEPALIVE {
+            description
+              "Don't send keepalives";
+          }
+          enum DK_NOT_IFMF_NOKEEPALIVE {
+            description
+              "Send Keepalives";
+          }
+          enum IFMF_VLAN_OFFLOAD {
+            description
+              "Offload VLAN filtering to NIC";
+          }
+          enum IFMF_LOOSE_LCP {
+            description
+              "Don't set IFF_LINKDOWN";
+          }
+          enum IFMF_LOOSE_NCP {
+            description
+              "Don't set IFF_HARDDOWN";
+          }
+          enum IFMF_PPP_ACFC {
+            description
+              "Negotiate ACFC";
+          }
+          enum IFMF_PPP_PFC {
+            description
+              "Negotiate PFC";
+          }
+          enum IFMF_LOOSE_LMI {
+            description
+              "Don't set IFF_LINKDOWN";
+          }
+          enum IFMF_DCE {
+            description
+              "Respond to status inquiries";
+          }
+        }
+        description
+          "Interface media flag";
+      }
+
+      leaf-list device {
+        type enumeration {
+          enum IFDF_PRESENT {
+            description
+              "Interface hardware is present";
+          }
+          enum IFDF_RUNNING {
+            description
+              "Resources allocated";
+          }
+          enum IFDF_DUPLEX {
+            description
+              "Can hear own transmissions";
+          }
+          enum IFDF_DOWN {
+            description
+              "Non-functional, dropping packets";
+          }
+          enum IFDF_NOCARR {
+            description
+              "No-Carrier/unconnected";
+          }
+          enum IFDF_ERROR {
+            description
+              "Generic interface hardware error";
+          }
+          enum IFDF_ERROR2 {
+            description
+              "Alternate generic interface hardware error";
+          }
+          enum IFDF_NOMULTI {
+            description
+              "Hardware cannot receive multicasts";
+          }
+          enum IFDF_LOOPBACK {
+            description
+              "This is the loopback interface";
+          }
+          enum IFDF_QUENCH {
+            description
+              "Device output queueing quenched";
+          }
+          enum IFDF_ALLMULTI {
+            description
+              "Device receiving all multicasts";
+          }
+          enum IFDF_PROMISC {
+            description
+              "All packets received on the interface are sent to the
+               central point or Services Processing Unit regardless of
+               the destination MAC address of the packet";
+          }
+          enum IFDF_LINKDOWN {
+            description
+              "Link-Layer-Down owned by logical";
+          }
+          enum IFDF_LOOPED {
+            description
+              "Loop-Detected, owned by logical";
+          }
+        }
+        description
+          "Interface device flags";
+      }
+
+      leaf-list error {
+        type enumeration {
+          enum BPDU {
+            description
+              "Bridge protocol data unit errors detected";
+          }
+          enum LOOP_DETECT_PDU {
+            description
+              "Loop detect protocol data unit errors detected";
+          }
+          enum ETHERNET_SWITCHING {
+            description
+              "Ethernet switch errors detected";
+          }
+          enum MAC_REWRITE {
+            description
+              "MAC rewrite errors detected";
+          }
+        }
+        description
+          "Interface error flags";
+      }
+    }
+  }
+
+  grouping interface-units-top {
+    description
+      "Top-level grouping for logical interface units (aka.
+       subinterface/IFL)" ;
+
+    container units {
+      description
+        "Container for logical interface state";
+
+      list unit {
+        description
+          "List of logical interface/units";
+
+        key "name";
+
+        leaf name {
+          type uint32;
+          description
+            "Logical interface unit number";
+        }
+      }
+    }
+  }
+
+  grouping interfaces-top {
+    description
+      "Top-level grouping for interfaces state data";
+
+    container interfaces {
+      description
+        "Container for interfaces state";
+
+      list interface {
+        description
+          "List of interfaces";
+
+        key "name";
+
+        leaf name {
+          type string;
+          description
+            "Interface name";
+        }
+
+        uses interface-top;
+        uses interface-units-top;
+      }
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds interfaces domain to top-level state";
+
+    uses interfaces-top;
+  }
+}
+

@@ -1,0 +1,623 @@
+module jnx-aug-openconfig-qos {
+    yang-version "1";
+
+    namespace "http://yang.juniper.net/openconfig/augment/qos";
+
+    prefix "jnx-oc-qos";
+
+    import openconfig-interfaces { prefix oc-if; }
+    import ietf-yang-types { prefix yang; }
+    import openconfig-qos { prefix oc-qos; }
+    import junos-extension { prefix junos; }
+    import openconfig-types { prefix oc-types; }
+
+    organization "Juniper Networks";
+
+    description
+       "This module contains JUNOS augments to OpenConfig Qos model";
+
+    revision "2020-09-29" {
+        description "Initial Policer revision";
+        reference "TBD";
+    }
+
+    revision "2020-08-02" {
+        description "Initial revision";
+        reference "TBD";
+    }
+
+    grouping jnx-iflset-interface {
+      description
+         "Reference leafrefs to iflsetinterface";
+
+      leaf jnx-iflsetinterface {
+        type string;
+        description
+          "Reference to a iflsetinterface";
+      }
+    }
+
+  grouping policer-ref {
+    description
+      "Reference leafrefs to policer.";
+
+    leaf egress-policer {
+      type leafref {
+        path "/oc-qos:qos/jnx-oc-qos:policers/jnx-oc-qos:policer/jnx-oc-qos:name";
+      }
+      description
+        "Policer name.";
+    }
+  }
+
+  grouping classifier-ref {
+    description
+      "Reference leafrefs to classifier.";
+
+    leaf egress-fc {
+      type leafref {
+        path "/oc-qos:qos/oc-qos:classifiers/oc-qos:classifier/oc-qos:name";
+      }
+      description
+        "Classifier name.";
+    }
+  }
+
+  grouping jnx-qos-policer-1r2c-config {
+    description
+      "Configuration data for 1 rate, 2 color policer.";
+
+    leaf cir {
+      type uint64;
+      units bps;
+      description
+        "Committed information rate for the single-rate token
+        bucket policer.  This value represents the rate at which
+        tokens are added to the bucket.";
+    }
+
+    leaf cir-pct {
+      type oc-types:percentage;
+      description
+        "Committed information rate for the single-rate token
+        bucket policer. This value represents the rate at which
+        tokens are added to the bucket. It is expressed as a
+        percentage of the total bandwidth allocated to the
+        context in which the policer is referenced.";
+    }
+
+    leaf bc {
+      type uint32;
+      units bytes;
+      description
+        "Committed burst size for the single-rate token bucket
+        policer.  This value represents the depth of the token
+        bucket.";
+      }
+    }
+
+    grouping jnx-qos-policer-1r3c-config {
+      description
+        "Configuration data for 1 rate, 3 color policer (SrTCM).";
+
+      leaf cir {
+        type uint64;
+        units bps;
+        description
+          "Committed information rate for the single-rate token
+          bucket policer.  This value represents the rate at which
+          tokens are added to the bucket.";
+      }
+
+      leaf cir-pct {
+        type oc-types:percentage;
+        description
+          "Committed information rate for the single-rate token
+          bucket policer. This value represents the rate at which
+          tokens are added to the bucket. It is expressed as a
+          percentage of the total bandwidth allocated to the
+          context in which the policer is referenced.";
+      }
+
+      leaf bc {
+        type uint64;
+        units bytes;
+        description
+          "Committed burst size for the single-rate token bucket
+          policer.  This value represents the depth of the token
+          bucket.";
+      }
+ 
+      leaf be {
+        type uint64;
+        units bytes;
+        description
+          "Excess burst size for the single-rate token bucket policer.
+          This value represents the depth of the secondary bucket.";
+      }
+ 
+      leaf color-aware {
+        type boolean;
+        default false;
+        description
+          "If set to true, SrTCM policer is color-aware otherwise it is color-blind.
+          Kindly refer to RFC 2697.";
+      }
+    }
+
+    grouping jnx-qos-policer-2r3c-config {
+      description
+        "Configuration data for 2 rate, 3 color policer (TrTCM).";
+
+      leaf cir {
+        type uint64;
+        units bps;
+        description
+          "Committed information rate for the dual-rate token
+          bucket policer.  This value represents the rate at which
+          tokens are added to the bucket.";
+      }
+
+      leaf cir-pct {
+        type oc-types:percentage;
+        description
+          "Committed information rate for the dual-rate token
+          bucket policer. This value represents the rate at which
+          tokens are added to the bucket. It is expressed as a
+          percentage of the total bandwidth allocated to the
+          context in which the policer is referenced.";
+      }
+
+      leaf pir {
+        type uint64;
+        units bps;
+        description
+          "Peak information rate for the dual-rate token bucket
+          policer.  This value represents the rate at which tokens
+          are added to the secondary bucket.";
+      }
+
+      leaf pir-pct {
+        type oc-types:percentage;
+        description
+          "Peak information rate for the dual-rate token bucket
+          policer. This value represents the rate at which tokens
+          are added to the secondary bucket. The value is expressed
+          as a percentage of the total bandwidth available.";
+      }
+
+      leaf bc {
+        type uint64;
+        units bytes;
+        description
+          "Committed burst size for the two-rate token bucket
+          policer.  This value represents the depth of the token
+          bucket.";
+      }
+  
+      leaf be {
+        type uint64;
+        units bytes;
+        description
+          "Excess burst size for the two-rate token bucket policer.
+          This value represents the depth of the secondary bucket.";
+      }
+  
+      leaf color-aware {
+        type boolean;
+        default false;
+        description
+          "If set to true, SrTCM policer is color-aware otherwise it is color-blind.
+          Kindly refer to RFC 2697.";
+      }
+    }
+
+    grouping jnx-qos-policer-common-actions-config {
+        description
+            "Configuration data for QoS policer actions";
+
+        leaf drop {
+            type boolean;
+            description
+                "If set to true, packets within this context are dropped.";
+        }
+        leaf forwarding-class {
+            type string;
+            description
+                "Sets the class of service in IPv4 and IPv6 headers.";
+            reference
+                "Please refer to RFC 2474";
+        }
+
+        leaf loss-priority {
+            type enumeration {
+                enum LOW {
+                    description
+                        "Packet loss priority is low";
+                }
+                enum MEDIUM-LOW {
+                    description
+                        "Packet loss priority is medium-low";
+                }
+                enum MEDIUM-HIGH {
+                    description
+                        "Packet loss priority is medium-high";
+                }
+                enum HIGH {
+                    description
+                        "Packet loss priority is high";
+                }
+            }
+            description
+                "Type of loss-priority for the packet";
+        }
+    }
+
+    grouping jnx-qos-policer-1r2c-top {
+        description
+            "Top-level grouping for 1 rate, 2 color policer";
+
+        container one-rate-two-color {
+            description
+                "Top-level container for data related to a 1 rate, 2 color
+                policer.";
+
+            container config {
+                description
+                  "Configuration data for 1 rate, 2 color policer";
+
+                uses jnx-qos-policer-1r2c-config;
+            }
+
+            container state {
+                config false;
+                description
+                    "Operational state data for 1 rate, 2 color policers";
+
+                uses jnx-qos-policer-1r2c-config;
+            }
+
+            container conform-action {
+              description
+                "Action to be applied to packets that are policed within the
+                CIR of the one-rate, two-colour policer. Packets that receive
+                a token from the in-CIR bucket are said to be conforming and
+                have all of the specified actions applied.";
+
+              container config {
+                description
+                  "Configuration parameters relating to conforming packets for the
+                  1r2c policer.";
+                uses jnx-qos-policer-common-actions-config;
+              }
+
+              container state {
+                config false;
+                  description
+                    "Operational state parameters relating to conforming packets
+                    for the 1r2c policer.";
+
+                  uses jnx-qos-policer-common-actions-config;
+              }
+            }
+
+            container exceed-action {
+                description
+                    "Action to be applied to packets that are scheduled above the CIR
+                    of the one-rate, two-colour policer. Packets that do not receive a
+                    token from the in-CIR bucket are said to be exceeding, and have
+                    all of the specified actions applied.";
+
+                container config {
+                    description
+                      "Configuration parameters relating to exceeding packets for
+                      the 1r2c policer.";
+
+                    uses jnx-qos-policer-common-actions-config;
+                }
+
+                container state {
+                    config false;
+                    description
+                      "Operational state parameters relating to exceeding
+                      packets for the 1r2c policer.";
+
+                    uses jnx-qos-policer-common-actions-config;
+                }
+            }
+        }
+    }
+
+    grouping jnx-qos-policer-1r3c-top {
+      description
+        "Top-level grouping for 1 rate, 3 color policer";
+
+      container one-rate-three-color {
+        description
+          "Top-level container for data related to a 1 rate, 3 color
+          policer.";
+
+        container config {
+          description
+            "Configuration data for 1 rate, 3 color policer";
+
+          uses jnx-qos-policer-1r3c-config;
+        }
+
+        container state {
+          config false;
+            description
+              "Operational state data for 1 rate, 3 color policers";
+
+            uses jnx-qos-policer-1r3c-config;
+          }
+
+          container conform-action {
+            description
+              "Action to be applied to the packets that are within the
+              CIR of the policer. All packets that receive a token from
+              this bucket have all actions specified applied to them";
+
+            container config {
+              description
+                "Configuration parameters for the conform action of a
+                1r3c policer.";
+              uses jnx-qos-policer-common-actions-config;
+            }
+
+            container state {
+              config false;
+                description
+                  "Operational state parameters relating to the conform
+                  action of a 1r3c policer.";
+                uses jnx-qos-policer-common-actions-config;
+              }
+            }
+
+            container exceed-action {
+              description
+                "Action to be applied to the packets that are within the PIR
+                of the policer. Packets that receive a token from within the
+                PIR allocation have all the specified actions applied to them";
+
+              container config {
+                description
+                  "Configuration parameters relating to the action
+                  applied to exceeding packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+
+              container state {
+                config false;
+                description
+                  "Operational state parameters relating to the action
+                  applied to exceeding packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+            }
+
+            container violate-action {
+              description
+                "Action to be applied to the packets that are scheduled
+                above the PIR of the policer. Packets that do not receive
+                a token from either bucket have all specified actions
+                applied to them.";
+
+              container config {
+                description
+                  "Configuration parameters relating to the action
+                  applied to violating packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+
+              container state {
+                config false;
+                description
+                  "Operational state parameters relating to the action
+                  applied to violating packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+            }
+        }
+    }
+
+    grouping jnx-qos-policer-2r3c-top {
+      description
+        "Top-level grouping for 2 rate, 3 color policer";
+
+      container two-rate-three-color {
+        description
+          "Top-level container for data related to a 2 rate, 3 color
+          policer.";
+
+        container config {
+          description
+            "Configuration data for 2 rate, 3 color policer";
+
+          uses jnx-qos-policer-2r3c-config;
+        }
+
+        container state {
+          config false;
+            description
+              "Operational state data for 1 rate, 3 color policers";
+
+            uses jnx-qos-policer-2r3c-config;
+          }
+
+          container conform-action {
+            description
+              "Action to be applied to the packets that are within the
+              CIR of the policer. All packets that receive a token from
+              this bucket have all actions specified applied to them";
+
+            container config {
+              description
+                "Configuration parameters for the conform action of a
+                2r3c policer.";
+              uses jnx-qos-policer-common-actions-config;
+            }
+
+            container state {
+              config false;
+                description
+                  "Operational state parameters relating to the conform
+                  action of a 2r3c policer.";
+                uses jnx-qos-policer-common-actions-config;
+              }
+            }
+
+            container exceed-action {
+              description
+                "Action to be applied to the packets that are within the PIR
+                of the policer. Packets that receive a token from within the
+                PIR allocation have all the specified actions applied to them";
+
+              container config {
+                description
+                  "Configuration parameters relating to the action
+                  applied to exceeding packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+
+              container state {
+                config false;
+                description
+                  "Operational state parameters relating to the action
+                  applied to exceeding packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+            }
+
+            container violate-action {
+              description
+                "Action to be applied to the packets that are scheduled
+                above the PIR of the policer. Packets that do not receive
+                a token from either bucket have all specified actions
+                applied to them.";
+
+              container config {
+                description
+                  "Configuration parameters relating to the action
+                  applied to violating packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+
+              container state {
+                config false;
+                description
+                  "Operational state parameters relating to the action
+                  applied to violating packets.";
+
+                uses jnx-qos-policer-common-actions-config;
+              }
+            }
+        }
+    }
+
+    grouping jnx-qos-policer-config {
+        description
+            "Configuration data for QoS Policers";
+
+        leaf type {
+            type enumeration {
+                enum SINGLE-RATE-2-COLOR {
+                    description
+                        "Single rate two-color policer";
+                }
+                enum SINGLE-RATE-3-COLOR {
+                    description
+                        "Single-rate-3-color (SrTCM) policer, please refer to RFC 2697.";
+                }
+                enum TWO-RATE-3-COLOR {
+                    description
+                        "Two-rate-3-color (TrTCM Policer), please refer to RFC 2698.";
+                }
+            }
+            description
+                "Type of Policer";
+        }
+
+        leaf name {
+            type string;
+            description
+                "Name of the policer.";
+        }
+    }
+
+    grouping jnx-qos-policer-state {
+        description
+            "Operational state data for QoS policers";
+    }
+
+    grouping jnx-qos-policers-top {
+        description
+            "Top-level grouping for the set of defined QoS Policer";
+
+        container policers {
+            description
+                "Container for policers.";
+
+            list policer {
+                key "name type";
+                description
+                    "List of defined QoS traffic schedulers.";
+
+                leaf name {
+                    type leafref {
+                        path "../config/name";
+                    }
+                    description
+                        "Reference to the name in config";
+                }
+
+                leaf type {
+                    type leafref {
+                        path "../config/type";
+                    }
+                    description
+                        "Reference to the type in config";
+                }
+
+                container config {
+                    description
+                        "Configuration data for QoS Policer";
+
+                    uses jnx-qos-policer-config;
+                }
+
+                container state {
+                    config false;
+
+                    description
+                        "Operational state data for QoS policers";
+
+                    uses jnx-qos-policer-config;
+                    uses jnx-qos-policer-state;
+                }
+
+                uses jnx-qos-policer-1r2c-top;
+                uses jnx-qos-policer-1r3c-top;
+                uses jnx-qos-policer-2r3c-top;
+            }
+        }
+    }
+
+    augment "/oc-qos:qos/oc-qos:interfaces/" +
+      "oc-qos:interface/oc-qos:interface-ref/" +
+      "oc-qos:state" {
+
+      uses jnx-iflset-interface;
+    }
+
+    augment "/oc-qos:qos" {
+        uses jnx-qos-policers-top;
+    }
+}

@@ -1,0 +1,352 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-version {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/version";
+
+   prefix version;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for version command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R2.13";
+   }
+
+   rpc get-software-information {
+     description "Show software process revision levels";
+     input {
+       uses command-forwarding;
+       leaf level {
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container software-information {
+         uses software-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping software-information-block {
+     leaf host-name {
+       type string;
+       description "Hostname of router";
+     }
+     leaf product-model {
+       type string;
+       description "Hardware model name";
+     }
+     leaf junos-version {
+       type string;
+       description "Junos Version";
+     }
+     leaf junos-edition {
+       type string;
+       description "Junos Edition";
+     }
+     leaf yocto-version {
+       type string;
+       description "Yocto Version";
+     }
+     leaf kernel-version {
+       type string;
+       description "Kernel version";
+     }
+     leaf junos-package {
+       type string;
+       description "Junos Package Version";
+     }
+     leaf product-name {
+       type string;
+       description "Product name";
+     }
+     leaf jsr {
+       type empty;
+       description "System is in services-router mode";
+     }
+     leaf fips {
+       type empty;
+       description "System conforms to FIPS requirements";
+     }
+     container external-package-information {
+       list external-package-item {
+         leaf external-package-name {
+           type string;
+         }
+         leaf external-package-version {
+           type string;
+         }
+       }
+     }
+     list package-information {
+       leaf comment {
+         type string;
+       }
+       leaf package-type {
+         type string;
+       }
+       leaf name {
+         type string;
+         description "Syslog message tag name";
+       }
+       leaf version {
+         type string;
+         description "JUNOS version";
+       }
+       leaf package-name {
+         type string;
+         description "Name of software package";
+       }
+     }
+     list version-information {
+       leaf component {
+         type string;
+       }
+       leaf release {
+         type string;
+         description "Release name";
+       }
+       leaf builder {
+         type string;
+       }
+       leaf build-date {
+         type string;
+         description "Build date";
+       }
+       leaf build-machine {
+         type string;
+       }
+       leaf build-directory {
+         type string;
+       }
+       leaf service-interface {
+         type string;
+       }
+       leaf major {
+         type int32;
+       }
+       leaf minor {
+         type int32;
+       }
+       leaf release-category {
+         type string;
+       }
+       leaf build-number {
+         type int32;
+       }
+       leaf spin {
+         type int32;
+       }
+     }
+     container haiku {
+       leaf content {
+         type string;
+       }
+     }
+   }
+ }

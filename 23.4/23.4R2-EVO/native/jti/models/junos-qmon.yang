@@ -1,0 +1,93 @@
+/*
+ * YANG definition for Qmon statss
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-qmon {
+  yang-version 1;
+
+  // namespace
+  namespace "http://juniper.net/yang/junos-telemetry-qmon";
+
+  prefix "jnx-qmon";
+
+  import jnx-tel-top { prefix junos; }
+
+
+  // meta
+  organization "Juniper Networks";
+
+  contact "support@juniper.net";
+
+  description "Yang definition for Qmon stats";
+  revision "2021-02-09" {
+    description "Initial yang file";
+  }
+
+
+    grouping qmon-counter {
+        leaf queue-number {
+            type uint32;
+            description "Interface queue number";
+        }
+        leaf peak-buffer-occupancy-bytes {
+            type uint32;
+            description "Peak value of queue buffer occupancy in bytes";
+        }
+        leaf packets {
+            type uint64;
+            description "Packets egress out via interface queue";
+        }
+        leaf bytes {
+            type uint64;
+            description "Bytes egress out via interface queue";
+        }
+        leaf tail-drop-packets {
+            type uint64;
+            description "Number of tail drop packets";
+        }
+        leaf tail-drop-bytes {
+            type uint64;
+            description "Number of tail drop bytes";
+        }
+    }
+    grouping qmon-top {
+        leaf name {
+            type string;
+            description "Interface name";
+        }
+        container state {
+         config false;
+           description "container node for state";
+             leaf parent_ae_name {
+              type string;
+               description "Name of ae, interface is member of";
+           }
+         }
+        list ingress {
+          config false;
+          key queue-number;
+          uses qmon-counter;
+          description "Queue monitoring direction";
+        }
+    }
+
+
+  augment "/junos:junos" {
+    container system {
+      config false;
+      description "Container node for system";
+        container linecard {
+          config false;
+          description "Container node for linecard";
+             list qmon-sw {
+               key name;
+                description "Queue monitoring list";
+                  uses qmon-top;
+      }
+   }
+ }
+}
+  }

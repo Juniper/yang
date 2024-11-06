@@ -1,0 +1,106 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-cmerror-counters {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/junos-cmerror-counters";
+
+    prefix "jnx-cmerror-counters";
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "Yang definition for secure packet capture";
+
+    revision "2021-01-21" {
+        description "Initial yang file";
+    }
+
+    grouping cmerror-counters-top {
+        container junos {
+            config false;
+            container system {
+                container cmerror {
+                    list counters {
+                        key identifier;
+                        leaf identifier {
+                            type string;
+                            description
+                                "Identifier. Follows convention of
+                                 '/<component>/<instance#>/<sub-component>/<instance#>/module-name/<instance#>/<error-name>'";
+                        }
+                        leaf fru-slot {
+                            type uint32;
+                            description "The slot at which the FRU that detects this error is placed";
+                        }
+                        leaf fru-type {
+                            type string;
+                            description "The type of FRU that detects this error. Can be one of fpc,sib,feb";
+                        }
+                        leaf component-id {
+                            type uint32;
+                            description "The id of the component that reports the error. For example, the PFE ID";
+                        }
+                        leaf description {
+                            type string;
+                            description "A description of the error that has occured";
+                        }
+                        leaf help {
+                            type string;
+                            description "A string that could help provide some further information related to the error";
+                        }
+                        leaf count {
+                            type uint64;
+                            description "The current count of the error on the system";
+                        }
+                        leaf last-updated {
+                            type uint64;
+                            description "The time (in ms since epoch) when the entry for this error was last updated";
+                        }
+                        leaf enabled {
+                            type boolean;
+                            description "Whether the error is enabled or not. By default, all the errors are enabled";
+                        }
+                        leaf error-module-id {
+                            type uint32;
+                            description "The ID of the module that is responsible for detection of this error.
+                                         Can also be obtained from the 'show cmerror module' output";
+                        }
+                        leaf error-code {
+                            type uint32;
+                            description "The error-code of the particular error (same as what we see in 'show cmerror module')";
+                        }
+                        leaf occur-count {
+                            type uint64;
+                            description "The number of times that the error has occured";
+                        }
+                        leaf cleared-count {
+                            type uint64;
+                            description "The number of times that the error has been cleared";
+                        }
+                        leaf last-cleared-at {
+                            type uint64;
+                            description "The time (in ms since epoch) when the entry for this error was last cleared";
+                        }
+                        leaf action-count {
+                            type uint32;
+                            description "The number of times that the action related to the error has been taken";
+                        }
+                        leaf last-action-taken-at {
+                            type uint64;
+                            description "The time (in ms since epoch) when the action related to this error was last taken";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    uses cmerror-counters-top;
+}

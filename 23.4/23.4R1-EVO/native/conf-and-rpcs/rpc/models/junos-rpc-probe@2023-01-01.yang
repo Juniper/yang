@@ -1,0 +1,443 @@
+/*
+ * Copyright (c) 2023 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-probe {
+   namespace "http://yang.juniper.net/junos/rpc/probe";
+
+   prefix probe;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for probe command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R1.10-EVO";
+   }
+
+   rpc probe {
+     description "Probe interfaces on remote target";
+     input {
+       leaf by-name {
+         description "Probe a local interface by name";
+         type string;
+       }
+       leaf by-index {
+         description "Probe a local interface by index";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf by-address {
+         description "Probe a local interface by address";
+         type string;
+       }
+       leaf by-remote-address {
+         description "Probe a remote interface by address";
+         type string;
+       }
+       leaf count {
+         description "Number of probe requests to send";
+         units "packets";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf wait {
+         description "Maximum wait time after sending final packet";
+         units "seconds";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf detail {
+         description "Display incoming interface of received packet";
+         type empty;
+       }
+       leaf interface {
+         description "Source interface (multicast, all-ones, unrouted packets)";
+         type string;
+       }
+       leaf interval {
+         description "Delay between probe requests";
+         units "seconds";
+         type string;
+       }
+       leaf source {
+         description "Source address of probe request";
+         type string;
+       }
+       leaf ttl {
+         description "IP time-to-live value (IPv6 hop-limit value)";
+         units "hops";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 255";
+           }
+         }
+       }
+       leaf tos {
+         description "IP type-of-service value";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 255";
+           }
+         }
+       }
+       leaf inet {
+         description "Force probe to IPv4 destination";
+         type empty;
+       }
+       leaf inet6 {
+         description "Force probe to IPv6 destination";
+         type empty;
+       }
+       leaf routing-instance {
+         description "Routing instance for probe attempt";
+         type string;
+       }
+       leaf proxy {
+         description "Hostname or IP address of proxy node";
+         type string;
+         mandatory true;
+       }
+       leaf logical-system {
+         description "Name of logical system";
+         type string {
+         }
+       }
+     }
+     output {
+       container probe-results {
+         uses probe-results-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping probe-results-block {
+     list probe-test-results {
+       leaf owner-name {
+         type string;
+         description "Test owner name";
+       }
+       leaf test-name {
+         type string;
+         description "Name of test";
+       }
+       leaf target-address {
+         type string;
+         description "Target address of test";
+       }
+       leaf source-address {
+         type string;
+         description "Source address of test";
+       }
+       leaf test-type {
+         type string;
+         description "Type of the probe";
+       }
+       leaf test-size {
+         type uint32;
+         description "Number of probes in test";
+       }
+       container generic-sample-results {
+         leaf sample-status {
+           type string;
+           description "Operation response status from probe";
+         }
+         leaf sample-tx-time {
+           type string;
+           description "Time at which probe was sent";
+         }
+         leaf sample-rx-time {
+           type string;
+           description "Time at which probe response was received or timed out";
+         }
+         leaf offload-status {
+           type string;
+           description "Use of offload timestamps in probes";
+         }
+         leaf rtt {
+           type uint32;
+           description "Round trip time of probe";
+         }
+         leaf rtt-jitter {
+           type uint32;
+           description "Round trip jitter of probes";
+         }
+         leaf egress-jitter {
+           type uint32;
+           description "Egress delay jitter of probes";
+         }
+         leaf ingress-jitter {
+           type uint32;
+           description "Ingress delay jitter of probes";
+         }
+       }
+       container generic-aggregate-results {
+         leaf aggregate-type {
+           type string;
+           description "Scope of aggregate results";
+         }
+         leaf num-samples-tx {
+           type uint32;
+           description "Number of probes sent";
+         }
+         leaf num-samples-rx {
+           type uint32;
+           description "Number of probes received";
+         }
+         leaf loss-egress {
+           type uint32;
+           description "Number of probes lost before reflection";
+         }
+         leaf loss-percentage {
+           type string;
+           description "Percentage of probes lost (no response)";
+         }
+         list generic-aggregate-measurement {
+           leaf measurement-type {
+             type string;
+             description "Type of value observed over measurement";
+           }
+           leaf measurement-samples {
+             type uint32;
+             description "Number of measurement samples";
+           }
+           leaf measurement-min {
+             type uint32;
+             description "Minimum over measurement samples";
+           }
+           leaf measurement-max {
+             type uint32;
+             description "Maximum over measurement samples";
+           }
+           leaf measurement-avg {
+             type uint32;
+             description "Average over measurement samples";
+           }
+           leaf measurement-stddev {
+             type uint32;
+             description "Standard deviation over measurement samples";
+           }
+         }
+       }
+     }
+   }
+ }

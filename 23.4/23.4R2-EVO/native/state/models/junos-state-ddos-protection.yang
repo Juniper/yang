@@ -1,0 +1,228 @@
+module junos-state-ddos-protection {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/ddos-protection";
+  prefix js-ddos;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-routing-types {
+    prefix rt-types;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-ddos-protection-types {
+    prefix js-ddos-types;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     DDoS protection state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-24 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping ddos-violation-counters {
+    description
+      "Counters for DDoS violations";
+
+    leaf violation-count {
+      type yang:counter64;
+      description
+        "Number of violations that occurred";
+    }
+  }
+
+  grouping ddos-violation-state {
+    description
+      "DDoS instance violation state data";
+
+    container violations {
+      description
+        "Enclosing container for violation state data";
+
+      leaf status {
+        type js-ddos-types:violation-status-code;
+        description
+          "Status code for the violation";
+      }
+
+      leaf violated-time-start {
+        type rt-types:timeticks64;
+        description
+          "This timestamp indicates the time that a violation occured.
+           The value is the timestamp in nanoseconds relative to the
+           Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+      }
+
+      leaf violated-time-end {
+        type rt-types:timeticks64;
+        description
+          "This timestamp indicates the time that a violation ended.
+           The value is the timestamp in nanoseconds relative to the
+           Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+      }
+
+      container counters {
+        description
+          "Enclosing container for DDoS instance counters";
+
+        uses ddos-violation-counters;
+      }
+    }
+  }
+
+  grouping ddos-counters {
+    description
+      "DDoS instance counters state data";
+
+    leaf in-packets {
+      type yang:counter64;
+      description
+        "Total number of packets received";
+    }
+
+    leaf dropped-packets {
+      type yang:counter64;
+      description
+        "Total number of packets dropped";
+    }
+
+    leaf policer-dropped-packets {
+      type yang:counter64;
+      description
+        "Total number of packets dropped by policer";
+    }
+
+    leaf other-dropped-packets {
+      type yang:counter64;
+      description
+        "Total number of packets dropped by others";
+    }
+
+    leaf flows-dropped-packets {
+      type yang:counter64;
+      description
+        "Total number of packets dropped by flows";
+    }
+
+    leaf rate-arrival {
+      type yang:counter32;
+      units "pps";
+      description
+        "Current rate of packet arrival measured in packets per second
+         (pps)";
+    }
+
+    leaf rate-arrival-max {
+      type yang:counter32;
+      units "pps";
+      description
+        "Maximum rate of packet arrival measured in packets per second
+         (pps)";
+    }
+  }
+
+  grouping ddos-instances-top {
+    description
+      "Top level container for DDoS instances state data";
+
+    container instances {
+      description
+        "Enclosing container for DDoS instance state";
+
+      list instance {
+        description
+          "DDoS instance state data";
+
+        key "slot protocol-name packet-type locale";
+
+        leaf slot {
+          type uint16;
+          description
+            "Slot location for the DDoS instance";
+        }
+
+        leaf protocol-name {
+          type string;
+          description
+            "Protocol name for the DDoS instance";
+        }
+
+        leaf packet-type {
+          type string;
+          description
+            "Protocol packet type for the DDoS instance";
+        }
+
+        leaf locale {
+          type js-ddos-types:locale;
+          description
+            "Locale for the DDoS instance (RE or FPC)";
+        }
+
+        uses ddos-violation-state;
+
+        container counters {
+          description
+            "Enclosing container for DDoS instance counters";
+
+          uses ddos-counters;
+        }
+
+      }
+    }
+  }
+
+  grouping ddos-top {
+    description
+      "Top-level grouping for DDoS protection state data";
+
+    container ddos-protection {
+      description
+        "Enclosing container for DDoS protection state";
+
+      uses ddos-instances-top;
+    }
+  }
+
+  augment "/js:state/js-sys:system" {
+    description
+      "Adds DDoS domain to system state";
+
+    uses ddos-top;
+  }
+}

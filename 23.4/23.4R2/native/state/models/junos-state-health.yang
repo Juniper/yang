@@ -1,0 +1,119 @@
+module junos-state-health {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/health";
+  prefix js-health;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-chassis {
+    prefix js-chas;
+  }
+
+  import ietf-routing-types {
+    prefix rt-types;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     health state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-04-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping chassis-module-health {
+    description
+      "Top-level grouping for chassis module health parameters";
+
+    container health {
+      description
+        "Encapsulating container for chassis module health parameters";
+
+      leaf status {
+        type enumeration {
+          enum UNSPECIFIED {
+            value 0;
+            description
+              "The component does not support health status reporting";
+          }
+          enum HEALTHY {
+            value 1;
+            description
+              "The component is in a healthy state and is operating
+               within the expected parameters";
+          }
+          enum DEGRADED {
+            value 2;
+            description
+              "The component is in a degraded state.  It has not
+               completely failed but failures have occurred that either
+               reduce its ability to perform or may cause an unhealthy
+               state should additional failures occur.";
+          }
+          enum FAILED {
+            value 3;
+            description
+              "The component is in a failed state.  It is unhealthy and
+               not performing the function expected of it.";
+          }
+        }
+        description
+          "The status of the component indicating its current health";
+      }
+
+      leaf last-unhealthy {
+        type rt-types:timeticks64;
+        description
+          "The time at which the component was last observed to be in an
+           unhealthy state.  Unhealthy is defined as the component being
+           in a DEGRADED or FAILED state.
+
+           The value is the timestamp in nanoseconds relative to the
+           Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+      }
+
+      leaf unhealthy-count {
+        type uint64;
+        description
+          "The number of status checks that have determined this
+           component to be in an unhealthy (DEGRADED for FAILED)
+           state.";
+      }
+    }
+  }
+
+
+  augment "/js:state/js-chas:chassis/js-chas:modules/js-chas:module" {
+    description
+      "Adds health related parameters to chassis modules";
+
+    uses chassis-module-health;
+  }
+
+}

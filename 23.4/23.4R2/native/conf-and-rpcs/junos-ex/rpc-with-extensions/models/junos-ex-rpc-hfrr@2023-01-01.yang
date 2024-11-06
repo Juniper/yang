@@ -1,0 +1,326 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-hfrr {
+   namespace "http://yang.juniper.net/junos-ex/rpc/hfrr";
+
+   prefix hfrr;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for hfrr command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R2.13";
+   }
+
+   rpc get-hfrr-information {
+     description "Show HFRR profile information";
+     junos:command "show hfrr profiles";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Shard name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+     output {
+       container hfrr-information {
+         uses hfrr-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping hfrr-information-block {
+     list hfrrp {
+       leaf ptr {
+         type int32;
+         description "HFRR profile pointer";
+       }
+       leaf state {
+         type string;
+         description "HFRR profile Current state";
+       }
+       leaf inactive-reason {
+         type string;
+         description "HFRR profile Inactive reason (if any)";
+       }
+       leaf prefix-limit-timer-expiration {
+         type uint32;
+         description "HFRR prefix limit blackout timer expiration (in secs)";
+       }
+       leaf prefix-limit-hit-count {
+         type uint32;
+         description "Number of times prefix limit was hit for this profile.";
+       }
+       leaf prefix-limit-last-occurance {
+         type string;
+         description "Time at which prefix limit was hit the last time.";
+       }
+       leaf ifl-name {
+         type string;
+         description "HFRR profile protected IFL Name";
+       }
+       leaf ifl-handle {
+         type int32;
+         description "HFRR profile protected IFL Handle";
+       }
+       leaf rt-instance-name {
+         type string;
+         description "HFRR profile Routing Instance Name";
+       }
+       leaf rt-instance-handle {
+         type int32;
+         description "HFRR profile Routing Instance Handle";
+       }
+       leaf sync-bg-running {
+         type string;
+         description "HFRR profile Sync BG running currently";
+       }
+       leaf rts-filter-set {
+         type string;
+         description "HFRR profile RTS Filter Set";
+       }
+       leaf delete-bg-running {
+         type string;
+         description "HFRR profile Delete BG running currently";
+       }
+       leaf arp-prefix-limit {
+         type int32;
+         description "HFRR profile ARP prefix limit";
+       }
+       leaf blackout-timeout-scale-factor {
+         type int32;
+         description "HFRR profile blackout timeout scale factor (in mins)";
+       }
+       leaf num-arp-routes {
+         type int32;
+         description "HFRR profile No of ARP routes learnt";
+       }
+       leaf num-frr-routes {
+         type int32;
+         description "HFRR profile No of HFRR routes added currently";
+       }
+     }
+   }
+ }

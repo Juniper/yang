@@ -1,0 +1,486 @@
+module junos-state-poe {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/poe";
+  prefix js-poe;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     PoE state data
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-05-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef power-class {
+    type enumeration {
+      enum CLASS_0 {
+        value 0;
+        description
+          "PoE power class 0";
+      }
+      enum CLASS_1 {
+        value 1;
+        description
+          "PoE power class 1";
+      }
+      enum CLASS_2 {
+        value 2;
+        description
+          "PoE power class 2";
+      }
+      enum CLASS_3 {
+        value 3;
+        description
+          "PoE power class 3";
+      }
+      enum CLASS_4 {
+        value 4;
+        description
+          "PoE power class 4";
+      }
+      enum CLASS_5 {
+        value 5;
+        description
+          "PoE power class 5";
+      }
+      enum CLASS_6 {
+        value 6;
+        description
+          "PoE power class 6";
+      }
+      enum CLASS_7 {
+        value 7;
+        description
+          "PoE power class 7";
+      }
+      enum CLASS_8 {
+        value 8;
+        description
+          "PoE power class 8";
+      }
+      enum NOT_APPLICABLE {
+        value 9;
+        description
+          "PoE power class not applicable";
+      }
+      enum UNKNOWN {
+        value 10;
+        description
+          "PoE power class unknown";
+      }
+    }
+    description
+      "IEEE 802.3 PoE power classes";
+  }
+
+  grouping poe-power-consumption {
+    description
+      "Grouping for per controller/interface power consumption";
+
+    leaf power-consumption {
+      type decimal64 {
+        fraction-digits 2;
+        range "0..max";
+      }
+      units watts;
+      description
+        "PoE power consumption by the connected power device(s)";
+    }
+
+    leaf power-over-consumed {
+      type boolean;
+      description
+        "The connected power device(s) is consuming more power than
+         allocated";
+    }
+  }
+
+  grouping poe-controller-top {
+    description
+      "Top level grouping for PoE controllers";
+
+    container controllers {
+      description
+        "Enclosing container for the list of PoE controllers and global
+         controller state";
+
+      leaf fast-poe-enabled {
+        type boolean;
+        description
+          "Fast PoE enabled or not";
+      }
+
+      leaf perpetual-poe-enabled {
+        type boolean;
+        description
+          "Perpetual PoE enabled or not";
+      }
+
+      list controller {
+        key "index";
+        description
+          "List of PoE controllers";
+
+        leaf index {
+          type uint32;
+          description
+            "Virtual-chassis index/controller number";
+        }
+
+        leaf firmware-available {
+          type boolean;
+          description
+            "New PoE firmware version available or not";
+        }
+
+        leaf max-power {
+          type decimal64 {
+            fraction-digits 2;
+            range "0..max";
+          }
+          units watts;
+          description
+            "Total PoE power available for the switch";
+        }
+
+        uses poe-power-consumption;
+
+        leaf guard-band {
+          type uint64;
+          units watts;
+          description
+            "PoE guard band value";
+        }
+
+        leaf poe-management {
+          type enumeration {
+            enum STATIC {
+              description
+                "Management is static";
+            }
+            enum DYNAMIC {
+              description
+                "Management is dynamic";
+            }
+            enum CLASS {
+              description
+                "Management is class";
+            }
+          }
+          description
+            "PoE management mode of the switch";
+        }
+
+        leaf poe-status {
+          type enumeration {
+            enum AF_MODE {
+              description
+                "IEEE 802.3AF mode";
+            }
+            enum AF_ENHANCE {
+              description
+                "IEEE 802.3AF enhancement mode";
+            }
+            enum AT_MODE {
+              description
+                "IEEE 802.3AT mode";
+            }
+            enum AT_AF_COMBO {
+              description
+                "IEEE 802.3AF/AT mode";
+            }
+            enum DOWNLOAD_INIT {
+              description
+                "PoE firmware version upgrade - download started";
+            }
+            enum POE_SW_ERASE {
+              description
+                "PoE firmware version upgrade - software erase";
+            }
+            enum DOWNLOAD_IN_PROGRESS {
+              description
+                "PoE firmware version upgrade - download in progress";
+            }
+            enum DOWNLOAD_FAIL {
+              description
+                "PoE firmware version upgrade - download failed";
+            }
+            enum REBOOT_REQUIRED {
+              description
+                "PoE firmware version upgrade - reboot required";
+            }
+            enum DOWNLOAD_REQUIRED {
+              description
+                "PoE firmware version upgrade - download required";
+            }
+            enum NOT_READY {
+              description
+                "PoE module is not ready";
+            }
+            enum DEVICE_FAIL {
+              description
+                "PoE module is in device failed state";
+            }
+            enum POE_NOT_SUPPORTED {
+              description
+                "PoE not supported";
+            }
+            enum BT_MODE {
+              description
+                "IEEE 802.3BT mode";
+            }
+          }
+          description
+            "PoE status of the switch";
+        }
+
+        leaf lldp-priority {
+          type enumeration {
+            enum ENABLED {
+              description
+                "LLDP priority is enabled";
+            }
+            enum DISABLED {
+              description
+                "LLDP priority is disabled";
+            }
+          }
+          description
+            "PoE LLDP priority status";
+        }
+      }
+    }
+  }
+
+  grouping poe-interface-top {
+    description
+      "Top level grouping for PoE interfaces";
+
+    container interfaces {
+      description
+        "Enclosing container for the list of PoE interfaces";
+
+      list interface {
+        key "name";
+        description
+          "List of PoE interfaces";
+
+        leaf name {
+          type string;
+          description
+            "PoE interface name";
+        }
+
+        leaf admin-status {
+          type enumeration {
+            enum ENABLED {
+              description
+                "Administrative status is enabled";
+            }
+            enum DISABLED {
+              description
+                "Administrative status is disabled";
+            }
+          }
+          description
+            "PoE administrative status";
+        }
+
+        leaf oper-status {
+          type enumeration {
+            enum ENABLED {
+              description
+                "Operational status is enabled";
+            }
+            enum DISABLED {
+              description
+                "Operational status is disabled";
+            }
+          }
+          description
+            "PoE operational status";
+        }
+
+        leaf poe-four-pair {
+          type enumeration {
+            enum ENABLED {
+              description
+                "Four pair status is enabled";
+            }
+            enum DISABLED {
+              description
+                "Four pair status is disabled";
+            }
+          }
+          description
+            "PoE four pair status";
+        }
+
+        leaf poe-pair-status {
+          type enumeration {
+            enum 4P_POH {
+              description
+                "Four pair ultra high power mode";
+            }
+            enum 4P_BT {
+              description
+                "Four pair IEEE 802.3BT mode";
+            }
+            enum 4P_AT {
+              description
+                "Four pair IEEE 802.3AT mode";
+            }
+            enum SS_BT {
+              description
+                "IEEE 802.3BT single signature";
+            }
+            enum DS_BT {
+              description
+                "IEEE 802.3BT dual signature";
+            }
+            enum 2P_POH {
+              description
+                "Two pair ultra high power mode";
+            }
+            enum 2P_AT {
+              description
+                "Two pair IEEE 802.3AT mode";
+            }
+          }
+          description
+            "PoE pair status";
+        }
+
+        leaf power-limit {
+          type decimal64 {
+            fraction-digits 1;
+            range "0..max";
+          }
+          units watts;
+          description
+            "Interface PoE power limit";
+        }
+
+        leaf power-limit-lldp-negotiated {
+          type boolean;
+          description
+            "The power limit value is LLDP negotiated or not";
+        }
+
+        leaf priority {
+          type enumeration {
+            enum LOW {
+              description
+                "Priority is low";
+            }
+            enum HIGH {
+              description
+                "Priority is high";
+            }
+            enum CRITICAL {
+              description
+                "Priority is critical";
+            }
+          }
+          description
+            "Interface PoE priority";
+        }
+
+        leaf priority-lldp-negotiated {
+          type boolean;
+          description
+            "The priority value is LLDP negotiated or not";
+        }
+
+        uses poe-power-consumption;
+
+        leaf power-class-a {
+          type power-class;
+          description
+            "IEEE 802.3 power class value for the Alternative A
+             pair-set";
+        }
+
+        leaf power-class-b {
+          type power-class;
+          description
+            "IEEE 802.3 power class value for the Alternative B
+             pair-set";
+        }
+
+        leaf poe-mode {
+          type enumeration {
+            enum 802_3AF {
+              description
+                "PoE mode is IEEE 802.3AF";
+            }
+            enum 802_3AT {
+              description
+                "PoE mode is IEEE 802.3AT";
+            }
+            enum ULTRA_POE {
+              description
+                "PoE mode is Ultra-PoE";
+            }
+            enum 802_3BT {
+              description
+                "PoE mode is IEEE 802.3BT";
+            }
+          }
+          description
+            "Interface PoE mode";
+        }
+      }
+    }
+  }
+
+  grouping poe-top {
+    description
+      "Top-level grouping for PoE state data";
+
+    container poe {
+      description
+        "Container for PoE state";
+
+      uses poe-controller-top;
+      uses poe-interface-top;
+
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds PoE domain to top-level state";
+
+    uses poe-top;
+  }
+}
+

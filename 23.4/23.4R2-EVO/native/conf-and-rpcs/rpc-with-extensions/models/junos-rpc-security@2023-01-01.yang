@@ -1,0 +1,2292 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-security {
+   namespace "http://yang.juniper.net/junos/rpc/security";
+
+   prefix security;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2023-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2023-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for security command(s)";
+
+   revision 2023-01-01 {
+     description "Junos: 23.4R2.14-EVO";
+   }
+
+   rpc get-security-alarm-information {
+     description "Show active security alarm information";
+     junos:command "show security alarms";
+     input {
+       leaf alarm-id {
+         description "Alarm ID filter";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf-list alarm-type {
+         ordered-by user;
+         description "Alarm type filter";
+         type enumeration {
+           enum "authentication" {
+             description "Authentication alarms";
+           }
+           enum "cryptographic-self-test" {
+             description "Cryptographic self-test alarms";
+           }
+           enum "decryption-failures" {
+             description "Decryption failure alarms";
+           }
+           enum "encryption-failures" {
+             description "Encryption failure alarms";
+           }
+           enum "ike-phase1-failures" {
+             description "IKE Phase 1 failure alarms";
+           }
+           enum "ike-phase2-failures" {
+             description "IKE Phase 2 failure alarms";
+           }
+           enum "key-generation-self-test" {
+             description "Key generation self-test alarms";
+           }
+           enum "non-cryptographic-self-test" {
+             description "Non-cryptographic self-test alarms";
+           }
+           enum "policy" {
+             description "Policy alarms";
+           }
+           enum "replay-attacks" {
+             description "Replay attack alarms";
+           }
+           enum "idp" {
+             description "IDP attack alarms";
+           }
+         }
+       }
+       leaf newer-than {
+         description "Alarms newer than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf older-than {
+         description "Alarms older than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf process {
+         description "Process that generated the alarm filter";
+         type string;
+       }
+       leaf severity {
+         description "Severity of the alarm filter";
+         type enumeration {
+           enum "alert" {
+             description "Alert severity";
+           }
+           enum "crit" {
+             description "Critical severity";
+           }
+           enum "debug" {
+             description "Debug severity";
+           }
+           enum "emerg" {
+             description "Emergency severity";
+           }
+           enum "err" {
+             description "Error severity";
+           }
+           enum "info" {
+             description "Information severity";
+           }
+           enum "notice" {
+             description "Notice severity";
+           }
+           enum "warning" {
+             description "Warning severity";
+           }
+         }
+       }
+       leaf style {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "detail" {
+             description "Show detail alarm information";
+           }
+         }
+       }
+     }
+     output {
+       container security-alarm-information {
+         uses security-alarm-information-block;
+       }
+     }
+   }
+   rpc get-security-log-information {
+     description "Show auditable security log information";
+     junos:command "show security log";
+     input {
+       leaf destination-address {
+         description "Destination address and optional prefix length";
+         type jt:ipprefix-optional;
+       }
+       leaf destination-port {
+         description "Destination port";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf event-id {
+         description "Event ID filter";
+         type string;
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+       }
+       leaf older-than {
+         description "Events older than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf policy-name {
+         description "Policy name filter";
+         type string;
+       }
+       leaf process {
+         description "Process that generated the event";
+         type string;
+       }
+       leaf protocol {
+         description "Protocol filter";
+         type string;
+       }
+       leaf newer-than {
+         description "Events newer than filter (YYYY-MM-DD.HH:MM:SS)";
+         type jt:time;
+       }
+       leaf result {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "failure" {
+             description "Event was a failure";
+           }
+           enum "success" {
+             description "Event was successful";
+           }
+         }
+       }
+       leaf severity {
+         description "Severity of the event";
+         type enumeration {
+           enum "alert" {
+             description "Alert severity";
+           }
+           enum "crit" {
+             description "Critical severity";
+           }
+           enum "debug" {
+             description "Debug severity";
+           }
+           enum "emerg" {
+             description "Emergency severity";
+           }
+           enum "err" {
+             description "Error severity";
+           }
+           enum "info" {
+             description "Information severity";
+           }
+           enum "notice" {
+             description "Notice severity";
+           }
+           enum "warning" {
+             description "Warning severity";
+           }
+         }
+       }
+       leaf source-address {
+         description "Source address and optional prefix length";
+         type jt:ipprefix-optional;
+       }
+       leaf source-port {
+         description "Source port";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf username {
+         description "Username filter";
+         type string;
+       }
+       leaf sort-by {
+         description "Sort by selected field";
+         default "time";
+         type enumeration {
+           enum "destination-address" {
+             description "Sort by destination address";
+           }
+           enum "destination-port" {
+             description "Sort by destination port";
+           }
+           enum "interface-name" {
+             description "Sort by interface name";
+           }
+           enum "policy-name" {
+             description "Sort by policy name";
+           }
+           enum "protocol" {
+             description "Sort by protocol";
+           }
+           enum "source-address" {
+             description "Sort by source address";
+           }
+           enum "source-port" {
+             description "Sort by source port";
+           }
+           enum "time" {
+             description "Sort by time of event arrival";
+           }
+           enum "username" {
+             description "Sort by event user name ";
+           }
+         }
+       }
+       leaf direction {
+         junos:cli-feature "nokeyword";
+         default "ascending";
+         type enumeration {
+           enum "ascending" {
+             description "Sort in ascending order";
+           }
+           enum "descending" {
+             description "Sort in descending order";
+           }
+         }
+       }
+       leaf style {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "detail" {
+             description "Show detail alarm information";
+           }
+         }
+       }
+     }
+     output {
+       container security-log-information {
+         uses security-log-information-block;
+       }
+     }
+   }
+   rpc get-tpm-status {
+     description "Show TPM status";
+     junos:command "show security tpm status";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-pki-certificate-request {
+     description "Show PKCS-10 certificate request information";
+     junos:command "show security pki certificate-request";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf certificate-id {
+         description "Certificate identifier";
+         type string {
+           length "1 .. 32";
+           junos:posix-pattern "![/%. ]";
+           junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-ca-certificate {
+     description "Show certificate-authority certificate information";
+     junos:command "show security pki ca-certificate";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice ca-cert-choice {
+         case ca-profile {
+           leaf ca-profile {
+             description "Certificate authority profile";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+         case ca-profile-group {
+           leaf ca-profile-group {
+             description "Show CA profile group";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-node-local-local-certificate {
+     description "Show router certificate information";
+     junos:command "show security pki node-local local-certificate";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice certificate-choice {
+         case certificate-id {
+           leaf certificate-id {
+             description "Certificate identifier";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+         case system-generated {
+           leaf system-generated {
+             description "Autogenerated self-signed certificate";
+             type empty;
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-node-local-certificate-request {
+     description "Show PKCS-10 certificate request information";
+     junos:command "show security pki node-local certificate-request";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf certificate-id {
+         description "Certificate identifier";
+         type string {
+           length "1 .. 32";
+           junos:posix-pattern "![/%. ]";
+           junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-local-certificate {
+     description "Show router certificate information";
+     junos:command "show security pki local-certificate";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       choice certificate-choice {
+         case certificate-id {
+           leaf certificate-id {
+             description "Certificate identifier";
+             type string {
+               length "1 .. 32";
+               junos:posix-pattern "![/%. ]";
+               junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+             }
+           }
+         }
+         case system-generated {
+           leaf system-generated {
+             description "Autogenerated self-signed certificate";
+             type empty;
+           }
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pki-certificate-info-list {
+         uses x509-pki-certificate-info-list-block;
+       }
+     }
+   }
+   rpc get-pki-crl {
+     description "Show certificate revocation list information";
+     junos:command "show security pki crl";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf ca-profile {
+         description "Certificate authority profile";
+         type string {
+           length "1 .. 32";
+           junos:posix-pattern "![/%. ]";
+           junos:pattern-message "Must not contain \'/\', %, \'.\' or a space";
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container x509-pkid-crl-information-list {
+         uses x509-pkid-crl-information-list-block;
+       }
+     }
+   }
+   rpc get-pki-statistics {
+     description "Show PKI related statistics";
+     junos:command "show security pki statistics";
+     input {
+       uses command-forwarding;
+       choice daemon-select {
+         case logical-system {
+         }
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container pki-statistics {
+         uses pki-statistics-block;
+       }
+     }
+   }
+   rpc get-gvpn-security-associations-information {
+     description "Show IPSec security association information";
+     junos:command "show security group-vpn member ipsec security-associations";
+     input {
+       uses command-forwarding;
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf show-gvpn-index-ipsec-security-association {
+         description "Index of security association";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "10001 .. 20000";
+           }
+         }
+       }
+       leaf group-id {
+         description "Group VPN identification number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4294967295";
+           }
+         }
+       }
+       leaf service-set {
+         description "Service set name";
+         type string {
+           junos:posix-pattern "^[A-Za-z0-9][_0-9A-Za-z-]{0,62}$";
+           junos:pattern-message "Must be a string beginning with a number or letter and consisting of no more than 63 total letters, numbers, dashes and underscores.";
+         }
+       }
+     }
+   }
+   rpc get-gvpn-ipsec-statistics-information {
+     description "Show IPSec statistics";
+     junos:command "show security group-vpn member ipsec statistics";
+     input {
+       uses command-forwarding;
+       leaf fpc {
+         description "FPC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+       leaf pic {
+         description "PIC slot number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+       leaf service-set {
+         description "Name of service set";
+         type string {
+           junos:posix-pattern "^[A-Za-z0-9][_0-9A-Za-z-]{0,62}$";
+           junos:pattern-message "Must be a string beginning with a number or letter and consisting of no more than 63 total letters, numbers, dashes and underscores.";
+         }
+       }
+       leaf show-gvpn-index-ipsec-statistics {
+         description "Index of Security Association";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "10001 .. 20000";
+           }
+         }
+       }
+     }
+   }
+   rpc get-gvpn-inactive-tunnels {
+     description "Inactive-tunnels";
+     junos:command "show security group-vpn member ipsec inactive-tunnels";
+     input {
+       uses command-forwarding;
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-id {
+         description "Group VPN identification number";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 4294967295";
+           }
+         }
+       }
+       leaf service-set {
+         description "Service set name";
+         type string {
+           junos:posix-pattern "^[A-Za-z0-9][_0-9A-Za-z-]{0,62}$";
+           junos:pattern-message "Must be a string beginning with a number or letter and consisting of no more than 63 total letters, numbers, dashes and underscores.";
+         }
+       }
+     }
+   }
+   rpc get-gvpn-ike-security-associations-information {
+     description "Show IKE security association information";
+     junos:command "show security group-vpn member ike security-associations";
+     input {
+       uses command-forwarding;
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Show brief output (default)";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+         }
+       }
+       leaf peer-address {
+         description "IP address of the peer";
+         junos:cli-feature "nokeyword";
+         type jt:ipaddr;
+       }
+       leaf index {
+         description "Index of security association";
+         default "0";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf service-set {
+         description "Service set name";
+         type string {
+           junos:posix-pattern "^[A-Za-z0-9][_0-9A-Za-z-]{0,62}$";
+           junos:pattern-message "Must be a string beginning with a number or letter and consisting of no more than 63 total letters, numbers, dashes and underscores.";
+         }
+       }
+     }
+   }
+   rpc get-gvpn-kek-security-associations-information {
+     description "Show KEK security association information";
+     junos:command "show security group-vpn member kek security-associations";
+     input {
+       uses command-forwarding;
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Show brief output (default)";
+           }
+           enum "detail" {
+             description "Show detailed output";
+           }
+         }
+       }
+       leaf peer-address {
+         description "IP address of the peer";
+         junos:cli-feature "nokeyword";
+         type jt:ipaddr;
+       }
+       leaf index {
+         description "Index of security association";
+         default "0";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       choice groupchoice {
+         description "Specify a group by name or ID";
+         case group-id {
+           leaf group-id {
+             description "Group VPN identification number";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type uint32 {
+                 range "1 .. 4294967295";
+               }
+             }
+           }
+         }
+         case vpn {
+           leaf vpn {
+             description "Group VPN Name";
+             type string {
+               length "1 .. 32";
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-hakr-keychain-information {
+     description "Show all protocols keychain";
+     junos:command "show security keychain";
+     input {
+       leaf verbosity {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container hakr-keychain-information {
+         uses hakr-keychain-information-block;
+       }
+     }
+   }
+   rpc get-mka-session-information {
+     description "Show MKA sessions information";
+     junos:command "show security mka sessions";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container mka-session-information {
+         uses mka-session-information-block;
+       }
+     }
+   }
+   rpc get-mka-session-interface-information {
+     description "Show MKA session on this interface";
+     junos:command "show security mka sessions interface";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Show MKA session for this interface";
+         junos:cli-feature "nokeyword";
+         default "all";
+         type string {
+           junos:posix-pattern "^(([fgx]e-)|(mge-)|(et-)|(em-))|^em[0-9]$";
+           junos:pattern-message "Only ethernet interfaces allowed";
+         }
+       }
+     }
+     output {
+       container mka-session-information {
+         uses mka-session-information-block;
+       }
+     }
+   }
+   rpc get-mka-statistics {
+     description "Show MKA statistics";
+     junos:command "show security mka statistics";
+     output {
+       container mka-statistics {
+         uses mka-statistics-block;
+       }
+     }
+   }
+   rpc get-mka-interface-statistics {
+     description "Show MKA statistics on this interface";
+     junos:command "show security mka statistics interface";
+     input {
+       leaf interface-name {
+         description "Show MKA statistics for this interface";
+         junos:cli-feature "nokeyword";
+         default "all";
+         type string {
+           junos:posix-pattern "^(([fgx]e-)|(mge-)|(et-)|(em-))|^em[0-9]$";
+           junos:pattern-message "Only ethernet interfaces allowed";
+         }
+       }
+     }
+     output {
+       container mka-statistics {
+         uses mka-statistics-block;
+       }
+     }
+   }
+   rpc get-macsec-connection-information {
+     description "Show MAC Security connections information";
+     junos:command "show security macsec connections";
+     output {
+       container macsec-connection-information {
+         uses macsec-connection-information-block;
+       }
+     }
+   }
+   rpc get-macsec-connection-interface-information {
+     description "Show MAC security connections on this interface";
+     junos:command "show security macsec connections interface";
+     input {
+       leaf interface-name {
+         description "Show MAC security connections for this interface";
+         junos:cli-feature "nokeyword";
+         default "all";
+         type string {
+           junos:posix-pattern "^(([fgx]e-)|(mge-)|(et-)|(em-))|^em[0-9]$";
+           junos:pattern-message "Only ethernet interfaces allowed";
+         }
+       }
+     }
+     output {
+       container macsec-connection-information {
+         uses macsec-connection-information-block;
+       }
+     }
+   }
+   rpc get-macsec-statistics {
+     description "Show MAC Security statistics";
+     junos:command "show security macsec statistics";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container macsec-statistics {
+         uses macsec-statistics-block;
+       }
+     }
+   }
+   rpc get-macsec-interface-statistics {
+     description "Show MAC security statistics on this interface";
+     junos:command "show security macsec statistics interface";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Show MAC security statistics for this interface";
+         junos:cli-feature "nokeyword";
+         default "all";
+         type string {
+           junos:posix-pattern "^(([fgx]e-)|(mge-)|(et-)|(em-))|^em[0-9]$";
+           junos:pattern-message "Only ethernet interfaces allowed";
+         }
+       }
+     }
+     output {
+       container macsec-statistics {
+         uses macsec-statistics-block;
+       }
+     }
+   }
+   rpc get-macsec-crypto-algorithms {
+     description "Show fips validated algorithms used by MACsec module from crypto library";
+     junos:command "show security macsec crypto algorithms";
+     output {
+       container macsec-crypto-algorithms {
+         uses macsec-crypto-algorithms-block;
+       }
+     }
+   }
+   rpc get-macsec-crypto-version {
+     description "Show version of crypto library used by MACsec module";
+     junos:command "show security macsec crypto version";
+     output {
+       container macsec-crypto-version {
+         uses macsec-crypto-version-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping security-alarm-information-block {
+     leaf security-alarms-disabled {
+       type empty;
+       description "Security alarm subsystem disabled";
+     }
+     leaf no-security-alarms-active {
+       type empty;
+       description "No security alarms active";
+     }
+     leaf no-security-alarms-returned {
+       type empty;
+       description "No security alarms returned for this filter";
+     }
+     list security-alarm {
+       leaf security-alarm-id {
+         type string;
+         description "Alarm ID";
+       }
+       leaf security-alarm-time {
+         type string;
+         description "Time of the alarm";
+       }
+       leaf security-alarm-message {
+         type string;
+         description "Full message of the alarm";
+       }
+       leaf security-alarm-type {
+         type string;
+         description "Alarm type";
+       }
+       leaf severity {
+         type string;
+         description "Syslog message severity";
+       }
+       container process {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+       }
+     }
+   }
+   grouping security-log-information-block {
+     leaf security-logs-disabled {
+       type empty;
+       description "Security logging disabled";
+     }
+     leaf no-security-events {
+       type empty;
+       description "No security events have been logged";
+     }
+     leaf no-security-events-returned {
+       type empty;
+       description "No security events were logged matching this filter";
+     }
+     list security-event {
+       leaf security-event-time {
+         type string;
+         description "Time of the event";
+       }
+       leaf security-event-message {
+         type string;
+         description "Full message of the event";
+       }
+       leaf security-event-id {
+         type string;
+         description "Event ID";
+       }
+       leaf severity {
+         type string;
+         description "Syslog message severity";
+       }
+       leaf security-event-result {
+         type string;
+         description "Result of this event (success or failure)";
+       }
+       leaf security-event-username {
+         type string;
+         description "Username associated with event";
+       }
+       leaf security-event-interface-name {
+         type string;
+         description "Interface name associated with event";
+       }
+       leaf security-event-protocol {
+         type string;
+         description "Protocol associated with event";
+       }
+       leaf security-event-policy-name {
+         type string;
+         description "Policy name associated with event";
+       }
+       leaf security-event-destination-address {
+         type string;
+         description "Destination address associated with event";
+       }
+       leaf security-event-destination-port {
+         type int32;
+         description "Destination port associated with event";
+       }
+       leaf security-event-source-address {
+         type string;
+         description "Source address associated with event";
+       }
+       leaf security-event-source-port {
+         type int32;
+         description "Source port associated with event";
+       }
+       container process {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf pid {
+           type int32;
+           description "PID of the process that generated the event";
+         }
+       }
+     }
+   }
+   grouping x509-pki-certificate-info-list-block {
+     container x509-certificate-info {
+       description "Detailed information about an X.509 certificate";
+       leaf identifier {
+         type string;
+         description "Certificate identifier";
+       }
+       leaf signature-algorithm {
+         type string;
+         description "Algorithm used by the CA to sign the certificate";
+       }
+       leaf status {
+         type string;
+       }
+       container public-key {
+         leaf public-key-algorithm {
+           type string;
+           description "Algorithm used for creating the subject public key";
+         }
+         leaf public-key-length {
+           type int32;
+           description "Length of X.509 public";
+         }
+         leaf public-key-verification-status {
+           type string;
+           description "Verification status of X.509 public key";
+         }
+         leaf public-key-location {
+           type string;
+           description "Keypair generated locally or at cloud HSM";
+         }
+       }
+       list fingerprint {
+         leaf fingerprint-content {
+           type string;
+         }
+         leaf fingerprint-hash-algorithm {
+           type string;
+         }
+       }
+       container issuer {
+         container distinguished-name {
+           leaf-list organization-name {
+             type string;
+             description "Organization";
+           }
+           leaf-list organizational-unit-name {
+             type string;
+             description "Organization unit";
+           }
+           leaf-list country-name {
+             type string;
+             description "Country name";
+           }
+           leaf-list state-or-province-name {
+             type string;
+             description "State";
+           }
+           leaf-list locality-name {
+             type string;
+             description "Locality";
+           }
+           leaf-list common-name {
+             type string;
+             description "Common name";
+           }
+           leaf-list email-address {
+             type string;
+             description "E-mail address";
+           }
+           leaf-list domain-component {
+             type string;
+             description "Domain component";
+           }
+           leaf-list dn-serial-number {
+             type string;
+             description "DN Serial number";
+           }
+         }
+       }
+       container subject {
+         container distinguished-name {
+           leaf-list organization-name {
+             type string;
+             description "Organization";
+           }
+           leaf-list organizational-unit-name {
+             type string;
+             description "Organization unit";
+           }
+           leaf-list country-name {
+             type string;
+             description "Country name";
+           }
+           leaf-list state-or-province-name {
+             type string;
+             description "State";
+           }
+           leaf-list locality-name {
+             type string;
+             description "Locality";
+           }
+           leaf-list common-name {
+             type string;
+             description "Common name";
+           }
+           leaf-list email-address {
+             type string;
+             description "E-mail address";
+           }
+           leaf-list domain-component {
+             type string;
+             description "Domain component";
+           }
+           leaf-list dn-serial-number {
+             type string;
+             description "DN Serial number";
+           }
+         }
+       }
+       leaf certificate-type {
+         type string;
+         description "X.509 certificate type";
+       }
+       leaf ca-profile {
+         type string;
+         description "CA Profile Name";
+       }
+       container issue-info {
+         leaf recipient {
+           type string;
+         }
+         leaf issued-by {
+           type string;
+         }
+       }
+       container validity {
+         leaf not-before {
+           type string;
+           description "Start date of validity period";
+         }
+         leaf not-after {
+           type string;
+           description "End date of validity period";
+         }
+       }
+       leaf version {
+         type string;
+         description "Certificate version";
+       }
+       leaf cert-chain {
+         type string;
+         description "Certificate Chain";
+       }
+       list serial-number-list {
+         leaf serial-number-x509 {
+           type string;
+           description "Serial number of an X.509 certificate";
+         }
+         leaf serial-number-dec-x509 {
+           type string;
+           description "Serial number of an X.509 certificate in decimal";
+         }
+       }
+       list public-key-contents-list {
+         leaf key-contents {
+           type string;
+           description "Contents of an X.509 public key";
+         }
+       }
+       list subject-string-list {
+         leaf subject-string {
+           type string;
+           description "Cerificate's distinguished name";
+         }
+       }
+       list alternate-subject-list {
+         leaf alternate-subject {
+           type string;
+           description "Series of alternate subject in X.509 certificate";
+         }
+       }
+       list key-usage-list {
+         leaf key-usage {
+           type string;
+           description "Purpose for which X.509 key is used";
+         }
+       }
+       list distribution-crl-list {
+         leaf distribution-crl {
+           type string;
+           description "Information about a distribution CRL";
+         }
+       }
+       list authority-information-access-ocsp-list {
+         leaf authority-information-access-ocsp {
+           type string;
+           description "Information about ocsp authority-information-access locations";
+         }
+       }
+       list certificate-policy-list {
+         leaf certificate-policy {
+           type string;
+           description "List of certificate policy identifiers";
+         }
+       }
+       container auto-re-enrollment {
+         leaf auto-re-enrollment-status {
+           type string;
+           description "Auto-re-enrollment information";
+         }
+         leaf auto-re-enrollment-next-trigger-time {
+           type string;
+           description "Auto-re-enrollment next trigger time";
+         }
+       }
+     }
+   }
+   grouping x509-pkid-crl-information-list-block {
+     container pkid-x509-crl-information {
+       description "Detailed information about X.509 certificate revocation list";
+       leaf identifier {
+         type string;
+         description "Certificate identifier";
+       }
+       leaf crl-version {
+         type string;
+         description "CRL version";
+       }
+       leaf crl-number {
+         type string;
+         description "CRL sequence number";
+       }
+       leaf crl-issuer {
+         type string;
+         description "CRL issuer name";
+       }
+       container crl-validity {
+         leaf effective-date {
+           type string;
+           description "Effective date of CRL";
+         }
+         leaf next-update {
+           type string;
+           description "Next update of CRL";
+         }
+         leaf last-download {
+           type string;
+           description "Last Download Time of CRL";
+         }
+       }
+       list crl-revocation-list {
+         leaf revoked-cert-serial-number {
+           type string;
+           description "Serial number of revoked certificate";
+         }
+         leaf crl-revocation-date {
+           type string;
+           description "Revocation date";
+         }
+       }
+     }
+   }
+   grouping pki-statistics-block {
+     leaf statistics-name {
+       type string;
+     }
+     leaf statistics-value {
+       type int32;
+     }
+   }
+   grouping hakr-keychain-information-block {
+     list hakr-keychain {
+       leaf hakr-keychain-name {
+         type string;
+         description "Keychain name";
+       }
+       leaf hakr-keychain-active-send-key {
+         type int32;
+         description "Transmit key ID";
+       }
+       leaf hakr-keychain-active-receive-key {
+         type int32;
+         description "Receive key ID";
+       }
+       leaf hakr-keychain-next-send-key {
+         type string;
+         description "Next transmit key";
+       }
+       leaf hakr-keychain-next-receive-key {
+         type string;
+         description "Next receive key";
+       }
+       leaf hakr-keychain-next-key-time {
+         type string;
+         description "Key transition time";
+       }
+       leaf hakr-keychain-tolerance {
+         type int32;
+         description "Clock skew tolerance";
+       }
+       list hakr-keys {
+         leaf hakr-key-id {
+           type string;
+           description "Authentication element identifier";
+         }
+         leaf hakr-key-algorithm {
+           type string;
+           description "Authentication algorithm";
+         }
+         leaf hakr-key-state {
+           type string;
+           description "Authentication key operational state";
+         }
+         leaf hakr-key-options {
+           type string;
+           description "Authentication key options";
+         }
+         leaf hakr-key-start-time {
+           type string;
+           description "Time since the current session began (hours:minutes:seconds)";
+         }
+         leaf hakr-key-mode {
+           type string;
+           description "Authentication key mode";
+         }
+         leaf hakr-key-secret {
+           type string;
+           description "Authentication key";
+         }
+       }
+       leaf-list hakr-sa-clients {
+         type string;
+         description "Keychain clients ";
+       }
+     }
+     list hakr-keys {
+       leaf hakr-key-secret {
+         type string;
+         description "Authentication key";
+       }
+       leaf hakr-key-id {
+         type string;
+         description "Authentication element identifier";
+       }
+       leaf hakr-key-algorithm {
+         type string;
+         description "Authentication algorithm";
+       }
+       leaf hakr-key-state {
+         type string;
+         description "Authentication key operational state";
+       }
+       leaf hakr-key-options {
+         type string;
+         description "Authentication key options";
+       }
+       leaf hakr-key-start-time {
+         type string;
+         description "Time since the current session began (hours:minutes:seconds)";
+       }
+       leaf hakr-key-mode {
+         type string;
+         description "Authentication key mode";
+       }
+     }
+   }
+   grouping mka-session-information-block {
+     leaf interface-name {
+       type string;
+     }
+   }
+   grouping mka-statistics-block {
+     container mka-interface-statistics {
+       leaf interface-name {
+         type string;
+       }
+       leaf received-packets {
+         type uint32;
+         description "Number of MKA packets received";
+       }
+       leaf sent-packets {
+         type uint32;
+         description "Number of MKA packets sent";
+       }
+       leaf version-error {
+         type uint32;
+         description "Number of MKA packets with version mismatch";
+       }
+       leaf cak-error {
+         type uint32;
+         description "Number of MKA packets with CAK invalid or mismatch";
+       }
+       leaf integrity-check-value-mismatch {
+         type uint32;
+         description "Number of MKA packets with integrity check value mismatch";
+       }
+       leaf duplicate-message-identifier {
+         type uint32;
+         description "Number of MKA packets with duplicate message identifier";
+       }
+       leaf duplicate-message-number {
+         type uint32;
+         description "Number of MKA packets with duplicate message number";
+       }
+       leaf duplicate-address {
+         type uint32;
+         description "Number of MKA packets with duplicate address";
+       }
+       leaf invalid-destination {
+         type uint32;
+         description "Number of MKA packets with invalid destination";
+       }
+       leaf format-error {
+         type uint32;
+         description "Number of MKA packets with format errors";
+       }
+       leaf old-message-number {
+         type uint32;
+         description "Number of MKA packets with old or replayed message number";
+       }
+     }
+   }
+   grouping macsec-connection-information-block {
+     leaf interface-name {
+       type string;
+     }
+     leaf connectivity-association-name {
+       type string;
+       description "Connectivity association name";
+     }
+     leaf cipher-suite {
+       type string;
+       description "Cipher suite name";
+     }
+     leaf encryption {
+       type string;
+       description "MAC security encryption status";
+     }
+     leaf offset {
+       type uint32;
+       description "MAC security offset";
+     }
+     leaf include-sci {
+       type string;
+       description "MAC security SCI inclusion status";
+     }
+     leaf replay-protect {
+       type string;
+       description "MAC replay protect status";
+     }
+     leaf replay-protect-window {
+       type uint32;
+       description "MAC security replay protect window size";
+     }
+     leaf sci {
+       type string;
+       description "MKA outbound secure channel identifier";
+     }
+     leaf outgoing-packet-number {
+       type uint64;
+       description "MAC security outgoing packet number";
+     }
+     leaf lowest-accepted-packet-number {
+       type uint32;
+       description "MAC security lowest accepted packet number";
+     }
+     leaf association-number {
+       type uint32;
+       description "MAC security association number";
+     }
+     leaf member-identifier {
+       type string;
+       description "MKA member identifier";
+     }
+     leaf key-number {
+       type uint32;
+       description "MKA key number being used";
+     }
+     leaf association-number-status {
+       type string;
+       description "MAC security association number status";
+     }
+     leaf start-time {
+       type string;
+       description "MAC security association number using start time";
+     }
+     list macsec-interface-common-information {
+       leaf interface-name {
+         type string;
+       }
+       leaf connectivity-association-name {
+         type string;
+         description "Connectivity association name";
+       }
+       leaf cipher-suite {
+         type string;
+         description "Cipher suite name";
+       }
+       leaf encryption {
+         type string;
+         description "MAC security encryption status";
+       }
+       leaf offset {
+         type uint32;
+         description "MAC security offset";
+       }
+       leaf include-sci {
+         type string;
+         description "MAC security SCI inclusion status";
+       }
+       leaf-list replay-protect {
+         type string;
+         description "MAC replay protect status";
+       }
+       leaf replay-protect-window {
+         type uint32;
+         description "MAC security replay protect window size";
+       }
+     }
+     list outbound-secure-channel {
+       leaf sci {
+         type string;
+         description "MKA outbound secure channel identifier";
+       }
+       leaf outgoing-packet-number {
+         type uint64;
+         description "MAC security outgoing packet number";
+       }
+       list outbound-secure-association {
+         leaf association-number {
+           type uint32;
+           description "MAC security association number";
+         }
+         leaf association-number-status {
+           type string;
+           description "MAC security association number status";
+         }
+         leaf create-time {
+           type string;
+           description "MAC security association number creation time";
+         }
+         leaf member-identifier {
+           type string;
+           description "MKA member identifier";
+         }
+         leaf key-number {
+           type uint32;
+           description "MKA key number being used";
+         }
+         leaf start-time {
+           type string;
+           description "MAC security association number using start time";
+         }
+       }
+     }
+     list inbound-secure-channel {
+       leaf sci {
+         type string;
+         description "MKA outbound secure channel identifier";
+       }
+       leaf lowest-accepted-packet-number {
+         type uint32;
+         description "MAC security lowest accepted packet number";
+       }
+       list inbound-secure-association {
+         leaf association-number {
+           type uint32;
+           description "MAC security association number";
+         }
+         leaf association-number-status {
+           type string;
+           description "MAC security association number status";
+         }
+         leaf create-time {
+           type string;
+           description "MAC security association number creation time";
+         }
+         leaf member-identifier {
+           type string;
+           description "MKA member identifier";
+         }
+         leaf key-number {
+           type uint32;
+           description "MKA key number being used";
+         }
+         leaf start-time {
+           type string;
+           description "MAC security association number using start time";
+         }
+       }
+     }
+   }
+   grouping macsec-statistics-block {
+     leaf interface-name {
+       type string;
+     }
+     leaf encrypted-packets {
+       type uint64;
+       description "Macsec encrypted packets sent";
+     }
+     leaf encrypted-bytes {
+       type uint64;
+       description "Macsec encrypted bytes sent";
+     }
+     leaf protected-packets {
+       type uint64;
+       description "Macsec packets sent with only integrity protection";
+     }
+     leaf protected-bytes {
+       type uint64;
+       description "Macsec bytes sent with only integrity protection";
+     }
+     leaf ok-packets {
+       type uint64;
+       description "Macsec packets accepted";
+     }
+     leaf decrypted-bytes {
+       type uint64;
+       description "Macsec received bytes decrypted";
+     }
+     leaf decrypted-packets {
+       type uint64;
+       description "Macsec received packets decrypted";
+     }
+     leaf validated-packets {
+       type uint64;
+       description "Macsec received packets validated";
+     }
+     leaf validated-bytes {
+       type uint64;
+       description "Macsec received bytes validated";
+     }
+     leaf untagged-packets {
+       type uint64;
+       description "Macsec untagged packets";
+     }
+     leaf toolong-packets {
+       type uint64;
+       description "Macsec too long packets transmitted on a secure channel";
+     }
+     leaf control-packets {
+       type uint64;
+       description "Macsec control packets received on a secure channel";
+     }
+     leaf tagged-miss-packets {
+       type uint64;
+       description "Macsec tagged miss packets received on a secure channel";
+     }
+     leaf untagged-hit-packets {
+       type uint64;
+       description "Macsec untagged hit packets received on a secure channel";
+     }
+     leaf notag-packets {
+       type uint64;
+       description "Macsec no tag packets received on a secure channel";
+     }
+     leaf badtag-packets {
+       type uint64;
+       description "Macsec bad tag packets received on a secure channel";
+     }
+     leaf unknown-sci-packets {
+       type uint64;
+       description "Macsec unknown sci packets received on a secure channel";
+     }
+     leaf no-sci-packets {
+       type uint64;
+       description "Macsec no sci packets received on a secure channel";
+     }
+     leaf control-pass-packets {
+       type uint64;
+       description "Macsec allowed control packets received on a secure channel";
+     }
+     leaf uncontrol-pass-packets {
+       type uint64;
+       description "Macsec allowed uncontrol packets received on a secure channel";
+     }
+     leaf control-fail-packets {
+       type uint64;
+       description "Macsec dropped control packets received on a secure channel";
+     }
+     leaf uncontrol-fail-packets {
+       type uint64;
+       description "Macsec dropped uncontrol packets received on a secure channel";
+     }
+     leaf hit-dropped-packets {
+       type uint64;
+       description "Macsec hit dropped packets received on a security channel";
+     }
+     leaf notusing-sa-packets {
+       type uint64;
+       description "Macsec not using sa packets received on a security channel";
+     }
+     leaf unused-sa-packets {
+       type uint64;
+       description "Macsec unused sa packets received on a security channel";
+     }
+     leaf late-packets {
+       type uint64;
+       description "Macsec late packets dropped on a security channel";
+     }
+     leaf delayed-packets {
+       type uint64;
+       description "Macsec delayed packets accepted on a security channel";
+     }
+     leaf unchecked-packets {
+       type uint64;
+       description "Macsec unchecked packets accepted on a security channel";
+     }
+     leaf notvalid-packets {
+       type uint64;
+       description "Macsec not valid packets dropped on a security channel";
+     }
+     leaf invalid-packets {
+       type uint64;
+       description "Macsec invalid packets accepted on a security channel";
+     }
+     list secure-channel-sent {
+       leaf encrypted-packets {
+         type uint64;
+         description "Macsec encrypted packets sent";
+       }
+       leaf encrypted-bytes {
+         type uint64;
+         description "Macsec encrypted bytes sent";
+       }
+       leaf protected-packets {
+         type uint64;
+         description "Macsec packets sent with only integrity protection";
+       }
+       leaf protected-bytes {
+         type uint64;
+         description "Macsec bytes sent with only integrity protection";
+       }
+     }
+     list secure-association-sent {
+       leaf encrypted-packets {
+         type uint64;
+         description "Macsec encrypted packets sent";
+       }
+       leaf encrypted-bytes {
+         type uint64;
+         description "Macsec encrypted bytes sent";
+       }
+       leaf protected-packets {
+         type uint64;
+         description "Macsec packets sent with only integrity protection";
+       }
+       leaf protected-bytes {
+         type uint64;
+         description "Macsec bytes sent with only integrity protection";
+       }
+     }
+     list secure-channel-received {
+       leaf ok-packets {
+         type uint64;
+         description "Macsec packets accepted";
+       }
+       leaf decrypted-packets {
+         type uint64;
+         description "Macsec received packets decrypted";
+       }
+       leaf decrypted-bytes {
+         type uint64;
+         description "Macsec received bytes decrypted";
+       }
+       leaf validated-packets {
+         type uint64;
+         description "Macsec received packets validated";
+       }
+       leaf validated-bytes {
+         type uint64;
+         description "Macsec received bytes validated";
+       }
+     }
+     list secure-association-received {
+       leaf ok-packets {
+         type uint64;
+         description "Macsec packets accepted";
+       }
+       leaf decrypted-packets {
+         type uint64;
+         description "Macsec received packets decrypted";
+       }
+       leaf decrypted-bytes {
+         type uint64;
+         description "Macsec received bytes decrypted";
+       }
+       leaf validated-packets {
+         type uint64;
+         description "Macsec received packets validated";
+       }
+       leaf validated-bytes {
+         type uint64;
+         description "Macsec received bytes validated";
+       }
+     }
+     list macsec-error-information {
+       list secure-channel-sent-errors {
+         leaf untagged-packets {
+           type uint64;
+           description "Macsec untagged packets";
+         }
+         leaf toolong-packets {
+           type uint64;
+           description "Macsec too long packets transmitted on a secure channel";
+         }
+       }
+       list secure-channel-received-errors {
+         leaf control-packets {
+           type uint64;
+           description "Macsec control packets received on a secure channel";
+         }
+         leaf tagged-miss-packets {
+           type uint64;
+           description "Macsec tagged miss packets received on a secure channel";
+         }
+         leaf untagged-hit-packets {
+           type uint64;
+           description "Macsec untagged hit packets received on a secure channel";
+         }
+         leaf untagged-packets {
+           type uint64;
+           description "Macsec untagged packets";
+         }
+         leaf notag-packets {
+           type uint64;
+           description "Macsec no tag packets received on a secure channel";
+         }
+         leaf badtag-packets {
+           type uint64;
+           description "Macsec bad tag packets received on a secure channel";
+         }
+         leaf unknown-sci-packets {
+           type uint64;
+           description "Macsec unknown sci packets received on a secure channel";
+         }
+         leaf no-sci-packets {
+           type uint64;
+           description "Macsec no sci packets received on a secure channel";
+         }
+         leaf control-pass-packets {
+           type uint64;
+           description "Macsec allowed control packets received on a secure channel";
+         }
+         leaf control-fail-packets {
+           type uint64;
+           description "Macsec dropped control packets received on a secure channel";
+         }
+         leaf uncontrol-pass-packets {
+           type uint64;
+           description "Macsec allowed uncontrol packets received on a secure channel";
+         }
+         leaf uncontrol-fail-packets {
+           type uint64;
+           description "Macsec dropped uncontrol packets received on a secure channel";
+         }
+       }
+       list secure-channel-received-extended {
+         leaf hit-dropped-packets {
+           type uint64;
+           description "Macsec hit dropped packets received on a security channel";
+         }
+         leaf invalid-packets {
+           type uint64;
+           description "Macsec invalid packets accepted on a security channel";
+         }
+         leaf late-packets {
+           type uint64;
+           description "Macsec late packets dropped on a security channel";
+         }
+         leaf delayed-packets {
+           type uint64;
+           description "Macsec delayed packets accepted on a security channel";
+         }
+         leaf unchecked-packets {
+           type uint64;
+           description "Macsec unchecked packets accepted on a security channel";
+         }
+         leaf notvalid-packets {
+           type uint64;
+           description "Macsec not valid packets dropped on a security channel";
+         }
+         leaf notusing-sa-packets {
+           type uint64;
+           description "Macsec not using sa packets received on a security channel";
+         }
+         leaf unused-sa-packets {
+           type uint64;
+           description "Macsec unused sa packets received on a security channel";
+         }
+         leaf untagged-hit-packets {
+           type uint64;
+           description "Macsec untagged hit packets received on a secure channel";
+         }
+       }
+     }
+     leaf macsec-tx-sc-protected {
+       type int32;
+       description "Protected Secure Channel MACSec packets transmitted";
+     }
+     leaf macsec-tx-sc-encrypted {
+       type int32;
+       description "Encrypted Secure Channel MACSec packets transmitted";
+     }
+     leaf macsec-tx-sc-protectedbytes {
+       type int32;
+       description "Protected Secure Channel MACSec bytes transmitted";
+     }
+     leaf macsec-tx-sc-encryptedbytes {
+       type int32;
+       description "Encrypted Secure Channel MACSec bytes transmitted";
+     }
+     leaf macsec-rx-sc-ok {
+       type int32;
+       description "OK Secure Association MACSec packets received";
+     }
+     leaf macsec-rx-sc-validatedbytes {
+       type int32;
+       description "Validated Secure Association MACSec bytes received";
+     }
+     leaf macsec-rx-sc-decryptedbytes {
+       type int32;
+       description "Validated Secure Association MACSec bytes received";
+     }
+   }
+   grouping macsec-crypto-algorithms-block {
+     leaf fips-validated-algorithms {
+       type string;
+       description "Fips validated algorithms used by MACsec module";
+     }
+   }
+   grouping macsec-crypto-version-block {
+     leaf crypto-version {
+       type string;
+       description "Version of crypto library used by MACsec module";
+     }
+   }
+ }

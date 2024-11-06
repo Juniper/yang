@@ -1,0 +1,206 @@
+module junos-state-system-syslog-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/syslog/types";
+  prefix js-log-types;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+     USA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS syslog data types.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-05-01 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef log-severity {
+    type enumeration {
+      enum EMERGENCY {
+        value 0;
+        description
+          "System is unusable";
+      }
+      enum ALERT {
+        value 1;
+        description
+          "Action must be taken immediately";
+      }
+      enum CRITICAL {
+        value 2;
+        description
+          "Critical conditions";
+      }
+      enum ERROR {
+        value 3;
+        description
+          "Error conditions";
+      }
+      enum WARNING {
+        value 4;
+        description
+          "Warning conditions";
+      }
+      enum NOTICE {
+        value 5;
+        description
+          "Normal but significant condition";
+      }
+      enum INFORMATIONAL {
+        value 6;
+        description
+          "Informational messages";
+      }
+      enum DEBUG {
+        value 7;
+        description
+          "Debug-level messages";
+      }
+    }
+    reference
+      "IETF RFC 5424 - The Syslog Protocol";
+  }
+
+  typedef log-facility {
+    type enumeration {
+      enum KERN {
+        value 0;
+        description
+          "Kernel messages";
+      }
+      enum USER {
+        value 1;
+        description
+          "User-level messages";
+      }
+      enum MAIL {
+        value 2;
+        description
+          "Mail system";
+      }
+      enum DAEMON {
+        value 3;
+        description
+          "System daemons";
+      }
+      enum AUTH {
+        value 4;
+        description
+          "Security/authorization messages";
+      }
+      enum SYSLOG {
+        value 5;
+        description
+          "Messages generated internally by syslogd";
+      }
+      enum LPR {
+        value 6;
+        description
+          "Line printer subsystem";
+      }
+      enum NEWS {
+        value 7;
+        description
+          "Network news subsystem";
+      }
+      enum UUCP {
+        value 8;
+        description
+          "UUCP subsystem";
+      }
+      enum CRON {
+        value 9;
+        description
+          "Clock daemon";
+      }
+      enum AUTHPRIV {
+        value 10;
+        description
+          "Security/authorization messages (Private)";
+      }
+      enum FTP {
+        value 11;
+        description
+          "FTP daemon";
+      }
+      enum NTP {
+        value 12;
+        description
+          "NTP subsystem";
+      }
+      enum AUDIT {
+        value 13;
+        description
+          "Audit message";
+      }
+      enum ALERT {
+        value 14;
+        description
+          "Alert message";
+      }
+      enum LOCAL0 {
+        value 16;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL1 {
+        value 17;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL2 {
+        value 18;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL3 {
+        value 19;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL4 {
+        value 20;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL5 {
+        value 21;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL6 {
+        value 22;
+        description
+          "Reserved for local use";
+      }
+      enum LOCAL7 {
+        value 23;
+        description
+          "Reserved for local use";
+      }
+    }
+    reference
+      "IETF RFC 5424 - The Syslog Protocol";
+  }
+}

@@ -1,0 +1,78 @@
+/*
+ * Native model for IPv6 RA(router advertisement) Openconfig
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-ipv6-ra {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/ipv6-ra";
+  prefix jnx-ipv6-ra;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+    ipv6 router-advertisement";
+
+  revision 2023-06-06 {
+    description "Initial revision";
+  }
+
+  grouping jnx-ipv6-ra-interface {
+    leaf name {
+      type string;
+      description "Name of the interface";
+    }
+    leaf initial-adv-sent {
+      type uint16;
+      description "Number of initial advertisements sent";
+    }
+    leaf adv-sent {
+      type uint64;
+      description "Number of advertisements sent";
+    }
+    leaf adv-received {
+      type uint64;
+      description "Number of advertisements received";
+    }
+    leaf solicits-received {
+      type uint64;
+      description "Number of solicits received";
+    }
+    leaf last-adv-time {
+      type uint32;
+      description "Time (in seconds) since last advertisement sent";
+    }
+    leaf last-solicit-time {
+      type uint32;
+      description "Time (in seconds) since last solicit received";
+    }
+  }
+
+  grouping jnx-ipv6-ra-top {
+    container ipv6-ra {
+      description
+        "Defines ipv6 router-advertisement information";
+      list ipv6-ra-interface {
+        description
+          "list the ipv6 router-advertisement related statistics";
+        key name;
+        uses jnx-ipv6-ra-interface;
+      }
+    }
+  }
+  uses jnx-ipv6-ra-top;
+}

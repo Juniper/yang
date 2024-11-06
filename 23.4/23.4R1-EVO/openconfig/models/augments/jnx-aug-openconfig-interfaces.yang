@@ -1,0 +1,415 @@
+module jnx-aug-openconfig-interfaces {
+    yang-version "1";
+
+    namespace "http://yang.juniper.net/openconfig/augment/interfaces";
+
+    prefix "jnx-oc-interfaces";
+
+    import ietf-yang-types { prefix yang; }
+    import openconfig-interfaces { prefix oc-if; }
+    import openconfig-if-ethernet { prefix oc-eth; }
+    import openconfig-vlan { prefix oc-vlan; }
+    import junos-extension { prefix junos; }
+    import openconfig-if-ethernet { prefix oc-ethernet; }
+
+    organization "Juniper Networks";
+
+    description
+       "This module contains JUNOS augments to OpenConfig Interfaces model";
+
+    revision "2016-06-02" {
+        description "Initial revision";
+        reference "TBD";
+    }
+
+    grouping jnx-interface {
+      leaf index {
+        type yang:counter64;
+        description
+          "Interface index";
+      }
+      leaf egress-queues {
+        type yang:counter64;
+        description
+          "Number of egress queues";
+      }
+      leaf init-time {
+        type yang:counter64;
+        description
+          "interface initialisation time";
+      }
+    }
+
+    grouping jnx-interface-state {
+      leaf parent-ae-name {
+        type string;
+        description
+          "Name of parent for ae interface, if applicable";
+      }
+
+      leaf high-speed {
+        type uint32;
+        description
+          "This corresponds to ifHighSpeed object in the standard interface
+          MIB";
+      }
+    }
+
+    grouping jnx-interface-viable-top {
+      leaf jnx-forwarding-viable {
+        type boolean;
+        default true;
+        description
+          "This value indicates whether the interface could be used
+          to route traffic or not";
+      }
+    }
+
+    grouping jnx-subinterface {
+      leaf init-time {
+        type yang:counter64;
+        description
+          "interface initialisation time";
+      }
+    }
+
+    grouping jnx-subinterface-state {
+      leaf parent-ae-name {
+        type string;
+        description
+          "Name of parent for ae interface, if applicable";
+      }
+    }
+
+    grouping jnx-interface-in-stats {
+      leaf in-1sec-pkts {
+        type yang:counter64;
+      }
+
+      leaf in-1sec-octets {
+        type yang:counter64;
+      }
+
+      leaf in-pause-pkts {
+        type yang:counter64;
+      }
+
+      leaf parent-ae-name {
+        type string;
+        description
+          "Name of parent for ae interface, if applicable";
+      }
+
+      leaf in-unknown-proto-pkts {
+        type yang:counter64;
+      }
+    }
+
+    grouping jnx-subinterface-in-stats {
+      leaf parent-ae-name {
+        type string;
+        description
+          "Name of parent for ae interface, if applicable";
+      }
+    }
+
+    grouping jnx-interface-out-stats {
+      leaf out-1sec-pkts {
+        type yang:counter64;
+      }
+
+      leaf out-1sec-octets {
+        type yang:counter64;
+      }
+
+      leaf out-pause-pkts {
+        type yang:counter64;
+      }
+      
+      leaf out-unknown-proto-pkts {
+        type yang:counter64;
+      }
+    }
+
+    grouping jnx-interface-in-errors {
+      leaf in-drops {
+        type yang:counter64;
+      }
+
+      leaf in-frame-errors {
+        type yang:counter64;
+      }
+
+      leaf in-runts {
+        type yang:counter64;
+      }
+
+      leaf in-giants {
+        type yang:counter64;
+      }
+
+      leaf in-resource-errors {
+        type yang:counter64;
+      }
+    }
+
+    grouping jnx-interface-out-errors {
+      leaf out-drops {
+        type yang:counter64;
+      }
+
+      leaf mtu-errors {
+        type yang:counter64;
+      }
+
+      leaf out-resource-errors {
+        type yang:counter64;
+      }
+    }
+
+    grouping jnx-interface-queue-stats {
+      leaf queue-number {
+        type uint32;
+        description
+          "queue number";
+      }
+
+      leaf pkts {
+        type yang:counter64;
+        description
+          "Number of Packets trasmitted in the queue.";
+      }
+
+      leaf bytes {
+        type yang:counter64;
+        description
+          "Number of bytes trasmitted in the queue.";
+      }
+
+      leaf tail-drop-pkts {
+        type yang:counter64;
+        description
+          "The number of packets tail dropped at the queue.";
+      }
+
+      leaf tail-drop-bytes {
+        type yang:counter64;
+        description
+          "The number of bytes tail dropped at the queue.";
+      }
+
+      leaf rl-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of rate limit dropped packets at the queue.";
+      }
+
+      leaf rl-drop-bytes {
+        type yang:counter64;
+        description
+          "The total number of rate limit dropped bytes at the queue.";
+      }
+
+      leaf red-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of red drop packets at the queue.";
+      }
+
+      leaf red-drop-bytes {
+        type yang:counter64;
+        description
+          "The total number of red drop bytes at the queue.";
+      }
+
+      leaf avg-buffer-occupancy {
+        type yang:counter64;
+        description
+          "Average buffer occupancy of the queue.";
+      }
+
+      leaf cur-buffer-occupancy {
+        type yang:counter64;
+        description
+          "Current buffer occupancy of the queue.";
+      }
+
+      leaf peak-buffer-occupancy {
+        type yang:counter64;
+        description
+          "Peak buffer occupancy of the queue.";
+      }
+
+      leaf allocated-buffer-size {
+        type yang:counter64;
+        description
+          "Allocated buffer size for the queue.";
+      }
+
+      leaf queued-pkts {
+        type yang:counter64;
+        description
+          "The total number of packets queued at the queue.";
+      }
+
+      leaf queued-bytes {
+        type yang:counter64;
+        description
+          "The total number of bytes queued at the queue.";
+      }
+
+      leaf lp-red-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of low PLP packets RED-droppped at the queue.";
+      }
+
+      leaf hp-red-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of high PLP packets RED-droppped at the queue.";
+      }
+    }
+
+    grouping jnx-interface-counters {
+       uses jnx-interface-in-stats;
+       uses jnx-interface-out-stats;
+
+       uses jnx-interface-in-errors;
+       uses jnx-interface-out-errors;
+
+       list in-queue {
+         key queue-number;
+
+         uses jnx-interface-queue-stats;
+       }
+
+       list out-queue {
+         key queue-number;
+
+         uses jnx-interface-queue-stats;
+       }
+    }
+
+    grouping jnx-subinterface-fc-in-stats {
+      leaf address-family {
+        type string;
+      }
+
+      leaf fc-number {
+        type uint32;
+      }
+
+      leaf in-pkts {
+        type yang:counter64;
+      }
+
+      leaf in-octets {
+        type yang:counter64;
+      }
+    }
+
+    grouping jnx-pfc-stats-data {
+      list jnx-pfc-statistics {
+        key priority;
+        description
+          "Priority Flow Control(PFC) statistics. Priority Flow Control
+          provides a link-level flow control mechanism that can be
+          controlled independently for each class of service (CoS) or priority";
+        leaf priority {
+          type uint32;
+          description
+            "Egress queue priority value";
+        }
+        leaf in-mac-pause-frames {
+          type uint64;
+          description
+            "Flow control frames received for a given priority value";
+        }
+        leaf out-mac-pause-frames {
+          type uint64;
+          description
+            "Flow control frames transmitted for a given priority value";
+        }
+      }
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-ethernet:ethernet/oc-ethernet:config" {
+
+      uses jnx-interface-viable-top;
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-ethernet:ethernet/oc-ethernet:state" {
+
+      uses jnx-interface-viable-top;
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface" {
+
+      uses jnx-interface;
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-eth:ethernet/oc-eth:state/oc-eth:counters" {
+
+      uses jnx-pfc-stats-data;
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-if:state" {
+
+      uses jnx-interface-state;
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-if:state/oc-if:counters" {
+
+
+       uses jnx-interface-counters;
+    }
+
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-if:subinterfaces/oc-if:subinterface" {
+
+      uses jnx-subinterface;
+    } 
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-if:subinterfaces/oc-if:subinterface/" +
+      "oc-if:state" {
+
+      uses jnx-subinterface-state;
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/" +
+      "oc-if:subinterfaces/oc-if:subinterface/" +
+      "oc-if:state/oc-if:counters" {
+
+      uses jnx-subinterface-in-stats;
+
+      uses jnx-interface-in-errors;
+      uses jnx-interface-out-errors;
+
+      list in-fc-stats {
+        key "address-family fc-number";
+
+        uses jnx-subinterface-fc-in-stats;
+      }
+
+      list in-queue {
+         key queue-number;
+
+         uses jnx-interface-queue-stats;
+      }
+
+      list out-queue {
+         key queue-number;
+
+         uses jnx-interface-queue-stats;
+      }
+    }
+
+}

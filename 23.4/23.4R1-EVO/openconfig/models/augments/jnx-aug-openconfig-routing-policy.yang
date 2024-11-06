@@ -1,0 +1,46 @@
+module jnx-aug-openconfig-routing-policy {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/rpol";
+
+  prefix "jnx-oc-rpol";
+
+  import openconfig-routing-policy { prefix oc-rpol; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig routing policy model";
+
+  revision "2021-07-10" {
+      description "Added support for multipath-resolve and load-balance";
+      reference "0.0.2";
+  }
+
+  revision "2016-12-16" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  grouping then-actions {
+      leaf jnx-load-balance {
+          description "Type of load balancing in forwarding table";
+          type enumeration {
+              enum per-packet {
+                  description
+                      "Load balance on a per-prefix basis";
+              }
+          }
+      }
+      leaf jnx-multipath-resolve {
+          type empty;
+          description "Use all paths for resolution over this prefix";
+      }
+  }
+
+   augment "/oc-rpol:routing-policy/oc-rpol:policy-definitions/oc-rpol:policy-definition/oc-rpol:statements/oc-rpol:statement/oc-rpol:actions/oc-rpol:config" {
+       description "Augmention added for JUNOS specific then policy operation";
+       uses jnx-oc-rpol:then-actions;
+   }
+}
