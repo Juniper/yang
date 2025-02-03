@@ -1,0 +1,172 @@
+ module junos-genstate-system-uptime-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/system-uptime-information";
+   prefix jgsui;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for system-uptime-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping system-uptime-information-top {
+     description "Top-level grouping";
+     container system-uptime-information {
+       description "System uptime information";
+       leaf time-source {
+         type string;
+         description "Time Source";
+       }
+       container system-uptime-information-brief {
+         description "Uptime info across the system";
+         leaf date-time {
+           type string;
+         }
+         leaf time-length {
+           type string;
+         }
+         leaf active-user-count-brief {
+           type int32;
+           description "Number of users currently logged in, across the system";
+         }
+       }
+       container last-configured-time {
+         description "Last configured time";
+         leaf date-time {
+           type string;
+         }
+         leaf time-length {
+           type string;
+         }
+         leaf user {
+           type string;
+           description "User name executing this script";
+         }
+       }
+       container current-time {
+         description "Current time";
+         leaf date-time {
+           type string;
+         }
+       }
+       container node-booted-time {
+         description "Node booted time";
+         leaf date-time {
+           type string;
+         }
+         leaf time-length {
+           type string;
+         }
+       }
+       container system-booted-time {
+         description "System booted time";
+         leaf date-time {
+           type string;
+         }
+         leaf time-length {
+           type string;
+         }
+       }
+       container protocols-started-time {
+         description "Protocols started time";
+         leaf date-time {
+           type string;
+         }
+         leaf time-length {
+           type string;
+         }
+       }
+       container uptime-information {
+         description "System uptime details";
+         leaf date-time {
+           type string;
+         }
+         leaf up-time {
+           type string;
+           description "Uptime in ascii format";
+         }
+         leaf active-user-count {
+           type int32;
+           description "Number of users currently logged in";
+         }
+         leaf load-average-1 {
+           type string;
+           description "Load average for last 1 minute";
+         }
+         leaf load-average-5 {
+           type string;
+           description "Load average for last 5 minutes";
+         }
+         leaf load-average-15 {
+           type string;
+           description "Load average for last 15 minutes";
+         }
+         container user-table {
+           list user-entry {
+             leaf user {
+               type string;
+               description "User name executing this script";
+             }
+             leaf tty {
+               type string;
+               description "Name of the terminal the user is on";
+             }
+             leaf from {
+               type string;
+               description "Host from which the user is logged on";
+             }
+             leaf login-time {
+               type string;
+               description "Time the user logged on";
+             }
+             leaf idle-time {
+               type string;
+               description "Time since the user last typed anything";
+             }
+             leaf command {
+               type string;
+             }
+           }
+           container process-table {
+             list process-entry {
+               leaf process-id {
+                 type int32;
+                 description "Process identifier";
+               }
+               leaf command {
+                 type string;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds system-uptime-information to top-level genstate";
+     uses system-uptime-information-top;
+   }
+ }

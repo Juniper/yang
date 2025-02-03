@@ -1,0 +1,149 @@
+ module junos-genstate-snmp-v3-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/snmp-v3-information";
+   prefix jgsvi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for snmp-v3-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping snmp-v3-information-top {
+     description "Top-level grouping";
+     container snmp-v3-information {
+       description "Top-level container";
+       container snmp-v3-general-information {
+         list snmp-v3-engine-information {
+           leaf engine-id {
+             type string;
+             description "Engine ID";
+           }
+           leaf engine-boots {
+             type int32;
+             description "Number of times this engine has booted";
+           }
+           leaf engine-time {
+             type int32;
+             description "Number of seconds since this engine has booted";
+           }
+           leaf max-msg-size {
+             type int32;
+             description "Maximum message size allowed by this engine";
+           }
+         }
+       }
+       container snmp-v3-usm-user-information {
+         container snmp-v3-usm-user-engine-id {
+           leaf user-engine-id {
+             type string;
+             description "Engine ID";
+           }
+         }
+         list snmp-v3-usm-user {
+           leaf user-name {
+             type string;
+             description "User name";
+           }
+           leaf auth-type {
+             type string;
+             description "Type of authentication required by this user";
+           }
+           leaf priv-type {
+             type string;
+             description "Type of encryption required by this user";
+           }
+           leaf storage-type {
+             type string;
+             description "Type of storage for this entry";
+           }
+           leaf row-status {
+             type string;
+             description "Status for this entry";
+           }
+         }
+       }
+       container snmp-v3-group-information {
+         list snmp-v3-group {
+           leaf group-name {
+             type string;
+             description "Group name";
+           }
+           leaf security-model {
+             type string;
+             description "Security model";
+           }
+           leaf security-name {
+             type string;
+             description "Security name";
+           }
+           leaf storage-type {
+             type string;
+             description "Type of storage for this entry";
+           }
+           leaf row-status {
+             type string;
+             description "Status for this entry";
+           }
+         }
+       }
+       container snmp-v3-community-information {
+         description "SNMPv3 community information";
+         list snmp-v3-community {
+           description "SNMPv3 community";
+           leaf community-index {
+             type string;
+             description "Community index in this community table entry";
+           }
+           leaf security-name {
+             type string;
+             description "Security name";
+           }
+           leaf context-name {
+             type string;
+             description "Context name used when performing access control";
+           }
+           leaf transport-tag {
+             type string;
+             description "Transport tag used to identify a set of targets";
+           }
+           leaf storage-type {
+             type string;
+             description "Type of storage for this entry";
+           }
+           leaf row-status {
+             type string;
+             description "Status for this entry";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds snmp-v3-information to top-level genstate";
+     uses snmp-v3-information-top;
+   }
+ }

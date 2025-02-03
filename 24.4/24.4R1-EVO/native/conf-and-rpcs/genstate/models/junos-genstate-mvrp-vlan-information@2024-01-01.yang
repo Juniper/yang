@@ -1,0 +1,72 @@
+ module junos-genstate-mvrp-vlan-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-vlan-information";
+   prefix jgmvi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mvrp-vlan-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping mvrp-vlan-information-top {
+     description "Top-level grouping";
+     container mvrp-vlan-information {
+       description "Top-level container";
+       list mvrp-vlan-instance {
+         leaf mvrp-routing-instance-name {
+           type string;
+           description "Name of routing instance";
+         }
+         list mvrp-vlan-entry {
+           description "Dynamic vlan information";
+           leaf mvrp-vlan-id {
+             type int32;
+             description "VLAN ID";
+           }
+           leaf mvrp-static-vlan {
+             type empty;
+             description "Statically configured vlan";
+           }
+           list mvrp-vlan-interface-entry {
+             leaf mvrp-interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf mvrp-fixed-registration {
+               type empty;
+               description "Fixed registration vlan";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mvrp-vlan-information to top-level genstate";
+     uses mvrp-vlan-information-top;
+   }
+ }

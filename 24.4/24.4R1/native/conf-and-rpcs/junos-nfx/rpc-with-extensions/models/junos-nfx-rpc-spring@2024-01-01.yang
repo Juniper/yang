@@ -1,0 +1,316 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-spring {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/spring";
+
+   prefix spring;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for spring command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-spring-sensor-traffic-stats-information {
+     description "Show SPRING traffic statistics";
+     junos:command "show spring traffic-statistics";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "summary";
+         type enumeration {
+           enum "summary" {
+             description "Show summary output";
+           }
+         }
+       }
+     }
+     output {
+       container spring-sensor-traffic-stats-information {
+         uses spring-sensor-traffic-stats-information-block;
+       }
+     }
+   }
+   rpc get-spring-sensor-traffic-intf-information {
+     description "Show SPRING per-interface-per-member-link sensor statistics";
+     junos:command "show spring traffic-statistics per-interface-per-member-link";
+     input {
+       leaf intf-type {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "ingress" {
+             description "Show SPRING per-interface-per-member-link ingress sensor statistics";
+           }
+           enum "egress" {
+             description "Show SPRING per-interface-per-member-link egress sensor statistics";
+           }
+         }
+       }
+     }
+     output {
+       container spring-sensor-traffic-stats-information {
+         uses spring-sensor-traffic-stats-information-block;
+       }
+     }
+   }
+   rpc get-spring-sensor-traffic-sid-information {
+     description "Show SPRING per-sid sensor statistics";
+     junos:command "show spring traffic-statistics per-sid";
+     input {
+       leaf sid-type {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "ingress" {
+             description "Show SPRING per-sid ingress sensor statistics";
+           }
+           enum "egress" {
+             description "Show SPRING per-sid egress sensor statistics";
+           }
+         }
+       }
+     }
+     output {
+       container spring-sensor-traffic-stats-information {
+         uses spring-sensor-traffic-stats-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping spring-sensor-traffic-stats-information-block {
+     leaf spring-traffic-next-update-in {
+       type uint32;
+       description "Number of seconds left for next update";
+     }
+     list spring-traffic-stats-counters {
+       leaf spring-traffic-stats-interface-or-sid {
+         type string;
+       }
+       leaf spring-traffic-stats-sensor-type {
+         type string;
+         description "Type of ISIS Traffic sensor";
+       }
+       leaf spring-traffic-stats-packets-count {
+         type uint32;
+         description "Number of packets";
+       }
+       leaf spring-traffic-stats-bytes-count {
+         type uint32;
+         description "Number of Bytes";
+       }
+       leaf spring-traffic-stats-packet-rate {
+         type uint32;
+       }
+       leaf spring-traffic-stats-byte-rate {
+         type uint32;
+       }
+       leaf spring-traffic-stats-error {
+         type string;
+         description "Error encountered in statistics collection";
+       }
+     }
+   }
+ }

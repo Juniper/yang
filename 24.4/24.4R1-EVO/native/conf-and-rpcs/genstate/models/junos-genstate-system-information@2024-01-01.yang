@@ -1,0 +1,99 @@
+ module junos-genstate-system-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/system-information";
+   prefix jgsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for system-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping system-information-top {
+     description "Top-level grouping";
+     container system-information {
+       description "Top-level container";
+       leaf host-name {
+         type string;
+         description "Hostname of router";
+       }
+       leaf hardware-model {
+         type string;
+         description "Platform";
+       }
+       leaf flavor {
+         type string;
+         description "System flavor (cSRX only : #CPU-#G)";
+       }
+       leaf os-name {
+         type string;
+         description "Operating System Name";
+       }
+       leaf os-version {
+         type string;
+         description "Operating System Version";
+       }
+       leaf serial-number {
+         type string;
+         description "Chassis Serial Number";
+       }
+       leaf virtual-chassis {
+         type empty;
+         description "System is a Virtual Chassis";
+       }
+       leaf cluster-node {
+         type empty;
+         description "Node of a cluster";
+       }
+       leaf blade-server {
+         type empty;
+         description "System is a Blade Server";
+       }
+       leaf aggregation-device {
+         type string;
+         description "System is an Aggregation Device";
+       }
+       list package-information {
+         leaf name {
+           type string;
+           description "Syslog message tag name";
+         }
+         leaf version {
+           type string;
+           description "JUNOS version";
+         }
+         leaf package-name {
+           type string;
+           description "Name of software package";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds system-information to top-level genstate";
+     uses system-information-top;
+   }
+ }

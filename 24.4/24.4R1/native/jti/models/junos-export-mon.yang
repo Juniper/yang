@@ -1,0 +1,228 @@
+module junos-export-mon {
+
+  yang-version "1";
+
+  // namespace
+  namespace "http://juniper.net/yang/junos-export-mon";
+
+  prefix "junos-exp-mon";
+
+  // meta
+  organization "Juniper Networks";
+
+  description
+    "This module provides data definitions for configuration of
+     PFE export monitor subsystem.
+
+    The statistics for each sensor is exported for export subsystem
+    configuration and accounting. As part of accounting all reap
+    statistics associated with a wrap and and all wrap statistics
+    associated with a sesnor.
+    ";
+
+  revision "2021-12-20" {
+      description "Junos export monitor telemetry Information data model";
+      reference "1.0.0";
+  }
+
+  grouping resource-export-info {
+    list export-info {
+      description
+        "Describes export subsystem config and accounting params";
+
+      key resource;
+      leaf resource {
+        type string;
+        description
+          "Identifies a PFE resource - sensor name";
+      }
+
+      leaf rep-interval {
+        type uint32;
+        description
+          "Describes configured reporting interval of a PFE resource";
+      }
+
+      leaf payload-size {
+        type uint32;
+        description
+        "Describes configured payload size of a PFE resource";
+      }
+
+      leaf qos-options {
+        type uint32;
+        description
+        "Describes configured qos options of a PFE resource";
+      }
+
+      leaf fc-options {
+        type uint32;
+        description
+        "Describes configured flow control options of a PFE resource";
+      }
+
+      leaf plp-options {
+        type uint32;
+        description
+        "Describes configured packet loss priority options of a PFE resource";
+      }
+
+      container server {
+        description
+        "Describes Server details";
+
+        leaf ip {
+          type string;
+          description
+          "Describes configured IP address of a PFE resource";
+        }
+
+        leaf port {
+          type uint32;
+          description
+          "Describes configured port of a PFE resource";
+        }
+      }
+      leaf num-clients {
+        type uint32;
+        description
+        "Describes number of clients for this PFE resource";
+      }
+
+      list clients {
+        description
+        "Describes clients' details";
+
+        key  index;
+        leaf index {
+          type uint32;
+          description
+          "Client's Index";
+        }
+
+        leaf ip {
+          type string;
+          description
+          "Describes configured IP address of a Client";
+        }
+
+        leaf port {
+          type uint32;
+          description
+          "Describes configured port of a Client";
+        }
+
+      }
+
+      container accounting {
+        description
+        "Describes export counters";
+
+        leaf successful-reaps {
+          type uint64;
+          description
+          "Describes no of successful reaps for a PFE resource";
+        }
+
+        leaf failed-reaps {
+          type uint64;
+          description
+          "Describes no of failed reaps for a PFE resource";
+        }
+
+        leaf reaps-in-last-rep-interval {
+          type uint32;
+          description
+          "Describes no of reaps in the latest reporting interval for a PFE resource";
+        }
+
+        leaf packets-in-last-rep-interval {
+          type uint32;
+          description
+          "Describes no of packets in the latest reporting interval for a PFE resource";
+        }
+
+        leaf instances-in-last-rep-interval {
+          type uint32;
+          description
+          "Describes no of instances in the latest reporting interval for a PFE resource";
+        }
+
+        leaf total-packets {
+          type uint64;
+          description
+          "Describes no of packets exported for a PFE resource";
+        }
+
+        leaf num-wraps {
+          type uint64;
+          description
+          "Describes no of wraps happened for a PFE resource";
+        }
+
+        leaf average-reaps {
+          type uint64;
+          description
+          "Describes average reaps for a warp of a PFE resource";
+        }
+
+        leaf last-packet-size {
+          type uint32;
+          description
+          "Describes last exported packet size of a PFE resource";
+        }
+
+      }
+
+      list wraps {
+        description
+        "Describes wrap ino";
+
+        key index;
+        leaf index {
+          type uint32;
+          description
+            "Identifies a wrap number";
+        }
+
+        leaf time {
+          type string;
+          description
+            "Describes time at which this reap happened for this PFE resource";
+        }
+
+      }
+
+    }
+
+  }
+
+  grouping pfe-export-mon {
+    description
+      "This describes the data exported by PFE jvision export module on the
+       linecard. The list of data exported per PFE resource/sensor. A group
+       can mean any PFE sensor like IFD, IFL, etc.,";
+
+    container junos {
+      config false;
+      description "JunOS OS";
+
+      container system {
+        description "Junos System";
+
+        container linecard {
+          description "Contains PFE resources";
+
+          container export-monitor {
+            description "Monitoring of exported PFE resources";
+
+            uses resource-export-info;
+          }
+        }
+      }
+    }
+  }
+
+  uses pfe-export-mon;
+
+}

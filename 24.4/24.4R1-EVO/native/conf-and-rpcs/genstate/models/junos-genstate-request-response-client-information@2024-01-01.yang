@@ -1,0 +1,83 @@
+ module junos-genstate-request-response-client-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/request-response-client-information";
+   prefix jgrrci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for request-response-client-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping request-response-client-information-top {
+     description "Top-level grouping";
+     container request-response-client-information {
+       description "Request-response client information";
+       list request-response-client {
+         leaf client-id {
+           type string;
+           description "Client ID";
+         }
+         leaf socket-address {
+           type string;
+           description "Socket Address";
+         }
+         leaf client-type {
+           type string;
+           description "Client Type";
+         }
+         leaf client-login-time {
+           type string;
+           description "Client Login Time (UTC)";
+         }
+         leaf channel-count {
+           type int32;
+           description "Channel Count";
+         }
+         container grpc-channel-information {
+           list grpc-channel {
+             leaf target {
+               type string;
+               description "Channel target";
+             }
+             leaf status {
+               type string;
+               description "Channel status";
+             }
+             leaf user {
+               type string;
+               description "User name";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds request-response-client-information to top-level genstate";
+     uses request-response-client-information-top;
+   }
+ }

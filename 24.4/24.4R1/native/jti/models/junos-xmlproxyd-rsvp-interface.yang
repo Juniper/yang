@@ -1,0 +1,189 @@
+module junos-xmlproxyd-rsvp-interface {
+  yang-version 1;
+  namespace "http://juniper.net/yang/mpls";
+  prefix junos-xmlproxyd-rsvp-interface;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of rsvp interface yang model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping proxyd-rsvp-interface-top {
+    description
+      "Juniper Networks RSVP interface";
+    container junos {
+      config false;
+      container rsvp-interface-information {
+        description
+          "RSVP interface information";
+        leaf active-count {
+          description
+            "Number of active RSVP interfaces";
+          type uint32;
+        }
+        list rsvp-interface {
+          description
+            "RSVP interface";
+          key "interface-name";
+          leaf interface-name {
+            description
+              "Name of logical interface";
+            type string;
+          }
+          leaf index {
+            description
+              "Index of the interface";
+            type uint32;
+          }
+          leaf rsvp-status {
+            description
+              "State of the interface";
+            type string;
+          }
+          leaf authentication-flag {
+            description
+              "State of authentication flag of the interface";
+            type string;
+          }
+          leaf aggregate-flag {
+            description
+              "State of refresh reduction flag of the interface";
+            type string;
+          }
+          leaf ack-flag {
+            description
+              "State of refresh reduction message ID extension flag of the interface";
+            type string;
+          }
+          leaf protect-flag {
+            description
+              "State of link protection flag of the interface";
+            type string;
+          }
+          leaf hello-interval {
+            description
+              "Frequency at which RSVP hellos are sent on this interface (in seconds)";
+            type uint32;
+          }
+          leaf interface-address {
+            description
+              "IP address of the local interface";
+            type string;
+          }
+          list message-statistics {
+            description
+              "RSVP interface message statistics";
+            key "rsvp-message";
+            leaf rsvp-message {
+              description
+                "RSVP interface message information";
+              type string;
+            }
+            leaf messages-sent {
+              description
+                "Total number of messages sent";
+              type uint32;
+            }
+            leaf messages-received {
+              description
+                "Total number of messages received";
+              type uint32;
+            }
+            leaf messages-sent-5seconds {
+              description
+                "Number of messages sent in the last 5 seconds";
+              type uint32;
+            }
+            leaf messages-received-5seconds {
+              description
+                "Number of messages received in the last 5 seconds";
+              type uint32;
+            }
+          }
+          container rsvp-telink {
+            description
+              "Traffic-engineered links that are managed by the peer they are associated with";
+            leaf active-reservation {
+              description
+                "Number of reservations that are actively reserving bandwidth on the interface";
+              type uint32;
+            }
+            leaf preemption-count {
+              description
+                "Number of times an RSVP session was preempted on this interface";
+              type uint32;
+            }
+            leaf update-threshold {
+              description
+                "Percentage change in reserved bandwidth to trigger an IGP update";
+              type decimal64 {
+                fraction-digits 3;
+              }
+            }
+            leaf subscription {
+              description
+                "User-configured subscription factor";
+              type uint32;
+            }
+            leaf static-bandwidth {
+              description
+                "Total interface bandwidth in scaled units of bps";
+              type string;
+            }
+            leaf static-bandwidth-bps {
+              description
+                "Total interface bandwidth in bps";
+              type uint64;
+            }
+            leaf available-bandwidth {
+              description
+                "Amount of bandwidth that RSVP is allowed to reserve in scaled units of bps, it is equal to (static bandwidth * subscription factor)";
+              type string;
+            }
+            leaf available-bandwidth-bps {
+              description
+                "Amount of bandwidth that RSVP is allowed to reserve in bps, it is equal to (static bandwidth * subscription factor)";
+              type uint64;
+            }
+            list reserved-bandwidth {
+              description
+                "Currently reserved bandwidth for a priority";
+              key "bandwidth-priority";
+              leaf bandwidth-priority {
+                description
+                  "Bandwidth reserved at different priority levels";
+                type uint32;
+              }
+              leaf total-reserved-bandwidth {
+                description
+                  "Total amount of bandwidth currently reserved with units appended";
+                type string;
+              }
+              leaf total-reserved-bandwidth-bps {
+                description
+                  "Total amount of bandwidth currently reserved in bps";
+                type uint64;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses proxyd-rsvp-interface-top;
+}

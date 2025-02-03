@@ -1,0 +1,475 @@
+module junos-state-agf-ngap {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/agf/ngap";
+  prefix js-agf-ngap;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-services {
+    prefix js-svc;
+  }
+
+  import junos-state-agf {
+    prefix js-agf;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Access Gateway Function (AGF) NG Application Protocol (NGAP).
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-06-07 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping ngap-n2-non-ue-sent-message-counters {
+    description
+      "NGAP related Non-UE signling message counters";
+
+    leaf ng-setup-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of NG setup request messages sent";
+    }
+
+    leaf ran-config-update-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of RAN configuration update messages sent";
+    }
+
+    leaf amf-config-update-acknowledgement-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of AMF configuration update acknowledge messages sent";
+    }
+
+    leaf amf-config-update-failure-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of AMF configuration update failure messages sent";
+    }
+
+    leaf ng-reset-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of NG reset messages sent";
+    }
+
+    leaf ng-reset-acknowledgement-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of NG reset acknowledge messages sent";
+    }
+
+    leaf non-ue-error-indication-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Non-UE related Error indication messages sent";
+    }
+  }
+
+  grouping ngap-n2-non-ue-received-message-counters {
+    description
+      "NGAP related Non-UE signling message counters";
+
+    leaf ng-setup-response-msgs-received {
+      type yang:counter64;
+      description
+        "Number of NG setup response messages received";
+    }
+
+    leaf ng-setup-failure-msgs-received {
+      type yang:counter64;
+      description
+        "Number of NG setup failure messages received";
+    }
+
+    leaf ran-config-update-acknowledgement-msgs-received {
+      type yang:counter64;
+      description
+        "RAN configuration update achnowledge messages received";
+    }
+
+    leaf ran-config-update-failure-msgs-received {
+      type yang:counter64;
+      description
+        "Number of RAN configuration update failure messages received";
+    }
+
+    leaf amf-config-update-msgs-received {
+      type yang:counter64;
+      description
+        "Number of AMF configuration update messages received";
+    }
+
+    leaf ng-reset-msgs-received {
+      type yang:counter64;
+      description
+        "Number of NG reset request messages received";
+    }
+
+    leaf ng-reset-acknowledgement-msgs-received {
+      type yang:counter64;
+      description
+        "Number of NG reset acknowledge messages received";
+    }
+
+    leaf non-ue-error-indication-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Non-UE related Error indication messages received";
+    }
+
+    leaf amf-status-indication-msgs-received {
+      type yang:counter64;
+      description
+        "Number of AMF status indication messages received";
+    }
+
+    leaf overload-start-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Overload start messages received";
+    }
+
+    leaf overload-stop-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Overload stop messages received";
+    }
+  }
+
+  grouping ngap-n2-ue-sent-message-counters {
+    description
+      "NGAP related UE signling message counters";
+
+    leaf initial-context-setup-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Initial context setup response messages sent";
+    }
+
+    leaf initial-context-setup-failure-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Initial context setup failure messages sent";
+    }
+
+    leaf ue-context-release-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of UE context release request messages sent";
+    }
+
+    leaf ue-context-release-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of UE context release complete messages sent";
+    }
+
+    leaf ue-context-modify-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of UE context modification response messages sent";
+    }
+
+    leaf ue-context-modify-failure-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of UE context modification failure messages sent";
+    }
+
+    leaf pdu-session-resource-setup-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session resource setup response messages sent";
+    }
+
+    leaf pdu-session-resource-release-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session resource release response messages sent";
+    }
+
+    leaf pdu-session-resource-mod-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session resource modify response messages sent";
+    }
+
+    leaf pdu-session-resource-notify-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session resource notify messages sent";
+    }
+
+    leaf pdu-session-resource-mod-indication-msgs-sent {
+      type yang:counter64;
+      description
+        "PDU session resource modify indication messages sent";
+    }
+
+    leaf pdu-session-resource-setup-request-msgs-received {
+      type yang:counter64;
+      description
+        "PDU session resource setup request messages received";
+    }
+
+    leaf pdu-session-resource-release-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session resource release connand received";
+    }
+
+    leaf pdu-session-resource-mod-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session resource modify request messages received";
+    }
+
+    leaf pdu-session-resource-mod-confirm-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session resource modify confirm messages received";
+    }
+
+    leaf initial-ue-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Initial UE messages sent";
+    }
+
+    leaf uplink-nas-transport-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Uplink NAS transport messages sent";
+    }
+
+    leaf nas-non-delivery-indication-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of NAS non-delivery indication messages sent";
+    }
+
+    leaf ue-error-indication-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of UE related Error indication messages sent";
+    }
+  }
+
+  grouping ngap-n2-ue-received-message-counters {
+    description
+      "NGAP related UE signling message counters";
+
+    leaf initial-context-setup-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Initial context setup request message recived";
+    }
+
+    leaf ue-context-release-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of UE context release command messages received";
+    }
+
+    leaf ue-context-modification-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of UE context modification request messages received";
+    }
+
+    leaf downlink-nas-transport-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Downlink NAS transport messages received";
+    }
+
+    leaf reroute-nas-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Reroute NAS request messages received";
+    }
+
+    leaf ue-tnla-bind-release-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of UE-TNLA binding release request messages received";
+    }
+
+    leaf ue-error-indication-msgs-received {
+      type yang:counter64;
+      description
+        "Number of UE related Error indication messages received";
+    }
+  }
+
+  grouping ngap-ue-counters {
+    description
+      "NGAP related User-equipment state counters";
+
+    leaf ues-total {
+      type yang:counter64;
+      description
+        "NGAP User-equipment total state counter";
+    }
+
+    leaf ues-establishing {
+      type yang:counter64;
+      description
+        "NGAP User-equipment establishing state counter";
+    }
+
+    leaf ues-established {
+      type yang:counter64;
+      description
+        "NGAP User-equipment established state counter";
+    }
+
+    leaf ues-releasing {
+      type yang:counter64;
+      description
+        "NGAP User-equipment releasing state counter";
+    }
+
+    leaf ues-released {
+      type yang:counter64;
+      description
+        "NGAP User-equipment released state counter";
+    }
+  }
+
+  grouping ngap-agf-top {
+    description
+      "Top-level grouping for AGF related NGAP information";
+
+    container ngap {
+      description
+        "Container for NGAP daemon related info";
+
+      container counters {
+        description
+          "NGAP User-equipment state total counters";
+
+        uses ngap-ue-counters;
+      }
+
+      container amfs {
+        description
+          "Encapsulating container for the list of AMFs on the system";
+
+        list amf {
+          key "name";
+          description
+            "AMFs registered on the system";
+
+          leaf name {
+            type string;
+            description
+              "A unique name identifying the AMF";
+          }
+
+          leaf routing-instance {
+            type string;
+            description
+              "Routing instance for AMF";
+          }
+
+          leaf default {
+            type boolean;
+            description
+              "Default AMF status";
+          }
+
+          leaf connection-status {
+            type enumeration {
+              enum OFFLINE {
+                description
+                  "AMF in offline state";
+              }
+              enum OFFLINE_ADMIN {
+                description
+                  "AMF in offline admin state";
+              }
+              enum CONNECTING {
+                description
+                  "AMF connecting state";
+              }
+              enum INITIALIZING {
+                description
+                  "AMF in initializing state";
+              }
+              enum ONLINE {
+                description
+                  "AMF in online state";
+              }
+              enum FAILED {
+                description
+                  "AMF in failed state";
+              }
+            }
+          }
+
+          leaf overload-status {
+            type boolean;
+            description
+              "Overload Status of the AMFs";
+          }
+
+          container counters {
+            description
+              "NGAP AMF specific user-equipment related counters";
+            uses ngap-ue-counters;
+          }
+
+          container message-counters {
+            description
+              "NGAP AMF specific N2 message statisitcs info";
+            uses ngap-n2-non-ue-sent-message-counters;
+            uses ngap-n2-non-ue-received-message-counters;
+            uses ngap-n2-ue-sent-message-counters;
+            uses ngap-n2-ue-received-message-counters;
+          }
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-svc:services/js-agf:agf" {
+    description
+      "Adds NGAP domain to agf services state";
+
+    uses ngap-agf-top;
+  }
+}

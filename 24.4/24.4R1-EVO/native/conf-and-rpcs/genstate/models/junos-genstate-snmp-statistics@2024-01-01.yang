@@ -1,0 +1,211 @@
+ module junos-genstate-snmp-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/snmp-statistics";
+   prefix jgss;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for snmp-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping snmp-statistics-top {
+     description "Top-level grouping";
+     container snmp-statistics {
+       description "Top-level container";
+       container snmp-input-statistics {
+         leaf packets {
+           type int32;
+         }
+         leaf bad-versions {
+           type int32;
+         }
+         leaf bad-community-names {
+           type int32;
+         }
+         leaf bad-community-uses {
+           type int32;
+         }
+         leaf asn-parse-errors {
+           type int32;
+         }
+         leaf too-bigs {
+           type int32;
+         }
+         leaf no-such-names {
+           type int32;
+         }
+         leaf bad-values {
+           type int32;
+         }
+         leaf read-onlys {
+           type int32;
+         }
+         leaf general-errors {
+           type int32;
+         }
+         leaf total-request-varbinds {
+           type int32;
+         }
+         leaf total-set-varbinds {
+           type int32;
+         }
+         leaf get-requests {
+           type int32;
+         }
+         leaf get-nexts {
+           type int32;
+         }
+         leaf set-requests {
+           type int32;
+         }
+         leaf get-responses {
+           type int32;
+         }
+         leaf traps {
+           type int32;
+         }
+         leaf silent-drops {
+           type int32;
+         }
+         leaf proxy-drops {
+           type int32;
+         }
+         leaf commit-pending-drops {
+           type int32;
+         }
+         leaf throttle-drops {
+           type int32;
+         }
+         leaf duplicate-request-drops {
+           type int32;
+           description "Number of duplicate requests that were dropped";
+         }
+       }
+       container snmp-v3-input-statistics {
+         leaf unknown-secmodels {
+           type int32;
+         }
+         leaf invalid-msgs {
+           type int32;
+         }
+         leaf unknown-pduhandlers {
+           type int32;
+         }
+         leaf unavail-contexts {
+           type int32;
+         }
+         leaf unknown-contexts {
+           type int32;
+         }
+         leaf unsupported-seclevels {
+           type int32;
+         }
+         leaf not-in-timewindows {
+           type int32;
+         }
+         leaf unknown-usernames {
+           type int32;
+         }
+         leaf unknown-eids {
+           type int32;
+         }
+         leaf wrong-digests {
+           type int32;
+         }
+         leaf decrypt-errors {
+           type int32;
+         }
+       }
+       container snmp-output-statistics {
+         leaf packets {
+           type int32;
+         }
+         leaf too-bigs {
+           type int32;
+         }
+         leaf no-such-names {
+           type int32;
+         }
+         leaf bad-values {
+           type int32;
+         }
+         leaf general-errors {
+           type int32;
+         }
+         leaf get-requests {
+           type int32;
+         }
+         leaf get-nexts {
+           type int32;
+         }
+         leaf set-requests {
+           type int32;
+         }
+         leaf get-responses {
+           type int32;
+         }
+         leaf traps {
+           type int32;
+         }
+       }
+       container snmp-performance-statistics {
+         leaf average-response-time {
+           type string;
+           description "Average response time in ms for processing SNMP PDU";
+         }
+         leaf one-minute-request-throughput {
+           type int32;
+           description "Throughput of request diaptaching in last minute";
+         }
+         leaf five-minute-request-throughput {
+           type int32;
+           description "Throughput of request dispatching in last five minutes";
+         }
+         leaf fifteen-minute-request-throughput {
+           type int32;
+           description "Throughput of request dispatching in last fifteen minutes";
+         }
+         leaf one-minute-response-throughput {
+           type int32;
+           description "Throughput of response dispatching in last minute";
+         }
+         leaf five-minute-response-throughput {
+           type int32;
+           description "Throughput of response dispatching in last five minutes";
+         }
+         leaf fifteen-minute-response-throughput {
+           type int32;
+           description "Throughput of response dispatching in last fifteen minutes";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds snmp-statistics to top-level genstate";
+     uses snmp-statistics-top;
+   }
+ }

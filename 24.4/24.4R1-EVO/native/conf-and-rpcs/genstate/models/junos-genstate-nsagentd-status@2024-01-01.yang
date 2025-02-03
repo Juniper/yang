@@ -1,0 +1,48 @@
+ module junos-genstate-nsagentd-status {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/nsagentd-status";
+   prefix jgns;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for nsagentd-status";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping nsagentd-status-top {
+     description "Top-level grouping";
+     container nsagentd-status {
+       description "Top-level container";
+       leaf status-resp {
+         type string;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds nsagentd-status to top-level genstate";
+     uses nsagentd-status-top;
+   }
+ }

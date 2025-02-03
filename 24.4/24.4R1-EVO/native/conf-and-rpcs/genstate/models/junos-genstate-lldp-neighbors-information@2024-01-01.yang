@@ -1,0 +1,445 @@
+ module junos-genstate-lldp-neighbors-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/lldp-neighbors-information";
+   prefix jglni;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lldp-neighbors-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping lldp-neighbors-information-top {
+     description "Top-level grouping";
+     container lldp-neighbors-information {
+       description "Top-level container";
+       list lldp-neighbor-information {
+         leaf lldp-index {
+           type uint32;
+           description "LLDP index";
+         }
+         leaf lldp-ttl {
+           type uint32;
+           description "How long until the neighbor record expired";
+         }
+         leaf lldp-timemark {
+           type string;
+           description "When neighbor information was received";
+         }
+         leaf lldp-age {
+           type uint32;
+           description "Age of record";
+         }
+         leaf lldp-local-interface {
+           type string;
+           description "Interface on which neighbor information was received";
+         }
+         leaf lldp-local-parent-interface-name {
+           type string;
+           description "Parent interface of local interface on which neighbor informationwas received";
+         }
+         leaf lldp-local-port-id {
+           type string;
+           description "Port on which neighbor information was received";
+         }
+         leaf lldp-local-port-ageout-count {
+           type uint32;
+           description "Number of age-outs that occured on a given port";
+         }
+         leaf lldp-remote-chassis-id-subtype {
+           type string;
+           description "LLDP remote chassis ID subtype";
+         }
+         leaf lldp-remote-chassis-id {
+           type string;
+           description "LLDP remote chassis ID";
+         }
+         leaf lldp-remote-port-id-subtype {
+           type string;
+           description "LLDP remote port ID subtype";
+         }
+         leaf lldp-remote-port-id {
+           type string;
+           description "LLDP remote port ID";
+         }
+         leaf lldp-remote-port-description {
+           type string;
+           description "LLDP remote port ID";
+         }
+         leaf lldp-remote-system-name {
+           type string;
+           description "Administratively assigned host name of remote neighbor";
+         }
+         leaf lldp-remote-system-capabilities-supported {
+           type string;
+         }
+         leaf lldp-remote-system-capabilities-enabled {
+           type string;
+         }
+         leaf lldp-remote-inventory-hardware-revision {
+           type string;
+         }
+         leaf lldp-remote-inventory-firmware-revision {
+           type string;
+         }
+         leaf lldp-remote-inventory-software-revision {
+           type string;
+         }
+         leaf lldp-remote-inventory-serial-number {
+           type string;
+         }
+         leaf lldp-remote-inventory-manufacturer-name {
+           type string;
+         }
+         leaf lldp-remote-inventory-model-name {
+           type string;
+         }
+         leaf lldp-remote-inventory-asset-id {
+           type string;
+         }
+         leaf lldp-remote-inventory-network-policy {
+           type string;
+         }
+         container lldp-system-description {
+           leaf lldp-remote-system-description {
+             type string;
+             description "System information";
+           }
+         }
+         list lldp-remote-management-address-info {
+           leaf lldp-remote-management-address-type {
+             type string;
+             description "Management address for use by SNMP manager query";
+           }
+           leaf lldp-remote-management-address {
+             type string;
+             description "Management address for use by SNMP manager query";
+           }
+           leaf lldp-remote-management-address-port-id {
+             type uint32;
+             description "Port ID of Management address for use by SNMP manager query";
+           }
+           leaf lldp-remote-management-address-interface-subtype {
+             type string;
+             description "Enumeration value that identifies the interface numbering method used for defining the interface number associated with the remote system";
+           }
+           leaf lldp-remote-management-addr-oid {
+             type string;
+             description "LLDP OID value advertised by the remote system";
+           }
+           leaf lldp-remote-management-address-sub-type {
+             type uint32;
+             description "LLDP remote system management address Subtype";
+           }
+         }
+         list lldp-org-specific-tlv {
+           leaf lldp-remote-oui-802-3 {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of IEEE 802.3 information received from the remote system";
+           }
+           leaf lldp-remote-oui-802-1 {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of IEEE 802.1 information received from the remote system";
+           }
+           leaf lldp-remote-org-def-info-oui {
+             type string;
+             description "Organizationally Unique Identifier globally unique assignednumber of the information received from the remote system";
+           }
+           leaf lldp-remote-oui-juniper {
+             type string;
+             description "Juniper specific information received from the remote system";
+           }
+           leaf lldp-remote-oui-tia {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype {
+             type uint32;
+             description "Subtype of the organizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-vlan {
+             type uint32;
+             description "Subtype of the IEEE 802.1 VLAN name organizationally definedinformation received from the remote system";
+           }
+           leaf lldp-remote-subtype-port-vid {
+             type uint32;
+             description "Subtype of the IEEE 802.1 VLAN id organizationally definedinformation received from the remote system";
+           }
+           leaf lldp-remote-subtype-port-protocol-vid {
+             type uint32;
+             description "Subtype of the IEEE 802.1 VLAN id organizationally definedinformation received from the remote system";
+           }
+           leaf lldp-remote-subtype-protocol-id {
+             type uint32;
+             description "Subtype of the IEEE 802.1 VLAN id organizationally definedinformation received from the remote system";
+           }
+           leaf lldp-remote-subtype-link-aggregation-8021 {
+             type uint32;
+             description "Subtype of the IEEE 802.1 Link Aggregation organizationallydefined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-mac {
+             type uint32;
+             description "Subtype of the IEEE 802.3 MAC/PHY configuration/statusorganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-lag {
+             type uint32;
+             description "Subtype of the IEEE 802.3 Link Aggregation organizationallydefined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-mdi-power {
+             type uint32;
+             description "Subtype of the IEEE 802.3 MDI Power organizationallydefined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-serial {
+             type uint32;
+             description "Subtype of the Juniper specific information received from the remote system";
+           }
+           leaf lldp-remote-subtype-vcp {
+             type uint32;
+             description "Subtype of the Juniper specific information received from the remote system";
+           }
+           leaf lldp-remote-subtype-cloud-reach-event {
+             type uint32;
+             description "Subtype of the Juniper specific information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-phone-home-active {
+             type uint32;
+             description "Subtype of the Juniper specific information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-cloud-connect-event {
+             type uint32;
+             description "Subtype of the Juniper specific information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-mtu {
+             type uint32;
+             description "Subtype of the IEEE 802.3 Maximum Frame Size organizationallydefined information received from the remote system";
+           }
+           leaf lldp-remote-index {
+             type uint32;
+             description "Value used by agent to identify a particular unrecognized organizationally defined information";
+           }
+           leaf lldp-remote-value {
+             type string;
+             description "Value used to identify the organizationally defined information of the remote system";
+           }
+           leaf lldp-remote-subtype-vlan-id {
+             type uint32;
+             description "IEEE 802.1 VLAN name subtype VLAN ID value of theorganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-vlan-name {
+             type string;
+             description "IEEE 802.1 VLAN name subtype VLAN name value of theorganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-link-aggregation-8021-status {
+             type string;
+             description "IEEE 802.1 Link Aggregation subtype status value oforganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-link-aggregation-8021-portid {
+             type uint32;
+             description "IEEE 802.1 Link Aggregation subtype aggregated port ID valueof organizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-mac-autonegotiation {
+             type string;
+             description "IEEE 802.3 MAC/PHY configuration/status subtype autonegotiationsupport/status value of organizationally defined information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-mac-pmd {
+             type string;
+             description "IEEE 802.3 MAC/PHY configuration/status subtype PMDautonegotiation advertised capability value of organizationally definedinformation received from the remote system";
+           }
+           leaf lldp-remote-subtype-mac-mau {
+             type uint32;
+             description "IEEE 802.3 MAC/PHY configuration/status subtype operational MAUtype value of organizationally defined information received from theremote system";
+           }
+           leaf lldp-remote-subtype-power-support {
+             type string;
+             description "Subtype of the IEEE 802.3 MDI Power support organizationallydefined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-power-pair {
+             type string;
+             description "Subtype of the IEEE 802.3 MDI Power pair organizationallyeefined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-power-class {
+             type string;
+             description "Subtype of the IEEE 802.3 MDI Power class organizationallydefined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-slot-serial {
+             type string;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-cloud-reach-event-info {
+             type string;
+             description "Juniper specific cloud reachability event information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-phone-home-active-info {
+             type string;
+             description "Juniper specific phone home activity information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-cloud-connect-event-info {
+             type string;
+             description "Juniper specific cloud connectivity event information receivedfrom the remote system";
+           }
+           leaf lldp-remote-cc-state {
+             type uint32;
+             description "CC state of the Juniper specific information receivedfrom the remote system";
+           }
+           leaf lldp-remote-cc-error-code {
+             type uint32;
+             description "Error code of the Juniper specific information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-vcp-info {
+             type string;
+             description "Juniper specific ifl vcp information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-juniper-mode-change {
+             type uint32;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-juniper-mode-change-error {
+             type uint32;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-juniper-mode-change-ip-address {
+             type uint32;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-juniper-mode-change-image-name {
+             type uint32;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-juniper-mode-change-ftp-login {
+             type uint32;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-juniper-mode-change-image-md5 {
+             type uint32;
+             description "Juniper specific ifl slot serial information receivedfrom the remote system";
+           }
+           leaf lldp-remote-subtype-lag-status {
+             type string;
+             description "IEEE 802.3 Link Aggregation subtype status value oforganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-lag-portid {
+             type uint32;
+             description "IEEE 802.3 Link Aggregation subtype aggregated port ID value oforganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-mtu-size {
+             type uint32;
+             description "IEEE 802.3 Maximum Frame Size subtype frame size value oforganizationally defined information received from the remote system";
+           }
+           leaf lldp-med-remote-system-class {
+             type string;
+             description "LLDP remote MED system class";
+           }
+           leaf lldp-med-remote-application-attributes {
+             type string;
+             description "Application which MED runs and its configuration parameters";
+           }
+           leaf lldp-remote-subtype-med-capabilities {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-med-cap-status {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-med-class-type {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-policy-type {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-nw-app-type {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-nw-policy-info {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-loc-id-type {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-loc-data-format {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-loc-lci-len {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-ext-power-vi-mdi {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-med-power-type {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-med-power-source {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-med-power-priority {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-med-power-value {
+             type string;
+             description "Organizationally Unique Identifier globally unique assigned  number of TIA TR-41 committee information received from the remote system";
+           }
+           leaf lldp-remote-subtype-port-protocol-vid-status {
+             type string;
+             description "IEEE 802.1 VLAN name subtype VLAN name value of theorganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-port-protocol-vid-id {
+             type string;
+             description "IEEE 802.1 VLAN name subtype VLAN name value of theorganizationally defined information received from the remote system";
+           }
+           leaf lldp-remote-subtype-protocol-id-length {
+             type string;
+             description "IEEE 802.1 VLAN name subtype VLAN name value of theorganizationally defined information received from the remote system";
+           }
+         }
+         list lldp-remote-unknown-tlv {
+           leaf lldp-remote-unknown-tlv-type {
+             type uint32;
+             description "Type extracted from the TLV";
+           }
+           leaf lldp-remote-unknown-tlv-info {
+             type string;
+             description "Value extracted from the value field of TLV";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lldp-neighbors-information to top-level genstate";
+     uses lldp-neighbors-information-top;
+   }
+ }

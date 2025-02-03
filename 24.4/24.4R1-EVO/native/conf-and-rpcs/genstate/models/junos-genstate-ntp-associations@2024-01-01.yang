@@ -1,0 +1,101 @@
+ module junos-genstate-ntp-associations {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ntp-associations";
+   prefix jgna;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for ntp-associations";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping ntp-associations-top {
+     description "Top-level grouping";
+     container ntp-associations {
+       description "Top-level container";
+       list association {
+         leaf remote {
+           type jt:ipaddr;
+           description "Address or name of the remote NTP peer";
+         }
+         leaf refid {
+           type jt:ipaddr;
+           description "Reference identifier of the remote peer";
+         }
+         leaf auth {
+           type string;
+           description "Display the authentication method used for the peers";
+         }
+         leaf stratum {
+           type uint32;
+           description "Stratum of the remote peer, number of hops between the client and the reference clock";
+         }
+         leaf association-type {
+           type string;
+           description "Type of peer: b (broadcast), l (local), m (multicast), or u (unicast)";
+         }
+         leaf when {
+           type uint32;
+           description "Duration, in seconds, since the last NTP packet was received from the peer";
+         }
+         leaf poll {
+           type uint32;
+           description "Polling interval, in seconds";
+         }
+         leaf reach {
+           type uint32;
+           description "Reachability register, in octal";
+         }
+         leaf delay {
+           type jt:unsigned-float;
+           description "Current estimated round-trip delay to the peer, in milliseconds";
+         }
+         leaf offset {
+           type decimal64 {
+             fraction-digits 9;
+           }
+           description "Current estimated offset, relative time difference between the peer clock and local clock, in milliseconds";
+         }
+         leaf jitter {
+           type jt:unsigned-float;
+           description "Exponential average of first-order time differences, in milliseconds";
+         }
+         leaf rootdelay {
+           type jt:unsigned-float;
+           description "Unsigned, fixed-point number indicating the total round-trip delay to the reference clock";
+         }
+         leaf rootdisp {
+           type jt:unsigned-float;
+           description "Unsigned, fixed-point number indicating the maximum error relative to the reference clock";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds ntp-associations to top-level genstate";
+     uses ntp-associations-top;
+   }
+ }

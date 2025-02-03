@@ -1,0 +1,197 @@
+module junos-state-static-routing {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/static-routing";
+  prefix js-static-rt;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  import junos-state-routing-tables {
+    prefix js-rtt;
+  }
+
+  import junos-state-routing-tables-types {
+    prefix js-rtt-types;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     static-routing state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-04-01 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping static-routes-nexthop-params {
+    description
+      "Common parameters for static routes.";
+
+    leaf metric {
+      type uint32;
+      description
+        "A metric (or cost) which is utilized to specify the order of
+         selection of the next-hop entry.  The lower the metric, the
+         more preferable the prefix entry is.  When this value is not
+         specified, the metric is inherited from the default metric of
+         the implementation for static route entries.  When multiple
+         next-hops are specified for a static route, the metric is
+         utilized to determine which of the next-hops to be installed in
+         the RIB.  When multiple next-hops have the same metric (be it
+         specified, or simply the default) then these next-hops should
+         all be installed in the RIB.";
+    }
+
+    leaf preference {
+      type uint32;
+      description
+        "Preference of the entry.  The preference defines the order of
+         selection when multiple sources (protocols, static, etc.)
+         contribute to the same prefix entry. The lower the preference,
+         the more preferable the prefix is. When this value is not
+         specified, the preference is inherited from the default
+         preference of the implementation for static routes.";
+    }
+
+    leaf resolve {
+      type boolean;
+      default false;
+      description
+        "Determines whether the next-hop should be looked up recursively
+         using the routing table.";
+    }
+  }
+
+  grouping static-routes-params {
+    description
+      "Parameters for static routes.";
+
+    leaf description {
+      type string;
+      description
+        "An optional textual description for the static route.";
+    }
+
+    leaf discard {
+      type boolean;
+      default false;
+      description
+        "Drop packets to destination, send no ICMP unreachables.";
+    }
+  }
+
+  grouping static-routes-nexthop {
+    description
+      "Nexthop parameters for static routes.";
+
+    container next-hops {
+      description
+        "Parameters relating to the next-hops that are to be utilized
+         for the static route being specified";
+
+      list next-hop {
+        key "index";
+        description
+          "A list of next-hops to be utilized for the static route being
+           specified. The next-hop that is to be used for the static
+           route. This may be specified as an IP address or an interface.";
+
+        leaf index {
+          type union {
+            type inet:ip-address;
+            type junos-intft:interface-name;
+          }
+          description
+            "Reference to the destination prefix list nexthop. This may
+             be specified as an IP address or an interface.";
+        }
+        uses static-routes-nexthop-params;
+      }
+    }
+  }
+
+  grouping static-route-top {
+    description
+      "Parameters relating to static routes.";
+
+    list static-route {
+      key "prefix";
+
+      description
+        "List of locally configured static routes";
+
+      leaf prefix {
+        type inet:ip-prefix;
+        description
+          "Reference to the destination prefix list key.";
+      }
+
+      uses static-routes-params;
+      uses static-routes-nexthop;
+    }
+  }
+
+  grouping static-top {
+    description
+      "Top-level grouping for STATIC state data.";
+
+    container static-routes {
+      when "../js-rtt:identifier = 'js-rtt-types:static-route'" {
+        description
+          "Include this container only for static routing.";
+      }
+
+      description
+        "Container for static routing state.";
+
+      uses static-route-top;
+    }
+  }
+
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-rtt:routing-tables/js-rtt:routing-table/js-rtt:protocols" +
+          "/js-rtt:protocol" {
+    description
+       "Adds STATIC domain to protocol state inside a routing instance.";
+
+      uses static-top;
+  }
+}
+

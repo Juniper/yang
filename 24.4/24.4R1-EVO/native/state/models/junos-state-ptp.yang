@@ -1,0 +1,1421 @@
+module junos-state-ptp {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/ptp";
+  prefix js-ptp;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Precision Time Protocol (PTP) state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-07-11 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+
+  typedef network-protocol {
+    type enumeration {
+      enum udp-ipv4 {
+        description
+          "UDP on IPv4.";
+      }
+      enum udp-ipv6 {
+        description
+          "UDP on IPv6.";
+      }
+      enum ieee802-3 {
+        description
+          "IEEE Std 802.3 (Ethernet).";
+      }
+    }
+    description
+      "Enumeration for the protocol used by a PTP Instance to
+       transport PTP messages.";
+    reference
+      "7.4.1 of IEEE Std 1588-2019";
+  }
+
+  typedef time-interval {
+    type int64;
+    units "nanoseconds";
+    description
+      "Time interval, expressed in nanoseconds.";
+    reference
+      "5.3.2 of IEEE Std 1588-2019";
+  }
+
+  typedef clock-identity {
+    type string {
+      pattern "[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){7}";
+    }
+    description
+      "Identifies unique clock entities within a PTP Network.";
+    reference
+      "5.3.4 of IEEE Std 1588-2019
+       7.5.2.2 of IEEE Std 1588-2019";
+  }
+
+  typedef port-oper-status {
+    type enumeration {
+      enum up {
+        description
+          "The port is up.";
+      }
+      enum down {
+        description
+          "The port is down.";
+      }
+      enum testing {
+        description
+          "In some test mode. No operational packets can be passed.";
+      }
+      enum unknown {
+        description
+          "Port status cannot be determined.";
+      }
+    }
+  }
+
+  typedef instance-type {
+    type enumeration {
+      enum ordinary-clock {
+        description
+          "Ordinary Clock.";
+      }
+      enum boundary-clock {
+        description
+          "Boundary Clock.";
+      }
+      enum peer-to-peer-transparent-clock {
+        description
+          "Peer-to-peer Transparent Clock.";
+      }
+      enum end-to-end-transparent-clock {
+        description
+          "End-to-end Transparent Clock.";
+      }
+    }
+    description
+      "Enumeration for the type of PTP Instance.";
+    reference
+      "8.2.1.5.5 of IEEE Std 1588-2019";
+  }
+
+  typedef profile {
+    type enumeration {
+      enum g.8265.1 {
+        description
+          "The G.8265.1 PTP telecom profile.";
+        reference
+          "ITU-T G.8265.1 v2.2 (08/2019).";
+      }
+      enum g.8275.1 {
+        description
+          "The G.8275.1 PTP telecom profile.";
+        reference
+          "ITU-T G.8275.1 v3.0 (03/2020).";
+      }
+      enum g.8275.2 {
+        description
+          "The G.8275.2 PTP telecom profile.";
+        reference
+          "ITU-T G.8275.2 v2.0 (03/2020).";
+      }
+      enum g.8275.2.enh {
+        description
+          "The G.8275.2 Enhanced PTP telecom profile.";
+      }
+      enum g.8275.1.enh {
+        description
+          "The G.8275.1 Enhanced PTP telecom profile.";
+      }
+      enum ieee-1588-v2 {
+        description
+          "The IEEE 1588-2008 PTP profile.";
+        reference
+          "IEEE 1588-2008";
+      }
+      enum ieee-1588-v2.1 {
+        description
+          "The IEEE 1588-2019 PTP profile.";
+        reference
+          "IEEE 1588-2019";
+      }
+      enum enterprise {
+        description
+          "The IETF PTP Enterprise profile.";
+        reference
+          "IETF PTP Enterprise profile";
+      }
+      enum smpte {
+        description
+          "The SMPTE PTP profile.";
+        reference
+          "IEEE SMPTE ST-2059-2 Profile,2015";
+      }
+      enum aes67 {
+        description
+          "AES67 PTP profile.";
+        reference
+          "AES67 2015";
+      }
+      enum aes67-smpte {
+        description
+          "Combined PTP profile with AES67 and SMPTE ST-2059-2.";
+        reference
+          "AES-R16-2016";
+      }
+    }
+    description
+      "Denotes the PTP profile used in the PTP Instance.";
+  }
+
+  typedef ptp-port-oper-mode {
+    type enumeration {
+      enum time-transmitter-only {
+        description
+          "The PTP Port is configured as the source
+           of time.";
+      }
+      enum bmc {
+        description
+          "The PTP Port synchronizes to an upstream PTP Port
+           that is in the time-transmitter state.";
+      }
+      enum stateful {
+        description
+          "The PTP Port can be a time-transmitter or a time-receiver port.";
+      }
+    }
+    description
+      "Operating mode of a PTP Port.";
+  }
+
+  typedef port-state {
+    type enumeration {
+      enum initializing {
+        value 1;
+        description
+          "The PTP Port is initializing state.";
+      }
+      enum faulty {
+        value 2;
+        description
+          "The PTP Port is in faulty state.";
+      }
+      enum disabled {
+        value 3;
+        description
+          "The PTP Port is disabled.";
+      }
+      enum listening {
+        value 4;
+        description
+          "The PTP Port is waiting for the announce-receipt-timeout
+           to expire or to receive an Announce message from a TimeTransmitter
+           PTP Instance.";
+      }
+      enum pre-time-transmitter {
+        value 5;
+        description
+          "This port state provides an additional mechanism to
+          support more orderly reconfiguration of PTP Networks when
+          PTP Instances are added or deleted, PTP Instance
+          characteristics change, or connection topology changes.";
+      }
+      enum time-transmitter {
+        value 6;
+        description
+          "The PTP Port is the source of time on the PTP
+           Communication Path.";
+      }
+      enum passive {
+        value 7;
+        description
+          "The PTP Port is not the source of time on the PTP
+           Communication Path nor does it synchronize to a TimeTransmitter
+           Clock (receive time). The PTP Port can potentially
+           to time-receiver when PTP Instances are added or deleted,
+           PTP Instance characteristics change, or connection
+           topology changes.";
+      }
+      enum uncalibrated {
+        value 8;
+        description
+          "The PTP Port is anticipating a change to the time-receiver state,
+           but it has not yet satisfied all requirements
+           (implementation or PTP Profile) necessary to ensure
+           complete synchronization. For example, an implementation
+           might require a minimum number of PTP Sync messages
+           in order to completely synchronize its servo algorithm.";
+      }
+      enum time-receiver {
+        value 9;
+        description
+          "The PTP Port synchronizes to an upstream PTP Port on the PTP
+           Communication Path that is in the time-transmitter state (i.e.
+           receives time).";
+      }
+    }
+    description
+      "State of PTP Port.";
+    reference
+      "8.2.15.3.1 of IEEE Std 1588-2019
+       9.2.5 of IEEE Std 1588-2019";
+  }
+
+  typedef delay-mechanism {
+    type enumeration {
+      enum e2e {
+        description
+          "The PTP Port is configured to use the delay
+           request-response mechanism.";
+      }
+      enum p2p {
+        description
+          "The PTP Port is configured to use the peer-to-peer
+           delay mechanism.";
+      }
+    }
+    description
+      "Enumeration for the path delay measuring mechanism.";
+    reference
+      "8.2.15.4.4 of IEEE Std 1588-2019";
+  }
+
+  grouping port-identity {
+    description
+      "Identifies a PTP Port.";
+    reference
+      "5.3.5 of IEEE Std 1588-2019";
+
+    leaf clock-identity {
+      type clock-identity;
+      description
+        "Clock Identity of the PTP Port.";
+    }
+
+    leaf port-number {
+      type uint16;
+      description
+        "PTP Port number.";
+      reference
+        "7.5.2.3 of IEEE Std 1588-2019";
+    }
+  }
+
+  grouping port-address {
+    description
+      "The Protocol address of a PTP Port.";
+    reference
+      "5.3.6 of IEEE Std 1588-2019";
+
+    leaf network-protocol {
+      type network-protocol;
+      description
+        "Protocol used by a PTP Instance to transport PTP messages,
+         like PTPoE, PTPoIPv4 or PTPoIPv6.";
+    }
+
+    leaf address-length {
+      type uint16 {
+        range "0..16";
+      }
+      description
+        "Number of octets in the address.";
+    }
+
+    leaf address {
+      type union {
+        type inet:ip-address;
+        type yang:mac-address;
+      }
+      description
+        "The protocol address of a PTP Port.";
+    }
+  }
+
+  grouping clock-quality {
+    description
+      "Quality of a PTP Instance.";
+    reference
+      "5.3.7 of IEEE Std 1588-2019
+       8.2.1.3.1 of IEEE Std 1588-2019";
+
+    leaf clock-class {
+      type uint8;
+      description
+        "The clockClass denotes the traceability of the time or
+         frequency distributed by the clock.";
+      reference
+        "7.6.2.5 of IEEE Std 1588-2019
+         8.2.1.3.1.2 of IEEE Std 1588-2019";
+    }
+
+    leaf clock-accuracy {
+      type uint8;
+      description
+        "The clockAccuracy indicates the accuracy of the clock
+         (Local Clock of the PTP Instance).";
+      reference
+        "7.6.2.6 of IEEE Std 1588-2019
+         8.2.1.3.1.3 of IEEE Std 1588-2019";
+    }
+
+    leaf offset-scaled-log-variance {
+      type uint16;
+      description
+        "The offsetScaledLogVariance indicates the stability of the
+         clock (Local Clock of the PTP Instance).It provides an
+         estimate of the variations of the clock from a linear timescale
+         when it is not synchronized to another clock using the
+         protocol.";
+      reference
+        "7.6.2.7 of IEEE Std 1588-2019";
+    }
+  }
+
+  grouping ptp-instance-performance-parameters {
+    description
+      "PTP Instance Performance Monitoring Parameters,
+       related to the PTP Port in the time-receiver state.";
+    reference
+      "Table J.1 of IEEE Std 1588-2019";
+
+    leaf average-time-transmitter-time-receiver-delay {
+      type time-interval;
+      description
+        "Average of the TimeTransmitterTimeReceiverDelay
+         for this interval.";
+    }
+
+    leaf minimum-time-transmitter-time-receiver-delay {
+      type time-interval;
+      description
+        "Minimum of the TimeTransmitterTimeReceiverDelay
+         for this interval.";
+    }
+
+    leaf maximum-time-transmitter-time-receiver-delay {
+      type time-interval;
+      description
+        "Maximum of the TimeTransmitterTimeReceiverDelay
+         for this interval.";
+    }
+
+    leaf stddev-time-transmitter-time-receiver-delay {
+      type time-interval;
+      description
+        "StdDev of the TimeTransmitterTimeReceiverDelay
+         for this interval.";
+    }
+
+    leaf average-time-receiver-time-transmitter-delay {
+      type time-interval;
+      description
+        "Average of the TimeReceiverTimeTransmitterDelay
+         for this interval.";
+    }
+
+    leaf minimum-time-receiver-time-transmitter-delay {
+      type time-interval;
+      description
+        "Minimum of the TimeReceiverTimeTransmitterDelay
+         for this interval.";
+    }
+
+    leaf maximum-time-receiver-time-transmitter-delay {
+      type time-interval;
+      description
+        "Maximum of the TimeReceiverTimeTransmitterDelay
+         for this interval.";
+    }
+
+    leaf stddev-time-receiver-time-transmitter-delay {
+      type time-interval;
+      description
+        "StdDev of the TimeReceiverTimeTransmitterDelay
+         for this interval.";
+    }
+
+    leaf average-mean-path-delay {
+      type time-interval;
+      description
+        "Average of the <meanPathDelay> this interval.";
+    }
+
+    leaf minimum-mean-path-delay {
+      type time-interval;
+      description
+        "Minimum of the <meanPathDelay> for this interval.";
+    }
+
+    leaf maximum-mean-path-delay {
+      type time-interval;
+      description
+        "Maximum of the <meanPathDelay> for this interval.";
+    }
+
+    leaf stddev-mean-path-delay {
+      type time-interval;
+      description
+        "StdDev of the <meanPathDelay> for this interval.";
+    }
+
+    leaf average-offset-from-time-transmitter {
+      type time-interval;
+      description
+        "Average of the <offsetFromTimeTransmitter> for
+         this interval.";
+    }
+
+    leaf minimum-offset-from-time-transmitter {
+      type time-interval;
+      description
+        "Minimum of the <offsetFromTimeTransmitter> for
+         this interval.";
+    }
+
+    leaf maximum-offset-from-time-transmitter {
+      type time-interval;
+      description
+        "Maximum of the <offsetFromTimeTransmitter> for
+         this interval.";
+    }
+
+    leaf stddev-offset-from-time-transmitter {
+      type time-interval;
+      description
+        "StdDev of the <offsetFromTimeTransmitter> for
+         this interval.";
+    }
+  }
+
+  grouping additional-performance-parameters {
+    description
+      "Additional Performance Monitoring Parameters, intended
+       to complement ptp-instance-performance-parameters.";
+    reference
+      "Table J.3 of IEEE Std 1588-2019";
+
+    leaf announce-tx {
+      type yang:counter32;
+      description
+        "The number of transmitted Announce messages.";
+    }
+
+    leaf announce-rx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Announce messages from
+         the current GM that have been received for this interval.";
+    }
+
+    leaf announce-foreign-rx {
+      type yang:counter32;
+      description
+        "Counter indicating the total number of Announce messages
+         from the foreign TimeTransmitters that have been received
+         for this interval.";
+    }
+
+    leaf sync-tx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Sync messages that have
+         been transmitted for this interval.";
+    }
+
+    leaf sync-rx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Sync messages that have
+         been received for this interval.";
+    }
+
+    leaf follow-up-tx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Follow_Up messages that
+         have been transmitted for this interval.";
+    }
+
+    leaf follow-up-rx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Follow_Up messages that
+         have been received for this interval.";
+    }
+
+    leaf delay-req-tx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Delay_Req messages that
+         have been transmitted for this interval.";
+    }
+
+    leaf delay-req-rx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Delay_Req messages that
+         have been received for this interval.";
+    }
+
+    leaf delay-resp-tx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Delay_Resp messages that
+         have been transmitted for this interval.";
+    }
+
+    leaf delay-resp-rx {
+      type yang:counter32;
+      description
+        "Counter indicating the number of Delay_Resp messages that
+         have been received for this interval.";
+    }
+  }
+
+  grouping clock-performance-monitoring-data-record {
+    description
+      "PTP Instance performance monitoring statistics.";
+    reference
+      "Table J.4.1 of IEEE Std 1588-2019";
+
+    leaf index {
+      type uint8 {
+        range "0..98";
+      }
+      description
+        "Index to each record in the list (0-98).";
+    }
+
+    leaf measurement-valid {
+      type boolean;
+      description
+        "Data in this record can be correctly interpreted.";
+    }
+
+    leaf period-complete {
+      type boolean;
+      description
+        "If true, indicates that  measurements were performed
+         during the entire period (15-minute or 24-hour).";
+    }
+
+    leaf pm-time {
+      type jt:absolute-time-seconds;
+
+      description
+        "Time of the beginning of the measurement record of
+         clock performance monitoring.";
+    }
+
+    uses ptp-instance-performance-parameters;
+  }
+
+  grouping port-performance-monitoring-data-record {
+    description
+      "The IEEE Std 1588 PortPerformanceMonitoringDataRecord
+       type is used for additional PTP Port related performance
+       monitoring statistics.";
+    reference
+      "Table J.4.1 of IEEE Std 1588-2019";
+
+    leaf index {
+      type uint8 {
+          range "0..98";
+      }
+      description
+        "Index to each record in the list (0-98).";
+    }
+
+    leaf pm-time {
+      type jt:absolute-time-seconds;
+      description
+        "Time of the beginning of the measurement record of port
+         performance monitoring.";
+    }
+
+    container counters {
+      description
+        "Container for PTP Port performance counters.";
+      uses additional-performance-parameters;
+    }
+  }
+
+
+  grouping ptp-default-ds {
+    description
+      "The default data set of the PTP Instance.";
+
+    container default-ds {
+      description
+        "The default data set of the PTP Instance.";
+      reference
+        "8.2.1 of IEEE Std 1588-2019";
+
+      leaf two-step-flag {
+        type boolean;
+        description
+          "When set to true, the PTP Instance is two-step,
+           otherwise the PTP Instance is one-step.";
+        reference
+          "8.2.1.2.1 of IEEE Std 1588-2019";
+      }
+
+      leaf clock-identity {
+        type clock-identity;
+        description
+          "The clockIdentity of the PTP Instance.";
+        reference
+          "8.2.1.2.2 of IEEE Std 1588-2019";
+      }
+
+      leaf number-ports {
+        type uint16;
+        description
+          "The number of PTP Ports on the PTP Instance.
+           For an Ordinary Clock, the value shall be one.";
+        reference
+          "8.2.1.2.3 of IEEE Std 1588-2019";
+      }
+
+      container clock-quality {
+        description
+          "clockQuality of the PTP Instance.";
+        reference
+          "8.2.1.3.1 of IEEE Std 1588-2019";
+        uses clock-quality;
+      }
+
+      leaf priority1 {
+        type uint8;
+        description
+          "priority1 (use in TimeTransmitter selection logic) of the
+           PTP Instance.";
+        reference
+          "7.6.2.3 of IEEE Std 1588-2019
+           8.2.1.4.1 of IEEE Std 1588-2019";
+      }
+
+      leaf priority2 {
+        type uint8;
+        description
+          "priority2 (use in TimeTransmitter selection logic) of the
+           PTP Instance.";
+        reference
+          "7.6.2.4 of IEEE Std 1588-2019
+           8.2.1.4.2 of IEEE Std 1588-2019";
+      }
+
+      leaf local-priority {
+        type uint8;
+        description
+          "Local priority (use in alternate TimeTransmitter selection
+           logic) of the PTP Instance.";
+        reference
+          "6.3.1 of G.8275.";
+      }
+
+      leaf domain-number {
+        type uint8;
+        description
+          "Domain Number of the PTP Instance.";
+        reference
+          "7.1 of IEEE Std 1588-2019
+           8.2.1.4.3 of IEEE Std 1588-2019";
+      }
+
+      leaf time-receiver-only {
+        type boolean;
+        description
+          "If true, the PTP Instance is a time-receiver-only PTP
+           Instance.";
+        reference
+          "8.2.1.4.4 of IEEE Std 1588-2019
+           9.2.2.1 of IEEE Std 1588-2019";
+      }
+
+      leaf sdo-id {
+        type uint16 {
+          range "0..4095";
+        }
+        description
+          "sdoId of the PTP Instance. Within a PTP Network,
+           a domain is identified by two data set members:
+           domainNumber and sdoId.";
+        reference
+          "7.1 of IEEE Std 1588-2019
+           8.2.1.4.5 of IEEE Std 1588-2019
+           16.5 of IEEE Std 1588-2019";
+      }
+
+      container current-time {
+        description
+          "This provides current value of the PTP Instance
+           time.";
+        reference
+          "8.2.1.5.1 of IEEE Std 1588-2019";
+        uses jt:absolute-time-nanoseconds;
+      }
+
+      leaf instance-enable {
+        type boolean;
+        description
+          "Indicates if the PTP Instance is enabled for PTP
+           operation.";
+        reference
+          "8.2.1.5.2 of IEEE Std 1588-2019";
+      }
+
+      leaf max-steps-removed {
+        type uint8 {
+          range "2..255";
+        }
+        description
+          "If the value of stepsRemoved of an Announce
+           message is greater than or equal to the value
+           of this max-steps-removed leaf, the Announce
+           message will be ignored.";
+        reference
+          "8.2.1.5.4 of IEEE Std 1588-2019
+           9.3.2.5 of IEEE Std 1588-2019";
+      }
+
+      leaf instance-type {
+        type instance-type;
+        description
+          "The type of PTP Instance.";
+        reference
+          "8.2.1.5.5 of IEEE Std 1588-2019";
+      }
+
+      leaf profile {
+        type profile;
+        description
+          "PTP profile configured on the PTP Instance.";
+      }
+    }
+  }
+
+  grouping ptp-current-ds {
+    description
+      "PTP current data set.";
+
+    container current-ds {
+      description
+        "Provides PTP current data sets.";
+      reference
+        "8.2.2 of IEEE Std 1588-2019";
+
+      leaf steps-removed {
+        type uint16;
+        description
+          "The number of PTP Communication Paths traversed
+           between this PTP Instance and the Grandmaster PTP
+           Instance.";
+        reference
+          "8.2.2.2 of IEEE Std 1588-2019";
+      }
+
+      leaf offset-from-time-transmitter {
+        type time-interval;
+        description
+          "The current value of the time difference between
+           a TimeTransmitter PTP Instance and a TimeReceiver
+           PTP Instance as computed by the TimeReceiver PTP Instance.";
+        reference
+          "8.2.2.3 of IEEE Std 1588-2019";
+      }
+
+    }
+  }
+
+  grouping ptp-parent-ds {
+    description
+      "Provides data learned from the parent of this PTP
+       Instance.";
+
+    container parent-ds {
+      description
+        "Provides data learned from the parent of this PTP
+         Instance.";
+      reference
+        "8.2.3 of IEEE Std 1588-2019";
+
+      container parent-port-identity {
+        description
+          "portIdentity of the PTP Port on the TimeTransmitter PTP
+           Instance that issues the Sync messages used in
+           synchronizing this PTP Instance.";
+        reference
+          "8.2.3.2 of IEEE Std 1588-2019";
+        uses port-identity;
+      }
+
+      leaf grandmaster-identity {
+        type clock-identity;
+        description
+          "clockIdentity of the Grandmaster PTP Instance.";
+        reference
+          "8.2.3.6 of IEEE Std 1588-2019";
+      }
+
+      container grandmaster-clock-quality {
+        description
+          "clockQuality of the Grandmaster PTP Instance.";
+        reference
+          "8.2.3.7 of IEEE Std 1588-2019";
+        uses clock-quality;
+      }
+
+      leaf grandmaster-priority1 {
+        type uint8;
+        description
+          "priority1 of the Grandmaster PTP Instance.";
+        reference
+          "8.2.3.8 of IEEE Std 1588-2019";
+      }
+
+      leaf grandmaster-priority2 {
+        type uint8;
+        description
+          "priority2 of the Grandmaster PTP Instance.";
+        reference
+          "8.2.3.9 of IEEE Std 1588-2019";
+      }
+
+      container protocol-address {
+        description
+          "The protocol address of the PTP Port that issues
+           the Sync messages used in synchronizing this PTP
+           Instance.";
+        reference
+          "8.2.3.10 of IEEE Std 1588-2019";
+
+        uses port-address;
+      }
+
+    }
+  }
+
+  grouping ptp-time-properties-ds {
+    description
+      "Provides data learned from the current Grandmaster
+       PTP Instance.";
+
+    container time-properties-ds {
+      description
+        "Provides data learned from the current Grandmaster
+         PTP Instance.";
+      reference
+        "8.2.4 of IEEE Std 1588-2019";
+
+      leaf current-utc-offset {
+        when "../current-utc-offset-valid='true'";
+        type int16;
+        units "seconds";
+        description
+          "The offset from UTC in seconds.";
+        reference
+          "7.2.4 of IEEE Std 1588-2019
+           8.2.4.2 of IEEE Std 1588-2019";
+      }
+
+      leaf current-utc-offset-valid {
+        type boolean;
+        description
+          "The value of current-utc-offset-valid shall be true
+           if the values of current-utc-offset, leap59, and leap61
+           are known to be correct, otherwise it shall be false.";
+        reference
+          "8.2.4.3 of IEEE Std 1588-2019";
+      }
+
+      leaf leap59 {
+        type boolean;
+        description
+          "If the timescale is PTP, a true value for leap59
+           shall indicate that the last minute of the current
+           UTC day contains 59 seconds.";
+        reference
+          "8.2.4.4 of IEEE Std 1588-2019";
+      }
+
+      leaf leap61 {
+        type boolean;
+        description
+          "If the timescale is PTP, a true value for leap61
+           shall indicate that the last minute of the current
+           UTC day contains 61 seconds.";
+        reference
+          "8.2.4.5 of IEEE Std 1588-2019";
+      }
+
+      leaf time-traceable {
+        type boolean;
+        description
+          "The value of time-traceable shall be true if the
+           timescale is traceable to a primary reference;
+           otherwise, the value shall be false.";
+        reference
+          "8.2.4.6 of IEEE Std 1588-2019";
+      }
+
+      leaf frequency-traceable {
+        type boolean;
+        description
+          "The value of time-traceable shall be true if the
+           frequency determining the timescale is traceable
+           to a primary reference; otherwise, the value shall
+           be false.";
+      reference
+        "8.2.4.7 of IEEE Std 1588-2019";
+      }
+
+      leaf ptp-timescale {
+        type boolean;
+        description
+          "If ptp-timescale is true, the timescale of the
+           Grandmaster PTP Instance is PTP, which is the
+           elapsed time since the PTP epoch measured using
+           the second defined by International Atomic Time
+           (TAI).";
+        reference
+          "7.2.1 of IEEE Std 1588-2019
+           8.2.4.8 of IEEE Std 1588-2019";
+      }
+
+      leaf time-source {
+        type uint8;
+        description
+          "The source of time used by the Grandmaster PTP
+           Instance.";
+        reference
+          "7.6.2.8 of IEEE Std 1588-2019
+           8.2.4.9 of IEEE Std 1588-2019";
+      }
+    }
+  }
+
+  grouping ptp-performance-monitoring-ds {
+    description
+      "Provides data for the optional performance monitoring
+       mechanism, scoped to the PTP Instance.";
+
+    container performance-monitoring-ds {
+      description
+        "Provides data for the optional performance monitoring
+         mechanism, scoped to the PTP Instance.";
+      reference
+        "8.2.13 of IEEE Std 1588-2019
+         J.5.1 of IEEE Std 1588-2019";
+
+      leaf enable {
+        type boolean;
+        description
+          "Performance monitoring is enabled on this node.";
+        reference
+          "J.5.1.1 of IEEE Std 1588-2019";
+      }
+
+      list record {
+        key "index";
+        max-elements 99;
+        description
+          "List of performance monitoring records for the
+           PTP Instance. The list is organized as follows:
+           - 97 15-minute measurement records, the current record
+             at index 0, followed by the most recent 96 records.
+           - 2 24-hour measurement records, the current record
+             at index 97, and the previous record at index 98.";
+        reference
+          "J.5.1.2 of IEEE Std 1588-2019";
+
+        uses clock-performance-monitoring-data-record;
+      }
+    }
+  }
+
+  grouping ptp-port-ds {
+    description
+      "PTP Port data set.";
+
+    container port-ds {
+      description
+        "Primary data set for the PTP Port.";
+      reference
+        "8.2.15 of IEEE Std 1588-2019";
+
+      container port-identity {
+        description
+          "The IEEE Std 1588 portIdentity of this PTP Port.";
+        reference
+          "8.2.15.2.1 of IEEE Std 1588-2019";
+        uses port-identity;
+      }
+
+      leaf state {
+        type port-state;
+        description
+          "Current state of the protocol engine associated
+           with this PTP Port.";
+        reference
+          "8.2.15.3.1 of IEEE Std 1588-2019";
+      }
+
+      leaf log-min-delay-req-interval {
+        type int8 {
+            range "-7..7";
+        }
+        description
+          "Logarithm to the base 2 of minDelayReqInterval,
+           the minimum permitted mean time interval between
+           successive Delay_Req messages sent by a TimeReceiver
+           PTP Instance.";
+        reference
+          "7.7.2.4 of IEEE Std 1588-2019
+           8.2.15.3.2 of IEEE Std 1588-2019";
+      }
+
+      leaf log-announce-interval {
+        type int8;
+        description
+          "Logarithm to the base 2 of the mean
+           announceInterval, the time interval between
+           successive Announce messages sent by a PTP
+           Port.";
+        reference
+          "7.7.2.2 of IEEE Std 1588-2019
+           8.2.15.4.1 of IEEE Std 1588-2019";
+      }
+
+      leaf announce-receipt-timeout {
+        type uint8;
+        description
+          "The integral multiple of announceInterval that
+           must pass without receipt of an Announce
+           message before the occurrence of the event
+           ANNOUNCE_RECEIPT_TIMEOUT_EXPIRES.";
+        reference
+          "7.7.3.1 of IEEE Std 1588-2019
+           8.2.15.4.2 of IEEE Std 1588-2019";
+      }
+
+      leaf log-sync-interval {
+        type int8;
+        description
+          "Logarithm to the base 2 of the mean syncInterval,
+           the time interval between successive Sync
+           messages, when transmitted as multicast messages.
+           The rates for unicast transmissions are negotiated
+           separately on a per PTP Port basis and are not
+           constrained by this leaf.";
+        reference
+          "7.7.2.3 of IEEE Std 1588-2019
+           8.2.15.4.3 of IEEE Std 1588-2019";
+      }
+
+      leaf delay-mechanism {
+        type delay-mechanism;
+        description
+          "The path delay measuring mechanism used by the PTP
+           Port in computing <meanDelay> (propagation delay).";
+        reference
+          "8.2.15.4.4 of IEEE Std 1588-2019";
+      }
+
+      leaf version-number {
+        type uint8;
+        description
+          "The PTP major version in use on the PTP Port.";
+        reference
+          "8.2.15.4.6 of IEEE Std 1588-2019";
+      }
+
+      leaf minor-version-number {
+        type uint8;
+        description
+          "The PTP minor version in use on the PTP Port.";
+        reference
+          "8.2.15.4.7 of IEEE Std 1588-2019";
+      }
+
+      leaf delay-asymmetry {
+        type time-interval;
+        description
+          "The value of <delayAsymmetry> applicable to the
+           PTP Port, which is the difference in transmission
+           time in one direction as compared to the opposite
+           direction.";
+        reference
+          "7.4.2 of IEEE Std 1588-2019
+           8.2.15.4.8 of IEEE Std 1588-2019";
+      }
+
+      leaf enable {
+        type boolean;
+        description
+          "Indicates if the PTP Port is enabled for
+          PTP operation.";
+        reference
+          "8.2.15.5.1 of IEEE Std 1588-2019";
+      }
+
+      leaf time-transmitter-only {
+        type boolean;
+        description
+          "If the value of time-transmitter-only is true, the PTP Port
+           shall be in time-transmitterOnly mode.";
+        reference
+          "8.2.15.5.2 of IEEE Std 1588-2019
+           9.2.2.2 of IEEE Std 1588-2019";
+      }
+
+      leaf local-priority {
+        type uint8;
+        description
+          "Local Priority assigned to port (use in TimeTransmitter
+           selection logic).";
+      }
+
+      leaf operating-mode {
+        type ptp-port-oper-mode;
+        description
+          "Indicates PTP Port's operating mode for PTP operation.";
+      }
+
+    }
+  }
+
+  grouping ptp-description-port-ds {
+    description
+      "PTP Port description data set.";
+
+    container description-port-ds {
+      description
+        "Provides descriptive information for the PTP
+         Port.";
+      reference
+        "8.2.18 of IEEE Std 1588-2019";
+
+      container protocol-address {
+        description
+          "Protocol address which is used as the source address
+           by the network transport protocol for this PTP Port.";
+        reference
+          "8.2.18.3 of IEEE Std 1588-2019";
+
+        uses port-address;
+      }
+    }
+  }
+
+  grouping ptp-unicast-negotiation-port-ds {
+    description
+      "PTP Port unicast negotiation data.";
+
+    container unicast-negotiation-port-ds {
+      description
+        "Provides management access to the optional unicast
+         negotiation mechanism.";
+      reference
+        "16.1 of IEEE Std 1588-2019";
+
+      leaf enable {
+        type boolean;
+        description
+          "When enable is false, the unicast negotiation
+           mechanism is disabled on this PTP Port.
+           When enable is true, the unicast negotiation
+           mechanism is enabled on this PTP Port.";
+        reference
+          "8.2.19.2 of IEEE Std 1588-2019";
+      }
+    }
+  }
+
+  grouping ptp-performance-monitoring-port-ds {
+    container performance-monitoring-port-ds {
+      description
+        "Provides data for the optional performance
+         monitoring mechanism, scoped to each PTP Port.";
+      reference
+        "8.2.26 of IEEE Std 1588-2019
+         J.5.2 of IEEE Std 1588-2019";
+
+      list record {
+        key "index";
+        max-elements 99;
+        description
+          "List of performance monitoring records for the
+           PTP Port, not specific to the peer-to-peer delay
+           measurement mehanism. The list is organized
+           as follows:
+           - 97 15-minute measurement records, the current
+             record at index 0, followed by the most recent
+             96 records.
+           - 2 24-hour measurement records, the current record
+             at index 97, and the previous record at index 98.";
+        reference
+          "J.5.2.2 of IEEE Std 1588-2019";
+
+        uses port-performance-monitoring-data-record;
+      }
+    }
+  }
+
+  grouping ptp-top {
+    description
+      "Top level grouping for PTP.";
+
+    container ptp {
+      description
+        "PTP data sets.";
+
+      container instances {
+        description
+          "PTP Instances list.";
+
+        list instance {
+          key "instance-index";
+
+          description
+            "List of PTP Instances in a System.";
+          reference
+            "8.1.4.2 of IEEE Std 1588-2019";
+
+          leaf instance-index {
+            type uint32;
+            description
+              "The instance list is indexed using instance-index.
+               It is unique per PTP Instance within the PTP Node.";
+            reference
+              "8.1.4.2 of IEEE Std 1588-2019";
+          }
+
+          uses ptp-default-ds;
+          uses ptp-current-ds;
+          uses ptp-parent-ds;
+          uses ptp-time-properties-ds;
+          uses ptp-performance-monitoring-ds;
+
+          container ports {
+            description
+              "PTP Port in the PTP Instance.";
+
+            list port {
+              key "index";
+
+              description
+                "List of data for each PTP Port in the PTP Instance.";
+              reference
+                "8.1.4.2 of IEEE Std 1588-2019";
+
+              leaf index {
+                type uint16;
+                description
+                  "The port list is indexed using a number that is
+                   unique per PTP Port within the PTP Instance,
+                   applicable to the management context only
+                   (i.e., not used in PTP messages).";
+              }
+
+              leaf underlying-interface {
+                type junos-intft:interface-name;
+                description
+                  "Reference to the configured underlying interface
+                   that is used by this PTP Port for transport of
+                   PTP messages.";
+              }
+              leaf aggregate-interface {
+                type boolean;
+                description
+                  "If True, the underlying interface is an aggregate
+                   interface.";
+              }
+              leaf aggregate-member-interface {
+                type leafref {
+                  path "/js:state/js-if:interfaces/js-if:interface/js-if:name";
+                }
+                description
+                  "Reference to the aggregate member interface
+                   that is used for transport of PTP messages.";
+             }
+             leaf oper-status {
+                type port-oper-status;
+                description
+                  "Operational state of the configured underlying
+                   interface that is used by this PTP Port for transport
+                   of PTP messages.";
+              }
+
+              uses ptp-port-ds;
+              uses ptp-description-port-ds;
+              uses ptp-unicast-negotiation-port-ds;
+              uses ptp-performance-monitoring-port-ds;
+
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-pro:protocols" {
+    description
+      "Adds ieee1588 PTP to protocol state.";
+
+    uses ptp-top;
+  }
+}

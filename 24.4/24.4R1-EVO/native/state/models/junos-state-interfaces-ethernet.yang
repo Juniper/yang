@@ -1,0 +1,152 @@
+module junos-state-interfaces-ethernet {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/interfaces/ethernet";
+  prefix js-if-eth;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of Ethernet specific nodes for
+     JUNOS Interface state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-12-21 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping ethernet-counters {
+    description
+      "";
+
+    leaf in-pcs-errored-seconds {
+      type yang:counter64;
+      description
+        "";
+    }
+
+    leaf fec-corrected-words {
+      type yang:counter64;
+      description
+        "";
+    }
+
+    leaf fec-uncorrectable-words {
+      type yang:counter64;
+      description
+        "";
+    }
+  }
+
+  grouping ethernet-top {
+    description
+      "Top-level grouping for Ethernet interface state data";
+
+    container ethernet {
+      description
+        "Container for Ethernet state";
+
+      leaf fec-mode {
+        type enumeration {
+          enum NONE {
+            description
+              "";
+          }
+          enum FEC91 {
+            description
+              "";
+          }
+          enum FEC74 {
+            description
+              "";
+          }
+          enum FEC94 {
+            description
+              "";
+          }
+          enum FEC119 {
+            description
+              "";
+          }
+          enum FEC134 {
+            description
+              "";
+          }
+          enum FEC91_RS544 {
+            description
+              "";
+          }
+          enum FECKP4 {
+            description
+              "";
+          }
+          enum FEC161 {
+            description
+              "";
+          }
+          enum FEC_AUTO {
+            description
+              "";
+          }
+        }
+      }
+
+      leaf fec-codeword-size {
+         type uint16;
+         description
+        "";
+     }
+
+     leaf fec-codeword-rate {
+       type decimal64 { fraction-digits 2; }
+       description
+        "";
+     }
+      container counters {
+        description
+          "Ethernet interface counters";
+
+        uses ethernet-counters;
+      }
+    }
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface" {
+    description
+      "Adds Ethernet-specific data to interface state";
+
+    uses ethernet-top;
+  }
+}

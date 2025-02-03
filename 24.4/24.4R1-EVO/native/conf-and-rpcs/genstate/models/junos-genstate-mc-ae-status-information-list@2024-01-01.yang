@@ -1,0 +1,198 @@
+ module junos-genstate-mc-ae-status-information-list {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mc-ae-status-information-list";
+   prefix jgmasil;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mc-ae-status-information-list";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping mc-ae-status-information-list-top {
+     description "Top-level grouping";
+     container mc-ae-status-information-list {
+       description "Information about one or more mc-ae";
+       container mc-ae-status-information {
+         description "Information about an mc-ae";
+         container mc-ae-status {
+           leaf member-link {
+             type string;
+             description "Aggregate interface name";
+           }
+           leaf init-sm-state {
+             type string;
+             description "Current state of MC-AE state machine";
+           }
+           leaf cfg-err-status {
+             type string;
+             description "Configuration Error Detected";
+           }
+           leaf local-status {
+             type string;
+             description "Local MC-AE node status";
+           }
+           leaf local-state {
+             type string;
+             description "Local MC-AE link state";
+           }
+           leaf peer-status {
+             type string;
+             description "Peer MC-AE node status";
+           }
+           leaf peer-state {
+             type string;
+             description "Peer MC-AE link state";
+           }
+         }
+         list mc-ae-revertive-status {
+           description "Information about Revertive ";
+           leaf ae-member-link {
+             type string;
+             description "Aggregate interface name";
+           }
+           leaf switchover-mode {
+             type string;
+             description "Switchover mode";
+           }
+           leaf switchover-status {
+             type string;
+             description "Switchover status";
+           }
+           leaf revert-time {
+             type string;
+             description "Configured Revert Time";
+           }
+           leaf switchover-remaining-time {
+             type string;
+             description "Remaining time to trigger switchover";
+           }
+         }
+         list mc-ae-ifl-list {
+           leaf logical-interface {
+             type string;
+             description "Logical interface name";
+           }
+           leaf topology-type {
+             type string;
+             description "Topology type";
+           }
+           leaf local-logical-interface-state {
+             type string;
+             description "Local logical interface MC-AE link state";
+           }
+           leaf peer-logical-interface-state {
+             type string;
+             description "Peer logical interface MC-AE link state";
+           }
+           leaf mcp-state {
+             type string;
+             description "Multi Chassis Protection state";
+           }
+         }
+         container mc-ae-stitching-peer {
+           leaf stitching-peer {
+             type string;
+             description "Stitching peer name";
+           }
+         }
+         list mc-ae-clink {
+           leaf la-status {
+             type string;
+             description "Local Advertised Status";
+           }
+           leaf pa-status {
+             type string;
+             description "Peer Advertised Status";
+           }
+           leaf vc-id {
+             type uint32;
+             description "Vc Id";
+           }
+           leaf local-ip {
+             type string;
+             description "Local Ip Address";
+           }
+           leaf remote-ip {
+             type string;
+             description "Remote Ip Address";
+           }
+           leaf clink-state {
+             type string;
+             description "Clink Operation State";
+           }
+           leaf clink-type {
+             type string;
+             description "Local or Remote clink";
+           }
+         }
+         list mc-ae-additional-information {
+           description "Additional Information about LACP,MCAE Parameters ";
+           leaf redundancy-grp-id {
+             type string;
+             description "Redundancy Group Id configured";
+           }
+           leaf mcae-id {
+             type string;
+             description "Local mcae-id configured";
+           }
+           leaf local-mode {
+             type string;
+             description "Local mcae mode configured";
+           }
+           leaf local-status-control {
+             type string;
+             description "Local status-control configured";
+           }
+           leaf local-chassis-id {
+             type string;
+             description "Local Chassis Id configured";
+           }
+           leaf local-system-id {
+             type string;
+             description "Local System Id configured";
+           }
+           leaf local-admin-key {
+             type string;
+             description "Local Admin Key Configured";
+           }
+           leaf local-partner-system-id {
+             type string;
+             description "Local Partner System Id";
+           }
+           leaf peer-partner-system-id {
+             type string;
+             description "Peer Partner System Id";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mc-ae-status-information-list to top-level genstate";
+     uses mc-ae-status-information-list-top;
+   }
+ }

@@ -1,0 +1,2137 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-mld {
+   namespace "http://yang.juniper.net/junos-es/rpc/mld";
+
+   prefix mld;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for mld command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-mld-group-information {
+     description "Show MLD group members";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of group";
+         type string;
+       }
+     }
+     output {
+       container mld-group-information {
+         uses mld-group-information-block;
+       }
+     }
+   }
+   rpc get-mld-output-group-information {
+     description "Show MLD output group members";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group-name {
+         description "Name of group";
+         type string;
+       }
+     }
+     output {
+       container mld-output-group-information {
+         uses mld-output-group-information-block;
+       }
+     }
+   }
+   rpc get-mld-interface-information {
+     description "Show MLD interfaces";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type string;
+       }
+     }
+     output {
+       container mld-interface-information {
+         uses mld-interface-information-block;
+       }
+     }
+   }
+   rpc get-mld-statistics-information {
+     description "Show MLD statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+     }
+     output {
+       container mld-statistics-information {
+         uses mld-statistics-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-options-information {
+     description "Show MLD snooping options";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+     }
+   }
+   rpc get-mld-snooping-membership-information {
+     description "Show MLD snooping group membership";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mld-snooping-group-information-root {
+         uses mld-snooping-group-information-root-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-bridge-domain-membership {
+     description "For a particular bridge-domain";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf domain-name {
+         description "Name of bridge-domain";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+     output {
+       container mld-snooping-group-information-root {
+         uses mld-snooping-group-information-root-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-membership {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+     output {
+       container mld-snooping-group-information-root {
+         uses mld-snooping-group-information-root-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-evpn-membership-information {
+     description "Show MLD snooping evpn membership";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-mld-snooping-bridge-domain-evpn-groups {
+     description "For a particular bridge-domain";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf domain-name {
+         description "Name of bridge-domain";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-evpn-groups {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+   }
+   rpc get-mld-snooping-evpn-database-information {
+     description "Show MLD snooping evpn database";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-mld-snooping-bridge-domain-evpn-database {
+     description "For a particular bridge-domain";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf domain-name {
+         description "Name of bridge-domain";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-evpn-database {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+   }
+   rpc get-mld-snooping-evpn-proxy-information {
+     description "Show MLD snooping evpn proxy";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-mld-snooping-bridge-domain-evpn-proxy {
+     description "For a particular bridge-domain";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf domain-name {
+         description "Name of bridge-domain";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-evpn-proxy {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf group {
+         description "IP address range for group";
+         type jt:ipv6prefix;
+       }
+     }
+   }
+   rpc get-mld-snooping-evpn-status-information {
+     description "Show MLD snooping evpn status";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       container mld-snooping-evpn-status-information {
+         uses mld-snooping-evpn-status-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-evpn-status {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mld-snooping-evpn-status-information {
+         uses mld-snooping-evpn-status-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-interface-information {
+     description "Show MLD snooping interfaces";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mld-interface-information {
+         uses mld-interface-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-bridge-domain-interface {
+     description "For a particular bridge-domain";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf domain-name {
+         description "Name of bridge-domain";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mld-interface-information {
+         uses mld-interface-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-interface {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mld-interface-information {
+         uses mld-interface-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-statistics-information {
+     description "Show MLD snooping statistics";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mgm-snooping-statistics-information {
+         uses mgm-snooping-statistics-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-bridge-domain-statistics {
+     description "For a particular bridge-domain";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf domain-name {
+         description "Name of bridge-domain";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf vlan-id {
+         description "VLAN ID for a learning domain";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mgm-snooping-statistics-information {
+         uses mgm-snooping-statistics-information-block;
+       }
+     }
+   }
+   rpc get-mld-snooping-vlan-statistics {
+     description "For a particular VLAN";
+     input {
+       leaf logical-system {
+         description "Name of logical system, or 'all'";
+         type string {
+         }
+       }
+       leaf verbosity_level {
+         default "detail";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing-instance";
+         type string;
+       }
+       leaf virtual-switch {
+         description "Name of virtual-switch instance";
+         type string;
+       }
+       leaf vlan-name {
+         description "Name of VLAN";
+         type string;
+         mandatory true;
+       }
+       leaf interface {
+         description "Name of interface";
+         type string;
+       }
+       leaf qualified-vlan {
+         description "VLAN ID for a Qualified VLAN";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4094";
+           }
+         }
+       }
+     }
+     output {
+       container mgm-snooping-statistics-information {
+         uses mgm-snooping-statistics-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping mld-group-information-block {
+     list mgm-interface-groups {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf mgm-group-count {
+         type int32;
+       }
+       leaf mgm-snooping-rvlan-interface {
+         type string;
+         description "Interface is part of Receiver Vlan";
+       }
+       list mgm-group {
+         leaf multicast-group-address {
+           type jt:ipaddr;
+           description "Group address";
+         }
+         leaf mgm-group-mode-type {
+           type string;
+           description "Group operational mode (Include/Exclude).";
+         }
+         leaf multicast-source-address {
+           type jt:ipaddr;
+           description "Source address";
+         }
+         list host-record {
+           leaf record-type {
+             type string;
+           }
+           leaf receiver {
+             type jt:ipaddr;
+           }
+           leaf record-timeout {
+             type int32;
+           }
+         }
+         list reverse-oif {
+           leaf oif-name {
+             type string;
+             description "Reverse OIF name";
+           }
+           leaf host-count {
+             type int32;
+             description "Host reference count";
+           }
+         }
+         leaf last-address {
+           type jt:ipaddr;
+         }
+         leaf mgm-timeout {
+           type int32;
+         }
+         leaf mgm-type {
+           type string;
+         }
+         leaf mgm-source-timeout {
+           type int32;
+           description "Amount of time for which the traffic from source is forwarded.";
+         }
+         leaf mgm-type-instance {
+           type string;
+         }
+         leaf mgm-group-output-interface {
+           type string;
+           description "Group output interface";
+         }
+         leaf mgm-output-interface-status {
+           type string;
+           description "Group output interface status";
+         }
+       }
+     }
+   }
+   grouping mld-output-group-information-block {
+     list mgm-interface-output-groups {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf mgm-output-interface-status {
+         type string;
+         description "Group output interface status";
+       }
+       list mgm-output-group {
+         leaf multicast-group-address {
+           type jt:ipaddr;
+           description "Group address";
+         }
+         leaf mgm-group-mode-type {
+           type string;
+           description "Group operational mode (Include/Exclude).";
+         }
+         leaf multicast-source-address {
+           type jt:ipaddr;
+           description "Source address";
+         }
+         leaf mgm-type {
+           type string;
+         }
+         leaf mgm-group-input-interface {
+           type string;
+           description "Group input interface";
+         }
+       }
+     }
+   }
+   grouping mld-interface-information-block {
+     list mgm-interface {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf querier-address {
+         type jt:ipaddr;
+       }
+       leaf mgm-interface-state {
+         type string;
+       }
+       leaf querier-timeout {
+         type int32;
+       }
+       leaf mgm-interface-version {
+         type int32;
+       }
+       leaf mgm-group-count {
+         type int32;
+       }
+       leaf mgm-group-limit {
+         type uint32;
+         description "Maximum number of (source,group) per interface";
+       }
+       leaf mgm-group-threshold {
+         type uint32;
+         description "Percentage of maximum at which to start generating warnings";
+       }
+       leaf mgm-group-log-interval {
+         type uint32;
+         description "Percentage of maximum at which to start generating warnings";
+       }
+       leaf mgm-ssm-map {
+         type string;
+         description "Name of source-specific multicast map";
+       }
+       leaf mgm-ssm-map-policy {
+         type string;
+         description "Name of source-specific multicast map policy";
+       }
+       leaf mgm-immediate-leave {
+         type string;
+         description "Groups are removed immediately without sending last membership queries";
+       }
+       leaf mgm-promiscuous-mode {
+         type string;
+         description "IGMP messages coming from different subnet are accepted";
+       }
+       leaf mgm-passive {
+         type string;
+         description "Do not send or receive control messages";
+       }
+       leaf mgm-passive-allow-receive {
+         type empty;
+         description "Allow receiving control messages";
+       }
+       leaf mgm-passive-send-general-query {
+         type empty;
+         description "Send general query messages";
+       }
+       leaf mgm-passive-send-group-query {
+         type empty;
+         description "Send group query messages";
+       }
+       leaf mgm-group-policy {
+         type string;
+         description "Group filter applied to incoming Report messages";
+       }
+       leaf mgm-oif-map {
+         type string;
+         description "Output interface mapping policy";
+       }
+       leaf mgm-distributed {
+         type string;
+         description "Distributed IGMP";
+       }
+       leaf remote-pe-address {
+         type jt:ipaddr;
+       }
+       leaf mgm-mc-lag-state {
+         type string;
+         description "State of the mc-lag interface";
+       }
+       list mgm-host {
+         leaf mgm-host-address {
+           type jt:ipaddr;
+         }
+         leaf mgm-host-record-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-configured-parameters {
+       leaf query-interval {
+         type string;
+       }
+       leaf query-response-interval {
+         type string;
+       }
+       leaf last-member-query-interval {
+         type string;
+       }
+       leaf robustness-count {
+         type int32;
+       }
+       leaf igmp-l2-querier {
+         type string;
+       }
+       leaf l2-querier-source-address {
+         type jt:ipaddr;
+       }
+       leaf evpn-ssm-reports-only {
+         type string;
+       }
+       leaf proto-version {
+         type uint32;
+       }
+       leaf multicast-router-no-flood {
+         type string;
+       }
+       leaf mld-l2-querier {
+         type string;
+       }
+     }
+     container mgm-derived-parameters {
+       leaf membership-timeout {
+         type string;
+       }
+       leaf query-other-timeout {
+         type string;
+       }
+     }
+   }
+   grouping mld-statistics-information-block {
+     list mgm-statistics-interface {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf mgm-disabled-interface-name {
+         type string;
+       }
+       leaf mgm-interface-all {
+         type empty;
+       }
+       container mgm-statistics-group {
+         list mgm-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+             description "Total number of errors encountered";
+           }
+         }
+       }
+       container mgm-statistics-other {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       container mgm-statistics-global {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       list mgm-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf received-count {
+           type int32;
+         }
+         leaf sent-count {
+           type int32;
+         }
+         leaf error-count {
+           type int32;
+           description "Total number of errors encountered";
+         }
+       }
+       list mgm-other-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf statistic-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-statistics-other {
+       list mgm-other-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf statistic-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-statistics-global {
+       list mgm-other-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf statistic-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-statistics-all {
+       container mgm-statistics-group {
+         list mgm-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+             description "Total number of errors encountered";
+           }
+         }
+       }
+       container mgm-statistics-other {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       container mgm-statistics-global {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   grouping mld-snooping-group-information-root-block {
+     list mld-snooping-group-information-per-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf mgm-disabled-learning-domain {
+         type string;
+       }
+       list mld-snooping-group-information-per-bridge-domain {
+         leaf bridge-domain {
+           type string;
+           description "Bridge Domain";
+         }
+         list mld-snooping-group-information-per-learning-domain {
+           leaf learning-domain {
+             type string;
+             description "Bridge or VPLS learning domain";
+           }
+           list mgm-interface-groups {
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf mgm-group-count {
+               type int32;
+             }
+             leaf mgm-snooping-rvlan-interface {
+               type string;
+               description "Interface is part of Receiver Vlan";
+             }
+             list mgm-group {
+               leaf multicast-group-address {
+                 type jt:ipaddr;
+                 description "Group address";
+               }
+               leaf mgm-group-mode-type {
+                 type string;
+                 description "Group operational mode (Include/Exclude).";
+               }
+               leaf multicast-source-address {
+                 type jt:ipaddr;
+                 description "Source address";
+               }
+               list host-record {
+                 leaf record-type {
+                   type string;
+                 }
+                 leaf receiver {
+                   type jt:ipaddr;
+                 }
+                 leaf record-timeout {
+                   type int32;
+                 }
+               }
+               list reverse-oif {
+                 leaf oif-name {
+                   type string;
+                   description "Reverse OIF name";
+                 }
+                 leaf host-count {
+                   type int32;
+                   description "Host reference count";
+                 }
+               }
+               leaf last-address {
+                 type jt:ipaddr;
+               }
+               leaf mgm-timeout {
+                 type int32;
+               }
+               leaf mgm-type {
+                 type string;
+               }
+               leaf mgm-source-timeout {
+                 type int32;
+                 description "Amount of time for which the traffic from source is forwarded.";
+               }
+               leaf mgm-type-instance {
+                 type string;
+               }
+               leaf mgm-group-output-interface {
+                 type string;
+                 description "Group output interface";
+               }
+               leaf mgm-output-interface-status {
+                 type string;
+                 description "Group output interface status";
+               }
+             }
+           }
+         }
+       }
+       list mld-snooping-group-information-per-vlan {
+         leaf vlan {
+           type string;
+           description "Vlan";
+         }
+         list mld-snooping-group-information-per-learning-domain {
+           leaf learning-domain {
+             type string;
+             description "Bridge or VPLS learning domain";
+           }
+           list mgm-interface-groups {
+             leaf interface-name {
+               type string;
+               description "Name of interface";
+             }
+             leaf mgm-group-count {
+               type int32;
+             }
+             leaf mgm-snooping-rvlan-interface {
+               type string;
+               description "Interface is part of Receiver Vlan";
+             }
+             list mgm-group {
+               leaf multicast-group-address {
+                 type jt:ipaddr;
+                 description "Group address";
+               }
+               leaf mgm-group-mode-type {
+                 type string;
+                 description "Group operational mode (Include/Exclude).";
+               }
+               leaf multicast-source-address {
+                 type jt:ipaddr;
+                 description "Source address";
+               }
+               list host-record {
+                 leaf record-type {
+                   type string;
+                 }
+                 leaf receiver {
+                   type jt:ipaddr;
+                 }
+                 leaf record-timeout {
+                   type int32;
+                 }
+               }
+               list reverse-oif {
+                 leaf oif-name {
+                   type string;
+                   description "Reverse OIF name";
+                 }
+                 leaf host-count {
+                   type int32;
+                   description "Host reference count";
+                 }
+               }
+               leaf last-address {
+                 type jt:ipaddr;
+               }
+               leaf mgm-timeout {
+                 type int32;
+               }
+               leaf mgm-type {
+                 type string;
+               }
+               leaf mgm-source-timeout {
+                 type int32;
+                 description "Amount of time for which the traffic from source is forwarded.";
+               }
+               leaf mgm-type-instance {
+                 type string;
+               }
+               leaf mgm-group-output-interface {
+                 type string;
+                 description "Group output interface";
+               }
+               leaf mgm-output-interface-status {
+                 type string;
+                 description "Group output interface status";
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping mld-snooping-evpn-status-information-block {
+     leaf oism-mode {
+       type string;
+     }
+     leaf smet-enabled {
+       type string;
+     }
+     list mld-snooping-evpn-status-information-per-instance {
+       leaf instance-name {
+         type string;
+       }
+       leaf non-evpn-extended-bd {
+         type string;
+       }
+       list mld-snooping-evpn-status-information-per-bd {
+         leaf evpn-bridge-domain {
+           type string;
+         }
+         leaf vlan-id {
+           type int32;
+         }
+         leaf vni-id {
+           type int32;
+         }
+         list evpn-status-bd-info {
+           leaf evpn-oism-bd-state {
+             type string;
+           }
+           leaf evpn-oism-bd-sbd-state {
+             type string;
+           }
+           leaf evpn-oism-bd-mvlan-state {
+             type string;
+           }
+           leaf evpn-oism-bd-dci-state {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   grouping mgm-snooping-statistics-information-block {
+     list mgm-statistics-interface {
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf mgm-disabled-interface-name {
+         type string;
+       }
+       leaf mgm-interface-all {
+         type empty;
+       }
+       container mgm-statistics-group {
+         list mgm-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+           }
+         }
+       }
+       container mgm-statistics-other {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       container mgm-statistics-global {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       list mgm-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf received-count {
+           type int32;
+         }
+         leaf sent-count {
+           type int32;
+         }
+         leaf error-count {
+           type int32;
+         }
+       }
+       list mgm-other-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf statistic-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-statistics-other {
+       list mgm-other-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf statistic-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-statistics-global {
+       list mgm-other-statistic {
+         leaf statistic-name {
+           type string;
+         }
+         leaf statistic-count {
+           type int32;
+         }
+       }
+     }
+     container mgm-snooping-statistics {
+       leaf mgm-snooping-instance-all {
+         type empty;
+       }
+       container mgm-statistics-group {
+         list mgm-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf received-count {
+             type int32;
+           }
+           leaf sent-count {
+             type int32;
+           }
+           leaf error-count {
+             type int32;
+           }
+         }
+       }
+       container mgm-statistics-other {
+         list mgm-other-statistic {
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       leaf instance-name {
+         type string;
+       }
+       leaf bridge-domain {
+         type string;
+         description "Bridge Domain";
+       }
+       leaf vlan {
+         type string;
+         description "Vlan";
+       }
+       leaf learning-domain {
+         type string;
+         description "Bridge or VPLS learning domain";
+       }
+     }
+   }
+ }

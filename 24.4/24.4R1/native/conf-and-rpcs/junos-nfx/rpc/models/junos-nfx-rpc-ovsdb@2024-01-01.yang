@@ -1,0 +1,544 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-rpc-ovsdb {
+   namespace "http://yang.juniper.net/junos-nfx/rpc/ovsdb";
+
+   prefix ovsdb;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for ovsdb command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-ovsdb-controller-information {
+     description "Show controller information and connection status";
+     input {
+       leaf address {
+         description "IP address of the controller";
+         type jt:ipaddr;
+       }
+     }
+     output {
+       container vtep-controller-information {
+         uses vtep-controller-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-mac-routes-information {
+     description "Show all MAC routes";
+     input {
+       leaf mactype {
+         description "Display information for local/remote MAC";
+         type enumeration {
+           enum "local" {
+             description "Display information for local MAC's";
+           }
+           enum "remote" {
+             description "Display information for remote MAC's";
+           }
+         }
+       }
+       leaf maccast {
+         description "Display information for unicast/multicast MAC";
+         type enumeration {
+           enum "unicast" {
+             description "Display information for unicast MAC's";
+           }
+           enum "multicast" {
+             description "Display information for multicast MAC's";
+           }
+         }
+       }
+       leaf address {
+         description "Display information for a specified MAC address";
+         type jt:mac-addr;
+       }
+       leaf logical-switch {
+         description "Display information for a specified logical switch";
+         type string;
+       }
+       leaf mac_count {
+         description "Display mac count";
+         type enumeration {
+           enum "count" {
+             description "Display mac count";
+           }
+         }
+       }
+     }
+     output {
+       container vtep-mac-routes-details-information {
+         uses vtep-mac-routes-details-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-logical-switch-information {
+     description "Show logical switches";
+     input {
+       leaf logical-switch {
+         description "Display information for a specified logical switch";
+         type string;
+       }
+     }
+     output {
+       container logical-switch-information {
+         uses logical-switch-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-vtep-information {
+     description "Show virtual tunnel end points";
+     input {
+       leaf address {
+         description "IP address of the VTEP";
+         type jt:ipaddr;
+       }
+       leaf encapsulation {
+         description "Encapsulation type of the VTEP";
+         type enumeration {
+           enum "vxlan-over-ipv4" {
+             description "Encapsulation type is VXLAN over IPv4";
+           }
+         }
+       }
+     }
+     output {
+       container vtep-information {
+         uses vtep-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-interface-information {
+     description "Show physical ports controlled by NVP";
+     input {
+       leaf interface {
+         description "Display information for a specified interface";
+         type union {
+           type jt:interface-unit;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container vtep-interface-information {
+         uses vtep-interface-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-interface-statistics-information {
+     description "Display information for interface statistics";
+     input {
+       leaf interface {
+         description "Display information for a specified interface";
+         type union {
+           type jt:interface-unit;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container vtep-statistics-information {
+         uses vtep-statistics-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-commit-failure-information {
+     description "Show ovsdb commit failures";
+     input {
+       leaf transaction-id {
+         description "Display specified ovsdb commit failure";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container vtep-gateway-commit-failure-information {
+         uses vtep-gateway-commit-failure-information-block;
+       }
+     }
+   }
+   rpc get-ovsdb-tunnels-information {
+     description "Show ovsdb tunnels";
+     input {
+       leaf source-address {
+         description "Source IP address of the Tunnel";
+         type jt:ipaddr;
+       }
+       leaf destination-address {
+         description "Destination IP address of the Tunnel";
+         type jt:ipaddr;
+       }
+     }
+     output {
+       container vtep-tunnels-information {
+         uses vtep-tunnels-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping vtep-controller-information-block {
+     list vtep-controller {
+       leaf address {
+         type jt:ipaddr;
+       }
+       leaf protocol {
+         type string;
+       }
+       leaf port {
+         type uint32;
+       }
+       leaf max-backoff {
+         type uint32;
+       }
+       leaf inactivity-probe {
+         type uint32;
+       }
+       leaf connection-status {
+         type string;
+       }
+       leaf last-error {
+         type string;
+       }
+       leaf state {
+         type string;
+       }
+       leaf sec-since-connect {
+         type uint32;
+       }
+       leaf sec-since-disconnect {
+         type uint32;
+       }
+     }
+   }
+   grouping vtep-mac-routes-details-information-block {
+     list vtep-mac-routes-information {
+       leaf logical-switch-name {
+         type string;
+       }
+       list vtep-mac-routes {
+         leaf mac {
+           type jt:mac-addr;
+         }
+         leaf address {
+           type jt:ipaddr;
+         }
+         leaf vtep-type {
+           type string;
+         }
+         leaf vtep-address {
+           type jt:ipaddr;
+         }
+         leaf mac-type {
+           type string;
+         }
+         leaf logical-switch-name {
+           type string;
+         }
+       }
+     }
+   }
+   grouping logical-switch-information-block {
+     list logical-switch {
+       leaf logical-switch-name {
+         type string;
+       }
+       leaf tunnel-key {
+         type uint32;
+       }
+       leaf logical-switch-state {
+         type string;
+       }
+       leaf num-remote-mac {
+         type uint32;
+       }
+       leaf num-local-mac {
+         type uint32;
+       }
+     }
+   }
+   grouping vtep-information-block {
+     list virtual-tunnel-end-point {
+       leaf encapsulation-type {
+         type string;
+       }
+       leaf ip-address {
+         type string;
+       }
+       leaf num-macs {
+         type uint32;
+       }
+     }
+   }
+   grouping vtep-interface-information-block {
+     list vtep-interface {
+       leaf port-name {
+         type string;
+       }
+       leaf vlan {
+         type uint32;
+       }
+       leaf logical-switch-name {
+         type string;
+       }
+     }
+   }
+   grouping vtep-statistics-information-block {
+     list vtep-statistics {
+       leaf port-name {
+         type string;
+       }
+       leaf input-packets {
+         type uint32;
+       }
+       leaf output-packets {
+         type uint32;
+       }
+       leaf input-bytes {
+         type uint32;
+       }
+       leaf output-bytes {
+         type uint32;
+       }
+     }
+   }
+   grouping vtep-gateway-commit-failure-information-block {
+     list vtep-gateway-commit-failed-transaction {
+       leaf vtep-gateway-commit-transaction-id {
+         type uint32;
+       }
+       leaf vtep-gateway-commit-logical-switch-name {
+         type string;
+       }
+       leaf vtep-gateway-commit-logical-switch-port {
+         type string;
+       }
+       leaf vtep-gateway-commit-vlan {
+         type uint32;
+       }
+     }
+   }
+   grouping vtep-tunnels-information-block {
+     list vtep-tunnels {
+       leaf sip-address {
+         type string;
+       }
+       leaf dip-address {
+         type string;
+       }
+       leaf bfd-enabled {
+         type string;
+       }
+       leaf bfd-status {
+         type string;
+       }
+     }
+   }
+ }

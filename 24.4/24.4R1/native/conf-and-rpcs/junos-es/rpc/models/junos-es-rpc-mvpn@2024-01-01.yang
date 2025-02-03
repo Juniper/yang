@@ -1,0 +1,947 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-mvpn {
+   namespace "http://yang.juniper.net/junos-es/rpc/mvpn";
+
+   prefix mvpn;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for mvpn command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-mvpn-instance-information {
+     description "Show MVPN instance";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf display-tunnel-name {
+         description "Display ingress provider tunnel name instead of attribute";
+         type empty;
+       }
+       leaf instance-name {
+         description "Name of MVPN instance";
+         default "all";
+         type string;
+       }
+       leaf family {
+         description "MVPN instance address family";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 instance";
+           }
+           enum "inet6" {
+             description "Display IPv6 instance";
+           }
+         }
+       }
+       leaf level {
+         default "detail";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "detail" {
+             description "Display detailed version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container mvpn-instance-information {
+         uses mvpn-instance-information-block;
+       }
+     }
+   }
+   rpc get-mvpn-neighbor-information {
+     description "Show MVPN neighbor";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf neighbor-address {
+         description "Address of MVPN neighbor";
+         default "all";
+         type string;
+       }
+       leaf instance-name {
+         description "Name of MVPN instance";
+         default "all";
+         type string;
+       }
+       leaf family {
+         description "MVPN neighbor address family";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 neighbor";
+           }
+           enum "inet6" {
+             description "Display IPv6 neighbor";
+           }
+         }
+       }
+       leaf level {
+         default "detail";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "detail" {
+             description "Display detailed version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container mvpn-instance-information {
+         uses mvpn-instance-information-block;
+       }
+     }
+   }
+   rpc get-mvpn-c-multicasti-route {
+     description "Show MVPN c-multicast route";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf display-tunnel-name {
+         description "Display ingress provider tunnel name instead of attribute";
+         type empty;
+       }
+       leaf source-pe {
+         description "Display source PE information";
+         type empty;
+       }
+       leaf instance-name {
+         description "Name of MVPN instance";
+         default "all";
+         type string;
+       }
+       leaf family {
+         description "MVPN c-multicast route address family";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 c-multicast route";
+           }
+           enum "inet6" {
+             description "Display IPv6 c-multicast route";
+           }
+         }
+       }
+       leaf level {
+         default "detail";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "detail" {
+             description "Display detailed version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container mvpn-instance-information {
+         uses mvpn-instance-information-block;
+       }
+     }
+   }
+   rpc get-mvpn-source-route-information {
+     description "Show MVPN source route";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf instance-name {
+         description "Name of MVPN instance";
+         default "all";
+         type string;
+       }
+       leaf family {
+         description "MVPN source address family";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 source route";
+           }
+           enum "inet6" {
+             description "Display IPv6 source route";
+           }
+         }
+       }
+       leaf level {
+         default "detail";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "detail" {
+             description "Display detailed version of output";
+           }
+           enum "extensive" {
+             description "Display extensive version of output";
+           }
+         }
+       }
+     }
+     output {
+       container mvpn-instance-information {
+         uses mvpn-instance-information-block;
+       }
+     }
+   }
+   rpc get-mvpn-suppressed-information {
+     description "Show suppressed MVPN forwarding prefixes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf general {
+         description "Display suppressed general entries";
+         type empty;
+       }
+       leaf mvpn-rpt {
+         description "Display suppressed MVPN (*,G) entries";
+         type empty;
+       }
+       leaf instance {
+         description "Name of instance";
+         type string;
+         mandatory true;
+       }
+       leaf family {
+         description "Address family";
+         type enumeration {
+           enum "inet" {
+             description "Display IPv4 suppressed prefixes";
+           }
+           enum "inet6" {
+             description "Display IPv6 suppressed prefixes";
+           }
+         }
+       }
+       leaf level {
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+         }
+       }
+     }
+     output {
+       container mvpn-suppressed-information {
+         uses mvpn-suppressed-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping mvpn-instance-information-block {
+     container mvpn-instance {
+       list instance-family {
+         leaf address-family {
+           type string;
+         }
+         list instance-entry {
+           leaf-list instance-name {
+             type string;
+           }
+           leaf ngen-mvpn-mode {
+             type string;
+             description "MVPN mode of operation";
+           }
+           leaf ngen-mvpn-hmcnh-usage {
+             type string;
+             description "Forwarding Entry hierarchical nh usage";
+           }
+           leaf ngen-mvpn-sel-tun-nh-shared {
+             type string;
+             description "Forwarding Entry for selective tunnel nh share usage";
+           }
+           leaf instance-display-error {
+             type string;
+           }
+           leaf sender-based-rpf-status {
+             type string;
+             description "Sender-Based RPF status";
+           }
+           leaf hot-root-standby-status {
+             type string;
+             description "Hot Root Standby status";
+           }
+           container provider-tunnel {
+             leaf provider-tunnel-id {
+               type string;
+               description "Provider tunnel identifier";
+             }
+           }
+           container neighbor {
+             list neighbor-entry {
+               leaf neighbor-identifier {
+                 type string;
+                 description "Neighbor IPv4 address";
+               }
+               leaf provider-tunnel-id {
+                 type string;
+                 description "Provider tunnel identifier";
+               }
+               leaf label-in {
+                 type string;
+                 description "Incoming label";
+               }
+               leaf neighbor-property {
+                 type string;
+                 description "Special properties of the neighbor";
+               }
+               list mvpn-downstream-ptnl-segment {
+                 list mvpn-downstream-ptnl-segment-entry {
+                   leaf provider-tunnel-id {
+                     type string;
+                     description "Provider tunnel identifier";
+                   }
+                   leaf mvpn-downstream-segment-name {
+                     type string;
+                     description "Downstream p-tunnel segment name";
+                   }
+                 }
+               }
+             }
+           }
+           container c-multicast-ipv4 {
+             list c-multicast-ipv4-entry {
+               leaf-list c-multicast-address {
+                 type string;
+                 description "Address of the c-multicast route";
+               }
+               leaf provider-tunnel-id {
+                 type string;
+                 description "Provider tunnel identifier";
+               }
+               leaf label-in {
+                 type string;
+                 description "Incoming label";
+               }
+               leaf c-multicast-property {
+                 type string;
+                 description "Special properties of the c-multicast route";
+               }
+               leaf c-multicast-fwd-nh {
+                 type string;
+                 description "C-multicast route Forwarding NH Id";
+               }
+               leaf backup-provider-tunnel-id {
+                 type string;
+                 description "Backup Provider tunnel identifier";
+               }
+               leaf c-backup-multicast-fwd-nh {
+                 type string;
+                 description "C-multicast route Forwarding NH Id for backup ptnl";
+               }
+               list mvpn-downstream-ptnl-segment {
+                 list mvpn-downstream-ptnl-segment-entry {
+                   leaf provider-tunnel-id {
+                     type string;
+                     description "Provider tunnel identifier";
+                   }
+                   leaf mvpn-downstream-segment-name {
+                     type string;
+                     description "Downstream p-tunnel segment name";
+                   }
+                 }
+               }
+             }
+           }
+           container source-ipv4 {
+           }
+           list c-multicast-source-pe-cmcast-addr {
+           }
+           container inter-as-provider-tunnel {
+             leaf provider-tunnel-id {
+               type string;
+               description "Provider tunnel identifier";
+             }
+           }
+           list mvpn-downstream-ptnl-segment {
+             list mvpn-downstream-ptnl-segment-entry {
+               leaf provider-tunnel-id {
+                 type string;
+                 description "Provider tunnel identifier";
+               }
+               leaf mvpn-downstream-segment-name {
+                 type string;
+                 description "Downstream p-tunnel segment name";
+               }
+             }
+           }
+           container c-multicast-ipv6 {
+             list c-multicast-ipv6-entry {
+               leaf-list c-multicast-address {
+                 type string;
+                 description "Address of the c-multicast route";
+               }
+               leaf provider-tunnel-id {
+                 type string;
+                 description "Provider tunnel identifier";
+               }
+               leaf label-in {
+                 type string;
+                 description "Incoming label";
+               }
+               leaf c-multicast-property {
+                 type string;
+                 description "Special properties of the c-multicast route";
+               }
+               leaf c-multicast-fwd-nh {
+                 type string;
+                 description "C-multicast route Forwarding NH Id";
+               }
+               leaf backup-provider-tunnel-id {
+                 type string;
+                 description "Backup Provider tunnel identifier";
+               }
+               leaf c-backup-multicast-fwd-nh {
+                 type string;
+                 description "C-multicast route Forwarding NH Id for backup ptnl";
+               }
+               list mvpn-downstream-ptnl-segment {
+                 list mvpn-downstream-ptnl-segment-entry {
+                   leaf provider-tunnel-id {
+                     type string;
+                     description "Provider tunnel identifier";
+                   }
+                   leaf mvpn-downstream-segment-name {
+                     type string;
+                     description "Downstream p-tunnel segment name";
+                   }
+                 }
+               }
+             }
+           }
+           list source-ipv4-entry {
+             leaf-list source-route-address {
+               type string;
+               description "Address of the source route";
+             }
+             leaf source-pe-string {
+               type string;
+               description "Source PE sequence number";
+             }
+             leaf source-extended-community {
+               type string;
+               description "Source PE extended community";
+             }
+             leaf route-distinguisher {
+               type string;
+               description "Name of the route-distinguisher";
+             }
+             leaf as-number {
+               type int32;
+             }
+             leaf source-interface-name {
+               type string;
+               description "Source PE interface name";
+             }
+             leaf source-interface-index {
+               type int32;
+               description "Source PE interface index";
+             }
+           }
+           list source-ipv6-entry {
+             leaf-list source-route-address {
+               type string;
+               description "Address of the source route";
+             }
+             leaf source-pe-string {
+               type string;
+               description "Source PE sequence number";
+             }
+             leaf source-extended-community {
+               type string;
+               description "Source PE extended community";
+             }
+             leaf route-distinguisher {
+               type string;
+               description "Name of the route-distinguisher";
+             }
+             leaf as-number {
+               type int32;
+             }
+             leaf source-interface-name {
+               type string;
+               description "Source PE interface name";
+             }
+             leaf source-interface-index {
+               type int32;
+               description "Source PE interface index";
+             }
+           }
+           container source-ipv6 {
+           }
+         }
+         container instance-entry-summary {
+           leaf sender-based-rpf-status {
+             type string;
+             description "Sender-Based RPF status";
+           }
+           leaf hot-root-standby-status {
+             type string;
+             description "Hot Root Standby status";
+           }
+           container neighbor-summary {
+             leaf neighbor-summary-count {
+               type int32;
+               description "Number of neighbors in the instance";
+             }
+           }
+           container c-multicast-summary {
+             leaf c-multicast-ipv4-count {
+               type int32;
+               description "Number of c-multicast IPv4 routes in the instance";
+             }
+           }
+           container c-multicast-ipv6-summary {
+             leaf c-multicast-ipv6-count {
+               type int32;
+               description "Number of c-multicast IPv6 routes in the instance";
+             }
+           }
+           container source-summary {
+             leaf source-ipv4-count {
+               type int32;
+               description "Number of IPv4 source routes in the instance";
+             }
+           }
+           container source-ipv6-summary {
+             leaf source-ipv6-count {
+               type int32;
+               description "Number of IPv6 source routes in the instance";
+             }
+           }
+         }
+       }
+     }
+     container mvpn-instance-src-pe {
+       list instance-family {
+         leaf address-family {
+           type string;
+         }
+         list instance-entry {
+           leaf-list instance-name {
+             type string;
+           }
+           leaf ngen-mvpn-mode {
+             type string;
+             description "MVPN mode of operation";
+           }
+           leaf instance-display-error {
+             type string;
+           }
+           container neighbor {
+             list neighbor-entry {
+               list mvpn-downstream-ptnl-segment {
+               }
+             }
+           }
+           container c-multicast-ipv4 {
+             list c-multicast-ipv4-entry {
+               list mvpn-downstream-ptnl-segment {
+               }
+             }
+           }
+           container source-ipv4 {
+           }
+           list c-multicast-source-pe-cmcast-addr {
+             leaf-list c-multicast-address {
+               type string;
+               description "Address of the c-multicast route";
+             }
+             container c-multicast-source-pe {
+               leaf mvpn-src-pe-string {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf-list extended-community {
+                 type string;
+                 description "Extended community";
+               }
+               leaf route-distinguisher {
+                 type string;
+                 description "Name of the route-distinguisher";
+               }
+               leaf as-number {
+                 type int32;
+               }
+               leaf mvpn-interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf mvpn-interface-index {
+                 type int32;
+                 description "Index of interface";
+               }
+             }
+             container c-multicast-pim-source-pe {
+               leaf pim-src-pe-string {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf-list extended-community {
+                 type string;
+                 description "Extended community";
+               }
+               leaf route-distinguisher {
+                 type string;
+                 description "Name of the route-distinguisher";
+               }
+               leaf as-number {
+                 type int32;
+               }
+               leaf mvpn-interface-name {
+                 type string;
+                 description "Name of interface";
+               }
+               leaf mvpn-interface-index {
+                 type int32;
+                 description "Index of interface";
+               }
+             }
+           }
+           list mvpn-downstream-ptnl-segment {
+           }
+           container c-multicast-ipv6 {
+             list c-multicast-ipv6-entry {
+               list mvpn-downstream-ptnl-segment {
+               }
+             }
+           }
+           container source-ipv6 {
+           }
+         }
+         container instance-entry-summary {
+           leaf sender-based-rpf-status {
+             type string;
+             description "Sender-Based RPF status";
+           }
+           leaf hot-root-standby-status {
+             type string;
+             description "Hot Root Standby status";
+           }
+         }
+       }
+     }
+     list instance-family {
+       list instance-entry {
+         container neighbor {
+           list neighbor-entry {
+             list mvpn-downstream-ptnl-segment {
+             }
+           }
+         }
+         container c-multicast-ipv4 {
+           list c-multicast-ipv4-entry {
+             list mvpn-downstream-ptnl-segment {
+             }
+           }
+         }
+         container source-ipv4 {
+         }
+         list c-multicast-source-pe-cmcast-addr {
+         }
+         list mvpn-downstream-ptnl-segment {
+         }
+         container c-multicast-ipv6 {
+           list c-multicast-ipv6-entry {
+             list mvpn-downstream-ptnl-segment {
+             }
+           }
+         }
+         container source-ipv6 {
+         }
+       }
+       container instance-entry-summary {
+         leaf sender-based-rpf-status {
+           type string;
+           description "Sender-Based RPF status";
+         }
+         leaf hot-root-standby-status {
+           type string;
+           description "Hot Root Standby status";
+         }
+       }
+     }
+   }
+   grouping mvpn-suppressed-information-block {
+     container mvpn-suppressed {
+       leaf mvpn-suppressed-instance {
+         type string;
+         description "MVPN Instance";
+       }
+       leaf mvpn-suppressed-family {
+         type string;
+         description "MVPN address family";
+       }
+       list mvpn-suppressed-prefix {
+         leaf-list c-multicast-address {
+           type string;
+           description "Address of the c-multicast route";
+         }
+         leaf suppress-reason {
+           type string;
+           description "Reason prefix was suppressed by MVPN";
+         }
+       }
+       container mvpn-suppressed-summary {
+         leaf suppressed-general-count {
+           type int32;
+           description "Number of general suppressed MVPN forwarding cache entries";
+         }
+         leaf suppressed-mvpn-rpt-count {
+           type int32;
+           description "Number of RPT suppressed MVPN forwarding cache entries";
+         }
+       }
+     }
+   }
+ }

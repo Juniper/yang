@@ -1,0 +1,130 @@
+ module junos-genstate-mvrp-interface-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-interface-statistics";
+   prefix jgmis;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mvrp-interface-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping mvrp-interface-statistics-top {
+     description "Top-level grouping";
+     container mvrp-interface-statistics {
+       description "MVRP interface statistics";
+       list mvrp-statistics-instance {
+         leaf mvrp-routing-instance-name {
+           type string;
+           description "Name of routing instance";
+         }
+         list mvrp-statistics-interface-entry {
+           description "Statistics information";
+           leaf mvrp-interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf mvrp-statistics-vlan-registered {
+             type int32;
+             description "MAC Registered";
+           }
+           leaf mvrp-statistics-sent-pdu {
+             type int32;
+             description "Number of Sent MVRP PDUs";
+           }
+           leaf mvrp-statistics-received-pdu {
+             type int32;
+             description "Number of Received MVRP PDUs without error";
+           }
+           leaf mvrp-statistics-error-pdu {
+             type int32;
+             description "Number of Received MVRP PDUs with error";
+           }
+           leaf mvrp-join-empty-transmit {
+             type int32;
+             description "Join Empty transmitted";
+           }
+           leaf mvrp-leaveall-transmit {
+             type int32;
+             description "Leave All Transmitted";
+           }
+           leaf mvrp-join-in-transmit {
+             type int32;
+             description "Join In Transmitted";
+           }
+           leaf mvrp-empty-transmit {
+             type int32;
+             description "Empty Transmitted";
+           }
+           leaf mvrp-leave-transmit {
+             type int32;
+             description "Leave Transmitted";
+           }
+           leaf mvrp-in-transmit {
+             type int32;
+             description "In transmitted";
+           }
+           leaf mvrp-new-transmit {
+             type int32;
+             description "New Transmitted";
+           }
+           leaf mvrp-join-in-received {
+             type int32;
+             description "Join In Received";
+           }
+           leaf mvrp-leave-all-received {
+             type int32;
+             description "Leave All received";
+           }
+           leaf mvrp-leave-received {
+             type int32;
+             description "Leave Received";
+           }
+           leaf mvrp-in-received {
+             type int32;
+             description "In Received";
+           }
+           leaf mvrp-empty-received {
+             type int32;
+             description "Empty Received";
+           }
+           leaf mvrp-join-empty-received {
+             type int32;
+             description "Join Empty Received";
+           }
+           leaf mvrp-new-received {
+             type int32;
+             description "New Received";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mvrp-interface-statistics to top-level genstate";
+     uses mvrp-interface-statistics-top;
+   }
+ }

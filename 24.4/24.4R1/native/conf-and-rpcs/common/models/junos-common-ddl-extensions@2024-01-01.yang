@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-common-ddl-extensions {
+   namespace "http://yang.juniper.net/junos/common/ddl-extensions";
+
+   prefix junos;
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "This module contains definitions for Junos YANG extensions.";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   extension must {
+     argument "stmt-algebra";
+     description "
+      expression of configuration-statement paths having special
+      keywords like any, all, unique";
+   }
+   extension must-message {
+     argument "message-string";
+     description "
+      When specifying the junos:must constraint, a must-message should
+      also be specified so that when the contraint is not met,the 
+      warning message informs users what the constraints are.
+
+      If the must-message is missing, the input file will compile,
+      but the warning message will say (null) which won't be 
+      helpful for users to fix the problem";
+   }
+   extension posix-pattern {
+     argument "value";
+     description "
+      expression of pattern in posix format";
+   }
+   extension pattern-message {
+     argument "value";
+     description "
+      Error message in case of mismatch";
+   }
+   extension command {
+     argument "command";
+     description "
+      The junos cli command for this rpc";
+   }
+   extension action-execute {
+     description "
+      The junos action execute for rpc";
+   }
+   extension script {
+     argument "script";
+     description "
+      The junos action execute script for rpc";
+   }
+   extension trans-script {
+     argument "value";
+     description "
+      List of space seperated tranlsation scripts invoked by 
+      associated hierarchy";
+   }
+   extension cli-feature {
+     argument "feature";
+     description "
+      The Junos CLI features that are available with this extension are given below.
+      nokeyword: Indicates that there is no need to explicitly specify the
+                 leaf name in the input syntax on CLI.
+      oneliner/oneliner-plus: These features are applicable in JUNOS CLI configuration mode.
+                              The oneliner and oneliner-plus features simplify
+                              output by placing an object's attributes on a single line.
+                              The oneliner flag does so without exception; the oneliner-plus
+                              flag does so only when zero or one value occurs for an attribute.
+      homogeneous: The homogeneous flag, when used in conjunction with lists
+                   groups objects into a single set of braces under the object keyword.
+                   This feature is applicable in JUNOS CLI configuration mode.";
+   }
+ }

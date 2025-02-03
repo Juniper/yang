@@ -1,0 +1,146 @@
+ module junos-genstate-sensor-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/sensor-information";
+   prefix jgsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for sensor-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping sensor-information-top {
+     description "Top-level grouping";
+     container sensor-information {
+       description "Show all installed sensors";
+       list sensor {
+         description "Show sensor details";
+         leaf sensor-name {
+           type string;
+           description "Sensor name";
+         }
+         leaf resource-name {
+           type string;
+           description "Resource name";
+         }
+         leaf sensor-version {
+           type string;
+           description "Sensor version";
+         }
+         leaf sensor-id {
+           type uint64;
+           description "Sensor-ID Derived from Sensor name";
+         }
+         leaf resource-filter {
+           type string;
+           description "Resource filter";
+         }
+         leaf subscription-id {
+           type uint64;
+           description "Telemetry subscription ID";
+         }
+         leaf parent-sensor-name {
+           type string;
+           description "Parent sensor to which this sensor belongs, Not applicable otherwise";
+         }
+         leaf components {
+           type string;
+           description "Component(s) to which this sensor belongs, Not applicable otherwise";
+         }
+         container server-information {
+           description "Show server Information";
+           leaf server-name {
+             type string;
+             description "Server name";
+           }
+           leaf scope-id {
+             type string;
+             description "Scope-id";
+           }
+           leaf remote-address {
+             type string;
+             description "Address of the physical interface.";
+           }
+           leaf remote-port {
+             type uint32;
+             description "Port";
+           }
+           leaf transport {
+             type string;
+             description "Transport";
+           }
+         }
+         container profile-information {
+           description "Show Profile Information";
+           leaf profile-name {
+             type string;
+             description "Profilename";
+           }
+           leaf rep-interval {
+             type int32;
+             description "Reporting interval (in seconds)";
+           }
+           leaf payload-size {
+             type int32;
+             description "Payload size";
+           }
+           leaf local-address {
+             type string;
+             description "Address of the physical interface.";
+           }
+           leaf local-port {
+             type uint32;
+             description "Port";
+           }
+           leaf timestamp {
+             type string;
+             description "Timestamp";
+           }
+           leaf serverformat {
+             type string;
+             description "Format";
+           }
+           leaf dscp {
+             type string;
+             description "DSCP";
+           }
+           leaf forwarding-class {
+             type string;
+             description "Forwarding-class";
+           }
+           leaf loss-priority {
+             type string;
+             description "Loss priority";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds sensor-information to top-level genstate";
+     uses sensor-information-top;
+   }
+ }

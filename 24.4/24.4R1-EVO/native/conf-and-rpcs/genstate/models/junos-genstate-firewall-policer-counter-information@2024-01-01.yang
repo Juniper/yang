@@ -1,0 +1,70 @@
+ module junos-genstate-firewall-policer-counter-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/firewall-policer-counter-information";
+   prefix jgfpci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for firewall-policer-counter-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping firewall-policer-counter-information-top {
+     description "Top-level grouping";
+     container firewall-policer-counter-information {
+       description "Display policer counter statistics in short form";
+       list policer-counter {
+         list policer-counter-entry {
+           leaf counter-id {
+             type int32;
+           }
+           leaf green-bytes {
+             type int32;
+           }
+           leaf green-packets {
+             type int32;
+           }
+           leaf yellow-bytes {
+             type int32;
+           }
+           leaf yellow-packets {
+             type int32;
+           }
+           leaf discard-bytes {
+             type int32;
+           }
+           leaf discard-packets {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds firewall-policer-counter-information to top-level genstate";
+     uses firewall-policer-counter-information-top;
+   }
+ }

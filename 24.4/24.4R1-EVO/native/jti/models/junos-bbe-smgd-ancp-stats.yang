@@ -1,0 +1,67 @@
+module junos-bbe-smgd-ancp-stats {
+  yang-version 1;
+  namespace "http://juniper.net/yang/bbe-smgd-ancp-stats";
+  prefix junos-bbe-smgd-ancp-stats;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of Junos native bbe-smgd";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping ancp-adapter-statistics-group {
+    description
+      "Statistics associated with ANCP adapter";
+    leaf mapped-dynamic-subscriber-count {
+      type uint32;
+      description
+        "Number of ANCP subscribers mapped to dynamic interfaces by ANCP adapter";
+    }
+  }
+
+  grouping bbe-smgd-ancp-stats-top {
+    description
+      "Top level grouping for ancp stats";
+    container junos {
+      description
+        "Container for JunOS";
+      config false;
+      container system {
+        description
+          "Container for system";
+        container subscriber-management {
+          description
+            "Container for subscriber management";
+          container access-network {
+            description
+              "Container for access network";
+            container ancp {
+              description
+                "Container for ancp";
+              container adapter {
+                description
+                  "Container for adapter";
+                uses ancp-adapter-statistics-group;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses bbe-smgd-ancp-stats-top;
+}

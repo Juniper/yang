@@ -1,0 +1,858 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-p4-switch {
+   namespace "http://yang.juniper.net/junos/rpc/p4-switch";
+
+   prefix p4-switch;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for p4-switch command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   rpc get-p4-switch-global-statistics {
+     description "Show P4 Switch statistics";
+     output {
+       container p4-switch-global-statistics {
+         uses p4-switch-global-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-traffic-statistics {
+     description "Show P4 Switch traffic statistics";
+     output {
+       container p4-switch-traffic-statistics {
+         uses p4-switch-traffic-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-traffic-statistics-ip {
+     description "Display IPv4 statistics";
+     output {
+       container p4-switch-traffic-ipv4-statistics {
+         uses p4-switch-traffic-ipv4-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-traffic-statistics-ip6 {
+     description "Display IPv6 statistics";
+     output {
+       container p4-switch-traffic-ipv6-statistics {
+         uses p4-switch-traffic-ipv6-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-traffic-statistics-l2 {
+     description "Display Layer 2 statistics";
+     output {
+       container p4-switch-traffic-l2-statistics {
+         uses p4-switch-traffic-l2-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-traffic-statistics-traceroute {
+     description "Display traceroute statistics";
+     output {
+       container p4-switch-traffic-traceroute-statistics {
+         uses p4-switch-traffic-traceroute-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-devices {
+     description "Show P4 Switch Devices information";
+     input {
+       leaf device-name {
+         description "Name of device";
+         type string;
+       }
+     }
+     output {
+       container p4-switch-devices {
+         uses p4-switch-devices-block;
+       }
+     }
+   }
+   rpc get-p4-switch-device-statistics {
+     description "Show P4 Switch Device Statistics";
+     input {
+       leaf device-name {
+         description "Name of device";
+         type string;
+       }
+     }
+     output {
+       container p4-switch-device-statistics {
+         uses p4-switch-device-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-controllers {
+     description "Show P4 Switch Controller information";
+     input {
+       leaf device-name {
+         description "Name of device";
+         type string;
+       }
+     }
+     output {
+       container p4-switch-controllers {
+         uses p4-switch-controllers-block;
+       }
+     }
+   }
+   rpc get-p4-switch-controllers-statistics {
+     description "Show P4 Switch Controller statistics";
+     input {
+       leaf device-name {
+         description "Name of device";
+         type string;
+       }
+     }
+     output {
+       container p4-switch-controllers-statistics {
+         uses p4-switch-controllers-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-interfaces-statistics {
+     description "Show P4 Switch Interfaces information";
+     input {
+       leaf device-name {
+         description "Name of device";
+         type string;
+       }
+     }
+     output {
+       container p4-switch-interfaces-statistics {
+         uses p4-switch-interfaces-statistics-block;
+       }
+     }
+   }
+   rpc get-p4-switch-interfaces-detail {
+     description "Show P4 Switch Interfaces detail";
+     input {
+       leaf device-name {
+         description "Name of device";
+         type string;
+       }
+     }
+     output {
+       container p4-switch-interfaces-detail {
+         uses p4-switch-interfaces-detail-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping p4-switch-global-statistics-block {
+     list p4-switch-global-statistic-stanza {
+       container p4-switch-global-statistic-title {
+         leaf p4-switch-global-title-name {
+           type string;
+           description "P4 Swtich title";
+         }
+       }
+       container p4-switch-global-statistic-counters {
+         list p4-switch-global-statistic-counter {
+           leaf p4-switch-global-field-name {
+             type string;
+             description "P4 Swtich stats field names";
+           }
+           leaf p4-switch-global-counter {
+             type uint64;
+             description "P4 Swtich stats counter";
+           }
+           leaf p4-switch-global-unit {
+             type string;
+             description "P4 Swtich unit";
+           }
+         }
+       }
+     }
+   }
+   grouping p4-switch-traffic-statistics-block {
+     leaf p4-agent-ipv4-type {
+       type string;
+       description "P4 Agent IPv4 packet type";
+     }
+     leaf p4-agent-ipv4-punt-packets {
+       type uint32;
+       description "P4 Agent IPv4 punt packets";
+     }
+     leaf p4-agent-ipv4-punt-bytes {
+       type uint32;
+       description "P4 Agent IPv4 punt bytes";
+     }
+     leaf p4-agent-ipv4-punt-drops {
+       type uint32;
+       description "P4 Agent IPv4 punt packet drops";
+     }
+     leaf p4-agent-ipv4-inject-packets {
+       type uint32;
+       description "P4 Agent IPv4 inject packets";
+     }
+     leaf p4-agent-ipv4-inject-bytes {
+       type uint32;
+       description "P4 Agent IPv4 inject bytes";
+     }
+     leaf p4-agent-ipv4-inject-drops {
+       type uint32;
+       description "P4 Agent IPv4 inject packet drops";
+     }
+     leaf p4-agent-ipv6-type {
+       type string;
+       description "P4 Agent IPv6 packet type";
+     }
+     leaf p4-agent-ipv6-punt-packets {
+       type uint32;
+       description "P4 Agent IPv6 punt packets";
+     }
+     leaf p4-agent-ipv6-punt-bytes {
+       type uint32;
+       description "P4 Agent IPv6 punt bytes";
+     }
+     leaf p4-agent-ipv6-punt-drops {
+       type uint32;
+       description "P4 Agent IPv6 punt packet drops";
+     }
+     leaf p4-agent-ipv6-inject-packets {
+       type uint32;
+       description "P4 Agent IPv6 inject packets";
+     }
+     leaf p4-agent-ipv6-inject-bytes {
+       type uint32;
+       description "P4 Agent IPv6 inject bytes";
+     }
+     leaf p4-agent-ipv6-inject-drops {
+       type uint32;
+       description "P4 Agent IPv6 inject packet drops";
+     }
+     leaf p4-agent-l2-type {
+       type string;
+       description "P4 Agent L2 packet type";
+     }
+     leaf p4-agent-l2-punt-packets {
+       type uint32;
+       description "P4 Agent L2 punt packets";
+     }
+     leaf p4-agent-l2-punt-bytes {
+       type uint32;
+       description "P4 Agent L2 punt bytes";
+     }
+     leaf p4-agent-l2-punt-drops {
+       type uint32;
+       description "P4 Agent L2 punt packet drops";
+     }
+     leaf p4-agent-l2-inject-packets {
+       type uint32;
+       description "P4 Agent L2 inject packets";
+     }
+     leaf p4-agent-l2-inject-bytes {
+       type uint32;
+       description "P4 Agent L2 inject bytes";
+     }
+     leaf p4-agent-l2-inject-drops {
+       type uint32;
+       description "P4 Agent L2 inject packet drops";
+     }
+     leaf p4-agent-traceroute-type {
+       type string;
+       description "P4 Agent Traceroute packet type";
+     }
+     leaf p4-agent-traceroute-punt-packets {
+       type uint32;
+       description "P4 Agent Traceroute punt packets";
+     }
+     leaf p4-agent-traceroute-punt-bytes {
+       type uint32;
+       description "P4 Agent Traceroute punt bytes";
+     }
+     leaf p4-agent-traceroute-punt-drops {
+       type uint32;
+       description "P4 Agent Traceroute punt packet drops";
+     }
+     leaf p4-agent-traceroute-inject-packets {
+       type uint32;
+       description "P4 Agent Traceroute inject packets";
+     }
+     leaf p4-agent-traceroute-inject-bytes {
+       type uint32;
+       description "P4 Agent Traceroute inject bytes";
+     }
+     leaf p4-agent-traceroute-inject-drops {
+       type uint32;
+       description "P4 Agent Traceroute inject packet drops";
+     }
+     leaf p4-agent-unknown-type {
+       type string;
+       description "P4 Agent Unknown packet type";
+     }
+     leaf p4-agent-unknown-punt-packets {
+       type uint32;
+       description "P4 Agent Unknown punt packets";
+     }
+     leaf p4-agent-unknown-punt-bytes {
+       type uint32;
+       description "P4 Agent Unknown punt bytes";
+     }
+     leaf p4-agent-unknown-punt-drops {
+       type uint32;
+       description "P4 Agent Unknown punt packet drops";
+     }
+     leaf p4-agent-unknown-inject-packets {
+       type uint32;
+       description "P4 Agent Unknown inject packets";
+     }
+     leaf p4-agent-unknown-inject-bytes {
+       type uint32;
+       description "P4 Agent Unknown inject bytes";
+     }
+     leaf p4-agent-unknown-inject-drops {
+       type uint32;
+       description "P4 Agent Unknown inject packet drops";
+     }
+   }
+   grouping p4-switch-traffic-ipv4-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-switch-traffic-ipv6-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-switch-traffic-l2-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-switch-traffic-traceroute-statistics-block {
+     leaf p4-agent-punt-packets {
+       type uint32;
+       description "P4 Agent punt packets";
+     }
+     leaf p4-agent-punt-bytes {
+       type uint32;
+       description "P4 Agent punt bytes";
+     }
+     leaf p4-agent-punt-drops {
+       type uint32;
+       description "P4 Agent punt packet drops";
+     }
+     leaf p4-agent-inject-packets {
+       type uint32;
+       description "P4 Agent inject packets";
+     }
+     leaf p4-agent-inject-bytes {
+       type uint32;
+       description "P4 Agent inject bytes";
+     }
+     leaf p4-agent-inject-drops {
+       type uint32;
+       description "P4 Agent inject packet drops";
+     }
+   }
+   grouping p4-switch-devices-block {
+     list p4-switch-device {
+       leaf device-name {
+         type string;
+         description "Device name";
+       }
+       leaf node-id {
+         type uint64;
+         description "Node id";
+       }
+       leaf primary {
+         type string;
+         description "Primary";
+       }
+       leaf backup-count {
+         type uint64;
+         description "Backup Count";
+       }
+       leaf forwarding-config {
+         type string;
+         description "Forwarding config";
+       }
+       leaf entries {
+         type uint64;
+         description "Entries";
+       }
+     }
+   }
+   grouping p4-switch-device-statistics-block {
+     list p4-switch-device-stats {
+       leaf device-name {
+         type string;
+         description "Device name";
+       }
+       leaf node-id {
+         type uint64;
+         description "Node id";
+       }
+       leaf primary {
+         type string;
+         description "Primary";
+       }
+       leaf backup-count {
+         type uint64;
+         description "Backup Count";
+       }
+       leaf forwarding-config {
+         type string;
+         description "Forwarding config";
+       }
+       leaf entries {
+         type uint64;
+         description "Entries";
+       }
+       list p4-switch-device-stats-stanza {
+         container p4-switch-device-stats-title {
+           leaf p4-switch-device-title-name {
+             type string;
+             description "P4 Swtich device title";
+           }
+         }
+         container p4-switch-device-stats-counts {
+           list p4-switch-device-stats-count {
+             leaf p4-switch-device-field-name {
+               type string;
+               description "P4 Swtich device stats field names";
+             }
+             leaf p4-switch-device-counter {
+               type uint64;
+               description "P4 Swtich device stats counter";
+             }
+             leaf p4-switch-device-unit {
+               type string;
+               description "P4 Swtich device stats unit";
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping p4-switch-controllers-block {
+     list p4-switch-cntrs {
+       leaf device-name {
+         type string;
+         description "Device name";
+       }
+       leaf node-id {
+         type uint64;
+         description "Node id";
+       }
+       leaf role-id {
+         type uint64;
+         description "Role id";
+       }
+       leaf election-id {
+         type string;
+         description "Election id";
+       }
+       leaf session-id {
+         type uint64;
+         description "Session id";
+       }
+       leaf role {
+         type uint64;
+         description "Role";
+       }
+       leaf forwarding-config {
+         type string;
+         description "Forwarding config";
+       }
+       leaf entries {
+         type uint64;
+         description "Entries";
+       }
+     }
+   }
+   grouping p4-switch-controllers-statistics-block {
+     list p4-switch-controllers-stats {
+       leaf device-name {
+         type string;
+         description "Device name";
+       }
+       leaf node-id {
+         type uint64;
+         description "Node id";
+       }
+       leaf role-id {
+         type uint64;
+         description "Role id";
+       }
+       leaf election-id {
+         type string;
+         description "Election id";
+       }
+       leaf session-id {
+         type uint64;
+         description "Session id";
+       }
+       leaf role {
+         type uint64;
+         description "Role";
+       }
+       leaf forwarding-config {
+         type string;
+         description "Forwarding config";
+       }
+       leaf entries {
+         type uint64;
+         description "Entries";
+       }
+       list p4-switch-controllers-stats-stanza {
+         container p4-switch-controllers-stats-title {
+           leaf p4-switch-controllers-title-name {
+             type string;
+             description "P4 Swtich controller title name";
+           }
+         }
+         container p4-switch-controllers-stats-counts {
+           list p4-switch-controllers-stats-count {
+             leaf p4-switch-controller-field-name {
+               type string;
+               description "P4 Swtich controller stats field name";
+             }
+             leaf p4-switch-controller-counter {
+               type uint64;
+               description "P4 Swtich Controller stats counter";
+             }
+             leaf p4-switch-controller-unit {
+               type string;
+               description "P4 Swtich controller stats unit";
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping p4-switch-interfaces-statistics-block {
+     list p4-switch-interfaces-stats {
+       leaf device-name {
+         type string;
+         description "Device name";
+       }
+       leaf node-id {
+         type uint64;
+         description "Node id";
+       }
+       leaf ifd-name {
+         type string;
+         description "P4 Swtich interface name";
+       }
+       leaf ifd-index {
+         type uint64;
+         description "P4 Switch Interface Index";
+       }
+       leaf port-id {
+         type uint64;
+         description "P4 Switch Port Id";
+       }
+     }
+   }
+   grouping p4-switch-interfaces-detail-block {
+     list p4-switch-interfaces-det {
+       leaf device-name {
+         type string;
+         description "Device name";
+       }
+       leaf node-id {
+         type uint64;
+         description "Node id";
+       }
+       leaf ifd-name {
+         type string;
+         description "P4 Swtich interface name";
+       }
+       leaf ifd-index {
+         type uint64;
+         description "P4 Switch Interface Index";
+       }
+       leaf port-id {
+         type uint64;
+         description "P4 Switch Port Id";
+       }
+       leaf unit {
+         type uint64;
+         description "Unit";
+       }
+       leaf ifl-index {
+         type uint64;
+         description "Ifl Index";
+       }
+       leaf vlan-id {
+         type string;
+         description "Vlan Id";
+       }
+     }
+   }
+ }

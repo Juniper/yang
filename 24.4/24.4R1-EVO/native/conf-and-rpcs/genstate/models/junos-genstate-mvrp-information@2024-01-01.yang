@@ -1,0 +1,77 @@
+ module junos-genstate-mvrp-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-information";
+   prefix jgmi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mvrp-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping mvrp-information-top {
+     description "Top-level grouping";
+     container mvrp-information {
+       description "Top-level container";
+       list mvrp-information-entry {
+         leaf mvrp-dynamic-vlan {
+           type string;
+           description "MVRP dynamic VLAN creation";
+         }
+         leaf mvrp-bpdu-mac-address {
+           type string;
+           description "MVRP BPDU destination MAC address";
+         }
+         leaf mvrp-routing-instance-name {
+           type string;
+           description "Name of routing instance";
+         }
+         list mvrp-interface-timers {
+           leaf mvrp-interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf mvrp-timer-join {
+             type uint32;
+             description "Join timer";
+           }
+           leaf mvrp-timer-leave {
+             type uint32;
+             description "Leave timer";
+           }
+           leaf mvrp-timer-leaveall {
+             type uint32;
+             description "LeaveAll timer";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mvrp-information to top-level genstate";
+     uses mvrp-information-top;
+   }
+ }

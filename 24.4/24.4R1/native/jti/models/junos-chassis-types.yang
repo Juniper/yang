@@ -1,0 +1,256 @@
+module junos-chassis-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/chassis/types";
+  prefix "jct";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of common JUNOS chassis types.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-04-01 {
+    description
+      "Addition of humidity and alarmport identities";
+    reference "0.2.0";
+  }
+
+  revision 2023-12-08 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.2.0";
+
+  identity fpm-led-name {
+    description
+      "Base identity from which fpm-led-name-color and
+       fpm-led-name-state identities are derived. It can
+       be used inside other JUNOS native modules.";
+  }
+
+  identity fpm-led-name-color {
+    base fpm-led-name;
+    description
+      "Front panel led name based on the severity-color for hardware
+       components.";
+  }
+
+  identity fpm-led-name-state {
+    base fpm-led-name;
+    description
+      "Front panel led name based on the state of the hardware
+       components.";
+  }
+
+  identity fpm-led-green {
+    base fpm-led-name-color;
+    description
+      "Led name indicating system or component working fine when it is
+       ON.";
+  }
+
+  identity fpm-led-blue {
+    base fpm-led-name-color;
+    description
+      "Led name indicating system or component acting as master when it
+       is ON.";
+  }
+
+  identity fpm-led-yellow {
+    base fpm-led-name-color;
+    description
+      "Led name indicating system or component has some warning or
+       notification when it is ON.";
+  }
+
+  identity fpm-led-red {
+    base fpm-led-name-color;
+    description
+      "Led name indicating system or component has severe failure when
+       it is ON.";
+  }
+
+  identity fpm-led-amber {
+    base fpm-led-name-color;
+    description
+      "Led name indicating system or component has fault when it is
+       ON.";
+  }
+
+  identity fpm-led-ok {
+    base fpm-led-name-state;
+    description
+      "Led name indicating system or component working ok when it is
+       ON.";
+  }
+
+  identity fpm-led-master {
+    base fpm-led-name-state;
+    description
+      "Led name indicating system or component is master when it is
+       ON.";
+  }
+
+  identity fpm-led-active {
+    base fpm-led-name-state;
+    description
+      "Led name indicating system or component is active or master when
+       it is ON.";
+  }
+
+  identity fpm-led-fail {
+    base fpm-led-name-state;
+    description
+      "Led name indicating system or component is at fault when it is
+       ON.";
+  }
+
+  identity component-measurement-units {
+    description
+      "Measurement unit for platform components.";
+  }
+
+  identity component-temperature-units {
+    base component-measurement-units;
+    description
+      "Measurement unit for temperature related component sensor.";
+  }
+
+  identity component-voltage-units {
+    base component-measurement-units;
+    description
+      "Measurement unit for voltage related component sensor.";
+  }
+
+  identity component-power-units {
+    base component-measurement-units;
+    description
+      "Measurement unit for power related component sensor.";
+  }
+
+  identity component-fan-units {
+    base component-measurement-units;
+    description
+      "Measurement unit for fan related component sensor.";
+  }
+
+  identity component-humidity-units {
+    base component-measurement-units;
+    description
+      "Measurement unit for Humidity related component sensor.";
+  }
+
+  identity fahrenheit {
+    base component-temperature-units;
+    description
+      "Temperature in degree fahrenheit for temperature sensor.";
+  }
+
+  identity celsius {
+    base component-temperature-units;
+    description
+      "Temperature in degree celsius for temperature sensor.";
+  }
+
+  identity watts {
+    base component-power-units;
+    description
+      "Power in watts for power sensor component.";
+  }
+
+  identity milli-volts {
+    base component-voltage-units;
+    description
+      "Voltage in milli-volts for voltage sensor component.";
+  }
+
+  identity rpm {
+    base component-fan-units;
+    description
+      "Fan speed in revolutions per minute for fan component.";
+  }
+
+  identity relative-humidity {
+    base component-humidity-units;
+    description
+      "Humidity in relative-humidity for humidity sensor component.";
+  }
+
+  identity junos-sensor-type {
+    description
+      "Sensor type for JUNOS hardware components.";
+  }
+
+  identity temperature-sensor {
+    base junos-sensor-type;
+    description
+      "Sensor is related to temperature information.";
+  }
+
+  identity voltage-sensor {
+    base junos-sensor-type;
+    description
+      "Sensor is related to voltage information.";
+  }
+
+  identity fan-sensor {
+    base junos-sensor-type;
+    description
+      "Sensor is related to fans in the system.";
+  }
+
+  identity power-sensor {
+    base junos-sensor-type;
+    description
+      "Sensor is related to power information.";
+  }
+
+  identity humidity-sensor {
+    base junos-sensor-type;
+    description
+      "Sensor is related to humidity information.";
+  }
+
+  identity junos-process-type {
+    description
+      "Types of applications running in JUNOS user-space, kernel
+       or related to a specific application.";
+  }
+
+  identity fabric-process {
+    base junos-process-type;
+    description
+      "Fabric processes running on different hardware components.";
+  }
+
+  identity kernel-process {
+    base junos-process-type;
+    description
+      "Processes which are not in user space.";
+  }
+
+  identity user-process {
+    base junos-process-type;
+    description
+      "Processes which are in user space.";
+  }
+}

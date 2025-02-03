@@ -1,0 +1,70 @@
+ module junos-genstate-system-login-lockout-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/system-login-lockout-information";
+   prefix jgslli;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for system-login-lockout-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping system-login-lockout-information-top {
+     description "Top-level grouping";
+     container system-login-lockout-information {
+       description "Show users locked out from logins";
+       leaf no-login-lockout {
+         type empty;
+         description "No users locked out from logins";
+       }
+       leaf no-login-lockout-user {
+         type empty;
+         description "User not locked out from logins";
+       }
+       container login-lockout-users-table {
+         list login-lockout-user-entry {
+           description "Login lockout information for a user";
+           leaf login-lockout-user {
+             type string;
+             description "Name of user being locked out";
+           }
+           leaf login-lockout-start-time {
+             type string;
+             description "The time the lockout started";
+           }
+           leaf login-lockout-end-time {
+             type string;
+             description "The time the lockout ends";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds system-login-lockout-information to top-level genstate";
+     uses system-login-lockout-information-top;
+   }
+ }

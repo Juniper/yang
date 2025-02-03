@@ -1,0 +1,109 @@
+ module junos-genstate-arp-table-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/arp-table-information";
+   prefix jgati;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for arp-table-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping arp-table-information-top {
+     description "Top-level grouping";
+     container arp-table-information {
+       description "Information about one or more entries in the ARP table";
+       list arp-table-entry {
+         leaf mac-address {
+           type jt:mac-addr;
+           description "Hardware MAC address associated with the ARP entry";
+         }
+         leaf ip-address {
+           type jt:ipaddr;
+           description "IP address of the ARP entry";
+         }
+         leaf hostname {
+           type string;
+           description "Resolved hostname of the ARP entry";
+         }
+         leaf interface-name {
+           type string;
+           description "Name of the interface associated with the ARP entry";
+         }
+         leaf time-to-expire {
+           type string;
+           description "Seconds remaining until the entry expires";
+         }
+         leaf state {
+           type string;
+           description "Next hop current state";
+         }
+         leaf reference-count {
+           type int32;
+           description "Next hop reference count";
+         }
+         container arp-table-entry-flags {
+           leaf none {
+             type empty;
+             description "ARP entry has no flags";
+           }
+           leaf permanent {
+             type empty;
+             description "ARP entry is permanent";
+           }
+           leaf published {
+             type empty;
+             description "ARP entry is published";
+           }
+           leaf dead {
+             type empty;
+             description "ARP entry is dead";
+           }
+           leaf free {
+             type empty;
+             description "ARP entry is free";
+           }
+           leaf virtual-gateway-address {
+             type empty;
+             description "ARP entry is for virtual gateway address";
+           }
+           leaf remotely-learnt-address {
+             type empty;
+             description "ARP entry learnt from remote and installed by protocol";
+           }
+           leaf flood-as-unknown-unicast {
+             type empty;
+             description "ARP entry to be flooded as unknown unicast traffic";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds arp-table-information to top-level genstate";
+     uses arp-table-information-top;
+   }
+ }

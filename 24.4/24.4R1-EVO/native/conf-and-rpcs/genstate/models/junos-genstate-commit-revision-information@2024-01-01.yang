@@ -1,0 +1,75 @@
+ module junos-genstate-commit-revision-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/commit-revision-information";
+   prefix jgcri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for commit-revision-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping commit-revision-information-top {
+     description "Top-level grouping";
+     container commit-revision-information {
+       description "Top-level container";
+       leaf revision {
+         type string;
+       }
+       leaf date-time {
+         type string;
+       }
+       leaf user {
+         type string;
+         description "User name executing this script";
+       }
+       leaf client {
+         type string;
+         description "This client application performed the commit";
+       }
+       leaf comment {
+         type string;
+       }
+       leaf log {
+         type string;
+         description "Log message for this commit";
+       }
+       leaf db-modified {
+         type empty;
+       }
+       leaf new-db-revision {
+         type uint32;
+       }
+       leaf old-db-revision {
+         type uint32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds commit-revision-information to top-level genstate";
+     uses commit-revision-information-top;
+   }
+ }
