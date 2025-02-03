@@ -1,0 +1,321 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-bier {
+   namespace "http://yang.juniper.net/junos-es/rpc/bier";
+
+   prefix bier;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for bier command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-bier-information {
+     description "Show BIER neighbor";
+     junos:command "show bier neighbor";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+               junos:posix-pattern "^[a-zA-Z0-9_-]{1,63}$";
+               junos:pattern-message "Logical-system name is a string consisting of up to 63 letters, numbers, dashes and underscores";
+             }
+           }
+         }
+       }
+       leaf neighbor-address {
+         description "Address of BIER neighbor";
+         default "all";
+         type string;
+       }
+       leaf subdomain-id {
+         description "Subdomain Id of BIER";
+         default "all";
+         type string;
+       }
+       leaf level {
+         junos:cli-feature "nokeyword";
+         default "detail";
+         type enumeration {
+           enum "summary" {
+             description "Display summary output";
+           }
+           enum "detail" {
+             description "Display detailed version of output";
+           }
+         }
+       }
+     }
+     output {
+       container bier-information {
+         uses bier-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping bier-information-block {
+     container bier-info {
+       list info-entry {
+         leaf subdomain-id {
+           type int32;
+           description "Subdomain ID";
+         }
+         leaf bsl {
+           type int32;
+           description "BSL";
+         }
+         list bier-nbr-entry {
+           leaf bier-nbr-identifier {
+             type string;
+             description "Bier-nbr address";
+           }
+           leaf label {
+             type int32;
+             description "Label";
+           }
+           leaf nexthop-address {
+             type string;
+             description "Nexthop address";
+           }
+           leaf packets {
+             type uint64;
+             description "Packet";
+           }
+           leaf pps {
+             type uint64;
+             description "PPS";
+           }
+           leaf bytes {
+             type uint64;
+             description "Bytes";
+           }
+           leaf bier-nbr-fbm {
+             type string;
+             description "FBM the bier-nbr";
+           }
+         }
+       }
+       container info-entry-summary {
+         container bier-nbr-summary {
+           leaf bier-nbr-summary-count {
+             type int32;
+             description "Number of bier-nbrs in the bier info";
+           }
+         }
+       }
+     }
+     list info-entry {
+     }
+   }
+ }

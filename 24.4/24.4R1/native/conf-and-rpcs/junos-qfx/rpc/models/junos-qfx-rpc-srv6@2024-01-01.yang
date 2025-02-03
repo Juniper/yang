@@ -1,0 +1,524 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-srv6 {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/srv6";
+
+   prefix srv6;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for srv6 command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-srv6-block-information {
+     description "Show SRv6 block information";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       leaf block-name {
+         description "SRv6 block name";
+         type string;
+       }
+     }
+     output {
+       container srv6-block-information {
+         uses srv6-block-information-block;
+       }
+     }
+   }
+   rpc get-srv6-locator-information {
+     description "Show srv6 information";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       leaf locator-name {
+         description "SRV6 locator name";
+         type string;
+       }
+     }
+     output {
+       container srv6-locator-entry-information {
+         uses srv6-locator-entry-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping srv6-block-information-block {
+     container srv6-block-entry {
+       leaf block-name {
+         type string;
+       }
+       leaf block-prefix {
+         type string;
+       }
+       leaf block-prefix-length {
+         type uint32;
+       }
+       leaf micro-sid-length {
+         type uint32;
+       }
+       container global-srv6-sid-range {
+         leaf global-srv6-sid-range.heading {
+           type string;
+         }
+         leaf static-sid-range {
+           type uint32;
+           description "SRV6 Locator static SID range";
+         }
+         leaf dynamic-sid-range {
+           type uint32;
+           description "SRV6 Locator dynamic SID range";
+         }
+         leaf allocated-static-sid-count {
+           type uint32;
+           description "SRV6 Locator allocated static SID count";
+         }
+         leaf allocated-dynamic-sid-count {
+           type uint32;
+           description "SRV6 Locator allocated dynamic SID count";
+         }
+         leaf available-static-sid-count {
+           type uint32;
+           description "SRV6 Locator available static SID count";
+         }
+         leaf available-dynamic-sid-count {
+           type uint32;
+           description "SRV6 Locator available dynamic SID count";
+         }
+       }
+       container local-srv6-sid-range {
+         leaf local-srv6-sid-range.heading {
+           type string;
+         }
+         leaf static-sid-range {
+           type uint32;
+           description "SRV6 Locator static SID range";
+         }
+         leaf dynamic-sid-range {
+           type uint32;
+           description "SRV6 Locator dynamic SID range";
+         }
+         leaf allocated-static-sid-count {
+           type uint32;
+           description "SRV6 Locator allocated static SID count";
+         }
+         leaf allocated-dynamic-sid-count {
+           type uint32;
+           description "SRV6 Locator allocated dynamic SID count";
+         }
+         leaf available-static-sid-count {
+           type uint32;
+           description "SRV6 Locator available static SID count";
+         }
+         leaf available-dynamic-sid-count {
+           type uint32;
+           description "SRV6 Locator available dynamic SID count";
+         }
+       }
+     }
+   }
+   grouping srv6-locator-entry-information-block {
+     container srv6-locator-entry {
+       leaf locator-name {
+         type string;
+         description "SRV6 Locator name";
+       }
+       leaf locator-prefix {
+         type string;
+         description "SRV6 Locator prefix";
+       }
+       leaf locator-length {
+         type uint32;
+         description "SRV6 Locator length";
+       }
+       leaf block-length {
+         type uint32;
+         description "SRV6 Locator block length";
+       }
+       leaf node-length {
+         type uint32;
+         description "SRV6 Locator node length";
+       }
+       leaf function-length {
+         type uint32;
+         description "SRV6 Locator function length";
+       }
+       leaf argument-length {
+         type uint32;
+         description "SRV6 Locator argument length";
+       }
+       leaf static-sid-range {
+         type uint32;
+         description "SRV6 Locator static SID range";
+       }
+       leaf dynamic-sid-range {
+         type uint32;
+         description "SRV6 Locator dynamic SID range";
+       }
+       leaf allocated-static-sid-count {
+         type uint32;
+         description "SRV6 Locator allocated static SID count";
+       }
+       leaf allocated-dynamic-sid-count {
+         type uint32;
+         description "SRV6 Locator allocated dynamic SID count";
+       }
+       leaf available-static-sid-count {
+         type uint32;
+         description "SRV6 Locator available static SID count";
+       }
+       leaf available-dynamic-sid-count {
+         type uint32;
+         description "SRV6 Locator available dynamic SID count";
+       }
+       leaf micro-sid-locator {
+         type string;
+       }
+       leaf micro-sid-locator-flavor {
+         type string;
+       }
+       leaf micro-sid-locator-anycast {
+         type string;
+       }
+       leaf micro-sid-block-name {
+         type string;
+       }
+       leaf sid-value {
+         type string;
+         description "SRV6 Locator SID value";
+       }
+       leaf sid-owner {
+         type string;
+         description "SRV6 Locator SID owner";
+       }
+       leaf sid-type {
+         type string;
+         description "SRV6 Locator SID Type";
+       }
+       leaf sid-behavior {
+         type string;
+         description "SRV6 Locator SID behaviour";
+       }
+     }
+     container srv6-locator-sid-table {
+       container srv6-locator-entry {
+         leaf sid-value {
+           type string;
+           description "SRV6 Locator SID value";
+         }
+         leaf sid-owner {
+           type string;
+           description "SRV6 Locator SID owner";
+         }
+         leaf sid-type {
+           type string;
+           description "SRV6 Locator SID Type";
+         }
+         leaf sid-behavior {
+           type string;
+           description "SRV6 Locator SID behaviour";
+         }
+         leaf locator-name {
+           type string;
+           description "SRV6 Locator name";
+         }
+         leaf locator-prefix {
+           type string;
+           description "SRV6 Locator prefix";
+         }
+         leaf locator-length {
+           type uint32;
+           description "SRV6 Locator length";
+         }
+         leaf block-length {
+           type uint32;
+           description "SRV6 Locator block length";
+         }
+         leaf node-length {
+           type uint32;
+           description "SRV6 Locator node length";
+         }
+         leaf function-length {
+           type uint32;
+           description "SRV6 Locator function length";
+         }
+         leaf argument-length {
+           type uint32;
+           description "SRV6 Locator argument length";
+         }
+         leaf static-sid-range {
+           type uint32;
+           description "SRV6 Locator static SID range";
+         }
+         leaf dynamic-sid-range {
+           type uint32;
+           description "SRV6 Locator dynamic SID range";
+         }
+         leaf allocated-static-sid-count {
+           type uint32;
+           description "SRV6 Locator allocated static SID count";
+         }
+         leaf allocated-dynamic-sid-count {
+           type uint32;
+           description "SRV6 Locator allocated dynamic SID count";
+         }
+         leaf available-static-sid-count {
+           type uint32;
+           description "SRV6 Locator available static SID count";
+         }
+         leaf available-dynamic-sid-count {
+           type uint32;
+           description "SRV6 Locator available dynamic SID count";
+         }
+         leaf micro-sid-locator {
+           type string;
+         }
+         leaf micro-sid-locator-flavor {
+           type string;
+         }
+         leaf micro-sid-locator-anycast {
+           type string;
+         }
+         leaf micro-sid-block-name {
+           type string;
+         }
+       }
+       container srv6-sid-table-entry {
+         leaf sid-value {
+           type string;
+           description "SRV6 Locator SID value";
+         }
+         leaf sid-owner {
+           type string;
+           description "SRV6 Locator SID owner";
+         }
+         leaf sid-type {
+           type string;
+           description "SRV6 Locator SID Type";
+         }
+         leaf sid-behavior {
+           type string;
+           description "SRV6 Locator SID behaviour";
+         }
+       }
+     }
+   }
+ }

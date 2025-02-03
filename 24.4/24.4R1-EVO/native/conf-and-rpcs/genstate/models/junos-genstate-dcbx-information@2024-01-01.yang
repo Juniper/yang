@@ -1,0 +1,57 @@
+ module junos-genstate-dcbx-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dcbx-information";
+   prefix jgdi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dcbx-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping dcbx-information-top {
+     description "Top-level grouping";
+     container dcbx-information {
+       description "Top-level container";
+       leaf-list dcbx-global-status {
+         type string;
+         description "Global administration status";
+       }
+       list dcbx-status-information {
+         leaf dcbx-interface-name {
+           type string;
+         }
+         leaf dcbx-interface-status {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dcbx-information to top-level genstate";
+     uses dcbx-information-top;
+   }
+ }

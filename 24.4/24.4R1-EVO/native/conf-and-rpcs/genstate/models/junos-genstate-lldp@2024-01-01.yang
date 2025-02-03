@@ -1,0 +1,174 @@
+ module junos-genstate-lldp {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/lldp";
+   prefix jgl;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lldp";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping lldp-top {
+     description "Top-level grouping";
+     container lldp {
+       description "Top-level container";
+       leaf lldp-global-status {
+         type string;
+         description "Global administration status";
+       }
+       leaf lldp-advertisement-interval {
+         type uint32;
+         description "Advertisement interval";
+       }
+       leaf lldp-transmit-delay-interval {
+         type uint32;
+         description "Transmit delay interval";
+       }
+       leaf lldp-hold-time-interval {
+         type uint32;
+         description "Hold time interval";
+       }
+       leaf lldp-notification-interval {
+         type uint32;
+         description "LLDP notification interval";
+       }
+       leaf lldp-tx-fast-init {
+         type uint32;
+         description "LLDP Tx Fast Init";
+       }
+       leaf ptopo-configuration-trap-interval {
+         type uint32;
+         description "Physical topology configuration change trap interval";
+       }
+       leaf ptopo-maximum-hold-time {
+         type uint32;
+         description "Physical topology connections maximum hold time interval";
+       }
+       leaf lldp-med-global-status {
+         type string;
+         description "LLDP-MED administrative status";
+       }
+       leaf lldp-med-fast-start-count {
+         type uint32;
+         description "Fast-start count for LLDP-MED";
+       }
+       leaf lldp-port-id-subtype {
+         type string;
+         description "Sub-type to be used for Port ID TLV generation";
+       }
+       leaf lldp-port-description-type {
+         type string;
+         description "The Interfaces Group MIB object to be used for Port Description TLV generation";
+       }
+       leaf lldp-selected-management-interface {
+         type string;
+         description "Selected management-interface name";
+       }
+       leaf lldp-configured-management-interface {
+         type string;
+         description "Configured management-interface name";
+       }
+       leaf lldp-tlv-select {
+         type string;
+         description "LLDP tlv-select";
+       }
+       leaf lldp-tlv-filter {
+         type string;
+         description "LLDP tlv-filter";
+       }
+       leaf lldp-med-tlv-select {
+         type string;
+         description "LLDP-MED tlv-select";
+       }
+       leaf lldp-med-tlv-filter {
+         type string;
+         description "LLDP-MED tlv-filter";
+       }
+       list lldp-interface-information {
+         leaf lldp-interface-name {
+           type string;
+           description "Interface name";
+         }
+         leaf lldp-parent-interface-name {
+           type string;
+           description "Parent interface name";
+         }
+         leaf lldp-interface-status {
+           type string;
+           description "Per interface administrative status for basic LLDP";
+         }
+         leaf lldp-med-interface-status {
+           type string;
+           description "Per interface administrative status for LLDP-MED";
+         }
+         leaf lldp-interface-power-negotiation-status {
+           type string;
+           description "Per interface power negotiation status for LLDP";
+         }
+         leaf lldp-interface-neighbor-count {
+           type uint32;
+           description "Number of neighbors on this interface";
+         }
+         leaf lldp-interface-dest-mac {
+           type string;
+           description "Per interface LLDP PDU dest MAC address";
+         }
+       }
+       leaf lldp-basic-tlv-supported {
+         type string;
+       }
+       leaf lldp-802-tlv-supported {
+         type string;
+       }
+       leaf lldp-med-tlv-supported {
+         type string;
+       }
+       list lldp-exported-vlan-information {
+         leaf lldp-vlan-interface-name {
+           type string;
+           description "VLAN interface name";
+         }
+         leaf lldp-vlan-parent-interface-name {
+           type string;
+           description "Parent interface name of VLAN interface";
+         }
+         leaf lldp-vlan-tag {
+           type uint32;
+           description "VLAN tag";
+         }
+         leaf lldp-vlan-name {
+           type string;
+           description "VLAN name";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lldp to top-level genstate";
+     uses lldp-top;
+   }
+ }

@@ -1,0 +1,401 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-ntp {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/ntp";
+
+   prefix ntp;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for ntp command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-ntp-associations-information {
+     description "Show status of peers";
+     junos:command "show ntp associations";
+     input {
+       leaf no-resolve {
+         description "Don't attempt to print addresses symbolically";
+         type empty;
+       }
+     }
+     output {
+       container ntp-associations {
+         uses ntp-associations-block;
+       }
+     }
+   }
+   rpc get-ntp-status-information {
+     description "Show internal variables returned by peers";
+     junos:command "show ntp status";
+     input {
+       leaf no-resolve {
+         description "Do not attempt to print addresses symbolically";
+         type empty;
+       }
+     }
+     output {
+       container ntp-status {
+         uses ntp-status-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping ntp-associations-block {
+     list association {
+       leaf remote {
+         type jt:ipaddr;
+         description "Address or name of the remote NTP peer";
+       }
+       leaf refid {
+         type jt:ipaddr;
+         description "Reference identifier of the remote peer";
+       }
+       leaf auth {
+         type string;
+         description "Display the authentication method used for the peers";
+       }
+       leaf stratum {
+         type uint32;
+         description "Stratum of the remote peer, number of hops between the client and the reference clock";
+       }
+       leaf association-type {
+         type string;
+         description "Type of peer: b (broadcast), l (local), m (multicast), or u (unicast)";
+       }
+       leaf when {
+         type uint32;
+         description "Duration, in seconds, since the last NTP packet was received from the peer";
+       }
+       leaf poll {
+         type uint32;
+         description "Polling interval, in seconds";
+       }
+       leaf reach {
+         type uint32;
+         description "Reachability register, in octal";
+       }
+       leaf delay {
+         type jt:unsigned-float;
+         description "Current estimated round-trip delay to the peer, in milliseconds";
+       }
+       leaf offset {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Current estimated offset, relative time difference between the peer clock and local clock, in milliseconds";
+       }
+       leaf jitter {
+         type jt:unsigned-float;
+         description "Exponential average of first-order time differences, in milliseconds";
+       }
+       leaf rootdelay {
+         type jt:unsigned-float;
+         description "Unsigned, fixed-point number indicating the total round-trip delay to the reference clock";
+       }
+       leaf rootdisp {
+         type jt:unsigned-float;
+         description "Unsigned, fixed-point number indicating the maximum error relative to the reference clock";
+       }
+     }
+   }
+   grouping ntp-status-block {
+     leaf associd {
+       type uint32;
+       description "Association ID";
+     }
+     leaf status {
+       type string;
+       description "System status word, a code representing the status items listed";
+     }
+     leaf version {
+       type string;
+       description "A detailed description of the version of NTP being used";
+     }
+     leaf processor {
+       type string;
+       description "Indicates the current hardware platform and version of the processor";
+     }
+     leaf system {
+       type string;
+       description "Detailed description of the name and version of the operating system in use";
+     }
+     leaf leap {
+       type uint32;
+       description "Leap Indicator: 2-bit integer warning of an impending leap second to be inserted or deleted";
+     }
+     leaf stratum {
+       type uint32;
+       description "Stratum of the remote peer, number of hops between the client and the reference clock";
+     }
+     leaf precision {
+       type int32;
+       description "The precision of the peer clock, how precisely the frequency and time can be maintained with this particular timekeeping system";
+     }
+     leaf rootdelay {
+       type jt:unsigned-float;
+       description "Unsigned, fixed-point number indicating the total round-trip delay to the reference clock";
+     }
+     leaf rootdisp {
+       type jt:unsigned-float;
+       description "Unsigned, fixed-point number indicating the maximum error relative to the reference clock";
+     }
+     leaf refid {
+       type jt:ipaddr;
+       description "Reference identifier of the remote peer";
+     }
+     leaf reftime {
+       type string;
+       description "The local time, in timestamp format, when the local clock was last updated";
+     }
+     leaf clock {
+       type string;
+       description "The current time on the local router clock";
+     }
+     leaf peer {
+       type uint32;
+       description "An identification number of the peer in use";
+     }
+     leaf tc {
+       type uint32;
+       description "Time constant";
+     }
+     leaf mintc {
+       type uint32;
+       description "Minimum polling time constant";
+     }
+     leaf offset {
+       type decimal64 {
+         fraction-digits 9;
+       }
+       description "Current estimated offset, relative time difference between the peer clock and local clock, in milliseconds";
+     }
+     leaf frequency {
+       type decimal64 {
+         fraction-digits 9;
+       }
+       description "The frequency of the clock";
+     }
+     leaf sys-jitter {
+       type jt:unsigned-float;
+       description "System jitter, the overall variability in timekeeping accuracy within a system";
+     }
+     leaf clk-jitter {
+       type jt:unsigned-float;
+       description "Clock jitter, short-term variability in timekeeping accuracy";
+     }
+     leaf clk-wander {
+       type jt:unsigned-float;
+       description "Clock wander, gradual and continuous frequency variations in a local clock";
+     }
+   }
+ }

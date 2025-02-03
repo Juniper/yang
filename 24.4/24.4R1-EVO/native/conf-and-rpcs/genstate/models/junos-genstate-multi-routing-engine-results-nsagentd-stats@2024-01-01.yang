@@ -1,0 +1,54 @@
+ module junos-genstate-multi-routing-engine-results-nsagentd-stats {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multi-routing-engine-results-nsagentd-stats";
+   prefix jgmrerns;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for multi-routing-engine-results-nsagentd-stats";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping multi-routing-engine-results-nsagentd-stats-top {
+     description "Top-level grouping";
+     container multi-routing-engine-results-nsagentd-stats {
+       description "Top-level container";
+       list multi-routing-engine-item-nsagentd-stats {
+         leaf stats-resp {
+           type string;
+         }
+         leaf re-name-stats {
+           type string;
+           description "Hostname of the Routing Engine";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds multi-routing-engine-results-nsagentd-stats to top-level genstate";
+     uses multi-routing-engine-results-nsagentd-stats-top;
+   }
+ }

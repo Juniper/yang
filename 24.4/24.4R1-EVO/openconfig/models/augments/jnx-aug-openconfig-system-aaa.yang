@@ -1,0 +1,262 @@
+module jnx-aug-openconfig-system-aaa {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/system/aaa";
+
+  prefix "jnx-oc-system-aaa";
+
+  import openconfig-system { prefix oc-sys; }
+  import openconfig-aaa { prefix oc-aaa; }
+  import junos-extension { prefix junos; }
+  import openconfig-aaa-types  { prefix oc-aaa-types; }
+  import openconfig-types      { prefix oc-types; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig system aaa model";
+
+  revision "2021-12-01" {
+    description " Adding Roles defintion";
+  }
+
+  revision "2019-02-26" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  // Authorization action values
+
+  identity AUTH_ACTION {
+    description
+      "Base identity for authorization actions";
+  }
+
+  identity PERMIT {
+    base AUTH_ACTION;
+    description
+      "Permit authorization request";
+  }
+
+  identity DENY {
+    base AUTH_ACTION;
+    description
+      "Deny authorization request";
+  }
+
+  identity REQUEST_TYPE {
+    description
+      "Base identity for authorization request type";
+  }
+
+  identity REQUEST_CONFIG {
+    base REQUEST_TYPE;
+    description
+      "Configuration request type";
+  }
+
+  identity REQUEST_COMMAND {
+    base REQUEST_TYPE;
+    description
+      "Operations command request type";
+  }
+
+  identity REQUEST_RPC {
+    base REQUEST_TYPE;
+    description
+      "RPC request type";
+  }
+
+  // Role's permissions types
+  identity PERMISSIONS_TYPE {
+    description
+        "Set of permitted operation categories";
+  }
+
+  identity ADMIN {
+    base PERMISSIONS_TYPE;
+    description
+        "Can view user accounts";
+  }
+
+  identity ADMIN_CONTROL {
+    base PERMISSIONS_TYPE;
+    description
+        "Can modify user accounts";
+  }
+
+  identity ALL {
+    base PERMISSIONS_TYPE;
+    description
+        "Has All permission";
+  }
+
+  identity MAINTENANCE {
+    base PERMISSIONS_TYPE;
+    description
+        "Can become the super-user";
+  }
+
+  identity VIEW {
+    base PERMISSIONS_TYPE;
+    description
+        "Can view current values and statistics";
+  }
+
+  identity VIEW_CONFIGURATION {
+    base PERMISSIONS_TYPE;
+    description
+        "Can view all configuration";
+  }
+
+grouping aaa-authorization-roles-config {
+    description
+      "Configuration data for local user roles";
+
+    leaf rolename {
+      type union {
+        type string;
+        type identityref {
+          base oc-aaa-types:SYSTEM_DEFINED_ROLES;
+        }
+      }
+      description
+        "Role assigned to the user.  The role may be supplied
+        as a string or a role defined by the SYSTEM_DEFINED_ROLES
+        identity.";
+    }
+    leaf-list permissions {
+       type identityref {
+         base PERMISSIONS_TYPE;
+       }
+    }
+    container policies {
+        list policy {
+            key "action request-type";
+            description
+                "Authorization policy actions for local user roles";
+
+            leaf action {
+                type identityref {
+                    base AUTH_ACTION;
+                }
+                description
+                    "Specifies the authorization action";
+            }
+
+            leaf request-type {
+                type identityref {
+                    base REQUEST_TYPE;
+                }
+                description
+                    "Specifies the authorization request type";
+            }
+            leaf-list request-regex {
+                type oc-types:std-regexp;
+                description
+                    "Specifies the regular expression pattern for matching authorization request";
+            }
+        }
+    }
+  }
+
+  grouping aaa-authorization-roles-state {
+    description
+      "Operational state data for local user roles";
+  }
+
+  grouping aaa-authorization-roles-top {
+    description
+      "Top-level grouping for local user roles";
+
+    container roles {
+      description
+        "Enclosing container list of local user roles";
+
+      list role {
+        key "rolename";
+        description
+          "List of local user roles on the system";
+
+        leaf rolename {
+          type leafref {
+            path "../config/rolename";
+          }
+          description
+            "References the configured rolename for the user role";
+        }
+
+        container config {
+          description
+            "Configuration data for local user roles";
+
+          uses aaa-authorization-roles-config;
+        }
+
+        container state {
+          config false;
+
+          description
+            "Operational state data for local user roles";
+
+          uses aaa-authorization-roles-config;
+          uses aaa-authorization-roles-state;
+        }
+      }
+
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:authentication/oc-sys:admin-user/oc-sys:config" {
+    uses oc-aaa:aaa-admin-config {
+      refine admin-password {
+        junos:secret;
+      }
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:authentication/oc-sys:users/oc-sys:user/oc-sys:config" {
+    uses oc-aaa:aaa-authentication-user-config {
+      refine password {
+        junos:secret;
+      }
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:radius/oc-sys:config" {
+    uses oc-aaa:aaa-radius-server-config {
+      refine secret-key {
+        junos:secret;
+      }
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:radius/oc-sys:state" {
+    uses oc-aaa:aaa-radius-server-config {
+      refine secret-key {
+        junos:secret;
+      }
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:tacacs/oc-sys:config" {
+    uses oc-aaa:aaa-tacacs-server-config {
+      refine secret-key {
+        junos:secret;
+      }
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:tacacs/oc-sys:state" {
+    uses oc-aaa:aaa-tacacs-server-config {
+      refine secret-key {
+        junos:secret;
+      }
+    }
+  }
+
+  augment "/oc-sys:system/oc-sys:aaa/oc-sys:authorization" {
+      uses aaa-authorization-roles-top;
+  }
+
+}

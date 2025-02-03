@@ -1,0 +1,140 @@
+ module junos-genstate-firewall-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/firewall-information";
+   prefix jgfi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for firewall-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping firewall-information-top {
+     description "Top-level grouping";
+     container firewall-information {
+       description "Top-level container";
+       list filter-information {
+         description "Details of a firewall filter";
+         leaf filter-name {
+           type string;
+           description "Name of filter";
+         }
+         list counter {
+           description "Counter information";
+           leaf counter-name {
+             type string;
+             description "Counter name";
+           }
+           leaf byte-count {
+             type uint64;
+             description "Bytes counted";
+           }
+           leaf packet-count {
+             type uint64;
+             description "Packets counted";
+           }
+         }
+         list policer {
+           description "Policer information";
+           leaf policer-name {
+             type string;
+             description "Name of this policer";
+           }
+           leaf byte-count {
+             type uint64;
+             description "Bytes counted";
+           }
+           leaf packet-count {
+             type uint64;
+             description "Packets counted";
+           }
+         }
+         list enchanced-hierarchical-policer {
+           description "Hierarchical Policer information";
+           leaf policer-name {
+             type string;
+             description "Name of this policer";
+           }
+           leaf byte-count-high {
+             type uint64;
+             description "Bytes counted";
+           }
+           leaf packet-count-high {
+             type uint64;
+             description "Packets counted";
+           }
+           leaf byte-count-medium-high {
+             type uint64;
+             description "Bytes counted";
+           }
+           leaf packet-count-medium-high {
+             type uint64;
+             description "Packets counted";
+           }
+           leaf byte-count-medium-low {
+             type uint64;
+             description "Bytes counted";
+           }
+           leaf packet-count-medium-low {
+             type uint64;
+             description "Packets counted";
+           }
+           leaf byte-count-low {
+             type uint64;
+             description "Bytes counted";
+           }
+           leaf packet-count-low {
+             type uint64;
+             description "Packets counted";
+           }
+           leaf packet-count {
+             type uint64;
+             description "Packets counted";
+           }
+           leaf byte-count {
+             type uint64;
+             description "Bytes counted";
+           }
+         }
+         list filter-version {
+           description "Filter version information";
+           leaf filter-name {
+             type string;
+             description "Name of filter";
+           }
+           leaf version {
+             type uint32;
+             description "Filter version";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds firewall-information to top-level genstate";
+     uses firewall-information-top;
+   }
+ }

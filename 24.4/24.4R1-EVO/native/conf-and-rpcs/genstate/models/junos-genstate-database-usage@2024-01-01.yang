@@ -1,0 +1,61 @@
+ module junos-genstate-database-usage {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/database-usage";
+   prefix jgdu;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for database-usage";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping database-usage-top {
+     description "Top-level grouping";
+     container database-usage {
+       description "Show candidate database usage";
+       leaf maximum-size {
+         type string;
+         description "Show maximum size of database";
+       }
+       leaf current-size {
+         type string;
+         description "Show current database size on disk";
+       }
+       leaf actual-usage {
+         type string;
+         description "Show actual database usage";
+       }
+       leaf available-space {
+         type string;
+         description "Show available database space";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds database-usage to top-level genstate";
+     uses database-usage-top;
+   }
+ }

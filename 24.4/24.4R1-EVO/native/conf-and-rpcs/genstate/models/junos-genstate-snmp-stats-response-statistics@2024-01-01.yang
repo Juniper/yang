@@ -1,0 +1,87 @@
+ module junos-genstate-snmp-stats-response-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/snmp-stats-response-statistics";
+   prefix jgssrs;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for snmp-stats-response-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping snmp-stats-response-statistics-top {
+     description "Top-level grouping";
+     container snmp-stats-response-statistics {
+       description "Mib2d's statistics for stats responses from kernel/PFE";
+       list stats-average-response-time-statistics {
+         leaf stats-type {
+           type string;
+           description "Stats type";
+         }
+         leaf stats-type-count {
+           type uint64;
+           description "Stats count for a stats type";
+         }
+         leaf stats-average-response-time {
+           type string;
+           description "Average response time for a stats type";
+         }
+       }
+       list bucket-statistics {
+         leaf bucket-type {
+           type string;
+           description "Bucket type";
+         }
+         leaf bucket-stats-response-count {
+           type uint64;
+           description "Stats count for a bucket";
+         }
+       }
+       list bad-responses {
+         leaf bad-responses-response-time {
+           type string;
+           description "Response time of a stats request";
+         }
+         leaf bad-responses-request-timestamp {
+           type int32;
+           description "Timestamp of stats request";
+         }
+         leaf bad-responses-stats-type {
+           type string;
+           description "Stats type";
+         }
+         leaf bad-responses-key {
+           type string;
+           description "Key for a stats request";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds snmp-stats-response-statistics to top-level genstate";
+     uses snmp-stats-response-statistics-top;
+   }
+ }

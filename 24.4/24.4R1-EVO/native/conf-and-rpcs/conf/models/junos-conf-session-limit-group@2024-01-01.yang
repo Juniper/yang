@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-conf-session-limit-group {
+   namespace "http://yang.juniper.net/junos/conf/session-limit-group";
+
+   prefix jc-session-limit-group;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   import junos-conf-root {
+     prefix jc;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos session-limit-group configuration module";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   augment /jc:configuration {
+     uses session-limit-group-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses session-limit-group-group;
+   }
+   grouping session-limit-group-group {
+     list session-limit-group {
+       key name;
+       ordered-by user;
+       description "Session-limit-group configuration";
+       status deprecated;
+       leaf name {
+         description "Name of the group";
+         type string {
+           length "1 .. 63";
+         }
+       }
+       leaf maximum-sessions {
+         description "Maximum number of sessions per tunnel-group";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+   }
+ }

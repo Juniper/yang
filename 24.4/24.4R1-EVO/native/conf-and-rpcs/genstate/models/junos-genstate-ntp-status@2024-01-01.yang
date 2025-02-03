@@ -1,0 +1,133 @@
+ module junos-genstate-ntp-status {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ntp-status";
+   prefix jgns;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for ntp-status";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping ntp-status-top {
+     description "Top-level grouping";
+     container ntp-status {
+       description "Top-level container";
+       leaf associd {
+         type uint32;
+         description "Association ID";
+       }
+       leaf status {
+         type string;
+         description "System status word, a code representing the status items listed";
+       }
+       leaf version {
+         type string;
+         description "A detailed description of the version of NTP being used";
+       }
+       leaf processor {
+         type string;
+         description "Indicates the current hardware platform and version of the processor";
+       }
+       leaf system {
+         type string;
+         description "Detailed description of the name and version of the operating system in use";
+       }
+       leaf leap {
+         type uint32;
+         description "Leap Indicator: 2-bit integer warning of an impending leap second to be inserted or deleted";
+       }
+       leaf stratum {
+         type uint32;
+         description "Stratum of the remote peer, number of hops between the client and the reference clock";
+       }
+       leaf precision {
+         type int32;
+         description "The precision of the peer clock, how precisely the frequency and time can be maintained with this particular timekeeping system";
+       }
+       leaf rootdelay {
+         type jt:unsigned-float;
+         description "Unsigned, fixed-point number indicating the total round-trip delay to the reference clock";
+       }
+       leaf rootdisp {
+         type jt:unsigned-float;
+         description "Unsigned, fixed-point number indicating the maximum error relative to the reference clock";
+       }
+       leaf refid {
+         type jt:ipaddr;
+         description "Reference identifier of the remote peer";
+       }
+       leaf reftime {
+         type string;
+         description "The local time, in timestamp format, when the local clock was last updated";
+       }
+       leaf clock {
+         type string;
+         description "The current time on the local router clock";
+       }
+       leaf peer {
+         type uint32;
+         description "An identification number of the peer in use";
+       }
+       leaf tc {
+         type uint32;
+         description "Time constant";
+       }
+       leaf mintc {
+         type uint32;
+         description "Minimum polling time constant";
+       }
+       leaf offset {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Current estimated offset, relative time difference between the peer clock and local clock, in milliseconds";
+       }
+       leaf frequency {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "The frequency of the clock";
+       }
+       leaf sys-jitter {
+         type jt:unsigned-float;
+         description "System jitter, the overall variability in timekeeping accuracy within a system";
+       }
+       leaf clk-jitter {
+         type jt:unsigned-float;
+         description "Clock jitter, short-term variability in timekeeping accuracy";
+       }
+       leaf clk-wander {
+         type jt:unsigned-float;
+         description "Clock wander, gradual and continuous frequency variations in a local clock";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds ntp-status to top-level genstate";
+     uses ntp-status-top;
+   }
+ }

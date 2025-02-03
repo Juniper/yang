@@ -1,0 +1,1157 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-spanning-tree {
+   namespace "http://yang.juniper.net/junos/rpc/spanning-tree";
+
+   prefix spanning-tree;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for spanning-tree command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   rpc get-stp-bridge-information {
+     description "Show STP bridge parameters";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       choice msti-vlan {
+         case msti {
+           leaf msti {
+             description "MSTP instance ID";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type int32 {
+                 range "0 .. 4094";
+               }
+             }
+           }
+         }
+         case vlan-id {
+           leaf vlan-id {
+             description "VLAN ID";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type int32 {
+                 range "1 .. 4094";
+               }
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+         }
+       }
+     }
+     output {
+       container stp-bridge {
+         uses stp-bridge-block;
+       }
+     }
+   }
+   rpc get-stp-interface-information {
+     description "Show STP interface parameters";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type union {
+           type jt:interface-device;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       choice msti-vlan {
+         case msti {
+           leaf msti {
+             description "MSTP instance ID";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type int32 {
+                 range "0 .. 4094";
+               }
+             }
+           }
+         }
+         case vlan-id {
+           leaf vlan-id {
+             description "VLAN ID";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type int32 {
+                 range "1 .. 4094";
+               }
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+         }
+       }
+     }
+     output {
+       container stp-interface-information {
+         uses stp-interface-information-block;
+       }
+     }
+   }
+   rpc get-mstp-configuration-information {
+     description "Show MSTP configuration";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+         }
+       }
+     }
+     output {
+       container mstp-configuration {
+         uses mstp-configuration-block;
+       }
+     }
+   }
+   rpc get-stp-interface-statistics {
+     description "Show STP interface statistics";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type union {
+           type jt:interface-device;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+         }
+       }
+     }
+     output {
+       container stp-interface-statistics {
+         uses stp-interface-statistics-block;
+       }
+     }
+   }
+   rpc get-stp-routing-instance-statistics {
+     description "Show STP routing instance statistics";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system";
+             type string {
+             }
+           }
+         }
+       }
+       leaf routing-instance-name {
+         description "Name of routing instance";
+         type string {
+         }
+       }
+     }
+     output {
+       container stp-context-statistics-information {
+         uses stp-context-statistics-information-block;
+       }
+     }
+   }
+   rpc get-stp-bridge-statistics {
+     description "Statistics related to Bridge";
+     output {
+       container stp-stats-information {
+         uses stp-stats-information-block;
+       }
+     }
+   }
+   rpc get-stp-message-queues-statistics {
+     description "Message queues related statistics";
+     output {
+       container stp-message-queue {
+         uses stp-message-queue-block;
+       }
+     }
+   }
+   rpc get-stp-buffer-see-all {
+     description "All the buffers";
+     input {
+       choice stp-instance-vlan {
+         case stp-instance {
+           leaf stp-instance {
+             description "STP instance ID";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type int32 {
+                 range "0 .. 64";
+               }
+             }
+           }
+         }
+         case vlan-id {
+           leaf vlan-id {
+             description "VLAN ID";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type int32 {
+                 range "1 .. 4094";
+               }
+             }
+           }
+         }
+       }
+       leaf routing-instance {
+         description "Name of routing instance";
+         type string {
+         }
+       }
+     }
+     output {
+       container stp-buffer-information {
+         uses stp-buffer-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping stp-bridge-block {
+     leaf routing-instance-name {
+       type string;
+       description "Routing instance name";
+     }
+     leaf context-id {
+       type int32;
+       description "Context identifier";
+     }
+     leaf protocol {
+       type string;
+       description "Enabled protocol";
+     }
+     leaf bpdu-destination-mac-address {
+       type string;
+       description "Destination MAC address in the spanning tree BPDUs";
+     }
+     container cist-bridge-parameters {
+       description "STP bridge parameters for Common and Internal Spanning Tree";
+       leaf cist-id {
+         type int32;
+         description "CIST identifier";
+       }
+       leaf root-port {
+         type string;
+         description "Root port";
+       }
+       leaf root-cost {
+         type uint32;
+         description "Root cost";
+       }
+       leaf internal-root-cost {
+         type uint32;
+         description "CIST internal root cost";
+       }
+       leaf hello-time-learned {
+         type int32;
+         description "Hello time";
+       }
+       leaf max-age-learned {
+         type int32;
+         description "Maximum age for received BPDUs";
+       }
+       leaf forward-delay-learned {
+         type int32;
+         description "Forward delay";
+       }
+       leaf msg-age {
+         type int32;
+         description "Age of the received BPDU";
+       }
+       leaf hop-count {
+         type int32;
+         description "Hop count received from the root bridge";
+       }
+       leaf time-since-last-tc {
+         type int32;
+         description "Time since last topology change";
+       }
+       leaf topology-change-count {
+         type int32;
+         description "Number of topology changes";
+       }
+       leaf extended-system-id {
+         type int32;
+         description "Extended system identifier";
+       }
+       leaf internal-instance-id {
+         type int32;
+         description "Internal instance identifier";
+       }
+       leaf hello-time-configured {
+         type int32;
+         description "Hello time configured on this bridge";
+       }
+       leaf max-age-configured {
+         type int32;
+         description "Maximum age configured on this bridge";
+       }
+       leaf forward-delay-configured {
+         type int32;
+         description "Forward delay configured on this bridge";
+       }
+       leaf max-hop-count-configured {
+         type int32;
+         description "Maximum hop count configured on this bridge";
+       }
+       leaf path-cost-method {
+         type string;
+         description "Type of path cost method currently in use";
+       }
+       container root-bridge {
+         description "Root bridge identifier";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+       container regional-root-bridge {
+         description "CIST regional root bridge identifier";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+       container this-bridge {
+         description "ID of bridge";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+     }
+     list msti-bridge-parameters {
+       description "STP bridge parameters for Multiple Spanning Tree instances";
+       leaf msti-id {
+         type int32;
+         description "MSTI ID";
+       }
+       leaf root-port {
+         type string;
+         description "Root port";
+       }
+       leaf root-cost {
+         type uint32;
+         description "Root cost";
+       }
+       leaf hello-time-learned {
+         type int32;
+         description "Hello time";
+       }
+       leaf max-age-learned {
+         type int32;
+         description "Maximum age for received BPDUs";
+       }
+       leaf forward-delay-learned {
+         type int32;
+         description "Forward delay";
+       }
+       leaf max-hop-count-configured {
+         type int32;
+         description "Maximum hop count configured on this bridge";
+       }
+       leaf hop-count {
+         type int32;
+         description "Hop count received from the root bridge";
+       }
+       leaf time-since-last-tc {
+         type int32;
+         description "Time since last topology change";
+       }
+       leaf topology-change-count {
+         type int32;
+         description "Number of topology changes";
+       }
+       leaf extended-system-id {
+         type int32;
+         description "Extended system identifier";
+       }
+       leaf internal-instance-id {
+         type int32;
+         description "Internal instance identifier";
+       }
+       leaf hello-time-configured {
+         type int32;
+         description "Hello time configured on this bridge";
+       }
+       leaf max-age-configured {
+         type int32;
+         description "Maximum age configured on this bridge";
+       }
+       leaf forward-delay-configured {
+         type int32;
+         description "Forward delay configured on this bridge";
+       }
+       leaf path-cost-method {
+         type string;
+         description "Type of path cost method currently in use";
+       }
+       container msti-regional-root-bridge {
+         description "MSTI regional root identifier";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+       container this-bridge {
+         description "ID of bridge";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+     }
+     list vst-bridge-parameters {
+       description "STP bridge parameters for VLAN Spanning Tree";
+       leaf vlan-id {
+         type int32;
+         description "VLAN identifier";
+       }
+       leaf root-port {
+         type string;
+         description "Root port";
+       }
+       leaf root-cost {
+         type uint32;
+         description "Root cost";
+       }
+       leaf hello-time-learned {
+         type int32;
+         description "Hello time";
+       }
+       leaf max-age-learned {
+         type int32;
+         description "Maximum age for received BPDUs";
+       }
+       leaf forward-delay-learned {
+         type int32;
+         description "Forward delay";
+       }
+       leaf msg-age {
+         type int32;
+         description "Age of the received BPDU";
+       }
+       leaf time-since-last-tc {
+         type int32;
+         description "Time since last topology change";
+       }
+       leaf topology-change-count {
+         type int32;
+         description "Number of topology changes";
+       }
+       leaf extended-system-id {
+         type int32;
+         description "Extended system identifier";
+       }
+       leaf hello-time-configured {
+         type int32;
+         description "Hello time configured on this bridge";
+       }
+       leaf max-age-configured {
+         type int32;
+         description "Maximum age configured on this bridge";
+       }
+       leaf forward-delay-configured {
+         type int32;
+         description "Forward delay configured on this bridge";
+       }
+       leaf path-cost-method {
+         type string;
+         description "Type of path cost method currently in use";
+       }
+       container root-bridge {
+         description "Root bridge identifier";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+       container this-bridge {
+         description "ID of bridge";
+         leaf bridge-priority {
+           type int32;
+           description "Bridge priority";
+         }
+         leaf bridge-mac {
+           type string;
+           description "Media access control address of bridge";
+         }
+       }
+     }
+   }
+   grouping stp-interface-information-block {
+     list stp-instance {
+       leaf instance-id {
+         type int32;
+         description "STP instance ID";
+       }
+       leaf vlan-id {
+         type int32;
+         description "VLAN identifier";
+       }
+       list stp-interfaces {
+         description "Information about one or more Spanning Tree Protocol interfaces";
+         container stp-interface-entry {
+           leaf interface-name {
+             type string;
+             description "Name of interface";
+           }
+           leaf port-number {
+             type int32;
+             description "Port number";
+           }
+           leaf designated-port-number {
+             type int32;
+             description "Designated port number";
+           }
+           leaf designated-bridge-mac {
+             type string;
+             description "Media access control address of bridge";
+           }
+           leaf port-cost {
+             type uint32;
+             description "Port cost";
+           }
+           leaf port-state {
+             type string;
+             description "Port state";
+           }
+           leaf port-role {
+             type string;
+             description "Role of port";
+           }
+           leaf port-priority {
+             type int32;
+             description "Port priority";
+           }
+           leaf designated-port-priority {
+             type int32;
+             description "Designated port priority";
+           }
+           leaf designated-bridge-priority {
+             type int32;
+             description "Bridge priority";
+           }
+           leaf link-type {
+             type string;
+             description "Type of link";
+           }
+           leaf port-migrated-protocol {
+             type string;
+             description "Migrated protocol for port";
+           }
+           leaf boundary-port {
+             type string;
+             description "STP boundary port";
+           }
+         }
+       }
+     }
+   }
+   grouping mstp-configuration-block {
+     leaf context-id {
+       type int32;
+       description "Context identifier";
+     }
+     leaf mstp-name {
+       type string;
+       description "MSTP region name";
+     }
+     leaf mstp-revision {
+       type int32;
+       description "MSTP revision";
+     }
+     leaf mstp-configuration-digest {
+       type string;
+       description "MSTP configuration digest";
+     }
+     container vlan-map {
+       list vlan-map-entry {
+         leaf msti-id {
+           type int32;
+           description "MSTI ID";
+         }
+         leaf vlan-string {
+           type string;
+           description "Member VLANs in MSTI";
+         }
+       }
+     }
+   }
+   grouping stp-interface-statistics-block {
+     list stp-interface-statistics-entry {
+       description "Spanning Tree Protocol interface statistics";
+       leaf interface-name {
+         type string;
+         description "Name of interface";
+       }
+       leaf total-bpdus-sent {
+         type int32;
+         description "Total number of BPDUs sent out";
+       }
+       leaf total-bpdus-received {
+         type int32;
+         description "Total number of BPDUs received";
+       }
+       leaf next-bpdu-time {
+         type int32;
+         description "Next bpdu send time in the steady state in seconds";
+       }
+       leaf total-tcn-bpdus-sent-received {
+         type string;
+         description "Total number of TCN BPDUs sent/received";
+       }
+       leaf total-proposal-bpdus-sent-received {
+         type string;
+         description "Total number of Proposal BPDUs sent/received";
+       }
+       leaf total-agreement-bpdus-sent-received {
+         type string;
+         description "Total number of Agreement BPDUs sent/received";
+       }
+     }
+     container vstp-interface-statistics {
+       description "Statistics information about one or more VLAN STP interfaces";
+       leaf vlan-id {
+         type int32;
+         description "VLAN identifier";
+       }
+       list stp-interface-statistics-entry {
+         description "Spanning Tree Protocol interface statistics";
+         leaf interface-name {
+           type string;
+           description "Name of interface";
+         }
+         leaf total-bpdus-sent {
+           type int32;
+           description "Total number of BPDUs sent out";
+         }
+         leaf total-bpdus-received {
+           type int32;
+           description "Total number of BPDUs received";
+         }
+         leaf next-bpdu-time {
+           type int32;
+           description "Next bpdu send time in the steady state in seconds";
+         }
+         leaf total-tcn-bpdus-sent-received {
+           type string;
+           description "Total number of TCN BPDUs sent/received";
+         }
+         leaf total-proposal-bpdus-sent-received {
+           type string;
+           description "Total number of Proposal BPDUs sent/received";
+         }
+         leaf total-agreement-bpdus-sent-received {
+           type string;
+           description "Total number of Agreement BPDUs sent/received";
+         }
+       }
+     }
+   }
+   grouping stp-context-statistics-information-block {
+     leaf message-type {
+       type string;
+       description "Spanning Tree message type";
+     }
+     leaf total-bpdus-sent {
+       type int32;
+       description "Total number of BPDUs sent out";
+     }
+     leaf total-bpdus-received {
+       type int32;
+       description "Total number of BPDUs received";
+     }
+     leaf bpdus-sent-last-ivl {
+       type int32;
+       description "Total number of BPDUs sent out for this routing instance in last interval";
+     }
+     leaf bpdus-received-last-ivl {
+       type int32;
+       description "Total number of BPDUs received on this routing instance in last interval";
+     }
+     list vstp-statistics {
+       description "VLAN Spanning Tree Protocol statistics";
+       leaf vlan-id {
+         type int32;
+         description "VLAN identifier";
+       }
+       leaf message-type {
+         type string;
+         description "Spanning Tree message type";
+       }
+       leaf total-bpdus-sent {
+         type int32;
+         description "Total number of BPDUs sent out";
+       }
+       leaf total-bpdus-received {
+         type int32;
+         description "Total number of BPDUs received";
+       }
+       leaf bpdus-sent-last-ivl {
+         type int32;
+         description "Total number of BPDUs sent out for this routing instance in last interval";
+       }
+       leaf bpdus-received-last-ivl {
+         type int32;
+         description "Total number of BPDUs received on this routing instance in last interval";
+       }
+     }
+   }
+   grouping stp-stats-information-block {
+     leaf stp-stats-context {
+       type string;
+       description "Routing Instance Name";
+     }
+     list stp-instance-stats-information {
+       leaf stp-stats-instance-id {
+         type int32;
+         description "STP Instance ID";
+       }
+       leaf number-root-bridge-changes {
+         type int32;
+         description "Number of times Root Bridge has changed";
+       }
+       leaf time-root-bridge-changes {
+         type string;
+         description "Time at which last Root Brdige changed";
+       }
+       leaf number-root-port-changes {
+         type int32;
+         description "Number of times Root Port has changed";
+       }
+       leaf time-root-port-changes {
+         type string;
+         description "Time at which last Root Port changed";
+       }
+       leaf recent-tc-received-port {
+         type string;
+         description "Port on which, Tc is received last time";
+       }
+       leaf time-last-tc-received {
+         type string;
+         description "Time at which last Tc is received";
+       }
+     }
+   }
+   grouping stp-message-queue-block {
+     list stp-queue-entry {
+       leaf queue-name {
+         type string;
+         description "Queue Name";
+       }
+       leaf queue-current-size {
+         type int32;
+         description "Queue current size";
+       }
+       leaf queue-high-watermark {
+         type int32;
+         description "Queue High Watermark";
+       }
+       leaf max-avg-wait-time {
+         type string;
+         description "Wait time";
+       }
+     }
+   }
+   grouping stp-buffer-information-block {
+     list stp-buffer-entry {
+       leaf ppmq-threshold-reached-time {
+         type string;
+         description "Time of PPM XmitQ reaching 70% of Q-Size";
+       }
+     }
+     list stp-instance-entry {
+       leaf stp-routing-instance {
+         type string;
+         description "Routing-instance name";
+       }
+       leaf stp-instance-id {
+         type string;
+         description "STP Instance ID";
+       }
+       leaf vstp-vlan-id {
+         type string;
+         description "VSTP vlan id";
+       }
+       leaf stp-root-bridge-changed {
+         type string;
+         description "Time at which Root Bridge got changed";
+       }
+       leaf stp-root-port-changed {
+         type string;
+         description "Time at which Root Port got changed";
+       }
+       leaf stp-topoch-recd-port {
+         type string;
+         description "Time at which Topo-Ch was received";
+       }
+       leaf stp-topoch-local-port {
+         type string;
+         description "Time at which Topo-Ch was local generated";
+       }
+     }
+     list stp-instance-port-entry {
+       leaf stp-instance-port-id {
+         type string;
+         description "STP Instance ID";
+       }
+       leaf vstp-vlan-id {
+         type string;
+         description "VSTP vlan id";
+       }
+       leaf stp-fwd-port-changed {
+         type string;
+         description "Time at which this port entry is made";
+       }
+       leaf stp-port-state {
+         type string;
+         description "This port state";
+       }
+       leaf stp-port-role {
+         type string;
+         description "This port role";
+       }
+     }
+   }
+ }

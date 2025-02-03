@@ -1,0 +1,342 @@
+ module junos-genstate-subscription-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/subscription-statistics";
+   prefix jgss;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for subscription-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping subscription-statistics-top {
+     description "Top-level grouping";
+     container subscription-statistics {
+       description "Statistics of sensors";
+       list subscription-details {
+         description "Show subscription statistics information";
+         leaf subscription-id {
+           type uint64;
+           description "Telemetry subscription ID";
+         }
+         leaf subscription-type {
+           type string;
+           description "Type of the subscription";
+         }
+         leaf client-ip-port {
+           type string;
+           description "IP-port of the client";
+         }
+         leaf gnmi-mode {
+           type string;
+           description "GNMI mode for the subscription";
+         }
+         leaf subscription-time {
+           type string;
+           description "Time at which the subscription request was received";
+         }
+         list sensor-statistics-brief {
+           leaf sensor-path {
+             type string;
+             description "Sensor path";
+           }
+           leaf rep-interval {
+             type int32;
+             description "Reporting interval (in seconds)";
+           }
+           leaf component-name {
+             type string;
+             description "Component(s) servicing the sensor";
+           }
+           leaf gnmi-sub-mode {
+             type string;
+             description "GNMI SubMode for the subscription";
+           }
+           leaf component-id {
+             type int32;
+             description "Component ID for PFE sensors";
+           }
+           leaf sub-component-id {
+             type int32;
+             description "Sub Component ID for PFE sensors";
+           }
+           list child-sensor-statistics-brief {
+             leaf child-sensor-path {
+               type string;
+               description "Child sensor path";
+             }
+             leaf child-component-name {
+               type string;
+               description "Child Component servicing the sensor";
+             }
+             leaf child-component-id {
+               type int32;
+               description "Child component ID for PFE sensors";
+             }
+             leaf child-sub-component-id {
+               type int32;
+               description "Child sub component ID for PFE sensors";
+             }
+             leaf child-gnmi-sub-mode {
+               type string;
+               description "Child GNMI SubMode for the subscription";
+             }
+             leaf child-rep-interval {
+               type int32;
+               description "Child Reporting interval (in seconds)";
+             }
+           }
+           leaf average-latency {
+             type uint32;
+             description "Average iLatency in milli seconds";
+           }
+           leaf circular-buffer-used {
+             type uint32;
+             description "Average circular buffer use in percentage";
+           }
+           leaf bytes-sent {
+             type uint64;
+             description "Number of bytes sent";
+           }
+           leaf packets-sent {
+             type uint64;
+             description "Number of packets sent";
+           }
+           leaf packet-drops {
+             type uint64;
+             description "Number of packets dropped";
+           }
+           leaf initial-sync-bytes-sent {
+             type uint64;
+             description "Number of bytes sent for initial sync";
+           }
+           leaf initial-sync-packets-sent {
+             type uint64;
+             description "Number of packets sent for initial sync";
+           }
+           leaf initial-sync-packet-drops {
+             type uint64;
+             description "Number of packets dropped for initial sync";
+           }
+           leaf initial-sync-average-latency {
+             type uint32;
+             description "Average initial sync iLatency in milli seconds";
+           }
+           leaf initial-sync-circular-buffer-used {
+             type uint32;
+             description "Average initial sync circular buffer use in percentage";
+           }
+           list child-sensor-statistics-detail {
+             leaf child-sensor-path {
+               type string;
+               description "Child sensor path";
+             }
+             leaf child-component-name {
+               type string;
+               description "Child Component servicing the sensor";
+             }
+             leaf child-component-id {
+               type int32;
+               description "Child component ID for PFE sensors";
+             }
+             leaf child-sub-component-id {
+               type int32;
+               description "Child sub component ID for PFE sensors";
+             }
+             leaf child-gnmi-sub-mode {
+               type string;
+               description "Child GNMI SubMode for the subscription";
+             }
+             leaf child-average-latency {
+               type uint32;
+               description "Child Average iLatency in milli seconds";
+             }
+             leaf child-bytes-sent {
+               type uint64;
+               description "Number of bytes sent - child sensor";
+             }
+             leaf child-packets-sent {
+               type uint64;
+               description "Number of packets sent - child sensor";
+             }
+             leaf child-packet-drops {
+               type uint64;
+               description "Number of packets dropped - child sensor";
+             }
+             leaf child-initial-sync-bytes-sent {
+               type uint64;
+               description "Number of bytes sent for initial sync - child sensor";
+             }
+             leaf child-initial-sync-packets-sent {
+               type uint64;
+               description "Number of packets sent for initial sync - child sensor";
+             }
+             leaf child-initial-sync-packet-drops {
+               type uint64;
+               description "Number of packets dropped for initial sync - child sensor";
+             }
+             leaf child-initial-sync-average-latency {
+               type uint32;
+               description "Child Average initial sync iLatency in milli seconds";
+             }
+             leaf child-rep-interval {
+               type int32;
+               description "Child Reporting interval (in seconds)";
+             }
+           }
+         }
+         list sensor-statistics-detail {
+           leaf sensor-path {
+             type string;
+             description "Sensor path";
+           }
+           leaf rep-interval {
+             type int32;
+             description "Reporting interval (in seconds)";
+           }
+           leaf component-name {
+             type string;
+             description "Component(s) servicing the sensor";
+           }
+           leaf gnmi-sub-mode {
+             type string;
+             description "GNMI SubMode for the subscription";
+           }
+           leaf component-id {
+             type int32;
+             description "Component ID for PFE sensors";
+           }
+           leaf sub-component-id {
+             type int32;
+             description "Sub Component ID for PFE sensors";
+           }
+           list child-sensor-statistics-detail {
+             leaf child-sensor-path {
+               type string;
+               description "Child sensor path";
+             }
+             leaf child-rep-interval {
+               type int32;
+               description "Child Reporting interval (in seconds)";
+             }
+             leaf child-component-name {
+               type string;
+               description "Child Component servicing the sensor";
+             }
+             leaf child-gnmi-sub-mode {
+               type string;
+               description "Child GNMI SubMode for the subscription";
+             }
+             leaf child-component-id {
+               type int32;
+               description "Child component ID for PFE sensors";
+             }
+             leaf child-sub-component-id {
+               type int32;
+               description "Child sub component ID for PFE sensors";
+             }
+             leaf child-average-latency {
+               type uint32;
+               description "Child Average iLatency in milli seconds";
+             }
+             leaf child-bytes-sent {
+               type uint64;
+               description "Number of bytes sent - child sensor";
+             }
+             leaf child-packets-sent {
+               type uint64;
+               description "Number of packets sent - child sensor";
+             }
+             leaf child-packet-drops {
+               type uint64;
+               description "Number of packets dropped - child sensor";
+             }
+             leaf child-initial-sync-bytes-sent {
+               type uint64;
+               description "Number of bytes sent for initial sync - child sensor";
+             }
+             leaf child-initial-sync-packets-sent {
+               type uint64;
+               description "Number of packets sent for initial sync - child sensor";
+             }
+             leaf child-initial-sync-packet-drops {
+               type uint64;
+               description "Number of packets dropped for initial sync - child sensor";
+             }
+             leaf child-initial-sync-average-latency {
+               type uint32;
+               description "Child Average initial sync iLatency in milli seconds";
+             }
+           }
+           leaf average-latency {
+             type uint32;
+             description "Average iLatency in milli seconds";
+           }
+           leaf circular-buffer-used {
+             type uint32;
+             description "Average circular buffer use in percentage";
+           }
+           leaf bytes-sent {
+             type uint64;
+             description "Number of bytes sent";
+           }
+           leaf packets-sent {
+             type uint64;
+             description "Number of packets sent";
+           }
+           leaf packet-drops {
+             type uint64;
+             description "Number of packets dropped";
+           }
+           leaf initial-sync-bytes-sent {
+             type uint64;
+             description "Number of bytes sent for initial sync";
+           }
+           leaf initial-sync-packets-sent {
+             type uint64;
+             description "Number of packets sent for initial sync";
+           }
+           leaf initial-sync-packet-drops {
+             type uint64;
+             description "Number of packets dropped for initial sync";
+           }
+           leaf initial-sync-average-latency {
+             type uint32;
+             description "Average initial sync iLatency in milli seconds";
+           }
+           leaf initial-sync-circular-buffer-used {
+             type uint32;
+             description "Average initial sync circular buffer use in percentage";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds subscription-statistics to top-level genstate";
+     uses subscription-statistics-top;
+   }
+ }

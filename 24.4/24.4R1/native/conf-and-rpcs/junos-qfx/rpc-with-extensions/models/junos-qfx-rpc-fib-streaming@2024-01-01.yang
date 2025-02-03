@@ -1,0 +1,727 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-fib-streaming {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/fib-streaming";
+
+   prefix fib-streaming;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for fib-streaming command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-fib-streaming-ipv4-unicast-routes-info {
+     description "Show ipv4 route entries";
+     junos:command "show fib-streaming routes ipv4-unicast";
+     input {
+       leaf prefix {
+         description "Prefix of the ipv4 route";
+         type jt:ipprefix-optional;
+       }
+       leaf table {
+         description "Name of the routing table";
+         type string {
+           length "1 .. 128";
+         }
+       }
+       leaf count {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "all" {
+             description "Show all ipv4 prefixes";
+           }
+         }
+       }
+     }
+     output {
+       container fib-telemetry-ip-routes {
+         uses fib-telemetry-ip-routes-block;
+       }
+     }
+   }
+   rpc get-fib-streaming-ipv6-unicast-routes-info {
+     description "Show ipv6 route entries";
+     junos:command "show fib-streaming routes ipv6-unicast";
+     input {
+       leaf prefix {
+         description "Prefix of the ipv6 route";
+         type jt:ipprefix-optional;
+       }
+       leaf table {
+         description "Name of the routing table";
+         type string {
+           length "1 .. 128";
+         }
+       }
+       leaf count {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "all" {
+             description "Show all ipv6 prefixes";
+           }
+         }
+       }
+     }
+     output {
+       container fib-telemetry-ip-routes {
+         uses fib-telemetry-ip-routes-block;
+       }
+     }
+   }
+   rpc get-fib-streaming-mpls-routes-info {
+     description "Show mpls route entries";
+     junos:command "show fib-streaming routes mpls";
+     input {
+       leaf label {
+         description "Index of the next-hop";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf table {
+         description "Name of the routing table";
+         type string {
+           length "1 .. 128";
+         }
+       }
+       leaf count {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "all" {
+             description "Show all mpls prefixes";
+           }
+         }
+       }
+     }
+     output {
+       container fib-telemetry-mpls-routes {
+         uses fib-telemetry-mpls-routes-block;
+       }
+     }
+   }
+   rpc get-fib-streaming-next-hop-groups-info {
+     description "Show next-hop-group entries";
+     junos:command "show fib-streaming next-hop-groups";
+     input {
+       leaf index {
+         description "Index of the next-hop";
+         type union {
+           type uint32;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf count {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "all" {
+             description "Show all next-hop groups";
+           }
+         }
+       }
+     }
+     output {
+       container fib-telemetry-tgnhs-info {
+         uses fib-telemetry-tgnhs-info-block;
+       }
+     }
+   }
+   rpc get-fib-streaming-next-hops-info {
+     description "Show next-hop entries";
+     junos:command "show fib-streaming next-hops";
+     input {
+       leaf index {
+         description "Index of the next-hop";
+         type union {
+           type uint64;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       leaf count {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "all" {
+             description "Show all next-hops";
+           }
+         }
+       }
+     }
+     output {
+       container fib-telemetry-tfnhs-info {
+         uses fib-telemetry-tfnhs-info-block;
+       }
+     }
+   }
+   rpc get-fib-streaming-route-tables {
+     description "Show route tables information";
+     junos:command "show fib-streaming route-tables";
+     input {
+       leaf count {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "all" {
+             description "Dump all tables";
+           }
+         }
+       }
+       leaf summary {
+         junos:cli-feature "nokeyword";
+         type enumeration {
+           enum "summary" {
+             description "Show route-tables with summary info";
+           }
+         }
+       }
+     }
+   }
+   rpc get-fib-telemetry-state {
+     description "Show FIBTD states";
+     junos:command "show fib-streaming state";
+     output {
+       container fib-telemetry-state {
+         uses fib-telemetry-state-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping fib-telemetry-ip-routes-block {
+     list ip-routes {
+       leaf ip-str {
+         type string;
+         description "MPLS labels";
+       }
+       leaf tgnh-id {
+         type uint64;
+         description "TGNHS-Index";
+       }
+       leaf vrf-name {
+         type string;
+         description "Name of routing instance";
+       }
+       leaf a-fibnhs {
+         type string;
+         description "Affected FIBNHS from which TFNH is derived";
+       }
+       leaf rt-type {
+         type uint64;
+         description "Type of the Route";
+       }
+       leaf flags {
+         type uint64;
+         description "TGNH's Flags";
+       }
+       leaf rt-tgnh-id {
+         type uint64;
+         description "TGNHS-Index associated with route";
+       }
+       leaf origin-protocol {
+         type string;
+         description "Origin protocol string";
+       }
+       leaf origin-network-instance {
+         type string;
+         description "Origin Network Instance string";
+       }
+       leaf decapsulate-header {
+         type uint32;
+         description "Decapsulate header";
+       }
+     }
+   }
+   grouping fib-telemetry-mpls-routes-block {
+     list mpls-routes {
+       leaf mpls-label {
+         type string;
+         description "MPLS-Route";
+       }
+       leaf tgnh-id {
+         type uint64;
+         description "TGNHS-Index";
+       }
+       leaf vrf-name {
+         type string;
+         description "Name of routing instance";
+       }
+       leaf a-fibnhs {
+         type string;
+         description "Affected FIBNHS from which TFNH is derived";
+       }
+       leaf flags {
+         type uint64;
+         description "TGNH's Flags";
+       }
+       leaf rt-tgnh-id {
+         type uint64;
+         description "TGNHS-Index associated with route";
+       }
+     }
+   }
+   grouping fib-telemetry-tgnhs-info-block {
+     list tgnh-group {
+       leaf tgnh-id {
+         type uint64;
+         description "TGNHS-Index";
+       }
+       leaf programmed-id {
+         type uint64;
+         description "Programmed id/index";
+       }
+       leaf backup-tgnh-id {
+         type uint64;
+         description "Backup-TGNHS-Index";
+       }
+       leaf flags {
+         type uint64;
+         description "TGNH's Flags";
+       }
+       leaf fc-bitmask {
+         type string;
+         description "Bitmask of Forwarding Class";
+       }
+     }
+     list ctgnh-group {
+       leaf tgnh-id {
+         type uint64;
+         description "TGNHS-Index";
+       }
+       leaf fc {
+         type string;
+         description "Forwarding Class";
+       }
+       leaf fc-bitmask {
+         type string;
+         description "Bitmask of Forwarding Class";
+       }
+       leaf backup-tgnh-id {
+         type uint64;
+         description "Backup-TGNHS-Index";
+       }
+     }
+     list ctgnh-fields {
+       leaf cos-cond-id {
+         type uint64;
+         description "COS DB condition id";
+       }
+       leaf code-point {
+         type uint32;
+         description "COS classifier code-point";
+       }
+       leaf tgnh-id {
+         type uint64;
+         description "TGNHS-Index";
+       }
+     }
+     list tfnh-group {
+       leaf tfnh-id {
+         type uint64;
+         description "TFNHS-Index";
+       }
+       leaf nh-bal {
+         type string;
+         description "NH-balance";
+       }
+       leaf tfnh-label-cnt {
+         type uint64;
+         description "TFNH-Label_count";
+       }
+       leaf iface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf iface-subid {
+         type uint32;
+         description "TFNH-Interface-sub-index";
+       }
+       leaf mac-addr {
+         type string;
+         description "MAC-address";
+       }
+       leaf ip-addr {
+         type string;
+         description "Ip address";
+       }
+       leaf fc-bitmask {
+         type string;
+         description "Bitmask of Forwarding Class";
+       }
+       leaf lsp-id {
+         type uint32;
+         description "LSP ID";
+       }
+       leaf lsp-name {
+         type uint32;
+         description "LSP Name";
+       }
+     }
+     list ifl-list {
+       description "Show all IFL info in DB";
+       leaf ifl-id {
+         type uint64;
+         description "IFL-Index";
+       }
+       leaf iface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf iface-subid {
+         type uint32;
+         description "TFNH-Interface-sub-index";
+       }
+       leaf iflink-type {
+         type uint32;
+         description "Interface link type";
+       }
+       leaf ip-str {
+         type string;
+         description "MPLS labels";
+       }
+     }
+   }
+   grouping fib-telemetry-tfnhs-info-block {
+     list tfnh-list {
+       leaf tfnh-id {
+         type uint64;
+         description "TFNHS-Index";
+       }
+       leaf programmed-id {
+         type uint64;
+         description "Programmed id/index";
+       }
+       leaf lsp-id {
+         type uint32;
+         description "LSP ID";
+       }
+       leaf lsp-name {
+         type uint32;
+         description "LSP Name";
+       }
+       leaf encapsulate-header {
+         type uint32;
+         description "Encapsulate Header";
+       }
+       leaf decapsulate-header {
+         type uint32;
+         description "Decapsulate header";
+       }
+       leaf vni-label {
+         type uint32;
+         description "VNI Label";
+       }
+       leaf pop-top-label {
+         type uint32;
+         description "Pop Top Label";
+       }
+       leaf tunnel-af {
+         type uint32;
+         description "IFL tunnel AF";
+       }
+       leaf src-ip {
+         type string;
+         description "IPIP src address";
+       }
+       leaf dst-ip {
+         type string;
+         description "IPIP dst address";
+       }
+       leaf ip-addr {
+         type string;
+         description "Ip address";
+       }
+       leaf mac-addr {
+         type string;
+         description "MAC-address";
+       }
+       leaf pushed-mpls {
+         type string;
+         description "Pushed-mpls-label-stack";
+       }
+       leaf iface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf tgnh-id {
+         type uint64;
+         description "TGNHS-Index";
+       }
+       leaf nh-bal {
+         type string;
+         description "NH-balance";
+       }
+       leaf fibnhs {
+         type string;
+         description "FIBNHS from which TFNH is derived";
+       }
+       leaf tfnh-label-cnt {
+         type uint64;
+         description "TFNH-Label_count";
+       }
+       leaf mpls-label {
+         type string;
+         description "MPLS-Route";
+       }
+       leaf creator-tfnh {
+         type uint64;
+         description "Creator ID fo the TFNH from which this entry was created";
+       }
+       leaf fc {
+         type string;
+         description "Forwarding Class";
+       }
+       leaf fc-bitmask {
+         type string;
+         description "Bitmask of Forwarding Class";
+       }
+       leaf show-bitmask {
+         type string;
+         description "Bitmask of FIBNHS under TFNH that need to be streamed";
+       }
+       leaf flags {
+         type uint64;
+         description "TGNH's Flags";
+       }
+       leaf origin-protocol {
+         type string;
+         description "Origin protocol string";
+       }
+     }
+   }
+   grouping fib-telemetry-state-block {
+     list state {
+       leaf fib-resync-done {
+         type uint32;
+         description "Fib-streaming resync status";
+       }
+       leaf rpd-client-session {
+         type string;
+         description "Connection status with RPD";
+       }
+       leaf lsp-name-init-sync-done {
+         type uint32;
+         description "LSP name initial sync status";
+       }
+       leaf resync-done {
+         type uint32;
+         description "Streaming readiness status";
+       }
+       leaf operation-mode {
+         type string;
+         description "Operation mode of FIBTD";
+       }
+     }
+   }
+ }

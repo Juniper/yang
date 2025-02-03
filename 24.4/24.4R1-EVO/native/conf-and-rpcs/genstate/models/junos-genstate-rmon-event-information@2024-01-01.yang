@@ -1,0 +1,71 @@
+ module junos-genstate-rmon-event-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rmon-event-information";
+   prefix jgrei;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for rmon-event-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping rmon-event-information-top {
+     description "Top-level grouping";
+     container rmon-event-information {
+       description "Top-level container";
+       list rmon-event {
+         leaf event-index {
+           type int32;
+           description "Event instance identifier";
+         }
+         leaf event-descr {
+           type string;
+           description "Comment describing the event entry";
+         }
+         leaf event-type {
+           type string;
+           description "Type of notification made about this event";
+         }
+         leaf event-owner {
+           type string;
+           description "Name of owner of the event";
+         }
+         leaf event-creator {
+           type string;
+           description "Method by which the entry was created";
+         }
+         leaf event-state {
+           type string;
+           description "Current state of the entry";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds rmon-event-information to top-level genstate";
+     uses rmon-event-information-top;
+   }
+ }

@@ -1,0 +1,105 @@
+ module junos-genstate-ipv6-nd-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ipv6-nd-information";
+   prefix jgini;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for ipv6-nd-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping ipv6-nd-information-top {
+     description "Top-level grouping";
+     container ipv6-nd-information {
+       description "Top-level container";
+       leaf ipv6-nd-total {
+         type int32;
+         description "Total number of cache entries";
+       }
+       list ipv6-nd-entry {
+         leaf ipv6-nd-neighbor-address {
+           type jt:ipv6addr;
+           description "Address of the neighbor";
+         }
+         leaf ipv6-nd-neighbor-l2-address {
+           type string;
+           description "Layer 2 address of the neighbor";
+         }
+         leaf ipv6-nd-expire {
+           type int32;
+         }
+         leaf ipv6-nd-isrouter {
+           type string;
+         }
+         leaf ipv6-nd-issecure {
+           type string;
+         }
+         leaf ipv6-nd-reference-count {
+           type int32;
+         }
+         leaf ipv6-nd-interface-name {
+           type string;
+           description "Name of the interface";
+         }
+         container ipv6-nd-table-entry-flags {
+           leaf none {
+             type empty;
+             description "ND entry has no flags";
+           }
+           leaf permanent {
+             type empty;
+             description "ND entry is permanent";
+           }
+           leaf published {
+             type empty;
+             description "ND entry is published";
+           }
+           leaf dead {
+             type empty;
+             description "ND entry is dead";
+           }
+           leaf free {
+             type empty;
+             description "ND entry is free";
+           }
+           leaf virtual-gateway-address {
+             type empty;
+             description "ND entry is for virtual gateway address";
+           }
+           leaf remotely-learnt-address {
+             type empty;
+             description "ND entry learnt from remote and installed by protocol";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds ipv6-nd-information to top-level genstate";
+     uses ipv6-nd-information-top;
+   }
+ }

@@ -1,0 +1,103 @@
+ module junos-genstate-request-response-server-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/request-response-server-information";
+   prefix jgrrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for request-response-server-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping request-response-server-information-top {
+     description "Top-level grouping";
+     container request-response-server-information {
+       description "Request-response server information";
+       container grpc-server-information {
+         description "Request-response gRPC server information";
+         leaf grpc-max-connections {
+           type int32;
+           description "Max gRPC connections";
+         }
+         leaf grpc-skip-authentication {
+           type int32;
+           description "GRPC skip-authentication";
+         }
+         list grpc-server {
+           leaf grpc-server-address {
+             type string;
+             description "GRPC server address";
+           }
+           leaf grpc-server-port {
+             type string;
+             description "GRPC server port";
+           }
+           leaf grpc-server-status {
+             type string;
+             description "GRPC server status";
+           }
+           leaf grpc-server-type {
+             type string;
+             description "GRPC server type";
+           }
+         }
+       }
+       container thrift-server-information {
+         description "Request-response thrift server information";
+         leaf thrift-max-connections {
+           type int32;
+           description "Max thrift connections";
+         }
+         leaf thrift-skip-authentication {
+           type int32;
+           description "Thrift skip-authentication";
+         }
+         container thrift-server {
+           leaf thrift-server-address {
+             type string;
+             description "Thrift server address";
+           }
+           leaf thrift-server-port {
+             type string;
+             description "Thrift server port";
+           }
+           leaf thrift-server-status {
+             type string;
+             description "Thrift server status";
+           }
+           leaf thrift-server-type {
+             type string;
+             description "Thrift server type";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds request-response-server-information to top-level genstate";
+     uses request-response-server-information-top;
+   }
+ }

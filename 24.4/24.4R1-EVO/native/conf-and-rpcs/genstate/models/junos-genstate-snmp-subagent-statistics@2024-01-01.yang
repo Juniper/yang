@@ -1,0 +1,75 @@
+ module junos-genstate-snmp-subagent-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/snmp-subagent-statistics";
+   prefix jgsss;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for snmp-subagent-statistics";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping snmp-subagent-statistics-top {
+     description "Top-level grouping";
+     container snmp-subagent-statistics {
+       description "Top-level container";
+       list subagent-statistics {
+         leaf subagent {
+           type string;
+           description "Subagent identifier";
+         }
+         leaf subagent-request-pdus {
+           type uint32;
+           description "Number of request PDUs handled by subagent";
+         }
+         leaf subagent-response-pdus {
+           type uint32;
+           description "Number of response PDUs handled by subagent";
+         }
+         leaf subagent-request-variables {
+           type uint32;
+           description "Number of request variables handled by subagent";
+         }
+         leaf subagent-response-variables {
+           type uint32;
+           description "Number of request variables handled by subagent";
+         }
+         leaf subagent-average-response-time {
+           type string;
+           description "Average response time of subagent";
+         }
+         leaf subagent-maximum-response-time {
+           type string;
+           description "Maximum response time of subagent";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds snmp-subagent-statistics to top-level genstate";
+     uses snmp-subagent-statistics-top;
+   }
+ }

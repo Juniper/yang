@@ -1,0 +1,55 @@
+ module junos-genstate-l2pt-interface-list {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/l2pt-interface-list";
+   prefix jglil;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for l2pt-interface-list";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping l2pt-interface-list-top {
+     description "Top-level grouping";
+     container l2pt-interface-list {
+       description "L2PT interface infomration";
+       leaf tunnel-destination-mac {
+         type string;
+         description "DMAC of the tunneled packets";
+       }
+       list l2pt-interface-entry {
+         leaf protocols {
+           type string;
+           description "Protocols for which tunelling is enabled";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds l2pt-interface-list to top-level genstate";
+     uses l2pt-interface-list-top;
+   }
+ }

@@ -1,0 +1,736 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-fibd {
+   namespace "http://yang.juniper.net/junos/rpc/fibd";
+
+   prefix fibd;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for fibd command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   rpc show-fibd-statistics {
+     description "Show fibd statistics";
+     output {
+       container fibd-statistics {
+         uses fibd-statistics-block;
+       }
+     }
+   }
+   rpc show-fibd-statistics-filtered {
+     description "Show fibd filtered statistics";
+     output {
+       container fibd-filtered-statistics {
+         uses fibd-filtered-statistics-block;
+       }
+     }
+   }
+   rpc show-fibd-statistics-rates {
+     description "Show fibd statistics rates";
+     output {
+       container fibd-statistics-rates {
+         uses fibd-statistics-rates-block;
+       }
+     }
+   }
+   rpc show-fibd-statistics-rates-filtered {
+     description "Show fibd filtered rates";
+     output {
+       container fibd-statistics-filtered-rates {
+         uses fibd-statistics-filtered-rates-block;
+       }
+     }
+   }
+   rpc fibd-status {
+     description "Current status of fibd";
+     output {
+       container fibd-status {
+         uses fibd-status-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping fibd-statistics-block {
+     leaf rtt-add {
+       type uint64;
+       description "Number of route table DDS objects added";
+     }
+     leaf rtt-chg {
+       type uint64;
+       description "Number of route table DDS objects changed";
+     }
+     leaf rtt-del {
+       type uint64;
+       description "Number of route table DDS objects deleted";
+     }
+     leaf rtt-active {
+       type uint64;
+       description "Number of route table DDS objects active";
+     }
+     leaf rt-add {
+       type uint64;
+       description "Number of route DDS objects added";
+     }
+     leaf rt-chg {
+       type uint64;
+       description "Number of route DDS objects changed";
+     }
+     leaf rt-del {
+       type uint64;
+       description "Number of route DDS objects deleted";
+     }
+     leaf rt-active {
+       type uint64;
+       description "Number of route DDS objects active";
+     }
+     leaf nh-add {
+       type uint64;
+       description "Number of next-hop DDS objects added";
+     }
+     leaf nh-chg {
+       type uint64;
+       description "Number of next-hop DDS objects changed";
+     }
+     leaf nh-del {
+       type uint64;
+       description "Number of next-hop DDS objects deleted";
+     }
+     leaf nh-active {
+       type uint64;
+       description "Number of next-hop DDS objects active";
+     }
+     leaf ifd-add {
+       type uint64;
+       description "Number of IFD DDS objects added";
+     }
+     leaf ifd-chg {
+       type uint64;
+       description "Number of IFD DDS objects changed";
+     }
+     leaf ifd-del {
+       type uint64;
+       description "Number of IFD DDS objects deleted";
+     }
+     leaf ifd-active {
+       type uint64;
+       description "Number of IFD DDS objects active";
+     }
+     leaf ifl-add {
+       type uint64;
+       description "Number of IFL DDS objects added";
+     }
+     leaf ifl-chg {
+       type uint64;
+       description "Number of IFL DDS objects changed";
+     }
+     leaf ifl-del {
+       type uint64;
+       description "Number of IFL DDS objects deleted";
+     }
+     leaf ifl-active {
+       type uint64;
+       description "Number of IFL DDS objects active";
+     }
+     leaf iff-add {
+       type uint64;
+       description "Number of IFF DDS objects added";
+     }
+     leaf iff-chg {
+       type uint64;
+       description "Number of IFF DDS objects changed";
+     }
+     leaf iff-del {
+       type uint64;
+       description "Number of IFF DDS objects deleted";
+     }
+     leaf iff-active {
+       type uint64;
+       description "Number of IFF DDS objects active";
+     }
+     leaf ifa-add {
+       type uint64;
+       description "Number of IFA DDS objects added";
+     }
+     leaf ifa-chg {
+       type uint64;
+       description "Number of IFA DDS objects changed";
+     }
+     leaf ifa-del {
+       type uint64;
+       description "Number of IFA DDS objects deleted";
+     }
+     leaf ifa-active {
+       type uint64;
+       description "Number of IFA DDS objects active";
+     }
+     leaf rt-link-delete {
+       type uint64;
+       description "Number of Route DDS object link deletion received";
+     }
+     leaf nh-link-delete {
+       type uint64;
+       description "Number of Next-hop DDS object link deletion received";
+     }
+     leaf dup-link-delete {
+       type uint64;
+       description "Number of duplicate Route/Next-hop link deletion received";
+     }
+     leaf new-count {
+       type uint64;
+     }
+     leaf delete-count {
+       type uint64;
+     }
+     leaf change-count {
+       type uint64;
+     }
+     leaf share-count {
+       type uint64;
+     }
+     leaf ctx-count {
+       type uint64;
+     }
+     leaf max-count {
+       type uint64;
+     }
+     leaf discard-count {
+       type uint64;
+     }
+     leaf max-discard-count {
+       type uint64;
+     }
+     leaf publish-count {
+       type uint64;
+     }
+     leaf last-published-context {
+       type uint64;
+     }
+     leaf oldest-available-context {
+       type uint64;
+     }
+     leaf read-count {
+       type uint64;
+     }
+     leaf max-checked-in-pub {
+       type uint64;
+     }
+     leaf total-num-checked {
+       type uint64;
+     }
+     leaf total-num-times-checked {
+       type uint64;
+     }
+   }
+   grouping fibd-filtered-statistics-block {
+     leaf rtt-add {
+       type uint64;
+       description "Number of route table DDS objects added";
+     }
+     leaf rtt-chg {
+       type uint64;
+       description "Number of route table DDS objects changed";
+     }
+     leaf rtt-del {
+       type uint64;
+       description "Number of route table DDS objects deleted";
+     }
+     leaf rtt-active {
+       type uint64;
+       description "Number of route table DDS objects active";
+     }
+     leaf rt-add {
+       type uint64;
+       description "Number of route DDS objects added";
+     }
+     leaf rt-chg {
+       type uint64;
+       description "Number of route DDS objects changed";
+     }
+     leaf rt-del {
+       type uint64;
+       description "Number of route DDS objects deleted";
+     }
+     leaf rt-active {
+       type uint64;
+       description "Number of route DDS objects active";
+     }
+     leaf nh-add {
+       type uint64;
+       description "Number of next-hop DDS objects added";
+     }
+     leaf nh-chg {
+       type uint64;
+       description "Number of next-hop DDS objects changed";
+     }
+     leaf nh-del {
+       type uint64;
+       description "Number of next-hop DDS objects deleted";
+     }
+     leaf nh-active {
+       type uint64;
+       description "Number of next-hop DDS objects active";
+     }
+     leaf ifd-add {
+       type uint64;
+       description "Number of IFD DDS objects added";
+     }
+     leaf ifd-chg {
+       type uint64;
+       description "Number of IFD DDS objects changed";
+     }
+     leaf ifd-del {
+       type uint64;
+       description "Number of IFD DDS objects deleted";
+     }
+     leaf ifd-active {
+       type uint64;
+       description "Number of IFD DDS objects active";
+     }
+     leaf ifl-add {
+       type uint64;
+       description "Number of IFL DDS objects added";
+     }
+     leaf ifl-chg {
+       type uint64;
+       description "Number of IFL DDS objects changed";
+     }
+     leaf ifl-del {
+       type uint64;
+       description "Number of IFL DDS objects deleted";
+     }
+     leaf ifl-active {
+       type uint64;
+       description "Number of IFL DDS objects active";
+     }
+     leaf iff-add {
+       type uint64;
+       description "Number of IFF DDS objects added";
+     }
+     leaf iff-chg {
+       type uint64;
+       description "Number of IFF DDS objects changed";
+     }
+     leaf iff-del {
+       type uint64;
+       description "Number of IFF DDS objects deleted";
+     }
+     leaf iff-active {
+       type uint64;
+       description "Number of IFF DDS objects active";
+     }
+     leaf ifa-add {
+       type uint64;
+       description "Number of IFA DDS objects added";
+     }
+     leaf ifa-chg {
+       type uint64;
+       description "Number of IFA DDS objects changed";
+     }
+     leaf ifa-del {
+       type uint64;
+       description "Number of IFA DDS objects deleted";
+     }
+     leaf ifa-active {
+       type uint64;
+       description "Number of IFA DDS objects active";
+     }
+     leaf rt-link-delete {
+       type uint64;
+       description "Number of Route DDS object link deletion received";
+     }
+     leaf nh-link-delete {
+       type uint64;
+       description "Number of Next-hop DDS object link deletion received";
+     }
+     leaf dup-link-delete {
+       type uint64;
+       description "Number of duplicate Route/Next-hop link deletion received";
+     }
+   }
+   grouping fibd-statistics-rates-block {
+     leaf rtt-add-rate {
+       type string;
+       description "Number of route table DDS objects added per second";
+     }
+     leaf rtt-chg-rate {
+       type string;
+       description "Number of route table DDS objects changed per second";
+     }
+     leaf rtt-del-rate {
+       type string;
+       description "Number of route table DDS objects deleted per second";
+     }
+     leaf rt-add-rate {
+       type string;
+       description "Number of route DDS objects added per second";
+     }
+     leaf rt-chg-rate {
+       type string;
+       description "Number of route DDS objects changed per second";
+     }
+     leaf rt-del-rate {
+       type string;
+       description "Number of route DDS objects deleted per second";
+     }
+     leaf nh-add-rate {
+       type string;
+       description "Number of next-hop DDS objects added per second";
+     }
+     leaf nh-chg-rate {
+       type string;
+       description "Number of next-hop DDS objects changed per second";
+     }
+     leaf nh-del-rate {
+       type string;
+       description "Number of next-hop DDS objects deleted per second";
+     }
+     leaf ifd-add-rate {
+       type string;
+       description "Number of IFD DDS objects added per second";
+     }
+     leaf ifd-chg-rate {
+       type string;
+       description "Number of IFD DDS objects changed per second";
+     }
+     leaf ifd-del-rate {
+       type string;
+       description "Number of IFD DDS objects deleted per second";
+     }
+     leaf ifl-add-rate {
+       type string;
+       description "Number of IFL DDS objects added per second";
+     }
+     leaf ifl-chg-rate {
+       type string;
+       description "Number of IFL DDS objects changed per second";
+     }
+     leaf ifl-del-rate {
+       type string;
+       description "Number of IFL DDS objects deleted per second";
+     }
+     leaf iff-add-rate {
+       type string;
+       description "Number of IFF DDS objects added per second";
+     }
+     leaf iff-chg-rate {
+       type string;
+       description "Number of IFF DDS objects changed per second";
+     }
+     leaf iff-del-rate {
+       type string;
+       description "Number of IFF DDS objects deleted per second";
+     }
+     leaf ifa-add-rate {
+       type string;
+       description "Number of IFA DDS objects added per second";
+     }
+     leaf ifa-chg-rate {
+       type string;
+       description "Number of IFA DDS objects changed per second";
+     }
+     leaf ifa-del-rate {
+       type string;
+       description "Number of IFA DDS objects deleted per second";
+     }
+   }
+   grouping fibd-statistics-filtered-rates-block {
+     leaf fibd-filter-request {
+       type string;
+       description "Set fibd filter request";
+     }
+     leaf rtt-add-rate {
+       type string;
+       description "Number of route table DDS objects added per second";
+     }
+     leaf rtt-chg-rate {
+       type string;
+       description "Number of route table DDS objects changed per second";
+     }
+     leaf rtt-del-rate {
+       type string;
+       description "Number of route table DDS objects deleted per second";
+     }
+     leaf rt-add-rate {
+       type string;
+       description "Number of route DDS objects added per second";
+     }
+     leaf rt-chg-rate {
+       type string;
+       description "Number of route DDS objects changed per second";
+     }
+     leaf rt-del-rate {
+       type string;
+       description "Number of route DDS objects deleted per second";
+     }
+     leaf nh-add-rate {
+       type string;
+       description "Number of next-hop DDS objects added per second";
+     }
+     leaf nh-chg-rate {
+       type string;
+       description "Number of next-hop DDS objects changed per second";
+     }
+     leaf nh-del-rate {
+       type string;
+       description "Number of next-hop DDS objects deleted per second";
+     }
+     leaf ifd-add-rate {
+       type string;
+       description "Number of IFD DDS objects added per second";
+     }
+     leaf ifd-chg-rate {
+       type string;
+       description "Number of IFD DDS objects changed per second";
+     }
+     leaf ifd-del-rate {
+       type string;
+       description "Number of IFD DDS objects deleted per second";
+     }
+     leaf ifl-add-rate {
+       type string;
+       description "Number of IFL DDS objects added per second";
+     }
+     leaf ifl-chg-rate {
+       type string;
+       description "Number of IFL DDS objects changed per second";
+     }
+     leaf ifl-del-rate {
+       type string;
+       description "Number of IFL DDS objects deleted per second";
+     }
+     leaf iff-add-rate {
+       type string;
+       description "Number of IFF DDS objects added per second";
+     }
+     leaf iff-chg-rate {
+       type string;
+       description "Number of IFF DDS objects changed per second";
+     }
+     leaf iff-del-rate {
+       type string;
+       description "Number of IFF DDS objects deleted per second";
+     }
+     leaf ifa-add-rate {
+       type string;
+       description "Number of IFA DDS objects added per second";
+     }
+     leaf ifa-chg-rate {
+       type string;
+       description "Number of IFA DDS objects changed per second";
+     }
+     leaf ifa-del-rate {
+       type string;
+       description "Number of IFA DDS objects deleted per second";
+     }
+   }
+   grouping fibd-status-block {
+     leaf status-resp {
+       type string;
+     }
+   }
+ }

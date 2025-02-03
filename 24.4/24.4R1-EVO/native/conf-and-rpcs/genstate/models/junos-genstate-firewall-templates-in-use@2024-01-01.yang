@@ -1,0 +1,48 @@
+ module junos-genstate-firewall-templates-in-use {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/firewall-templates-in-use";
+   prefix jgftiu;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for firewall-templates-in-use";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping firewall-templates-in-use-top {
+     description "Top-level grouping";
+     container firewall-templates-in-use {
+       description "Top-level container";
+       leaf firewall-templates-in-use-none {
+         type string;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds firewall-templates-in-use to top-level genstate";
+     uses firewall-templates-in-use-top;
+   }
+ }

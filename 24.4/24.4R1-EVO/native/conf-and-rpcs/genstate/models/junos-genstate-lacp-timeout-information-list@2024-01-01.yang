@@ -1,0 +1,67 @@
+ module junos-genstate-lacp-timeout-information-list {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/lacp-timeout-information-list";
+   prefix jgltil;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lacp-timeout-information-list";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping lacp-timeout-information-list-top {
+     description "Top-level grouping";
+     container lacp-timeout-information-list {
+       description "Information about one or more lacp time-out interfaces";
+       list lacp-timeout-information {
+         list lag-lacp-header {
+           description "LACP header";
+           leaf aggregate-name {
+             type string;
+             description "Aggregated Interface name";
+           }
+         }
+         list lacp-timeout-info {
+           leaf name {
+             type string;
+             description "Interface name";
+           }
+           leaf lacp-mux-state {
+             type string;
+             description "State of the mux lacp machine";
+           }
+           leaf lacp-timeout-time {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lacp-timeout-information-list to top-level genstate";
+     uses lacp-timeout-information-list-top;
+   }
+ }

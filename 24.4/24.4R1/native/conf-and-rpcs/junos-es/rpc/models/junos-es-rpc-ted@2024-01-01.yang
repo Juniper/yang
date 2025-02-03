@@ -1,0 +1,1930 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-rpc-ted {
+   namespace "http://yang.juniper.net/junos-es/rpc/ted";
+
+   prefix ted;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for ted command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.11";
+   }
+
+   rpc get-ted-database-information {
+     description "Show current Traffic Engineering Database";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+       leaf system-id {
+         description "System ID or node ID";
+         type string;
+       }
+       leaf local {
+         description "Shows any local augmentation of TED";
+         type empty;
+       }
+       leaf mi-id {
+         description "IGP Multi-Instance ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint64 {
+             range "0 .. 65535";
+           }
+         }
+       }
+       leaf mt-id {
+         description "IGP Multi-Topology ID";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 4096";
+           }
+         }
+       }
+       leaf proto {
+         description "TED-Protocol";
+         type enumeration {
+           enum "isis-l1" {
+             description "Filter by ISIS Level 1 Protocol";
+           }
+           enum "isis-l2" {
+             description "Filter by ISIS Level 2 Protocol";
+           }
+           enum "ospf" {
+             description "Filter by OSPF Protocol";
+           }
+           enum "exported-isis-l1" {
+             description "Filter by Exported ISIS Level 1 Protocol";
+           }
+           enum "exported-isis-l2" {
+             description "Filter by Exported ISIS Level 2 Protocol";
+           }
+           enum "exported-ospf" {
+             description "Filter by Exported OSPF Protocol";
+           }
+         }
+       }
+     }
+     output {
+       container ted-database-information {
+         uses ted-database-information-block;
+       }
+     }
+   }
+   rpc get-ted-link-information {
+     description "Show current Traffic Engineering Database link";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-link-information {
+         uses ted-link-information-block;
+       }
+     }
+   }
+   rpc get-ted-ipv6-prefix-tree-information {
+     description "Show TED IPv6 Prefix Tree";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-ipv6-prefix-tree-information {
+         uses ted-ipv6-prefix-tree-information-block;
+       }
+     }
+   }
+   rpc get-ted-prefix-tree-information {
+     description "Show TED IPv4 Prefix Tree";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-prefix-tree-information {
+         uses ted-prefix-tree-information-block;
+       }
+     }
+   }
+   rpc get-ted-protocol-information {
+     description "Show current contributing protocols";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-protocol-information {
+         uses ted-protocol-information-block;
+       }
+     }
+   }
+   rpc get-ted-msvr-tree-information {
+     description "Show TED Mapping Server Tree";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-msvr-tree-information {
+         uses ted-msvr-tree-information-block;
+       }
+     }
+   }
+   rpc get-ted-sid-index-tree-information {
+     description "Show TED Spring Sid Index Tree";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf topology-type {
+         description "Topology type";
+         default "traffic-engineering";
+         type enumeration {
+           enum "traffic-engineering" {
+             description "Traffic-engineering topology";
+           }
+           enum "l3-unicast" {
+             description "L3-Unicast topology";
+           }
+           enum "bgp-ls-epe" {
+             description "BGP-LS-EPE topology";
+           }
+           enum "express-segments" {
+             description "Express-Segments topology";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-sid-index-tree-information {
+         uses ted-sid-index-tree-information-block;
+       }
+     }
+   }
+   rpc get-ted-spring-te-policy-information {
+     description "Show TE policy information stored in TED";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+       leaf instance {
+         description "Name of routing instance";
+         type string;
+       }
+     }
+     output {
+       container ted-spring-te-policy-information {
+         uses ted-spring-te-policy-information-block;
+       }
+     }
+   }
+   rpc get-ted-export-feed-overview-information {
+     description "Show TED export feed source information";
+     input {
+       leaf verbosity_level {
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping ted-database-information-block {
+     container ted-database-summary {
+       leaf ted-database-iso-count {
+         type int32;
+       }
+       leaf ted-database-inet-count {
+         type int32;
+       }
+       leaf ted-database-inet6-count {
+         type int32;
+       }
+     }
+     list ted-database {
+       description "MPLS traffic engineering database";
+       leaf ted-database-id {
+         type string;
+       }
+       leaf ted-database-type {
+         type string;
+       }
+       leaf ted-database-age {
+         type int32;
+       }
+       leaf ted-database-link-in {
+         type int32;
+       }
+       leaf ted-database-link-out {
+         type int32;
+       }
+       leaf ted-database-protocol {
+         type string;
+       }
+       leaf ted-database-mi-id {
+         type uint32;
+       }
+       leaf ted-database-mt-id {
+         type uint32;
+       }
+       container ted-database-spring-info {
+         container ted-spring-capability {
+         }
+         container ted-msvr {
+         }
+         container ted-spring-falgo-defs {
+         }
+       }
+       container ted-database-srv6-info {
+         container ted-node-msd-types {
+         }
+       }
+       list ted-link {
+         leaf ted-link-to {
+           type string;
+         }
+         leaf ted-link-local-address {
+           type jt:ipaddr;
+         }
+         leaf ted-link-remote-address {
+           type jt:ipaddr;
+         }
+         leaf ted-v6-link-local-address {
+           type jt:ipv6addr;
+         }
+         leaf ted-v6-link-remote-address {
+           type jt:ipv6addr;
+         }
+         leaf ted-link-local-ifindex {
+           type uint32;
+           description "Local interface index";
+         }
+         leaf ted-link-remote-ifindex {
+           type uint32;
+           description "Remote interface index";
+         }
+         leaf ted-link-name {
+           type string;
+           description "Link name";
+         }
+         leaf ted-link-local-bgp-peer-as {
+           type uint32;
+           description "Local bgp peer as";
+         }
+         leaf ted-link-remote-bgp-peer-as {
+           type uint32;
+           description "Remote bgp peer as";
+         }
+         leaf ted-link-local-bgp-peer-member-as {
+           type uint32;
+           description "Local bgp peer member as";
+         }
+         leaf ted-link-remote-bgp-peer-member-as {
+           type uint32;
+           description "Remote bgp peer member as";
+         }
+         leaf ted-link-metric {
+           type uint32;
+         }
+         leaf ted-link-igp-metric {
+           type uint32;
+         }
+         leaf ted-link-avg-delay {
+           type uint32;
+         }
+         leaf ted-link-min-delay {
+           type uint32;
+         }
+         leaf ted-link-max-delay {
+           type uint32;
+         }
+         leaf ted-link-avg-delay-var {
+           type uint32;
+         }
+         leaf ted-link-static-bandwidth {
+           type int32;
+         }
+         leaf ted-link-reservable-bandwidth {
+           type int32;
+         }
+         leaf ted-link-flood-reflector {
+           type string;
+           description "Flood reflector or reflector client";
+         }
+         leaf ted-link-flood-reflector-cluster-id {
+           type uint32;
+           description "Flood reflector cluster-id";
+         }
+         leaf ted-link-unreserved-bw-tlv-meaning {
+           type string;
+         }
+         leaf ted-link-avail-bw0 {
+           type int32;
+         }
+         leaf ted-link-avail-bw1 {
+           type int32;
+         }
+         leaf ted-link-avail-bw2 {
+           type int32;
+         }
+         leaf ted-link-avail-bw3 {
+           type int32;
+         }
+         leaf ted-link-avail-bw4 {
+           type int32;
+         }
+         leaf ted-link-avail-bw5 {
+           type int32;
+         }
+         leaf ted-link-avail-bw6 {
+           type int32;
+         }
+         leaf ted-link-avail-bw7 {
+           type int32;
+         }
+         leaf ted-link-model {
+           type string;
+         }
+         leaf ted-link-dste-tlv-meaning {
+           type string;
+         }
+         leaf ted-link-ct-bw0 {
+           type int32;
+         }
+         leaf ted-link-ct-bw1 {
+           type int32;
+         }
+         leaf ted-link-ct-bw2 {
+           type int32;
+         }
+         leaf ted-link-ct-bw3 {
+           type int32;
+         }
+         leaf ted-link-ct-bw4 {
+           type int32;
+         }
+         leaf ted-link-ct-bw5 {
+           type int32;
+         }
+         leaf ted-link-ct-bw6 {
+           type int32;
+         }
+         leaf ted-link-ct-bw7 {
+           type int32;
+         }
+         leaf ted-link-protocol {
+           type string;
+         }
+         container admin-groups {
+           leaf admin-groups.heading {
+             type string;
+           }
+           leaf color {
+             type int32;
+           }
+           leaf no-group-flag {
+             type empty;
+           }
+           leaf-list admin-group-name {
+             type string;
+             description "Name of the admin group";
+           }
+           leaf admin-group-number {
+             type int32;
+             description "Number of the admin group";
+           }
+         }
+         container ted-link-extended-admin-group {
+           leaf ted-link-extended-admin-group.heading {
+             type string;
+           }
+           leaf-list admin-group-name {
+             type string;
+             description "Name of the admin group";
+           }
+         }
+         container ted-link-abstract-hop {
+           leaf ted-link-abstract-hop.heading {
+             type string;
+           }
+           leaf-list abstract-hop-name {
+             type string;
+           }
+         }
+         container switching-capability-descriptor {
+           leaf switching-capability-descriptor.heading {
+             type string;
+             description "Switching capability of an interface";
+           }
+           leaf switching-type {
+             type string;
+             description "LSP switching capability";
+           }
+           leaf encoding-type {
+             type string;
+             description "LSP encoding type";
+           }
+           leaf maximum-lsp-bw0 {
+             type int32;
+           }
+           leaf maximum-lsp-bw1 {
+             type int32;
+           }
+           leaf maximum-lsp-bw2 {
+             type int32;
+           }
+           leaf maximum-lsp-bw3 {
+             type int32;
+           }
+           leaf maximum-lsp-bw4 {
+             type int32;
+           }
+           leaf maximum-lsp-bw5 {
+             type int32;
+           }
+           leaf maximum-lsp-bw6 {
+             type int32;
+           }
+           leaf maximum-lsp-bw7 {
+             type int32;
+             description "Maximum bandwidth an LSP could reserve";
+           }
+           leaf minimum-lsp-bw {
+             type int32;
+             description "Minimum bandwidth an LSP could reserve";
+           }
+           leaf mtu {
+             type int32;
+             description "MTU along an interface";
+           }
+           leaf tdm-indication {
+             type string;
+           }
+         }
+         container ted-link-srlg {
+           leaf ted-link-srlg.heading {
+             type string;
+           }
+           leaf-list srlg-name {
+             type string;
+             description "Name of the srlg";
+           }
+         }
+         container ted-adj-sids {
+           list ted-link-lan-adj-sid {
+             leaf ted-link-lan-adj-sid-af {
+               type string;
+             }
+             leaf ted-link-lan-adj-sid-label {
+               type uint32;
+             }
+             leaf ted-link-lan-adj-sid-flags {
+               type string;
+             }
+             leaf ted-link-lan-adj-sid-weight {
+               type uint32;
+             }
+             leaf ted-link-lan-adj-sid-neighbor {
+               type string;
+             }
+           }
+           container ted-link-p2p-adj-sid {
+             leaf ted-link-p2p-adj-sid-af {
+               type string;
+             }
+             leaf ted-link-p2p-adj-sid-label {
+               type uint32;
+             }
+             leaf ted-link-p2p-adj-sid-flags {
+               type string;
+             }
+             leaf ted-link-p2p-adj-sid-weight {
+               type uint32;
+             }
+           }
+         }
+         container ted-bgp-peer-sids {
+           list ted-link-bgp-peer-sid {
+             leaf ted-link-bgp-peer-sid-af {
+               type string;
+             }
+             leaf ted-link-bgp-peer-sid-label {
+               type uint32;
+             }
+             leaf ted-link-bgp-peer-sid-type {
+               type string;
+             }
+             leaf ted-link-bgp-peer-sid-flags {
+               type string;
+             }
+             leaf ted-link-bgp-peer-sid-weight {
+               type uint32;
+             }
+           }
+         }
+         container ted-srv6-end-x-sids {
+           list ted-srv6-end-x-sid {
+             leaf ted-srv6-end-x-sid-type {
+               type string;
+             }
+             leaf ted-srv6-end-x-sid-val {
+               type jt:ipv6addr;
+             }
+             leaf ted-srv6-end-x-sid-flags {
+               type string;
+             }
+             leaf ted-srv6-end-x-sid-weight {
+               type int32;
+             }
+             leaf ted-srv6-end-x-sid-algo {
+               type int32;
+             }
+             leaf ted-srv6-end-x-sid-func {
+               type string;
+             }
+             leaf ted-srv6-end-x-sid-lan-neighbor-id {
+               type string;
+             }
+             container ted-srv6-end-x-sid-sstlv {
+               leaf ted-srv6-end-x-sid-sstlv-header {
+                 type empty;
+               }
+               leaf ted-srv6-end-x-sid-sstlv-blen {
+                 type uint32;
+               }
+               leaf ted-srv6-end-x-sid-sstlv-nlen {
+                 type uint32;
+               }
+               leaf ted-srv6-end-x-sid-sstlv-flen {
+                 type uint32;
+               }
+               leaf ted-srv6-end-x-sid-sstlv-alen {
+                 type uint32;
+               }
+             }
+           }
+         }
+         container ted-link-msd-types {
+           list ted-link-msd-entry {
+             leaf ted-link-msd-type {
+               type uint32;
+             }
+             leaf ted-link-msd-value {
+               type uint32;
+             }
+           }
+         }
+         leaf ted-link-from {
+           type string;
+         }
+         leaf ted-link-link-out {
+           type int32;
+         }
+         leaf ted-link-local-bw7 {
+           type int32;
+         }
+         leaf ted-link-forwarding-adjacency {
+           type empty;
+           description "Indicates that the link is a forwarding adjacency";
+         }
+         leaf ted-link-local-bw0 {
+           type int32;
+         }
+         leaf ted-link-local-bw1 {
+           type int32;
+         }
+         leaf ted-link-local-bw2 {
+           type int32;
+         }
+         leaf ted-link-local-bw3 {
+           type int32;
+         }
+         leaf ted-link-local-bw4 {
+           type int32;
+         }
+         leaf ted-link-local-bw5 {
+           type int32;
+         }
+         leaf ted-link-local-bw6 {
+           type int32;
+         }
+       }
+       container ted-prefixes {
+         list ted-prefix {
+           leaf ted-prefix-protocol {
+             type string;
+           }
+           leaf ted-prefix-address {
+             type jt:ipaddr;
+           }
+           leaf ted-prefix-length {
+             type uint32;
+           }
+           leaf ted-v6-prefix-address {
+             type jt:ipv6addr;
+           }
+           leaf ted-v6-prefix-length {
+             type uint32;
+           }
+           leaf ted-prefix-igp-metric {
+             type uint32;
+           }
+           leaf ted-prefix-igp-flags {
+             type string;
+           }
+           leaf ted-prefix-flags {
+             type string;
+           }
+           leaf ted-prefix-ospf-route-type {
+             type string;
+           }
+           leaf ted-prefix-ospf-forwarding-addr {
+             type string;
+           }
+           leaf-list ted-prefix-tag {
+             type uint32;
+           }
+           leaf-list ted-prefix-extended-tag {
+             type uint32;
+           }
+           container ted-prefix-sid {
+             leaf ted-prefix-sid-index {
+               type uint32;
+             }
+             leaf ted-prefix-sid-flags {
+               type string;
+             }
+             leaf ted-prefix-sid-algo {
+               type string;
+             }
+           }
+           container ted-prefix-fapm {
+             leaf ted-prefix-fapm-algo {
+               type uint32;
+             }
+             leaf ted-prefix-fapm-metric {
+               type uint32;
+             }
+           }
+         }
+         leaf ted-prefixes-header {
+           type empty;
+           description "Prefixes";
+         }
+       }
+       container ted-srv6-locators {
+         list ted-srv6-locator {
+           container ted-srv6-sid {
+             leaf ted-srv6-sid-addr {
+               type jt:ipv6addr;
+             }
+             leaf ted-srv6-sid-flags {
+               type string;
+             }
+             leaf ted-srv6-sid-func {
+               type string;
+             }
+             container ted-srv6-sid-sstlv {
+               leaf ted-srv6-sid-sstlv-header {
+                 type empty;
+               }
+               leaf ted-srv6-sid-sstlv-blen {
+                 type uint32;
+               }
+               leaf ted-srv6-sid-sstlv-nlen {
+                 type uint32;
+               }
+               leaf ted-srv6-sid-sstlv-flen {
+                 type uint32;
+               }
+               leaf ted-srv6-sid-sstlv-alen {
+                 type uint32;
+               }
+             }
+           }
+           leaf ted-srv6-locator-address {
+             type jt:ipv6addr;
+           }
+           leaf ted-srv6-locator-length {
+             type uint32;
+           }
+           leaf ted-srv6-locator-metric {
+             type uint32;
+           }
+           leaf ted-srv6-locator-flags {
+             type uint32;
+           }
+           leaf ted-srv6-locator-algo {
+             type uint32;
+           }
+         }
+         leaf ted-srv6-locators-header {
+           type empty;
+           description "SRv6 Locators";
+         }
+       }
+       container ted-spring-capability {
+         list ted-spring-srgb-block {
+           leaf ted-spring-srgb-block-start {
+             type uint32;
+           }
+           leaf ted-spring-srgb-block-range {
+             type uint32;
+           }
+           leaf ted-spring-srgb-block-flags {
+             type string;
+           }
+         }
+       }
+       container ted-spring-falgo-defs {
+         list ted-spring-falgo-def {
+           leaf ted-spring-falgo-def-algo {
+             type uint32;
+           }
+           leaf ted-spring-falgo-def-metric-type {
+             type uint32;
+           }
+           leaf ted-spring-falgo-def-calculation-type {
+             type uint32;
+           }
+           leaf ted-spring-falgo-def-priority {
+             type uint32;
+           }
+           leaf ted-spring-falgo-def-flags {
+             type string;
+           }
+           leaf ted-spring-falgo-def-include-any {
+             type string;
+           }
+           leaf ted-spring-falgo-def-include-all {
+             type string;
+           }
+           leaf ted-spring-falgo-def-exclude {
+             type string;
+           }
+         }
+       }
+       container ted-msvr {
+         leaf ted-msvr-header {
+           type empty;
+           description "Mapping Server";
+         }
+         list ted-msvr-prefix {
+           leaf ted-msvr-prefix-address {
+             type jt:ipaddr;
+           }
+           leaf ted-msvr-prefix-length {
+             type uint32;
+           }
+           leaf ted-msvr-range {
+             type uint32;
+           }
+           leaf ted-msvr-start {
+             type uint32;
+           }
+           leaf ted-msvr-flags {
+             type string;
+           }
+           leaf ted-msvr-sid-flags {
+             type string;
+           }
+         }
+       }
+       container ted-node-msd-types {
+         list ted-node-msd-entry {
+           leaf ted-node-msd-type {
+             type uint32;
+           }
+           leaf ted-node-msd-value {
+             type uint32;
+           }
+         }
+       }
+       leaf ted-database-id-overload {
+         type string;
+       }
+       container ted-te-policies {
+         leaf ted-te-policies-header {
+           type empty;
+         }
+         leaf ted-te-policies-count {
+           type int32;
+         }
+         leaf ted-te-policies-candidate-path-count {
+           type int32;
+         }
+         leaf ted-te-policies-segment-list-count {
+           type int32;
+         }
+         leaf ted-te-policies-segment-count {
+           type int32;
+         }
+       }
+       list ted-database-lcl-addr {
+         leaf ted-lcl-addr {
+           type jt:ipaddr;
+         }
+       }
+       list ted-database-v6-lcl-addr {
+         leaf ted-v6-lcl-addr {
+           type jt:ipv6addr;
+         }
+       }
+       container ted-spring-algorithm {
+         leaf-list ted-spring-algorithm-type {
+           type uint32;
+         }
+       }
+       container ted-node-srv6-capability {
+         leaf ted-node-srv6-capability-flag {
+           type uint32;
+         }
+       }
+     }
+   }
+   grouping ted-link-information-block {
+     list ted-link {
+       leaf ted-link-to {
+         type string;
+       }
+       leaf ted-link-local-address {
+         type jt:ipaddr;
+       }
+       leaf ted-link-remote-address {
+         type jt:ipaddr;
+       }
+       leaf ted-v6-link-local-address {
+         type jt:ipv6addr;
+       }
+       leaf ted-v6-link-remote-address {
+         type jt:ipv6addr;
+       }
+       leaf ted-link-local-ifindex {
+         type uint32;
+         description "Local interface index";
+       }
+       leaf ted-link-remote-ifindex {
+         type uint32;
+         description "Remote interface index";
+       }
+       leaf ted-link-name {
+         type string;
+         description "Link name";
+       }
+       leaf ted-link-local-bgp-peer-as {
+         type uint32;
+         description "Local bgp peer as";
+       }
+       leaf ted-link-remote-bgp-peer-as {
+         type uint32;
+         description "Remote bgp peer as";
+       }
+       leaf ted-link-local-bgp-peer-member-as {
+         type uint32;
+         description "Local bgp peer member as";
+       }
+       leaf ted-link-remote-bgp-peer-member-as {
+         type uint32;
+         description "Remote bgp peer member as";
+       }
+       leaf ted-link-metric {
+         type uint32;
+       }
+       leaf ted-link-igp-metric {
+         type uint32;
+       }
+       leaf ted-link-avg-delay {
+         type uint32;
+       }
+       leaf ted-link-min-delay {
+         type uint32;
+       }
+       leaf ted-link-max-delay {
+         type uint32;
+       }
+       leaf ted-link-avg-delay-var {
+         type uint32;
+       }
+       leaf ted-link-static-bandwidth {
+         type int32;
+       }
+       leaf ted-link-reservable-bandwidth {
+         type int32;
+       }
+       leaf ted-link-flood-reflector {
+         type string;
+         description "Flood reflector or reflector client";
+       }
+       leaf ted-link-flood-reflector-cluster-id {
+         type uint32;
+         description "Flood reflector cluster-id";
+       }
+       leaf ted-link-unreserved-bw-tlv-meaning {
+         type string;
+       }
+       leaf ted-link-avail-bw0 {
+         type int32;
+       }
+       leaf ted-link-avail-bw1 {
+         type int32;
+       }
+       leaf ted-link-avail-bw2 {
+         type int32;
+       }
+       leaf ted-link-avail-bw3 {
+         type int32;
+       }
+       leaf ted-link-avail-bw4 {
+         type int32;
+       }
+       leaf ted-link-avail-bw5 {
+         type int32;
+       }
+       leaf ted-link-avail-bw6 {
+         type int32;
+       }
+       leaf ted-link-avail-bw7 {
+         type int32;
+       }
+       leaf ted-link-model {
+         type string;
+       }
+       leaf ted-link-dste-tlv-meaning {
+         type string;
+       }
+       leaf ted-link-ct-bw0 {
+         type int32;
+       }
+       leaf ted-link-ct-bw1 {
+         type int32;
+       }
+       leaf ted-link-ct-bw2 {
+         type int32;
+       }
+       leaf ted-link-ct-bw3 {
+         type int32;
+       }
+       leaf ted-link-ct-bw4 {
+         type int32;
+       }
+       leaf ted-link-ct-bw5 {
+         type int32;
+       }
+       leaf ted-link-ct-bw6 {
+         type int32;
+       }
+       leaf ted-link-ct-bw7 {
+         type int32;
+       }
+       leaf ted-link-protocol {
+         type string;
+       }
+       container admin-groups {
+         leaf admin-groups.heading {
+           type string;
+         }
+         leaf color {
+           type int32;
+         }
+         leaf no-group-flag {
+           type empty;
+         }
+         leaf-list admin-group-name {
+           type string;
+           description "Name of the admin group";
+         }
+         leaf admin-group-number {
+           type int32;
+           description "Number of the admin group";
+         }
+       }
+       container ted-link-extended-admin-group {
+         leaf ted-link-extended-admin-group.heading {
+           type string;
+         }
+         leaf-list admin-group-name {
+           type string;
+           description "Name of the admin group";
+         }
+       }
+       container ted-link-abstract-hop {
+         leaf ted-link-abstract-hop.heading {
+           type string;
+         }
+         leaf-list abstract-hop-name {
+           type string;
+         }
+       }
+       container switching-capability-descriptor {
+         leaf switching-capability-descriptor.heading {
+           type string;
+           description "Switching capability of an interface";
+         }
+         leaf switching-type {
+           type string;
+           description "LSP switching capability";
+         }
+         leaf encoding-type {
+           type string;
+           description "LSP encoding type";
+         }
+         leaf maximum-lsp-bw0 {
+           type int32;
+         }
+         leaf maximum-lsp-bw1 {
+           type int32;
+         }
+         leaf maximum-lsp-bw2 {
+           type int32;
+         }
+         leaf maximum-lsp-bw3 {
+           type int32;
+         }
+         leaf maximum-lsp-bw4 {
+           type int32;
+         }
+         leaf maximum-lsp-bw5 {
+           type int32;
+         }
+         leaf maximum-lsp-bw6 {
+           type int32;
+         }
+         leaf maximum-lsp-bw7 {
+           type int32;
+           description "Maximum bandwidth an LSP could reserve";
+         }
+         leaf minimum-lsp-bw {
+           type int32;
+           description "Minimum bandwidth an LSP could reserve";
+         }
+         leaf mtu {
+           type int32;
+           description "MTU along an interface";
+         }
+         leaf tdm-indication {
+           type string;
+         }
+       }
+       container ted-link-srlg {
+         leaf ted-link-srlg.heading {
+           type string;
+         }
+         leaf-list srlg-name {
+           type string;
+           description "Name of the srlg";
+         }
+       }
+       container ted-adj-sids {
+         list ted-link-lan-adj-sid {
+           leaf ted-link-lan-adj-sid-af {
+             type string;
+           }
+           leaf ted-link-lan-adj-sid-label {
+             type uint32;
+           }
+           leaf ted-link-lan-adj-sid-flags {
+             type string;
+           }
+           leaf ted-link-lan-adj-sid-weight {
+             type uint32;
+           }
+           leaf ted-link-lan-adj-sid-neighbor {
+             type string;
+           }
+         }
+         container ted-link-p2p-adj-sid {
+           leaf ted-link-p2p-adj-sid-af {
+             type string;
+           }
+           leaf ted-link-p2p-adj-sid-label {
+             type uint32;
+           }
+           leaf ted-link-p2p-adj-sid-flags {
+             type string;
+           }
+           leaf ted-link-p2p-adj-sid-weight {
+             type uint32;
+           }
+         }
+       }
+       container ted-bgp-peer-sids {
+         list ted-link-bgp-peer-sid {
+           leaf ted-link-bgp-peer-sid-af {
+             type string;
+           }
+           leaf ted-link-bgp-peer-sid-label {
+             type uint32;
+           }
+           leaf ted-link-bgp-peer-sid-type {
+             type string;
+           }
+           leaf ted-link-bgp-peer-sid-flags {
+             type string;
+           }
+           leaf ted-link-bgp-peer-sid-weight {
+             type uint32;
+           }
+         }
+       }
+       container ted-srv6-end-x-sids {
+         list ted-srv6-end-x-sid {
+           leaf ted-srv6-end-x-sid-type {
+             type string;
+           }
+           leaf ted-srv6-end-x-sid-val {
+             type jt:ipv6addr;
+           }
+           leaf ted-srv6-end-x-sid-flags {
+             type string;
+           }
+           leaf ted-srv6-end-x-sid-weight {
+             type int32;
+           }
+           leaf ted-srv6-end-x-sid-algo {
+             type int32;
+           }
+           leaf ted-srv6-end-x-sid-func {
+             type string;
+           }
+           leaf ted-srv6-end-x-sid-lan-neighbor-id {
+             type string;
+           }
+           container ted-srv6-end-x-sid-sstlv {
+             leaf ted-srv6-end-x-sid-sstlv-header {
+               type empty;
+             }
+             leaf ted-srv6-end-x-sid-sstlv-blen {
+               type uint32;
+             }
+             leaf ted-srv6-end-x-sid-sstlv-nlen {
+               type uint32;
+             }
+             leaf ted-srv6-end-x-sid-sstlv-flen {
+               type uint32;
+             }
+             leaf ted-srv6-end-x-sid-sstlv-alen {
+               type uint32;
+             }
+           }
+         }
+       }
+       container ted-link-msd-types {
+         list ted-link-msd-entry {
+           leaf ted-link-msd-type {
+             type uint32;
+           }
+           leaf ted-link-msd-value {
+             type uint32;
+           }
+         }
+       }
+       leaf ted-link-from {
+         type string;
+       }
+       leaf ted-link-link-out {
+         type int32;
+       }
+       leaf ted-link-local-bw7 {
+         type int32;
+       }
+       leaf ted-link-forwarding-adjacency {
+         type empty;
+         description "Indicates that the link is a forwarding adjacency";
+       }
+       leaf ted-link-local-bw0 {
+         type int32;
+       }
+       leaf ted-link-local-bw1 {
+         type int32;
+       }
+       leaf ted-link-local-bw2 {
+         type int32;
+       }
+       leaf ted-link-local-bw3 {
+         type int32;
+       }
+       leaf ted-link-local-bw4 {
+         type int32;
+       }
+       leaf ted-link-local-bw5 {
+         type int32;
+       }
+       leaf ted-link-local-bw6 {
+         type int32;
+       }
+     }
+   }
+   grouping ted-ipv6-prefix-tree-information-block {
+     container ted-ipv6-prefix-entries {
+       list ted-ipv6-prefix-tree-prefix {
+         leaf ted-ipv6-prefix-tree-address {
+           type jt:ipv6addr;
+         }
+         leaf ted-ipv6-prefix-tree-length {
+           type uint32;
+         }
+         leaf ted-ipv6-prefix-tree-node {
+           type string;
+         }
+       }
+     }
+   }
+   grouping ted-prefix-tree-information-block {
+     container ted-prefix-entries {
+       list ted-prefix-tree-prefix {
+         leaf ted-prefix-tree-address {
+           type jt:ipaddr;
+         }
+         leaf ted-prefix-tree-length {
+           type uint32;
+         }
+         leaf ted-prefix-tree-node {
+           type string;
+         }
+       }
+     }
+   }
+   grouping ted-protocol-information-block {
+     container ted-protocol {
+       leaf ted-protocol-name {
+         type string;
+         description "Protocol that filled in the TED entry";
+       }
+       leaf ted-protocol-credibility {
+         type int32;
+       }
+       leaf ted-protocol-self-node {
+         type string;
+       }
+     }
+   }
+   grouping ted-msvr-tree-information-block {
+     container ted-msvr-entries {
+       list ted-msvr-tree-entry {
+         leaf ted-msvr-prefix-address {
+           type jt:ipaddr;
+         }
+         leaf ted-msvr-prefix-length {
+           type uint32;
+         }
+         leaf ted-msvr-start {
+           type uint32;
+         }
+         leaf ted-msvr-range {
+           type uint32;
+         }
+       }
+     }
+   }
+   grouping ted-sid-index-tree-information-block {
+     container ted-sid-index-entries {
+       list ted-sid-index-tree {
+         leaf ted-sid-index-tree-address {
+           type string;
+         }
+         leaf ted-sid-index-tree-length {
+           type uint32;
+         }
+         leaf ted-sid-index {
+           type uint32;
+         }
+         leaf ted-sid-index-credibility {
+           type int32;
+         }
+         leaf ted-sid-index-node {
+           type string;
+         }
+       }
+     }
+   }
+   grouping ted-spring-te-policy-information-block {
+     container ted-spring-te-policy-summary {
+       leaf ted-spring-te-policy-iso-count {
+         type int32;
+       }
+       leaf ted-spring-te-policy-inet-count {
+         type int32;
+       }
+       leaf ted-spring-te-policy-inet6-count {
+         type int32;
+       }
+     }
+     list ted-spring-te-policy-list {
+       leaf ted-spring-te-policy-id {
+         type string;
+       }
+       leaf ted-spring-te-policy-type {
+         type string;
+       }
+       leaf ted-spring-te-policy-age {
+         type int32;
+       }
+       leaf ted-spring-te-policy-protocol {
+         type string;
+       }
+       list ted-spring-te-policy {
+         leaf ted-spring-te-policy-color {
+           type uint32;
+         }
+         leaf ted-spring-te-policy-endpoint {
+           type jt:ipaddr;
+         }
+         list ted-spring-te-policy-candidate-path {
+           leaf ted-spring-te-policy-candidate-path-name {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-flags {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-origin {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-origin-address {
+             type jt:ipaddr;
+           }
+           leaf ted-spring-te-policy-candidate-path-as {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-discriminator {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-preference {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-priority {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-constraint-header {
+             type empty;
+           }
+           leaf ted-spring-te-policy-candidate-path-constraint-flags {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-mtid {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-algo {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-exclude-any {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-include-any {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-include-all {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-bandwidth {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-bsid-flags {
+             type string;
+           }
+           leaf ted-spring-te-policy-candidate-path-mpls-bsid {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-mpls-spec-bsid {
+             type uint32;
+           }
+           leaf ted-spring-te-policy-candidate-path-srv6-bsid {
+             type jt:ipv6addr;
+           }
+           leaf ted-spring-te-policy-candidate-path-srv6-spec-bsid {
+             type jt:ipv6addr;
+           }
+           leaf ted-spring-te-policy-candidate-path-segment-list-count {
+             type int32;
+           }
+           list ted-spring-te-policy-candidate-path-segment-list {
+             leaf ted-spring-te-policy-candidate-path-segment-list-index {
+               type int32;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-list-flags {
+               type string;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-list-mtid {
+               type uint32;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-list-weight {
+               type uint32;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-list-algo {
+               type uint32;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-list-metric-type {
+               type string;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-list-metric-value {
+               type uint32;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-count {
+               type int32;
+             }
+             leaf ted-spring-te-policy-candidate-path-segment-header {
+               type empty;
+             }
+             list ted-spring-te-policy-candidate-path-segment {
+               leaf ted-spring-te-policy-candidate-path-mpls-segment-id {
+                 type uint32;
+               }
+               leaf ted-spring-te-policy-candidate-path-srv6-segment-id {
+                 type jt:ipv6addr;
+               }
+               leaf ted-spring-te-policy-candidate-path-segment-descriptor {
+                 type jt:ipaddr;
+               }
+               leaf ted-spring-te-policy-candidate-path-segment-flags {
+                 type string;
+               }
+               leaf ted-spring-te-policy-candidate-path-segment-ep-bhv {
+                 type string;
+                 description "Endpoint behavior of a segment";
+               }
+               leaf ted-spring-te-policy-candidate-path-segment-ep-bhv-flags {
+                 type uint32;
+                 description "Endpoint behavior flags of a segment";
+               }
+               leaf ted-spring-te-policy-candidate-path-segment-ep-bhv-algo {
+                 type uint32;
+                 description "Endpoint behavior algo of a segment";
+               }
+               container ted-spring-te-policy-candidate-path-segment-sstlv {
+                 leaf ted-spring-te-policy-candidate-path-segment-sstlv-header {
+                   type empty;
+                 }
+                 leaf ted-spring-te-policy-candidate-path-segment-sstlv-blen {
+                   type uint32;
+                 }
+                 leaf ted-spring-te-policy-candidate-path-segment-sstlv-nlen {
+                   type uint32;
+                 }
+                 leaf ted-spring-te-policy-candidate-path-segment-sstlv-flen {
+                   type uint32;
+                 }
+                 leaf ted-spring-te-policy-candidate-path-segment-sstlv-alen {
+                   type uint32;
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+ }

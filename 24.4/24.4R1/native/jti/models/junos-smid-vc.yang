@@ -1,0 +1,260 @@
+module junos-smid-vc {
+  yang-version 1;
+  namespace "http://juniper.net/yang/smid-vc";
+  prefix junos-smid-vc;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of Junos native smid vc yang model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  typedef role {
+    description
+      "Role for MX chassis or RE's";
+    type enumeration {
+      enum MASTER {
+        value 0;
+      }
+      enum BACKUP;
+      enum LINECARD;
+    }
+  }
+
+  typedef member-id {
+    description
+      "A index value for chassis";
+    type uint8 {
+      range "0..1";
+    }
+  }
+
+  grouping smid-vc-top {
+    description
+      "Top level grouping for smid-vc";
+    container junos {
+      description
+        "Junos container";
+      config false;
+      container system {
+        description
+          "System container";
+        container mx-vc {
+          description
+            "MX-VC container";
+          container members {
+            description
+              "Members container";
+            list member {
+              description
+                "Member";
+              key "member-id";
+              leaf member-id {
+                description
+                  "chassis member-id for mxvc systems";
+                type member-id;
+              }
+              container virtual-chassis-ports {
+                description
+                  "In non-MXVC systems there will be no virtual chassis ports (VCPs)";
+                list virtual-chassis-port {
+                  description
+                    "Virtual Chassis Port";
+                  key "vcp-interface-name";
+                  leaf vcp-interface-name {
+                    description
+                      "Interface name for virtual chasis ports used for inter-chassis communication; only available on MXVC, NA otherwise";
+                    type string;
+                  }
+                  leaf status {
+                    description
+                      "port status, up or down";
+                    type string;
+                  }
+                  leaf adjacency {
+                    description
+                      "port status, up or down";
+                    type string;
+                  }
+                  leaf neighbor-member-id {
+                    description
+                      "Member ID of neighbor chassis this VCP is connected to";
+                    type member-id;
+                  }
+                  leaf neighbor-interface-name {
+                    description
+                      "VCP interface name of linked interface on neighboring chassis";
+                    type string;
+                  }
+                  leaf input-packets {
+                    description
+                      "Number of packets going received at the vcp-interface";
+                    type uint64;
+                  }
+                  leaf output-packets {
+                    description
+                      "Number of packets sent from the vcp-interface";
+                    type uint64;
+                  }
+                  leaf input-bytes {
+                    description
+                      "Number of bytes going received at the vcp-interface";
+                    type uint64;
+                  }
+                  leaf output-bytes {
+                    description
+                      "Number of bytes sent from the vcp-interface";
+                    type uint64;
+                  }
+                  leaf input-errors {
+                    description
+                      "Number of errors being received at the vcp-interface";
+                    type uint64;
+                  }
+                  leaf output-errors {
+                    description
+                      "Number of errors in sending from the vcp-interface";
+                    type uint64;
+                  }
+                  leaf input-drops {
+                    description
+                      "Number of drops being received at the vcp-interface";
+                    type uint64;
+                  }
+                  leaf output-drops {
+                    description
+                      "Number of drops in sending from the vcp-interface";
+                    type uint64;
+                  }
+                  leaf carrier-transitions {
+                    description
+                      "Number of carrier-transitions in the vcp-interface";
+                    type uint64;
+                  }
+                }
+              }
+              container ddos-protocols {
+                description
+                  "Container for DDOS protocols";
+                list ddos-protocol {
+                  description
+                    "List of DDOS protocols";
+                  key "packet-type";
+                  leaf packet-type {
+                    description
+                      "chassis-HIGH or chassis-LOW packet type";
+                    type string;
+                  }
+                  leaf state {
+                    description
+                      "Member state relating to DDOS";
+                    type string;
+                  }
+                  leaf packets-received {
+                    description
+                      "Number of packets chassis has received";
+                    type uint64;
+                  }
+                  leaf packets-dropped {
+                    description
+                      "Number of packets the chassis is dropping";
+                    type uint64;
+                  }
+                  leaf rate {
+                    description
+                      "The Rate at which packets are being dropped";
+                    type uint64;
+                  }
+                  leaf violation-count {
+                    description
+                      "number of violations";
+                    type uint64;
+                  }
+                }
+              }
+              container heartbeat {
+                description
+                  "VC heartbeat keeps track of last communications between VC's and whether they are aware of eachother";
+                leaf local-address {
+                  description
+                    "the local vc address";
+                  type string;
+                }
+                leaf remote-address {
+                  description
+                    "remote vc address";
+                  type string;
+                }
+                leaf connection-state {
+                  description
+                    "MXVC connection state";
+                  type string;
+                }
+                leaf sent-counter {
+                  description
+                    "Counter for messages the local VC has sent a message to remote VC";
+                  type uint64;
+                }
+                leaf receive-counter {
+                  description
+                    "Counter for messages received from remote VC";
+                  type uint64;
+                }
+                leaf lost-missed-counter {
+                  description
+                    "counter for lost/missed messages";
+                  type uint64;
+                }
+                leaf last-message-sent-time {
+                  description
+                    "Timestamp for last message sent";
+                  type string;
+                }
+                leaf last-message-sent-length {
+                  description
+                    "Time since last message was sent";
+                  type string;
+                }
+                leaf last-message-received-time {
+                  description
+                    "Timestamp from last message received";
+                  type string;
+                }
+                leaf last-message-received-length {
+                  description
+                    "Time since last message received";
+                  type string;
+                }
+                leaf maximum-latency {
+                  description
+                    "Maximum latency between sent and received messages";
+                  type uint64;
+                }
+                leaf minimum-latency {
+                  description
+                    "Minimum latency between sent and received messages";
+                  type uint64;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses smid-vc-top;
+}

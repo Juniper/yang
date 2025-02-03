@@ -1,0 +1,646 @@
+module junos-state-agf-nas {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/agf/nas";
+  prefix js-agf-nas;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-services {
+    prefix js-svc;
+  }
+
+  import junos-state-agf {
+    prefix js-agf;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Access Gateway Function (AGF) Non-Access-Stratum Protocol (NAS).
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-06-07 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping nas-n1-sent-message-counters {
+    description
+      "NAS overall N1 sent signaling message statistics";
+
+    leaf registration-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Registration request messages sent";
+    }
+
+    leaf registration-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Registration complete messages sent";
+    }
+
+    leaf deregistration-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Deregistration request messages sent";
+    }
+
+    leaf deregistration-accept-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Deregistration accept messages sent";
+    }
+
+    leaf identity-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Identity response messages sent";
+    }
+
+    leaf authentication-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Authentication response messages sent";
+    }
+
+    leaf authentication-failure-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Authentication failure messages sent";
+    }
+
+    leaf security-mode-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Security mode complete messages sent";
+    }
+
+    leaf security-mode-reject-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Security mode reject messages sent";
+    }
+
+    leaf service-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Service request messages sent";
+    }
+
+    leaf uplink-nas-transport-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Uplink NAS transport messages sent";
+    }
+
+    leaf mobility-management-5g-status-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of 5GMM status messages sent";
+    }
+
+    leaf pdu-session-establishment-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session establishment request messages sent";
+    }
+
+    leaf pdu-session-modification-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session modification complete messages sent";
+    }
+
+    leaf pdu-session-modification-reject-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session modification reject messages sent";
+    }
+
+    leaf pdu-session-release-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session release request messages sent";
+    }
+
+    leaf pdu-session-release-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session release complete messages sent";
+    }
+
+    leaf pdu-5g-session-management-status-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of 5GMM status messages sent";
+    }
+  }
+
+  grouping nas-n1-received-message-counters {
+    description
+      "NAS overall N1 received signaling message statistics";
+
+    leaf registration-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Registration accept messages received";
+    }
+
+    leaf registration-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Registration reject messages received";
+    }
+
+    leaf deregistration-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Deregistration accept messages received";
+    }
+
+    leaf deregistration-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Deregistration request messages received";
+    }
+
+    leaf identity-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Identity request messages received";
+    }
+
+    leaf authentication-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Authentication request messages received";
+    }
+
+    leaf authentication-result-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Authentication result messages received";
+    }
+
+    leaf authentication-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Authentication reject messages received";
+    }
+
+    leaf security-mode-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Security mode command messages received";
+    }
+
+    leaf service-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Service accept messages received";
+    }
+
+    leaf service-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Service reject messages received";
+    }
+
+    leaf downlink-nas-transport-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Downlink NAS transport messages received";
+    }
+
+    leaf mobility-management-5g-status-msgs-received {
+      type yang:counter64;
+      description
+        "Number of 5GMM status messages received";
+    }
+
+    leaf pdu-session-establishment-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session establishment accept messages received";
+    }
+
+    leaf pdu-session-establishment-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session establishment reject messages received";
+    }
+
+    leaf pdu-session-modification-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Service accept messages received";
+    }
+
+    leaf pdu-session-release-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session release commmad messages received";
+    }
+
+    leaf pdu-session-release-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session release release reject messages received";
+    }
+
+    leaf pdu-5g-session-management-status-msgs-received {
+      type yang:counter64;
+      description
+        "Number of 5GSM status messages received";
+    }
+  }
+
+  grouping nas-n1-fn-rg-sent-message-counters {
+    description
+      "NAS fn-rg N1 sent signaling message statistics";
+
+    leaf registration-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Registration request messages sent";
+    }
+
+    leaf registration-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Registration complete messages sent";
+    }
+
+    leaf deregistration-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Deregistration request messages sent";
+    }
+
+    leaf deregistration-accept-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Deregistration accept messages sent";
+    }
+
+    leaf identity-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Identity response messages sent";
+    }
+
+    leaf authentication-response-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Authentication response messages sent";
+    }
+
+    leaf authentication-failure-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Authentication failure messages sent";
+    }
+
+    leaf security-mode-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Security mode complete messages sent";
+    }
+
+    leaf security-mode-reject-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Security mode reject messages sent";
+    }
+
+    leaf service-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Service request messages sent";
+    }
+
+    leaf uplink-nas-transport-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of Uplink NAS transport messages sent";
+    }
+
+    leaf mobility-management-5g-status-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of 5GMM status messages sent";
+    }
+
+    leaf pdu-session-establishment-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session establishment request messages sent";
+    }
+
+    leaf pdu-session-modification-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session modification complete messages sent";
+    }
+
+    leaf pdu-session-modification-reject-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session modification reject messages sent";
+    }
+
+    leaf pdu-session-release-request-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session release request messages sent";
+    }
+
+    leaf pdu-session-release-complete-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of PDU session release complete messages sent";
+    }
+
+    leaf pdu-5g-session-management-status-msgs-sent {
+      type yang:counter64;
+      description
+        "Number of 5GMM status messages sent";
+    }
+  }
+
+  grouping nas-n1-fn-rg-received-message-counters {
+    description
+      "NAS fn-rg N1 received signaling message statistics";
+
+    leaf registration-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Registration accept messages received";
+    }
+
+    leaf registration-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Registration reject messages received";
+    }
+
+    leaf deregistration-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Deregistration accept messages received";
+    }
+
+    leaf deregistration-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Deregistration request messages received";
+    }
+
+    leaf identity-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Identity request messages received";
+    }
+
+    leaf authentication-request-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Authentication request messages received";
+    }
+
+    leaf authentication-result-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Authentication result messages received";
+    }
+
+    leaf authentication-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Authentication reject messages received";
+    }
+
+    leaf security-mode-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Security mode command messages received";
+    }
+
+    leaf service-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Service accept messages received";
+    }
+
+    leaf service-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Service reject messages received";
+    }
+
+    leaf downlink-nas-transport-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Downlink NAS transport messages received";
+    }
+
+    leaf mobility-management-5g-status-msgs-received {
+      type yang:counter64;
+      description
+        "Number of 5GMM status messages received";
+    }
+
+    leaf pdu-session-establishment-accept-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session establishment accept messages received";
+    }
+
+    leaf pdu-session-establishment-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session establishment reject messages received";
+    }
+
+    leaf pdu-session-modification-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of Service accept messages received";
+    }
+
+    leaf pdu-session-release-command-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session release commmad messages received";
+    }
+
+    leaf pdu-session-release-reject-msgs-received {
+      type yang:counter64;
+      description
+        "Number of PDU session release release reject messages received";
+    }
+
+    leaf pdu-5g-session-management-status-msgs-received {
+      type yang:counter64;
+      description
+        "Number of 5GSM status messages received";
+    }
+  }
+
+  grouping nas-ue-counters {
+    description
+      "NAS overall user-equipment state summary counters";
+
+    leaf ues-total {
+      type yang:counter64;
+      description
+        "NAS User-equipment total state counter";
+    }
+
+    leaf ues-initial {
+      type yang:counter64;
+      description
+        "NAS User-equipment initial state counter";
+    }
+
+    leaf ues-registering {
+      type yang:counter64;
+      description
+        "NAS User-equipment registering state counter";
+    }
+
+    leaf ues-registered {
+      type yang:counter64;
+      description
+        "NAS User-equipment registered state counter";
+    }
+
+    leaf ues-deregistering {
+      type yang:counter64;
+      description
+        "NAS User-equipment deregistering state counter";
+    }
+
+    leaf ues-deregistered {
+      type yang:counter64;
+      description
+        "NAS User-equipment deregistered state counter";
+    }
+  }
+
+  grouping nas-pdu-session-counters {
+    description
+      "NAS overall pdu-session state summary counters";
+
+    leaf pdu-sessions-total {
+      type yang:counter64;
+      description
+        "NAS fn-rg specific pdu-session total state counter";
+    }
+
+    leaf pdu-sessions-inactive {
+      type yang:counter64;
+      description
+        "NAS fn-rg specific pdu-session inactive state counter";
+    }
+
+    leaf pdu-sessions-activating {
+      type yang:counter64;
+      description
+        "NAS fn-rg specific pdu-session activating state counter";
+    }
+
+    leaf pdu-sessions-active {
+      type yang:counter64;
+      description
+        "NAS fn-rg specific pdu-session active state counter";
+    }
+
+    leaf pdu-sessions-deactivating {
+      type yang:counter64;
+      description
+        "NAS fn-rg specific pdu-session deactivating state counter";
+    }
+  }
+
+  grouping nas-agf-top {
+    description
+      "Top-level grouping for AGF related NAS information";
+
+    container nas {
+      description
+        "Container for NAS daemon related info";
+
+      container counters {
+        description
+          "NAS User-equipment related counters";
+
+        uses nas-ue-counters;
+        uses nas-pdu-session-counters;
+      }
+
+      container message-counters {
+        description
+          "NAS N1 message statistics info";
+
+        uses nas-n1-sent-message-counters;
+        uses nas-n1-received-message-counters;
+      }
+
+      container fn-rg {
+        description
+          "Container for NAS fn-rg connection information";
+
+        container counters {
+          description
+            "NAS fn-rg User-equipment related counters";
+
+          uses nas-ue-counters;
+        }
+
+        container message-counters {
+            description
+              "NAS fn-rg N1 message statistics info";
+
+            uses nas-n1-fn-rg-sent-message-counters;
+            uses nas-n1-fn-rg-received-message-counters;
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-svc:services/js-agf:agf" {
+    description
+      "Adds NAS domain to agf services state";
+
+    uses nas-agf-top;
+  }
+}

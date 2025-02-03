@@ -1,0 +1,415 @@
+ module junos-genstate-multi-routing-engine-results-jtd-stats {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multi-routing-engine-results-jtd-stats";
+   prefix jgmrerjs;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for multi-routing-engine-results-jtd-stats";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping multi-routing-engine-results-jtd-stats-top {
+     description "Top-level grouping";
+     container multi-routing-engine-results-jtd-stats {
+       description "Top-level container";
+       list multi-routing-engine-item-jtd-stats {
+         leaf icmp-pkt-user-send-fail {
+           type uint64;
+           description "Linux ICMP send to ICMPD failures";
+         }
+         leaf ioctl-bad-cmsg {
+           type uint64;
+           description "Bad cmsg JTD IOCTL failures";
+         }
+         leaf ioctl-cmsg-missing {
+           type uint64;
+           description "Missing cmsg JTD IOCTL failures";
+         }
+         leaf ioctl-copy-from-userspace-fail {
+           type uint64;
+           description "Function copy_from_user() JTD IOCTL failures";
+         }
+         leaf ip-options-pkt-in-invalid {
+           type uint64;
+           description "IPv4 with IP invalid IP options received";
+         }
+         leaf ip-router-alert-user-send-fail {
+           type uint64;
+           description "IPv4 Router Alert packet send to ICMPD failures";
+         }
+         leaf resource-alloc-fail {
+           type uint64;
+           description "Resource allocation failures";
+         }
+         leaf skb-cmsg-control-get-fail {
+           type uint64;
+           description "Function skb_cmsg_control_get() call failures";
+         }
+         leaf skb-cmsg-control-set-fail {
+           type uint64;
+           description "Function skb_cmsg_control_set() call failures";
+         }
+         leaf ttp-bad-len {
+           type uint64;
+           description "TTP packets with bad header length received";
+         }
+         leaf ttp-l3-tx-drop {
+           type uint64;
+           description "TTP Layer 3 egress packets dropped";
+         }
+         leaf ttp-tlv-bad-drop {
+           type uint64;
+           description "TTP packets with bad TLV dropped";
+         }
+         leaf ttp-tlv-bad-len {
+           type uint64;
+           description "TTP packets with bad TLV length received";
+         }
+         leaf ttp-tlv-bad-type {
+           type uint64;
+           description "TTP packets with bad TLV type received";
+         }
+         leaf ttp-tlv-bad-value {
+           type uint64;
+           description "TTP packets with bad TLV value received";
+         }
+         leaf ttp-tlv-missing {
+           type uint64;
+           description "TTP packets with missing TLV received";
+         }
+         leaf ttp-tlv-too-many {
+           type uint64;
+           description "TTP packets with too many TLVs received";
+         }
+         leaf unexpected-codepoint {
+           type uint64;
+           description "Unexpected codepoint reached";
+         }
+         leaf upcall-add-fail {
+           type uint64;
+           description "Upcall entry add failures";
+         }
+         leaf upcall-read-fail {
+           type uint64;
+           description "Upcall entry read failures";
+         }
+         leaf upcall-syn-fail {
+           type uint64;
+           description "Upcall entry syn failures";
+         }
+         leaf packets-with-incorrect-inject-hint {
+           type uint64;
+           description "Incorrect inject/hint received";
+         }
+         leaf cache-add-entry-fail {
+           type uint64;
+           description "Cache entry add failures";
+         }
+         leaf cache-add-entry-success {
+           type uint64;
+           description "Cache entry add successes";
+         }
+         leaf cache-delete-entry-fail {
+           type uint64;
+           description "Cache entry delete failures";
+         }
+         leaf cache-delete-entry-success {
+           type uint64;
+           description "Cache entry delete successes";
+         }
+         leaf cache-lookup-entry-fail {
+           type uint64;
+           description "Cache entry lookup failures";
+         }
+         leaf cache-lookup-entry-success {
+           type uint64;
+           description "Cache entry lookup successes";
+         }
+         leaf cache-update-entry {
+           type uint64;
+           description "Cache entry updates";
+         }
+         leaf egress-filter-drops {
+           type uint64;
+           description "Packets dropped on egress filter";
+         }
+         leaf handle-drop-calls {
+           type uint64;
+           description "Non-DDOS policing related packet drops";
+         }
+         leaf handle-drop-calls-ddos {
+           type uint64;
+           description "DDOS policing related packet drops";
+         }
+         leaf igmpl2-in-pkts {
+           type uint64;
+           description "IGMP Layer 2 packets received";
+         }
+         leaf ingress-filter-drops {
+           type uint64;
+           description "Packets dropped on ingress filter";
+         }
+         leaf ioctl-processing-fail {
+           type uint64;
+           description "JTD IOCTL failures";
+         }
+         leaf ioctl-processing-success {
+           type uint64;
+           description "JTD IOCTL successes";
+         }
+         leaf ip-options-pkt-in {
+           type uint64;
+           description "IPv4 with IP options received";
+         }
+         leaf ip-router-alert-rx {
+           type uint64;
+           description "IPv4 Router Alert packets received";
+         }
+         leaf mldl2-in-pkts {
+           type uint64;
+           description "MLD Layer 2 packets received";
+         }
+         leaf netlink-send-fail {
+           type uint64;
+           description "Netlink send failures";
+         }
+         leaf p4-agent-pkt-rx {
+           type uint64;
+           description "Ingress packets sent to P4 switch application";
+         }
+         leaf ttp-raw-pkt-rx {
+           type uint64;
+           description "TTP_TLV_RAWRX_PROTO tagged ingress packets sent to userspace";
+         }
+         leaf resets-sent {
+           type uint64;
+           description "Reset packets sent";
+         }
+         leaf tcp6-socket-lookup-fail {
+           type uint64;
+           description "TCP6 socket lookup failures";
+         }
+         leaf tcp6-socket-lookup-success {
+           type uint64;
+           description "TCP6 socket lookup successes";
+         }
+         leaf tcp-socket-lookup-fail {
+           type uint64;
+           description "TCP socket lookup failures";
+         }
+         leaf tcp-socket-lookup-success {
+           type uint64;
+           description "TCP socket lookup successes";
+         }
+         leaf ttp-arp-in {
+           type uint64;
+           description "TTP ARP packets received";
+         }
+         leaf ttp-clnp-in {
+           type uint64;
+           description "TTP CLNP packets received";
+         }
+         leaf ttp-hdr-in {
+           type uint64;
+           description "TTP packets received";
+         }
+         leaf ttp-hdr-out {
+           type uint64;
+           description "TTP packets transmitted";
+         }
+         leaf ttp-ipv4-mpls-in {
+           type uint64;
+           description "TTP IPv4->MPLS packets received";
+         }
+         leaf ttp-l2-in {
+           type uint64;
+           description "TTP Layer 2 packets received";
+         }
+         leaf ttp-l3-ipv4-in {
+           type uint64;
+           description "TTP Layer 3 IPv4 packets received";
+         }
+         leaf ttp-l3-ipv6-in {
+           type uint64;
+           description "TTP Layer 3 IPv6 packets received";
+         }
+         leaf ttp-mpls-ipv4-in {
+           type uint64;
+           description "TTP MPLS->IPv4 packets received";
+         }
+         leaf ttp-l3-mpls-in {
+           type uint64;
+           description "TTP Layer 3 MPLS packets received";
+         }
+         leaf ttp-unknown-in {
+           type uint64;
+           description "Unknown TTP packets received";
+         }
+         leaf ttp-l3-unknown {
+           type uint64;
+           description "TTP Layer 3 unknown packets received";
+         }
+         leaf upcall-add-success {
+           type uint64;
+           description "Upcall entry add successes";
+         }
+         leaf upcall-read-success {
+           type uint64;
+           description "Upcall entry read successes";
+         }
+         leaf upcall-syn-success {
+           type uint64;
+           description "Upcall entry syn successes";
+         }
+         leaf egress-drops {
+           type uint64;
+           description "Egress drops";
+         }
+         leaf fragments {
+           type uint64;
+           description "IP fragments";
+         }
+         leaf ingress-filter-drop {
+           type uint64;
+           description "Ingress L2 filter drops";
+         }
+         leaf mpls-ttl-expired-with-ttp-hint {
+           type uint64;
+           description "MPLS packets with TTL expiry hint received";
+         }
+         leaf ttp-in-bytes {
+           type uint64;
+           description "TTP packets received bytes";
+         }
+         leaf ttp-in-packets {
+           type uint64;
+           description "TTP packets received";
+         }
+         leaf ttp-out-bytes {
+           type uint64;
+           description "TTP packets transmitted bytes";
+         }
+         leaf ttp-out-packets {
+           type uint64;
+           description "TTP packets transmitted";
+         }
+         leaf ttp-in-unknown-l3 {
+           type uint64;
+           description "TTP packets with unknown Rx type received";
+         }
+         leaf ttp-ipv4-in-bytes {
+           type uint64;
+           description "TTP IPv4 packets received bytes";
+         }
+         leaf ttp-ipv4-in-packets {
+           type uint64;
+           description "TTP IPv4 received packets";
+         }
+         leaf ttp-ipv4-out-bytes {
+           type uint64;
+           description "TTP IPv4 packets transmitted bytes";
+         }
+         leaf ttp-ipv4-out-packets {
+           type uint64;
+           description "TTP IPv4 packets transmitted";
+         }
+         leaf ttp-ipv6-in-bytes {
+           type uint64;
+           description "TTP IPv6 packets received bytes";
+         }
+         leaf ttp-ipv6-in-packets {
+           type uint64;
+           description "TTP IPv6 packets received";
+         }
+         leaf ttp-ipv6-out-bytes {
+           type uint64;
+           description "TTP IPv6 packets transmitted bytes";
+         }
+         leaf ttp-ipv6-out-packets {
+           type uint64;
+           description "TTP IPv6 packets transmitted";
+         }
+         leaf mpls-packets-0-bad-sum {
+           type uint64;
+           description "MPLS IPv4 packet with bad checksum received";
+         }
+         leaf mpls-packets-0-tag {
+           type uint64;
+           description "MPLS IPv4 packet received";
+         }
+         leaf mpls-packets-1-tag {
+           type uint64;
+           description "MPLS Router alert packets received";
+         }
+         leaf mpls-packets-2-tag {
+           type uint64;
+           description "MPLS IPv6 packets received";
+         }
+         leaf mpls-packets-bad-tag {
+           type uint64;
+           description "MPLS packets bad tag received";
+         }
+         leaf mpls-packets-bfd {
+           type uint64;
+           description "MPLS BFD packets received";
+         }
+         leaf mpls-packets-drop {
+           type uint64;
+           description "Rx MPLS packets dropped";
+         }
+         leaf mpls-packets-eoam {
+           type uint64;
+           description "MPLS CFM packets received";
+         }
+         leaf mpls-packets-lsp-ing {
+           type uint64;
+           description "MPLS LSP ping packets received";
+         }
+         leaf mpls-packets-too-small {
+           type uint64;
+           description "Undersized MPLS packets received";
+         }
+         leaf mpls-packets-total {
+           type uint64;
+           description "Total MPLS packets received";
+         }
+         leaf mpls-packets-ttl-expire {
+           type uint64;
+           description "MPLS TTL expired packets received";
+         }
+         leaf re-name-stats {
+           type string;
+           description "Hostname of the Routing Engine";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds multi-routing-engine-results-jtd-stats to top-level genstate";
+     uses multi-routing-engine-results-jtd-stats-top;
+   }
+ }

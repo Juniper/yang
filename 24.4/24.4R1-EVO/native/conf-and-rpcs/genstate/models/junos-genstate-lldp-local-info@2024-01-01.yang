@@ -1,0 +1,148 @@
+ module junos-genstate-lldp-local-info {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/lldp-local-info";
+   prefix jglli;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lldp-local-info";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping lldp-local-info-top {
+     description "Top-level grouping";
+     container lldp-local-info {
+       description "Top-level container";
+       leaf lldp-local-chassis-id {
+         type string;
+       }
+       leaf lldp-local-chassis-id-type {
+         type string;
+       }
+       leaf lldp-local-system-name {
+         type string;
+       }
+       leaf lldp-local-system-description {
+         type string;
+       }
+       leaf lldp-local-system-capabilities-supported {
+         type string;
+         description "LLDP local system capabilities supported";
+       }
+       leaf lldp-local-system-capabilities-enabled {
+         type string;
+         description "LLDP local system capabilities enabled";
+       }
+       leaf lldp-local-redundancy-group-name {
+         type string;
+       }
+       leaf lldp-local-redundancy-group-address {
+         type string;
+       }
+       leaf lldp-local-cloud-reach-event {
+         type string;
+       }
+       leaf lldp-local-phone-home-active {
+         type string;
+       }
+       list lldp-local-interface-info {
+         leaf lldp-local-interface-name {
+           type string;
+         }
+         leaf lldp-parent-local-interface-name {
+           type string;
+           description "Parent interface name of local interface";
+         }
+         leaf lldp-local-interface-id {
+           type uint32;
+         }
+         leaf lldp-local-interface-description {
+           type string;
+         }
+         leaf lldp-local-interface-status {
+           type string;
+           description "Interface status";
+         }
+         leaf lldp-tlv-select {
+           type string;
+           description "LLDP tlv-select";
+         }
+         leaf lldp-tlv-filter {
+           type string;
+           description "LLDP tlv-filter";
+         }
+         leaf lldp-med-tlv-select {
+           type string;
+           description "LLDP-MED tlv-select";
+         }
+         leaf lldp-med-tlv-filter {
+           type string;
+           description "LLDP-MED tlv-filter";
+         }
+       }
+       list lldp-local-cloud-connect-info {
+         leaf cc-state {
+           type uint32;
+           description "Controller connectivity state";
+         }
+         leaf cc-message {
+           type string;
+           description "Controller connectivity state message";
+         }
+         leaf cc-errno {
+           type uint32;
+           description "Controller connectivity error code";
+         }
+       }
+       list lldp-local-management-address-info {
+         leaf lldp-local-management-address-interface-name {
+           type string;
+           description "LLDP local management interaface name";
+         }
+         leaf lldp-local-management-address-subtype {
+           type string;
+           description "LLDP local management interface address subtype ";
+         }
+         leaf lldp-local-management-address-address {
+           type string;
+           description "LLDP local management interface address ";
+         }
+         leaf lldp-local-management-address-interface-number-subtype {
+           type string;
+           description "LLDP local management interface number subtype";
+         }
+         leaf lldp-local-management-address-interface-number {
+           type uint32;
+           description "LLDP local management address interface number";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lldp-local-info to top-level genstate";
+     uses lldp-local-info-top;
+   }
+ }

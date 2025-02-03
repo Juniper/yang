@@ -1,0 +1,991 @@
+module junos-state-chassis {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/chassis";
+  prefix js-chas;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-routing-types {
+    prefix rt-types;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-chassis-types {
+    prefix jct;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     chassis state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-08-02 {
+    description
+      "Add additional process, memory, interrupt, kernel state data";
+    reference "0.6.0";
+  }
+
+  revision 2024-04-01 {
+    description
+      "Add chassis environment, front-panel and fabric state data";
+    reference "0.5.0";
+  }
+
+  revision 2023-10-30 {
+    description
+      "Add process and load-average state data";
+    reference "0.4.0";
+  }
+
+  revision 2022-11-22 {
+    description
+      "Add filesystem storage state data";
+    reference "0.3.0";
+  }
+
+  revision 2022-05-12 {
+    description
+      "Add chassis MAC address state data";
+    reference "0.2.0";
+  }
+
+  revision 2022-04-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.6.0";
+
+  grouping chassis-sub-module-top {
+    description
+      "Top-level grouping for the list of sub-module references";
+
+    container sub-modules {
+      description
+        "Encapsulating container for the list of chassis sub-modules
+         references";
+
+      list sub-module {
+        key name;
+        description
+          "List of chassis sub-module references";
+
+        leaf name {
+          type leafref {
+            path "../../../../module/name";
+          }
+          description
+            "Reference to the name of the sub-module";
+        }
+      }
+    }
+  }
+
+  grouping chassis-module-common {
+    description
+      "Top-level grouping for common chassis module attributes";
+    leaf oper-status {
+      type enumeration {
+        enum unknown {
+          value 1;
+          description
+            "Default operational status of a platform component";
+        }
+        enum empty {
+          value 2;
+          description
+            "Component is not present in given chassis slot";
+        }
+        enum present {
+          value 3;
+          description
+            "Component is present in given chassis slot";
+        }
+        enum onlining {
+          value 4;
+          description
+            "Component is powered on and transitioning to online state";
+        }
+        enum online {
+          value 5;
+          description
+            "Component is enabled and online";
+        }
+        enum offline {
+          value 6;
+          description
+            "Component is disabled and is in offline state";
+        }
+        enum offlining {
+          value 7;
+          description
+            "Component is transitioning to offline state";
+        }
+        enum standby {
+          value 8;
+          description
+            "Component is in standby mode";
+        }
+        enum diagnostic {
+          value 9;
+          description
+            "Component is in diagnostic mode";
+        }
+        enum fault {
+          value 10;
+          description
+            "Component is in fault state";
+        }
+      }
+      description
+        "Component operational state for a given platform module";
+    }
+
+    leaf part-name {
+      type string;
+      description
+        "Complete part name as described in the output of 'show chassis
+         hardware'";
+    }
+
+    leaf hardware-version {
+      type string;
+      description
+        "Hardware revision of the chassis component";
+    }
+
+    leaf model-number {
+      type string;
+      description
+        "Model number of the chassis component";
+    }
+
+    leaf part-number {
+      type string;
+      description
+        "Part number for the chassis component";
+    }
+
+    leaf serial-number {
+      type string;
+      description
+        "Serial number of the chassis component. The serial number of
+         the backplane is also the serial number of the device
+         chassis.";
+    }
+
+    leaf description {
+      type string;
+      description
+        "Brief description of the chassis component";
+    }
+
+    leaf clei-code {
+      type string;
+      description
+        "Common Language Equipment Identifier code. This value is
+         displayed only for hardware components that use ID EEPROM
+         format v2. This value is not displayed for components that use
+         ID EEPROM format v1.";
+    }
+
+    leaf parent-module {
+      type leafref {
+        path "../../module/name";
+      }
+      description
+        "Reference to the name of the parent component";
+    }
+  }
+
+  grouping chassis-storage {
+    description
+      "Top-level grouping for chassis module filesystem storage
+       attributes";
+
+    container storage {
+      description
+        "Storage state date for a given chassis module";
+
+      container mount-points {
+        description
+          "Encapsulating container for filesystem mount points";
+
+        list mount-point {
+          key name;
+          description
+            "List of filesystem mount points for a given chassis
+             module.  The structure of the list is represented as a
+             mapping of `df -B1` unix command output generally packaged
+             as part of GNU coreutils";
+
+          leaf name {
+            type string;
+            description
+              "The name of the directory on which the filesystem is
+               mounted";
+          }
+
+          leaf filesystem {
+            type string;
+            description
+              "The name of the filesystem";
+          }
+
+          leaf size {
+            type uint64;
+            units bytes;
+            description
+              "The size of the filesystem in 1-byte blocks";
+          }
+
+          leaf available {
+            type uint64;
+            units bytes;
+            description
+              "The available space in 1-byte blocks";
+          }
+
+          leaf utilized {
+            type uint64;
+            units bytes;
+            description
+              "The used space in 1-byte blocks";
+          }
+
+          leaf utilized-percent {
+            type rt-types:percentage;
+            description
+              "The percentage of used space";
+          }
+        }
+      }
+    }
+  }
+
+  grouping chassis-load {
+    description
+      "Top-level grouping for chassis module cpu load";
+
+    container load-average {
+      description
+        "CPU load average for a given chassis module";
+
+      leaf interval-1min {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        description
+          "Load average for 1 min interval";
+      }
+
+      leaf interval-5min {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        description
+          "Load average for 5 min interval";
+      }
+
+      leaf interval-15min {
+        type decimal64 {
+          fraction-digits 2;
+        }
+        description
+          "Load average for 15 min interval";
+      }
+    }
+  }
+
+  grouping chassis-processes {
+    description
+      "Top-level grouping for chassis module process attributes";
+
+    container processes {
+      description
+        "Encapsulating container for process attributes";
+
+      leaf process-count {
+        type yang:gauge32;
+        description
+          "Number of processes running in the node";
+      }
+
+      leaf process-max {
+        type uint32;
+        description
+          "Maximum number of processes allowed in the node";
+      }
+
+      list process {
+        key "pid";
+        description
+          "List of processes on the system";
+
+        leaf pid {
+          type uint32;
+          description
+            "Process ID (PID)";
+        }
+
+        leaf name {
+          type string;
+          description
+            "Process name";
+        }
+
+        leaf type {
+          type identityref {
+            base jct:junos-process-type;
+          }
+        }
+
+        container fabric-process {
+          leaf status {
+            type enumeration {
+              enum unknown {
+                value 1;
+                description
+                  "Application status is not known";
+              }
+              enum in-progress {
+                value 2;
+                description
+                  "Application is in in-progress state";
+              }
+              enum ready {
+                value 3;
+                description
+                  "Application is in ready state";
+              }
+            }
+            description
+              "Status of the process running on a particular node";
+          }
+
+          leaf reason {
+            type enumeration {
+              enum not-applicable {
+                value 1;
+                description
+                  "Application status reason is not applicable";
+              }
+              enum high-availability {
+                value 2;
+                description
+                  "Application status is because it is in High
+                   Availability (HA) window";
+              }
+              enum board {
+                value 3;
+                description
+                  "Application status is because Device Management
+                   Framework (DMF) is in progress";
+              }
+              enum link {
+                value 4;
+                description
+                  "Application status is because Link
+                   training/detraining is in progress";
+              }
+            }
+            description
+              "Any specific reason for the status of the process";
+          }
+
+          description
+            "Fabric processes running at ASIC or PFE level";
+        }
+
+        container cpu {
+          description
+            "Process CPU utilization details";
+
+          leaf interval-1min {
+            type jt:irix-percentage;
+            description
+              "Process % CPU utilization average for 1 min interval";
+          }
+
+          leaf interval-5min {
+            type jt:irix-percentage;
+            description
+              "Process % CPU utilization average for 5 min interval";
+          }
+
+          leaf interval-15min {
+            type jt:irix-percentage;
+            description
+              "Process % CPU utilization average for 15 min interval";
+          }
+        }
+
+        container memory {
+          description
+            "Process memory attribute details";
+
+          leaf text-segment-size {
+            type jt:kilobytes;
+            description
+              "Text segment memory usage of the process in kilobytes";
+          }
+
+          leaf stack-segment-size {
+            type jt:kilobytes;
+            description
+              "Stack segment memory usage of the process in kilobytes";
+          }
+
+          leaf data-segment-size {
+            type jt:kilobytes;
+            description
+              "Data segment memory usage of the process in kilobytes";
+          }
+
+          leaf resident-memory-size {
+            type jt:kilobytes;
+            description
+              "Resident size in memory (VmRSS) of the process in
+               kilobytes";
+          }
+
+          leaf virtual-memory-size {
+            type jt:kilobytes;
+            description
+              "Total program size (VmSize) of the process in kilobytes";
+          }
+        }
+
+        container file-descriptors {
+          description
+            "Container for per-process file descriptors data";
+
+          leaf used {
+            type yang:gauge64;
+            description
+              "File descriptors in use by this process";
+          }
+
+          leaf max {
+            type uint64;
+            description
+              "Max file descriptors allowed for this process";
+          }
+        }
+      }
+    }
+  }
+
+  grouping chassis-mac-addresses {
+    description
+      "Grouping for MAC address information related to chassis modules";
+
+    container mac-addresses {
+      description
+        "MAC address information for a given chassis module";
+
+      leaf public-base-address {
+        type yang:mac-address;
+        description
+          "Base (Starting) Public MAC address for the chassis module";
+      }
+
+      leaf public-address-count {
+        type uint32;
+        description
+          "Total number of available public MAC addresses for the
+           chassis module";
+      }
+
+      leaf private-base-address {
+        type yang:mac-address;
+        description
+          "Base (Staring) Private MAC address for the chassis module";
+      }
+
+      leaf private-address-count {
+        type uint32;
+        description
+          "Total number of available private MAC addresses for the
+           chassis module";
+      }
+    }
+  }
+
+  grouping chassis-module-fabric-top {
+    description
+      "Top-level grouping containing details of fabric module";
+
+    container fabric {
+      description
+      "Encapsulating container for fabric module";
+
+      leaf sib-link-error {
+        type enumeration {
+          enum unknown {
+            value 0;
+            description
+              "Link errors status is not known";
+          }
+          enum none {
+            value 1;
+            description
+              "No link errors present";
+          }
+          enum link-errors {
+            value 2;
+            description
+              "Link failure errors";
+          }
+          enum inactive {
+            value 4;
+            description
+               "Link is in inactive state";
+          }
+          enum partially-active {
+            value 5;
+            description
+              "Link is in partially active state";
+          }
+        }
+        description
+          "Link error in a given SIB";
+      }
+
+      leaf sib-link-status {
+        type enumeration {
+          enum unknown {
+            value 0;
+            description
+              "Link status is not known";
+          }
+          enum active {
+            value 1;
+            description
+              "Link status is active";
+          }
+          enum unused {
+            value 2;
+            description
+              "Link is not used";
+          }
+        }
+        description
+          "Status of the link in a given SIB";
+      }
+    }
+  }
+
+  grouping chassis-module-fpm-led {
+    description
+      "Containing LED details of front panel module";
+
+    list led {
+      description
+        "Containing list of LEDs for FRUs and alarms";
+      key name;
+
+      leaf name {
+        type identityref {
+          base jct:fpm-led-name;
+        }
+        description
+          "Led name for front panel display module";
+      }
+
+      leaf value {
+        type boolean;
+        description
+          "Led value (ON/OFF) for front panel display module";
+      }
+    }
+  }
+
+  grouping fpm-alarm-port-state {
+    description
+      "Grouping of dry-contact alarm port state.";
+
+    leaf index {
+      type uint8;
+      description
+        "Port index.";
+    }
+
+    leaf status {
+      type enumeration {
+        enum set {
+          description
+            "Port is connected for dry-contact alarm.";
+        }
+        enum clear {
+          description
+            "Port is not connected for dry-contact alarm.";
+        }
+      }
+      description
+        "Port status for dry-contact alarm.";
+    }
+  }
+
+  grouping chassis-module-fpm-alarm-port {
+    description
+      "Top-level grouping containing dry-contact details of front panel
+       module.";
+
+    list input-port {
+      description
+        "List of input ports for dry-contact alarm.";
+
+      key index;
+
+      uses fpm-alarm-port-state;
+    }
+
+    list output-port {
+      description
+        "List of output ports for dry-contact alarm.";
+
+      key index;
+
+      uses fpm-alarm-port-state;
+    }
+  }
+
+
+  grouping chassis-module-fpm-top {
+    description
+      "Top-level grouping containing details of front panel module.";
+
+    container fpm {
+      description
+        "Encapsulating container for front panel display module.";
+
+      container fru-leds {
+        description
+          "Led used to indicate alarm in front panel display module.";
+
+        list fru-led {
+          description
+            "List of FRU leds.";
+
+          key fru-name;
+          leaf fru-name {
+            type leafref {
+              path "../../../../../module/name";
+            }
+            description
+              "Hardware components name listed for led details in front panel module.";
+          }
+
+          container leds {
+            description
+              "Containing LED details for all hardware components.";
+            uses chassis-module-fpm-led;
+          }
+        }
+      }
+
+      container alarm-leds {
+        description
+          "Led used to indicate alarm in front panel display module.";
+        uses chassis-module-fpm-led;
+      }
+
+      container alarm-port {
+        description
+          "Dry-contact alarm details in front panel display module.";
+        uses chassis-module-fpm-alarm-port;
+      }
+    }
+  }
+
+  grouping env-stats-group {
+    description
+      "Encapsulating container for the list of chassis modules in the
+        system.";
+
+    leaf name {
+      type string;
+      description
+        "The name of the resource in FRU.";
+    }
+
+    leaf value {
+      type uint64;
+      description
+        "The value of the resource in given FRU.";
+    }
+
+    leaf type {
+      type identityref {
+        base jct:junos-sensor-type;
+      }
+      description
+        "Sensor type based on information such as temperature, voltage etc.";
+    }
+
+    leaf unit {
+      type identityref {
+        base jct:component-measurement-units;
+      }
+      description
+        "Measurement unit of the value measured for the given resource.";
+    }
+
+    leaf status {
+      type enumeration {
+        enum unknown {
+          value 1;
+          description
+            "Sensor status is not known.";
+        }
+        enum init {
+          value 2;
+          description
+            "Sensor status is up for initialization.";
+        }
+        enum testing {
+          value 3;
+          description
+            "Sensor status is in testing mode.";
+        }
+        enum ok {
+          value 4;
+          description
+            "Sensor status is ok.";
+        }
+        enum failed {
+          value 5;
+          description
+            "Sensor status is failed.";
+        }
+        enum init-failed {
+          value 6;
+          description
+            "Sensor status is init failed.";
+        }
+      }
+      description
+        "Status of the given resource to indicate if it is OK or not.";
+    }
+  }
+
+  grouping environment-sensors {
+    description
+      "Grouping for environment sensors.";
+
+    container sensors {
+      description
+        "Encapsulating container for a list of environment sensors.";
+
+      list sensor {
+        key name;
+
+        description
+          "List of sensor related resources.";
+
+        uses env-stats-group;
+      }
+    }
+  }
+
+  grouping chassis-module-environment-top {
+    description
+      "Grouping containing details of environment state for hardware
+       modules.";
+
+    container environment {
+      description
+        "Resources related to a FRU environment (power, voltage and
+         temperature).";
+
+      uses environment-sensors;
+    }
+  }
+
+  grouping chassis-memory {
+    description
+      "Top-level grouping for memory in a node";
+
+    container memory {
+      description
+        "Container for system memory data per node";
+
+      leaf physical {
+        type jt:kilobytes;
+        description
+          "Amount of physical memory available in the system in KBs";
+      }
+
+      leaf free {
+        type jt:kilobytes;
+        description
+          "Free memory not being used for anything in KBs";
+      }
+
+      leaf active {
+        type jt:kilobytes;
+        description
+          "Memory that has been used more recently in KBs";
+      }
+
+      leaf inactive {
+        type jt:kilobytes;
+        description
+          "Memory not used recently and suitable for reclaim in KBs";
+      }
+
+      leaf buffer-cache {
+        type jt:kilobytes;
+        description
+          "Memory used for buffers/cache in KBs";
+      }
+
+      leaf swap-used {
+        type jt:kilobytes;
+        description
+          "Swap memory in use currently in KBs";
+      }
+
+      leaf swap-total {
+        type jt:kilobytes;
+        description
+          "Total Swap space available in KBs";
+      }
+    }
+  }
+
+  grouping chassis-interrupts {
+    description
+      "Grouping containing per node interrupts data";
+
+    container interrupts {
+      description
+        "Container for hardware interrupts";
+
+      leaf rate {
+        type yang:gauge32;
+        description
+          "Hardware interrupts per second";
+      }
+
+      leaf total {
+        type yang:counter64;
+        description
+          "Total number of hardware interrupts";
+      }
+    }
+  }
+
+  grouping chassis-kernel {
+    description
+      "Grouping containing Kernel data";
+
+    container kernel {
+      description
+        "Container for kernel data";
+
+      container file-descriptors {
+        description
+          "Container for per node file descriptors data";
+
+        leaf used {
+          type yang:gauge64;
+          description
+            "Current utilization of file descriptors in the node";
+        }
+
+        leaf max {
+          type uint64;
+          description
+            "Maximum file descriptors allowed in the node";
+        }
+      }
+    }
+  }
+
+  grouping chassis-module-top {
+    description
+      "Top-level grouping containing a list of chassis modules";
+
+    container modules {
+      description
+        "Encapsulating container for the list of chassis modules in the
+         system";
+
+      list module {
+        key name;
+
+        description
+          "List of chassis modules in the system";
+
+        leaf name {
+          type string;
+          description
+            "A name representing a unique chassis module in the system";
+        }
+
+        uses chassis-module-common;
+        uses chassis-sub-module-top;
+        uses chassis-mac-addresses;
+        uses chassis-storage;
+        uses chassis-module-fpm-top;
+        uses chassis-module-fabric-top;
+        uses chassis-module-environment-top;
+        uses chassis-load;
+        uses chassis-processes;
+        uses chassis-memory;
+        uses chassis-interrupts;
+        uses chassis-kernel;
+      }
+    }
+  }
+
+  grouping chassis-top {
+    description
+      "Top-level grouping for chassis state data";
+
+    container chassis {
+      description
+        "Container for chassis state";
+
+      uses chassis-module-top;
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds chassis domain to system state";
+
+    uses chassis-top;
+  }
+}

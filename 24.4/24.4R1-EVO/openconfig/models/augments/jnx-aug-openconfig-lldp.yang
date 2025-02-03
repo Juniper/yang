@@ -1,0 +1,84 @@
+module jnx-aug-openconfig-lldp {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/lldp";
+
+  prefix "jnx-oc-lldp";
+
+  import openconfig-lldp-types { prefix oc-lldp-types; }
+  import openconfig-lldp { prefix oc-lldp; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig lldp model";
+
+  revision "2016-06-24" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+    augment "/oc-lldp:lldp/oc-lldp:interfaces/oc-lldp:interface/oc-lldp:state" {
+      leaf loc-port-id { 
+         type string;
+         description
+            "The string value used to identify the port component
+            associated with a given port in the local system.";
+        }
+      }
+    augment "/oc-lldp:lldp/oc-lldp:interfaces/oc-lldp:interface/oc-lldp:state" {
+      leaf loc-port-description {
+        type string;
+        description
+           "The string value used to identify the IEEE 802 LAN station's port
+           description associated with the local system. If the local
+           agent supports IETF RFC 2863, lldpLocPortDesc object should
+           have the same value of ifDescr object.";
+      }
+    }
+
+    grouping jnx-local-dest-mac-type {
+      leaf jnx-local-dest-mac-type {
+        type string;
+        description
+        "The string value used to identify the destination mac type
+        configured localy on lldp interface";
+      }
+    }
+
+    augment "/oc-lldp:lldp/oc-lldp:interfaces/oc-lldp:interface/oc-lldp:state" {
+      uses jnx-local-dest-mac-type;
+    }
+
+    grouping jnx-global-dest-mac-type {
+      leaf jnx-global-dest-mac-type {
+        type string;
+        description
+        "The string value used to identify the destination mac type
+        configured globaly for lldp.";
+      }
+    }
+
+    augment "/oc-lldp:lldp/oc-lldp:state" {
+      uses jnx-global-dest-mac-type;
+    }
+
+    grouping loc_port_info_type {
+      leaf loc-port-id-type {
+	 type oc-lldp-types:port-id-type;
+         description
+         "The type of port identifier encoding used in the associated
+         'lldpLocPortId' object.Refered from the lldp standard mib";
+      }
+    }
+
+    augment "/oc-lldp:lldp/oc-lldp:state" {
+       leaf loc-port-id-type {
+        type oc-lldp-types:port-id-type;
+        description
+           "The type of port identifier encoding used in the associated
+           'lldpLocPortId' object.Refered from the lldp standard mib";
+       }
+     }
+}
+

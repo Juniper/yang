@@ -1,0 +1,464 @@
+ module junos-genstate-dcbx-neighbor-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dcbx-neighbor-information";
+   prefix jgdni;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dcbx-neighbor-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping dcbx-neighbor-information-top {
+     description "Top-level grouping";
+     container dcbx-neighbor-information {
+       description "Top-level container";
+       list dcbx-interface-information {
+         description "DCBX related information for interface";
+         leaf dcbx-interface-name {
+           type string;
+         }
+         leaf dcbx-protocol-state {
+           type string;
+         }
+         leaf dcbx-active-application-maps {
+           type string;
+         }
+         leaf dcbx-protocol-mode {
+           type string;
+         }
+         list dcbx-status-information {
+           leaf dcbx-interface-status {
+             type string;
+           }
+           leaf dcbx-interface-name {
+             type string;
+           }
+         }
+         list dcbx-protocol-control-adv {
+           leaf dcbx-feature-advertisement-type {
+             type string;
+             description "Advertisement type for the feature";
+           }
+           container dcbx-protocol-control-information {
+             leaf dcbx-protocol-control-op-version {
+               type uint32;
+               description "Operation version of the DCBX control protocol";
+             }
+             leaf dcbx-protocol-control-seq-number {
+               type uint32;
+               description "Current sequence number of the DCBX control protocol";
+             }
+             leaf dcbx-protocol-control-ack-id {
+               type uint32;
+               description "Acknowledge id of the DCBX control protocol";
+             }
+             leaf dcbx-protocol-control-seq-number-satellite {
+               type uint32;
+               description "Current sequence number of the DCBX control protocol on the V44 Satellite device";
+             }
+           }
+         }
+         container dcbx-feature-pfc {
+           container dcbx-feature-common {
+             description "Common header for a DCBX feature";
+             leaf dcbx-feature-name {
+               type string;
+             }
+             leaf dcbx-feature-protocol-state {
+               type string;
+             }
+             leaf dcbx-feature-operation-state {
+               type string;
+             }
+           }
+           list dcbx-feature-pfc-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             leaf pfc-max-no-traffic-class {
+               type uint32;
+               description "Max number of traffic class capable to support PFC";
+             }
+             container dcbx-feature-flags {
+               description "Different common flags relevant to each DCBX feature";
+               leaf dcbx-feature-flag-enable {
+                 type string;
+               }
+               leaf dcbx-feature-flag-willing {
+                 type string;
+               }
+               leaf dcbx-feature-flag-error {
+                 type string;
+               }
+             }
+             list pfc-configuration {
+               leaf dcbx-feature-pfc-code-point {
+                 type string;
+                 description "IEEE Code Point";
+               }
+               leaf dcbx-feature-pfc-state {
+                 type string;
+                 description "PFC state for the priority";
+               }
+             }
+           }
+         }
+         container ieee-dcbx-feature-pfc {
+           container ieee-dcbx-feature-common {
+             description "Common header for a IEEE DCBX feature";
+             leaf dcbx-feature-name {
+               type string;
+             }
+           }
+           list ieee-dcbx-feature-pfc-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             leaf pfc-max-no-traffic-class {
+               type uint32;
+               description "Max number of traffic class capable to support PFC";
+             }
+             leaf dcbx-feature-operation-state {
+               type string;
+             }
+             container ieee-dcbx-feature-flags {
+               description "Different common flags relevant to each DCBX feature";
+               leaf dcbx-feature-flag-willing {
+                 type string;
+               }
+             }
+             container ieee-dcbx-feature-pfc-flags {
+               leaf ieee-dcbx-feature-pfc-mbc {
+                 type string;
+               }
+             }
+             list pfc-configuration {
+               leaf dcbx-feature-pfc-code-point {
+                 type string;
+                 description "IEEE Code Point";
+               }
+               leaf dcbx-feature-pfc-state {
+                 type string;
+                 description "PFC state for the priority";
+               }
+             }
+           }
+         }
+         container dcbx-feature-application {
+           container dcbx-feature-common {
+             description "Common header for a DCBX feature";
+             leaf dcbx-feature-name {
+               type string;
+             }
+             leaf dcbx-feature-protocol-state {
+               type string;
+             }
+             leaf dcbx-feature-operation-state {
+               type string;
+             }
+           }
+           list dcbx-feature-application-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             container dcbx-feature-flags {
+               description "Different common flags relevant to each DCBX feature";
+               leaf dcbx-feature-flag-enable {
+                 type string;
+               }
+               leaf dcbx-feature-flag-willing {
+                 type string;
+               }
+               leaf dcbx-feature-flag-error {
+                 type string;
+               }
+             }
+             list dcbx-feature-application-configuration {
+               container dcbx-feature-application-entry {
+                 leaf dcbx-feature-application-name {
+                   type string;
+                   description "Application Name";
+                 }
+                 leaf dcbx-feature-application-ether-type {
+                   type string;
+                   description "Ethernet type of the application";
+                 }
+                 leaf dcbx-feature-application-socket-number {
+                   type string;
+                   description "Socket number of the application";
+                 }
+                 leaf dcbx-feature-application-priority-map {
+                   type string;
+                   description "Priority map of the application";
+                 }
+                 leaf dcbx-feature-application-status {
+                   type string;
+                   description "Status of the application";
+                 }
+               }
+             }
+           }
+         }
+         container ieee-dcbx-feature-application {
+           container ieee-dcbx-feature-common {
+             description "Common header for a IEEE DCBX feature";
+             leaf dcbx-feature-name {
+               type string;
+             }
+           }
+           list ieee-dcbx-feature-application-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             list ieee-dcbx-feature-application-configuration {
+               container ieee-dcbx-feature-application-entry {
+                 leaf dcbx-feature-application-name {
+                   type string;
+                   description "Application Name";
+                 }
+                 leaf dcbx-feature-application-ether-type {
+                   type string;
+                   description "Ethernet type of the application";
+                 }
+                 leaf dcbx-feature-application-socket-number {
+                   type string;
+                   description "Socket number of the application";
+                 }
+                 leaf ieee-dcbx-feature-application-priority-field {
+                   type string;
+                   description "Priority field of the application";
+                 }
+                 leaf dcbx-feature-application-priority-map {
+                   type string;
+                   description "Priority map of the application";
+                 }
+               }
+             }
+           }
+         }
+         container dcbx-feature-ets {
+           container dcbx-feature-common {
+             description "Common header for a DCBX feature";
+             leaf dcbx-feature-name {
+               type string;
+             }
+             leaf dcbx-feature-protocol-state {
+               type string;
+             }
+             leaf dcbx-feature-operation-state {
+               type string;
+             }
+           }
+           list dcbx-feature-ets-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             leaf ets-max-no-traffic-class {
+               type uint32;
+               description "Max number of traffic class capable to support ETS";
+             }
+             container dcbx-feature-flags {
+               description "Different common flags relevant to each DCBX feature";
+               leaf dcbx-feature-flag-enable {
+                 type string;
+               }
+               leaf dcbx-feature-flag-willing {
+                 type string;
+               }
+               leaf dcbx-feature-flag-error {
+                 type string;
+               }
+             }
+             list ets-configuration-cp-priority-group {
+               list ets-configuration-cp-priority-group-item {
+                 leaf dcbx-feature-ets-code-point {
+                   type string;
+                   description "Code Points for ETS";
+                 }
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+               }
+             }
+             container ets-configuration-priority-group-bandwidth {
+               container ets-configuration-priority-group-bandwidth-item {
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+                 leaf dcbx-feature-ets-bw-percentage {
+                   type string;
+                   description "Percentage Bandwidth assigned to code point";
+                 }
+               }
+             }
+           }
+         }
+         container ieee-dcbx-feature-ets {
+           container ieee-dcbx-feature-common {
+             description "Common header for a IEEE DCBX feature";
+             leaf dcbx-feature-name {
+               type string;
+             }
+           }
+           list ieee-dcbx-feature-ets-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             leaf ieee-dcbx-feature-ets-tlv-type {
+               type string;
+               description "TLV type for the feature";
+             }
+             leaf ets-max-no-traffic-class {
+               type uint32;
+               description "Max number of traffic class capable to support ETS";
+             }
+             container ieee-dcbx-feature-flags {
+               description "Different common flags relevant to each DCBX feature";
+               leaf dcbx-feature-flag-willing {
+                 type string;
+               }
+             }
+             container ieee-dcbx-feature-ets-flags {
+               leaf ieee-dcbx-feature-ets-cbs {
+                 type string;
+               }
+             }
+             list ets-configuration-cp-priority-group {
+               list ets-configuration-cp-priority-group-item {
+                 leaf dcbx-feature-ets-code-point {
+                   type string;
+                   description "Code Points for ETS";
+                 }
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+               }
+             }
+             container ets-configuration-priority-group-bandwidth {
+               container ets-configuration-priority-group-bandwidth-item {
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+                 leaf dcbx-feature-ets-bw-percentage {
+                   type string;
+                   description "Percentage Bandwidth assigned to code point";
+                 }
+               }
+             }
+             container ets-configuration-algorithm {
+               container ets-configuration-algorithm-item {
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+                 leaf ieee-dcbx-feature-ets-algorithm {
+                   type string;
+                   description "Transmission Selection algorithm used by priority group";
+                 }
+               }
+             }
+           }
+           list ieee-dcbx-feature-ets-peer-advertisement {
+             leaf dcbx-feature-advertisement-type {
+               type string;
+               description "Advertisement type for the feature";
+             }
+             leaf ieee-dcbx-feature-ets-tlv-type {
+               type string;
+               description "TLV type for the feature";
+             }
+             leaf ets-max-no-traffic-class {
+               type uint32;
+               description "Max number of traffic class capable to support ETS";
+             }
+             container ieee-dcbx-feature-flags {
+               description "Different common flags relevant to each DCBX feature";
+               leaf dcbx-feature-flag-willing {
+                 type string;
+               }
+             }
+             container ieee-dcbx-feature-ets-flags {
+               leaf ieee-dcbx-feature-ets-cbs {
+                 type string;
+               }
+             }
+             list ets-configuration-cp-priority-group {
+               list ets-configuration-cp-priority-group-item {
+                 leaf dcbx-feature-ets-code-point {
+                   type string;
+                   description "Code Points for ETS";
+                 }
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+               }
+             }
+             container ets-configuration-priority-group-bandwidth {
+               container ets-configuration-priority-group-bandwidth-item {
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+                 leaf dcbx-feature-ets-bw-percentage {
+                   type string;
+                   description "Percentage Bandwidth assigned to code point";
+                 }
+               }
+             }
+             container ets-configuration-algorithm {
+               container ets-configuration-algorithm-item {
+                 leaf dcbx-feature-ets-priority-group {
+                   type uint32;
+                   description "Priority group assigned to IEEE code point";
+                 }
+                 leaf ieee-dcbx-feature-ets-algorithm {
+                   type string;
+                   description "Transmission Selection algorithm used by priority group";
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dcbx-neighbor-information to top-level genstate";
+     uses dcbx-neighbor-information-top;
+   }
+ }

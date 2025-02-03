@@ -1,0 +1,63 @@
+module junos-state-agf {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/agf";
+  prefix js-agf;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-services {
+    prefix js-svc;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Access Gateway Function (AGF) state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-06-07 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping agf-top {
+    description
+      "Top-level grouping for services agf functional data";
+
+    container agf {
+      description
+        "Container for AGF statistics and state information";
+
+    }
+  }
+
+  augment "/js:state/js-svc:services" {
+    description
+      "Add AGF domain to services state";
+
+    uses agf-top;
+  }
+}

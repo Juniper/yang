@@ -1,0 +1,112 @@
+module junos-eventd {
+  yang-version 1;
+  namespace "http://juniper.net/yang/eventd";
+  prefix eventd;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+  description
+    "This module contains a collection of legacy eventd state data.";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping eventd-top {
+    container junos {
+      config false;
+      container events {
+        list event {
+          key "id type priority facility";
+          leaf id {
+            description
+              "Event Identifier name";
+            type string;
+          }
+          leaf type {
+            type uint8;
+            description
+              "Event type";
+          }
+          container timestamp {
+            leaf seconds {
+              description
+                "Time format in seconds";
+              type uint32;
+            }
+            leaf microseconds {
+              description
+                "Time format in microseconds";
+              type uint32;
+            }
+          }
+          leaf priority {
+            type uint8;
+            description
+              "Specifies the priority";
+          }
+          leaf facility {
+            type uint8;
+            description
+              "Specifies the facility, or class of messages to log";
+          }
+          leaf pid {
+            description
+             "Process id";
+            type uint32;
+          }
+          leaf message {
+            description
+             "Log message";
+            type string;
+          }
+          leaf daemon {
+            description
+             "Daemon name";
+            type string;
+          }
+          leaf hostname {
+            description
+             "Host name";
+            type string;
+          }
+          leaf lsname {
+            description
+             "Logical system name";
+            type string;
+          }
+          list attributes {
+            key "key";
+            leaf key {
+              description
+                "Key name";
+              type string;
+            }
+            leaf value {
+              description
+                "Value";
+              type string;
+            }
+          }
+          leaf logoptions {
+            description
+              "Log options";
+            type int32;
+          }
+        }
+      }
+    }
+  }
+
+  uses eventd-top;
+}

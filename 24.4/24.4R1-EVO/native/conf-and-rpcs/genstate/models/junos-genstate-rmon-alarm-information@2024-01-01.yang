@@ -1,0 +1,119 @@
+ module junos-genstate-rmon-alarm-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rmon-alarm-information";
+   prefix jgrai;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for rmon-alarm-information";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   grouping rmon-alarm-information-top {
+     description "Top-level grouping";
+     container rmon-alarm-information {
+       description "Top-level container";
+       list rmon-alarm {
+         leaf alarm-index {
+           type int32;
+           description "Alarm instance identifier";
+         }
+         leaf var-name {
+           type string;
+           description "Monitored variable name";
+         }
+         leaf var-oid {
+           type string;
+           description "Monitored variable OID";
+         }
+         leaf sample-type {
+           type string;
+           description "Method of sampling the monitored variable";
+         }
+         leaf startup {
+           type string;
+           description "Alarm that might be sent when entry is activated";
+         }
+         leaf alarm-owner {
+           type string;
+           description "Name of owner of this entry";
+         }
+         leaf alarm-creator {
+           type string;
+           description "Method by which entry was created";
+         }
+         leaf alarm-subtag {
+           type string;
+           description "Additional tag added to system logs for this entry";
+         }
+         leaf alarm-state {
+           type string;
+           description "Current state of the entry";
+         }
+         leaf alarm-interval {
+           type int32;
+           description "Interval between samples, in seconds";
+         }
+         leaf rising-threshold {
+           type int32;
+           description "Rising alarm threshold";
+         }
+         leaf falling-threshold {
+           type int32;
+           description "Falling alarm threshold";
+         }
+         leaf rising-event-index {
+           type int32;
+           description "Event generated when a rising alarm is sent";
+         }
+         leaf falling-event-index {
+           type int32;
+           description "Event generated when a falling alarm is sent";
+         }
+         leaf alarm-value {
+           type int32;
+           description "Most recently monitored value";
+         }
+         leaf moderate-threshold {
+           type int32;
+           description "Moderate alarm threshold";
+         }
+         leaf high-threshold {
+           type int32;
+           description "High alarm threshold";
+         }
+         leaf critical-threshold {
+           type int32;
+           description "Critical alarm threshold";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds rmon-alarm-information to top-level genstate";
+     uses rmon-alarm-information-top;
+   }
+ }

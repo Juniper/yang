@@ -1,0 +1,481 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-sflow {
+   namespace "http://yang.juniper.net/junos/rpc/sflow";
+
+   prefix sflow;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for sflow command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   rpc get-sflow-information {
+     description "Show sFlow information";
+     output {
+       container sflow {
+         uses sflow-block;
+       }
+     }
+   }
+   rpc get-sflow-collector {
+     description "Show sFlow collectors";
+     input {
+       leaf collector-address {
+         description "Collector IP address";
+         type jt:ipprefix-optional;
+       }
+       leaf get-sflow-collector-level {
+         description "Display brief/details output";
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+         }
+       }
+     }
+     output {
+       container sflow {
+         uses sflow-block;
+       }
+     }
+   }
+   rpc get-sflow-interface {
+     description "Show sFlow interfaces";
+     input {
+       leaf interface-name {
+         description "Interface Name";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container sflow {
+         uses sflow-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping sflow-block {
+     list sflow-information {
+       leaf sflow-global-status {
+         type string;
+         description "SFLOW Global status";
+       }
+       leaf sflow-status {
+         type string;
+         description "SFLOW status";
+       }
+       leaf sflow-adaptive-fallback-status {
+         type string;
+         description "SFLOW Adaptive fallback status";
+       }
+       leaf sflow-sample-rate-egress {
+         type int32;
+         description "SFLOW egress sample rate";
+       }
+       leaf sflow-sample-rate-ingress {
+         type int32;
+         description "SFLOW ingress sample rate";
+       }
+       leaf sflow-sample-limit {
+         type int32;
+         description "SFLOW sampling limit";
+       }
+       leaf sflow-sample-limit-threshold {
+         type int32;
+         description "SFLOW sampling limit threshold";
+       }
+       leaf sflow-polling-interval {
+         type int32;
+         description "SFLOW polling interval";
+       }
+       leaf sflow-agent-id {
+         type jt:ipaddr;
+         description "SFLOW agent ID";
+       }
+       leaf sflow-agent-id6 {
+         type jt:ipaddr;
+         description "SFLOW agent ID IPv6";
+       }
+       leaf sflow-source-ip {
+         type jt:ipaddr;
+         description "SFLOW datagram source IP";
+       }
+       leaf sflow-source-ip6 {
+         type jt:ipaddr;
+         description "SFLOW datagram source IPv6";
+       }
+       leaf sflow-sample-size {
+         type int32;
+         description "SFLOW sample size";
+       }
+     }
+     list sflow-collector {
+       leaf remote-collector-interface-address {
+         type jt:ipaddr;
+         description "SFLOW remote collector IP address";
+       }
+       leaf collector-udp-port {
+         type int32;
+         description "SFLOW collector UDP port";
+       }
+       leaf collector-dscp-value {
+         type int32;
+         description "Sflow Collector DSCP Value";
+       }
+       leaf collector-fc-value {
+         type string;
+         description "Sflow Collector Forwarding Class Value";
+       }
+       leaf collector-number-of-samples {
+         type int32;
+         description "SFLOW collector number of samples";
+       }
+       leaf collector-number-of-counter-samples {
+         type int32;
+         description "SFLOW collector number of counter samples";
+       }
+       leaf collector-number-of-flow-samples {
+         type int32;
+         description "SFLOW collector number of flow samples";
+       }
+       leaf collector-number-of-datagrams {
+         type int32;
+         description "SFLOW collector number of datagrams sent";
+       }
+       leaf collector-routing-instance-name {
+         type string;
+         description "SFLOW collector routing instance name";
+       }
+       leaf collector-routing-instance-id {
+         type int32;
+         description "SFLOW collector routing instance id";
+       }
+     }
+     list sflow-interface {
+       leaf interface-name {
+         type string;
+         description "SFLOW interface name";
+       }
+       leaf interface-status-egress {
+         type string;
+         description "SFLOW interface egress status";
+       }
+       leaf interface-status-ingress {
+         type string;
+         description "SFLOW interface ingress status";
+       }
+       leaf interface-sample-rate-egress {
+         type int32;
+         description "SFLOW Inteface egress sampling rate";
+       }
+       leaf interface-sample-rate-ingress {
+         type int32;
+         description "SFLOW Inteface ingress sampling rate";
+       }
+       leaf interface-adapt-sample-rate-egress {
+         type int32;
+         description "SFLOW Inteface adapted egress sampling rate";
+       }
+       leaf interface-adapt-sample-rate-ingress {
+         type int32;
+         description "SFLOW Inteface adapted ingress sampling rate";
+       }
+       leaf interface-polling-interval {
+         type int32;
+         description "SFLOW Inteface polling interval";
+       }
+     }
+     list sflow-debug-interface-information {
+       leaf intf-name {
+         type string;
+         description "SFLOW interface name";
+       }
+       leaf intf-slot-id {
+         type int32;
+         description "SFLOW interface Slot id";
+       }
+       leaf intf-victimized-ingress {
+         type string;
+         description "SFLOW is interface ingress sample rate changed";
+       }
+       leaf intf-victimized-egress {
+         type string;
+         description "SFLOW is interface egress sample rate changed";
+       }
+       leaf intf-victimized-ingress-count {
+         type int32;
+         description "SFLOW interface ingress victimized count";
+       }
+       leaf intf-victimized-egress-count {
+         type int32;
+         description "SFLOW interface egress victimized count";
+       }
+       leaf intf-status-read-count {
+         type int32;
+         description "SFLOW interface status read count";
+       }
+       leaf intf-adaptive-fallback {
+         type string;
+         description "SFLOW is interface daptive fallback flag";
+       }
+       leaf intf-in-packets {
+         type int32;
+         description "SFLOW interface in packets count";
+       }
+       leaf intf-out-packets {
+         type int32;
+         description "SFLOW interface out packets count";
+       }
+       leaf intf-in-samples {
+         type int32;
+         description "SFLOW interface in samples count";
+       }
+       leaf intf-out-samples {
+         type int32;
+         description "SFLOW interface out samples count";
+       }
+       leaf intf-ingress-status {
+         type string;
+         description "SFLOW  interface ingress config status flag";
+       }
+       leaf intf-egress-status {
+         type string;
+         description "SFLOW  interface egress config status flag";
+       }
+       leaf intf-sample-rate-ingress {
+         type int32;
+         description "SFLOW interface sample rate ingress";
+       }
+       leaf intf-adapt-sample-rate-ingress {
+         type int32;
+         description "SFLOW interface adapted sample rate ingress";
+       }
+       leaf intf-sample-rate-egress {
+         type int32;
+         description "SFLOW interface sample rate egress";
+       }
+       leaf intf-adapt-sample-rate-egress {
+         type int32;
+         description "SFLOW interface adapted sample rate egress";
+       }
+       leaf intf-polling-interval {
+         type int32;
+         description "SFLOW interface polling interval";
+       }
+     }
+   }
+ }

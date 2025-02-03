@@ -1,0 +1,845 @@
+module junos-state-system-infrastructure-evo {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/infrastructure/evo";
+  prefix js-infra-evo;
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-routing-types {
+     prefix rt-types;
+  }
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-system-infrastructure {
+    prefix js-sys-infra;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  organization
+    "Juniper Networks Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+     USA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Evolved specific infrastructure data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-08-02 {
+    description
+      "Initial revision";
+     reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+
+  grouping evo-cluster-nodes-top {
+    description
+      "Top-level grouping for JUNOS Evolved infrastructure cluster
+       nodes";
+
+    container nodes {
+      description
+        "Encapsulating container for list of cluster nodes.";
+
+      list node {
+        key "name";
+
+        description
+          "List of nodes within the cluster";
+
+        leaf name {
+          type string;
+          description
+            "Name specifying the chassis and node details";
+        }
+
+        leaf id {
+          type uint64;
+          description
+            "The unique identifier assigned to the node";
+        }
+
+        leaf ip-address {
+          type inet:ip-address;
+          description
+            "IP address of the node";
+        }
+
+        leaf-list status {
+          type enumeration {
+            enum offline {
+              description
+                "Node status is offline";
+            }
+            enum online {
+              description
+                "Node status is online";
+            }
+            enum apps-ready {
+              description
+                "All applications in the node are ready";
+            }
+            enum configured-offline {
+              description
+                "Node has been configured offline";
+            }
+            enum configured-powered-off {
+              description
+                "Node has been configured powered-off";
+            }
+            enum powering-on {
+              description
+                "Node is in the process of powering on";
+            }
+            enum reboot-in-progress {
+              description
+                "Reboot is in progress";
+            }
+            enum reboot-scheduled {
+              description
+                "Reboot has been scheduled";
+            }
+            enum ungraceful-reboot-in-progress {
+              description
+                "Ungraceful reboot is in progress";
+            }
+            enum ungraceful-reboot-scheduled {
+              description
+                "Ungraceful reboot has been scheduled";
+            }
+            enum soft-reboot-in-progress {
+              description
+                "Soft reboot is in progress";
+            }
+            enum soft-reboot-scheduled {
+              description
+                "Soft reboot has been scheduled";
+            }
+            enum halt-in-progress {
+              description
+                "Halt is in progress";
+            }
+            enum halt-scheduled {
+              description
+                "Halt has been scheduled";
+            }
+            enum poweroff-in-progress {
+              description
+                "Poweroff is in progress";
+            }
+            enum poweroff-scheduled {
+              description
+                "Poweroff has been scheduled";
+            }
+            enum offline-in-progress {
+              description
+                "Offline is in progress";
+            }
+            enum offline-scheduled {
+              description
+                "Offline has been scheduled";
+            }
+          }
+          description
+            "Current status of the node";
+        }
+
+        leaf uptime {
+          type jt:absolute-time-seconds;
+          description
+            "Time since the node booted";
+        }
+      }
+    }
+  }
+
+  grouping evo-database-common {
+    description
+      "Grouping for common resources within JUNOS Evolved
+       infrastructure database across cluster (all nodes)";
+
+    container scope-id {
+      description
+        "The identifiers for topic/production scopes";
+
+      leaf utilized-percent {
+        type rt-types:percentage;
+        description
+          "Total % of allocated scope ids at system level,
+           past & present";
+      }
+    }
+
+    container guid {
+      description
+        "Global unique identifiers assigned to each
+         object created within JUNOS Evolved infrastructure
+         database";
+
+      leaf utilized-percent {
+        type rt-types:percentage;
+        description
+          "Utilization of GUID seeds at system level in percentage";
+      }
+
+      container nodes {
+        description
+          "Encapsulating container for list of nodes.";
+
+        list node {
+          key "name";
+          description
+            "List of nodes with name as the key";
+
+          leaf name {
+            type string;
+            description
+              "Name of the node specifying the Chassis and Node details,
+               as applicable";
+          }
+
+          container applications {
+            description
+              "Encapsulating container for list of applications.";
+
+            list application {
+              key "name";
+              description
+                "List of applications in a given node";
+
+              leaf name {
+                type string;
+                description
+                  "Name of the application";
+              }
+
+              leaf utilized-percent {
+                type rt-types:percentage;
+                description
+                  "GUID utilization %age in a given application. Can reduce
+                   if the range is replenished.";
+              }
+
+              leaf utilized-percent-threshold {
+                type rt-types:percentage;
+                description
+                  "GUID utilization %age which should not be breached. System
+                   should replinish the range much before this limit is hit.";
+              }
+            }
+          }
+        }
+      }
+    }
+
+    container olc {
+      description
+        "Global unique Object Logical Clock assigned
+         to each object within JUNOS Evolved infrastructure
+         database";
+
+      leaf utilized-percent {
+        type rt-types:percentage;
+        description
+          "Utilization of OLC epoch IDs at system level in percentage";
+      }
+
+      container nodes {
+        description
+          "Encapsulating container for list of nodes.";
+
+        list node {
+          key "name";
+
+          description
+            "List of nodes.";
+
+          leaf name {
+            type string;
+            description
+              "Name of the node specifying the chassis and node details";
+          }
+
+          container applications {
+            description
+              "Encapsulating container for list of applications.";
+
+            list application {
+              key "name";
+              description
+                "List of applications in a given node";
+
+              leaf name {
+                type string;
+                description
+                  "Name of the application";
+              }
+
+              container production-sets {
+                description
+                  "Encapsulating container for list of production-sets.";
+
+                list production-set {
+                  key "producer-id";
+
+                  description
+                    "List of production sets within an application";
+
+                  leaf producer-id {
+                    type uint64;
+                    description
+                      "Identifier for the production set";
+                  }
+
+                  leaf utilized-percent {
+                    type rt-types:percentage;
+                    description
+                      "OLC utilization per production-set within a
+                       given application (in percentage)";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping evo-database-node-common-counters {
+    description
+      "Cumulative statistics for a given node";
+
+    leaf adds {
+      type yang:counter64;
+      description
+        "Total number of objects added";
+    }
+
+    leaf changes {
+      type yang:counter64;
+      description
+        "Total number of changes done to objects";
+    }
+
+    leaf deletes {
+      type yang:counter64;
+      description
+        "Total number of objects deleted";
+    }
+
+    leaf adds-failed {
+      type yang:counter64;
+      description
+        "Total number of add failures";
+    }
+
+    leaf changes-failed {
+      type yang:counter64;
+      description
+        "Total number of change failures";
+    }
+
+    leaf deletes-failed {
+      type yang:counter64;
+      description
+        "Total number of delete failures";
+    }
+
+    leaf duplicates {
+      type yang:counter64;
+      description
+        "Total number of duplicate objects";
+    }
+
+    leaf stale {
+      type yang:counter64;
+      description
+        "Total number of stale objects";
+    }
+  }
+
+  grouping evo-database-node-sm {
+    description
+      "Grouping for per-node shared memory data";
+
+    container shared-memory {
+      description
+        "Container for per-node shared memory statistics";
+
+      leaf utilized-percent {
+        type rt-types:percentage;
+        description
+          "Object database utilization percentage";
+      }
+
+      leaf capacity {
+        type uint64;
+        description
+          "Maximum number of objects possible in shared memory
+           database";
+      }
+
+      container counters {
+        description
+          "Shared memory counters.";
+
+        leaf allocations {
+          type yang:counter64;
+          description
+            "Total allocations in shared memory database";
+        }
+
+        leaf free {
+          type yang:counter64;
+          description
+            "Total frees in shared memory database";
+        }
+
+        leaf live {
+          type yang:counter64;
+          description
+            "Total live objects in shared memory database";
+        }
+
+        leaf unique {
+          type yang:counter64;
+          description
+            "Total unique objects in shared memory database";
+        }
+      }
+    }
+  }
+
+  grouping app-context-client-common {
+    description
+      "Grouping for per-database-client data";
+
+    leaf priority {
+      type enumeration {
+        enum bulk {
+          description
+            "Bulk priority, typically used by Distributor syncer";
+        }
+        enum normal {
+          description
+            "Default priority";
+        }
+        enum high {
+          description
+            "High proiority";
+        }
+      }
+      default normal;
+      description
+        "Priority of the DDS client channel/connection";
+    }
+
+    leaf pid {
+      type uint64;
+      description
+        "PID of the application";
+    }
+
+    leaf promiscuous-mode {
+      type boolean;
+      description
+        "TRUE if in promiscuous mode, FALSE otherwise";
+    }
+
+    container counters {
+      description
+        "Client counters.";
+
+      leaf adds-received {
+        type yang:counter64;
+        description
+          "Total number of object adds received from Distributor";
+      }
+
+      leaf changes-received {
+        type yang:counter64;
+        description
+          "Total number of object changes received from Distributor";
+      }
+
+      leaf deletes-received {
+        type yang:counter64;
+        description
+          "Total number of object deletes received from Distributor";
+      }
+
+      leaf updates-sent {
+        type yang:counter64;
+        description
+          "Total number of object updates sent to Distributor";
+      }
+
+      leaf deletes-sent {
+        type yang:counter64;
+        description
+          "Total number of object deletes sent to Distributor";
+      }
+
+      leaf receive-failed {
+        type yang:counter64;
+        description
+          "Total number of object receive failures";
+      }
+
+      leaf send-failed {
+        type yang:counter64;
+        description
+          "Total number of object send failures";
+      }
+    }
+  }
+
+  grouping app-context-client-sm {
+    description
+      "Grouping for per client connection shared memory data";
+
+    container shared-memory {
+      description
+        "Container for per DDS client shared memory data";
+
+      leaf holds-total {
+        type uint64;
+        description
+          "Total number of holds";
+      }
+
+      leaf releases-total {
+        type uint64;
+        description
+          "Total number of releases";
+      }
+
+      leaf holds-current {
+        type uint64;
+        description
+          "Current number of holds";
+      }
+    }
+  }
+
+  grouping node-app-context-client {
+    description
+      "Top-level grouping for per client information under a
+       DDS stack/context";
+
+    container clients {
+      description
+        "Encapsulating container for list of clients";
+
+      list client {
+        key "id";
+
+        description
+          "DDS Client list";
+
+        leaf id {
+          type uint64;
+          description
+            "Client identifier unique within a given node";
+        }
+
+        uses app-context-client-common;
+        uses app-context-client-sm;
+      }
+    }
+  }
+
+  grouping node-app-context-top {
+    description
+      "Top-level grouping for DDS contexts within an application";
+
+    container contexts {
+      description
+        "Encapsulating container for list of contexts";
+
+      list context {
+        key "name";
+
+        description
+          "List of DDS contexts/stacks within an application";
+
+        leaf name {
+          type string;
+          description
+            "Name of the DDS context/stack";
+        }
+
+        container errors {
+          description
+            "Object errors in a given context within an application";
+
+          leaf dependency {
+            type yang:gauge32;
+            description
+              "Object dependency errors in a context within an
+               application. Provides current data and is not a
+               counter.";
+          }
+
+          leaf anomaly {
+            type yang:gauge32;
+            description
+              "Objects deleted but not freed in application
+               publish/dependency layer(s). Provides current data
+               and is not a counter.";
+          }
+        }
+
+        uses node-app-context-client;
+      }
+    }
+  }
+
+  grouping node-app-production-set {
+    description
+      "Grouping for production sets within an application";
+
+    container production-sets {
+      description
+        "Encapsulating container for list of production-sets.";
+
+      list production-set {
+        key "producer-id";
+
+        description
+          "List of production sets within an application";
+
+        leaf producer-id {
+          type uint64;
+          description
+            "Production identifier";
+        }
+
+        leaf epoch-id {
+          type uint64;
+          description
+            "Epoch identifier";
+        }
+
+        leaf state {
+          type enumeration {
+            enum active {
+              description
+                "Production set is active";
+            }
+            enum standby {
+              description
+                "Production set is on standby";
+            }
+          }
+
+          description
+            "State of the production set";
+        }
+      }
+    }
+  }
+
+  grouping evo-database-node-app {
+    description
+      "Grouping for per application data within a given node";
+
+    container applications {
+      description
+        "Encapsulating container for list of applications.";
+
+      list application {
+        key "name";
+
+        description
+          "List of applications within a node";
+
+        leaf name {
+          type string;
+          description
+            "Name of the application";
+        }
+
+        uses node-app-context-top;
+        uses node-app-production-set;
+      }
+    }
+  }
+
+  grouping evo-database-node-top {
+    description
+      "Top-level grouping for per node data";
+
+    container nodes {
+      description
+        "Encapsulating container for list of cluster nodes.";
+
+      list node {
+        key "name";
+
+        description
+          "List of nodes";
+
+        leaf name {
+          type string;
+          description
+            "Name of the node specifying the Chassis and Node details,
+             as applicable";
+        }
+
+        container counters {
+          description
+            "Collection of node counters.";
+
+          uses evo-database-node-common-counters;
+        }
+
+        uses evo-database-node-sm;
+        uses evo-database-node-app;
+      }
+    }
+  }
+
+  grouping evo-database-top {
+    description
+      "Top-level grouping for JUNOS Evolved infrastructure
+       database";
+
+    container database {
+      description
+        "Container for JUNOS Evolved infrastructure database
+         information";
+
+      uses evo-database-common;
+      uses evo-database-node-top;
+    }
+  }
+
+  grouping evo-indexes-top {
+    description
+      "Top-level grouping for indexes used within JUNOS Evolved
+       infrastructure";
+
+    container indexes {
+      description
+        "Encapsulating container for list of indexes.";
+
+      list index {
+        key "type";
+
+        description
+          "List of index types in the system across all nodes";
+
+        leaf type {
+          type string;
+          description
+            "Type of the index";
+        }
+
+        leaf clients {
+          type yang:gauge32;
+          description
+            "Number of clients of this type";
+        }
+
+        leaf chunk-size {
+          type uint32;
+          description
+            "Chunk size for this index type";
+        }
+
+        leaf total {
+          type yang:gauge32;
+          description
+            "Total number of chunks of the given type";
+        }
+
+        leaf free {
+          type yang:gauge32;
+          description
+            "Number of free chunks out of total";
+        }
+
+        leaf global {
+          type yang:gauge32;
+          description
+            "Global chunks in use";
+        }
+
+        leaf local {
+          type yang:gauge32;
+          description
+            "Local chunks in use";
+        }
+
+        leaf global-usage {
+          type yang:gauge32;
+          description
+            "Global usage";
+        }
+      }
+    }
+  }
+
+  grouping evo-top {
+    description
+      "Top-level grouping for JUNOS Evolved infrastructure";
+
+    container junos-evolved {
+      description
+        "Container for all JUNOS Evolved specific infrastructure data";
+
+      container cluster {
+        description
+          "Container at top level for cluster information within
+           JUNOS Evolved infrastructure";
+
+        uses evo-cluster-nodes-top;
+      }
+
+      uses evo-database-top;
+      uses evo-indexes-top;
+    }
+  }
+
+  augment "/js:state/js-sys:system/js-sys-infra:infrastructure" {
+    description
+      "Adds system infrastructure junos-evolved domain to top-level
+       state";
+
+    uses evo-top;
+  }
+}

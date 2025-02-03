@@ -1,0 +1,536 @@
+/*
+ * Copyright (c) 2024 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-fabric {
+   namespace "http://yang.juniper.net/junos/rpc/fabric";
+
+   prefix fabric;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for fabric command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R1.8-EVO";
+   }
+
+   rpc get-fabric-administration-inventory {
+     description "Show the administrative inventory";
+     junos:command "show fabric administration inventory";
+     input {
+       leaf summary {
+         description "Show inventory summary";
+         type empty;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-vm-process-stats {
+     description "Display infrastructure information";
+     junos:command "show fabric administration inventory infrastructure";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+     output {
+       choice output_c {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc fabric-administration-inventory-fabric-controls {
+     description "Display Fabric controls";
+     junos:command "show fabric administration inventory infrastructure fabric-controls";
+     input {
+       leaf fabric-control {
+         description "Show information for the specified Fabric control";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-administration-inventory-fabric-managers {
+     description "Display Fabric managers";
+     junos:command "show fabric administration inventory infrastructure fabric-managers";
+     input {
+       leaf fabric-manager {
+         description "Show information for the specified Fabric manager";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-administration-inventory-diagnostic-routing-engines {
+     description "Display Diagnostic routing engines";
+     junos:command "show fabric administration inventory infrastructure diagnostic-routing-engines";
+     input {
+       leaf diagnostic-routing-engine {
+         description "Show information for the specified Diagnostic routing engine";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-director-group-status {
+     description "Show the current configuration and clustering states of each Control cluster device";
+     junos:command "show fabric administration inventory director-group status";
+     input {
+       leaf target {
+         description "Send command to a single device or the entire Control cluster";
+         type string;
+       }
+       leaf detail {
+         description "Level of detail to show";
+         junos:cli-feature "nokeyword";
+         default "all";
+         type enumeration {
+           enum "all" {
+             description "Display all status";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-administration-inventory-node-device {
+     description "Display Node devices";
+     junos:command "show fabric administration inventory node-devices";
+     input {
+       leaf node-device {
+         description "Show information for the specified Node device";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-administration-inventory-device-group {
+     description "Display Node groups";
+     junos:command "show fabric administration inventory node-groups";
+     input {
+       leaf node-group {
+         description "Show information for the specified Node group";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-administration-interconnect-device {
+     description "Display Interconnect devices";
+     junos:command "show fabric administration inventory interconnect-devices";
+     input {
+       leaf interconnect-device {
+         description "Show information for the specified Interconnect device";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc get-dcf-mac-pool {
+     description "Show current MAC address pool details";
+     junos:command "show fabric administration system mac-pool";
+   }
+   rpc get-fabric-inventory {
+     description "Show the inventory";
+     junos:command "show fabric inventory";
+     input {
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-inventory-node-device {
+     description "Display Node devices";
+     junos:command "show fabric inventory node-devices";
+     input {
+       leaf node-device {
+         description "Show information for the specified Node device";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-inventory-device-group {
+     description "Display Node groups";
+     junos:command "show fabric inventory node-groups";
+     input {
+       leaf node-group {
+         description "Show information for the specified Node group";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "terse" {
+             description "Display terse output";
+           }
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   rpc fabric-inventory-fabric-controls {
+     description "Display Fabric controls";
+     junos:command "show fabric inventory infrastructure fabric-controls";
+     input {
+       leaf fabric-control {
+         description "Show information for the specified Fabric control";
+         junos:cli-feature "nokeyword";
+         type string;
+       }
+       leaf verbosity_level {
+         junos:cli-feature "nokeyword";
+         default "brief";
+         type enumeration {
+           enum "brief" {
+             description "Display brief output (default)";
+           }
+           enum "detail" {
+             description "Display detailed output";
+           }
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+ }
