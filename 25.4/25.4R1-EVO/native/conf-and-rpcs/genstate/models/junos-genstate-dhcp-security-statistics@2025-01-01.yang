@@ -1,0 +1,114 @@
+ module junos-genstate-dhcp-security-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dhcp-security-statistics";
+   prefix jgdss;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dhcp-security-statistics";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping dhcp-security-statistics-top {
+     description "Top-level grouping";
+     container dhcp-security-statistics {
+       description "Information about DHCP security statistics";
+       leaf total {
+         type int32;
+       }
+       leaf discover {
+         type int32;
+       }
+       leaf offer {
+         type int32;
+       }
+       leaf request {
+         type int32;
+       }
+       leaf decline {
+         type int32;
+       }
+       leaf ack {
+         type int32;
+       }
+       leaf nack {
+         type int32;
+       }
+       leaf release {
+         type int32;
+       }
+       leaf inform {
+         type int32;
+       }
+       leaf force-renew {
+         type int32;
+       }
+       leaf renew {
+         type int32;
+       }
+       leaf rebind {
+         type int32;
+       }
+       leaf total-ce-mac-mismatch {
+         type int32;
+       }
+       leaf total-trans-stale-timer_expiry {
+         type int32;
+       }
+       leaf succ-updated-snoop-binding {
+         type int32;
+       }
+       leaf total-current-transient-ce {
+         type int32;
+       }
+       leaf request-learnt-on-trusted-port {
+         type int32;
+       }
+       leaf total-dropped {
+         type int32;
+       }
+       leaf no-cfg {
+         type int32;
+       }
+       leaf no-vlan {
+         type int32;
+       }
+       leaf no-ifl {
+         type int32;
+       }
+       leaf request-on-trusted-port {
+         type int32;
+       }
+       leaf server-id-mismatch {
+         type int32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dhcp-security-statistics to top-level genstate";
+     uses dhcp-security-statistics-top;
+   }
+ }

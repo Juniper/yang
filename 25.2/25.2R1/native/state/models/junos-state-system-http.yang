@@ -1,0 +1,143 @@
+module junos-state-system-http {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/http";
+  prefix js-http;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-system-services {
+    prefix js-sys-svc;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains top level nodes for HTTP
+    servers.
+
+    Copyright (c) 2023 Juniper Networks, Inc.
+    All rights reserved.";
+
+  revision 2023-07-20 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping clients-top {
+    container clients {
+      description
+        "Container holding list of clients connected to this server";
+      list client {
+        key "address port";
+
+        description
+          "List of clients connected to server";
+        leaf address {
+          type inet:ip-address;
+          description
+            "Client ip address";
+        }
+
+        leaf port {
+          type inet:port-number;
+          description
+            "Client port";
+        }
+
+        leaf connected-time {
+          type jt:timeticks64;
+          units seconds;
+          description
+            "This timestamp indicates the time when this client
+            got connected.
+            The value is timestamp in seconds relative to the Unix
+            Epoch (Jan 1, 1970 00:00:00 UTC).";
+        }
+
+        container counters {
+        }
+      }
+    }
+  }
+
+  grouping http-top {
+    description
+      "Top-level grouping for http services";
+
+    container http {
+      description
+        "Container for http services, their state and statistics";
+
+      container servers {
+        description
+          "Container for http servers that are running on the device";
+
+        list server {
+          key name;
+
+          description
+            "The list of http servers that are running on the device";
+
+          leaf name {
+            type string;
+            description
+              "Name of the http server";
+          }
+
+          leaf-list listen-address {
+            type inet:ip-address;
+            description
+              "Server listen address(es) bound to an interface of the system";
+          }
+
+          leaf port {
+            type inet:port-number;
+            description
+              "TCP port on which server listens";
+          }
+
+          uses clients-top;
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-sys:system/js-sys-svc:services" {
+    description
+      "Add HTTP services to services state";
+
+    uses http-top;
+  }
+}

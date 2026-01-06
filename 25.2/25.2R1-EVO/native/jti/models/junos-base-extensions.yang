@@ -1,0 +1,50 @@
+module junos-base-extensions {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/base/extensions";
+  prefix junos-base;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module provides extensions to the YANG language to allow
+     JUNOS specific functionality and metadata to be defined.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-03 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  extension version {
+    argument "semver" {
+      yin-element false;
+    }
+    description
+      "The version number for a YANG module or collection of YANG
+       modules.
+
+       It is expressed as a semantic version number in the form:
+         X.Y.Z
+       Where:
+         * X corresponds to the major version
+         * Y corresponds to the minor version
+         * Z corresponds to a patch version
+      ";
+  }
+}

@@ -1,0 +1,302 @@
+module junos-state-l2-learning {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/l2-learning";
+  prefix js-l2l;
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-l2-types {
+    prefix jl2t;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  import junos-evpn-types {
+    prefix jevpnt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     l2-learning state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-02-29 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef mac-entry-type {
+    type enumeration {
+      enum static {
+        description
+          "Statically configured MAC entry.";
+      }
+      enum local {
+        description
+          "Locally learned MAC entry.";
+      }
+      enum remote {
+        description
+          "MAC entry that is learnt from a remote device via
+           the control plane.";
+      }
+    }
+    description
+      "Indicates whether the MAC entry was statically configured, or
+       dynamically learned, etc.";
+  }
+
+  typedef mac-ip-entry-type {
+    type enumeration {
+      enum static {
+        description
+          "Statically configured MAC-IP entry.";
+      }
+      enum local {
+        description
+          "Locally learned MAC-IP entry.";
+      }
+      enum remote {
+        description
+          "MAC-IP Entry that is learnt from a remote device via
+           the control plane.";
+      }
+      enum virtual-gateway {
+        description
+          "Virtual Gateway learned MAC-IP entry.";
+      }
+      enum local-gateway {
+        description
+          "Local IRB learned MAC-IP entry.";
+      }
+    }
+    description
+      "Indicates whether the MAC-IP entry was statically configured, or
+       dynamically learned, etc.";
+  }
+
+  grouping l2-learning-mac-ip-entry-state {
+    description
+      "Operational state data for MAC-IP table entries.";
+
+    leaf ip-address {
+      type inet:ip-address;
+      description
+        "IP address for the dynamic or static MAC-IP table entry.";
+    }
+
+    uses l2-learning-mac-entry-state;
+
+    leaf entry-type {
+      type mac-ip-entry-type;
+      description
+        "Indicates whether the MAC-IP entry was statically configured,
+         or dynamically learned, etc.";
+    }
+
+    leaf l3-interface {
+      type junos-intft:interface-name;
+      description
+        "Reference to the IRB interface for the MAC-IP table entry";
+    }
+  }
+
+  grouping l2-learning-mac-entry-state {
+    description
+      "Operational state data for MAC table entries.";
+
+    leaf mac-address {
+      type yang:mac-address;
+      description
+        "MAC address for the dynamic or static MAC/MAC-IP table entry.";
+    }
+
+    leaf vlan-id {
+      type union {
+        type enumeration {
+          enum none {
+            description
+              "No 802.1q Encapsulation.";
+          }
+        }
+        type jl2t:vlan-id;
+      }
+    }
+
+    leaf vlan-name {
+      type string;
+      description
+        "VLAN name from which this MAC/MAC-IP address was received.";
+    }
+
+    leaf vni {
+      type jl2t:vni-id;
+      description
+        "Virtual Network Identifier (VNI) used in VXLAN.";
+    }
+
+    leaf gbp-tag {
+      type uint32;
+      description
+        "Group Based Policy (GBP) tag associated with this MAC/MAC-IP
+         address.";
+      reference
+        "draft-smith-vxlan-group-policy-05";
+    }
+
+    leaf interface {
+      type junos-intft:interface-name;
+      description
+        "Reference to the logical-interface for the MAC/MAC-IP table
+         entry.";
+    }
+
+    leaf esi {
+      type jevpnt:esi;
+      description
+        "Ethernet segment identifier (ESI) on which entry is
+         learned.";
+    }
+  }
+
+  grouping mac-table-counters-top {
+    description
+      "Top-level grouping for MAC table counters";
+    container counters {
+      leaf total-mac-entries {
+        type uint32;
+        description
+          "Total number of MAC entries learned in this routing-instance.";
+      }
+    }
+  }
+
+  grouping mac-ip-table-counters-top {
+    description
+      "Top-level grouping for MAC-IP table counters";
+    container counters {
+      leaf total-mac-ip-entries {
+        type uint32;
+        description
+          "Total number of MAC-IP entries learned in this routing-instance.";
+      }
+    }
+  }
+
+  grouping l2-learning-mac-ip-table-top {
+    description
+      "Top-level grouping for MAC-IP table list.";
+
+    container mac-ip-table {
+      description
+        "Table of learned or statically configured MAC-IP addresses and
+         corresponding VLANs in the bridge domain.";
+
+      uses mac-ip-table-counters-top;
+
+      container entries {
+        description
+          "Enclosing container for list of MAC-IP table entries.";
+
+        list entry {
+          key "ip-address vlan-id";
+          description
+            "List of learned MAC-IP addresses.";
+
+          uses l2-learning-mac-ip-entry-state;
+        }
+      }
+    }
+  }
+
+  grouping l2-learning-mac-table-top {
+    description
+      "Top-level grouping for MAC table list.";
+
+    container mac-table {
+      description
+        "Table of learned or statically configured MAC addresses and
+         corresponding VLANs in the bridge domain.";
+
+      uses mac-table-counters-top;
+
+      container entries {
+        description
+          "Enclosing container for list of MAC table entries.";
+
+        list entry {
+          key "mac-address vlan-id";
+          description
+            "List of learned MAC addresses.";
+
+          uses l2-learning-mac-entry-state;
+
+          leaf entry-type {
+            type mac-entry-type;
+            description
+              "Indicates whether the MAC entry was statically configured, or
+              dynamically learned, etc.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping l2-learning-top {
+    description
+      "Top-level grouping for l2-learning state data.";
+
+    container l2-learning {
+      description
+        "Container for the forwarding database of the routing instance.";
+
+      uses l2-learning-mac-table-top;
+      uses l2-learning-mac-ip-table-top;
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" {
+    description
+      "Adds l2-learning domain to top-level routing-instance state.";
+
+    uses l2-learning-top;
+  }
+}

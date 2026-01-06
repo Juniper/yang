@@ -1,0 +1,99 @@
+ module junos-genstate-dhcp-security-binding {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dhcp-security-binding";
+   prefix jgdsb;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dhcp-security-binding";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping dhcp-security-binding-top {
+     description "Top-level grouping";
+     container dhcp-security-binding {
+       description "Information about DHCP security binding";
+       container dhcp-security-entries {
+         list dhcp-security-entry {
+           key "ip-address vlan-name intf-name";
+           leaf logical-system-name {
+             type string;
+             description "Logical-system name of the client";
+           }
+           leaf routing-instance-name {
+             type string;
+             description "Routing-instance name of the client";
+           }
+           leaf ip-address {
+             type jt:ipaddr;
+             description "IP address of the client";
+           }
+           leaf hw-address {
+             type string;
+             description "MAC address of the client";
+           }
+           leaf vlan-name {
+             type string;
+             description "Vlan name of the client";
+           }
+           leaf lease-expiry {
+             type int32;
+             description "Lease expiry time in seconds";
+           }
+           leaf state {
+             type string;
+             description "State of the client";
+           }
+           leaf intf-name {
+             type string;
+             description "Input interface name";
+           }
+           container dhcp-client-options {
+             list dhcp-option {
+               key "dhcp-option-code";
+               leaf dhcp-option-code {
+                 type int32;
+                 description "Numeric code assigned to the DHCP option";
+               }
+               leaf dhcp-option-len {
+                 type int32;
+                 description "Length of the data in the DHCP option";
+               }
+               leaf dhcp-option-data {
+                 type string;
+                 description "Value of the DHCP option";
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dhcp-security-binding to top-level genstate";
+     uses dhcp-security-binding-top;
+   }
+ }

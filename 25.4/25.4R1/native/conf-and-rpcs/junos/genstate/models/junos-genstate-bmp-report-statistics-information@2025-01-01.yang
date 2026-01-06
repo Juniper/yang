@@ -1,0 +1,64 @@
+ module junos-genstate-bmp-report-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-report-statistics-information";
+   prefix jgbrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-report-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-report-statistics-information-top {
+     description "Top-level grouping";
+     container bmp-report-statistics-information {
+       description "BMP statistics-report statistics information";
+       leaf bmp-report-statistics-header {
+         type string;
+       }
+       list bmp-report {
+         key "bmp-station-name";
+         leaf bmp-station-name {
+           type string;
+         }
+         container bmp-report-statistics {
+           leaf report-count {
+             type int32;
+             description "Total report count";
+           }
+           leaf report-last-sent-time-stamp {
+             type string;
+             description "Time when last report sent";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-report-statistics-information to top-level genstate";
+     uses bmp-report-statistics-information-top;
+   }
+ }

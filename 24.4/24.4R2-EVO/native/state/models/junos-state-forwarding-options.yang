@@ -1,0 +1,71 @@
+module junos-state-forwarding-options {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/forwarding-options";
+  prefix js-fwd;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Forwarding options state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-03-31 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping forwarding-options-top {
+    description
+      "Top-level grouping for JUNOS forwarding options state data";
+
+    container forwarding-options {
+      description
+        "Encapsulating container for all JUNOS forwarding options
+         state";
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds forwarding-options domain to top-level state";
+
+    uses forwarding-options-top;
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" {
+    description
+      "Adds forwarding-options domain to top-level routing-instance
+       state";
+
+    uses forwarding-options-top;
+  }
+}

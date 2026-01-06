@@ -1,0 +1,289 @@
+ module junos-genstate-bgp-sync-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-sync-information";
+   prefix jgbsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-sync-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-sync-information-top {
+     description "Top-level grouping";
+     container bgp-sync-information {
+       description "BGP synchronization information";
+       container bgp-rsync-master {
+         leaf bgp-precision-timers {
+           type string;
+         }
+         leaf bgp-rsync-session-state {
+           type string;
+           description "State of the BGP resynchronization session";
+         }
+         leaf bgp-rsync-session-time {
+           type string;
+           description "Amount of time that the BGP resynchronization session has been Up or Down";
+         }
+         leaf bgp-rsync-session-flaps {
+           type int32;
+           description "Number of BGP resynchronization session flaps";
+         }
+         leaf bgp-rsync-session-last-flap-reason {
+           type string;
+           description "Reason for most recent BGP resynchronization session flap";
+         }
+         leaf bgp-rsync-session-last-flap-error {
+           type string;
+           description "Socket error for most recent BGP resynchronization session flap";
+         }
+         leaf bgp-rsync-state {
+           type string;
+         }
+         leaf bgp-rsync-state-time {
+           type string;
+           description "Time since last protocol state change";
+         }
+         leaf bgp-rsync-flags {
+           type string;
+         }
+         leaf bgp-rsync-rt-state {
+           type string;
+         }
+         leaf bgp-rsync-ackwait {
+           type int32;
+           description "Number of peers waiting for ESTABLISH-ACK message";
+         }
+         leaf bgp-rsync-sowait {
+           type int32;
+           description "Number of peers waiting for socket record boundaries";
+         }
+         leaf bgp-rsync-sched {
+           type int32;
+           description "Number of peers being synchronized";
+         }
+         leaf bgp-rsync-sendbuf-count {
+           type int32;
+         }
+         leaf bgp-rsync-walker {
+           type empty;
+         }
+         container bgp-rsync-walk {
+           leaf bgp-rsync-walk-table {
+             type string;
+             description "Current table name";
+           }
+           leaf bgp-rsync-walk-prefix {
+             type string;
+             description "Current Prefix";
+           }
+           leaf bgp-rsync-walk-prefixlen {
+             type int32;
+             description "Current Prefix length";
+           }
+           leaf queue-count {
+             type int32;
+             description "Number of entries enqueued";
+           }
+         }
+         container bgp-rsync-estab-queue {
+           list bgp-rsync-queue-entry {
+             leaf rsy-queue-instance {
+               type int32;
+             }
+             leaf rsy-queue-addr {
+               type string;
+             }
+             leaf rsy-queue-estab-tm {
+               type int32;
+             }
+             leaf rsy-queue-more {
+               type empty;
+             }
+           }
+         }
+         container bgp-rsync-ack-queue {
+           list bgp-rsync-queue-entry {
+             leaf rsy-queue-instance {
+               type int32;
+             }
+             leaf rsy-queue-addr {
+               type string;
+             }
+             leaf rsy-queue-estab-tm {
+               type int32;
+             }
+             leaf rsy-queue-more {
+               type empty;
+             }
+           }
+         }
+         container bgp-rsync-commit-sync-queue {
+           list bgp-rsync-queue-entry {
+             leaf rsy-queue-instance {
+               type int32;
+             }
+             leaf rsy-queue-addr {
+               type string;
+             }
+             leaf rsy-queue-more {
+               type empty;
+             }
+           }
+         }
+         container bgp-rsync-error-queue {
+           list bgp-rsync-queue-entry {
+             leaf rsy-queue-instance {
+               type int32;
+             }
+             leaf rsy-queue-addr {
+               type string;
+             }
+             leaf rsy-queue-more {
+               type empty;
+             }
+           }
+         }
+         container bgp-rsync-stats {
+           leaf open-send-count {
+             type int32;
+           }
+           leaf estab-send-count {
+             type int32;
+           }
+           leaf estab-gr-send-count {
+             type int32;
+           }
+           leaf update-send-count {
+             type int32;
+           }
+           leaf gr-stale-label-send-count {
+             type int32;
+           }
+           leaf error-send-count {
+             type int32;
+           }
+           leaf complete-send-count {
+             type int32;
+           }
+           leaf open-receive-count {
+             type int32;
+           }
+           leaf request-wild-receive-count {
+             type int32;
+           }
+           leaf request-tgt-receive-count {
+             type int32;
+           }
+           leaf estab-ack-receive-count {
+             type int32;
+           }
+           leaf estab-gr-ack-receive-count {
+             type int32;
+           }
+           leaf complete-ack-receive-count {
+             type int32;
+           }
+           leaf update-send-avg-length {
+             type uint32;
+           }
+           leaf update-send-peak-length {
+             type uint32;
+           }
+         }
+       }
+       container bgp-standby {
+         leaf bgp-standby-state {
+           type string;
+         }
+         leaf bgp-standby-last-trans {
+           type string;
+         }
+         leaf bgp-standby-sendbuf {
+           type int32;
+         }
+         leaf bgp-unsync-timer {
+           type string;
+         }
+         leaf bgp-unsync-pending-tm {
+           type string;
+         }
+         container bgp-unsync-queue {
+           list bgp-unsync-entry {
+             leaf usy-iid {
+               type int32;
+             }
+             leaf usy-addr {
+               type jt:ipaddr;
+             }
+             leaf usy-elapsed {
+               type string;
+             }
+             leaf usy-flags {
+               type string;
+             }
+             leaf usy-more {
+               type empty;
+             }
+           }
+         }
+         container bgp-unsync-pending {
+           list bgp-unsync-entry {
+             leaf usy-iid {
+               type int32;
+             }
+             leaf usy-addr {
+               type jt:ipaddr;
+             }
+             leaf usy-elapsed {
+               type string;
+             }
+             leaf usy-flags {
+               type string;
+             }
+             leaf usy-more {
+               type empty;
+             }
+           }
+         }
+         container bgp-standby-sync-queue {
+           list bgp-standby-sync-entry {
+             leaf bstandby-iid {
+               type int32;
+             }
+             leaf bstandby-addr {
+               type jt:ipaddr;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-sync-information to top-level genstate";
+     uses bgp-sync-information-top;
+   }
+ }

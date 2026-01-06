@@ -1,0 +1,73 @@
+ module junos-genstate-bmp-socket-write-stats-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-socket-write-stats-information";
+   prefix jgbswsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-socket-write-stats-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-socket-write-stats-information-top {
+     description "Top-level grouping";
+     container bmp-socket-write-stats-information {
+       description "BMP socket write statistics information";
+       leaf bmp-sw-header {
+         type string;
+       }
+       list bmp-sw {
+         leaf bmp-sw-name {
+           type string;
+         }
+         container bmp-sw-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf write-count {
+             type string;
+             description "Write count";
+           }
+         }
+         container bmp-swr-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf write-rate-count {
+             type string;
+             description "Write rate count";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-socket-write-stats-information to top-level genstate";
+     uses bmp-socket-write-stats-information-top;
+   }
+ }

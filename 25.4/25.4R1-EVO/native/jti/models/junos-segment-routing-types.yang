@@ -1,0 +1,86 @@
+module junos-segment-routing-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/segment-routing/types";
+  prefix jsrt;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-routing-types {
+    prefix inet-rt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of segment-routing data types.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-09-30 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  typedef sr-bsid-type {
+    type union {
+        type inet-rt:mpls-label;
+        type inet:ipv6-address;
+    }
+    description
+      "The defined value of a segment identifier.  For SR-MPLS TE it
+       will be a label, for SRv6 TE it will be an IPv6 address";
+  }
+
+  typedef srte-protocol-origin {
+    type enumeration {
+      enum pcep {
+        value 10;
+        description
+          "Path Computation Element Protocol.";
+      }
+      enum bgp {
+        value 20;
+        description
+          "BGP SR policy.";
+      }
+      enum configuration {
+        value 30;
+        description
+          "Local configuration.";
+      }
+    }
+    description
+      "The component or protocol that originates or signals the
+       candidate path.";
+    reference
+      "RFC 9256 - Section 2.3 - Segment Routing Policy Architecture";
+  }
+}

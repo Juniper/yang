@@ -1,0 +1,80 @@
+module junos-state-system-controller {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/controller";
+  prefix js-sys-ctlr;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-lldp {
+    prefix js-lldp;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     system controller-connectivity state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-03-10 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping controller-top {
+    description
+      "Top-level grouping for JUNOS system controller-connectivity state
+       data";
+
+    container controller-connectivity {
+      description
+        "Encapsulating container for all system controller-connectivity
+         state";
+    }
+  }
+
+  augment "/js:state/js-sys:system" {
+    description
+      "Adds controller-connectivity domain to top-level system state";
+
+    uses controller-top;
+  }
+
+  augment "/js:state/js-pro:protocols/js-lldp:lldp/js-lldp:interfaces" +
+          "/js-lldp:interface/js-lldp:neighbors/js-lldp:neighbor" {
+    description
+      "Adds controller-connectivity domain to LLDP neighbor state";
+
+    uses controller-top;
+  }
+}

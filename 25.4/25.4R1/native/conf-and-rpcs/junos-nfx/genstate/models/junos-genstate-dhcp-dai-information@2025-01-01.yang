@@ -1,0 +1,63 @@
+ module junos-genstate-dhcp-dai-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dhcp-dai-information";
+   prefix jgddi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dhcp-dai-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping dhcp-dai-information-top {
+     description "Top-level grouping";
+     container dhcp-dai-information {
+       description "Information about Dynamic ARP Inspection";
+       container dai-summary {
+         list dai-entry {
+           key "ifd-name";
+           leaf ifd-name {
+             type string;
+             description "Interface name on which DAI stat collected";
+           }
+           leaf packets {
+             type uint64;
+           }
+           leaf pass {
+             type uint64;
+           }
+           leaf fail {
+             type uint64;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dhcp-dai-information to top-level genstate";
+     uses dhcp-dai-information-top;
+   }
+ }

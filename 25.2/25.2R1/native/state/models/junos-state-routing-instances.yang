@@ -1,0 +1,72 @@
+module junos-state-routing-instances {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/routing-instances";
+  prefix js-ri;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Routing Instances state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-04-21 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping routing-instances-top {
+    description
+      "Top-level grouping for JUNOS routing-instances state data";
+
+    container routing-instances {
+      description
+        "Encapsulating container for all JUNOS routing-instances state";
+
+      list routing-instance {
+        key name;
+
+        description
+          "List of all JUNOS routing-instances";
+
+        leaf name {
+          type string;
+          description
+            "Name of the routing instance";
+        }
+      }
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds routing-instances domain to top-level state";
+
+    uses routing-instances-top;
+  }
+}
+

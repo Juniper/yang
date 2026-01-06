@@ -1,0 +1,2241 @@
+module junos-state-networking {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/networking";
+  prefix js-net;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-chassis {
+    prefix js-chas;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for
+     JUNOS/EVO host networking stack statistics data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-11-19 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  grouping jtd-ingress-ttp-counters {
+    description
+      "Grouping for JTD ingress TTP counters";
+
+    leaf raw-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated raw packets received";
+    }
+
+    leaf arp-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated ARP packets received";
+    }
+
+    leaf l2-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated Layer 2 packets received";
+    }
+
+    leaf l3-ipv4-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated Layer 3 IPv4 packets received";
+    }
+
+    leaf l3-ipv6-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated Layer 3 IPv6 packets received";
+    }
+
+    leaf l3-mpls-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated Layer 3 MPLS packets received";
+    }
+
+    leaf unknown-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated Unknown packets received";
+    }
+
+    leaf l3-unknown-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated Layer 3 Unknown packets received";
+    }
+
+    leaf bytes {
+      type yang:counter64;
+      description
+        "Number of TTP packet bytes received";
+    }
+
+    leaf packets {
+      type yang:counter64;
+      description
+        "Number of TTP packets received";
+    }
+
+    leaf encapsulated-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated packets received";
+    }
+
+    leaf ipv4-bytes {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated IPv4 bytes received";
+    }
+
+    leaf ipv4-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated IPv4 packets received";
+    }
+
+    leaf ipv6-bytes {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated IPv6 bytes received";
+    }
+
+    leaf ipv6-pkts {
+      type yang:counter64;
+      description
+        "Number of TTP encapsulated IPv6 packets received";
+    }
+  }
+
+  grouping jtd-top {
+    description
+      "Top-level grouping for JTD networking state data";
+
+    container jtd {
+      description
+        "Enclosing container for JTD networking state";
+
+      container ingress {
+        description
+          "Enclosing container for JTD ingress state";
+
+        container counters {
+          description
+            "Enclosing container for JTD ingress counters";
+
+          leaf igmp-l2-pkts {
+            type yang:counter64;
+            description
+              "Number of IGMP Layer 2 packets received";
+          }
+
+          leaf ip-options-pkts {
+            type yang:counter64;
+            description
+              "Number of IPv4 packets with packet options received";
+          }
+
+          leaf ip-router-alert-pkts {
+            type yang:counter64;
+            description
+              "Number of IPv4 Router Alert packets received";
+          }
+
+          leaf mld-l2-pkts {
+            type yang:counter64;
+            description
+              "Number of MLD Layer 2 packets received";
+          }
+
+          leaf p4-agent-pkts {
+            type yang:counter64;
+            description
+              "Number of P4 switch agent packets received";
+          }
+
+          leaf ip-fragments {
+            type yang:counter64;
+            description
+              "Number of IP fragments received";
+          }
+
+          leaf mpls-ttl-expired-hint {
+            type yang:counter64;
+            description
+              "Number of MPLS packets with TTL expiry hint received";
+          }
+        }
+
+        container ttp {
+          description
+            "Enclosing container for JTD ingress TTP state";
+
+          container counters {
+            description
+              "Enclosing container for JTD ingress TTP counters";
+
+            uses jtd-ingress-ttp-counters;
+          }
+        }
+      }
+
+      container egress {
+        description
+          "Enclosing container for JTD egress state";
+
+        container counters {
+          description
+            "Enclosing container for JTD egress counters";
+
+          leaf tcp-reset-pkts {
+            type yang:counter64;
+            description
+              "Number of TCP Reset packets sent";
+          }
+        }
+
+        container ttp {
+          description
+            "Enclosing container for JTD egress TTP state";
+
+          container counters {
+            description
+              "Enclosing container for JTD egress TTP counters";
+
+            leaf bytes {
+              type yang:counter64;
+              description
+                "Number of TTP encapsulated packet bytes sent";
+            }
+
+            leaf packets {
+              type yang:counter64;
+              description
+                "Total number of TTP packets sent";
+            }
+
+            leaf encapsulated-pkts {
+              type yang:counter64;
+              description
+                "Number of TTP encapsulated packets sent";
+            }
+
+            leaf ipv4-bytes {
+              type yang:counter64;
+              description
+                "Number of TTP encapsulated IPv4 bytes sent";
+            }
+
+            leaf ipv4-pkts {
+              type yang:counter64;
+              description
+                "Number of TTP encapsulated IPv4 packets sent";
+            }
+
+            leaf ipv6-bytes {
+              type yang:counter64;
+              description
+                "Number of TTP encapsulated IPv6 bytes sent";
+            }
+
+            leaf ipv6-pkts {
+              type yang:counter64;
+              description
+                "Number of TTP encapsulated IPv6 packets sent";
+            }
+          }
+        }
+      }
+
+      container database {
+        description
+          "Enclosing container for JTD database state";
+
+        container counters {
+          description
+            "Enclosing container for JTD database counters";
+
+          leaf cache-add-entry-fail {
+            type yang:counter64;
+            description
+              "Failed cache entry additions";
+          }
+
+          leaf cache-add-entry-success {
+            type yang:counter64;
+            description
+              "Successful cache entry additions";
+          }
+
+          leaf cache-delete-entry-fail {
+            type yang:counter64;
+            description
+              "Failed cache entry deletions";
+          }
+
+          leaf cache-delete-entry-success {
+            type yang:counter64;
+            description
+              "Successful cache entry deletions";
+          }
+
+          leaf cache-lookup-entry-fail {
+            type yang:counter64;
+            description
+              "Failed cache entry lookups";
+          }
+
+          leaf cache-lookup-entry-success {
+            type yang:counter64;
+            description
+              "Successful cache entry lookups";
+          }
+
+          leaf cache-update-entry {
+            type yang:counter64;
+            description
+              "Cache entry updates";
+          }
+
+          leaf ioctl-processing-fail {
+            type yang:counter64;
+            description
+              "JTD IOCTL failures";
+          }
+
+          leaf ioctl-processing-success {
+            type yang:counter64;
+            description
+              "JTD IOCTL successes";
+          }
+
+          leaf tcp6-socket-lookup-fail {
+            type yang:counter64;
+            description
+              "TCP6 socket lookup failures";
+          }
+
+          leaf tcp6-socket-lookup-success {
+            type yang:counter64;
+            description
+              "TCP6 socket lookup successes";
+          }
+
+          leaf tcp-socket-lookup-fail {
+            type yang:counter64;
+            description
+              "TCP socket lookup failures";
+          }
+
+          leaf tcp-socket-lookup-success {
+            type yang:counter64;
+            description
+              "TCP socket lookup successes";
+          }
+
+          leaf upcall-add-success {
+            type yang:counter64;
+            description
+              "Upcall entry add successes";
+          }
+
+          leaf upcall-add-fail {
+            type yang:counter64;
+            description
+              "Upcall entry add failures";
+          }
+
+          leaf upcall-read-success {
+            type yang:counter64;
+            description
+              "Upcall entry read successes";
+          }
+
+          leaf upcall-read-fail {
+            type yang:counter64;
+            description
+              "Upcall entry read failures";
+          }
+
+          leaf upcall-syn-success {
+            type yang:counter64;
+            description
+              "Upcall entry syn successes";
+          }
+
+          leaf upcall-syn-fail {
+            type yang:counter64;
+            description
+              "Upcall entry syn failures";
+          }
+        }
+      }
+
+      container error {
+        description
+          "Enclosing container for JTD error state";
+
+        container counters {
+          description
+            "Enclosing container for JTD error counters";
+
+          leaf icmp-pkt-user-send-fail {
+            type yang:counter64;
+            description
+              "Linux ICMP send to ICMPD failures";
+          }
+
+          leaf ioctl-bad-cmsg {
+            type yang:counter64;
+            description
+              "Bad cmsg JTD IOCTL failures";
+          }
+
+          leaf ioctl-cmsg-missing {
+            type yang:counter64;
+            description
+              "Missing cmsg JTD IOCTL failures";
+          }
+
+          leaf ioctl-copy-from-userspace-fail {
+            type yang:counter64;
+            description
+              "Function copy_from_user() JTD IOCTL failures";
+          }
+
+          leaf ip-options-invalid-pkt-received {
+            type yang:counter64;
+            description
+              "Number of IPv4 packets with invalid IP options received";
+          }
+
+          leaf ip-router-alert-user-send-fail {
+            type yang:counter64;
+            description
+              "Number of IPv4 Router Alert packets that failed to send to ICMPD";
+          }
+
+          leaf resource-allocation-fail {
+            type yang:counter64;
+            description
+              "Resource allocation failures";
+          }
+
+         leaf skb-cmsg-control-get-fail {
+            type yang:counter64;
+            description
+              "Function skb_cmsg_control_get() failures";
+          }
+
+          leaf skb-cmsg-control-set-fail {
+            type yang:counter64;
+            description
+              "Function skb_cmsg_control_set() failures";
+          }
+
+          leaf ttp-bad-length-received {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets with bad header length received";
+          }
+
+          leaf ttp-tlv-bad-length-received {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets with bad TLV length received";
+          }
+
+          leaf ttp-tlv-bad-type-received {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulaed packets with bad TLV type received";
+          }
+
+          leaf ttp-tlv-bad-value-received {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets with bad TLV value received";
+          }
+
+          leaf ttp-tlv-missing-received {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets with missing TLV received";
+          }
+
+          leaf ttp-tlv-too-many-received {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets with too many TLVs received";
+          }
+
+          leaf unexpected-codepoint-reached {
+            type yang:counter64;
+            description
+              "Unexpected codepoint reached in kernel";
+          }
+
+          leaf pkts-incorrect-inject-hint-received {
+            type yang:counter64;
+            description
+              "Packets received with incorrect inject/hint";
+          }
+
+          leaf netlink-send-fail {
+            type yang:counter64;
+            description
+              "Netlink send failures";
+          }
+
+          leaf ip-local-out-fail {
+            type yang:counter64;
+            description
+              "Failures to send local IP packets";
+          }
+        }
+      }
+
+      container drops {
+        description
+          "Enclosing container for JTD drop state";
+
+        container counters {
+          description
+            "Enclosing container for JTD drop counters";
+
+          leaf ttp-l3-egress {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated Layer 3 egress packets dropped";
+          }
+
+          leaf ttp-tlv-bad {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets with bad TLV dropped";
+          }
+
+          leaf egress-filter {
+            type yang:counter64;
+            description
+              "Packets dropped on egress filter";
+          }
+
+          leaf ingress-filter {
+            type yang:counter64;
+            description
+              "Packets dropped on ingress filter";
+          }
+
+          leaf ingress-non-ddos {
+            type yang:counter64;
+            description
+              "Non-DDOS policing related packet drops on ingress";
+          }
+
+          leaf ingress-ddos {
+            type yang:counter64;
+            description
+              "DDOS policing related packet drops on ingress";
+          }
+
+          leaf egress {
+            type yang:counter64;
+            description
+              "Packets dropped on egress";
+          }
+
+          leaf ingress-l2-filter {
+            type yang:counter64;
+            description
+              "Packets dropped on ingress L2 filter";
+          }
+        }
+      }
+    }
+  }
+
+  grouping ttp-top {
+    description
+      "Top-level grouping for TTP networking state data";
+
+    container ttp {
+      description
+        "Enclosing container for TTP networking state";
+
+      container ingress {
+        description
+          "Enclosing container for TTP ingress state";
+
+        container counters {
+          description
+            "Enclosing container for TTP ingress counters";
+
+          leaf l2-pkts {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated L2 packets received";
+          }
+
+          leaf ipv4-l3-pkts {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated IPv4 L3 packets received";
+          }
+
+          leaf unknown-l3-pkts {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated Unknown L3 packets received";
+          }
+
+          leaf mpls-l3-pkts {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated MPLS L3 packets received";
+          }
+
+          leaf arp-pkts {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated ARP L3 packets received";
+          }
+
+          leaf ipv6-l3-pkts {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated IPv6 L3 packets received";
+          }
+        }
+      }
+
+      container egress {
+        description
+          "Enclosing container for TTP egress state";
+
+        container counters {
+          description
+            "Enclosing container for TTP egress counters";
+
+          leaf packets {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets sent";
+          }
+        }
+      }
+
+      container error {
+        description
+          "Enclosing container for TTP error state";
+
+        container counters {
+          description
+            "Enclosing container for TTP error counters";
+
+          leaf input-pkts-bad-tlv-header {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets received with bad TLV header";
+          }
+
+          leaf input-pkts-bad-tlv-type {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets received with bad TLV type";
+          }
+
+          leaf input-pkts-too-many-tlvs {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets received with too many TLVs";
+          }
+
+          leaf input-pkts-bad-type {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets received with bad type";
+          }
+        }
+      }
+
+      container drops {
+        description
+          "Enclosing container for TTP drops state";
+
+        container counters {
+          description
+            "Enclosing container for TTP drops counters";
+
+          leaf input-pkts-dropped-tlv-result {
+            type yang:counter64;
+            description
+              "Number of TTP encapsulated packets dropped on ingress based on TLV result";
+          }
+
+          leaf l3-pkts-dropped {
+            type yang:counter64;
+            description
+              "Total number of TTP encapsulated L3 packets dropped";
+          }
+        }
+      }
+    }
+  }
+
+  grouping icmp-common {
+    description
+      "Grouping for common ICMP ingress/egress state";
+
+    leaf echo-reply {
+      type yang:counter64;
+      description
+        "ICMP echo replies";
+    }
+
+    leaf destination-unreachable {
+      type yang:counter64;
+      description
+        "Destination unreachable";
+    }
+
+    leaf echo {
+      type yang:counter64;
+      description
+        "ICMP echoes";
+    }
+
+    leaf time-exceeded {
+      type yang:counter64;
+      description
+        "Time exceeded";
+    }
+
+    leaf parameter-problem {
+      type yang:counter64;
+      description
+        "Parameter problem";
+    }
+
+    leaf source-quench {
+      type yang:counter64;
+      description
+        "Source quench";
+    }
+
+    leaf routing-redirect {
+      type yang:counter64;
+      description
+        "Routing redirect";
+    }
+
+    leaf timestamp {
+      type yang:counter64;
+      description
+        "Timestamp";
+    }
+
+    leaf timestamp-reply {
+      type yang:counter64;
+      description
+        "Timestamp reply";
+    }
+
+    leaf address-mask-request {
+      type yang:counter64;
+      description
+        "Address mask request";
+    }
+
+    leaf address-mask-reply {
+      type yang:counter64;
+      description
+        "Address mask reply";
+    }
+
+    leaf router-advertisement {
+      type yang:counter64;
+      description
+        "Router advertisement";
+    }
+
+    leaf router-solicitation {
+      type yang:counter64;
+      description
+        "Router solicitation";
+    }
+
+    leaf extended-echo {
+      type yang:counter64;
+      description
+        "ICMP extended echo";
+    }
+
+    leaf extended-echo-reply {
+      type yang:counter64;
+      description
+        "ICMP extended echo reply";
+    }
+  }
+
+  grouping icmp-top {
+    description
+      "Top-level grouping for ICMP networking state data";
+
+    container icmp {
+      description
+        "Enclosing container for ICMP networking state";
+
+      container ingress {
+        description
+          "Enclosing container for ICMP ingress state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP ingress counters";
+
+          uses icmp-common;
+        }
+      }
+
+      container egress {
+        description
+          "Enclosing container for ICMP egress state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP egress counters";
+
+          uses icmp-common;
+
+          leaf message-responses-generated {
+            type yang:counter64;
+            description
+              "Message responses generated";
+          }
+        }
+      }
+
+      container error {
+        description
+          "Enclosing container for ICMP error state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP error counters";
+
+          leaf calls-to-icmp-error {
+            type yang:counter64;
+            description
+              "Calls made to icmp_error handler";
+          }
+
+          leaf errors-suppressed-old-message-icmp {
+            type yang:counter64;
+            description
+              "Errors not generated because old message was ICMP";
+          }
+
+          leaf bad-code-fields {
+            type yang:counter64;
+            description
+              "ICMP messages with bad code fields";
+          }
+
+          leaf less-than-minimum-length {
+            type yang:counter64;
+            description
+              "ICMP messages with less than minimum length";
+          }
+
+          leaf bad-checksum {
+            type yang:counter64;
+            description
+              "ICMP messages with bad checksum";
+          }
+
+          leaf bad-source-address {
+            type yang:counter64;
+            description
+              "ICMP messages with bad source address";
+          }
+
+          leaf bad-length {
+            type yang:counter64;
+            description
+              "ICMP messages with bad length";
+          }
+        }
+      }
+
+      container drops {
+        description
+          "Enclosing container for ICMP drop state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP drop counters";
+
+          leaf drops-due-to-rate-limit {
+            type yang:counter64;
+            description
+              "ICMP drops due to rate limit";
+          }
+
+          leaf echo-drops-bcast-or-mcast-destination {
+            type yang:counter64;
+            description
+              "ICMP echo drops with a broadcast/multicast destination
+               address";
+          }
+
+          leaf timestamp-drops-bcast-or-mcast-destination {
+            type yang:counter64;
+            description
+              "ICMP timestamp drops with a broadcast/multicast
+               destination address";
+          }
+        }
+      }
+    }
+  }
+
+  grouping icmp6-common {
+    description
+      "Grouping for common ICMP6 ingress/egress state";
+
+    leaf unreachable-icmp6-pkts {
+      type yang:counter64;
+      description
+        "Unreachable ICMP6 packets";
+    }
+
+    leaf echo {
+      type yang:counter64;
+      description
+        "ICMP6 echo";
+    }
+
+    leaf echo-reply {
+      type yang:counter64;
+      description
+        "ICMP6 echo reply";
+    }
+
+    leaf neighbor-solicitation {
+      type yang:counter64;
+      description
+        "Neighbor solicitation";
+    }
+
+    leaf neighbor-advertisement {
+      type yang:counter64;
+      description
+        "Neighbor advertisement";
+    }
+
+    leaf router-solicitation {
+      type yang:counter64;
+      description
+        "ICMP6 router solicitation";
+    }
+
+    leaf router-advertisement {
+      type yang:counter64;
+      description
+        "ICMP6 router advertisement";
+    }
+
+    leaf time-exceeded {
+      type yang:counter64;
+      description
+        "ICMP6 packets with time exceeded";
+    }
+
+    leaf parameter-problem {
+      type yang:counter64;
+      description
+        "ICMP6 packets with parameter problem";
+    }
+
+    leaf packet-too-big {
+      type yang:counter64;
+      description
+        "ICMP6 packets that are too big";
+    }
+
+    leaf multicast-listener-query {
+      type yang:counter64;
+      description
+        "Multicast listener query";
+    }
+
+    leaf multicast-listener-report {
+      type yang:counter64;
+      description
+        "Multicast listener report";
+    }
+
+    leaf multicast-listener-done {
+      type yang:counter64;
+      description
+        "Multicast listener done";
+    }
+
+    leaf version-2-multicast-listener-report {
+      type yang:counter64;
+      description
+        "Version 2 multicast listener report";
+    }
+
+    leaf redirect {
+      type yang:counter64;
+      description
+        "Redirect";
+    }
+  }
+
+  grouping icmp6-neighbor-discovery-common {
+    description
+      "Grouping for common ICMP6 neighbor discovery state";
+
+    leaf ndp-proxy-requests {
+      type yang:counter64;
+      description
+        "NDP proxy requests";
+    }
+
+    leaf dad-proxy-requests {
+      type yang:counter64;
+      description
+        "DAD proxy requests";
+    }
+
+    leaf ndp-proxy-responses {
+      type yang:counter64;
+      description
+        "NDP proxy responses";
+    }
+
+    leaf dad-proxy-conflicts {
+      type yang:counter64;
+      description
+        "DAD proxy conflicts";
+    }
+
+    leaf dup-proxy-responses {
+      type yang:counter64;
+      description
+        "DAD proxy duplicates";
+    }
+
+    leaf ndp-proxy-resolve-cnt {
+      type yang:counter64;
+      description
+        "NDP proxy resolve requests";
+    }
+
+    leaf dad-proxy-resolve-cnt {
+      type yang:counter64;
+      description
+        "DAD proxy resolve requests";
+    }
+  }
+
+  grouping icmp6-top {
+    description
+      "Top-level grouping for ICMPv6 networking state data";
+
+    container icmp6 {
+      description
+        "Enclosing container for ICMPv6 networking state";
+
+      container ingress {
+        description
+          "Enclosing container for ICMP6 ingress state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP6 ingress counters";
+
+          uses icmp6-common;
+        }
+      }
+
+      container egress {
+        description
+          "Enclosing container for ICMP6 egress state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP6 egress counters";
+
+          uses icmp6-common;
+
+          leaf message-responses-generated {
+            type yang:counter64;
+            description
+              "ICMP6 message responses generated";
+          }
+        }
+      }
+
+      container error {
+        description
+          "Enclosing container for ICMP6 error state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP6 error counters";
+
+          leaf calls-to-icmp6-error {
+            type yang:counter64;
+            description
+              "Calls to icmp6_error handler";
+          }
+
+          leaf errors-suppressed-old-message-icmp {
+            type yang:counter64;
+            description
+              "Errors not generated because old message was ICMP";
+          }
+
+          leaf errors-suppressed-rate-limitation {
+            type yang:counter64;
+            description
+              "Errors not generated because of rate limitation";
+          }
+
+          leaf bad-code-fields {
+            type yang:counter64;
+            description
+              "ICMP6 messages with bad code fields";
+          }
+
+          leaf less-than-minimum-length {
+            type yang:counter64;
+            description
+              "ICMP6 messages with less than minimum length";
+          }
+
+          leaf bad-checksums {
+            type yang:counter64;
+            description
+              "ICMP6 messages with bad checksums";
+          }
+
+          leaf bad-length {
+            type yang:counter64;
+            description
+              "ICMP6 messages with bad length";
+          }
+
+          leaf no-route {
+            type yang:counter64;
+            description
+              "ICMP6 messages with no route";
+          }
+
+          leaf administratively-prohibited {
+            type yang:counter64;
+            description
+              "ICMP6 messages that are administratively prohibited";
+          }
+
+          leaf beyond-scope {
+            type yang:counter64;
+            description
+              "ICMP6 messages that are beyond scope";
+          }
+
+          leaf address-unreachable {
+            type yang:counter64;
+            description
+              "ICMP6 messages with address unreachable";
+          }
+
+          leaf port-unreachable {
+            type yang:counter64;
+            description
+              "ICMP6 messages with port unreachable";
+          }
+
+          leaf time-exceed-transit {
+            type yang:counter64;
+            description
+              "ICMP6 messages with a time that exceeded transit limits";
+          }
+
+          leaf time-exceed-reassembly {
+            type yang:counter64;
+            description
+              "ICMP6 messages with a time that exceeded reassembly limits";
+          }
+
+          leaf erroneous-header-field {
+            type yang:counter64;
+            description
+              "ICMP6 messages with an erroneous header field";
+          }
+
+          leaf unrecognized-next-header {
+            type yang:counter64;
+            description
+              "ICMP6 messages with an unrecognized next header";
+          }
+
+          leaf unrecognized-option {
+            type yang:counter64;
+            description
+              "ICMP6 messages with an unrecognized option";
+          }
+
+          leaf unknown {
+            type yang:counter64;
+            description
+              "Unknown packets";
+          }
+        }
+      }
+
+      container neighbor-discovery {
+        description
+          "Enclosing container for ICMP6 neighbor discovery state";
+
+        container counters {
+          description
+            "Enclosing container for ICMP6 neighbor discovery counters";
+
+          leaf too-many-nd-options {
+            type yang:counter64;
+            description
+              "Messages with too many neighbor discovery options";
+          }
+
+          leaf system-max {
+            type yang:counter64;
+            description
+              "Neighbor discovery system max";
+          }
+
+          leaf public-max {
+            type yang:counter64;
+            description
+              "Neighbor discovery public max";
+          }
+
+          leaf iri-max {
+            type yang:counter64;
+            description
+              "Neighbor discovery IRI max";
+          }
+
+          leaf mgt-max {
+            type yang:counter64;
+            description
+              "Neighbor discovery management max";
+          }
+
+          leaf public-count {
+            type yang:counter64;
+            description
+              "Neighbor discovery public count";
+          }
+
+          leaf iri-count {
+            type yang:counter64;
+            description
+              "Neighbor discovery IRI count";
+          }
+
+          leaf mgt-count {
+            type yang:counter64;
+            description
+              "Neighbor discovery management count";
+          }
+
+          leaf system-drop {
+            type yang:counter64;
+            description
+              "Neighbor discovery system drop";
+          }
+
+          leaf public-drop {
+            type yang:counter64;
+            description
+              "Neighbor discovery public drop";
+          }
+
+          leaf iri-drop {
+            type yang:counter64;
+            description
+              "Neighbor discovery IRI drop";
+          }
+
+          leaf mgt-drop {
+            type yang:counter64;
+            description
+              "Neighbor discovery management drop";
+          }
+
+          leaf requests-dropped-on-entry {
+            type yang:counter64;
+            description
+              "Neighbor discovery ICMP6 requests dropped on entry";
+          }
+
+          leaf requests-dropped-during-retry {
+            type yang:counter64;
+            description
+              "Neighbor discovery ICMP6 requests dropped during retry";
+          }
+        }
+
+        container interface-restricted {
+          description
+            "Enclosing container for ICMP6 neighbor discovery
+             interface-restricted state";
+
+          container counters {
+            description
+              "Enclosing container for ICMP6 neighbor discovery
+               interface-restricted counters";
+
+            uses icmp6-neighbor-discovery-common;
+
+            leaf dad-proxy-eqmac-drop {
+              type yang:counter64;
+              description
+                "Packets from same node dropped";
+            }
+          }
+        }
+
+        container interface-unrestricted {
+          description
+            "Enclosing container for ICMP6 neighbor discovery
+             interface-unrestricted state";
+
+          container counters {
+            description
+              "Enclosing container for ICMP6 neighbor discovery
+               interface-unrestricted counters";
+
+            uses icmp6-neighbor-discovery-common;
+
+            leaf dad-proxy-eqport-drop {
+              type yang:counter64;
+              description
+                "Packets from same port dropped";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping mpls-top {
+    description
+      "Top-level grouping for MPLS state data";
+
+    container mpls {
+      description
+        "Enclosing container for MPLS state";
+
+      container ingress {
+        description
+          "Enclosing container for MPLS ingress state";
+
+        container counters {
+          description
+            "Enclosing container for MPLS ingress counters";
+
+          leaf pkts-total {
+            type yang:counter64;
+            description
+              "Total MPLS packets received";
+          }
+
+          leaf bfd-pkts-received {
+            type yang:counter64;
+            description
+              "MPLS BFD packets received";
+          }
+
+          leaf cfm-pkts-received {
+            type yang:counter64;
+            description
+              "MPLS CFM packets received";
+          }
+
+          leaf pkts-router-alert-tag {
+            type yang:counter64;
+            description
+              "Packets received with router alert tag";
+          }
+
+          leaf lsp-ping-pkts {
+            type yang:counter64;
+            description
+              "LSP ping packets received (ttl-expired/router alert)";
+          }
+
+          leaf pkts-ttl-expired {
+            type yang:counter64;
+            description
+              "Packets received with TTL expired";
+          }
+        }
+      }
+
+      container error {
+        description
+          "Enclosing container for MPLS error state";
+
+        container counters {
+          description
+            "Enclosing container for MPLS error counters";
+
+          leaf pkts-drop {
+            type yang:counter64;
+            description
+              "Packets dropped";
+          }
+
+          leaf pkts-header-too-small {
+            type yang:counter64;
+            description
+              "Packets with header too small";
+          }
+
+          leaf pkts-ipv4-explicit-null-tag {
+            type yang:counter64;
+            description
+              "Packets with IPv4 explicit NULL tag";
+          }
+
+          leaf pkts-ipv4-explicit-null-checksum-errors {
+            type yang:counter64;
+            description
+              "Packets with IPv4 explicit NULL cksum errors";
+          }
+
+          leaf pkts-ipv6-explicit-null-tag {
+            type yang:counter64;
+            description
+              "Packets with IPv6 explicit NULL tag";
+          }
+
+          leaf pkts-tag-encoding-error {
+            type yang:counter64;
+            description
+              "Packets with tag encoding error";
+          }
+        }
+      }
+    }
+  }
+
+  grouping tcp-top {
+    description
+      "Top-level grouping for TCP state data";
+
+    container tcp {
+      description
+        "Enclosing container for TCP state";
+
+      container counters {
+        description
+          "Enclosing container for TCP counters";
+
+        leaf pkts-sent {
+          type yang:counter64;
+          description
+            "Number of TCP packets sent";
+        }
+
+        leaf sent-window-probe-pkts {
+          type yang:counter64;
+          description
+            "TCP window probe packets sent";
+        }
+
+        leaf pkts-received {
+          type yang:counter64;
+          description
+            "Number of TCP packets received";
+        }
+
+        leaf discarded-bad-checksum {
+          type yang:counter64;
+          description
+            "Ingress TCP packets discarded for bad checksums";
+        }
+
+        leaf discarded-bad-header-offset {
+          type yang:counter64;
+          description
+            "Ingress TCP packets discarded for bad header offset
+             fields";
+        }
+
+        leaf connection-requests {
+          type yang:counter64;
+          description
+            "Number of TCP connection requests";
+        }
+
+        leaf bad-connection-attempts {
+          type yang:counter64;
+          description
+            "Number of bad TCP connection attempts";
+        }
+
+        leaf listen-queue-overflows {
+          type yang:counter64;
+          description
+            "TCP listen queue overflows";
+        }
+
+        leaf connections-established {
+          type yang:counter64;
+          description
+            "Total TCP connections established (including accepts)";
+        }
+
+        leaf embryonic-connections-dropped {
+          type yang:counter64;
+          description
+            "Embryonic TCP connections dropped";
+        }
+
+        leaf connections-dropped-by-retransmit-timeout {
+          type yang:counter64;
+          description
+            "TCP connections dropped by retransmit timeout";
+        }
+
+        leaf keepalive-probes-sent {
+          type yang:counter64;
+          description
+            "TCP keepalive probes sent";
+        }
+
+        leaf retransmitted {
+          type yang:counter64;
+          description
+            "TCP packets retransmitted";
+        }
+
+        leaf reset {
+          type yang:counter64;
+          description
+            "TCP connections reset";
+        }
+
+        leaf aborted {
+          type yang:counter64;
+          description
+            "TCP connections aborted";
+        }
+
+        leaf cookies-sent {
+          type yang:counter64;
+          description
+            "Cookies sent";
+        }
+
+        leaf cookies-received {
+          type yang:counter64;
+          description
+            "Cookies received";
+        }
+
+        leaf sack-recovery-episodes {
+          type yang:counter64;
+          description
+            "SACK recovery episodes";
+        }
+
+        leaf segment-retransmits {
+          type yang:counter64;
+          description
+            "TCP segment retransmits";
+        }
+
+        leaf out-of-sequence-segment-drops {
+          type yang:counter64;
+          description
+            "Out-of-sequence segment drops due to insufficient memory";
+        }
+
+        leaf rst-pkts {
+          type yang:counter64;
+          description
+            "TCP RST packets";
+        }
+      }
+    }
+  }
+
+  grouping udp-top {
+    description
+      "Top-level grouping for UDP state data";
+
+    container udp {
+      description
+       "Enclosing container for UDP state";
+
+      container counters {
+        description
+          "Enclosing container for UDP counters";
+
+        leaf datagrams-received {
+          type yang:counter64;
+          description
+            "Datagrams received";
+        }
+
+        leaf datagrams-incomplete-header {
+          type yang:counter64;
+          description
+            "Datagrams with incomplete header";
+        }
+
+        leaf datagrams-bad-datalength-field {
+          type yang:counter64;
+          description
+            "Datagrams with bad data length field";
+        }
+
+        leaf datagrams-bad-checksum {
+          type yang:counter64;
+          description
+            "Datagrams with bad checksum";
+        }
+
+        leaf datagrams-dropped-no-socket {
+          type yang:counter64;
+          description
+            "Datagrams dropped due to no socket";
+        }
+
+        leaf bcast-or-mcast-datagrams-dropped-no-socket {
+          type yang:counter64;
+          description
+            "Broadcast/multicast datagrams dropped due to no socket";
+        }
+
+        leaf datagrams-dropped-full-socket-buffers {
+          type yang:counter64;
+          description
+            "Datagrams dropped due to full socket buffers";
+        }
+
+        leaf datagrams-not-for-hashed-pcb {
+          type yang:counter64;
+          description
+            "Datagrams not for hashed pcb";
+        }
+
+        leaf datagrams-delivered {
+          type yang:counter64;
+          description
+            "Datagrams delivered";
+        }
+
+        leaf datagrams-output {
+          type yang:counter64;
+          description
+            "Datagrams output";
+        }
+      }
+    }
+  }
+
+  grouping ip-top {
+    description
+      "Top-level grouping for IP state data";
+
+    container ip {
+      description
+        "Enclosing container for IP state";
+
+      container counters {
+        description
+          "Enclosing container for IP counters";
+
+        leaf pkts-received {
+          type yang:counter64;
+          description
+            "Total IP packets received";
+        }
+
+        leaf bad-header-checksums {
+          type yang:counter64;
+          description
+            "Bad header checksums";
+        }
+
+        leaf pkts-size-less-than-minimum {
+          type yang:counter64;
+          description
+            "IP packets with size less than minimum";
+        }
+
+        leaf pkts-data-size-less-than-data-length {
+          type yang:counter64;
+          description
+            "IP packets with data size less than data length";
+        }
+
+        leaf pkts-header-length-less-than-data-size {
+          type yang:counter64;
+          description
+            "IP packets with header length less than data size";
+        }
+
+        leaf pkts-data-length-less-than-header-length {
+          type yang:counter64;
+          description
+            "IP packets with data length less than header length";
+        }
+
+        leaf pkts-incorrect-version-number {
+          type yang:counter64;
+          description
+            "IP packets with incorrect version number";
+        }
+
+        leaf pkts-destined-to-dead-next-hop {
+          type yang:counter64;
+          description
+            "IP packets destined to dead next hop";
+        }
+
+        leaf fragments-received {
+          type yang:counter64;
+          description
+            "IP fragments received";
+        }
+
+        leaf fragments-dropped-outofspace-or-dup {
+          type yang:counter64;
+          description
+            "IP fragments dropped (duplicate or out of space)";
+        }
+
+        leaf fragments-dropped-queueoverflow {
+          type yang:counter64;
+          description
+            "IP fragment sessions dropped (queue overflow)";
+        }
+
+        leaf fragments-dropped-after-timeout {
+          type yang:counter64;
+          description
+            "IP fragments dropped after timeout";
+        }
+
+        leaf pkts-reassembled-ok {
+          type yang:counter64;
+          description
+            "IP packets reassembled OK";
+        }
+
+        leaf pkts-for-this-host {
+          type yang:counter64;
+          description
+            "IP packets for this host";
+        }
+
+        leaf pkts-unknown-or-unsupported-protocol {
+          type yang:counter64;
+          description
+            "IP packets for unknown/unsupported protocol";
+        }
+
+        leaf pkts-forwarded {
+          type yang:counter64;
+          description
+            "IP packets forwarded";
+        }
+
+        leaf pkts-not-forwardable {
+          type yang:counter64;
+          description
+            "IP packets not forwardable";
+        }
+
+        leaf redirects-sent {
+          type yang:counter64;
+          description
+            "IP redirects sent";
+        }
+
+        leaf pkts-sent-from-this-host {
+          type yang:counter64;
+          description
+            "IP packets sent from this host";
+        }
+
+        leaf pkts-sent-with-fabricated-ip-header {
+          type yang:counter64;
+          description
+            "IP packets sent with fabricated IP header";
+        }
+
+        leaf output-pkts-dropped-no-bufs {
+          type yang:counter64;
+          description
+            "IP output packets dropped due to no buffers";
+        }
+
+        leaf output-pkts-discarded-no-route {
+          type yang:counter64;
+          description
+            "IP output packets discarded due to no route";
+        }
+
+        leaf output-datagrams-fragmented {
+          type yang:counter64;
+          description
+            "IP output datagrams fragmented";
+        }
+
+        leaf fragments-created {
+          type yang:counter64;
+          description
+            "IP fragments created";
+        }
+
+        leaf datagrams-not-fragmentable {
+          type yang:counter64;
+          description
+            "IP datagrams that can't be fragmented";
+        }
+
+        leaf pkts-bad-options {
+          type yang:counter64;
+          description
+            "IP packets with bad options";
+        }
+
+        leaf pkts-options-handled-without-error {
+          type yang:counter64;
+          description
+            "IP packets with options handled without error";
+        }
+
+        leaf strict-source-and-record-route-options {
+          type yang:counter64;
+          description
+            "IP packets with trict source and record route options";
+        }
+
+        leaf loose-source-and-record-route-options {
+          type yang:counter64;
+          description
+            "IP packets with loose source and record route options";
+        }
+
+        leaf record-route-options {
+          type yang:counter64;
+          description
+            "IP packets with record route options";
+        }
+
+        leaf timestamp-options {
+          type yang:counter64;
+          description
+            "IP packets with timestamp options";
+        }
+
+        leaf timestamp-and-address-options {
+          type yang:counter64;
+          description
+            "IP packets with timestamp and address options";
+        }
+
+        leaf timestamp-and-prespecified-address-options {
+          type yang:counter64;
+          description
+            "IP packets with timestamp and prespecified address options";
+        }
+
+        leaf option-pkts-dropped-rate-limit {
+          type yang:counter64;
+          description
+            "IP option packets dropped due to rate limit";
+        }
+
+        leaf router-alert-options {
+          type yang:counter64;
+          description
+            "IP packets with router alert options";
+        }
+
+        leaf multicast-pkts-dropped {
+          type yang:counter64;
+          description
+            "Multicast packets dropped (no iflist)";
+        }
+
+        leaf pkts-dropped {
+          type yang:counter64;
+          description
+            "IP packets dropped (src and int don't match)";
+        }
+
+        leaf transit-re-pkts-dropped-on-mgmt-interface {
+          type yang:counter64;
+          description
+            "Transit RE packets dropped on management interface";
+        }
+
+        leaf pkts-used-first-nexthop-in-ecmp-unilist {
+          type yang:counter64;
+          description
+            "IP packets that used first nexthop in ECMP unilist";
+        }
+
+        leaf incoming-ttpoip-pkts-received {
+          type yang:counter64;
+          description
+            "Incoming TTP over IP packets received";
+        }
+
+        leaf incoming-ttpoip-pkts-dropped {
+          type yang:counter64;
+          description
+            "Incoming TTP over IP packets dropped";
+        }
+
+        leaf outgoing-ttpoip-pkts-sent {
+          type yang:counter64;
+          description
+            "Outgoing TTP over IP packets sent";
+        }
+
+        leaf outgoing-ttpoip-pkts-dropped {
+          type yang:counter64;
+          description
+            "Outgoing TTP over IP packets dropped";
+        }
+
+        leaf incoming-rawip-pkts-dropped-no-socket-buffer {
+          type yang:counter64;
+          description
+            "Raw packets dropped due to no space in socket receive
+             buffer";
+        }
+
+        leaf incoming-virtual-node-pkts-delivered {
+          type yang:counter64;
+          description
+            "Packets consumed by virtual-node processing";
+        }
+      }
+    }
+  }
+
+  grouping ipv6-top {
+    description
+      "Top-level grouping for IPv6 state data";
+
+    container ipv6 {
+      description
+        "Enclosing container for IPv6 state";
+
+      container counters {
+        description
+          "Enclosing container for IPv6 counters";
+
+        leaf total-pkts-received  {
+          type yang:counter64;
+          description
+            "Total packets received";
+        }
+
+        leaf pkts-size-smaller-than-minimum {
+          type yang:counter64;
+          description
+            "IPv6 packets with size smaller than minimum";
+        }
+
+        leaf pkts-data-size-less-than-data-length {
+          type yang:counter64;
+          description
+            "IPv6 packets with data size < data length";
+        }
+
+        leaf pkts-bad-options {
+          type yang:counter64;
+          description
+            "IPv6 packets with bad options";
+        }
+
+        leaf pkts-incorrect-version-number {
+          type yang:counter64;
+          description
+            "IPv6 packets with incorrect version number";
+        }
+
+        leaf fragments-received {
+          type yang:counter64;
+          description
+            "IPv6 fragments received";
+        }
+
+        leaf duplicate-or-out-of-space-fragments-dropped {
+          type yang:counter64;
+          description
+            "IPv6 fragments dropped (dup or out of space)";
+        }
+
+        leaf fragments-dropped-after-timeout {
+          type yang:counter64;
+          description
+            "IPv6 fragments dropped after timeout";
+        }
+
+        leaf fragments-exceeded-limit {
+          type yang:counter64;
+          description
+            "IPv6 fragment sessions dropped due to queue overflow";
+        }
+
+        leaf pkts-reassembled-ok {
+          type yang:counter64;
+          description
+            "IPv6 packets reassembled ok";
+        }
+
+        leaf pkts-for-this-host {
+          type yang:counter64;
+          description
+            "IPv6 packets for this host";
+        }
+
+        leaf pkts-forwarded {
+          type yang:counter64;
+          description
+            "IPv6 packets forwarded";
+        }
+
+        leaf pkts-not-forwardable {
+          type yang:counter64;
+          description
+            "IPv6 packets not forwardable";
+        }
+
+        leaf redirects-sent {
+          type yang:counter64;
+          description
+            "IPv6 redirects sent";
+        }
+
+        leaf pkts-sent-from-this-host {
+          type yang:counter64;
+          description
+            "IPv6 packets sent from this host";
+        }
+
+        leaf pkts-sent-with-fabricated-ip-header {
+          type yang:counter64;
+          description
+            "IPv6 packets sent with fabricated ip header";
+        }
+
+        leaf output-pkts-dropped-no-bufs {
+          type yang:counter64;
+          description
+            "IPv6 output packets dropped due to no bufs";
+        }
+
+        leaf output-pkts-discarded-no-route {
+          type yang:counter64;
+          description
+            "IPv6 output packets discarded due to no route";
+        }
+
+        leaf output-datagrams-fragmented {
+          type yang:counter64;
+          description
+            "IPv6 output datagrams fragmented ";
+        }
+
+        leaf fragments-created {
+          type yang:counter64;
+          description
+            "IPv6 fragments created";
+        }
+
+        leaf datagrams-not-fragmentable {
+          type yang:counter64;
+          description
+            "IPv6 datagrams that can not be fragmented";
+        }
+
+        leaf pkts-violated-scope-rules {
+          type yang:counter64;
+          description
+            "IPv6 packets that violated scope rules";
+        }
+
+        leaf multicast-pkts-do-not-join {
+          type yang:counter64;
+          description
+            "Multicast packets which we don't join";
+        }
+
+        leaf pkts-headers-not-continuous {
+          type yang:counter64;
+          description
+            "IPv6 packets whose headers are not continuous";
+        }
+
+        leaf tunneling-pkts-can-not-find-gif {
+          type yang:counter64;
+          description
+            "IPv6 tunneling packets that can't find GIF";
+        }
+
+        leaf pkts-discarded-too-many-headers {
+          type yang:counter64;
+          description
+            "IPv6 packets discarded due to too many headers";
+        }
+
+        leaf failures-of-source-address-selection {
+          type yang:counter64;
+          description
+            "IPv6 packets with failed source address selection";
+        }
+
+        leaf link-locals {
+          type yang:counter64;
+          description
+            "IPv6 packets with link locals as source address";
+        }
+
+        leaf site-locals {
+          type yang:counter64;
+          description
+            "IPv6 packets with site locals as source address";
+        }
+
+        leaf forward-cache-hit {
+          type yang:counter64;
+          description
+            "Forward cache hit";
+        }
+
+        leaf forward-cache-miss {
+          type yang:counter64;
+          description
+            "Forward cache miss";
+        }
+
+        leaf pkts-destined-to-dead-next-hop {
+          type yang:counter64;
+          description
+            "IPv6 packets destined to dead next hop";
+        }
+
+        leaf option-pkts-dropped-rate-limit {
+          type yang:counter64;
+          description
+            "IPv6 option packets dropped due to rate limit";
+        }
+
+        leaf pkts-dropped {
+          type yang:counter64;
+          description
+            "IPv6 packets dropped (src and int don't match)";
+        }
+
+        leaf pkts-dropped-bad-protocol {
+          type yang:counter64;
+          description
+            "IPv6 packets dropped due to bad protocol";
+        }
+
+        leaf transit-re-packet-dropped-on-mgmt-interface {
+          type yang:counter64;
+          description
+            "Transit RE packet (null) dropped on management interface";
+        }
+      }
+    }
+  }
+
+  grouping networking-top {
+    description
+      "Top-level grouping for networking state data";
+
+    container networking {
+      description
+        "Enclosing container for networking state";
+
+      uses jtd-top;
+      uses ttp-top;
+      uses icmp-top;
+      uses icmp6-top;
+      uses mpls-top;
+      uses tcp-top;
+      uses udp-top;
+      uses ip-top;
+      uses ipv6-top;
+    }
+  }
+
+  augment "/js:state/js-chas:chassis/js-chas:modules/js-chas:module" {
+    description
+      "Adds networking domain to chassis module state";
+
+    uses networking-top;
+  }
+}

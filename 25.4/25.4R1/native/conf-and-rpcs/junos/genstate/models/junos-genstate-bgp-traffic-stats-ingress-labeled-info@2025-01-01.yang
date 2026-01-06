@@ -1,0 +1,88 @@
+ module junos-genstate-bgp-traffic-stats-ingress-labeled-info {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-traffic-stats-ingress-labeled-info";
+   prefix jgbtsili;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-traffic-stats-ingress-labeled-info";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-traffic-stats-ingress-labeled-info-top {
+     description "Top-level grouping";
+     container bgp-traffic-stats-ingress-labeled-info {
+       description "Top-level container";
+       container bgp-traffic-statistics-header {
+         leaf group-name {
+           type string;
+         }
+         leaf group-index {
+           type int32;
+         }
+         leaf nlri-name {
+           type string;
+         }
+       }
+       container bgp-traffic-statistics-ingress-labeled {
+         leaf bgp-traffic-statistics-received-fec-labels {
+           type int32;
+           description "Labels received for routes in FEC";
+         }
+         leaf bgp-traffic-error {
+           type string;
+           description "Error encountered when querying the statistics";
+         }
+         leaf bgp-traffic-statistics-next-hop {
+           type string;
+           description "Next hop for labeled path";
+         }
+         leaf bgp-traffic-statistics-packet-count {
+           type int32;
+           description "Number of packets";
+         }
+         leaf bgp-traffic-statistics-byte-count {
+           type int32;
+           description "Number of bytes";
+         }
+         leaf bgp-traffic-type {
+           type string;
+           description "Type of traffic: ingress or transit";
+         }
+       }
+       container bgp-traffic-statistics-error {
+         leaf bgp-traffic-error {
+           type string;
+           description "Error encountered when querying the statistics";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-traffic-stats-ingress-labeled-info to top-level genstate";
+     uses bgp-traffic-stats-ingress-labeled-info-top;
+   }
+ }

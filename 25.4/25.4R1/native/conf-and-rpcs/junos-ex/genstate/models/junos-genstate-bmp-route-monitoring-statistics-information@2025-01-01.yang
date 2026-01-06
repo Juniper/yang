@@ -1,0 +1,101 @@
+ module junos-genstate-bmp-route-monitoring-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-route-monitoring-statistics-information";
+   prefix jgbrmsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-route-monitoring-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-route-monitoring-statistics-information-top {
+     description "Top-level grouping";
+     container bmp-route-monitoring-statistics-information {
+       description "BGP Monitoring Protocol statistics information";
+       list bmp-station {
+         key "bmp-station-name";
+         leaf bmp-station-name {
+           type string;
+         }
+         container bmp-station-rib-in-pre-statistics {
+           leaf bmp-advertised-prefix-count {
+             type int32;
+             description "Total advertised prefix count";
+           }
+           leaf bmp-withdrawn-prefix-count {
+             type int32;
+             description "Total withdraw prefix count";
+           }
+         }
+         container bmp-station-rib-in-post-statistics {
+           leaf bmp-advertised-prefix-count {
+             type int32;
+             description "Total advertised prefix count";
+           }
+           leaf bmp-withdrawn-prefix-count {
+             type int32;
+             description "Total withdraw prefix count";
+           }
+         }
+         list bmp-station-rib-local-statistics {
+           leaf bmp-advertised-prefix-count {
+             type int32;
+             description "Total advertised prefix count";
+           }
+           leaf bmp-withdrawn-prefix-count {
+             type int32;
+             description "Total withdraw prefix count";
+           }
+         }
+         container bmp-station-rib-out-pre-statistics {
+           leaf bmp-advertised-prefix-count {
+             type int32;
+             description "Total advertised prefix count";
+           }
+           leaf bmp-withdrawn-prefix-count {
+             type int32;
+             description "Total withdraw prefix count";
+           }
+         }
+         container bmp-station-rib-out-post-statistics {
+           leaf bmp-advertised-prefix-count {
+             type int32;
+             description "Total advertised prefix count";
+           }
+           leaf bmp-withdrawn-prefix-count {
+             type int32;
+             description "Total withdraw prefix count";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-route-monitoring-statistics-information to top-level genstate";
+     uses bmp-route-monitoring-statistics-information-top;
+   }
+ }

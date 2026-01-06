@@ -1,0 +1,85 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-packet-capture {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/junos-packet-capture";
+
+    prefix "jnx-pcap";
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "Yang definition for secure packet capture";
+
+    revision "2021-01-21" {
+        description "Initial yang file";
+    }
+
+    grouping packet-capture-top {
+        container junos {
+            description "JunOS OS";
+            config false;
+            container system {
+                description "Container node for system";
+                container linecard {
+                    description "Container node for linecard";
+                    container packet-capture {
+                        description "Container node for packet capture";
+                        list packet {
+                            description "Describes packet information";
+                            key id;
+                            leaf id {
+                                type uint64;
+                                description "Packet-id";
+                            }
+                            leaf total-length {
+                                type uint64;
+                                description "The total length of the packet";
+                            }
+                            leaf actual-length {
+                                type uint64;
+                                description "The actual length of the packet sent";
+                            }
+                            leaf packet-data {
+                                type string;
+                                description "The packet data";
+                            }
+                            leaf timestamp {
+                                type uint64;
+                                description "The timestamp of packet capture";
+                            }
+                            leaf ifl-index {
+                                type uint32;
+                                description "Logical interface index";
+                            }
+                            leaf cos-queue {
+                                type uint16;
+                                description "COS queue number";
+                            }
+                            leaf direction {
+                                type enumeration {
+                                    enum INGRESS_PACKET {
+                                        description "Ingress packet";
+                                    }
+                                    enum EGRESS_PACKET {
+                                        description "Egress packet";
+                                    }
+                                }
+                                description "Direction of each packet";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    uses packet-capture-top;
+}

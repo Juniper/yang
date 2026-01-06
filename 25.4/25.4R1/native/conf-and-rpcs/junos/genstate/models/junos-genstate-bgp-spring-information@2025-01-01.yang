@@ -1,0 +1,78 @@
+ module junos-genstate-bgp-spring-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-spring-information";
+   prefix jgbsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-spring-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-spring-information-top {
+     description "Top-level grouping";
+     container bgp-spring-information {
+       description "BGP source-packet-routing information";
+       container bgp-srgb-information {
+         description "BGP source-packet-routing srgb information";
+         leaf bgp-srgb-allocation {
+           type string;
+           description "SRGB Block Allocation";
+         }
+         container bgp-srgb-config {
+           description "SRGB block configuration related information";
+           leaf bgp-srgb-config-block-header {
+             type string;
+             description "SRGB Config Block";
+           }
+           leaf bgp-srgb-start-label {
+             type int32;
+             description "Configuration of SRGB start label";
+           }
+           leaf bgp-srgb-index-range {
+             type int32;
+             description "Configuration of SRGB index range";
+           }
+         }
+         container bgp-srgb-block {
+           description "SRGB block related information";
+           leaf bgp-srgb-first-label {
+             type int32;
+             description "First label allocated for SRGB Block";
+           }
+           leaf bgp-srgb-last-label {
+             type int32;
+             description "Last label allocated for SRGB Block";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-spring-information to top-level genstate";
+     uses bgp-spring-information-top;
+   }
+ }

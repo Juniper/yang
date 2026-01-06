@@ -1,0 +1,154 @@
+ module junos-genstate-bgp-tunnel-atribute-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-tunnel-atribute-information";
+   prefix jgbtai;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-tunnel-atribute-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-tunnel-atribute-information-top {
+     description "Top-level grouping";
+     container bgp-tunnel-atribute-information {
+       description "Top-level container";
+       leaf bgp-srte-policy-count {
+         type uint32;
+       }
+       leaf bgp-ip-in-ip-count {
+         type uint32;
+       }
+       leaf bgp-vxlan-count {
+         type uint32;
+       }
+       leaf bgp-list-tunnels-count {
+         type uint32;
+       }
+       leaf bgp-unsupported-tun-count {
+         type uint32;
+       }
+       leaf bgp-total-tun-attrib-count {
+         type uint32;
+       }
+       list bgp-tun-attributes {
+         leaf bgp-srte-tunnel-adv-name {
+           type string;
+         }
+         leaf bgp-tunnel-attrib-id {
+           type uint32;
+         }
+         leaf bgp-tunnel-attrib-type {
+           type string;
+         }
+         leaf bgp-tunnel-attrib-name {
+           type string;
+         }
+         leaf bgp-tunnel-attrib-endpoint {
+           type string;
+         }
+         leaf bgp-tunnel-attrib-color {
+           type string;
+         }
+       }
+       container srte1-policy-information {
+         container srte1-policy {
+           leaf srte1-tunnel-id {
+             type uint32;
+           }
+           leaf srte1-path-preference {
+             type uint32;
+           }
+           leaf srte1-binding-sid {
+             type string;
+           }
+           leaf srte1-adv-policy-name {
+             type string;
+           }
+           leaf srte1-priority {
+             type uint32;
+           }
+           leaf srte1-enlp {
+             type uint32;
+           }
+           leaf srte1-tlv-recv-flags {
+             type string;
+           }
+           leaf srte1-binding-sid-label-encoding {
+             type string;
+           }
+           list srte1-segment-list {
+             leaf srte1-segment-list-weight {
+               type uint32;
+             }
+             list srte1-segment {
+               leaf srte1-segment-label {
+                 type uint32;
+               }
+               leaf srte1-segment-label-ttl {
+                 type string;
+                 description "SR Policy segment label ttl";
+               }
+             }
+           }
+         }
+       }
+       list bgp-tunnel-attribute {
+         leaf tunnel-attribute-type {
+           type string;
+         }
+         leaf tunnel-attribute-color {
+           type uint32;
+         }
+         leaf tunnel-attribute-destination {
+           type jt:ipaddr;
+         }
+       }
+       container bgp-tunnel-attribute-list {
+         list bgp-tun-attributes {
+           leaf bgp-tunnel-attrib-id {
+             type uint32;
+           }
+         }
+         list bgp-tunnel-attribute {
+           leaf tunnel-attribute-type {
+             type string;
+           }
+           leaf tunnel-attribute-rpf {
+             type empty;
+           }
+           leaf tunnel-attribute-destination {
+             type jt:ipaddr;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-tunnel-atribute-information to top-level genstate";
+     uses bgp-tunnel-atribute-information-top;
+   }
+ }

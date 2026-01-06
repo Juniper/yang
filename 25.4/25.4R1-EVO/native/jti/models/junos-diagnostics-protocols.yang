@@ -1,0 +1,70 @@
+module junos-diagnostics-protocols {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/diagnostics/protocols";
+  prefix jd-pro;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-diagnostics {
+    prefix jd;
+  }
+
+  import junos-diagnostics-routing-instances {
+    prefix jd-ri;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     protocols diagnostics data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-07-01 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "experimental";
+
+  grouping protocols-top {
+    description
+      "Top-level grouping for JUNOS protocols diagnostics data.";
+
+    container protocols {
+      description
+        "Encapsulating container for all JUNOS protocol diagnostics.";
+    }
+  }
+
+  augment "/jd:diagnostics" {
+    description
+      "Adds protocols domain to top-level diagnostics.";
+
+    uses protocols-top;
+  }
+
+  augment "/jd:diagnostics/jd-ri:routing-instances/jd-ri:routing-instance" {
+    description
+      "Adds protocols domain to top-level routing-instance diagnostics.";
+
+    uses protocols-top;
+  }
+}

@@ -1,0 +1,292 @@
+module junos-state-segment-routing-te-policy {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/segment-routing/te-policy";
+  prefix js-srte-pol;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-segment-routing {
+    prefix js-sr;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-segment-routing-types {
+    prefix jsrt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     segment-routing te-policies state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-09-30 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  grouping in-counters {
+    description
+      "Collection of incoming packet/bytes counters.";
+
+    leaf in-pkts {
+      type yang:counter64;
+      description
+        "A cumulative counter of the incoming packets steered to the
+         SR-TE policy. It includes both ingress and transit steered
+         traffic.";
+    }
+
+    leaf in-bytes {
+      type yang:counter64;
+      description
+        "The cumulative counter of the total incoming bytes steered to
+         the SR-TE policy.";
+    }
+  }
+
+  grouping sr-te-per-path-stats {
+    description
+      "A collection of counters that are associated with policy/tunnel
+       or segment-list";
+
+    container counters {
+      description
+        "A collection of counters on the per-path level. They count the
+         total traffic forwarded by the policy, regardless of its
+         installation source. The counters should be persistent across
+         policy state changes and switches between active protocols.";
+
+      uses in-counters;
+    }
+  }
+
+  grouping sr-te-stats {
+    description
+      "A collection of counters that are associated with policy/tunnel
+       or segment-list";
+
+    container counters {
+      description
+        "A collection of counters on the policy level. They count the
+         total traffic forwarded by the policy, regardless of its
+         installation source. The counters should be persistent across
+         policy state changes and switches between active protocols.";
+
+        container srv6 {
+          description
+            "Collection of SRv6 counters";
+
+          uses in-counters;
+        }
+    }
+  }
+
+  grouping te-policy-top {
+    description
+      "Top-level grouping used for SR-TE policy operational states.";
+
+    container te-policies {
+      description
+        "A collection of SRTE policies in the system.";
+
+      list te-policy {
+        key "color endpoint";
+
+        description
+          "An individual SR-TE policy is identified by a combination of
+           color and endpoint.";
+
+        leaf color {
+          type uint32;
+          description
+            "When the policy is used for RIB resolution to a specific
+             Segment Routing Traffic Engineering path, the policy is used
+             when the color required in the policy (which may be specified
+             based on the value of a BGP extended colour community) matches
+             the value of this leaf. The color being set to 0 indicates
+             that the colour is a wildcard in the policy resolution.";
+        }
+
+        leaf endpoint {
+          type inet:ip-address;
+          description
+            "When the policy is used for RIB resolution to a Segment
+             Routing Traffic Engineering path, the policy is used when the
+             required endpoint (which may be the protocol next-hop) matches
+             the endpoint address specified in this leaf. When the leaf is
+             set to all zeros (0.0.0.0 or ::), the endpoint acts as a
+             wildcard in the policy resolution.";
+        }
+
+        uses sr-te-stats;
+        uses candidate-path-top;
+      }
+    }
+  }
+
+  grouping candidate-path-top {
+    description
+      "A collection of candidate paths associated with the SR-TE
+       policy.";
+
+    container candidate-paths {
+
+      list candidate-path {
+        key "protocol-origin originator-asn originator-address discriminator";
+
+        description
+          "An individual candidate path within the list of candidate
+           paths associated with this SR-TE policy. It is uniquely
+           identified by the combination of protocol-origin, originator
+           and discriminator";
+
+        leaf protocol-origin {
+          type jsrt:srte-protocol-origin;
+          description
+            "The component or protocol that originates or signals the
+             candidate path.";
+        }
+
+        leaf originator-asn {
+          type inet:as-number;
+          description
+            "The autonomous system that node originating the candidate
+            path locates.";
+          reference
+            "Section 2.4 of draft-ietf-spring-segment-routing-policy.";
+        }
+
+        leaf originator-address {
+          type inet:ipv6-address;
+          description
+            "The address of the node originating the candidate path.
+             Address in IPv4 can be represented as IPv6-encoded-IPv4
+             e.g. ::FFFF:192.168.1.2 or a normal IPv6 address with the
+             lowest 32 bits carrying the actual IPv4 address.";
+          reference
+            "Section 2.4 of draft-ietf-spring-segment-routing-policy.";
+        }
+
+        leaf discriminator {
+          type uint32;
+          description
+            "A 32 bit value uniquely identifying the path within the
+             context of a policy learnt from a protocol.";
+
+        }
+        uses segment-lists-top;
+      }
+    }
+  }
+
+  grouping segment-lists-top {
+    description
+      "A collection of segment lists associated with the policy
+       candidate path.";
+
+      container segment-lists {
+        description
+          "A collection of segment lists associated with the policy
+           candidate path.";
+
+        list segment-list {
+          key "id";
+
+          description
+            "An individual segment list within the list of segment lists
+             associated with this candidate path.";
+
+          leaf id {
+            type uint32;
+            description
+              "Operational state specific to a segment-list in a
+               candidate-path.";
+          }
+
+          uses sr-te-per-path-stats;
+        }
+      }
+  }
+
+  grouping uncolored-te-tunnel-top {
+    description
+      "Top level grouping used for SR-TE uncolored tunnels";
+
+    container uncolored-te-tunnels {
+      description
+        "A collection of uncolored SRTE tunnels";
+
+      list uncolored-te-tunnel {
+        key "name";
+
+        description
+          "An individual uncolored SR-TE tunnel is identified by it's
+           tunnel's name";
+
+        leaf name {
+          type string;
+          description
+            "The user friendly SR-TE candidate path name.";
+        }
+
+        uses sr-te-per-path-stats;
+        uses segment-lists-top;
+      }
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-pro:protocols/js-sr:source-packet-routing" {
+    description
+       "Adds segment-routing to protocol state.";
+
+    uses te-policy-top;
+    uses uncolored-te-tunnel-top;
+  }
+}

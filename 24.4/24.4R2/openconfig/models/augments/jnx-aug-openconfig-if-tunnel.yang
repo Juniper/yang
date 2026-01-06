@@ -1,0 +1,40 @@
+module jnx-aug-openconfig-if-tunnel {
+
+    yang-version "1";
+
+    namespace "http://yang.juniper.net/openconfig/augment/if-tunnel";
+    prefix "jnx-oc-tun";
+
+    import openconfig-interfaces { prefix oc-if; }
+    import openconfig-if-tunnel { prefix oc-tun; }
+
+    organization "Juniper Networks";
+    contact "www.juniper.net";
+    description "This module contains augments to openconfig tunnel";
+
+    revision "2021-12-10" {
+        description "Initial revision";
+        reference "0.0.1";
+    }
+
+    augment "/oc-if:interfaces/oc-if:interface/oc-if:subinterfaces/" +
+            "oc-if:subinterface" {
+        description "Augmentation to add Junos tunnel subinterface
+                    configuration to subinterfaces path";
+        container tunnel {
+            description "Augmentation to add Junos tunnel subinterface
+                        configuration to subinterfaces path";
+            container state {
+                description "Parameters associated with
+                            the tunnel subinterface";
+                config false;
+                uses oc-tun:tunnel-config;
+            }
+            container config {
+                description "Configuration parameters associated with the
+                            tunnel subinterface";
+                uses oc-tun:tunnel-config;
+            }
+        }
+    }
+}

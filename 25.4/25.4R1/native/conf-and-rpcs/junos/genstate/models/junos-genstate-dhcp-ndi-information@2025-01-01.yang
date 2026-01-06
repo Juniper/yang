@@ -1,0 +1,63 @@
+ module junos-genstate-dhcp-ndi-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dhcp-ndi-information";
+   prefix jgdni;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dhcp-ndi-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping dhcp-ndi-information-top {
+     description "Top-level grouping";
+     container dhcp-ndi-information {
+       description "Information about Neighbor Discovery Inspection";
+       container ndi-summary {
+         list ndi-entry {
+           key "ifd-name";
+           leaf ifd-name {
+             type string;
+             description "Interface name on which DAI stat collected";
+           }
+           leaf packets {
+             type uint64;
+           }
+           leaf pass {
+             type uint64;
+           }
+           leaf fail {
+             type uint64;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dhcp-ndi-information to top-level genstate";
+     uses dhcp-ndi-information-top;
+   }
+ }

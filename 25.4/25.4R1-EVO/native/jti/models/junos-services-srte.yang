@@ -1,0 +1,95 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-services-srte {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/srvs-srte";
+  prefix junos-srvs-srte;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     MPLS-segment routing traffic engineering related stats.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-10-10 {
+    description
+      "Initial revision";
+  }
+
+   grouping jnx-srvs-srte-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container services {
+                container segment-routing {
+                    description "Junos segment-routing container";
+                    container traffic-engineering {
+                        description "Junos segment routing traffic-engineering container";
+                        container transit {
+                            description "Junos segment routing traffic-engineering transit container";
+                            container usage {
+                                description "Junos segment routing traffic-engineering transit usage container";
+                            }
+                        }
+                        container ingress {
+                            description "Junos segment routing traffic-engineering ingress container";
+                            container usage {
+                                description "Junos segment routing traffic-engineering ingress usage container";
+                            }
+                        }
+                        container tunnel {
+                            description "Junos segment routing traffic-engineering tunnel container";
+                            container ingress {
+                                description "Junos segment routing traffic-engineering tunnel ingress container";
+                                container usage {
+                                    description "Junos segment routing traffic-engineering tunnel ingress usage container";
+                                }
+                            }
+                            container transit {
+                                description "Junos segment routing traffic-engineering tunnel transit container";
+                                container usage {
+                                    description "Junos segment routing traffic-engineering tunnel transit usage container";
+                                }
+                            }
+                            container lsp {
+                                description "Junos segment routing traffic-engineering tunnel-lsp container";
+                                container ingress {
+                                    description "Junos segment routing traffic-engineering tunnel-lsp ingress container";
+                                    container usage {
+                                        description "Junos segment routing traffic-engineering tunnel-lsp ingress usage container";
+                                    }
+                                }
+                                container transit {
+                                    description "Junos segment routing traffic-engineering tunnel-lsp transit container";
+                                    container usage {
+                                        description "Junos segment routing traffic-engineering tunnel-lsp transit usage container";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+       }
+   }
+   uses jnx-srvs-srte-top;
+}

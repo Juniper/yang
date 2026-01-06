@@ -1,0 +1,121 @@
+ module junos-genstate-bmp-eor-stats-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-eor-stats-information";
+   prefix jgbesi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-eor-stats-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-eor-stats-information-top {
+     description "Top-level grouping";
+     container bmp-eor-stats-information {
+       description "BMP end-of-rib statistics information";
+       list bmp-eor {
+         key "bmp-station-name";
+         leaf bmp-station-name {
+           type string;
+         }
+         container bmp-eor-rib-in-pre-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf eor-count {
+             type int32;
+             description "Total end of rib count";
+           }
+           leaf eor-last-sent-time-stamp {
+             type string;
+             description "Time when last end of rib was sent";
+           }
+         }
+         container bmp-eor-rib-in-post-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf eor-count {
+             type int32;
+             description "Total end of rib count";
+           }
+           leaf eor-last-sent-time-stamp {
+             type string;
+             description "Time when last end of rib was sent";
+           }
+         }
+         container bmp-eor-rib-local-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf eor-count {
+             type int32;
+             description "Total end of rib count";
+           }
+           leaf eor-last-sent-time-stamp {
+             type string;
+             description "Time when last end of rib was sent";
+           }
+         }
+         container bmp-eor-rib-out-pre-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf eor-count {
+             type int32;
+             description "Total end of rib count";
+           }
+           leaf eor-last-sent-time-stamp {
+             type string;
+             description "Time when last end of rib was sent";
+           }
+         }
+         container bmp-eor-rib-out-post-stats {
+           leaf bmp-monitor-name {
+             type string;
+             description "BGP Monitoring type name";
+           }
+           leaf eor-count {
+             type int32;
+             description "Total end of rib count";
+           }
+           leaf eor-last-sent-time-stamp {
+             type string;
+             description "Time when last end of rib was sent";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-eor-stats-information to top-level genstate";
+     uses bmp-eor-stats-information-top;
+   }
+ }

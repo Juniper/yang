@@ -1,0 +1,146 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-cmerror-configuration {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/junos-cmerror-configuration";
+
+    prefix "jnx-cmerror-configuration";
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "Yang definition for secure packet capture";
+
+    revision "2021-01-21" {
+        description "Initial yang file";
+    }
+
+    grouping cmerror-configuration-top {
+        container junos {
+            config false;
+            container system {
+                container cmerror {
+                    list configuration {
+                        key identifier;
+                        leaf identifier {
+                            type string;
+                            description
+                                "Identifier. Follows convention of
+                                 '/<component>/<instance#>/<sub-component>/<instance#>/module-name/<instance#>/<error-name>'";
+                        }
+                        leaf fru-slot {
+                            type uint32;
+                            description "The slot at which the FRU that detects this error is placed";
+                        }
+                        leaf fru-type {
+                            type string;
+                            description "The type of FRU that detects this error. Can be one of fpc,sib,feb";
+                        }
+                        leaf Name {
+                            type string;
+                            description "The name of the error (same as last part of the identifier field";
+                        }
+                        leaf component-id {
+                            type uint32;
+                            description "The id of the component that reports the error. For example, the PFE ID";
+                        }
+                        leaf limit {
+                            type uint32;
+                            description
+                                "Used in conjunction with count and threshold. If the count crosses
+                                 the sum of threshold and limit, then no processing of the error is done.
+                                 This check is not done if limit has the value of 0.
+                                 If the limit is not set for the cmerror entry, we perform checks on
+                                 the 'level' basis (see configured-limit, configured-threshold for
+                                 more information on the 'level' parameters";
+                        }
+                        leaf raising-threshold {
+                            type uint32;
+                            description "The threshold of error count above which the cmerror is considered set";
+                        }
+                        leaf clearing-threshold {
+                            type uint32;
+                            description "The threshold of error count above which the cmerror is considered cleared";
+                        }
+                        leaf action {
+                            type uint32;
+                            description
+                                "The action(s) taken when the particular error is set/detected.
+                                 This is a bitmask which can be interpreted as follows -
+                                 0x1  => log the error
+                                 0x2  => get the global state
+                                 0x4  => set an alarm (can be seen through the 'show chassis alarms' CLI command)
+                                 0x8  => clear the alarm
+                                 0x10 => offline the FRU
+                                 0x20 => restart/reset the FRU
+                                 0x40 => disable the PFE where the error occured. This will bring all associated IFDs down
+                                 0x80 => offline the PFE where the error occured
+                                 0x100 => restart/reset the PFE where the error occured
+                                 0x200 => offline the PIC where the error occured
+                                 0x400 => disable the IFD associated with the error";
+                        }
+                        leaf scope {
+                            type string;
+                            description "The scope of the error. This can be board, pfe or switch";
+                        }
+                        leaf category {
+                            type string;
+                            description "The category of the error. This can be functional, memory, io, storage, switch, processing or internal";
+                        }
+                        leaf severity {
+                            type string;
+                            description "The severity of the error. This can be minor, major or fatal";
+                        }
+                        leaf threshold {
+                            type uint32;
+                            description
+                                "Used in conjunction with limit and count.
+                                 Used to decide whether the error should be serviced or not, using the formula
+                                 'if (item->count) crosses (item->threshold)+(item->limit), do not do anything.
+                                  Otherwise, process the error'
+                                 If the count exceeds the threshold, we also increment item->exceeded_occur_count.
+                                 This is applicable only if the 'category' of the error is 'internal'";
+                        }
+                        leaf action-handling-type {
+                            type uint32;
+                            description "The type of handling that is associated with the action. Can be interpreted as follows -
+                                         0 => local handling
+                                         1 => global handling";
+                        }
+                        leaf configured-threshold {
+                            type uint32;
+                            description "Similar to 'threshold', but this is applicable if the category of the error is not 'internal'";
+                        }
+                        leaf configured-limit {
+                            type uint32;
+                            description "Similar to 'limit', but this is applicable if the category of the error is not 'internal'";
+                        }
+                        leaf configured-action {
+                            type uint32;
+                            description "Similar to 'action', but this is applicable if the category of the error is not 'internal'";
+                        }
+                        leaf configured-clear-action {
+                            type uint32;
+                            description "Similar to 'configured-action', but this action is taken when the error is cleared rather than
+                                         when the error is set";
+                        }
+                        leaf wrap-cycle-marker {
+                            type uint8;
+                            description "An indicator that all of the cmerror configuration has been sent to the collector.
+                                         A transition from 0 to 1 and back to 0 signifies this";
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    uses cmerror-configuration-top;
+}

@@ -1,0 +1,89 @@
+module jnx-aug-openconfig-bfd {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/bfd";
+
+  prefix "jnx-oc-bfd";
+
+  import openconfig-network-instance { prefix oc-ni; }
+  import openconfig-bgp-types { prefix oc-bgp-types; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig bfd model";
+
+  revision "2021-07-21" {
+    description "Updating type of transmit/receive
+                 intervals to microseconds to keep
+                 it in line with the latest OC model
+                 intervals type";
+    reference "0.0.2";
+  }
+
+  revision "2019-06-06" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+grouping base-cfg-parms {
+    description "BFD grouping for base config parameters.";
+    leaf local-multiplier {
+      type uint32;
+      default 3;
+      description "Multiplier transmitted by local system.";
+    }
+
+    leaf enable {
+      type boolean;
+      default false;
+      description
+        "Indicates whether the BFD is enabled.";
+    }
+    choice interval-config-type {
+      description
+        "Two interval values or one value used for both transmit and
+         receive.";
+      case tx-rx-intervals {
+        leaf desired-min-tx-interval {
+          type uint32;
+          units microseconds;
+          description
+            "Desired minimum transmit interval of control packets" +
+            "(in microseconds)";
+       }
+
+        leaf required-min-rx-interval {
+          type uint32;
+          units microseconds;
+          description
+            "Required minimum receive interval of control packets." +
+            "(in microseconds)";
+        }
+      }
+      case single-interval {
+
+        leaf min-interval {
+          type uint32;
+          units microseconds;
+          description
+            "Desired minimum transmit interval and required " +
+            "minimum receive interval of control packets." +
+            "(in microseconds)";
+        }
+      }
+    }
+  }
+
+ grouping client-cfg-parms {
+    description
+      "BFD grouping for configuration parameters
+       used by clients of BFD, e.g. IGP or MPLS.";
+    container bfd-params {
+	uses base-cfg-parms;
+    }
+  }
+
+}
+

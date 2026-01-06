@@ -1,0 +1,1005 @@
+module junos-diagnostics-bgp {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/diagnostics/bgp";
+  prefix jd-bgp;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-bgp-types {
+    prefix junos-bt;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-diagnostics {
+    prefix jd;
+  }
+
+  import junos-diagnostics-protocols {
+    prefix jd-pro;
+  }
+
+  import junos-diagnostics-routing-instances {
+    prefix jd-ri;
+  }
+
+  import junos-control-protocol-types {
+    prefix junos-cpt;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-diagnostics-bgp-types {
+    prefix jd-bt;
+  }
+
+  import junos-diagnostics-rt-types {
+    prefix jd-rtt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     BGP diagnostics data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-09-10 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "experimental";
+
+  grouping bgp-route-diagnostic-params {
+    description
+      "Parameters in route diagnostic data.";
+
+    leaf-list state {
+      type identityref {
+        base jd-rtt:rt-state-type;
+      }
+      description
+        "State of the route.";
+    }
+
+    leaf hidden-reason {
+      type identityref {
+        base jd-rtt:rt-hidden-reason-type;
+      }
+      description
+        "Reason for the route to be marked hidden.";
+    }
+
+    leaf recommendation {
+      type string;
+      description
+        "Relevant suggestion to recover the route from hidden table.";
+    }
+  }
+
+  grouping bgp-dropped-route-cache-reason {
+    description
+      "Parameters for reason behind dropping the route.";
+
+    container reason-list {
+      description
+        "List of Reasons for dropping routes.";
+
+      list reason {
+        key "name";
+        description
+          "Reason for dropping the route.";
+
+        leaf name {
+          type identityref {
+            base jd-rtt:rt-hidden-reason-type;
+          }
+          description
+            "Name of the reason for dropping the route.";
+        }
+
+        leaf count {
+          type yang:gauge32;
+          description
+            "Number of prefixes dropped route cache for the given reason.";
+        }
+
+        uses bgp-dropped-prefix-list;
+      }
+    }
+  }
+
+  grouping bgp-afi-safi-dropped-route-cache-list {
+    description
+      "Parameters in dropped route cache.";
+
+    container dropped-route-cache {
+      description
+        "Dropped route cache.";
+
+      leaf size {
+        type uint32;
+        description
+          "Dropped route cache max route entries.";
+      }
+
+      leaf count {
+        type yang:gauge32;
+        description
+          "Number of route entries in dropped route cache.";
+      }
+
+      uses bgp-dropped-route-cache-reason;
+    }
+  }
+
+  grouping bgp-dropped-prefix-list {
+    description
+      "List of routes associated with a given afi-safi.";
+
+    container prefix-list {
+      description
+        "Enclosing container for list of routes in the
+         routing table.";
+
+      list prefixes {
+        key "prefix origin path-id";
+        description
+          "List of routes in the table, keyed by the route
+           prefix, the route origin, and path-id. The route
+           origin can be either the neighbor address from
+           which the route was learned, or the source protocol
+           that injected the route. The path-id distinguishes
+           routes for the same prefix received from a neighbor
+           (e.g., if add-paths is enabled).";
+
+        uses bgp-afi-safi-common-params;
+        leaf time {
+          type jt:absolute-time-seconds;
+          description
+            "Time recorded for the dropped prefix with the given reason.";
+        }
+      }
+    }
+  }
+
+  grouping bgp-afi-safi-common-params {
+    description
+      "Common parameters for afi-safi.";
+
+    leaf prefix {
+      type inet:ip-prefix;
+      description
+        "The prefix corresponding to the route.";
+    }
+
+    leaf origin {
+      type union {
+        type inet:ip-address;
+        type identityref {
+          base junos-cpt:routing-protocol;
+        }
+      }
+      description
+        "Indicates the origin of the route.  If the route is learned
+         from a neighbor, this value is the neighbor address.  If
+         the route was injected or redistributed from another
+         protocol, the origin indicates the source protocol for the
+         route.";
+    }
+
+    leaf path-id {
+      type uint32;
+      description
+        "If the route is learned from a neighbor, the path-id
+         corresponds to the path-id for the route in the
+         corresponding adj-rib-in-post table.  If the route is
+         injected from another protocol, or the neighbor does not
+         support BGP add-paths, the path-id should be set
+         to zero, also the default value.
+
+         However, YANG does not allow default values to be set
+         for parameters that form the key, so a default value
+         cannot be set here.";
+    }
+  }
+
+  grouping bgp-afi-safi-route-list {
+    description
+      "List of routes associated with a given afi-safi.";
+
+    container routes {
+      description
+        "Enclosing container for list of routes in the
+         routing table.";
+
+      list route {
+        key "prefix origin path-id";
+        description
+          "List of routes in the table, keyed by the route
+           prefix, the route origin, and path-id. The route
+           origin can be either the neighbor address from
+           which the route was learned, or the source protocol
+           that injected the route. The path-id distinguishes
+           routes for the same prefix received from a neighbor
+           (e.g., if add-paths is enabled).";
+
+        uses bgp-afi-safi-common-params;
+        uses bgp-route-diagnostic-params;
+      }
+    }
+  }
+
+  grouping bgp-neighbor-afi-safi-list {
+    description
+      "List of address-families associated with the BGP neighbor.";
+    list afi-safi {
+      key "name";
+      description
+        "AFI, SAFI configuration available for the neighbor or
+         group.";
+
+      leaf name {
+        type identityref {
+          base junos-bt:afi-safi-type;
+        }
+        description
+          "AFI/SAFI name.";
+      }
+
+      uses bgp-afi-safi-route-list;
+      uses bgp-afi-safi-dropped-route-cache-list;
+    }
+  }
+
+  grouping last-flaps {
+    description
+      "Last session flap.";
+    container last-flap {
+      description
+        "Last flap parameters.";
+
+      leaf time {
+        type jt:absolute-time-seconds;
+        description
+          "Timestamp when the BGP peer last flapped.";
+      }
+
+      leaf event {
+        type identityref {
+          base jd-bt:flap-event-type;
+        }
+        description
+          "Marks the last event for flapping the session.";
+      }
+
+      leaf reason {
+        type identityref {
+          base jd-bt:flap-reason;
+        }
+        description
+          "Marks the last session flap reason.";
+      }
+    }
+  }
+
+  grouping last-operationally-down {
+    description
+      "Last operationally down state.";
+    container last-operational-down {
+      description
+        "Last operational-down parameters.";
+
+      leaf time {
+        type jt:absolute-time-seconds;
+        description
+          "Timestamp when the BGP peer last went down.";
+      }
+
+      leaf reason {
+        type identityref {
+          base jd-bt:down-reason;
+        }
+        description
+          "Marks BGP down reason.";
+      }
+
+      leaf recommendation {
+        type string;
+        description
+          "Relative suggestion for operational down state of the peer.";
+      }
+    }
+  }
+
+  grouping import-eval {
+    description
+      "Import evaluation.";
+    container import-evaluation {
+      description
+        "Import evaluation parameters.";
+
+      leaf trigger {
+        type identityref {
+          base jd-bt:import-eval-trigger-event;
+        }
+        description
+          "Import evaluation trigger event.";
+      }
+
+      leaf time {
+        type jt:absolute-time-seconds;
+        description
+          "Time of trigger for the import evaluation.";
+      }
+
+      leaf-list address-family {
+        type identityref {
+          base jd-bt:address-family-type;
+        }
+        description
+          "Address-families that trigerred the import evaluation.";
+      }
+    }
+  }
+
+  grouping bgp-neighbors-top {
+    description
+      "Top-level grouping for BGP neighbors.";
+    container neighbors {
+      description
+        "Enclosing container for the list of BGP neighbors.";
+
+      list neighbor {
+        key "address";
+        description
+          "List of BGP neighbors configured on the local system,
+           uniquely identified by remote IPv[46] address.";
+
+        leaf address {
+          type inet:ip-address;
+          description
+            "The remote IP address of this entry's BGP peer.";
+        }
+
+        leaf session-state {
+          type identityref {
+            base jd-bt:session-state;
+          }
+          description
+            "Last state of the BGP peer.";
+        }
+
+        uses last-flaps;
+        uses last-operationally-down;
+        uses import-eval;
+
+        container afi-safis {
+          description
+            "Per-address-family configuration parameters associated
+             with the neighbor.";
+          uses bgp-neighbor-afi-safi-list;
+        }
+      }
+    }
+  }
+
+  grouping export-eval {
+    description
+      "Export-evaluation parameters.";
+    container export-evaluation {
+      description
+        "Export-evaluation.";
+
+      leaf trigger {
+        type identityref {
+          base jd-bt:export-eval-trigger-event;
+        }
+        description
+          "Export evaluation trigger event.";
+      }
+
+      leaf trigger-time {
+        type jt:absolute-time-seconds;
+        description
+          "Time of trigger for the export evaluation.";
+      }
+
+      leaf-list address-family {
+        type identityref {
+          base jd-bt:address-family-type;
+        }
+        description
+          "Address-families that trigerred the export evaluation.";
+      }
+    }
+  }
+
+  grouping bgp-groups-top {
+    description
+        "Top-level grouping for BGP groups.";
+    container groups {
+      description
+        "Enclosing container for the list of BGP groups.";
+
+      list group {
+        key "name";
+        description
+          "List of BGP groups configured on the local system.";
+
+        leaf name {
+          type string;
+          description
+            "Name of the group to be configured.";
+        }
+
+        uses export-eval;
+        uses bgp-neighbors-top;
+      }
+    }
+  }
+
+  grouping loc-rib-eval {
+    description
+      "Local-rib-evaluation parameters.";
+    container local-rib-evaluation {
+      description
+        "Local-rib-evaluation.";
+
+      leaf trigger {
+        type identityref {
+          base jd-bt:local-rib-eval-trigger-event;
+        }
+        description
+          "Local-rib evaluation trigger event.";
+      }
+
+      leaf pending-trigger {
+        type identityref {
+          base jd-bt:local-rib-eval-trigger-event;
+        }
+        description
+          "Local-rib pending evaluation trigger event.";
+      }
+
+      leaf trigger-time {
+        type jt:absolute-time-seconds;
+        description
+          "Time of trigger for the local-rib evaluation.";
+      }
+    }
+  }
+
+  grouping bgp-rib-top {
+    description
+      "Top-level grouping for BGP RIBs";
+
+    container rib {
+      description
+        "Enclosing container for RIB state.";
+
+      container afi-safis {
+        description
+          "Enclosing container for address family list.";
+
+        list afi-safi {
+          key "name";
+          description
+            "List of afi-safi types.";
+
+          leaf name {
+            type identityref {
+              base junos-bt:afi-safi-type;
+            }
+            description
+              "AFI/SAFI name.";
+          }
+
+          uses loc-rib-eval;
+        }
+      }
+    }
+  }
+
+  grouping bgp-diagnostics-threshold {
+    container threshold {
+      description
+        "BGP diagnostics related data for threshold values.";
+
+      leaf write-job-suspend {
+        type uint32;
+        description
+          "Configured value for write job suspend threshold in BGP.";
+      }
+
+      leaf current-memory-in-use {
+        type jt:irix-percentage;
+        description
+          "Current percentage of total memory in use by BGP.";
+      }
+
+      leaf max-memory-used {
+        type jt:irix-percentage;
+        description
+          "Maximum percenage of total memory ever used by BGP.";
+      }
+
+      leaf cache-hit-ratio {
+        type jt:irix-percentage;
+        description
+          "Cache hit ratio value.";
+      }
+
+      leaf cache-lookup {
+        type uint32;
+        description
+          "Cache lookup threshold configured value.";
+      }
+
+      leaf community-hash-avg {
+        type uint32;
+        units "used community/total";
+        description
+          "Cache average threshold configured value.";
+      }
+
+      leaf community-hash-max {
+        type uint32;
+        description
+          "Cache max threshold configured value.";
+      }
+
+      leaf bgp-advertised-entries {
+        type uint32;
+        description
+          "Cache max threshold configured value.";
+      }
+
+      leaf max-prefixes {
+        type uint32;
+        description
+          "Prefix threshold configured value in BGP.";
+      }
+
+      leaf group-count {
+        type yang:gauge32;
+        description
+          "Number of BGP groups.";
+      }
+    }
+  }
+
+  grouping bgp-diagnostics-label {
+    container label {
+      description
+        "BGP diagnostics related data for non-stop-routing.";
+
+      leaf srgb-label-type {
+        type identityref {
+          base jd-bt:srgb-label-type;
+        }
+        description
+          "SRGB label type.";
+      }
+
+      leaf srgb-label-start {
+        type uint32;
+        description
+          "SRGB label start number.";
+      }
+
+      leaf srgb-label-end {
+        type uint32;
+        description
+          "SRGB label end number.";
+      }
+
+      leaf stale-label-hold-time {
+        type jt:absolute-time-seconds;
+        description
+          "Time period to keep stale MPLS labels that were allocated by BGP.";
+      }
+
+      leaf stale-label-count {
+        type yang:gauge32;
+        description
+          "Count for the MPLS stale labels.";
+      }
+
+      leaf stale-label-delete-time {
+        type jt:absolute-time-seconds;
+        description
+          "Time after which stale labels are removed.";
+      }
+
+      leaf stale-label-mode {
+        type enumeration {
+          enum all {
+            description
+              "Stale label mode All.";
+          }
+          enum frr {
+            description
+              "Stale label mode FRR.";
+          }
+        }
+        description
+          "Mode of stale label to be used as All or FRR.";
+      }
+    }
+  }
+
+  grouping bgp-non-stop-routing {
+    description
+      "BGP non-stop-routing.";
+
+    container nsr {
+      description
+        "BGP non-stop-routing parameters.";
+
+      leaf enabled {
+        type boolean;
+        description
+          "Indicates whether or not NSR is enabled for BGP.";
+      }
+
+      leaf mode {
+        type enumeration {
+          enum master {
+            description
+              "Master routing engine.";
+          }
+          enum standby {
+            description
+              "Standby routing engine.";
+          }
+        }
+        description
+          "Indicates master or backup routing-engine.";
+      }
+
+      leaf multipath-enabled {
+        type boolean;
+        description
+          "Indicates if multipath is enabled in NSR.";
+      }
+    }
+  }
+
+  grouping bgp-multipath {
+    description
+      "Global BGP multipath.";
+
+    container multipath {
+      description
+        "Global BGP multipath paramaters.";
+
+      leaf global-enabled {
+        type boolean;
+        description
+          "Indicates if BGP multipath is enabled globally.";
+      }
+
+      leaf enabled-on-standby-routing {
+        type boolean;
+        description
+          "Indicates if BGP multipath is enabled on standby routing engine.";
+      }
+
+      leaf foreground-mode {
+        type enumeration {
+          enum none {
+            description
+              "Foreground mode none.";
+          }
+          enum delete {
+            description
+              "Foreground mode path delete.";
+          }
+          enum add-delete {
+            description
+              "Foreground mode path add and delete.";
+          }
+        }
+        description
+          "Indicates mode in BGP multipath.";
+      }
+    }
+  }
+
+  grouping bgp-sharding {
+    description
+      "BGP sharding and update-io-thread.";
+
+    container sharding {
+      description
+        "BGP sharding and update-io thread parameters.";
+
+      leaf enabled {
+        type boolean;
+        description
+          "Indicates whether or not Sharding is enabled for BGP.";
+      }
+
+      leaf count {
+        type uint32;
+        description
+          "Number of shards.";
+      }
+
+      leaf update-io-thread-count {
+        type uint32;
+        description
+          "Number of update-io threads.";
+      }
+    }
+  }
+
+  grouping bgp-vpn-advertisement-source {
+    description
+      "VPN route advertisement source.";
+
+    container address-family-advertisement {
+      description
+        "VPN address-family advertisement source.";
+
+      leaf-list main {
+        type identityref {
+          base jd-bt:address-family-type;
+        }
+        description
+          "VPN address-families for which we are advertising routes from VPN main table.";
+      }
+
+      leaf-list rr-asbr {
+        type identityref {
+          base jd-bt:address-family-type;
+        }
+        description
+          "VPN address-families for which we are acting as ASBR/RR routes.";
+      }
+
+      leaf-list main-default-instance {
+        type identityref {
+          base jd-bt:address-family-type;
+        }
+        description
+          "VPN address-families for which we are advertising routes from VPN
+           main table in master instance.";
+      }
+
+      leaf-list main-by-app {
+        type identityref {
+          base jd-bt:address-family-type;
+        }
+        description
+          "VPN address-families for which we are advertising routes from VPN
+           main table that is requested by other apps.";
+      }
+    }
+  }
+
+  grouping bgp-diagnostics-state {
+    description
+      "BGP self diagnostics warning.";
+
+    container operational-state {
+      description
+        "BGP self diagnostics warning parameters.";
+
+      leaf interface-replay-done-received {
+        type boolean;
+        description
+          "Check if interface replay done notification is received.";
+      }
+
+      leaf peers-pending-in-convergence {
+        type yang:gauge32;
+        description
+          "Number of BGP peers pending inbound-convergence.";
+      }
+
+      leaf peers-pending-out-convergence {
+        type yang:gauge32;
+        description
+          "Number of BGP peers pending outbound-convergence.";
+      }
+
+      leaf missing-router-id {
+        type boolean;
+        description
+          "Marks if BGP router Id is missing.";
+      }
+    }
+  }
+
+  grouping bgp-diagnostics-options {
+    description
+      "BGP self diagnostics operational options.";
+
+    container operational-options {
+      description
+        "BGP self diagnostics operational parameters.";
+
+      leaf enabled-master-instance {
+        type boolean;
+        description
+        "Indicates whether or not BGP is enabled in the master instance.";
+      }
+
+      leaf enabled-other-instances {
+        type boolean;
+        description
+          "Indicates whether or not BGP is enabled in other instances.";
+      }
+
+      leaf flash-inactive {
+        type boolean;
+        description
+          "Check whether flash is inactive for BGP.";
+      }
+
+      leaf defer-withdrawals {
+        type boolean;
+        description
+          "Check whether BGP should defer unreachable address-families.";
+      }
+
+      leaf route-job-run-full-quantum {
+        type boolean;
+        description
+          "Should BGP allow rt-job to run full quantum.";
+      }
+    }
+  }
+
+  grouping global-params {
+    description
+      "Global routing-instance independent BGP diagnostics parameters.";
+
+      leaf global-as-number {
+        type inet:as-number;
+        description
+          "Global AS number.";
+      }
+
+      leaf advertised-entry {
+        type yang:gauge32;
+        description
+          "Marks total advertised entries.";
+      }
+
+      container global-confederation-as {
+        description
+          "Marks the confederation-as related parameters.";
+
+        leaf-list member {
+          type jd-bt:confed-member-as;
+          description
+            "Confederation AS members.";
+        }
+
+        leaf number {
+          type inet:as-number;
+          description
+            "Globally configured confederation AS number.";
+        }
+      }
+
+      container orr-configured {
+        description
+          "Marks the optimal route reflection related parameters.";
+
+        leaf enabled {
+          type boolean;
+          description
+            "Check whether Optimal Route Reflection is configured.";
+        }
+
+        leaf igp-primary-address {
+          type inet:ip-address;
+          description
+            "Configured IGP primary address.";
+        }
+
+        leaf igp-backup-address {
+          type inet:ip-address;
+          description
+            "Configured IGP backup address.";
+        }
+      }
+
+      uses bgp-diagnostics-options;
+      uses bgp-multipath;
+      uses bgp-non-stop-routing;
+      uses bgp-sharding;
+      uses bgp-diagnostics-threshold;
+      uses bgp-diagnostics-label;
+      uses bgp-vpn-advertisement-source;
+      uses bgp-diagnostics-state;
+  }
+
+  grouping bgp-global-params {
+    description
+      "Parameters independent of routing-instances.";
+
+    container bgp {
+      description
+        "BGP entities independent of routing-instances.";
+
+      uses global-params;
+    }
+  }
+
+  grouping bgp-top {
+    description
+      "Top-level grouping for BGP diagnostics data.";
+
+    container bgp {
+      description
+        "Container for BGP diagnostics.";
+
+      leaf active {
+        type boolean;
+        description
+          "Check if BGP is running.";
+      }
+
+      leaf id {
+        type yang:dotted-quad;
+        description
+          "BGP ID.";
+      }
+
+      leaf listen-port {
+        type inet:port-number;
+        description
+          "Configured BGP port.";
+      }
+
+      uses bgp-groups-top;
+      uses bgp-rib-top;
+    }
+  }
+
+  augment "/jd:diagnostics/jd-pro:protocols" {
+    description
+      "Adds BGP domain to protocol diagnostics for instance independent parameters.";
+
+    uses bgp-global-params;
+  }
+
+  augment "/jd:diagnostics/jd-ri:routing-instances/jd-ri:routing-instance" +
+          "/jd-pro:protocols" {
+    description
+      "Adds BGP domain to protocol diagnostics inside a routing instance.";
+
+    uses bgp-top;
+  }
+}

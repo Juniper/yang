@@ -1,0 +1,144 @@
+ module junos-genstate-dhcpv6-security-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dhcpv6-security-statistics";
+   prefix jgdss;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dhcpv6-security-statistics";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping dhcpv6-security-statistics-top {
+     description "Top-level grouping";
+     container dhcpv6-security-statistics {
+       description "Information about DHCPv6 security statistics";
+       leaf total {
+         type int32;
+       }
+       leaf solicit {
+         type int32;
+       }
+       leaf advertise {
+         type int32;
+       }
+       leaf request {
+         type int32;
+       }
+       leaf reply {
+         type int32;
+       }
+       leaf confirm {
+         type int32;
+       }
+       leaf decline {
+         type int32;
+       }
+       leaf release {
+         type int32;
+       }
+       leaf renew {
+         type int32;
+       }
+       leaf rebind {
+         type int32;
+       }
+       leaf relay-forward {
+         type int32;
+       }
+       leaf relay-reply {
+         type int32;
+       }
+       leaf information-request {
+         type int32;
+       }
+       leaf request-learnt-on-trusted-port {
+         type int32;
+       }
+       leaf reconfigure {
+         type int32;
+       }
+       leaf total-ce-mac-mismatch {
+         type int32;
+       }
+       leaf total-trans-stale-timer_expiry {
+         type int32;
+       }
+       leaf succ-updated-snoop-binding {
+         type int32;
+       }
+       leaf total-current-transient-ce {
+         type int32;
+       }
+       leaf total-dropped {
+         type int32;
+       }
+       leaf no-cfg {
+         type int32;
+       }
+       leaf no-vlan {
+         type int32;
+       }
+       leaf no-ifl {
+         type int32;
+       }
+       leaf request-on-trusted-port {
+         type int32;
+       }
+       leaf server-id-mismatch {
+         type int32;
+       }
+       leaf iapd-solicit {
+         type int32;
+       }
+       leaf iapd-advertise {
+         type int32;
+       }
+       leaf iapd-request {
+         type int32;
+       }
+       leaf iapd-reply {
+         type int32;
+       }
+       leaf iapd-decline {
+         type int32;
+       }
+       leaf iapd-release {
+         type int32;
+       }
+       leaf iapd-renew {
+         type int32;
+       }
+       leaf iapd-rebind {
+         type int32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dhcpv6-security-statistics to top-level genstate";
+     uses dhcpv6-security-statistics-top;
+   }
+ }

@@ -1,0 +1,64 @@
+ module junos-genstate-bmp-term-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-term-statistics-information";
+   prefix jgbtsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-term-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-term-statistics-information-top {
+     description "Top-level grouping";
+     container bmp-term-statistics-information {
+       description "BMP termination statistics information";
+       leaf bmp-term-statistics-header {
+         type string;
+       }
+       list bmp-term {
+         key "bmp-station-name";
+         leaf bmp-station-name {
+           type string;
+         }
+         container bmp-term-statistics {
+           leaf term-count {
+             type int32;
+             description "Total termination count";
+           }
+           leaf term-last-sent-time-stamp {
+             type string;
+             description "Time when last termination sent";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-term-statistics-information to top-level genstate";
+     uses bmp-term-statistics-information-top;
+   }
+ }

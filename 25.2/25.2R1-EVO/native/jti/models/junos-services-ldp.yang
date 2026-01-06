@@ -1,0 +1,87 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-services-ldp {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/srvs-ldp";
+  prefix junos-srvs-ldp;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     ldp label switched path and p2mp related stats.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-07-19 {
+    description
+      "Initial revision";
+  }
+
+   grouping jnx-srvs-ldp-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container services {
+                container ldp {
+                    description "Junos Ldp container";
+                    container label-switched-path {
+                        description "Junos Lsp container";
+                        container ingress {
+                            description "Junos Ingress container";
+                            container usage {
+                                description "Junos ingress usage container";
+                            }
+                        }
+                        container transit {
+                            description "Junos Transit container";
+                            container usage {
+                                description "Junos transit usage container";
+                            }
+                        }
+                    }
+                    container p2mp {
+                    container label-switched-path {
+                        description "Junos Lsp container";
+                        container usage {
+                            description "Junos ingress usage container";
+                        }
+                    }
+                        container interface {
+                            container receive {
+                                description "Junos Receive container";
+                                container usage {
+                                    description "Junos receive usage container";
+                                }
+                            }
+                            container transmit {
+                                description "Junos transmit container";
+                                container usage {
+                                    description "Junos transmit usage container";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+       }
+   }
+   uses jnx-srvs-ldp-top;
+}

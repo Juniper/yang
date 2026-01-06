@@ -1,0 +1,288 @@
+module junos-state-ptp-global-ds {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/ptp/global-ds";
+  prefix js-ptp-global-ds;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-ptp {
+    prefix js-ptp;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of attributes for JUNOS PTP
+     global state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-07-11 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+
+  typedef ptp-lock-state {
+    type enumeration {
+      enum freerun {
+        description
+          "PTP clock is in freerun state.";
+      }
+      enum acquiring {
+        description
+          "PTP clock is in acquiring state.";
+      }
+      enum phase-aligned {
+        description
+          "PTP clock is in phase aligned state.";
+      }
+      enum holdover-in-spec {
+        description
+          "PTP clock is in holdover-in-spec state.";
+      }
+      enum holdover-out-of-spec {
+        description
+          "PTP clock is in holdover-out-of-spec state.";
+      }
+    }
+    description
+      "PTP clock current state. Provides information if the node's clock
+       state is free-run, phase aligned or holdover state.";
+  }
+
+  typedef e2e-clock-type {
+    type enumeration {
+      enum ieee1588-tc {
+        description
+          "End to End Transparent Clock as per section 10 of IEEE Std
+           1588-2019.";
+      }
+      enum itu-t-g8273-3-tc {
+        description
+          "End to End Transparent Clock as per ITU-T G.8273.3
+           recommendation.";
+      }
+    }
+    description
+      "End to End Transparent Clock type.";
+  }
+
+  typedef e2e-tc-status {
+    type enumeration {
+      enum not-applicable  {
+        description
+          "End to End Transparent Clock is not configured.";
+      }
+      enum active {
+        description
+          "End to End Transparent Clock is configured
+           and working properly.";
+      }
+      enum sync-in-progress {
+        description
+          "This is End to End Transparent Clock's temporary state.
+           During startup, all the PHYs are synchronized with each other.
+           This status can also occurs when the PHYs go through the
+           synchronization cycle again and working properly.";
+      }
+      enum inactive {
+        description
+          "End to End Transparent Clock is configured but not working
+           properly. This indicates some error in PHY timestamping
+           logic.";
+      }
+    }
+    description
+      "End to End transparent clock status.";
+  }
+
+  grouping ptp-e2e-tc {
+    container e2e-transparent-clock-ds {
+      description
+        "End to End Transparent Clock data set.";
+
+      leaf enable {
+        type boolean;
+        description
+          "If True, End to End Transparent Clock is enabled on the node.";
+      }
+
+      leaf clock-type {
+        type e2e-clock-type;
+        description
+          "End to End Transparent Clock type.
+           Denotes if End to End Transparent Clock is frequency
+           synchronized with physical layer clock or using PTP
+           for frequency synchronization.";
+      }
+
+      leaf oper-status {
+        type e2e-tc-status;
+        description
+          "End to End Transparent Clock status.";
+      }
+
+      leaf clock-state {
+        type ptp-lock-state;
+        description
+          "Syntonized End to End Transparent Clock lock status.";
+      }
+    }
+  }
+
+  grouping ptp-pts-thresholds {
+    description
+      "Thresholds for PTP Partial Timing Support servo.";
+
+    leaf phase-adjust-threshold {
+      type uint32;
+      units "nanoseconds";
+      description
+        "Max phase in nanoseconds that can be adjusted in a measurement
+         window.";
+    }
+    leaf freq-lock-threshold {
+      type uint8;
+      description
+        "Max frequency offset in parts per billion(ppb) that can be
+         tolerated for frequency lock.";
+    }
+    leaf phase-lock-threshold {
+      type uint16;
+      units "nanoseconds";
+      description
+        "Max phase offset in nanoseconds that can be tolerated for a
+         phase lock.";
+    }
+  }
+
+  grouping ptp-globalinfo {
+    container globalinfo-ds {
+      description
+        "The global data set of the PTP Instance.";
+
+      leaf clock-state {
+        type ptp-lock-state;
+        description
+          "PTP clock lock state.";
+      }
+
+      leaf time-since-current-clock-state {
+        type uint64;
+        units "seconds";
+        description
+          "Time elapsed in the current clock-state in seconds.";
+      }
+
+      leaf clock-type {
+        type js-ptp:instance-type;
+        description
+          "The type of PTP clock.";
+      }
+
+      leaf time-receiver-interface {
+        type junos-intft:interface-name;
+        description
+          "The local time-receiver interface that is used
+           by this PTP clock for synchronization to an upstream
+           master.";
+      }
+
+      leaf aggregate-member-interface {
+        type leafref {
+          path "/js:state/js-if:interfaces/js-if:interface/js-if:name";
+        }
+        description
+          "Reference to the aggregate member member interface that is
+           used for transport of PTP messages, valid only if
+           time-receiver-interface is an aggregate interface.";
+      }
+
+      leaf total-time-transmitter-ports {
+        type uint16;
+        description
+          "Total PTP time-transmitter ports in PTP clock.";
+      }
+
+      leaf total-time-receiver-ports {
+        type uint16;
+        description
+          "Total PTP time-receiver ports in PTP clock.";
+      }
+
+      leaf total-stateful-ports {
+        type uint16;
+        description
+          "Total PTP stateful ports in PTP clock.";
+      }
+
+      leaf snmp-trap-enabled {
+        type boolean;
+        description
+          "Denotes whether PTP SNMP trap generation is enabled.";
+      }
+
+      leaf phy-timestamping-enabled {
+        type boolean;
+        description
+          "Denotes whether Phy time stamping is enabled.";
+      }
+
+      leaf passive-port-monitoring-enabled {
+        type boolean;
+        description
+          "Denotes whether Passive Port Monitoring (PPM) is enabled.";
+      }
+
+      leaf time-receiver-port-monitoring-enabled {
+        type boolean;
+        description
+          "Denotes whether TimeReceiver Port Monitoring is
+           enabled.";
+      }
+
+      uses ptp-e2e-tc;
+      uses ptp-pts-thresholds;
+    }
+  }
+
+  augment "/js:state/js-pro:protocols/js-ptp:ptp/js-ptp:instances/js-ptp:instance" {
+    description
+      "Adds PTP clock global information.";
+
+    uses ptp-globalinfo;
+  }
+}

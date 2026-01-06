@@ -1,0 +1,71 @@
+module junos-bgp-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/bgp/types";
+  prefix "junos-bt";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains the definitions for types of BGP data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-08-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  identity afi-safi-type {
+    description
+      "Base identity for address family";
+    reference "RFC 4760.";
+  }
+
+  identity ipv4-unicast {
+    base afi-safi-type;
+    description
+      "Representing IPv4-Unicast prefix.";
+  }
+
+  identity ipv6-unicast {
+    base afi-safi-type;
+    description
+      "Representing IPv6-Unicast prefix.";
+  }
+
+  identity bgp-peer-type {
+    description
+      "Base identity for BGP peer type";
+  }
+
+  identity bgp-peer-type-internal {
+    base bgp-peer-type;
+    description
+      "Representing BGP peer type Internal";
+  }
+
+  identity bgp-peer-type-external {
+    base bgp-peer-type;
+    description
+      "Representing BGP peer type External";
+  }
+}

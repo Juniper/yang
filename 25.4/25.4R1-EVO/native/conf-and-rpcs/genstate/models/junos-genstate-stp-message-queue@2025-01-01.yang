@@ -1,0 +1,64 @@
+ module junos-genstate-stp-message-queue {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/stp-message-queue";
+   prefix jgsmq;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for stp-message-queue";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping stp-message-queue-top {
+     description "Top-level grouping";
+     container stp-message-queue {
+       description "Message Queue's Details";
+       list stp-queue-entry {
+         key "queue-name";
+         leaf queue-name {
+           type string;
+           description "Queue Name";
+         }
+         leaf queue-current-size {
+           type int32;
+           description "Queue current size";
+         }
+         leaf queue-high-watermark {
+           type int32;
+           description "Queue High Watermark";
+         }
+         leaf max-avg-wait-time {
+           type string;
+           description "Wait time";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds stp-message-queue to top-level genstate";
+     uses stp-message-queue-top;
+   }
+ }

@@ -1,0 +1,619 @@
+module junos-state-dot1x {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/dot1x";
+  prefix js-dot1x;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     802.1x state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-06-21 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping dot1x-authenticated-sessions {
+    description
+      "802.1x session details";
+
+    container authenticated-sessions {
+      description
+        "802.1x authenticated session details";
+
+      list authenticated-session {
+        key "mac";
+        description
+          "802.1x authenticated client MAC";
+
+        leaf mac {
+          type yang:mac-address;
+          description
+            "MAC address of the supplicant";
+        }
+
+        leaf supplicant-name {
+          type string;
+          description
+            "User name as sent by the supplicant for authentication";
+        }
+
+        leaf radius-supplicant-name {
+          type string;
+          description
+            "User name as sent by the RADIUS server for authentication";
+        }
+
+        leaf session-id {
+          type string;
+          description
+            "802.1x Session ID for client";
+        }
+
+        leaf supplicant-state {
+          type enumeration {
+            enum INITIALIZE {
+              description
+                "Supplicant is in Initialize state";
+            }
+            enum CONNECTING {
+              description
+                "Supplicant is in Connecting state";
+            }
+            enum HELD {
+              description
+                "Supplicant is in Held state";
+            }
+            enum AUTHENTICATING {
+              description
+                "Supplicant is in Authenticating state";
+            }
+            enum AUTHENTICATED {
+              description
+                "Supplicant is in Authenticated state";
+            }
+          }
+          description
+            "Current state of the supplicant";
+        }
+
+        leaf supplicant-held-reason {
+          type string;
+          description
+            "Held state reason of the supplicant for authentication
+             failure";
+        }
+
+        leaf authentication-method {
+          type enumeration {
+            enum FAIL {
+              description
+                "Authentication method is Fail";
+            }
+            enum GUEST_VLAN {
+              description
+                "Authentication method is GuestVlan";
+            }
+            enum RADIUS {
+              description
+                "Authentication method is RADIUS";
+            }
+            enum SF_PERMIT {
+              description
+                "Authentication method is Server-Fail Permit";
+            }
+            enum SF_VLAN {
+              description
+                "Authentication method is Server-Fail Vlan";
+            }
+            enum SF_USE_CACHE {
+              description
+                "Authentication method is Server-Fail Use-Cache";
+            }
+            enum SF_DENY {
+              description
+                "Authentication method is Server-Fail Deny";
+            }
+            enum MAC_RADIUS {
+              description
+                "Authentication method is MAC-RADIUS";
+            }
+            enum SERVER_REJECT_VLAN {
+              description
+                "Authentication method is Server-Reject Vlan";
+            }
+            enum CWA_AUTHENTICATION {
+              description
+                "Authentication method is CWA Redirect";
+            }
+          }
+          description
+            "Authentication Method used to authenticate a supplicant";
+        }
+
+        leaf vlan-name {
+          type string;
+          description
+            "VLAN name on which supplicant is authenticated";
+        }
+
+        leaf vlan-id {
+          type uint16 {
+            range "1..4094";
+          }
+          description
+            "VLAN ID on which supplicant is authenticated";
+        }
+
+        leaf secondary-vlan {
+          type uint16;
+          description
+            "Secondary VLAN on which supplicant is authenticated";
+        }
+
+        leaf voip-vlan {
+          type string;
+          description
+            "Voip VLAN on which supplicant is authenticated";
+        }
+
+        leaf dynamic-filter {
+          type string;
+          description
+            "Dynamic firewall filter applied for this supplicant";
+        }
+
+        leaf firewall-filter-name {
+          type string;
+          description
+            "Firewall filter name which is received from the RADIUS
+             server";
+        }
+
+        leaf session-reauthentication-interval {
+          type uint16;
+          units seconds;
+          description
+            "Session reauthentication timer in seconds";
+        }
+
+        leaf reauth-due {
+          type uint16;
+          units seconds;
+          description
+            "The length of time in seconds it takes for a supplicant to
+             reauthenticate";
+        }
+
+        leaf no-mac-binding-reauth-vsa {
+          type boolean;
+          description
+            "Used to retain a 802.1x session on MAC ageout and disables a
+             reauthentication ";
+        }
+
+        leaf ip-mac-session-binding-vsa {
+          type boolean;
+          description
+            "Used to retain a dot1x session in the event that IP binding
+             is found against the MAC address after MAC ages out.";
+        }
+
+        leaf-list egress-vlan {
+          type uint16;
+          description
+            "Egress vlan list received from the RADIUS server";
+        }
+
+        leaf radius-supplicant-mode {
+          type enumeration {
+            enum SINGLE {
+              description
+                "Radius single supplicant mode";
+            }
+            enum SINGLE_SECURE {
+              description
+                "Radius single-secure supplicant mode";
+            }
+          }
+        }
+
+        leaf retain-mac-aged-session-vsa {
+          type boolean;
+          description
+            "Retain MAC aged session VSA used to retain a session on MAC
+             age out and re-learn the MAC";
+        }
+
+        leaf session-acct-interim-interval {
+          type uint16;
+          units seconds;
+          description
+            "The interval in seconds between each accounting update that
+             the switch sends to the RADIUS server";
+        }
+
+        leaf acct-interim-due {
+          type uint16;
+          units seconds;
+          description
+            "The length of time in seconds it takes for updating
+             accounting information";
+        }
+
+        leaf cwa-redirect-url {
+          type inet:uri;
+          description
+            "URL to be used for CWA authentication for this client";
+        }
+
+        leaf server-fail-voip-action {
+            type enumeration {
+              enum PERMIT {
+                description
+                  "Force VoIP client authentication to succeed";
+              }
+              enum DENY {
+                description
+                  "Force VoIP client authentication to fail";
+              }
+              enum USE_CACHE {
+                description
+                  "Use the previous state of the VoIP client";
+              }
+              enum VLAN {
+                description
+                  "Force VoIP client authentication to succed in configured server-fail-voip vlan";
+              }
+            }
+          description
+            "The action to be taken for VoIP clients when a server is
+             inaccessible.";
+        }
+
+        leaf eapol-block {
+          type enumeration {
+            enum CAPTIVE_PORTAL {
+              description
+                "Block EAPOL-Start when client is authenticated in
+                 captive-portal mode";
+            }
+            enum MAC_RADIUS {
+              description
+                "Block EAPOL-Start when client is authenticated in
+                 MAC-RADIUS mode";
+            }
+            enum SERVER_FAIL {
+              description
+                "Block EAPOL-Start during RADIUS timeout";
+            }
+          }
+        }
+
+        leaf gbp-tag {
+          type uint16 {
+            range "1..65535";
+          }
+          description
+            "Group based policy tag received from RADIUS server";
+        }
+
+        leaf vlan-group-name {
+          type string;
+          description
+            "VLAN group name received from RADIUS server for an authenticated client";
+        }
+
+        leaf domain {
+          type enumeration {
+            enum DATA {
+              description
+                "802.1x session domain data";
+            }
+            enum VOIP {
+              description
+                "802.1x session domain VoIP";
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping dot1x-interface-counters {
+    description
+      "Grouping for 802.1x interface counters";
+
+    leaf connected-supplicants {
+      type yang:counter64;
+      description
+        "Number of connected supplicants";
+      }
+  }
+
+  grouping dot1x-interfaces {
+    description
+      "Grouping for 802.1x interfaces";
+
+    container interfaces {
+      description
+          "Encapsulating container for 802.1x interfaces";
+
+      list interface {
+        key "name";
+        description
+          "List of 802.1x interfaces";
+
+        leaf name {
+          type string;
+          description
+            "The name of the interface running 802.1x";
+        }
+
+        leaf role {
+          type enumeration {
+            enum AUTHENTICATOR {
+              description
+                "Authenticator is enabled for 802.1x interface";
+            }
+            enum SUPPLICANT {
+              description
+                "Supplicant is enabled for 802.1x interface";
+            }
+          }
+          description
+            "Role can be authenticator or supplicant";
+        }
+
+        leaf admin-status {
+          type enumeration {
+            enum AUTO {
+              description
+                "Administrative state is auto";
+            }
+            enum FORCE_UNAUTHORIZED {
+              description
+                "Administrative state is force-unauthorize";
+            }
+            enum FORCE_AUTHORIZED {
+              description
+                "Administrative state is force-authorize";
+            }
+          }
+          description
+            "Administrative state can be auto, force-authorize,
+             unauthorize";
+        }
+
+        leaf administrative-mode {
+          type enumeration {
+            enum SINGLE {
+              description
+                "802.1x administrative mode is single";
+            }
+            enum SINGLE_SECURE {
+              description
+                "802.1x administrative mode is single-secure";
+            }
+            enum MULTIPLE {
+              description
+                "802.1x administrative mode is multiple";
+            }
+          }
+          description
+            "The 802.1x administrative mode can be either single or
+             single-secure or multiple";
+        }
+
+        leaf oper-status {
+          type enumeration {
+            enum INITIALIZE {
+              description
+                "802.1X Interface operational-status is down";
+            }
+            enum ERR_DISABLE {
+              description
+                "802.1X Interface operational-status is down due to MDA limit voilation";
+            }
+            enum CONNECTING {
+              description
+                "802.1x Interface operational-status is up.";
+            }
+          }
+          description
+            "The 802.1x interface oper-status can be either INITIALIZE or
+             ERR_DISABLE or CONNECTING.";
+        }
+
+        leaf retry-count {
+          type uint16;
+          description
+            "Number of retries after which port is placed into wait
+             state";
+        }
+
+        leaf quiet-period {
+          type uint16;
+          units seconds;
+          description
+            "Time in seconds to wait after an authentication failure";
+        }
+
+        leaf transmit-period {
+          type uint16;
+          units seconds;
+          description
+            "Interval in seconds before retransmitting initial EAPOL
+             PDUs";
+        }
+
+        leaf mac-radius {
+          type boolean;
+          description
+            "Enable or disable MAC-RADIUS to allow MAC based clients";
+        }
+
+        leaf mac-radius-restrict {
+          type boolean;
+          description
+            "Enable or disable MAC-RADIUS-RESTRICT to allow only MAC
+             based clients";
+        }
+
+        leaf mac-radius-protocol {
+          type enumeration {
+            enum EAP_MD5 {
+              description
+                "Authentication protocol EAP_MD5";
+            }
+            enum EAP_PEAP {
+              description
+                "Authentication protocol EAP_PEAP";
+            }
+            enum PAP {
+              description
+                "Authentication protocol PAP";
+            }
+          }
+          description
+            "MAC RADIUS authentication protocols";
+        }
+
+        leaf reauthentication {
+          type boolean;
+          description
+            "802.1x Reauthentication enable or disable";
+        }
+
+        leaf reauthentication-interval {
+          type uint16;
+          units seconds;
+          description
+            "802.1x reauthentication interval in seconds";
+        }
+
+        leaf supplicant-timeout {
+          type uint16;
+          units seconds;
+          description
+            "Time to wait in seconds for a client response";
+        }
+
+        leaf server-timeout {
+          type uint16;
+          units seconds;
+          description
+            "Authentication server timeout interval in seconds";
+        }
+
+        leaf max-eapol-request {
+          type uint16;
+          description
+            "Number of EAPOL RequestIDs to send before timing out";
+        }
+
+        leaf guest-vlan {
+          type uint16;
+          description
+            "VLAN id for unauthenticated or non-responsive hosts";
+        }
+
+        leaf max-data-session-count {
+          type uint16;
+          description
+            "Multi domain data session count";
+        }
+
+        leaf multi-domain-recovery-timeout {
+          type uint16;
+          units seconds;
+          description
+            "Multi domain error disable recovery timeout in seconds";
+        }
+
+        leaf no-mac-table-binding {
+          type boolean;
+          description
+            "No MAC table binding status";
+        }
+
+        leaf ip-mac-session-binding {
+          type boolean;
+          description
+            "IP MAC session binding status";
+        }
+
+        leaf retain-mac-aged-session {
+          type boolean;
+          description
+            "Retain MAC aged session status";
+        }
+
+        container counters {
+          description
+            "802.1x interface counters container";
+
+          uses dot1x-interface-counters;
+        }
+
+        uses dot1x-authenticated-sessions;
+      }
+    }
+  }
+
+  grouping dot1x-top {
+    description
+      "Top-level grouping for 802.1x";
+
+    container dot1x {
+      description
+        "Container for 802.1x interface specific information";
+
+      uses dot1x-interfaces;
+    }
+  }
+
+  augment "/js:state/js-pro:protocols" {
+    description
+      "Adds 802.1x domain to protocol state";
+    uses dot1x-top;
+  }
+}

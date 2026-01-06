@@ -1,0 +1,93 @@
+ module junos-genstate-dhcp-security-vlans-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/dhcp-security-vlans-information";
+   prefix jgdsvi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for dhcp-security-vlans-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping dhcp-security-vlans-information-top {
+     description "Top-level grouping";
+     container dhcp-security-vlans-information {
+       description "Information about configuration done in dhcp-security";
+       container dhcp-security-all {
+         list dhcp-security-vlan {
+           key "vlan-logical-system-name vlan-routing-instance-name vlan-name";
+           leaf vlan-logical-system-name {
+             type string;
+             description "Logical system name";
+           }
+           leaf vlan-routing-instance-name {
+             type string;
+             description "Routing instance name";
+           }
+           leaf vlan-name {
+             type string;
+             description "Vlan name of the client";
+           }
+           leaf vlan-id {
+             type int32;
+             description "Vlan id of the client interface";
+           }
+           list dhcp-security-vlan-interface {
+             key "vlan-interface-name";
+             leaf vlan-interface-name {
+               type string;
+               description "Interface name in vlan";
+             }
+             leaf vlan-interface-flags {
+               type string;
+               description "Interface flags";
+             }
+             leaf vlan-interface-features-enabled {
+               type string;
+               description "Features enabled";
+             }
+             leaf vlan-port-mode {
+               type string;
+               description "Interface mode";
+             }
+             leaf vlan-port-mode-reason {
+               type string;
+               description "Interface port mode reason";
+             }
+           }
+           leaf vlan-features-enabled {
+             type string;
+             description "Features enabled";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds dhcp-security-vlans-information to top-level genstate";
+     uses dhcp-security-vlans-information-top;
+   }
+ }

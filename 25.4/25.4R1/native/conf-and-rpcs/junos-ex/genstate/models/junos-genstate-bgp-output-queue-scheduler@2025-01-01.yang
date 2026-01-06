@@ -1,0 +1,64 @@
+ module junos-genstate-bgp-output-queue-scheduler {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-output-queue-scheduler";
+   prefix jgboqs;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-output-queue-scheduler";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-output-queue-scheduler-top {
+     description "Top-level grouping";
+     container bgp-output-queue-scheduler {
+       description "BGP output queue scheduler information";
+       leaf bgp-output-queue-scheduler-instance {
+         type string;
+       }
+       list bgp-output-queue-scheduler-classes {
+         leaf output-queue-class {
+           type string;
+         }
+         leaf output-queue-tokens {
+           type int32;
+         }
+       }
+       list bgp-output-queue-scheduler-defaults {
+         leaf output-queue-default-priority {
+           type string;
+         }
+         leaf output-queue-class {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-output-queue-scheduler to top-level genstate";
+     uses bgp-output-queue-scheduler-top;
+   }
+ }

@@ -1,0 +1,194 @@
+module junos-state-anomalies-fib {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/anomalies/fib";
+  prefix js-anom-fib;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import ietf-routing-types {
+    prefix rt-types;
+  }
+
+  import junos-error-types {
+    prefix junos-err-types;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-anomalies {
+    prefix js-anom;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     system FIB anomaly state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-07-20 {
+    description
+      "Adjust datatype of timestamp leaf and addition of error module
+       leaf";
+    reference "1.0.0";
+  }
+
+  revision 2022-02-20 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "1.0.0";
+
+  grouping common-family-attributes {
+    description
+      "Common attributes for route families";
+
+    leaf status {
+      type junos-err-types:error-code;
+      description
+        "Error status code for the route anomaly entry";
+    }
+
+    leaf timestamp {
+      type rt-types:timeticks64;
+      description
+        "Timestamp associated with the route anomaly entry";
+    }
+
+    leaf module {
+      type string;
+      description
+        "Chassis module name for the originator of the route anomaly
+         entry.  This value corresponds to an entry within
+         `/state/chassis/modules/module/name`.";
+    }
+  }
+
+  grouping inet-entries-top {
+    description
+      "Top-level grouping for IPv4 anomaly route entries";
+
+    container inet {
+      description
+        "Encapsulating container for the list of IPv4 anomaly entries
+         on the local system";
+
+      list inet-entry {
+        key "prefix";
+        description
+          "List of IPv4 anomaly entries";
+
+        leaf prefix {
+          type inet:ipv4-prefix;
+          description
+            "The IPv4 destination prefix entry";
+        }
+
+        uses common-family-attributes;
+      }
+    }
+  }
+
+  grouping inet6-entries-top {
+    description
+      "Top-level grouping for IPv6 anomaly route entries";
+
+    container inet6 {
+      description
+        "Encapsulating container for the list of IPv6 anomaly entries
+         on the local system";
+
+      list inet6-entry {
+        key "prefix";
+        description
+          "List of IPv6 anomaly entries";
+
+        leaf prefix {
+          type inet:ipv6-prefix;
+          description
+            "The IPv6 destination prefix entry";
+        }
+
+        uses common-family-attributes;
+      }
+    }
+  }
+
+  grouping route-tables-top {
+    description
+      "Top-level grouping containing a list of routing tables";
+
+    container route-tables {
+      description
+        "Encapsulating container for the list of routing tables on the
+         local system";
+
+      list route-table {
+        key "name";
+        description
+          "Routing tables on the local system";
+
+        leaf name {
+          type string;
+          description
+            "A unique name identifying the routing table";
+        }
+
+        container routes {
+          description
+            "Encapsulating container for lists of route entries from
+             multiple families";
+
+          uses inet-entries-top;
+          uses inet6-entries-top;
+        }
+      }
+    }
+  }
+
+  grouping fib-anomalies-top {
+    description
+      "Top-level grouping for system FIB anomaly state data";
+
+    container fib {
+      description
+        "Container for FIB anomaly state";
+
+      uses route-tables-top;
+    }
+  }
+
+  augment "/js:state/js-sys:system/js-anom:anomalies" {
+    description
+      "Adds FIB domain to system anomaly state";
+
+    uses fib-anomalies-top;
+  }
+}

@@ -1,0 +1,123 @@
+ module junos-genstate-l2ng-vlan-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/l2ng-vlan-statistics-information";
+   prefix jglvsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for l2ng-vlan-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping l2ng-vlan-statistics-information-top {
+     description "Top-level grouping";
+     container l2ng-vlan-statistics-information {
+       description "Top-level container";
+       leaf bd-name {
+         type string;
+         description "Bridging media access control address count for bridge-domain";
+       }
+       list interface-statistics {
+         key "interface-name local-interface-index";
+         leaf interface-name {
+           type string;
+           description "Bridging media access control address interface";
+         }
+         leaf local-interface-index {
+           type int32;
+         }
+         leaf l2bd-vlan-id {
+           type string;
+           description "Bridge domain VLAN";
+         }
+         leaf vn-id {
+           type uint32;
+           description "VXLAN identifier";
+         }
+         leaf remote-pe {
+           type jt:ipaddr;
+         }
+         leaf broadcast-packets {
+           type uint64;
+           description "Broadcast packets";
+         }
+         leaf broadcast-bytes {
+           type uint64;
+           description "Broadcast bytes";
+         }
+         leaf multicast-packets {
+           type uint64;
+           description "Multicast packets";
+         }
+         leaf multicast-bytes {
+           type uint64;
+           description "Multicast bytes";
+         }
+         leaf flooded-packets {
+           type uint64;
+           description "Flooded packets";
+         }
+         leaf flooded-bytes {
+           type uint64;
+           description "Flooded bytes";
+         }
+         leaf unicast-packets {
+           type uint64;
+           description "Unicast packets";
+         }
+         leaf unicast-bytes {
+           type uint64;
+           description "Unicast bytes";
+         }
+         leaf data-vlan-mlp-drop-count {
+           type int32;
+           description "Number of mac learning packets dropped in data vlan";
+         }
+         leaf num-mac-count {
+           type int32;
+           description "Number of addresses learned on the interface";
+         }
+         leaf mac-limit {
+           type int32;
+           description "Limit of number of addresses learned on interface";
+         }
+         list interface {
+           leaf interface-name {
+             type string;
+             description "Bridging media access control address interface";
+           }
+           leaf interface-flags {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds l2ng-vlan-statistics-information to top-level genstate";
+     uses l2ng-vlan-statistics-information-top;
+   }
+ }

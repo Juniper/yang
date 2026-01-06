@@ -1,0 +1,80 @@
+module junos-l2-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/l2/types";
+  prefix "jl2t";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains the definitions for types of Layer2 data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-06 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  identity l2-domain-id-type {
+    description
+      "Base identity for Layer Domain Identifier type.";
+  }
+
+  identity vlan-id {
+    base l2-domain-id-type;
+    description
+      "12-bit Virtual LAN Idenifier.";
+  }
+
+  identity vni-id {
+    base l2-domain-id-type;
+    description
+      "24-bit VXLAN Network Identifier.";
+  }
+
+  typedef vlan-id {
+    type uint16 {
+      range 1..4094;
+    }
+    description
+      "Type definition representing a single-tagged VLAN.";
+  }
+
+  typedef vni-id {
+    type uint32 {
+      range 0..16777214;
+    }
+    description
+      "Type definition representing a virtual network identifier.";
+  }
+
+  typedef l2-domain-id {
+    type union {
+      type vlan-id;
+      type vni-id;
+    }
+    description
+      "Type definition representing a single-tagged VLAN
+       or a virtual network identifier.";
+  }
+
+}

@@ -1,0 +1,301 @@
+ module junos-genstate-license-summary-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/license-summary-information";
+   prefix jglsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for license-summary-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping license-summary-information-top {
+     description "Top-level grouping";
+     container license-summary-information {
+       description "Feature license information";
+       leaf licensing-mode {
+         type string;
+         description "Mode of license";
+       }
+       leaf licensing-persona {
+         type string;
+         description "Persona of license";
+       }
+       leaf last-sync-time {
+         type string;
+       }
+       container license-usage-summary {
+         description "Information about features licensed on this device";
+         leaf features-used {
+           type empty;
+           description "Licensed features are being used";
+         }
+         leaf no-feature-used {
+           type empty;
+           description "No licensed feature is being used";
+         }
+         list feature-summary {
+           key "name";
+           leaf name {
+             type string;
+             description "Identifier for this object";
+           }
+           leaf used-licensed {
+             type int32;
+             description "Number used that require a license";
+           }
+           leaf licensed {
+             type int32;
+             description "Number available in valid licenses";
+           }
+           leaf needed {
+             type int32;
+             description "Number used that require a license above licensed count";
+           }
+           leaf validity-type {
+             type string;
+             description "Type of validity of the license";
+           }
+           leaf end-date {
+             type string;
+           }
+           leaf description {
+             type string;
+             description "Description of feature";
+           }
+           leaf used-given {
+             type int32;
+             description "Number used that do not require a license";
+           }
+           container remaining-time {
+             leaf remaining-validity-value {
+               type int32;
+               description "Integer value";
+             }
+             leaf remaining-validity-time-unit {
+               type string;
+               description "Unit of time measurement";
+             }
+           }
+         }
+       }
+       container license-detail-usage-summary {
+         description "Information about features licensed on this device";
+         leaf no-feature-used {
+           type empty;
+           description "No licensed feature is being used";
+         }
+         leaf features-used {
+           type empty;
+           description "Licensed features are being used";
+         }
+         list feature-summary {
+           key "name";
+           leaf name {
+             type string;
+             description "Identifier for this object";
+           }
+           leaf used-licensed {
+             type int32;
+             description "Number used that require a license";
+           }
+           leaf licensed {
+             type int32;
+             description "Number available in valid licenses";
+           }
+           leaf needed {
+             type int32;
+             description "Number used that require a license above licensed count";
+           }
+           leaf license-available {
+             type int32;
+             description "Number of network license available";
+           }
+           leaf validity-type {
+             type string;
+             description "Type of validity of the license";
+           }
+           leaf end-date {
+             type string;
+           }
+           leaf description {
+             type string;
+             description "Description of feature";
+           }
+           leaf used-given {
+             type int32;
+             description "Number used that do not require a license";
+           }
+           container remaining-time {
+             leaf remaining-validity-value {
+               type int32;
+               description "Integer value";
+             }
+             leaf remaining-validity-time-unit {
+               type string;
+               description "Unit of time measurement";
+             }
+           }
+         }
+       }
+       container license-information {
+         description "Information about feature licenses installed on device";
+         leaf licenses-installed {
+           type empty;
+           description "Feature licenses are installed";
+         }
+         leaf no-licenses-installed {
+           type empty;
+           description "No feature licenses are installed";
+         }
+         list license {
+           key "name";
+           leaf name {
+             type string;
+             description "Identifier for this object";
+           }
+           leaf license-sku-name {
+             type string;
+             description "SKU name of this license key";
+           }
+           leaf license-version {
+             type int32;
+             description "Version of license";
+           }
+           leaf license-order-type {
+             type string;
+             description "Type of license order type";
+           }
+           leaf license-type {
+             type string;
+             description "Type of license";
+           }
+           leaf device-reference {
+             type string;
+             description "License is tied to this device";
+           }
+           leaf num-units {
+             type int32;
+             description "Number of units of the license";
+           }
+           leaf software-sn {
+             type string;
+             description "License is tied to this Software Serial Number";
+           }
+           leaf customer-reference {
+             type string;
+             description "Customer id of the license";
+           }
+           leaf release-version {
+             type string;
+             description "License defines the JUNOS release version it is tied to.";
+           }
+           leaf upgrade-license {
+             type string;
+             description "License defines if this is a software upgrade license tied to JUNOS release";
+           }
+           leaf group-reference {
+             type string;
+             description "License is tied to this group";
+           }
+           leaf-list group-define {
+             type string;
+             description "License defines device to be part of this license group";
+           }
+           leaf-list unsupported-attribute {
+             type int32;
+             description "An attribute that is not recognized by this implementation";
+           }
+           leaf lease-end-date {
+             type string;
+           }
+           leaf-list license-state {
+             type string;
+             description "License state";
+           }
+           list feature-block {
+             list feature {
+               key "name";
+               description "A single feature instance";
+               leaf name {
+                 type string;
+                 description "Identifier for this object";
+               }
+               leaf description {
+                 type string;
+                 description "Description of feature";
+               }
+               leaf num-units {
+                 type int32;
+                 description "Number of units of the license";
+               }
+               container validity-information {
+                 leaf validity-type {
+                   type string;
+                   description "Type of validity of the license";
+                 }
+                 leaf-list license-state {
+                   type string;
+                   description "License state";
+                 }
+                 container original-validity {
+                   leaf original-validity-value {
+                     type int32;
+                     description "Integer value";
+                   }
+                   leaf original-validity-time-unit {
+                     type string;
+                     description "Unit of time measurement";
+                   }
+                 }
+                 container remaining-time {
+                   leaf remaining-validity-value {
+                     type int32;
+                     description "Integer value";
+                   }
+                   leaf remaining-validity-time-unit {
+                     type string;
+                     description "Unit of time measurement";
+                   }
+                 }
+                 leaf start-date {
+                   type string;
+                 }
+                 leaf end-date {
+                   type string;
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds license-summary-information to top-level genstate";
+     uses license-summary-information-top;
+   }
+ }

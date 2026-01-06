@@ -1,0 +1,180 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-fabric {
+  yang-version "1";
+  namespace "http://juniper.net/yang/fabric";
+  prefix junos-fabric;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     fabric sensor.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-10-20 {
+    description
+     "Initial revision";
+  }
+
+    // Groups related to Fabric sensor
+    typedef identifier-type {
+        type enumeration {
+            enum SWITCH-FABRIC {
+                value 1;
+                description
+                "Indicates the type is fabric";
+            }
+            enum LINECARD {
+                value 2;
+                description
+                "Indicates the type is linecard";
+            }
+        }
+        description
+        "Source and destination types for fabric traffic";
+    }
+
+    grouping edges-group {
+        leaf src-type {
+            description "Source type can be Fabric or Linecard";
+            type identifier-type;
+        }
+        leaf src-slot {
+            description "Source slot for fabric traffic";
+            type uint32;
+        }
+        leaf src-pfe {
+            description "PFE id of source for fabric traffic";
+            type uint32;
+        }
+        leaf dst-type {
+            description "Destination type can be Fabric or Linecard";
+            type identifier-type;
+        }
+        leaf dst-slot {
+            description "Destination slot for fabric traffic";
+            type uint32;
+        }
+        leaf dst-pfe {
+            description "PFE id of destination for fabric traffic";
+            type uint32;
+        }
+    }
+
+    grouping class-stats-group {
+        leaf packets {
+            description "Packets count in fabric traffic";
+            type uint64;
+        }
+        leaf bytes {
+            description "Bytes count in fabric traffic";
+            type uint64;
+        }
+        leaf packets-per-second {
+            description "Drop rate of packets for fabric traffic";
+            type uint64;
+        }
+        leaf bytes-per-second {
+            description "Drop rate of bytes for fabric traffic";
+            type uint64;
+        }
+        leaf drop-packets {
+            description "Drop packets for fabric traffic";
+            type uint64;
+        }
+        leaf drop-bytes {
+            description "Drop bytes for fabric traffic";
+            type uint64;
+        }
+        leaf drop-packets-per-second {
+            description "Drop packets rate for fabric traffic";
+            type uint64;
+        }
+        leaf drop-bytes-per-second {
+            description "Drop bytes rate for fabric traffic";
+            type uint64;
+        }
+        leaf queue-depth-average {
+            description "Average queue size for fabric traffic";
+            type uint64;
+        }
+        leaf queue-depth-current {
+            description "Current queue size for fabric traffic";
+            type uint64;
+        }
+        leaf queue-depth-peak {
+            description "Peak queue size for fabric traffic";
+            type uint64;
+        }
+        leaf queue-depth-maximum {
+            description "Max queue size for fabric traffic";
+            type uint64;
+        }
+        leaf error-packets {
+            description "Error packets in fabric traffic";
+            type uint64;
+        }
+        leaf error-packets-per-second {
+            description "Error rate of packets in fabric traffic";
+            type uint64;
+        }
+    }
+
+    grouping jnx-fabric-top {
+        description
+        "Top-level grouping containing a list of fabric statistics";
+        container junos {
+            config false;
+            description "JunOS OS container";
+            container system {
+                description "Junos System container";
+                container linecard {
+                    description "Resources related to a linecard";
+                    container fabric {
+                        description "Fabric statistics";
+                        container fabric-message {
+                            description "Container for the fabric message";
+                            list edges {
+                                key "src-type src-slot src-pfe dst-type dst-slot dst-pfe";
+                                description "List of possible paths for fabric traffic messages";
+                                uses edges-group;
+                                list class-stats {
+                                    description "List of fabric statistics messages";
+                                    key "priority";
+                                    leaf priority {
+                                        description "Queue priorty of fabric messages";
+                                        type string;
+                                    }
+                                    container transmit-counts {
+                                        description "Transmit count of fabric messages";
+                                        uses class-stats-group;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    uses jnx-fabric-top;
+}

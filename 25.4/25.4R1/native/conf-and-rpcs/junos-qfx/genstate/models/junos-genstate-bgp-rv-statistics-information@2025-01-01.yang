@@ -1,0 +1,70 @@
+ module junos-genstate-bgp-rv-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-rv-statistics-information";
+   prefix jgbrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-rv-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-rv-statistics-information-top {
+     description "Top-level grouping";
+     container bgp-rv-statistics-information {
+       description "BGP route validation statistics";
+       container bgp-rv-statistics {
+         leaf bgp-rv-policy-origin-validation-requests {
+           type uint32;
+         }
+         leaf bgp-rv-policy-origin-validation-results-valid {
+           type uint32;
+         }
+         leaf bgp-rv-policy-origin-validation-results-invalid {
+           type uint32;
+         }
+         leaf bgp-rv-policy-origin-validation-results-unknown {
+           type uint32;
+         }
+         leaf bgp-rv-import-policy-reevaluations {
+           type uint32;
+         }
+         list bgp-rv-import-policy-rib-statistics {
+           leaf bgp-rv-import-policy-rib-name {
+             type string;
+           }
+           leaf bgp-rv-import-policy-rib-reevaluations {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-rv-statistics-information to top-level genstate";
+     uses bgp-rv-statistics-information-top;
+   }
+ }

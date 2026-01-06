@@ -1,0 +1,308 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-nfx-conf-fabric {
+   namespace "http://yang.juniper.net/junos-nfx/conf/fabric";
+
+   prefix jc-fabric;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   import junos-nfx-conf-root {
+     prefix jc;
+     revision-date 2025-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos fabric configuration module";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   augment /jc:configuration {
+     uses fabric-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses fabric-group;
+   }
+   grouping fabric-group {
+     container fabric {
+       description "Fabric configuration";
+       uses apply-advanced;
+       container protocols {
+         description "Routing protocol configuration";
+         status deprecated;
+         uses apply-advanced;
+       }
+       container virtual-chassis {
+         description "Virtual chassis configuration";
+         uses apply-advanced;
+         container flow-groups {
+           description "Flow groups";
+           uses apply-advanced;
+           list flow-group {
+             key name;
+             uses flow_group_type;
+           }
+           list node-device {
+             key name;
+             ordered-by user;
+             description "Node device";
+             leaf name {
+               description "Serial ID or alias of node-device";
+               type string;
+             }
+             uses apply-advanced;
+             list interconnect-device {
+               key name;
+               ordered-by user;
+               description "Interconnect device";
+               leaf name {
+                 description "Serial ID or alias of interconnect-device";
+                 type string;
+               }
+               uses apply-advanced;
+               leaf preference {
+                 description "Preference metric for link";
+                 type enumeration {
+                   enum "high" {
+                     description "High link preference";
+                   }
+                   enum "normal" {
+                     description "Normal link preference";
+                   }
+                   enum "never" {
+                     description "Never use this link";
+                   }
+                 }
+               }
+             }
+           }
+         }
+         container traceoptions {
+           uses juniper-virtual-chassis-traceoptions;
+         }
+       }
+     }
+   }
+   grouping apply-advanced {
+     description "Apply advanced configuration logic";
+     leaf-list apply-groups {
+       ordered-by user;
+       description "Groups from which to inherit configuration data";
+       type string;
+     }
+     leaf-list apply-groups-except {
+       ordered-by user;
+       description "Don't inherit configuration data from these groups";
+       type string;
+     }
+     list apply-macro {
+       key name;
+       ordered-by user;
+       description "Macro and parameters for commit script expansion";
+       uses apply-macro-type;
+     }
+   }
+   grouping apply-macro-type {
+     description "Macro data for commit-script expansion";
+     leaf name {
+       description "Name of the macro to be expanded";
+       type string;
+     }
+     list data {
+       key name;
+       uses macro-data-type;
+     }
+   }
+   grouping flow_group_type {
+     description "Flow Group";
+     leaf name {
+       description "Flow Group name";
+       type string {
+         length "1 .. 32";
+       }
+     }
+     uses apply-advanced;
+     list node-device {
+       key name;
+       ordered-by user;
+       description "Node device(s) associated with this flow group";
+       leaf name {
+         description "Alias of node-device";
+         type string {
+           length "1 .. 40";
+         }
+       }
+       uses apply-advanced;
+     }
+     list interconnect-device {
+       key name;
+       ordered-by user;
+       description "Interconnect device(s) associated with this flow group";
+       leaf name {
+         description "Alias of interconnect-device";
+         type string {
+           length "1 .. 40";
+         }
+       }
+       uses apply-advanced;
+     }
+   }
+   grouping juniper-virtual-chassis-traceoptions {
+     description "Global tracing options for virtual chassis";
+     uses apply-advanced;
+     container file {
+       description "Trace file options";
+       uses vchassis_trace_file_type;
+     }
+     list flag {
+       key name;
+       ordered-by user;
+       description "Tracing parameters";
+       leaf name {
+         type enumeration {
+           enum "parse" {
+             description "Trace configuration parsing";
+           }
+           enum "hello" {
+             description "Trace virtual chassis hello packets";
+           }
+           enum "psn" {
+             description "Trace partial sequence number (PSN) packets";
+           }
+           enum "csn" {
+             description "Trace complete sequence number (CSN) packets";
+           }
+           enum "lsp" {
+             description "Trace virtual link-state packets";
+           }
+           enum "normal" {
+             description "Trace normal events";
+           }
+           enum "task" {
+             description "Trace virtual chassis task processing";
+           }
+           enum "krt" {
+             description "Trace virtual chassis kernel events";
+           }
+           enum "spf" {
+             description "Trace virtual chassis SPF events";
+           }
+           enum "me" {
+             description "Trace virtual chassis master election events";
+           }
+           enum "packets" {
+             description "Trace virtual chassis packets";
+           }
+           enum "lsp-generation" {
+             description "Trace virtual chassis LSP generation";
+           }
+           enum "error" {
+             description "Trace virtual chassis errors";
+           }
+           enum "route" {
+             description "Trace virtual chassis routing information";
+           }
+           enum "state" {
+             description "Trace virtual chassis state transitions";
+           }
+           enum "auto-configuration" {
+             description "Trace virtual chassis ports auto configuration";
+           }
+           enum "graceful-restart" {
+             description "Trace graceful restart events";
+           }
+           enum "dcp-infra" {
+             description "Trace dcp infrastructure configuration";
+           }
+           enum "dcp-dev-state" {
+             description "Trace dcp infrastructure configuration";
+           }
+           enum "heartbeat" {
+             description "Trace virtual chassis heartbeat packets";
+           }
+           enum "all" {
+             description "Trace everything";
+           }
+         }
+       }
+       leaf send {
+         description "Trace transmitted packets";
+         type empty;
+       }
+       leaf receive {
+         description "Trace received packets";
+         type empty;
+       }
+       leaf detail {
+         description "Trace detailed information";
+         type empty;
+       }
+       leaf disable {
+         description "Disable this trace flag";
+         type empty;
+       }
+     }
+   }
+   grouping macro-data-type {
+     leaf name {
+       description "Keyword part of the keyword-value pair";
+       type string;
+     }
+     leaf value {
+       description "Value part of the keyword-value pair";
+       type string;
+     }
+   }
+   grouping vchassis_trace_file_type {
+     leaf filename {
+       description "Name of file in which to write trace information";
+       type string {
+         length "1 .. 1024";
+       }
+     }
+     leaf replace {
+       description "Replace trace file rather than appending to it";
+       type empty;
+     }
+     leaf size {
+       description "Maximum trace file size";
+       type string;
+     }
+     leaf files {
+       description "Maximum number of trace files";
+       default "10";
+       type union {
+         type string {
+           pattern "<.*>|$.*";
+         }
+         type uint32 {
+           range "2 .. 1000";
+         }
+       }
+     }
+     leaf no-stamp {
+       description "Do not timestamp trace file";
+       type empty;
+     }
+     choice world-readable-choice {
+       leaf world-readable {
+         description "Allow any user to read the log file";
+         type empty;
+       }
+       leaf no-world-readable {
+         description "Don't allow any user to read the log file";
+         type empty;
+       }
+     }
+   }
+ }

@@ -1,0 +1,664 @@
+module junos-state-synce {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/synce";
+  prefix js-synce;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for
+     JUNOS Synchronous Ethernet (SyncE) state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-07-11 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+
+  typedef quality-level {
+    type enumeration {
+      enum eprtc {
+        description
+          "Timing quality of enhanced primary reference time clock.";
+      }
+      enum prtc {
+        description
+          "Timing quality of primary reference time clock.";
+      }
+      enum eprc {
+        description
+          "Timing quality of enhanced primary reference clock.";
+      }
+      enum prc {
+        description
+          "Timing quality of a primary reference clock.";
+      }
+      enum ssu-a {
+        description
+          "Timing quality of a type I or IV slave clock.";
+      }
+      enum ssu-b {
+        description
+          "Timing quality of a type VI slave clock.";
+      }
+      enum e-eec {
+        description
+          "Timing quality of enhanced ethernet equipment clock.";
+      }
+      enum sec {
+        description
+          "Timing quality of SDH equipment clock.";
+      }
+      enum prs {
+        description
+          "Clock traceable to primary reference source.";
+      }
+      enum stu {
+        description
+          "Clock traceable to unknown quality.";
+      }
+      enum st2 {
+        description
+          "Clock traceable to stratum 2.";
+      }
+      enum tnc {
+        description
+          "Clock traceable to transit node clock.";
+      }
+      enum st3e {
+        description
+          "Clock traceable to stratum 3E.";
+      }
+      enum dnu {
+        description
+          "This clock shouldnot be used for synchronization.";
+      }
+    }
+  }
+
+  typedef clock-mode-config {
+    type enumeration {
+      enum auto-select {
+        description
+          "Clock selection is done based on quality of incoming reference.";
+      }
+      enum free-run {
+        description
+          "Use the free-running local oscillator.";
+      }
+      enum force-holdover {
+        description
+          "Run system clock in holdover state.";
+      }
+    }
+  }
+
+  typedef clock-mode-status {
+    type enumeration {
+      enum free-run {
+        description
+          "Using the free-running local oscillator.";
+      }
+      enum locked {
+        description
+          "System clock is in locked state with clock source.";
+      }
+      enum locked-holdover-acq {
+        description
+          "System clock is in locked state and has acquired holdover memory.";
+      }
+      enum holdover {
+        description
+          "System clock is in holdover state.";
+      }
+      enum acq-lock {
+        description
+          "System clock is in acquiring state.";
+      }
+    }
+  }
+
+  typedef network-option {
+    type enumeration {
+      enum option-1 {
+        description
+          "Option 1 (EEC1) synchronization networking.";
+      }
+      enum option-2 {
+        description
+          "Option 2 (EEC2) synchronization networking.";
+      }
+    }
+  }
+
+  typedef ql-select-mode {
+    type enumeration {
+      enum receive-ql {
+        description
+          "Use source's configured ESMC quality.";
+      }
+      enum config-ql {
+        description
+          "Use source's received ESMC quality.";
+      }
+    }
+  }
+
+  typedef switching-mode {
+    type enumeration {
+      enum revertive {
+        description
+          "Automatically switch to higher priority valid clock source.";
+      }
+      enum non-revertive {
+        description
+          "System uses current clock source as long as it is valid.";
+      }
+    }
+  }
+
+  typedef source-type {
+    type enumeration {
+      enum primary {
+        description
+          "System uses primary source as SyncE source.";
+      }
+      enum secondary {
+        description
+          "System uses secondary source as SyncE source.";
+      }
+    }
+  }
+
+  typedef port-type {
+    type enumeration {
+      enum ethernet {
+        description
+          "SyncE source is ethernet.";
+      }
+      enum external {
+        description
+          "SyncE source is external.";
+      }
+    }
+  }
+
+  typedef port-oper-status {
+    type enumeration {
+      enum up {
+        description
+          "The port is up.";
+      }
+      enum down {
+        description
+          "The port is down.";
+      }
+      enum testing {
+        description
+          "Port is in some test mode. No operational packets can
+           be passed.";
+      }
+      enum unknown {
+        description
+          "Port status cannot be determined.";
+      }
+    }
+  }
+
+  typedef port-status {
+    type enumeration {
+      enum available {
+        description
+          "Source port is available and qualified for SyncE source
+           selection logic.";
+      }
+      enum failed {
+        description
+          "Source port is not available for SyncE source selection
+           logic.";
+      }
+      enum wtr {
+        description
+          "Source port is in wait-to-restore state.";
+      }
+      enum holdoff {
+        description
+          "Source port is in holdoff state.";
+      }
+      enum locked {
+        description
+          "System clock is locked on this port.";
+      }
+    }
+  }
+
+  typedef ql-overwrite-mode {
+    type enumeration {
+      enum passthrough {
+        description
+          "QL Passthrough mode or selection mode is received QL.";
+      }
+      enum overwrite {
+        description
+          "QL overwrite mode or selection mode is configured QL.";
+      }
+    }
+  }
+
+  typedef wtr-time {
+    type uint8 {
+        range "0..12";
+    }
+    units "minutes";
+    description
+      "Wait to restore time for the selection process. It ensures that a
+       previous failed synchronization source is reconsidered as available
+       by the selection process if it is fault-free for a certain time.";
+  }
+
+  typedef clock-identity {
+    type string {
+      pattern "[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){7}";
+    }
+    description
+      "SyncE clock identity is an 8 octet string that uniquely identifies the
+       clock in the network.";
+  }
+
+  grouping synce-default-ds-top {
+    description
+      "Top level grouping for SyncE default data set.";
+
+    container default-ds {
+      description
+        "Enclosing container for SyncE dafault data set.";
+
+      leaf instance-enable {
+        type boolean;
+        description
+          "Indicates if the SyncE instance is enabled for SyncE operation.";
+      }
+
+      leaf clock-id {
+        type clock-identity;
+        description
+          "Clock Identity of the SyncE instance.";
+      }
+
+      leaf sync-network-option {
+        type network-option;
+        description
+          "Specifies the configured network option for this SyncE clock.";
+      }
+      leaf clock-mode-config {
+        type clock-mode-config;
+        description
+          "Specifies the SyncE global clock configured selection mode.";
+      }
+      leaf clock-mode-status {
+        type clock-mode-status;
+        description
+          "SyncE global current clock mode status.";
+      }
+
+      leaf ql-select-mode {
+        type ql-select-mode;
+        description
+          "Selection mode for incoming ESMC quality level used in clock
+           selection.";
+      }
+
+      leaf  revertive-mode {
+        type boolean;
+        description
+          "Specifies whether the clock reverts or not to a higher
+           priority valid source.";
+      }
+
+      leaf config-change-holdover {
+        type uint8 {
+          range "15..60";
+        }
+        units "seconds";
+        description
+          "Clock select wait time in seconds after change in
+           configuration.";
+      }
+
+      leaf switchover-holdover {
+        type uint8 {
+          range "30..60";
+        }
+        units "seconds";
+        description
+          "Switchover wait time in seconds after clock recovery.";
+      }
+
+      leaf reboot-holdover {
+        type uint8 {
+          range "60..180";
+        }
+        units "seconds";
+        description
+          "Clock select wait time in seconds after reboot.";
+      }
+
+      leaf max-transmit-quality-level {
+        type quality-level;
+        description
+          "Maximum transmit quality level configured on the clock.";
+      }
+
+      leaf quality-level {
+        type quality-level;
+        description
+          "The SSM quality level of the internal clock of the
+           node.";
+      }
+
+      leaf wtr-time {
+        type wtr-time;
+        description
+          "Global wait to restore time for the selection process.";
+      }
+
+      leaf eql-sel {
+        type boolean;
+        description
+          "If enabled, Enhanced ESMC quality level is supported.";
+      }
+
+      leaf ql-enable {
+        type boolean;
+        description
+          "If enabled, quality level is used for source selection.";
+      }
+    }
+  }
+
+  grouping synce-parent-ds-top {
+    description
+      "Top level grouping for SyncE parent data set.";
+
+    container parent-ds {
+      description
+        "Enclosing container for SyncE parent data set.";
+
+      leaf system-clock-source-port-name {
+        type leafref {
+          path "/js:state/js-if:interfaces/js-if:interface/js-if:name";
+        }
+        description
+          "Selected SyncE source interface name.";
+      }
+
+      leaf source-type {
+        type source-type;
+        description
+          "Selected SyncE source type.";
+      }
+
+      leaf system-clock-source-ql {
+        type quality-level;
+        description
+          "Received SSM quality level on source interface.";
+      }
+
+      leaf system-clock-source-id {
+        type clock-identity;
+        description
+          "Clock identity of the selected SyncE source in
+           case enhanced ESMC is enabled.";
+      }
+
+      leaf time-since-current-clock-state {
+        type uint64;
+        units "seconds";
+        description
+          "Time elapsed in seconds since last lock event.";
+      }
+    }
+  }
+
+  grouping synce-port-ds-counters {
+    description
+      "SyncE SSM port counters.";
+
+    leaf tx-ssm {
+      type yang:counter64;
+      description
+        "SyncE SSM port transmit counters.";
+    }
+
+    leaf rx-ssm {
+      type yang:counter64;
+      description
+        "SyncE SSM port receive counters.";
+    }
+
+    leaf rx-ssm-ineligible {
+      type yang:counter64;
+      description
+        "SyncE ineligible SSM port receive counters.";
+    }
+  }
+
+  grouping synce-port-ds {
+    description
+      "SyncE port data set.";
+
+    container port-ds {
+      description
+        "SyncE port data set.";
+
+      leaf port-type {
+        type port-type;
+        description
+          "SyncE port type (ethernet/external).";
+      }
+
+      leaf aggregate-member {
+        type boolean;
+        description
+          "Denotes if SyncE port is member of an aggregate interface." ;
+      }
+
+      leaf aggregate-interface {
+        type leafref {
+          path "/js:state/js-if:interfaces/js-if:interface/js-if:name";
+        }
+        description
+          "Aggregate interface name to which the port belongs,
+           valid only if aggregate-member is true.";
+      }
+
+      leaf source-configured {
+        type boolean;
+        description
+          "Specifies if the port is configured as a SyncE source.";
+      }
+
+      leaf port-status {
+        type port-status;
+        description
+          "SyncE port clock status.";
+      }
+
+      leaf oper-status {
+        type port-oper-status;
+        description
+          "SyncE port operational status.";
+      }
+
+      leaf lock-out {
+        type boolean;
+        description
+          "If true, SyncE port will no longer be considered by
+           the selection process.";
+      }
+
+      leaf ssm-support {
+        type boolean;
+        description
+          "If true, SyncE port supports SSM.";
+      }
+
+      leaf essm-support {
+        type boolean;
+        description
+          "If true, SyncE port supports extended SSM.";
+      }
+
+      leaf local-priority {
+        type uint8;
+        description
+          "User configured priority of the source to reflect preference amongst the sources.";
+      }
+
+      leaf ssm-send-enable {
+        type boolean;
+        description
+          "If true, SyncE port will transmit SSM.";
+      }
+
+      leaf ql-receiver-info {
+        type quality-level;
+        description
+          "SyncE port received SSM quality level.";
+      }
+
+      leaf ql-overwrite {
+        type ql-overwrite-mode;
+        description
+          "ql-overwrite configures the input QL mode.";
+      }
+
+      leaf ql-fixed-value {
+        type quality-level;
+        description
+          "SyncE port QL will be overwritten with this
+           configured SSM QL, if ql-overwrite is configured
+           accordingly.";
+      }
+
+      leaf ql-transmit-info {
+        type quality-level;
+        description
+          "SyncE port transmit SSM QL.";
+      }
+
+      leaf source-type {
+        type source-type;
+        description
+          "Selected SyncE source type.";
+      }
+
+      leaf wtr-time {
+        type wtr-time;
+        description
+          "Port wait-to-restore time before opening up for ESMC post a
+           synce source failure.";
+      }
+      leaf holdoff-time {
+        type uint16 {
+          range "300..1800";
+        }
+        units "milliseconds";
+        description
+          "Port signal down state time before closing for ESMC.";
+      }
+
+      container counters {
+        description
+          "SyncE port SSM counters.";
+
+        uses synce-port-ds-counters;
+      }
+    }
+  }
+
+  grouping synce-port-ds-top {
+    description
+      "Top level grouping for SyncE ports.";
+
+    container ports {
+      description
+        "Enclosing container for the list of SyncE ports.";
+
+      list port {
+        key "port-name";
+        description
+          "List of SyncE ports.";
+
+        leaf port-name {
+          type leafref {
+            path "/js:state/js-if:interfaces/js-if:interface/js-if:name";
+          }
+          description
+            "The port list is indexed using the port name.";
+        }
+
+        uses synce-port-ds;
+      }
+    }
+  }
+
+  grouping synce-top {
+    description
+      "Top-level grouping for SyncE state data.";
+
+    container synce {
+      description
+        "System SyncE state.";
+
+      uses synce-default-ds-top;
+      uses synce-parent-ds-top;
+      uses synce-port-ds-top;
+
+    }
+  }
+
+  augment "/js:state/js-pro:protocols" {
+    description
+      "Adds SyncE to protocol state.";
+
+    uses synce-top;
+  }
+}
+

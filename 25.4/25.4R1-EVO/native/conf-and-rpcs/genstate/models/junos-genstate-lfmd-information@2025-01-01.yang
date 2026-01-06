@@ -1,0 +1,408 @@
+ module junos-genstate-lfmd-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/lfmd-information";
+   prefix jgli;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lfmd-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping lfmd-information-top {
+     description "Top-level grouping";
+     container lfmd-information {
+       description "Information about the Link-Fault Management protocol";
+       list lfmd-interface-information {
+         key "lfmd-interface-name";
+         leaf lfmd-interface-name {
+           type string;
+           description "Name of interface";
+         }
+         leaf lfmd-status {
+           type string;
+           description "Status of 802.3ah on the interface";
+         }
+         leaf lfmd-discovery-state {
+           type string;
+         }
+         leaf lfmd-pdu-transmit-interval {
+           type uint32;
+           description "LFM keepalive PDU periodic transmit interval";
+         }
+         leaf lfmd-pdu-threshold {
+           type uint32;
+           description "Number of OAMPDUs missed before declaring peer lost";
+         }
+         leaf lfmd-pdu-hold-time {
+           type uint32;
+           description "Time for which no OAMPDU is received before declaring peer lost";
+         }
+         leaf lfmd-peer-address {
+           type jt:mac-addr;
+         }
+         leaf lfmd-loopback-tracking-status {
+           type string;
+           description "Loopback tracking enabled or not";
+         }
+         leaf lfmd-loopback-tracking-loop-status {
+           type string;
+         }
+         leaf lfmd-detect-loc-status {
+           type string;
+           description "Detect loc enabled or not";
+         }
+         leaf lfmd-detect-loc-loc-status {
+           type string;
+         }
+         leaf lfmd-peer-mux-action {
+           type string;
+           description "Remote multiplexor action";
+         }
+         leaf lfmd-peer-parser-action {
+           type string;
+           description "Remote parser action";
+         }
+         leaf lfmd-peer-config-mode {
+           type string;
+           description "Remote peer discovery configuration";
+         }
+         leaf lfmd-peer-config-unidirectional {
+           type string;
+           description "Support for remote peer unidirectional mode";
+         }
+         leaf lfmd-peer-config-loopback {
+           type string;
+           description "Support for remote peer loopback mode";
+         }
+         leaf lfmd-peer-config-link-events {
+           type string;
+           description "Support for remote peer link events";
+         }
+         leaf lfmd-peer-config-variable-request {
+           type string;
+           description "Support for remote peer variable requests";
+         }
+         container lfmd-discovery-flags {
+           leaf lfmd-flag-remote-stable {
+             type empty;
+           }
+           leaf lfmd-flag-remote-evaluating {
+             type empty;
+           }
+           leaf lfmd-flag-remote-state-valid {
+             type empty;
+           }
+           leaf lfmd-flag-local-satisfied {
+             type empty;
+           }
+           leaf lfmd-flag-local-stable {
+             type empty;
+           }
+           leaf lfmd-pdu-flags {
+             type int32;
+           }
+         }
+         container lfmd-statistics {
+           container lfmd-statistics-received {
+             leaf lfmd-information-pdus-received {
+               type uint32;
+               description "Number of information PDUs received";
+             }
+             leaf lfmd-event-pdus-received {
+               type uint32;
+               description "Number of event PDUs received";
+             }
+             leaf lfmd-variable-request-pdus-received {
+               type uint32;
+               description "Number of variable-request PDUs received";
+             }
+             leaf lfmd-variable-response-pdus-received {
+               type uint32;
+               description "Number of variable-response PDUs received";
+             }
+             leaf lfmd-loopback-control-pdus-received {
+               type uint32;
+               description "Number of loopback-control PDUs received";
+             }
+             leaf lfmd-organization-pdus-received {
+               type uint32;
+               description "Number of organization-specific PDUs received";
+             }
+             leaf lfmd-unknown-pdus-received {
+               type uint32;
+               description "Number of unknown PDUs received";
+             }
+             leaf lfmd-critical-event-received {
+               type uint32;
+               description "Number of PDUs received with Critical event flag bit set";
+             }
+             leaf lfmd-dying-gasp-received {
+               type uint32;
+               description "Number of PDUs received with Dying gasp flag bit set";
+             }
+             leaf lfmd-link-fault-received {
+               type uint32;
+               description "Number of PDUs received with Link fault flag bit set";
+             }
+           }
+           container lfmd-statistics-transmitted {
+             leaf lfmd-information-pdus-transmitted {
+               type uint32;
+               description "Number of information PDUs transmitted";
+             }
+             leaf lfmd-event-pdus-transmitted {
+               type uint32;
+               description "Number of event PDUs transmitted";
+             }
+             leaf lfmd-variable-request-pdus-transmitted {
+               type uint32;
+               description "Number of variable-request PDUs transmitted";
+             }
+             leaf lfmd-variable-response-pdus-transmitted {
+               type uint32;
+               description "Number of variable-response PDUs transmitted";
+             }
+             leaf lfmd-loopback-control-pdus-transmitted {
+               type uint32;
+               description "Number of loopback-control PDUs transmitted";
+             }
+             leaf lfmd-organization-pdus-transmitted {
+               type uint32;
+               description "Number of organization-specific PDUs transmitted";
+             }
+             leaf lfmd-unknown-pdus-transmitted {
+               type uint32;
+               description "Number of unknown PDUs transmitted";
+             }
+           }
+         }
+         container lfmd-events {
+           container lfmd-events-received {
+             container lfmd-event-received-symbol-error {
+               leaf lfmd-event-received-symbol-count {
+                 type uint32;
+                 description "Errored symbol period event count";
+               }
+               leaf lfmd-event-received-symbol-error-window {
+                 type uint64;
+                 description "Errored symbol period event window";
+               }
+               leaf lfmd-event-received-symbol-error-threshold {
+                 type uint64;
+                 description "Errored symbol period event threshold";
+               }
+               leaf lfmd-event-received-symbol-error-count {
+                 type uint64;
+                 description "Errored symbol count";
+               }
+               leaf lfmd-event-received-symbol-error-total-count {
+                 type uint64;
+                 description "Errored symbol period event total count";
+               }
+             }
+             container lfmd-event-received-frame-error {
+               leaf lfmd-event-received-frame-count {
+                 type uint32;
+                 description "Errored frame event count";
+               }
+               leaf lfmd-event-received-frame-error-window {
+                 type uint64;
+                 description "Errored frame event window";
+               }
+               leaf lfmd-event-received-frame-error-threshold {
+                 type uint64;
+                 description "Errored frame event threshold";
+               }
+               leaf lfmd-event-received-frame-error-count {
+                 type uint64;
+                 description "Errored frame count";
+               }
+               leaf lfmd-event-received-frame-error-total-count {
+                 type uint64;
+                 description "Errored frame event total count";
+               }
+             }
+             container lfmd-event-received-frame-period-error {
+               leaf lfmd-event-received-frame-period-count {
+                 type uint32;
+                 description "Errored frame period event count";
+               }
+               leaf lfmd-event-received-frame-period-error-window {
+                 type uint64;
+                 description "Errored frame period event window";
+               }
+               leaf lfmd-event-received-frame-period-error-threshold {
+                 type uint64;
+                 description "Errored frame period event threshold";
+               }
+               leaf lfmd-event-received-frame-period-error-count {
+                 type uint64;
+                 description "Errored frame period count";
+               }
+               leaf lfmd-event-received-frame-period-error-total-count {
+                 type uint64;
+                 description "Errored frame period event total count";
+               }
+             }
+             container lfmd-event-received-frame-seconds-error {
+               leaf lfmd-event-received-frame-seconds-count {
+                 type uint32;
+                 description "Errored frame seconds event count";
+               }
+               leaf lfmd-event-received-frame-seconds-error-window {
+                 type uint64;
+                 description "Errored frame seconds event window";
+               }
+               leaf lfmd-event-received-frame-seconds-error-threshold {
+                 type uint64;
+                 description "Errored frame seconds event threshold";
+               }
+               leaf lfmd-event-received-frame-seconds-error-count {
+                 type uint64;
+                 description "Errored frame seconds count";
+               }
+               leaf lfmd-event-received-frame-seconds-error-total-count {
+                 type uint64;
+                 description "Errored frame seconds event total count";
+               }
+             }
+           }
+           container lfmd-events-transmitted {
+             container lfmd-event-transmitted-symbol-error {
+               leaf lfmd-event-transmitted-symbol-count {
+                 type uint32;
+                 description "Errored symbol period event count";
+               }
+               leaf lfmd-event-transmitted-symbol-error-window {
+                 type uint64;
+                 description "Errored symbol period event window";
+               }
+               leaf lfmd-event-transmitted-symbol-error-threshold {
+                 type uint64;
+                 description "Errored symbol period event threshold";
+               }
+               leaf lfmd-event-transmitted-symbol-error-count {
+                 type uint64;
+                 description "Errored symbol period event count";
+               }
+               leaf lfmd-event-transmitted-symbol-error-total-count {
+                 type uint64;
+                 description "Errored symbol period event total count";
+               }
+             }
+             container lfmd-event-transmitted-frame-error {
+               leaf lfmd-event-transmitted-frame-count {
+                 type uint32;
+                 description "Errored frame event count";
+               }
+               leaf lfmd-event-transmitted-frame-error-window {
+                 type uint64;
+                 description "Errored frame event window";
+               }
+               leaf lfmd-event-transmitted-frame-error-threshold {
+                 type uint64;
+                 description "Errored frame event threshold";
+               }
+               leaf lfmd-event-transmitted-frame-error-count {
+                 type uint64;
+                 description "Errored frame count";
+               }
+               leaf lfmd-event-transmitted-frame-error-total-count {
+                 type uint64;
+                 description "Errored frame event total count";
+               }
+             }
+           }
+           container lfmd-events-current {
+             container lfmd-event-current-symbol-error {
+               leaf lfmd-event-symbol-count {
+                 type uint32;
+                 description "Errored symbol period event count";
+               }
+               leaf lfmd-event-symbol-error-window {
+                 type uint64;
+                 description "Errored symbol period event window";
+               }
+               leaf lfmd-event-symbol-error-threshold {
+                 type uint64;
+                 description "Errored symbol period event threshold";
+               }
+               leaf lfmd-event-symbol-error-count {
+                 type uint64;
+                 description "Errored symbol period event count";
+               }
+               leaf lfmd-event-symbol-error-total-count {
+                 type uint64;
+                 description "Errored symbol period event total count";
+               }
+             }
+             container lfmd-event-current-frame-error {
+               leaf lfmd-event-frame-count {
+                 type uint32;
+                 description "Errored frame event count";
+               }
+               leaf lfmd-event-frame-error-window {
+                 type uint64;
+                 description "Errored frame event window";
+               }
+               leaf lfmd-event-frame-error-threshold {
+                 type uint64;
+                 description "Errored frame event threshold";
+               }
+               leaf lfmd-event-frame-error-count {
+                 type uint64;
+                 description "Errored frame count";
+               }
+               leaf lfmd-event-frame-error-total-count {
+                 type uint64;
+                 description "Errored frame event total count";
+               }
+             }
+           }
+         }
+       }
+       list lfmd-action-profile-information {
+         leaf lfmd-action-profile-name {
+           type string;
+           description "Name of action profile";
+         }
+         leaf lfmd-action-profile-invoke-count {
+           type uint32;
+           description "Number of times the action profile has been invoked";
+         }
+         leaf lfmd-action-profile-execution-count {
+           type uint32;
+           description "Number of times the action profile has been executed";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lfmd-information to top-level genstate";
+     uses lfmd-information-top;
+   }
+ }

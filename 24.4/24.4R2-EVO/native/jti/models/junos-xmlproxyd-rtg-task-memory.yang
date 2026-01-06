@@ -1,0 +1,351 @@
+/*
+ * YANG definition for Juniper task memory
+ *
+ * Copyright (c) 2022, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-xmlproxyd-rtg-task-memory {
+  yang-version 1;
+  namespace "http://juniper.net/yang/xmlproxyd-rtg-task-memory";
+  prefix junos-xmlproxyd-rtg-task-memory;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description 
+    "Yang definition for Task memory";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping proxyd-rtg-task-memory-top {
+    description
+      "Task memory details";
+
+    container junos {
+      description
+        "Junos";
+      config false;
+
+      container task-memory-information {
+        description
+          "Task memory details information";
+
+        container task-memory-overall-report {
+          description
+            "Overall memory report";
+
+          container task-size-block-list {
+            description
+              "List of overall task memory report";
+
+            list task-size-block {
+              description
+                "List of task block";
+              key "tsb-size";
+
+              leaf tsb-size {
+                description
+                  "Size of this block";
+                type uint32;
+              }
+              leaf tsb-alloc-bytes {
+                description
+                  "Number of items allocated in bytes";
+                type uint32;
+              }
+              leaf tsb-allocs {
+                description
+                  "Number of items allocated now not using malloc";
+                type uint32;
+              }
+              leaf tsb-max-allocs {
+                description
+                  "Maximum items ever allocated";
+                type uint32;
+              }
+              leaf tsb-max-bytes {
+                description
+                  "Maximum items ever allocated in bytes";
+                type uint64;
+              }
+              leaf tsb-free-bytes {
+                description
+                  "Number of free bytes";
+                type uint64;
+              }
+            }
+          }
+
+          container task-memory-stats-list {
+            description
+              "Task memory statistics";
+
+            list task-memory-stats {
+              description
+                "The list of task memory statistics";
+              key "tms-name";
+
+              leaf tms-name {
+                description
+                  "Name of this pool";
+                type string;
+              }
+              leaf tms-allocs {
+                description
+                  "Number of items allocated";
+                type uint32;
+              }
+              leaf tms-alloc-bytes {
+                description
+                  "Number of bytes now allocated";
+                type uint64;
+              }
+              leaf tms-max-allocs {
+                description
+                  "Maximum items ever allocated";
+                type uint32;
+              }
+              leaf tms-max-bytes {
+                description
+                  "Maximum bytes ever allocated";
+                type uint64;
+              }
+            }
+          }
+
+          leaf task-memory-total-bytes {
+            description
+              "Total number of bytes ever allocated for task";
+            type uint64;
+          }
+          leaf task-memory-total-max-bytes {
+            description
+              "Maximum number of bytes ever allocated for task";
+            type uint64;
+          }
+          leaf task-memory-total-free-bytes {
+            description
+              "Total number of bytes ever freed for task";
+            type uint64;
+          }
+        }
+
+        container task-memory-allocator-report {
+          description
+            "Task blocks allocator report ";
+
+          container task-block-list {
+            description
+              "The list of task blocks allocated";
+
+            list task-block {
+              description
+                "List of task block";
+              key "tb-name";
+
+              leaf tb-name {
+                description
+                  "Name for this block";
+                type string;
+              }
+              leaf tb-size {
+                description
+                  "Actual size of this block";
+                type uint32;
+              }
+              leaf tb-alloc-size {
+                description
+                  "Allocated size for this block";
+                type uint32;
+              }
+              leaf tb-alloc-blocks {
+                description
+                  "Number of allocated structures";
+                type uint32;
+              }
+              leaf tb-alloc-bytes {
+                description
+                  "Number of allocated bytes";
+                type uint64;
+              }
+              leaf tb-max-alloc-blocks {
+                description
+                  "Maximum number of structures ever allocated";
+                type uint32;
+              }
+              leaf tb-max-alloc-bytes {
+                description
+                  "Maximum number of bytes ever allocated";
+                type uint64;
+              }
+            }
+          }
+
+          container task-lite-page-list {
+            description
+              "Task lite blocks allocated";
+
+            list task-lite-page {
+              description
+                "The list of task lite blocks allocated";
+              key "tlp-name";
+
+              leaf tlp-name {
+                description
+                  "Name of this pool";
+                type string;
+              }
+              leaf tlp-alloc-bytes {
+                description
+                  "Number of bytes allocated";
+                type uint64;
+              }
+              leaf tlp-max-alloc-bytes {
+                description
+                  "Maximum bytes ever allocated";
+                type uint64;
+              }
+            }
+          }
+
+          leaf task-memory-total-bytes {
+            description
+              "Total number of bytes ever allocated for task";
+            type uint64;
+          }
+          leaf task-memory-total-max-bytes {
+            description
+              "Maximum number of bytes ever allocated for task";
+            type uint64;
+          }
+        }
+
+        container task-memory-malloc-usage-report {
+          description
+            "Task allocator memory report";
+
+          container task-malloc-list {
+            description
+              "List of task malloc";
+
+            list task-malloc {
+              description
+                "List of malloc usage blocks";
+              key "tm-name";
+
+              leaf tm-name {
+                description
+                  "Name of this pool";
+                type string;
+              }
+              leaf tm-allocs {
+                description
+                  "Number of allocations out";
+                type uint32;
+              }
+              leaf tm-alloc-bytes {
+                description
+                  "Number of bytes allocated";
+                type uint64;
+              }
+              leaf tm-max-allocs {
+                description
+                  "Maximum allocations ever out";
+                type uint32;
+              }
+              leaf tm-max-alloc-bytes {
+                description
+                  "Maximum bytes allocated";
+                type uint64;
+              }
+              leaf tm-function-calls {
+                description
+                  "Number of function calls";
+                type uint32;
+              }
+            }
+          }
+
+          leaf task-memory-total-bytes {
+            description
+              "Total number of bytes ever allocated for task";
+            type uint64;
+          }
+
+          leaf task-memory-total-max-bytes {
+            description
+              "Maximum number of bytes ever allocated for task";
+            type uint64;
+          }
+        }
+
+        leaf task-memory-dynamic-allocs {
+          description
+            "Dynamically allocated memory";
+          type uint64;
+        }
+        leaf task-memory-max-dynamic-allocs {
+          description
+            "Maximum dynamically allocated memory";
+          type uint64;
+        }
+        leaf task-memory-bss-bytes {
+          description
+            "Number of bytes allocated for BSS memory";
+          type uint64;
+        }
+        leaf task-memory-max-bss-bytes {
+          description
+            "Maximum number of bytes allocated for BSS memory";
+          type uint64;
+        }
+        leaf task-memory-page-data-bytes {
+          description
+            "Number of bytes allocated for data memory";
+          type uint64;
+        }
+        leaf task-memory-max-page-data-bytes {
+          description
+            "Maximum number of bytes allocated for data memory";
+          type uint64;
+        }
+        leaf task-memory-dir-bytes {
+          description
+            "Number of bytes allocated for directory";
+          type uint64;
+        }
+        leaf task-memory-max-dir-bytes {
+          description
+            "Maximum number of bytes allocated for directory";
+          type uint64;
+        }
+        leaf task-memory-total-bytes-in-use {
+          description
+            "Total number of bytes in use";
+          type uint64;
+        }
+        leaf task-memory-total-bytes-percent {
+          description
+            "Maximum number of bytes in use";
+          type uint32;
+        }
+      }
+    }
+  }
+
+  uses proxyd-rtg-task-memory-top;
+}
+

@@ -1,0 +1,324 @@
+ module junos-genstate-stp-bridge {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/stp-bridge";
+   prefix jgsb;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for stp-bridge";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping stp-bridge-top {
+     description "Top-level grouping";
+     container stp-bridge {
+       description "Information about STP bridge parameters";
+       list routing-instance-information {
+         key "routing-instance-name";
+         leaf routing-instance-name {
+           type string;
+           description "Routing instance name";
+         }
+         leaf context-id {
+           type int32;
+           description "Context identifier";
+         }
+         leaf bpdu-destination-mac-address {
+           type string;
+           description "Destination MAC address in the spanning tree BPDUs";
+         }
+         leaf protocol {
+           type string;
+           description "Enabled protocol";
+         }
+         container cist-bridge-parameters {
+           description "STP bridge parameters for Common and Internal Spanning Tree";
+           leaf cist-id {
+             type int32;
+             description "CIST identifier";
+           }
+           leaf root-port {
+             type string;
+             description "Root port";
+           }
+           leaf root-cost {
+             type uint32;
+             description "Root cost";
+           }
+           leaf internal-root-cost {
+             type uint32;
+             description "CIST internal root cost";
+           }
+           leaf hello-time-learned {
+             type int32;
+             description "Hello time";
+           }
+           leaf max-age-learned {
+             type int32;
+             description "Maximum age for received BPDUs";
+           }
+           leaf forward-delay-learned {
+             type int32;
+             description "Forward delay";
+           }
+           leaf msg-age {
+             type int32;
+             description "Age of the received BPDU";
+           }
+           leaf hop-count {
+             type int32;
+             description "Hop count received from the root bridge";
+           }
+           leaf time-since-last-tc {
+             type int32;
+             description "Time since last topology change";
+           }
+           leaf topology-change-count {
+             type int32;
+             description "Number of topology changes";
+           }
+           leaf extended-system-id {
+             type int32;
+             description "Extended system identifier";
+           }
+           leaf internal-instance-id {
+             type int32;
+             description "Internal instance identifier";
+           }
+           leaf hello-time-configured {
+             type int32;
+             description "Hello time configured on this bridge";
+           }
+           leaf max-age-configured {
+             type int32;
+             description "Maximum age configured on this bridge";
+           }
+           leaf forward-delay-configured {
+             type int32;
+             description "Forward delay configured on this bridge";
+           }
+           leaf max-hop-count-configured {
+             type int32;
+             description "Maximum hop count configured on this bridge";
+           }
+           leaf path-cost-method {
+             type string;
+             description "Type of path cost method currently in use";
+           }
+           container root-bridge {
+             description "Root bridge identifier";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+           container regional-root-bridge {
+             description "CIST regional root bridge identifier";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+           container this-bridge {
+             description "ID of bridge";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+         }
+         list msti-bridge-parameters {
+           key "msti-id";
+           description "STP bridge parameters for Multiple Spanning Tree instances";
+           leaf msti-id {
+             type int32;
+             description "MSTI ID";
+           }
+           leaf root-port {
+             type string;
+             description "Root port";
+           }
+           leaf root-cost {
+             type uint32;
+             description "Root cost";
+           }
+           leaf hello-time-learned {
+             type int32;
+             description "Hello time";
+           }
+           leaf max-age-learned {
+             type int32;
+             description "Maximum age for received BPDUs";
+           }
+           leaf forward-delay-learned {
+             type int32;
+             description "Forward delay";
+           }
+           leaf max-hop-count-configured {
+             type int32;
+             description "Maximum hop count configured on this bridge";
+           }
+           leaf hop-count {
+             type int32;
+             description "Hop count received from the root bridge";
+           }
+           leaf time-since-last-tc {
+             type int32;
+             description "Time since last topology change";
+           }
+           leaf topology-change-count {
+             type int32;
+             description "Number of topology changes";
+           }
+           leaf internal-instance-id {
+             type int32;
+             description "Internal instance identifier";
+           }
+           container msti-regional-root-bridge {
+             description "MSTI regional root identifier";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+           container this-bridge {
+             description "ID of bridge";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+         }
+         list vst-bridge-parameters {
+           key "vlan-id";
+           description "STP bridge parameters for VLAN Spanning Tree";
+           leaf vlan-id {
+             type int32;
+             description "VLAN identifier";
+           }
+           leaf root-port {
+             type string;
+             description "Root port";
+           }
+           leaf root-cost {
+             type uint32;
+             description "Root cost";
+           }
+           leaf hello-time-learned {
+             type int32;
+             description "Hello time";
+           }
+           leaf max-age-learned {
+             type int32;
+             description "Maximum age for received BPDUs";
+           }
+           leaf forward-delay-learned {
+             type int32;
+             description "Forward delay";
+           }
+           leaf msg-age {
+             type int32;
+             description "Age of the received BPDU";
+           }
+           leaf time-since-last-tc {
+             type int32;
+             description "Time since last topology change";
+           }
+           leaf topology-change-count {
+             type int32;
+             description "Number of topology changes";
+           }
+           leaf extended-system-id {
+             type int32;
+             description "Extended system identifier";
+           }
+           leaf hello-time-configured {
+             type int32;
+             description "Hello time configured on this bridge";
+           }
+           leaf max-age-configured {
+             type int32;
+             description "Maximum age configured on this bridge";
+           }
+           leaf forward-delay-configured {
+             type int32;
+             description "Forward delay configured on this bridge";
+           }
+           leaf path-cost-method {
+             type string;
+             description "Type of path cost method currently in use";
+           }
+           container root-bridge {
+             description "Root bridge identifier";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+           container this-bridge {
+             description "ID of bridge";
+             leaf bridge-priority {
+               type int32;
+               description "Bridge priority";
+             }
+             leaf bridge-mac {
+               type string;
+               description "Media access control address of bridge";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds stp-bridge to top-level genstate";
+     uses stp-bridge-top;
+   }
+ }

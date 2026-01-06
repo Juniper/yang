@@ -1,0 +1,237 @@
+module junos-bbe-stats-svcsd-telemetry {
+  yang-version 1;
+  namespace "http://juniper.net/yang/junos-bbe-stats-svcsd-telemetry";
+  prefix "junos-bbe-stats-svcsd-telemetry";
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net.";
+  description
+    "Juniper Networks definition of Junos native bbe-smgd telemetry stats yang model";
+
+  revision 2024-03-25 {
+    description
+      "Initial revision";
+  }
+
+  typedef session-identifier {
+    type uint64;
+    description
+      "A unique identifier for a session in this intsance of subscriber-management";
+  }
+
+  typedef family-type {
+    type enumeration {
+      enum inet {
+        value 1;
+      }
+      enum inet6;
+      enum l2;
+    }
+    description
+      "The family type denotes the protocol family associated with service statistics.";
+  }
+
+  typedef directions {
+    type enumeration {
+      enum input {
+        value 1;
+      }
+      enum output;
+    }
+    description
+      "The directions denotes the direction of filter applied";
+  }
+
+  grouping actual-transit-statistics {
+    description
+      "The set of subscriber statistics for an interface.";
+    leaf ip-in-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 packets received by this interface.";
+    }
+    leaf ip-out-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 packets sent to this interface.";
+    }
+    leaf ip-in-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 bytes received by this interface.";
+    }
+    leaf ip-out-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv4 and IPv6 bytes sent to this interface.";
+    }
+    leaf ipv6-in-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv6 packets received by this interface.";
+    }
+    leaf ipv6-out-packets {
+      type uint64;
+      description
+        "The number of actual transit IPv6 packets sent to this interface.";
+    }
+    leaf ipv6-in-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv6 bytes received by this interface.";
+    }
+    leaf ipv6-out-bytes {
+      type uint64;
+      description
+        "The number of actual transit IPv6 bytes sent to this interface.";
+    }
+  }
+
+  grouping session {
+    list session {
+      description
+	"Subscriber sessions list";
+      key sid;
+      leaf sid {
+	type session-identifier;
+	description
+	  "The associated session ID for this interface";
+      }
+      uses actual-transit-statistics;
+    }
+  }
+
+  grouping service-filter-statistics {
+    description
+      "Service accounting statistics for a service filter";
+    leaf packets {
+      description
+	"The number of packets matched and accepted by this filter";
+      type uint64;
+    }
+    leaf bytes {
+      description
+	"The number of bytes matched and accepted by this filter";
+      type uint64;
+    }
+  }
+
+  grouping sessions {
+    list session {
+      description
+	"List of sessions";
+      key sid;
+      leaf sid {
+	type uint64;
+	description
+	  "The associated session ID for this interface";
+      }
+      container services {
+	description
+	  "Service statistics related data";
+	list service {
+	  description
+	    "List of services";
+          key ssid;
+	  leaf ssid {
+	    type uint64;
+	    description
+	      "The associated session ID for this service";
+	  }
+	  container families {
+	    description
+	      "Container for families";
+	    list family {
+	      description
+		"Instances of family";
+	      key "families-present";
+	      leaf families-present {
+		description
+		  "The type of families present";
+		type family-type;
+	      }
+	      container filter-directions {
+		description
+		  "Container for filter directions";
+		list filter-direction {
+		  description
+		    "Instances of filter-direction";
+		  key "direction";
+		  leaf direction {
+		    description
+		      "Direction of the filter";
+		    type directions;
+		  }
+		  uses service-filter-statistics;
+		}
+              }
+	    }
+	  }
+        }
+      }
+    }
+  }
+
+  grouping cpinstance {
+    list cp-instance {
+      description
+	"Control plane Instance list";
+      key "cp-name";
+      leaf cp-name {
+	description
+	  "Name of the cp instance";
+	type string;
+      }
+      container subscribers {
+	description
+	  "Subscribers Information";
+	container accounting-statistics {
+	  description
+	    "Subscriber accounting statistics";
+	  uses session;
+	}
+	container service-statistics {
+	  description
+	    "Services related data";
+	  uses sessions;
+	}
+      }
+    }
+  }
+
+
+  grouping bbe-statistics-top {
+    description
+      "Top level grouping for bbe stats svcsd telemetry stats";
+    container junos {
+      config false;
+      container system {
+        description
+          "Junos System";
+        container subscriber-management {
+          description
+            "Subscriber management data";
+          container cups {
+            description
+              "Container for control planes";
+            container cp-instances {
+              description
+                "Control-plane Instances";
+	      uses cpinstance;
+            }
+          }
+        }
+      }
+    }
+  }
+  uses bbe-statistics-top;
+}

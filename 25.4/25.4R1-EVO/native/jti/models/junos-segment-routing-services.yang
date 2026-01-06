@@ -1,0 +1,77 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-segment-routing-services {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/srvs-sr";
+  prefix junos-srvs-sr;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     MPLS-segment routing related stats.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-08-30 {
+    description
+      "Initial revision";
+  }
+
+   grouping jnx-srvs-sr-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container services {
+                container segment-routing {
+                    description "Junos segment-routing container";
+                    container sid {
+                        description "Junos segment routing sid container";
+                        container egress {
+                            description "Junos segment routing sid egress container";
+                            container usage {
+                                description "Junos segment routing sid egress usage container";
+                            }
+                        }
+                        container usage {
+                            description "Junos segment routing sid ingress usage container";
+                        }
+                    }
+                    container interface {
+                        description "Junos segment routing interface container";
+                        container ingress {
+                            description "Junos segment routing interface ingress container";
+                            container usage {
+                                description "Junos segment routing interface ingress usage container";
+                            }
+                        }
+                        container egress {
+                            description "Junos segment routing interface egress container";
+                            container usage {
+                                description "Junos segment routing interface egress usage container";
+                            }
+                        }
+                    }
+                }
+            }
+       }
+   }
+   uses jnx-srvs-sr-top;
+}

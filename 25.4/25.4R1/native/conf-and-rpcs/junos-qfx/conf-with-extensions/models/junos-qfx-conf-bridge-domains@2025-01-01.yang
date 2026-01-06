@@ -1,0 +1,43 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-conf-bridge-domains {
+   namespace "http://yang.juniper.net/junos-qfx/conf/bridge-domains";
+
+   prefix jc-bridge-domains;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   import junos-qfx-conf-root {
+     prefix jc;
+     revision-date 2025-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos bridge-domains configuration module";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   augment /jc:configuration {
+     uses bridge-domains-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses bridge-domains-group;
+   }
+   grouping bridge-domains-group {
+   }
+ }

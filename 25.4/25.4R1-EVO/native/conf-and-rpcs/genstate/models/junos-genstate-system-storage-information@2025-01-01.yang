@@ -1,0 +1,76 @@
+ module junos-genstate-system-storage-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/system-storage-information";
+   prefix jgssi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for system-storage-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping system-storage-information-top {
+     description "Top-level grouping";
+     container system-storage-information {
+       description "Top-level container";
+       leaf device-size {
+         type int32;
+         description "Device size";
+       }
+       list filesystem {
+         key "filesystem-name";
+         leaf filesystem-name {
+           type string;
+           description "Name of the filesystem";
+         }
+         leaf total-blocks {
+           type int32;
+           description "Number of 512 blocks";
+         }
+         leaf used-blocks {
+           type int32;
+           description "Used storage space";
+         }
+         leaf available-blocks {
+           type int32;
+           description "Available storage space";
+         }
+         leaf used-percent {
+           type int32;
+           description "Percent of filesystem in use";
+         }
+         leaf mounted-on {
+           type string;
+           description "Filesystem mounted on";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds system-storage-information to top-level genstate";
+     uses system-storage-information-top;
+   }
+ }

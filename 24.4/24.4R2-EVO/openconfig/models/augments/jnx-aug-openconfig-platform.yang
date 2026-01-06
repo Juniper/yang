@@ -1,0 +1,82 @@
+module jnx-aug-openconfig-platform {
+    yang-version "1";
+
+    namespace "http://yang.juniper.net/openconfig/augment/platform";
+
+    prefix "jnx-oc-platform";
+
+    import openconfig-platform { prefix oc-platform; }
+    import openconfig-platform-cpu { prefix oc-cpu; }
+    import openconfig-platform-types { prefix oc-platform-types; }
+    import openconfig-yang-types { prefix oc-yang; }
+    import junos-extension { prefix junos; }
+
+    organization "Juniper Networks";
+
+    description
+       "This module contains JUNOS augments to OpenConfig components model";
+
+    revision "2021-08-30" {
+        description "Augmenting new leaves for
+        /components/component/fabric/state and
+        /components/component/backplane/state and
+        /components/component/fpc/state and
+        /components/component/power-supply/state and
+        /components/component/fan/state and
+        /components/component/storage/state
+        containers";
+    }
+
+    revision "2021-09-15" {
+        description "Augmenting new container control-card
+        for /components/component/ path and defining generic
+        properties/property list for /components/component/
+        /<component-name>/properties/property path";
+    }
+
+    revision "2021-08-03" {
+        description "Augmenting new leaves for
+        /components/component/chassis/state and
+        /components/component/linecard/state
+        containers";
+    }
+
+    revision "2021-12-27" {
+        description "Augmenting new leaves for
+        /components/component/bios/state/software-version and
+        /components/component/bootloader/state/software-version and
+        leafs";
+    }
+
+    revision "2019-11-05" {
+        description "Initial revision";
+    }
+
+    augment "/oc-platform:components/oc-platform:component/" +
+        "oc-platform:integrated-circuit/oc-platform:state" {
+        description "Data for chip component, such as ASIC or NPU";
+
+        container properties {
+            description "Contianer for chip component";
+            list property {
+
+                key name;
+                description "Name of the chip component";
+
+                leaf name {
+                    description "Name for chip component";
+                    type string;
+                }
+
+                container state {
+                    description "Container for chip component state";
+
+                    leaf value {
+                        description "Data value for chip component";
+                        type uint64;
+                    }
+                }
+            }
+        }
+    }
+}

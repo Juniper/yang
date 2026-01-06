@@ -1,0 +1,53 @@
+ module junos-genstate-license-bandwidth-summary {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/license-bandwidth-summary";
+   prefix jglbs;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for license-bandwidth-summary";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping license-bandwidth-summary-top {
+     description "Top-level grouping";
+     container license-bandwidth-summary {
+       description "Summary of total bandwidth usage on this device";
+       leaf license-advance-bandwidth {
+         type int32;
+         description "Advance Bandwidth usage in active ports";
+       }
+       leaf license-premium-bandwidth {
+         type int32;
+         description "Premium Bandwidth usage in active ports";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds license-bandwidth-summary to top-level genstate";
+     uses license-bandwidth-summary-top;
+   }
+ }

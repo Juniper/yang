@@ -1,0 +1,1894 @@
+module junos-diagnostics-bgp-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/diagnostics/bgp/types";
+  prefix "jd-bt";
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains the definitions for types of BGP diagnostics
+     data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-09-10 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "experimental";
+
+  /*
+   *****************
+   * Typedefs.
+   *****************
+   */
+  typedef confed-member-as {
+    description
+      "Confederation AS member value.";
+    type uint32 {
+      range "0..65535";
+    }
+  }
+
+  /*
+   ************************************
+   * Identities resembling flap events.
+   ************************************
+   */
+  identity flap-event-type {
+    description
+      "Base identity for parameters on last flap event.";
+  }
+
+  identity none {
+    base flap-event-type;
+    description
+      "BGP event no-flap.";
+  }
+
+  identity stop {
+    base flap-event-type;
+    description
+      "BGP event stop.";
+  }
+
+  identity error {
+    base flap-event-type;
+    description
+      "BGP event transport error.";
+  }
+
+  identity hold-time {
+    base flap-event-type;
+    description
+      "BGP event hold time expiry.";
+  }
+
+  identity received-open-in-established {
+    base flap-event-type;
+    description
+      "BGP event received open message in established state.";
+  }
+
+  identity received-update {
+    base flap-event-type;
+    description
+      "BGP event received malformed update message.";
+  }
+
+  identity received-notify {
+    base flap-event-type;
+    description
+      "BGP event received notify from peer.";
+  }
+
+  identity restart {
+    base flap-event-type;
+    description
+      "BGP event peer router restart.";
+  }
+
+  identity restart-timeout {
+    base flap-event-type;
+    description
+      "BGP event peer router restart timeout.";
+  }
+
+  identity low-memory {
+    base flap-event-type;
+    description
+      "BGP event stop due to low memory.";
+  }
+
+  identity bfd-down {
+    base flap-event-type;
+    description
+      "BGP event BFD session down.";
+  }
+
+  identity prefix-limit-exceed-error {
+    base flap-event-type;
+    description
+      "BGP event session down due to prefix limit exceed error.";
+  }
+
+  identity ifa-deleted {
+    base flap-event-type;
+    description
+      "BGP event stop due to deletion of interface address.";
+  }
+
+  identity transport-connection-closed {
+    base flap-event-type;
+    description
+      "BGP event stop due to transport connection close.";
+  }
+
+  identity license-failure {
+    base flap-event-type;
+    description
+      "BGP event license failure.";
+  }
+
+  identity crpd-license-failure {
+    base flap-event-type;
+    description
+      "BGP event crpd license failure.";
+  }
+
+  /*
+   ************************************
+   * Identities resembling flap reason.
+   ************************************
+   */
+
+  identity flap-reason {
+    description
+      "Base identity for parameters on last flap reason.";
+  }
+
+  identity flap-none {
+    base flap-reason;
+    description
+      "BGP flap reason none.";
+  }
+
+  identity clear-neighbor {
+    base flap-reason;
+    description
+      "BGP flap reason clear bgp neighbor.";
+  }
+
+  identity configuration-change {
+    base flap-reason;
+    description
+      "BGP flap reason config change.";
+  }
+
+  identity set-auth-key-failure {
+    base flap-reason;
+    description
+      "BGP flap reason failed to set the authentication
+       key for the TCP connection.";
+  }
+
+  identity set-v4-addr-failure {
+    base flap-reason;
+    description
+      "BGP flap reason failed to set IPv4 address for the
+       TCP connection.";
+  }
+
+  identity switchover-ifa {
+    base flap-reason;
+    description
+      "BGP flap reason unable to set interface address
+       after switchover.";
+  }
+
+  identity switchover-prefix-limit-exceed {
+    base flap-reason;
+    description
+      "BGP flap reason prefix exceed limit.";
+  }
+
+  identity config-idle-after-switchover {
+    base flap-reason;
+    description
+      "BGP flap reason idle after switchover configuration.";
+  }
+
+  identity write-queue-error {
+    base flap-reason;
+    description
+      "BGP flap reason failure to send message to write queue.";
+  }
+
+  identity write-response-error {
+    base flap-reason;
+    description
+      "BGP flap reason write response error to main thread.";
+  }
+
+  identity tcp-write-error {
+    base flap-reason;
+    description
+      "BGP flap reason failed to write on TCP socket.";
+  }
+
+  identity read-response-error {
+    base flap-reason;
+    description
+      "BGP flap reason read response error to main thread.";
+  }
+
+  identity tcp-read-error {
+    base flap-reason;
+    description
+      "BGP flap reason failed to read from TCP socket.";
+  }
+
+  identity unknown-pdu {
+    base flap-reason;
+    description
+      "BGP flap reason unknown PDU received.";
+  }
+
+  identity tcp-socket-shutdown {
+    base flap-reason;
+    description
+      "BGP flap reason abnormal TCP socket shutdown.";
+  }
+
+  identity socket-failure {
+    base flap-reason;
+    description
+      "BGP flap reason TCP socket failure.";
+  }
+
+  identity management-error {
+    base flap-reason;
+    description
+      "BGP flap reason management error.";
+  }
+
+  identity hold-time-error {
+    base flap-reason;
+    description
+      "BGP flap reason hold time expired.";
+  }
+
+  identity io-hold-timeout {
+    base flap-reason;
+    description
+      "BGP flap reason I/O hold time expired.";
+  }
+
+  identity malformed-update-message {
+    base flap-reason;
+    description
+      "BGP flap reason received maloformed update message.";
+  }
+
+  identity malformed-update-message-in-shard {
+    base flap-reason;
+    description
+      "BGP flap reason received malformed update message in shard.";
+  }
+
+  /*
+   ****************************************
+   * Identities resembling BGP down reason.
+   ****************************************
+   */
+
+  identity down-reason {
+    description
+      "Base identity for parameters on bgp down reason.";
+  }
+
+  identity down-peer-closing {
+    base down-reason;
+    description
+      "BGP down as peer is closing.";
+  }
+
+  identity down-remote-wait-accept-connect {
+    base down-reason;
+    description
+      "BGP down waiting for peer to accept connect request.";
+  }
+
+  identity down-wait-open-message {
+    base down-reason;
+    description
+      "BGP down waiting for open message from remote.";
+  }
+
+  identity down-holdtime-expired {
+    base down-reason;
+    description
+      "BGP down waiting for keepalive message from remote.";
+  }
+
+  identity down-flapped {
+    base down-reason;
+    description
+      "BGP was up and went down just now.";
+  }
+
+  identity down-stuck {
+    base down-reason;
+    description
+      "BGP down but in middle of coming up.";
+  }
+
+  identity down-idle {
+    base down-reason;
+    description
+      "BGP down as its idled.";
+  }
+
+  identity down-configured-passive {
+    base down-reason;
+    description
+      "BGP down as router is configured as passive and waiting
+       for connection request from the peer.";
+  }
+
+  identity down-no-listen-task {
+    base down-reason;
+    description
+      "BGP down as no listen task configured.";
+  }
+
+  identity down-no-socket {
+    base down-reason;
+    description
+      "BGP down as TCP socket creation failed.";
+  }
+
+  identity down-authentication-failure {
+    base down-reason;
+    description
+      "BGP down as it failed to assign authentication
+       keys to the TCP connection.";
+  }
+
+  identity down-rtt-failure {
+    base down-reason;
+    description
+      "BGP down due to failure in setting the
+       kernel-id for the tcp socket.";
+  }
+
+  identity down-bind-failure {
+    base down-reason;
+    description
+      "BGP down as it failed to bind the tcp socket to
+       local address.";
+  }
+
+  identity down-bfd-interface-failure {
+    base down-reason;
+    description
+      "BGP went down due to failure in setting interface for BFD.
+       BFD has detected the underlying interface or forwarding path
+       to be non-functional and hence caused BGP to go down.";
+  }
+
+  identity down-strict-bfd {
+    base down-reason;
+    description
+      "BGP down as BFD session was found to be down when BGP
+       session was brought up.";
+  }
+
+  identity down-connect-failure {
+    base down-reason;
+    description
+      "BGP down as there is failure to connect to remote router.";
+  }
+
+  identity down-zero-asn {
+    base down-reason;
+    description
+      "BGP down as open message received has zero as AS number.";
+  }
+
+  identity down-zero-bgp-id {
+    base down-reason;
+    description
+      "BGP down as open message received has zero as BGP Id.";
+  }
+
+  identity down-big-asn {
+    base down-reason;
+    description
+      "BGP down as open message received has AS number greater
+       than permissible unit. When paired with complex network,
+       configuration, causes route flap and convergence issue.";
+  }
+
+  identity down-bgp-id-change-delete-pending {
+    base down-reason;
+    description
+      "BGP down as open message received same id while we are deleting routes.";
+  }
+
+  identity down-reserved-asn {
+    base down-reason;
+    description
+      "BGP down as open message received has reserved AS number.";
+  }
+
+  identity down-asn-mismatch {
+    base down-reason;
+    description
+      "BGP down as open message received has AS number different
+       from the one the router has as peer-as number.";
+  }
+
+  identity down-open-fail {
+    base down-reason;
+    description
+      "BGP down as it failed to send open message.
+       There has been no connectivity with the peer to establish
+       a successful BGP connection.
+       Probably indicated the connected interface between the peers
+       has a problem.";
+  }
+
+  identity down-open-bad-version {
+    base down-reason;
+    description
+      "BGP down as open message consist of bad version number.";
+  }
+
+  identity down-address-family-mismatch {
+    base down-reason;
+    description
+      "BGP down as received open message has address-families which
+       do not match the locally configured address-families.";
+  }
+
+  identity down-address-family-extended-nh-mismatch {
+    base down-reason;
+    description
+      "BGP down as received open message has address-family which
+       has extended nexthop mismatch issue.";
+  }
+
+  identity down-open-short {
+    base down-reason;
+    description
+      "BGP down as open message length is shorter than expected.";
+  }
+
+  identity down-open-parse-error {
+    base down-reason;
+    description
+      "BGP down as open message received has issue in parsing.";
+  }
+
+  identity down-open-unknown-auth-code {
+    base down-reason;
+    description
+      "BGP down as open message with unknown authentication code.";
+  }
+  identity down-open-missing {
+    base down-reason;
+    description
+      "BGP down as we did not receive an open message within hold-time.";
+  }
+
+  identity down-receive-notification {
+    base down-reason;
+    description
+      "BGP down as we received a notification due to an anomalous event.";
+  }
+
+  identity down-pdu-invalid-type {
+    base down-reason;
+    description
+      "BGP down as it received notification with
+       type of the PDU received is invalid.";
+  }
+
+  identity down-pdu-invalid-length {
+    base down-reason;
+    description
+      "BGP down as it received notification with
+       length of the PDU received is invalid.";
+  }
+
+  identity down-pdu-unexpected {
+    base down-reason;
+    description
+      "BGP down as it received notification with
+       type of the PDU received is unexpected.";
+  }
+
+  identity down-holdtime-unexpected {
+    base down-reason;
+    description
+      "BGP down as open message has hold-time which is less
+       than minimum hold-time that can be configured.";
+  }
+
+  identity down-keepalive-send-failure {
+    base down-reason;
+    description
+      "BGP down as first keepalive could not be sent.";
+  }
+
+  identity down-open-read-failure {
+    base down-reason;
+    description
+      "BGP down as failed to read an open message from the socket.";
+  }
+
+  identity down-group-bit-unset {
+    base down-reason;
+    description
+      "BGP down as group bit is unset.";
+  }
+
+  identity down-marker {
+    base down-reason;
+    description
+      "BGP down for marker.";
+  }
+
+  identity down-io-session-creation {
+    base down-reason;
+    description
+      "BGP down for I/O session creation.";
+  }
+
+  identity down-io-session-read-request {
+    base down-reason;
+    description
+      "BGP down for I/O session read request.";
+  }
+
+  identity down-authentication-field-error {
+    base down-reason;
+    description
+      "BGP down as message received has a wrong authentication field.";
+  }
+
+  identity down-internal {
+    base down-reason;
+    description
+      "BGP down due to internal management request failure.";
+  }
+
+  /*
+   ***************************************************
+   * Identities resembling export evaluation triggers.
+   ***************************************************
+   */
+
+  identity export-eval-trigger-event {
+    description
+      "Export evaluation trigger identities.";
+  }
+
+  identity export-eval-none {
+    base export-eval-trigger-event;
+    description
+      "No change.";
+  }
+
+  identity export-eval-adv-inactive {
+    base export-eval-trigger-event;
+    description
+      "Export advertise inactive.";
+  }
+
+  identity export-eval-local-pref-change {
+    base export-eval-trigger-event;
+    description
+      "Export local preference changed.";
+  }
+
+  identity export-eval-metric-out-change {
+    base export-eval-trigger-event;
+    description
+      "Export metric out changed.";
+  }
+
+  identity export-remove-private-change {
+    base export-eval-trigger-event;
+    description
+      "Export remove private changed.";
+  }
+
+  identity export-delay-med-update-change {
+    base export-eval-trigger-event;
+    description
+      "Export metric-out igp delay-med-update changed.";
+  }
+
+  identity export-vpn-apply-export-change {
+    base export-eval-trigger-event;
+    description
+      "Export can apply export changed.";
+  }
+
+  identity export-adv-bgp-static-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise BGP static changed.";
+  }
+
+  identity export-no-nexthop-change-changed {
+    base export-eval-trigger-event;
+    description
+      "Export no nexthop change changed.";
+  }
+
+  identity export-adv-peer-as-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise peer AS changed.";
+  }
+
+  identity export-non-transitive-ext-comm-change {
+    base export-eval-trigger-event;
+    description
+      "Export non transitive extended community changed.";
+  }
+
+  identity export-no-client-reflect-change {
+    base export-eval-trigger-event;
+    description
+      "Export no client reflect changed.";
+  }
+
+  identity export-propagate-unused-flag-bit-change {
+    base export-eval-trigger-event;
+    description
+      "Export propagate unused flag bit changed.";
+  }
+
+  identity export-advertise-non-llgr-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise to non LLGR changed.";
+  }
+  identity export-multipath-allow-protection-change {
+    base export-eval-trigger-event;
+    description
+      "Export multipath allow protection chnaged.";
+  }
+
+  identity export-egress-te-change {
+    base export-eval-trigger-event;
+    description
+      "Export egress-te changed.";
+  }
+
+  identity export-withdraw-label-change {
+    base export-eval-trigger-event;
+    description
+      "Export RFC 3107-withdraw-label changed.";
+  }
+
+  identity export-route-server-client-change {
+    base export-eval-trigger-event;
+    description
+      "Export route server client changed.";
+  }
+  identity export-advertise-prefix-sid-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise-prefix-SID changed.";
+  }
+
+  identity export-advertise-srgb-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise SRGB changed.";
+  }
+
+  identity export-receive-origin-val-comm-change {
+    base export-eval-trigger-event;
+    description
+      "Export received origin validation community changed.";
+  }
+
+  identity export-eval-metric-out-value-change {
+    base export-eval-trigger-event;
+    description
+      "Export metric out value changed.";
+  }
+
+  identity export-eval-metric-out-action-change {
+    base export-eval-trigger-event;
+    description
+      "Export metric out action changed.";
+  }
+
+  identity export-eval-metric-offset-change {
+    base export-eval-trigger-event;
+    description
+      "Export metric offset changed.";
+  }
+
+  identity export-out-delay-change {
+    base export-eval-trigger-event;
+    description
+      "Export out delay changed.";
+  }
+
+  identity export-advertise-external-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise external changed.";
+  }
+
+  identity export-no-prepend-global-as-change {
+    base export-eval-trigger-event;
+    description
+      "Export local-as no-prepend-global-as changed.";
+  }
+  identity export-advertise-srv6-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise srv6 changed.";
+  }
+  identity export-family-route-target-change {
+    base export-eval-trigger-event;
+    description
+      "Export family route target changed.";
+  }
+  identity export-family-route-target-external-path-change {
+    base export-eval-trigger-event;
+    description
+      "Export family route target external path changed.";
+  }
+
+  identity export-route-target-advertise-default-change {
+    base export-eval-trigger-event;
+    description
+      "Export route target advertise default changed.";
+  }
+
+  identity export-ipv4-lu-table-change {
+    base export-eval-trigger-event;
+    description
+      "Export ipv4 labeled unicast table changed.";
+  }
+
+  identity export-ipv6-lu-table-change {
+    base export-eval-trigger-event;
+    description
+      "Export ipv6 labeled unicast table changed.";
+  }
+
+  identity export-lu-explicit-null-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled unicast explicit null changed.";
+  }
+
+  identity export-labeled-family-per-prefix-label-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled family per prefix label change.";
+  }
+
+  identity export-labeled-family-per-nexthop-label-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled family per nexthop label change.";
+  }
+
+  identity export-labeled-family-per-group-label-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled family per group label change.";
+  }
+
+  identity export-lu-traffic-stat-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled unicast traffic statistics changed.";
+  }
+
+  identity export-l2vpn-status-vector-change {
+    base export-eval-trigger-event;
+    description
+      "Export l2vpn status vector change.";
+  }
+
+  identity export-delay-route-advertisement-change {
+    base export-eval-trigger-event;
+    description
+      "Export delay route advertisement changed.";
+  }
+
+  identity export-flow-strip-nh-change {
+    base export-eval-trigger-event;
+    description
+      "Export family flow strip nexthop changed.";
+  }
+
+  identity export-flow-allow-policy-add-nh-change {
+    base export-eval-trigger-event;
+    description
+      "Export family flow allow policy add nexthop changed.";
+  }
+
+  identity export-flow-redirect-ip-action-send-change {
+    base export-eval-trigger-event;
+    description
+      "Export family flow legacy redirect ip action send changed.";
+  }
+
+  identity export-flow-redirect-ip-action-receive-change {
+    base export-eval-trigger-event;
+    description
+      "Export family flow legacy redirect ip action receive changed.";
+  }
+
+  identity export-flow-second-independent-resolution-change {
+    base export-eval-trigger-event;
+    description
+      "Export family flow second independent resolution changed.";
+  }
+
+  identity export-lu-traffic-stat-interval-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled unicast traffic statistics interval changed.";
+  }
+
+  identity export-lu-traffic-stat-file-change {
+    base export-eval-trigger-event;
+    description
+      "Export labeled unicast traffic statistics file changed.";
+  }
+
+  identity export-add-path-change {
+    base export-eval-trigger-event;
+    description
+      "Export add path changed.";
+  }
+
+  identity export-egress-protection-change {
+    base export-eval-trigger-event;
+    description
+      "Export egress protection changed.";
+  }
+
+  identity export-aigp-change {
+    base export-eval-trigger-event;
+    description
+      "Export aigp changed.";
+  }
+
+  identity export-elc-v2-compatible-change {
+    base export-eval-trigger-event;
+    description
+      "Export elc v2 compatible changed.";
+  }
+
+  identity export-out-q-priority-change {
+    base export-eval-trigger-event;
+    description
+      "Export output queue priority changed.";
+  }
+
+  identity export-policy-change {
+    base export-eval-trigger-event;
+    description
+      "Export policy changed.";
+  }
+
+  identity af-export-policy-change {
+    base export-eval-trigger-event;
+    description
+      "Export AF export policy changed.";
+  }
+
+  identity export-adv-static-policy-change {
+    base export-eval-trigger-event;
+    description
+      "Export advertise static policy changed.";
+  }
+
+  identity export-orr-change {
+    base export-eval-trigger-event;
+    description
+      "Export optimal route reflection changed.";
+  }
+
+  identity export-defaults-ebgp-no-policy-change {
+    base export-eval-trigger-event;
+    description
+      "Export default eBGP no-policy changed.";
+  }
+
+  identity export-global-id-change {
+    base export-eval-trigger-event;
+    description
+      "Export global-id changed.";
+  }
+
+  identity export-aspath-domain-change {
+    base export-eval-trigger-event;
+    description
+      "Export aspath domain changed.";
+  }
+
+  identity export-domain-pathid-change {
+    base export-eval-trigger-event;
+    description
+      "Export domain pathid changed.";
+  }
+
+  identity export-srgb-label-name-change {
+    base export-eval-trigger-event;
+    description
+      "Export SRGB label name changed.";
+  }
+
+  identity export-policy-content-change {
+    base export-eval-trigger-event;
+    description
+      "Export policy content changed.";
+  }
+
+  identity export-orr-policy-content-change {
+    base export-eval-trigger-event;
+    description
+      "Export orr policy content changed.";
+  }
+
+  identity export-addpath-policy-change {
+    base export-eval-trigger-event;
+    description
+      "Export addpath policy changed.";
+  }
+
+  identity export-transit-cnh-change {
+    base export-eval-trigger-event;
+    description
+      "Export chained-composite-next-hop transit l2vpn|l3vpn|labeled-bgp changed.";
+  }
+
+  identity export-transit-ldp-cnh-change {
+    base export-eval-trigger-event;
+    description
+      "Export chained-composite-next-hop ingress ldp changed.";
+  }
+
+  identity export-loadbalance-label-capacity-change {
+    base export-eval-trigger-event;
+    description
+      "Export forwarding-options load-balance-label-capability changed.";
+  }
+
+  identity export-loadbalance-label-stitching-capacity-change {
+    base export-eval-trigger-event;
+    description
+      "Export forwarding-options load-balance-label-stitching-capability changed.";
+  }
+
+  identity export-bgp-static-policy-content-change {
+    base export-eval-trigger-event;
+    description
+      "Export BGP static policy content changed.";
+  }
+
+  identity export-switchover-change {
+    base export-eval-trigger-event;
+    description
+      "Export switchover changed.";
+  }
+
+  identity export-dynamic-db-policy-content-change {
+    base export-eval-trigger-event;
+    description
+      "Export BGP dynamic DB export policy content changed.";
+  }
+
+  identity export-srv6-change {
+    base export-eval-trigger-event;
+    description
+      "Export SRv6 related parameter changed.";
+  }
+
+  identity export-domain-pathid-send-change {
+    base export-eval-trigger-event;
+    description
+      "Export domain pathid send changed.";
+  }
+
+  identity export-link-bw-ext-comm-change {
+    base export-eval-trigger-event;
+    description
+      "Export send-non-transitive-link-bw-extended-community changed.";
+  }
+
+  identity pre-export-filter-change {
+    base export-eval-trigger-event;
+    description
+      "Pre export filter changed.";
+  }
+
+  identity export-fabric-color-change {
+    base export-eval-trigger-event;
+    description
+      "Export fabric color changed.";
+  }
+
+  identity export-fabric-color-content-change {
+    base export-eval-trigger-event;
+    description
+      "Export fabric color content changed.";
+  }
+
+  /*
+   ***************************************************
+   * Identities resembling import evaluation triggers.
+   ***************************************************
+   */
+
+  identity import-eval-trigger-event {
+    description
+      "Import evaluation trigger identities.";
+  }
+
+  identity import-no-change {
+    base import-eval-trigger-event;
+    description
+      "Import evaluation no change.";
+  }
+
+  identity import-address-family-accept-local-nh-change {
+    base import-eval-trigger-event;
+    description
+      "Import family accept-local-nexthop config changed.";
+  }
+
+  identity import-address-family-accept-own-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import family accept-own config changed.";
+  }
+
+  identity import-traffic-stat-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import traffic-statistics config changed.";
+  }
+
+  identity import-aggregate-label-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import aggregate-label config changed.";
+  }
+
+  identity import-address-family-nh-resolution-no-resolution-cfg-change {
+    base import-eval-trigger-event;
+    description
+      "Import family nexthop-resolution no-resolution config changed.";
+  }
+
+  identity import-address-family-nh-preserve-nh-hierarchy-chnage {
+    base import-eval-trigger-event;
+    description
+      "Import family nexthop-resolution preserve-nexthop-hierarchy config changed.";
+  }
+
+  identity import-no-install-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import no-install config changed.";
+  }
+
+  identity import-rib-group-related-change {
+    base import-eval-trigger-event;
+    description
+      "Import rib-group changed.";
+  }
+
+  identity import-vpn-rib-group-change {
+    base import-eval-trigger-event;
+    description
+      "Import VPN rib-group changed.";
+  }
+
+  identity import-address-family-multi-topology-change {
+    base import-eval-trigger-event;
+    description
+      "Import family multi-topology changed.";
+  }
+
+  identity import-flow-no-validate-change {
+    base import-eval-trigger-event;
+    description
+      "Import family ipv4 flow no-validate policy changed.";
+  }
+
+  identity import-address-family-loop-change {
+    base import-eval-trigger-event;
+    description
+      "Import family loops changed.";
+  }
+
+  identity import-address-family-egress-protection-change {
+    base import-eval-trigger-event;
+    description
+      "Import family egress-protection related change.";
+  }
+
+  identity import-address-family-aigp-change {
+    base import-eval-trigger-event;
+    description
+      "Import family aigp changed.";
+  }
+
+  identity import-address-family-entropy-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import family entropy-label config changed.";
+  }
+
+  identity import-r-target-advertise-change {
+    base import-eval-trigger-event;
+    description
+      "Import family route-target advertise-default config changed.";
+  }
+
+  identity import-cnh-transit-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import chained-composite-next-hop transit config changed.";
+  }
+
+  identity import-cnh-ingress-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import chained-composite-next-hop ingress config changed.";
+  }
+
+  identity import-address-family-protection-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import family protection config changed.";
+  }
+
+  identity import-receive-ovs-config-change {
+    base import-eval-trigger-event;
+    description
+      "Receive origin validation state community toggled.";
+  }
+
+  identity import-l2vpn-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import l2vpn config changed.";
+  }
+
+  identity import-drop-path-attr-change {
+    base import-eval-trigger-event;
+    description
+      "Import drop-path-attributes config changed.";
+  }
+
+  identity import-ignore-path-attr-change {
+    base import-eval-trigger-event;
+    description
+      "Import ignore-path-attributes config changed.";
+  }
+
+  identity import-keep-none-add-change {
+    base import-eval-trigger-event;
+    description
+      "Import keep none config added.";
+  }
+
+  identity import-keep-none-delete-change {
+    base import-eval-trigger-event;
+    description
+      "Import keep none config removed.";
+  }
+
+  identity import-keep-all-add-change {
+    base import-eval-trigger-event;
+    description
+      "Import keep all config added.";
+  }
+
+  identity import-keep-all-delete-change {
+    base import-eval-trigger-event;
+    description
+      "Import keep all config removed.";
+  }
+
+  identity import-accept-remote-nh-change {
+    base import-eval-trigger-event;
+    description
+      "Import accept-remote-nexthop config changed.";
+  }
+
+  identity import-multipath-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import BGP multipath config changed.";
+  }
+
+  identity import-enforce-first-as-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import BGP enforce-first-as config changed.";
+  }
+
+  identity import-safi129-change {
+    base import-eval-trigger-event;
+    description
+      "Import BGP rfc6514-compliant-safi129 config changed.";
+  }
+
+  identity import-link-bw-auto-sense-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import BGP link-bandwidth auto-sense config changed.";
+  }
+
+  identity import-address-family-damping-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import damping config changed.";
+  }
+
+  identity import-advertise-inactive-change {
+    base import-eval-trigger-event;
+    description
+      "Import BGP advertise-inactive config changed.";
+  }
+
+  identity import-bgp-protocol-pref-change {
+    base import-eval-trigger-event;
+    description
+      "Import BGP protocol preference changed.";
+  }
+
+  identity import-cluster-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import cluster config changed.";
+  }
+
+  identity import-policy-change {
+    base import-eval-trigger-event;
+    description
+      "Import policy changed.";
+  }
+
+  identity import-address-family-import-policy-change {
+    base import-eval-trigger-event;
+    description
+      "Import AF import policy changed.";
+  }
+
+  identity import-vrf-change {
+    base import-eval-trigger-event;
+    description
+      "VRF import changed.";
+  }
+
+  identity import-independent-resolve-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import secondary independent resolution config changed.";
+  }
+
+  identity import-route-target-policy-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import family route-target-policy config changed.";
+  }
+
+  identity import-address-family-nh-color-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import address-family extended-nexthop-color config changed.";
+  }
+
+  identity import-accept-prefix-sid-change {
+    base import-eval-trigger-event;
+    description
+      "Import accept-prefix-SID removed.";
+  }
+
+  identity import-shared-ifa-change {
+    base import-eval-trigger-event;
+    description
+      "Import shared IFA change.";
+  }
+
+  identity import-admin-soft-change {
+    base import-eval-trigger-event;
+    description
+      "Import administrative soft-reconfig.";
+  }
+
+  identity import-ipv4flow-no-validate-policy-change {
+    base import-eval-trigger-event;
+    description
+      "Import family ipv4 flow no-validate policy content changed.";
+  }
+
+  identity import-ipv4flow-legacy-redirect-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import family ipv4 flow legacy-redirect-ip-action config changed.";
+  }
+
+  identity import-as-local-as-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import autonomous-system or local-as related config changed.";
+  }
+
+  identity import-mvpn-import-eval-refresh {
+    base import-eval-trigger-event;
+    description
+      "Import MVPN requested import-eval and refresh.";
+  }
+
+  identity import-address-family-rib-import-policy-change {
+    base import-eval-trigger-event;
+    description
+      "Import family rib-group import-policy content changed.";
+  }
+
+  identity import-graceful-shut-receiver-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import graceful-shutdown receiver config changed.";
+  }
+
+  identity import-graceful-shut-sender-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import graceful-shutdown sender config changed.";
+  }
+
+  identity import-defaults-ebgp-no-policy-change {
+    base import-eval-trigger-event;
+    description
+      "Import defaults ebgp no-policy config changed.";
+  }
+
+  identity import-bgp-peer-switchover {
+    base import-eval-trigger-event;
+    description
+      "BGP peer switchover.";
+  }
+
+  identity import-mvpn-new-c-multicast-rt {
+    base import-eval-trigger-event;
+    description
+      "INET-MVPN new cmcast-rt-import.";
+  }
+
+  identity import-ipv6mvpn-new-c-multicast-rt {
+    base import-eval-trigger-event;
+    description
+      "INET6-MVPN new cmcast-rt-import.";
+  }
+
+  identity import-ipv4-transport-target-change {
+    base import-eval-trigger-event;
+    description
+      "Import INET-TRANSPORT - import transport-target update.";
+  }
+
+  identity import-ipv6-transport-target-change {
+    base import-eval-trigger-event;
+    description
+      "Import INET6-TRANSPORT - import transport-target update.";
+  }
+
+  identity import-bgp-ipv4-multicast-instance-change {
+    base import-eval-trigger-event;
+    description
+      "Import INETBGPMCAST new bgpmcast instance.";
+  }
+
+  identity import-bgp-ipv6-multicast-instance-change {
+    base import-eval-trigger-event;
+    description
+      "Import INET6BGPMCAST new bgpmcast instance.";
+  }
+
+  identity import-evpn-new-esi-rt {
+    base import-eval-trigger-event;
+    description
+      "Import EVPN New esi-rt-import.";
+  }
+
+  identity import-resolution-scheme-ribs-change {
+    base import-eval-trigger-event;
+    description
+      "Import Resolution Scheme creation or resolution-ribs change.";
+  }
+
+  identity import-bgp-resolution-scheme-delete {
+    base import-eval-trigger-event;
+    description
+      "Import Resolution Scheme Deletion.";
+  }
+
+  identity import-rt-task-pending-import-eval {
+    base import-eval-trigger-event;
+    description
+      "Import BGP rt-task detected pending import-eval.";
+  }
+
+  identity import-address-family-add-rr-asbr {
+    base import-eval-trigger-event;
+    description
+      "Import address-family added to RR/ASBR mode.";
+  }
+
+  identity import-address-family-delete-rr-asbr {
+    base import-eval-trigger-event;
+    description
+      "Import address-family deleted to RR/ASBR mode.";
+  }
+
+  identity import-domain-path-receive-request-eval {
+    base import-eval-trigger-event;
+    description
+      "Import D-PATH receive requested import-eval.";
+  }
+
+  identity import-ifl-link-bw-change-requested-eval {
+    base import-eval-trigger-event;
+    description
+      "Import IFL link-bandwidth change requested import-eval.";
+  }
+
+  identity import-link-bw-global-config-change {
+    base import-eval-trigger-event;
+    description
+      "Import Link-bandwidth global configuration changed.";
+  }
+
+  identity import-ibgp-no-loop-check {
+    base import-eval-trigger-event;
+    description
+      "IBGP no loop check.";
+  }
+
+  identity import-ibgp-loops {
+    base import-eval-trigger-event;
+    description
+      "IBGP loop present.";
+  }
+
+  identity import-ebgp-loops {
+    base import-eval-trigger-event;
+    description
+      "EBGP loops present.";
+  }
+
+  /*
+   ******************************************************
+   * Identities resembling local-rib evaluation triggers.
+   ******************************************************
+   */
+
+  identity local-rib-eval-trigger-event {
+    description
+      "Local rib evaluation trigger identities.";
+  }
+
+  identity local-rib-no-event {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib default trigger.";
+  }
+
+  identity local-rib-path-select-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib path selection changed.";
+  }
+
+  identity local-rib-max-ecmp-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib routing-options max ECMP changed.";
+  }
+
+  identity local-rib-dynamic-signal-tunnel-pref-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib routing-options dynamic-tunnels signal-tunnel-preference changed.";
+  }
+
+  identity local-rib-mpls-ipv6-tunnel-pref-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib mpls ipv6-tunneling changed.";
+  }
+
+  identity local-rib-mpls-ctx-id-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib mpls egress-protection context-identifier changed.";
+  }
+
+  identity local-rib-mpls-no-propagate-ttl-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib mpls no-propagate-ttl changed.";
+  }
+
+  identity local-rib-validation-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib routing-options validation changed.";
+  }
+
+  identity local-rib-no-vrf-propagate-ttl-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib routing-instances no-vrf-propagate-ttl changed.";
+  }
+
+  identity local-rib-sr-pref-override-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib bgp sr-preference-override changed.";
+  }
+
+  identity local-rib-srv6-resolve-pnh-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib bgp source-packet-routing srv6 resolve-over-bgp-pnh changed.";
+  }
+
+  identity local-rib-protect-core-change {
+    base local-rib-eval-trigger-event;
+    description
+      "Local rib routing-instances routing-options protect core changed.";
+  }
+
+  /*
+   *******************************************
+   * Identities resembling BGP session states.
+   *******************************************
+   */
+
+  identity session-state {
+    description
+      "Base identity for BGP state.";
+  }
+
+  identity idle {
+    base session-state;
+    description
+      "BGP state idle.";
+  }
+
+  identity connect {
+    base session-state;
+    description
+      "BGP state connect.";
+  }
+
+  identity down {
+    base session-state;
+    description
+      "BGP state down.";
+  }
+
+  identity open-sent {
+    base session-state;
+    description
+      "BGP state open sent.";
+  }
+
+  identity open-confirm {
+    base session-state;
+    description
+      "BGP state open confirm.";
+  }
+
+  identity established-rsync {
+    base session-state;
+    description
+      "BGP state established Re-sync.";
+  }
+
+  identity established {
+    base session-state;
+    description
+      "BGP state established.";
+  }
+
+  /*
+   *********************************************
+   * Identities resembling address family types.
+   *********************************************
+   */
+
+  identity address-family-type {
+    description
+      "Base identity for address-family types.";
+  }
+
+  identity address-family-none {
+    base address-family-type;
+    description
+      "Address family none.";
+  }
+
+  identity ipv4-unicast {
+    base address-family-type;
+    description
+      "Address family type ipv4-unicast.";
+  }
+
+  identity ipv4-multicast {
+    base address-family-type;
+    description
+      "Address family type ipv4-multicast.";
+  }
+
+  identity ipv4-vpn-unicast {
+    base address-family-type;
+    description
+      "Address family type ipv4-vpn-unicast.";
+  }
+
+  identity ipv4-vpn-multicast {
+    base address-family-type;
+    description
+      "Address family type ipv4-vpn-multicast.";
+  }
+
+  identity ipv6-unicast {
+    base address-family-type;
+    description
+      "Address family type ipv6-unicast.";
+  }
+
+  identity ipv6-multicast {
+    base address-family-type;
+    description
+      "Address family type ipv6-multicast.";
+  }
+
+  identity l2vpn {
+    base address-family-type;
+    description
+      "Address family type L2VPN.";
+  }
+
+  identity l2vpn-mspw-ad {
+    base address-family-type;
+    description
+      "Address family type L2VPN Mspwd AD.";
+  }
+
+  identity ipv4-labeled-unicast {
+    base address-family-type;
+    description
+      "Address family type ipv4-labeled-unicast.";
+  }
+
+  identity ipv6-vpn-unicast {
+    base address-family-type;
+    description
+      "Address family type ipv6-vpn-unicast.";
+  }
+
+  identity ipv6-labeled-unicast {
+    base address-family-type;
+    description
+      "Address family type ipv6-labeled-unicast.";
+  }
+
+  identity ipv6-vpn-multicast {
+    base address-family-type;
+    description
+      "Address family type ipv6-vpn-multicast.";
+  }
+
+  identity atmvpn {
+    base address-family-type;
+    description
+      "Address family type atmvpn.";
+  }
+
+  identity route-target {
+    base address-family-type;
+    description
+      "Address family type route-target.";
+  }
+
+  identity ipv4-flow {
+    base address-family-type;
+    description
+      "Address family type ipv4-flow.";
+  }
+
+  identity ipv4-vpn-flow {
+    base address-family-type;
+    description
+      "Address family type ipv4-vpn-flow.";
+  }
+
+  identity ipv6-flow {
+    base address-family-type;
+    description
+      "Address family type ipv6-flow.";
+  }
+
+  identity ipv6-vpn-flow {
+    base address-family-type;
+    description
+      "Address family type ipv6-vpn-flow.";
+  }
+
+  identity iso-unicast {
+    base address-family-type;
+    description
+      "Address family type iso-unicast.";
+  }
+
+  identity iso-vpn-unicast {
+    base address-family-type;
+    description
+      "Address family type iso-vpn-unicast.";
+  }
+
+  identity ipv4-mvpn {
+    base address-family-type;
+    description
+      "Address family type ipv4-mvpn.";
+  }
+
+  identity ipv6-mvpn {
+    base address-family-type;
+    description
+      "Address family type ipv6-mvpn.";
+  }
+
+  identity ipv4-mdt {
+    base address-family-type;
+    description
+      "Address family type ipv4-mdt.";
+  }
+
+  identity evpn {
+    base address-family-type;
+    description
+      "Address family type evpn.";
+  }
+
+  identity te-unicast {
+    base address-family-type;
+    description
+      "Address family type te-unicast.";
+  }
+
+  identity ipv4-segment-routing-te {
+    base address-family-type;
+    description
+      "Address family type ipv4-segment-routing-te.";
+  }
+
+  identity ipv6-segment-routing-te {
+    base address-family-type;
+    description
+      "Address family type ipv6-segment-routing-te.";
+  }
+
+  identity label-mirror {
+    base address-family-type;
+    description
+      "Address family type label-mirror.";
+  }
+
+  identity mpls-unicast {
+    base address-family-type;
+    description
+      "Address family type mpls-unicast.";
+  }
+
+  identity ipv4-transport {
+    base address-family-type;
+    description
+      "Address family type ipv4-transport.";
+  }
+
+  identity ipv6-transport {
+    base address-family-type;
+    description
+      "Address family type ipv6-transport.";
+  }
+
+  identity ipv4-bgpmcast {
+    base address-family-type;
+    description
+      "Address family type ipv4-bgpmcast.";
+  }
+
+  identity ipv6-bgpmcast {
+    base address-family-type;
+    description
+      "Address family type ipv6-bgpmcast.";
+  }
+
+  /*
+   *****************************************
+   * Identities resembling SRGB label types.
+   *****************************************
+   */
+
+  identity srgb-label-type {
+    description
+      "Base identity for SRGB label types.";
+  }
+
+  identity srgb-type-none {
+    base srgb-label-type;
+    description
+      "SRGB label type None.";
+  }
+
+  identity srgb-type-isis {
+    base srgb-label-type;
+    description
+      "SRGB label type ISIS.";
+  }
+
+  identity srgb-type-ospf {
+    base srgb-label-type;
+    description
+      "SRGB label type OSPF.";
+  }
+
+  identity srgb-type-bgp {
+    base srgb-label-type;
+    description
+      "SRGB label type BGP.";
+  }
+
+  identity srgb-type-global {
+    base srgb-label-type;
+    description
+      "Global SRGB label type.";
+  }
+}

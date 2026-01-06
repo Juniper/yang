@@ -1,0 +1,129 @@
+ module junos-genstate-cp-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/cp-interface-information";
+   prefix jgcii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for cp-interface-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping cp-interface-information-top {
+     description "Top-level grouping";
+     container cp-interface-information {
+       description "Top-level container";
+       list cp-interface {
+         key "cp-interface-name";
+         leaf cp-interface-name {
+           type string;
+           description "Interface name";
+         }
+         leaf cp-fallen-back {
+           type string;
+           description "Boolean value indicating if the interface has fallen back toCP from dot1x";
+         }
+         container cp-supplicant-list {
+           list cp-supplicant {
+             key "cp-supplicant-mac-address";
+             leaf cp-supplicant-name {
+               type string;
+               description "User name as sent by the supplicant for authentication";
+             }
+             leaf cp-supplicant-mac-address {
+               type jt:mac-addr;
+               description "MAC address of the supplicant";
+             }
+             leaf cp-supplicant-state {
+               type string;
+               description "Current state of the supplicant";
+             }
+             leaf cp-dynamic-filter {
+               type string;
+               description "Dynamic firewall filter applied for this supplicant";
+             }
+             leaf cp-dynamic-session-lifespan {
+               type uint32;
+               description "Lifespan timer assigned to the session dynamically";
+             }
+             leaf cp-session-expiration-time {
+               type uint32;
+               description "How long before the CP session expires";
+             }
+             leaf cp-user-keepalive-expiration-time {
+               type uint32;
+               description "How long before the CP User-Keepalive session expires";
+             }
+             leaf cp-eapol-block {
+               type string;
+               description "Eapol block is configured or not";
+             }
+           }
+         }
+         leaf cp-administrative-mode {
+           type string;
+           description "Supplicant authorization mode";
+         }
+         leaf cp-number-of-retries {
+           type uint32;
+           description "Number of retries after which port is placed into wait state";
+         }
+         leaf cp-quiet-period {
+           type uint32;
+           description "Time to wait after authentication failure";
+         }
+         leaf cp-configured-session-lifespan {
+           type uint32;
+           description "Configured Session Lifespan timer";
+         }
+         leaf cp-server-timeout {
+           type uint32;
+           description "Time to wait before invoking server-fail action";
+         }
+         leaf cp-keepalive-timeout {
+           type uint32;
+           description "Configured User-keepalive timer";
+         }
+         leaf cp-last-mac-learn-req {
+           type jt:mac-addr;
+           description "Last Mac learn request received on the interface.";
+         }
+         leaf cp-last-mac-learn-time {
+           type string;
+           description "Timestamp for last Mac learn request received on the interface";
+         }
+         leaf cp-number-of-connected-supplicants {
+           type uint32;
+           description "Number of connected supplicants";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds cp-interface-information to top-level genstate";
+     uses cp-interface-information-top;
+   }
+ }

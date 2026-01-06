@@ -1,0 +1,226 @@
+module junos-state-interfaces-ip {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/interfaces/ip";
+  prefix js-if-ip;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of IP specific nodes for
+     JUNOS Interface state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-07-17 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef ip-address-origin {
+    type enumeration {
+      enum static {
+        description
+          "Indicates that the address has been statically configured -
+           for example, using NETCONF or a CLI.";
+      }
+      enum dhcp {
+        description
+          "Indicates an address that has been assigned to this system by
+           way of the DHCP protocol.";
+      }
+      enum link-layer {
+        description
+          "Indicates an address created by IPv6 stateless
+           autoconfiguration (SLAAC) that embeds a link-layer address in
+           its interface identifier.";
+      }
+    }
+    description
+      "The origin of the IP address.";
+  }
+
+
+  grouping common-family-state {
+    description
+      "Per-family operational state data for interfaces.";
+
+    leaf mtu {
+      type uint32;
+      description
+        "The size, in octets, of the largest IPV4/IPv6 packet that the
+        interface will send and receive.
+        The server may restrict the allowed values for this leaf,
+        depending on the interface's type.";
+    }
+  }
+
+  grouping global-ip-address-state {
+    description
+      "Per-address operational state data for interfaces";
+
+    leaf prefix-length {
+      type uint8 {
+        range "0..128";
+      }
+      description
+        "The length of the subnet prefix.";
+    }
+
+    leaf origin {
+      type ip-address-origin;
+      description
+        "The origin of this address, e.g., statically configured,
+         assigned by DHCP.";
+    }
+
+    leaf primary {
+      type boolean;
+      description
+        "When set to true, address is used as the source address for
+         broadcast and multicast packets originated from this
+         interface.";
+    }
+
+    leaf preferred {
+      type boolean;
+      description
+        "When set to true, address used for packets sourced by the local
+         routing platform to destinations on the subnet.  By default,
+         the numerically lowest local address is chosen.";
+    }
+  }
+
+  grouping ipv4-address-state {
+    description
+      "Per-address operational state data for IPv4 interfaces";
+
+    uses global-ip-address-state;
+  }
+
+  grouping ipv6-address-state {
+    description
+      "Per-address operational state data for IPv6 interfaces";
+
+    uses global-ip-address-state;
+
+    leaf link-local {
+      type boolean;
+      description
+        "When set to true, address is a link-local address.";
+    }
+  }
+
+  grouping address-family-top {
+    description
+      "Top-level address family related state";
+
+    container family {
+      description
+        "State parameters for the address family.";
+
+        uses inet-top;
+        uses inet6-top;
+    }
+  }
+
+  grouping inet-top {
+    description
+      "Top-level IPv4 address family related state";
+
+    container inet {
+      description
+        "State parameters for the IPv4 address family";
+
+      uses common-family-state;
+
+      container addresses {
+        description
+          "Enclosing container for address list";
+
+        list address {
+          key "ip";
+          description
+            "The list of IPv4 addresses on the interface";
+
+          leaf ip {
+            type inet:ipv4-address;
+            description
+              "The IPv4 address on the interface";
+          }
+
+          uses ipv4-address-state;
+        }
+      }
+    }
+  }
+
+  grouping inet6-top {
+    description
+      "Top-level IPv6 address family related state";
+
+    container inet6 {
+      description
+        "State parameters for the IPv6 address family";
+
+      uses common-family-state;
+
+      container addresses {
+        description
+          "Enclosing container for address list";
+
+        list address {
+          key "ip";
+          description
+            "The list of IPv6 addresses on the interface";
+
+          leaf ip {
+            type inet:ipv6-address;
+            description
+              "The IPv6 address on the interface";
+          }
+
+          uses ipv6-address-state;
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface/js-if:units" +
+          "/js-if:unit" {
+    description
+      "Adds address family related state to interfaces";
+
+    uses address-family-top;
+  }
+}

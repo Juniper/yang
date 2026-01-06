@@ -1,0 +1,149 @@
+module junos-qmon {
+
+  yang-version "1";
+
+  // namespace
+  namespace "http://juniper.net/yang/junos-qmon";
+
+  prefix "junos-qmon";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+  // meta
+  organization "Juniper Networks";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module provides data definitions for PFE qmon counters
+    ";
+
+  revision 2023-08-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+ grouping qmon-ingress-counters {
+        leaf queue-number {
+            type uint32;
+            description "Interface queue number";
+        }
+        leaf peak-buffer-occupancy-bytes {
+            type uint32;
+            description "Peak value of queue buffer occupancy in bytes";
+        }
+        leaf packets {
+            type uint64;
+            description "Packets egress out via interface queue";
+        }
+        leaf bytes {
+            type uint64;
+            description "Bytes egress out via interface queue";
+        }
+        leaf tail-drop-packets {
+            type uint64;
+            description "Number of tail drop packets";
+        }
+        leaf tail-drop-bytes {
+            type uint64;
+            description "Number of tail drop bytes";
+        }
+ }
+
+ grouping qmon-egress-counters {
+        leaf queue-number {
+            type uint32;
+            description "Interface queue number";
+        }
+        leaf peak-buffer-occupancy-bytes {
+            type uint32;
+            description "Peak value of queue buffer occupancy in bytes";
+        }
+        leaf peak-buffer-occupancy-percent {
+            type uint32;
+            description "Peak value of queue buffer occupancy in percentage";
+        }
+        leaf packets {
+            type uint64;
+            description "Packets egress out via interface queue";
+        }
+        leaf bytes {
+            type uint64;
+            description "Bytes egress out via interface queue";
+        }
+        leaf tail-drop-packets {
+            type uint64;
+            description "Number of tail drop packets";
+        }
+        leaf tail-drop-bytes {
+            type uint64;
+            description "Number of tail drop bytes";
+        }
+ }
+
+  grouping qmon-detail {
+    list qmon-sw {
+       description
+       "Describes Queue monitoring list";
+       key name;
+
+      leaf name {
+        type string;
+        description
+          "Describes interface name";
+      }
+        container state {
+         config false;
+          description "container node for state";
+            leaf parent_ae_name {
+              type string;
+            description "Name of ae, interface is member of";
+          }
+        }
+       list ingress {
+         config false;
+         key queue-number;
+         uses qmon-ingress-counters;
+         description "Queue monitoring direction";
+       }
+       list egress {
+         config false;
+         key queue-number;
+         uses qmon-egress-counters;
+         description "Queue monitoring direction";
+       }
+    }
+}
+  grouping pfe-qmon {
+    description
+      "This describes the data exported by PFE jvision qmon sensor";
+
+    container junos {
+      config false;
+      description "JunOS OS";
+
+      container system {
+        description "Junos System";
+
+        container linecard {
+          description "Contains PFE resources";
+            uses qmon-detail;
+
+        }
+      }
+    }
+  }
+
+  uses pfe-qmon;
+
+}

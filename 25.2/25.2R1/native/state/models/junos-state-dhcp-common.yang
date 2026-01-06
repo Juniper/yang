@@ -1,0 +1,109 @@
+module junos-state-dhcp-common {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/dhcp/common";
+  prefix js-dhcp-common;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of common groupings and data
+     types for various DHCP features (e.g. relay, server, security).
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-06-28 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping dhcp-binding-common {
+    description
+      "Grouping of common attributes that exist for both DHCPv4
+       and DHCPv6 bindings";
+
+    leaf interface {
+      type string;
+      description
+        "The Interface on which the DHCPv4/v6 binding was learnt";
+    }
+    leaf lease-expiry {
+      type jt:timeticks64;
+      units seconds;
+      description
+        "This timestamp indicates the absolute time when the DHCP lease
+         expires.
+
+         The value is the timestamp in seconds relative to the Unix
+         Epoch (Jan 1, 1970 00:00:00 UTC).";
+    }
+  }
+
+  grouping dhcpv4-binding-common {
+    description
+      "Grouping of common attributes that exist for DHCPv4
+       bindings across DHCP relay/server/security";
+
+    leaf address {
+      type inet:ipv4-address;
+      description
+        "The IPv4 address requested/assigned by/to the
+         client device";
+    }
+
+    leaf mac-address {
+      type yang:mac-address;
+      description
+        "The MAC address associated with the client device";
+    }
+
+    uses dhcp-binding-common;
+  }
+
+  grouping dhcpv6-binding-common {
+    description
+      "Grouping of common attributes that exist for DHCPv6
+       bindings across DHCPv6 relay/server/security";
+
+    leaf address {
+      type inet:ipv6-prefix;
+      description
+        "The IPv6 address/prefix requested/assigned by/to the
+         client device. The IPv6 prefixes are represented as
+         <prefix>/<prefix_length>. The IPv6 addresses shall be
+         shown as a host prefix with prefix length 128.";
+    }
+
+    uses dhcp-binding-common;
+  }
+}

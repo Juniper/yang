@@ -1,0 +1,62 @@
+module junos-state-routing-options {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/routing-options";
+  prefix js-ro;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Routing Option state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-08-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping routing-options-top {
+    description
+      "Top-level grouping for JUNOS routing-options state data.";
+
+    container routing-options {
+      description
+        "Encapsulating container for all JUNOS routing-options state.";
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" {
+    description
+      "Adds routing-options domain to top-level routing-instance state";
+
+    uses routing-options-top;
+  }
+}

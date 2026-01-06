@@ -1,0 +1,82 @@
+/*
+ * $Id:$
+ *
+ * Copyright (c) 2016, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module pfed_base {
+  yang-version "1";
+
+  // namespace
+  namespace "http://juniper.net/yang/pfedbase";
+
+  prefix "pfedbase";
+
+  // meta
+  organization "Juniper Networks, Inc.";
+
+  contact
+      "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+  revision 2024-01-23 {
+      description "Junos NPU memory telemetry Information data model";
+      reference "1.0.0";
+  }
+
+  grouping pfed-base {
+   container junos {
+   list npu-memory {
+     key pfe-name;
+        leaf pfe-name {
+           type string;
+        }
+        leaf combined-pool-name {
+           type string;
+        }
+        leaf combined-size {
+           type uint32;
+        }
+        leaf combined-usage-count {
+           type uint32;
+        }
+        leaf combined-utilization {
+           type uint32;
+        }
+        leaf global-pool-name {
+           type string;
+        }
+        leaf global-usage-count {
+           type uint32;
+        }
+        leaf global-alloc-count {
+           type uint32;
+        }
+        leaf global-free-count {
+           type uint32;
+        }
+        leaf local-pool-name {
+           type string;
+        }
+        leaf local-usage-count {
+           type uint32;
+        }
+        leaf local-alloc-count {
+           type uint32;
+        }
+        leaf local-free-count {
+           type uint32;
+        }
+     }
+   }
+  }
+
+  uses pfed-base;
+}

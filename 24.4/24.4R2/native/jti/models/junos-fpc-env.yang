@@ -1,0 +1,112 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2022, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-fpc-env {
+  yang-version "1";
+  namespace "http://juniper.net/yang/fpc-env";
+  prefix junos-fpc-env;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way 
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     fpc-env sensor.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-07-19 {
+    description
+      "Initial revision";
+  }
+
+   // Groups related to FPC Environment sensor
+   grouping fpc-env-pwr-stats-group {
+       leaf max-fpc-power {
+           description "The maximum power the FPC is allowed to use in Watts";
+           type uint32;
+           units watts;
+       }
+       leaf fpc-power {
+           description "The power used by the FPC in Watts";
+           type uint32;
+           units watts;
+       }
+   }
+
+   grouping fpc-env-volt-stats-group {
+       leaf voltage-sensor-name {
+           description "The name of the voltage sensor associated with the FPC";
+           type string;
+       }
+       leaf voltage-value {
+           description "The value of the voltage sensor in mV";
+           type uint32;
+           units mV;
+       }
+   }
+
+   grouping fpc-env-temp-stats-group {
+       leaf temp-sensor-name {
+           description "The name of the temperature sensor associated with the FPC";
+           type string;
+       }
+       leaf temp-value {
+           description "The value of the temperature sensor in degrees Celsius";
+           type uint32;
+           units celsius;
+       }
+   }
+
+   grouping fpc-env-group {
+       leaf name {
+           description "The name of the FPC for which this environment record is being exported";
+           type string;
+       }
+   }
+
+   grouping jnx-fpc-env-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container system {
+                description "Junos System container";
+                list linecard {
+                    description "Resources related to a linecard";
+                    uses fpc-env-group;
+                    key name;
+                    container environment {
+                        description "Resources related to a linecard's environment (power, voltage and temperature)";
+                        container power-record {
+                            uses fpc-env-pwr-stats-group;
+                        }
+                        list voltage-record {
+                            uses fpc-env-volt-stats-group;
+                            key voltage-sensor-name;
+                        }
+                        list temp-record {
+                            uses fpc-env-temp-stats-group;
+                            key temp-sensor-name;
+                        }
+                    }
+                }
+           }
+        }
+   }
+   uses jnx-fpc-env-top;
+}

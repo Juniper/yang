@@ -1,0 +1,94 @@
+ module junos-genstate-lfmd-ppm-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/lfmd-ppm-information";
+   prefix jglpi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for lfmd-ppm-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping lfmd-ppm-information-top {
+     description "Top-level grouping";
+     container lfmd-ppm-information {
+       description "Information about ppm entries installed by Link-Fault-Management process";
+       list lfmd-ppm-interface {
+         key "lfm-ppm-interface-name";
+         description "Information about ppm entries for a particular interface";
+         leaf lfm-ppm-interface-name {
+           type string;
+           description "Name of ppm interface";
+         }
+         container lfm-ppm-intf-entry {
+           description "Information about ppm interface entry";
+           leaf intf-present {
+             type string;
+             description "PPM interface entry configured or not";
+           }
+           leaf intf-distribution {
+             type string;
+             description "PPM interface entry distributed to pfe or not";
+           }
+         }
+         container lfm-ppm-tx-entry {
+           description "Information about ppm transmit entry";
+           leaf tx-present {
+             type string;
+             description "PPM transmit entry configured or not";
+           }
+           leaf tx-interval {
+             type string;
+             description "PPM transmit entry transmission interval";
+           }
+           leaf tx-distribution {
+             type string;
+             description "PPM transmit entry distributed to pfe or not";
+           }
+         }
+         container lfm-ppm-adj-entry {
+           description "Information about ppm adjacency entry";
+           leaf adj-present {
+             type string;
+             description "PPM adjacency entry configured or not";
+           }
+           leaf adj-holdtime {
+             type string;
+             description "PPM adjacency entry hold time";
+           }
+           leaf adj-distribution {
+             type string;
+             description "PPM adjacency entry distributed to pfe or not";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds lfmd-ppm-information to top-level genstate";
+     uses lfmd-ppm-information-top;
+   }
+ }

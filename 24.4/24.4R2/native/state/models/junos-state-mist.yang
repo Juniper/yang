@@ -1,0 +1,102 @@
+module junos-state-mist {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/mist";
+  prefix js-mist;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-system-controller {
+    prefix js-sys-ctlr;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-lldp {
+    prefix js-lldp;
+  }
+
+  import junos-state-mist-types {
+    prefix js-mist-types;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Mist Controller state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-03-14 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping controller-connectivity-top {
+    description
+      "Top-level grouping for Mist related state data";
+
+    container mist {
+      description
+        "Encapsulating container for all JUNOS Mist state";
+
+      leaf connectivity-state {
+        type js-mist-types:connectivity-state;
+        description
+          "Mist controller connectivity status code";
+      }
+
+      leaf error-code {
+        type uint32;
+        description
+          "Numerical error code that corresponds with the current
+           status code";
+      }
+    }
+  }
+
+  augment "/js:state/js-sys:system/js-sys-ctlr:controller-connectivity" {
+    description
+      "Adds Mist controller connectivity domain to top-level system
+       controller state";
+
+    uses controller-connectivity-top;
+  }
+
+  augment "/js:state/js-pro:protocols/js-lldp:lldp/js-lldp:interfaces" +
+          "/js-lldp:interface/js-lldp:neighbors/js-lldp:neighbor" +
+          "/js-sys-ctlr:controller-connectivity" {
+    description
+      "Adds Mist controller connectivity extensions to LLDP neighbor
+       state";
+
+    uses controller-connectivity-top;
+  }
+}

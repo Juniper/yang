@@ -1,0 +1,805 @@
+module junos-state-interfaces-queue {
+  yang-version "1.1";
+  namespace "http://yang.juniper.net/junos/state/interfaces/queue";
+  prefix js-if-queue;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  import junos-state-chassis {
+    prefix js-chas;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of queue statistics data for
+     JUNOS Interface state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-08-22 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "experimental";
+
+  grouping queues-top {
+    description
+      "Top-level grouping for parameters related to queue
+       statistics for an interface.";
+
+    container queues {
+      description
+        "Encapsulating container for physical interface and logical interface related
+         queue statistics";
+
+      uses in-queues-top;
+      uses out-queues-top;
+      uses virtual-output-queues-top;
+    }
+  }
+
+  grouping queue-keys-common {
+    description
+      "Grouping for common queue list keys";
+
+    leaf type {
+      description
+        "The type of queues under the interfaces";
+
+      type enumeration {
+        enum default {
+          description
+            "The default queues under the interface";
+        }
+        enum remaining {
+          description
+            "The remaining queues under the interface";
+        }
+      }
+    }
+
+    leaf id {
+      type uint8;
+      description
+        "Queue number of the given queue of the interface";
+    }
+  }
+
+  grouping in-queues-top {
+    description
+      "Top-level grouping for parameters related to ingress queue
+       statistics for an interface.";
+
+    container in-queues {
+      description
+        "Encapsulating container for physical interface and logical
+         interface related ingress queue statistics";
+
+      list in-queue {
+        description
+          "List of ingress queues";
+
+        key "type id";
+
+        uses queue-keys-common;
+        uses queue-statistics-common;
+      }
+    }
+  }
+
+  grouping out-queues-top {
+    description
+      "Top-level grouping for parameters related to egress queue
+       statistics for an interface.";
+
+    container out-queues {
+      description
+        "Encapsulating container for physical interface and logical
+         interface related egress queue statistics";
+
+      list out-queue {
+        description
+          "List of egress queues";
+
+        key "type id";
+
+        uses queue-keys-common;
+        uses queue-residency-time;
+        uses queue-statistics-common;
+      }
+    }
+  }
+
+  grouping virtual-output-queues-top {
+    description
+      "Top-level grouping for parameters related to egress queue
+       statistics for an interface.";
+
+    container virtual-output-queues {
+      description
+        "Encapsulating container for physical interface and logical
+         interface related egress queue statistics";
+
+      list virtual-output-queue {
+        description
+          "List for virtual output queues under the interface";
+
+        key "name";
+
+        leaf name {
+          type leafref {
+            path "/js:state/js-chas:chassis/js-chas:modules/js-chas:module/js-chas:name";
+          }
+          description
+            "Name of the PFE module on which the virtual output queues
+             are present.";
+        }
+
+        list out-queue {
+          description
+            "List of egress queues";
+
+          key "type id";
+
+          uses queue-keys-common;
+          uses queue-statistics-common;
+        }
+      }
+    }
+  }
+
+  grouping queue-residency-time {
+    description
+      "Grouping for queue residency time";
+
+    leaf maximum-residency-time {
+      type uint64;
+      units "nanoseconds";
+      description
+        "Maximum residency time across packets seen since the last
+         internal poll";
+    }
+
+    leaf average-residency-time {
+      type uint64;
+      units "nanoseconds";
+      description
+        "Average residency time across packets seen since the last
+         internal poll";
+    }
+  }
+
+  grouping queue-statistics-common {
+    description
+      "Grouping for queue statistics counters, rates and queue depths";
+
+    container counters {
+      description
+        "Encapsulating container for queue counters and depths";
+
+      uses queue-counters-common;
+    }
+
+    container rates {
+      description
+        "Encapsulating container for queue rates.  Rates under this
+         container are SW calculated, hence latency is expected between
+         statistics reap, rates calculation and their export";
+
+      uses queue-rates-common;
+    }
+
+    container queue-depths {
+      description
+        "Encapsulating container for queue depths";
+
+      uses queue-depths-common;
+    }
+  }
+
+  grouping queue-counters-common {
+    description
+      "Grouping for the queue counters and depths";
+
+    leaf queued-pkts {
+      type yang:counter64;
+      description
+        "Number of packets queued in this queue";
+    }
+
+    leaf queued-bytes {
+      type yang:counter64;
+      description
+        "Number of bytes queued in this queue";
+    }
+
+    leaf transmit-pkts {
+      type yang:counter64;
+      description
+        "Number of packets transmitted by this queue";
+    }
+
+    leaf transmit-bytes {
+      type yang:counter64;
+      description
+        "Number of bytes queued by this queue";
+    }
+
+    leaf tail-drop-pkts {
+      type yang:counter64;
+      description
+        "Number of packets tail-dropped by this queue";
+    }
+
+    leaf tail-drop-bytes {
+      type yang:counter64;
+      description
+        "Number of bytes tail-dropped by this queue";
+    }
+
+    leaf ecn-ce-marked-pkts {
+      type yang:counter64;
+      description
+        "Number of packets for which ECN codepoint has been changed from
+         ECT (ECN-Capable Transport) to CE (Congestion Experienced)";
+    }
+
+    leaf ecn-ce-marked-bytes {
+      type yang:counter64;
+      description
+        "Number of bytes for which ECN codepoint has been changed from
+         ECT (ECN-Capable Transport) to CE (Congestion Experienced)";
+    }
+
+    leaf rate-limit-pkts {
+      type yang:counter64;
+      description
+        "Number of packets rate-limit-dropped by this queue";
+    }
+
+    leaf rate-limit-bytes {
+      type yang:counter64;
+      description
+        "Number of bytes rate-limit-dropped by this queue";
+    }
+
+    leaf red-drop-pkts {
+      type yang:counter64;
+      description
+        "Number of packets red-dropped by this queue";
+    }
+
+    leaf red-drop-bytes {
+      type yang:counter64;
+      description
+        "Number of bytes red-dropped by this queue";
+    }
+
+    leaf red-drop-pkts-low-non-tcp {
+      type yang:counter64;
+      description
+        "Number of low priority non-TCP packets red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-bytes-low-non-tcp {
+      type yang:counter64;
+      description
+        "Number of low priority non-TCP bytes red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-pkts-low-tcp {
+      type yang:counter64;
+      description
+        "Number of low priority TCP packets red-dropped by this queue";
+    }
+
+    leaf red-drop-bytes-low-tcp {
+      type yang:counter64;
+      description
+        "Number of low priority TCP bytes red-dropped by this queue";
+    }
+
+    leaf red-drop-pkts-high-non-tcp {
+      type yang:counter64;
+      description
+        "Number of high priority non-TCP packets red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-bytes-high-non-tcp {
+      type yang:counter64;
+      description
+        "Number of high priority non-TCP bytes red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-pkts-high-tcp {
+      type yang:counter64;
+      description
+        "Number of high priority TCP packets red-dropped by this queue";
+    }
+
+    leaf red-drop-bytes-high-tcp {
+      type yang:counter64;
+      description
+        "Number of high priority TCP bytes red-dropped by this queue";
+    }
+
+    leaf red-drop-pkts-low {
+      type yang:counter64;
+      description
+        "Number of low priority packets red-dropped by this queue";
+    }
+
+    leaf red-drop-bytes-low {
+      type yang:counter64;
+      description
+        "Number of low priority bytes red-dropped by this queue";
+    }
+
+    leaf red-drop-pkts-medium-low {
+      type yang:counter64;
+      description
+        "Number of medium-low priority packets red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-bytes-medium-low {
+      type yang:counter64;
+      description
+        "Number of medium-low priority bytes red-dropped by this queue";
+    }
+
+    leaf red-drop-pkts-medium-high {
+      type yang:counter64;
+      description
+        "Number of medium-high priority packets red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-bytes-medium-high {
+      type yang:counter64;
+      description
+        "Number of medium-high priority bytes red-dropped by this
+         queue";
+    }
+
+    leaf red-drop-pkts-medium {
+      type yang:counter64;
+      description
+        "Number of medium priority packets red-dropped by this queue";
+    }
+
+    leaf red-drop-bytes-medium {
+      type yang:counter64;
+      description
+        "Number of medium priority bytes red-dropped by this queue";
+    }
+
+    leaf red-drop-pkts-high {
+      type yang:counter64;
+      description
+        "Number of high priority packets red-dropped by this queue";
+    }
+
+    leaf red-drop-bytes-high {
+      type yang:counter64;
+      description
+        "Number of high priority bytes red-dropped by this queue";
+    }
+
+    leaf total-drop-pkts {
+      type yang:counter64;
+      description
+        "Total number of packets dropped by this queue";
+    }
+
+    leaf total-drop-bytes {
+      type yang:counter64;
+      description
+        "Total number of bytes dropped by this queue";
+    }
+
+    leaf reserved-buffer-pkts {
+      type yang:counter64;
+      description
+        "Queues's usage of reserved buffer pool in packets";
+    }
+
+    leaf reserved-buffer-bytes {
+      type yang:counter64;
+      description
+        "Queues's usage of reserved buffer pool in bytes";
+    }
+
+    leaf shared-buffer-pkts {
+      type yang:counter64;
+      description
+        "Queues's usage of shared buffer pool in pkts";
+    }
+
+    leaf shared-buffer-bytes {
+      type yang:counter64;
+      description
+        "Queues's usage of shared buffer pool in bytes";
+    }
+  }
+  grouping queue-rates-common {
+    description
+      "Grouping for the queue rates";
+
+    leaf queued-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which packets are queued in the queue, measured in
+         packets per second";
+    }
+
+    leaf queued-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which bytes are queued in the queue, measured in
+         bytes per second";
+    }
+
+    leaf transmit-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which packets are transmitted in the queue,
+         measured in packets per second";
+    }
+
+    leaf transmit-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which bytes are transmitted in the queue, measured
+         in bytes per second";
+    }
+
+    leaf tail-drop-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which packets are tail-dropped in the queue,
+         measured in packets per second";
+    }
+
+    leaf tail-drop-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which bytes are tail-dropped in the queue, measured
+         in bytes per second";
+    }
+
+    leaf ecn-ce-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "ECN CE packets rate";
+    }
+
+    leaf ecn-ce-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "ECN CE bytes rate";
+    }
+
+    leaf rate-limit-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which packets are rate-limit-dropped in the queue,
+         measured in packets per second";
+    }
+
+    leaf rate-limit-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which bytes are rate-limit-dropped in the queue,
+         measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which packets are red-dropped in the queue,
+         measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which bytes are red-dropped in the queue, measured
+         in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-low-non-tcp {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which low priority non-TCP packets are red-dropped
+         in the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-low-non-tcp {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which low priority non-TCP bytes are red-dropped in
+         the queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-low-tcp {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which low priority TCP packets are red-dropped in
+         the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-low-tcp {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which low priority TCP bytes are red-dropped in the
+         queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-high-non-tcp {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which high priority non-TCP packets are red-dropped
+         in the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-high-non-tcp {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which high priority non-TCP bytes are red-dropped
+         in the queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-high-tcp {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which high priority TCP packets are red-dropped in
+         the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-high-tcp {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which high priority TCP bytes are red-dropped in
+         the queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-low {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which low priority packets are red-dropped in the
+         queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-low {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which low priority bytes are red-dropped in the
+         queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-medium-low {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which medium-low priority packets are red-dropped
+         in the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-medium-low {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which medium-low priority bytes are red-dropped in
+         the queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-medium-high {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which medium-high priority packets are red-dropped
+         in the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-medium-high {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which medium-high priority bytes are red-dropped in
+         the queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-medium {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which medium priority packets are red-dropped in
+         the queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-medium {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which medium priority bytes are red-dropped in the
+         queue, measured in bytes per second";
+    }
+
+    leaf red-drop-pkts-rate-high {
+      type yang:gauge64;
+      units pps;
+      description
+        "The rate at which high priority packets are red-dropped in the
+         queue, measured in packets per second";
+    }
+
+    leaf red-drop-bytes-rate-high {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The rate at which high priority bytes are red-dropped in the
+         queue, measured in bytes per second";
+    }
+
+    leaf total-drop-pkts-rate {
+      type yang:gauge64;
+      units pps;
+      description
+        "The combined rate at which packets are dropped in the queue,
+         measured in packets per second";
+    }
+
+    leaf total-drop-bytes-rate {
+      type yang:gauge64;
+      units Bps;
+      description
+        "The combined rate at which bytes are dropped in the queue,
+         measured in bytes per second";
+    }
+  }
+
+  grouping queue-depths-common {
+    description
+      "Grouping for the queue depths";
+
+    leaf average-queue-depth {
+      type yang:gauge64;
+      units bytes;
+      description
+        "Average queue depth of the given queue";
+    }
+
+    leaf current-queue-depth {
+      type yang:gauge64;
+      units bytes;
+      description
+        "Current queue depth of the given queue";
+    }
+
+    leaf peak-queue-depth {
+      type yang:gauge64;
+      units bytes;
+      description
+        "Peak queue depth of the given queue";
+    }
+
+    leaf max-queue-depth {
+      type yang:gauge64;
+      units bytes;
+      description
+        "Maximum queue depth of the given queue";
+    }
+  }
+
+  grouping interface-slices-top {
+    description
+      "Top-level grouping for network slices under the interfaces" ;
+
+    container slices {
+      description
+        "Container for network slices under the interface";
+
+      list slice {
+        description
+          "List of network slices under the interface";
+
+        key "name";
+
+        leaf name {
+          type string;
+          description
+            "Name of the network slice";
+        }
+        uses queues-top;
+      }
+    }
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface" {
+    description
+      "Adds queue statistics related state to physical interfaces";
+
+    uses queues-top;
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface/js-if:units" +
+          "/js-if:unit" {
+    description
+      "Adds queue statistics related state to logical interfaces";
+
+    uses queues-top;
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface/js-if:interface-sets" +
+          "/js-if:interface-set" {
+    description
+      "Adds queue statistics related state to interface-sets";
+
+    uses queues-top;
+  }
+
+   augment "/js:state/js-if:interfaces/js-if:interface" {
+    description
+      "Adds slices related state information under interfaces";
+
+    uses interface-slices-top;
+  }
+}
+

@@ -1,0 +1,59 @@
+module junos-state-sampling {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/sampling";
+  prefix js-sampling;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     sampling state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping sampling-top {
+    description
+      "Top-level grouping for sampling state data";
+
+    container sampling {
+      description
+        "Container for sampling state";
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds sampling domain to top-level state";
+
+    uses sampling-top;
+  }
+}
+

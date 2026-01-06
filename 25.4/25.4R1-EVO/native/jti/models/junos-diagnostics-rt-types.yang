@@ -1,0 +1,606 @@
+module junos-diagnostics-rt-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/diagnostics/rt/types";
+  prefix "jd-rtt";
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains the definitions for route specific types
+     of diagnostics data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-09-10 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "experimental";
+
+  /*
+   ****************************************
+   * Identities resembling the route state.
+   ****************************************
+   */
+
+  identity rt-state-type {
+    description
+      "Base identity for parameters on route state.";
+  }
+
+  identity secondary-route {
+    base rt-state-type;
+    description
+      "Secondary route.";
+  }
+
+  identity released-route {
+    base rt-state-type;
+    description
+      "Released route.";
+  }
+
+  identity pending-evaluation {
+    base rt-state-type;
+    description
+      "Route pending evaluation.";
+  }
+
+  identity deleted-route {
+    base rt-state-type;
+    description
+      "Route deleted.";
+  }
+
+  identity hidden-route {
+    base rt-state-type;
+    description
+      "Hidden route.";
+  }
+
+  identity active-route {
+    base rt-state-type;
+    description
+      "Active route.";
+  }
+
+  identity initial {
+    base rt-state-type;
+    description
+      "Route initial.";
+  }
+
+  identity chain-delete {
+    base rt-state-type;
+    description
+      "Route chain delete.";
+  }
+
+  identity martian {
+    base rt-state-type;
+    description
+      "Martian route.";
+  }
+
+  identity independent-resolution {
+    base rt-state-type;
+    description
+      "Independent route resolution.";
+  }
+
+  identity no-install {
+    base rt-state-type;
+    description
+      "No install.";
+  }
+
+  identity no-readvertise {
+    base rt-state-type;
+    description
+      "No readvertise.";
+  }
+
+  identity forwarding-only {
+    base rt-state-type;
+    description
+      "Forwarding only.";
+  }
+
+  identity no-best {
+    base rt-state-type;
+    description
+      "Not best route.";
+  }
+
+  identity interior {
+    base rt-state-type;
+    description
+      "Interior route.";
+  }
+
+  identity exterior {
+    base rt-state-type;
+    description
+      "Exterior route.";
+  }
+
+  identity ack-request {
+    base rt-state-type;
+    description
+      "Ack request.";
+  }
+
+  identity proxy-arp {
+    base rt-state-type;
+    description
+      "Proxy ARP.";
+  }
+
+  identity always-flash {
+    base rt-state-type;
+    description
+      "Route always flash.";
+  }
+
+  identity changed {
+    base rt-state-type;
+    description
+      "Route changed.";
+  }
+
+  identity no-ack-request {
+    base rt-state-type;
+    description
+      "No ack request.";
+  }
+
+  identity lookup-hidden {
+    base rt-state-type;
+    description
+      "Hidden route lookup.";
+  }
+
+  identity if-list-check {
+    base rt-state-type;
+    description
+      "Route If-list check.";
+  }
+
+  identity non-nsr {
+    base rt-state-type;
+    description
+      "NSR incapable route.";
+  }
+
+  identity multicast-enhanced-rpf {
+    base rt-state-type;
+    description
+      "Multicast enhanced RPF.";
+  }
+
+  identity route-accounting {
+    base rt-state-type;
+    description
+      "Route accounting.";
+  }
+
+  identity no-propagate-ttl {
+    base rt-state-type;
+    description
+      "No propagate ttl route.";
+  }
+
+  identity kernel-opaque-data {
+    base rt-state-type;
+    description
+      "Kernel opaque data.";
+  }
+
+  identity protection-lsp {
+    base rt-state-type;
+    description
+      "Protection LSP.";
+  }
+
+  identity protection-path {
+    base rt-state-type;
+    description
+      "Protection path.";
+  }
+
+  identity protection-candidate {
+    base rt-state-type;
+    description
+      "Protection candidate.";
+  }
+
+  identity l2-ifl-unresolved {
+    base rt-state-type;
+    description
+      "L2 IFL unresolved route.";
+  }
+
+  identity vxlan-local {
+    base rt-state-type;
+    description
+      "VXLAN local route.";
+  }
+
+  identity lsp-is-elc {
+    base rt-state-type;
+    description
+      "EL capable.";
+  }
+
+  identity hold-phantom {
+    base rt-state-type;
+    description
+      "Hold phantom route.";
+  }
+
+  identity ecmp-consistent-hash {
+    base rt-state-type;
+    description
+      "ECMP consistent hash.";
+  }
+
+  identity lsi-l3 {
+    base rt-state-type;
+    description
+      "LSI-L3 route.";
+  }
+
+  identity lsi-vpls {
+    base rt-state-type;
+    description
+      "LSI-VPLS route.";
+  }
+
+  identity high-priority {
+    base rt-state-type;
+    description
+      "High priority route.";
+  }
+
+  identity low-priority {
+    base rt-state-type;
+    description
+      "Low priority route.";
+  }
+
+  identity multicast-resolve-ack {
+    base rt-state-type;
+    description
+      "Multicast resolve ack.";
+  }
+
+  identity programmed-route {
+    base rt-state-type;
+    description
+      "Programmed route.";
+  }
+
+  identity policy-multipath {
+    base rt-state-type;
+    description
+      "Policy multipath.";
+  }
+
+  identity nh-to-pfe {
+    base rt-state-type;
+    description
+      "Send NH to PFE.";
+  }
+
+  identity shard-distributed {
+    base rt-state-type;
+    description
+      "Shard distributed.";
+  }
+
+  identity meta-helper {
+    base rt-state-type;
+    description
+      "Has meta helper.";
+  }
+
+  identity pim-p2mp-nbr {
+    base rt-state-type;
+    description
+      "PIM P2MP neighbor.";
+  }
+
+  identity color-only-resolve {
+    base rt-state-type;
+    description
+      "Color only resolve.";
+  }
+
+  identity tunnel-no-advice {
+    base rt-state-type;
+    description
+      "Tunnel no-advice.";
+  }
+
+  identity shard-l3vpn-distributed {
+    base rt-state-type;
+    description
+      "Shard l3vpn distributed.";
+  }
+
+  identity shard-secondary-distributed {
+    base rt-state-type;
+    description
+      "Shard distributed secondary route.";
+  }
+
+  identity long-live-ack {
+    base rt-state-type;
+    description
+      "Long lived Ack.";
+  }
+
+  identity withdraw-on-nack {
+    base rt-state-type;
+    description
+      "Withdraw on NACK.";
+  }
+
+  /*
+   ************************************************
+   * Identities resembling the hidden-route reason.
+   ************************************************
+   */
+
+  identity rt-hidden-reason-type {
+    description
+      "Base identity for parameters on last flap event.";
+  }
+
+  identity reason-null {
+    base rt-hidden-reason-type;
+    description
+      "reason default null.";
+  }
+
+  identity as-confed-path-loop {
+    base rt-hidden-reason-type;
+    description
+      "AS confed path loop.";
+  }
+
+  identity as-zero {
+    base rt-hidden-reason-type;
+    description
+      "AS of value zero is AS path.";
+  }
+
+  identity as-path-loop {
+    base rt-hidden-reason-type;
+    description
+      "AS path loop.";
+  }
+
+  identity as-path-size-overflow {
+    base rt-hidden-reason-type;
+    description
+      "AS path size overflow.";
+  }
+
+  identity as-restricted-value {
+    base rt-hidden-reason-type;
+    description
+      "AS restricted value.";
+  }
+
+  identity cluster-loop {
+    base rt-hidden-reason-type;
+    description
+      "Cluster loop.";
+  }
+
+  identity empty-external-path {
+    base rt-hidden-reason-type;
+    description
+      "Empty path on external peer.";
+  }
+
+  identity first-as-check {
+    base rt-hidden-reason-type;
+    description
+      "Fails enforce-first-as check.";
+  }
+
+  identity flow-rt-validation-failure {
+    base rt-hidden-reason-type;
+    description
+      "Flow-route fails validation.";
+  }
+
+  identity invalid-confed-segment {
+    base rt-hidden-reason-type;
+    description
+      "Invalid confed segment.";
+  }
+
+  identity malformed-attribute {
+    base rt-hidden-reason-type;
+    description
+      "Malformed attribute.";
+  }
+
+  identity label-not-found {
+    base rt-hidden-reason-type;
+    description
+      "Invalid label.";
+  }
+
+  identity no-mpls-ifa {
+    base rt-hidden-reason-type;
+    description
+      "MPLS not enabled on interface.";
+  }
+
+  identity originator-loop {
+    base rt-hidden-reason-type;
+    description
+      "Originator loop.";
+  }
+
+  identity out-of-domain-path {
+    base rt-hidden-reason-type;
+    description
+      "Path received out of the domain.";
+  }
+
+  identity martian-prefix {
+    base rt-hidden-reason-type;
+    description
+      "Prefix is martian.";
+  }
+
+  identity ipv6-link-local {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is IPv6 link local.";
+  }
+
+  identity unsupported-address-family {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is an unsupported address family.";
+  }
+
+  identity nexthop-local {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is local.";
+  }
+
+  identity nexthop-martian {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is martian.";
+  }
+
+  identity nexthop-multicast {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is multicast.";
+  }
+
+  identity nexthop-broadcast {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is broadcast.";
+  }
+
+  identity unexpected-nh {
+    base rt-hidden-reason-type;
+    description
+      "Protocol nexthop is not on the interface.";
+  }
+
+  identity rnh-invalid {
+    base rt-hidden-reason-type;
+    description
+      "Redirect IP nexthop of the route is invalid.";
+  }
+
+  identity import-policy-reject {
+    base rt-hidden-reason-type;
+    description
+      "Rejected by import policy.";
+  }
+
+  identity unsupported-redirect-ip-community {
+    base rt-hidden-reason-type;
+    description
+      "Route has unsupported redirect IP community.";
+  }
+
+  identity reason-not-available {
+    base rt-hidden-reason-type;
+    description
+      "Specific reason not available.";
+  }
+
+  identity damping-supressed {
+    base rt-hidden-reason-type;
+    description
+      "Suppressed by damping.";
+  }
+
+  identity unsupported-label {
+    base rt-hidden-reason-type;
+    description
+      "Unsupported label stack or label block.";
+  }
+
+  identity inbound-convergence-wait {
+    base rt-hidden-reason-type;
+    description
+      "Waiting for inbound convergence.";
+  }
+
+  identity max-prefix-limit {
+    base rt-hidden-reason-type;
+    description
+      "Crossed prefix-limit.";
+  }
+
+  identity route-ifap-mismatch {
+    base rt-hidden-reason-type;
+    description
+      "Peer IFAP mismatch.";
+  }
+
+  identity prefix-qualification-failure {
+    base rt-hidden-reason-type;
+    description
+      "Failed in prefix qualification.";
+  }
+
+  identity unusable-nexthop {
+    base rt-hidden-reason-type;
+    description
+      "Nexthop unusable.";
+  }
+
+  identity route-leak-detected {
+    base rt-hidden-reason-type;
+    description
+      "Route leak detected.";
+  }
+
+  identity route-color-mismatch {
+    base rt-hidden-reason-type;
+    description
+      "Route color mismatch.";
+  }
+
+  identity route-target-prefix-limit {
+    base rt-hidden-reason-type;
+    description
+      "Route limit exceeded.";
+  }
+}

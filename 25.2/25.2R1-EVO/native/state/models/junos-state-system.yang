@@ -1,0 +1,133 @@
+module junos-state-system {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system";
+  prefix js-sys;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     system state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-07-14 {
+    description
+      "Remove unimplemented /state/system/host-name node.  Patch version
+       incremented due to lack of implementation (editorial).";
+    reference "0.2.1";
+  }
+
+  revision 2023-07-05 {
+    description
+      "Addition of system commit history state";
+    reference "0.2.0";
+  }
+
+  revision 2022-01-19 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.2.1";
+
+  grouping system-global-top {
+    description
+      "Global attributes for system state";
+  }
+
+  grouping system-commit-top {
+    description
+      "Top level grouping for system commit history";
+
+    container commit {
+      description
+        "System commit related state";
+
+      container entries {
+        description
+          "Encapsulating container for system commit entries";
+
+        list entry {
+          key "timestamp";
+
+          description
+            "List of system commit entries";
+
+          leaf timestamp {
+            type jt:timeticks64;
+            units seconds;
+            description
+              "The time at which the commit operation took place.
+
+               The value is the timestamp in seconds relative to the
+               Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+          }
+
+          leaf user {
+            type string;
+            description
+              "The username that executed the commit operation";
+          }
+
+          leaf client {
+            type string;
+            description
+              "The client type that executed the commit operation";
+          }
+
+          leaf comment {
+            type string;
+            description
+              "Optional comment associated to the commit operation.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping system-top {
+    description
+      "Top-level grouping for JUNOS system state data";
+
+    container system {
+      description
+        "Encapsulating container for all JUNOS system state";
+
+      uses system-global-top;
+      uses system-commit-top;
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds system domain to top-level state";
+
+    uses system-top;
+  }
+}

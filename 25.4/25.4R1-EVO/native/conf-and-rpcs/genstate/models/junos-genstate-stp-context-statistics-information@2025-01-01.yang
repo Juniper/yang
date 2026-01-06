@@ -1,0 +1,100 @@
+ module junos-genstate-stp-context-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/stp-context-statistics-information";
+   prefix jgscsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for stp-context-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping stp-context-statistics-information-top {
+     description "Top-level grouping";
+     container stp-context-statistics-information {
+       description "Spanning Tree Protocol statistics at routing instance level";
+       list stp-context-routing-information {
+         key "routing-instance-name";
+         leaf routing-instance-name {
+           type string;
+           description "Routing instance name";
+         }
+         leaf message-type {
+           type string;
+           description "Spanning Tree message type";
+         }
+         leaf total-bpdus-sent {
+           type int32;
+           description "Total number of BPDUs sent out";
+         }
+         leaf total-bpdus-received {
+           type int32;
+           description "Total number of BPDUs received";
+         }
+         leaf bpdus-sent-last-ivl {
+           type string;
+           description "Total number of BPDUs sent out for this routing instance in last interval";
+         }
+         leaf bpdus-received-last-ivl {
+           type string;
+           description "Total number of BPDUs received on this routing instance in last interval";
+         }
+         list vstp-statistics {
+           key "vlan-id";
+           description "VLAN Spanning Tree Protocol statistics";
+           leaf vlan-id {
+             type int32;
+             description "VLAN identifier";
+           }
+           leaf message-type {
+             type string;
+             description "Spanning Tree message type";
+           }
+           leaf total-bpdus-sent {
+             type int32;
+             description "Total number of BPDUs sent out";
+           }
+           leaf total-bpdus-received {
+             type int32;
+             description "Total number of BPDUs received";
+           }
+           leaf bpdus-sent-last-ivl {
+             type string;
+             description "Total number of BPDUs sent out for this routing instance in last interval";
+           }
+           leaf bpdus-received-last-ivl {
+             type string;
+             description "Total number of BPDUs received on this routing instance in last interval";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds stp-context-statistics-information to top-level genstate";
+     uses stp-context-statistics-information-top;
+   }
+ }

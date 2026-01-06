@@ -1,0 +1,162 @@
+module junos-state-evpn {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/evpn";
+  prefix "js-evpn";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  import junos-l2-types {
+    prefix jl2t;
+  }
+
+  import junos-evpn-types {
+    prefix jevpnt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     EVPN instance specific state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision "2024-01-04" {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping mac-database-dup-entry-group-top {
+    description
+      "Grouping for leaf level data for duplicate MAC database entry.";
+
+    leaf l2-domain-id {
+      type jl2t:l2-domain-id;
+      description
+        "vlan-id or vni-id associated with the MAC entry.";
+    }
+
+    leaf mac-address {
+      type yang:mac-address;
+      description
+        "MAC address with duplicate status.";
+    }
+
+    leaf l2-domain-id-type {
+      type identityref {
+        base jl2t:l2-domain-id-type;
+      }
+      description
+        "Indicates whether l2-domain-id is vlan-id or vni-id.";
+    }
+
+    leaf active-source {
+      type union {
+          type inet:ip-address;
+          type jevpnt:esi;
+          type junos-intft:base-state-interface-ref;
+      }
+      description
+        "Active source of the MAC address. It can be a logical interface
+         when the mac-address is learned from a local interface, an ESI,
+         or an IP address when it is learned from a remote PE.";
+    }
+
+    leaf active-source-timestamp {
+      type jt:absolute-time-microseconds;
+      description
+        "Time of last activity. The value is the timestamp in
+         microseconds relative to the Unix Epoch (Jan 1, 1970 00:00:00
+         UTC).";
+    }
+  }
+
+  grouping mac-database-duplicates-group-top {
+    description
+      "Top level grouping for all MAC database duplicate data.";
+
+    container mac-database-duplicates {
+      description
+        "EVPN MAC DB state duplicates.";
+
+      container mac-entries {
+        description
+          "MAC entries with duplicate status.";
+
+        list mac-entry {
+          description
+            "List of duplicate MAC entries.";
+
+          key "l2-domain-id mac-address";
+
+          uses mac-database-dup-entry-group-top;
+        }
+      }
+    }
+  }
+
+  grouping junos-evpn-instance-state-top {
+    description
+      "Top level grouping for all EVPN instance level data.";
+
+    container evpn {
+      description
+        "Container to hold information for EVPN at instance level.";
+
+      uses mac-database-duplicates-group-top;
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-pro:protocols" {
+    description
+       "Adds EVPN instance specific state.";
+
+    uses junos-evpn-instance-state-top;
+  }
+}

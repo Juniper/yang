@@ -1,0 +1,1466 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-es-conf-vlans {
+   namespace "http://yang.juniper.net/junos-es/conf/vlans";
+
+   prefix jc-vlans;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   import junos-es-conf-root {
+     prefix jc;
+     revision-date 2025-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos vlans configuration module";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   augment /jc:configuration {
+     uses vlans-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses vlans-group;
+   }
+   grouping vlans-group {
+     container vlans {
+       description "VLAN configuration";
+       uses apply-advanced;
+       list vlan {
+         key name;
+         description "Virtual LAN";
+         uses vlan-types;
+       }
+       container vlan-groups {
+         description "802.1x VLAN group configuration";
+         uses apply-advanced;
+         list vlan-group {
+           key name;
+           description "802.1x Vlan group";
+           max-elements 4096;
+           uses vlan-group-types;
+         }
+       }
+     }
+   }
+   grouping apply-advanced {
+     description "Apply advanced configuration logic";
+     leaf-list apply-groups {
+       ordered-by user;
+       description "Groups from which to inherit configuration data";
+       type string;
+     }
+     leaf-list apply-groups-except {
+       ordered-by user;
+       description "Don't inherit configuration data from these groups";
+       type string;
+     }
+     list apply-macro {
+       key name;
+       ordered-by user;
+       description "Macro and parameters for commit script expansion";
+       uses apply-macro-type;
+     }
+   }
+   grouping apply-macro-type {
+     description "Macro data for commit-script expansion";
+     leaf name {
+       description "Name of the macro to be expanded";
+       type string;
+     }
+     list data {
+       key name;
+       uses macro-data-type;
+     }
+   }
+   grouping macro-data-type {
+     leaf name {
+       description "Keyword part of the keyword-value pair";
+       type string;
+     }
+     leaf value {
+       description "Value part of the keyword-value pair";
+       type string;
+     }
+   }
+   grouping vlan-group-types {
+     description "802.1x Vlan Group";
+     leaf name {
+       description "VLAN group name";
+       type string {
+         length "2 .. 64";
+       }
+     }
+     uses apply-advanced;
+     leaf-list vlan-id-list {
+       description "List of vlan-ids for VLAN group";
+       type jt:vlan-range;
+     }
+   }
+   grouping vlan-types {
+     description "Virtual LAN";
+     leaf name {
+       description "VLAN name";
+       type string {
+         length "2 .. 64";
+       }
+     }
+     uses apply-advanced;
+     leaf description {
+       description "Text description of VLANs";
+       type string {
+       }
+     }
+     leaf activate-on-local-ports {
+       description "Activate VLAN only if configured on interface or assigned by NAC to DOT1XD clients.";
+       type empty;
+     }
+     choice vlan-identifier-choice {
+       case case_1 {
+         leaf vlan-id {
+           description "IEEE 802.1q VLAN identifier for VLAN";
+           type string;
+         }
+       }
+       case case_2 {
+         leaf-list vlan-id-list {
+           description "Create VLAN for each of the vlan-id specified in the vlan-id-list";
+           type jt:vlan-range;
+         }
+       }
+       case case_3 {
+         container vlan-tags {
+           presence "enable vlan-tags";
+           description "IEEE 802.1q VLAN tags for VLANs";
+           leaf outer {
+             description "[tpid.]vlan-id, tpid format is 0xNNNN and is optional";
+             type string {
+             }
+           }
+           leaf inner {
+             description "[tpid.]vlan-id, tpid format is 0xNNNN and is optional";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     list interface {
+       key name;
+       ordered-by user;
+       description "Interface name for this VLAN";
+       leaf name {
+         type string;
+       }
+       uses apply-advanced;
+     }
+     leaf l3-interface {
+       description "L3 interface name for this vlans";
+       type union {
+         type jt:interface-unit;
+         type string {
+           pattern "<.*>|$.*";
+         }
+       }
+     }
+     container forwarding-options {
+       description "Forwarding options configuration";
+       uses juniper-ethernet-switching-forwarding-options;
+     }
+     container multicast-snooping-options {
+       description "Multicast snooping option configuration";
+       uses juniper-multicast-snooping-options;
+     }
+     container switch-options {
+       description "VLANs switch-options configuration";
+       uses juniper-protocols-vlan;
+     }
+     leaf domain-type {
+       description "Type of VLANs SVLAN/DVLAN";
+       type enumeration {
+         enum "bridge" {
+           description "Forwarding instance";
+         }
+       }
+     }
+     leaf no-irb-layer-2-copy {
+       description "Disable transmission of layer-2 copy of packets of IRB routing-interface";
+       type empty;
+     }
+     leaf service-id {
+       description "Service id required if VLAN is of type MC-AE, and vlan-id all or vlan-id none or vlan-tags is configured";
+       type union {
+         type string {
+           pattern "<.*>|$.*";
+         }
+         type uint32 {
+           range "1 .. 65535";
+         }
+       }
+     }
+     leaf mcae-mac-synchronize {
+       description "Enable IRB MAC synchronization in this VLAN";
+       type empty;
+     }
+     leaf mcae-mac-flush {
+       description "Enable IRB MAC flush in a/s mode for this VLAN on MCAE link up";
+       type empty;
+     }
+     leaf private-vlan {
+       description "Type of secondary vlan for private vlan";
+       type enumeration {
+         enum "isolated" {
+           description "Isolated vlan";
+         }
+         enum "community" {
+           description "Community vlan";
+         }
+       }
+     }
+     leaf isolated-vlan {
+       description "VLAN id or name";
+       type string {
+       }
+     }
+     leaf-list community-vlans {
+       ordered-by user;
+       description "List of VLAN id or name";
+       type string;
+     }
+     container vxlan {
+       uses apply-advanced;
+       leaf ovsdb-managed {
+         description "Bridge-domain is managed remotely via VXLAN OVSDB Controller";
+         type empty;
+       }
+       leaf vni {
+         description "VXLAN identifier";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 16777214";
+           }
+         }
+       }
+       leaf translation-vni {
+         description "Translated VXLAN identifier";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "1 .. 16777214";
+           }
+         }
+       }
+       leaf multicast-group {
+         description "Multicast group registered for VXLAN segment";
+         type jt:ipv4addr;
+       }
+       leaf encapsulate-inner-vlan {
+         description "Retain inner VLAN in the packet";
+         type empty;
+       }
+       leaf decapsulate-accept-inner-vlan {
+         description "Accept VXLAN packets with inner VLAN";
+         type empty;
+       }
+       leaf unreachable-vtep-aging-timer {
+         description "Unreachable VXLAN tunnel endpoint removal timer";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint16 {
+             range "300 .. 1800";
+           }
+         }
+       }
+       leaf ingress-node-replication {
+         description "Enable ingress node replication";
+         type empty;
+       }
+       leaf-list static-remote-vtep-list {
+         description "Configure vlan specific static remote VXLAN tunnel endpoints";
+         type jt:ipaddr;
+         max-elements 1024;
+       }
+       leaf riot-loopback {
+         description "Enable loopback on RIOT platform";
+         type empty;
+       }
+     }
+   }
+   grouping juniper-ethernet-switching-forwarding-options {
+     uses apply-advanced;
+     container filter {
+       description "Filtering for ethernet switching forwarding table";
+       uses apply-advanced;
+       leaf input {
+         description "Name of input filter to apply for forwarded packets";
+         type string;
+       }
+     }
+     container flood {
+       description "Filtering for ethernet switching flood table";
+       uses apply-advanced;
+       leaf input {
+         description "Name of input filter to apply for ethernet switching flood packets";
+         type string;
+       }
+     }
+     container dhcp-security {
+       description "DHCP access security configuration";
+       presence "enable dhcp-security";
+       uses jdhcp-security-type;
+     }
+   }
+   grouping jdhcp-security-type {
+     description "DHCP access security configuration";
+     uses apply-advanced;
+     leaf no-dhcp-snooping {
+       description "Disable dhcp snooping";
+       type empty;
+     }
+     leaf arp-inspection {
+       description "Enable dynamic ARP inspection";
+       type empty;
+     }
+     leaf ip-source-guard {
+       description "Enable IP source guard";
+       type empty;
+     }
+     leaf no-dhcpv6-snooping {
+       description "Disable DHCPv6 snooping";
+       type empty;
+     }
+     leaf neighbor-discovery-inspection {
+       description "Enable neighbor discovery inspection";
+       type empty;
+     }
+     leaf ipv6-source-guard {
+       description "Enable IPv6 source guard";
+       type empty;
+     }
+     leaf light-weight-dhcpv6-relay {
+       description "Enable light weight dhcpv6 relay";
+       type empty;
+     }
+     list group {
+       key name;
+       description "Define a DHCP security group for overriding defaults";
+       uses ds-group;
+     }
+     container option-82 {
+       description "DHCP option-82 processing for snooped packets";
+       presence "enable option-82";
+       uses security-option-82-type;
+     }
+     container dhcpv6-options {
+       description "DHCPv6 option processing for snooped packets";
+       presence "enable dhcpv6-options";
+       uses security-dhcpv6-options-type;
+     }
+     leaf mine-dhcp-client-options {
+       description "Start storing incoming DHCP client options";
+       type empty;
+     }
+     leaf mine-dhcpv6-client-options {
+       description "Start storing incoming DHCPv6 client options";
+       type empty;
+     }
+     leaf trust-all {
+       description "Mark all ports as trusted for dhcp security";
+       type empty;
+     }
+     leaf retain-binding-on-renegotiation {
+       description "Retain existing IANA binding on renegotiation";
+       type empty;
+     }
+   }
+   grouping ds-group {
+     description "DHCP security groups";
+     leaf name {
+       description "Group name";
+       type string {
+         length "1 .. 64";
+       }
+     }
+     uses apply-advanced;
+     container overrides {
+       description "DHCP override processing";
+       presence "enable overrides";
+       uses ds-override-type;
+     }
+     list interface {
+       key name;
+       description "One or more interfaces";
+       leaf name {
+         description "Interface name";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       uses apply-advanced;
+       list static-ip {
+         key name;
+         ordered-by user;
+         description "Static IP address configuration";
+         uses ip-mac-static;
+       }
+       list static-ipv6 {
+         key name;
+         ordered-by user;
+         description "Static IPv6 address configuration";
+         uses ipv6-mac-static;
+       }
+     }
+   }
+   grouping ds-override-type {
+     description "Dynamic ARP Inspection override processing";
+     uses apply-advanced;
+     leaf trusted {
+       description "Make this trusted group of interfaces";
+       type empty;
+     }
+     leaf untrusted {
+       description "Make this untrusted group of interfaces";
+       type empty;
+     }
+     leaf no-option82 {
+       description "Make this group of interfaces not to add option82";
+       type empty;
+     }
+     leaf no-option37 {
+       description "Make this group of interfaces not to add option37";
+       type empty;
+     }
+     leaf no-option18 {
+       description "Make this group of interfaces not to add option18";
+       type empty;
+     }
+     leaf no-option16 {
+       description "Make this group of interfaces not to add option16";
+       type empty;
+     }
+     leaf no-option79 {
+       description "Make this group of interfaces not to add option79";
+       type empty;
+     }
+     leaf no-dhcpv6-options {
+       description "Make this group of interfaces not to add any DHCPv6 options";
+       type empty;
+     }
+   }
+   grouping ip-mac-static {
+     leaf name {
+       description "IP address";
+       type jt:ipaddr;
+     }
+     leaf mac {
+       description "MAC address";
+       type jt:mac-addr;
+     }
+   }
+   grouping ipv6-mac-static {
+     leaf name {
+       description "IP address";
+       type jt:ipv6addr;
+     }
+     leaf mac {
+       description "MAC address";
+       type jt:mac-addr;
+     }
+   }
+   grouping juniper-multicast-snooping-options {
+     uses apply-advanced;
+     container options {
+       description "Miscellaneous options";
+       uses apply-advanced;
+       container syslog {
+         description "Set system logging level";
+         uses apply-advanced;
+         container level {
+           description "Logging level";
+           leaf emergency {
+             description "Emergency level";
+             type empty;
+           }
+           leaf alert {
+             description "Alert level";
+             type empty;
+           }
+           leaf critical {
+             description "Critical level";
+             type empty;
+           }
+           leaf error {
+             description "Error level";
+             type empty;
+           }
+           leaf warning {
+             description "Warning level";
+             type empty;
+           }
+           leaf notice {
+             description "Notice level";
+             type empty;
+           }
+           leaf info {
+             description "Informational level";
+             type empty;
+           }
+           leaf debug {
+             description "Debugging level";
+             type empty;
+           }
+         }
+         leaf upto {
+           description "Log up to a particular logging level";
+           type enumeration {
+             enum "emergency" {
+               description "Emergency level";
+             }
+             enum "alert" {
+               description "Alert level";
+             }
+             enum "critical" {
+               description "Critical level";
+             }
+             enum "error" {
+               description "Error level";
+             }
+             enum "warning" {
+               description "Warning level";
+             }
+             enum "notice" {
+               description "Notice level";
+             }
+             enum "info" {
+               description "Informational level";
+             }
+             enum "debug" {
+               description "Debugging level";
+             }
+           }
+         }
+         leaf mark {
+           description "Periodically mark the trace file";
+           units "seconds";
+           type union {
+             type int32;
+             type string {
+               pattern "<.*>|$.*";
+             }
+           }
+         }
+       }
+     }
+     container traceoptions {
+       description "Multicast snooping trace options";
+       uses apply-advanced;
+       container file {
+         description "Trace file options";
+         leaf filename {
+           description "Name of file in which to write trace information";
+           type string {
+             length "1 .. 1024";
+           }
+         }
+         leaf replace {
+           description "Replace trace file rather than appending to it";
+           status deprecated;
+           type empty;
+         }
+         leaf size {
+           description "Maximum trace file size";
+           type string;
+         }
+         leaf files {
+           description "Maximum number of trace files";
+           default "10";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "2 .. 1000";
+             }
+           }
+         }
+         leaf no-stamp {
+           description "Do not timestamp trace file";
+           status deprecated;
+           type empty;
+         }
+         choice world-readable-choice {
+           leaf world-readable {
+             description "Allow any user to read the log file";
+             type empty;
+           }
+           leaf no-world-readable {
+             description "Don't allow any user to read the log file";
+             type empty;
+           }
+         }
+       }
+       list flag {
+         key name;
+         ordered-by user;
+         description "Tracing parameters";
+         leaf name {
+           type enumeration {
+             enum "parse" {
+               description "Trace configuration parsing";
+             }
+             enum "config-internal" {
+               description "Trace configuration internals";
+             }
+             enum "route" {
+               description "Trace routing information";
+             }
+             enum "normal" {
+               description "Trace normal events";
+             }
+             enum "general" {
+               description "Trace general events";
+             }
+             enum "state" {
+               description "Trace state transitions";
+             }
+             enum "policy" {
+               description "Trace policy processing";
+             }
+             enum "task" {
+               description "Trace routing protocol task processing";
+             }
+             enum "timer" {
+               description "Trace routing protocol timer processing";
+             }
+             enum "all" {
+               description "Trace everything";
+             }
+           }
+         }
+         leaf disable {
+           description "Disable this trace flag";
+           type empty;
+         }
+       }
+     }
+     container forwarding-cache {
+       description "Multicast forwarding cache";
+       uses apply-advanced;
+       container threshold {
+         description "Threshold";
+         uses apply-advanced;
+         leaf suppress {
+           description "Suppress threshold";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 200000";
+             }
+           }
+         }
+         leaf reuse {
+           description "Reuse threshold";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 200000";
+             }
+           }
+         }
+       }
+     }
+     leaf-list flood-groups {
+       ordered-by user;
+       description "Groups for which the traffic will be flooded";
+       type jt:ipaddr;
+     }
+     container host-outbound-traffic {
+       description "Host generated protocol packets";
+       uses apply-advanced;
+       leaf forwarding-class {
+         description "Forwarding class name";
+         type string {
+         }
+       }
+       leaf dot1p {
+         description "Dot1p bits";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 7";
+           }
+         }
+       }
+     }
+     container graceful-restart {
+       description "Configure graceful restart attributes";
+       uses apply-advanced;
+       choice enable-disable {
+         case case_1 {
+           leaf disable {
+             description "Disable graceful restart";
+             type empty;
+           }
+         }
+       }
+       leaf restart-duration {
+         description "Maximum time for graceful restart to finish";
+         default "180";
+         units "seconds";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 300";
+           }
+         }
+       }
+     }
+     leaf ignore-stp-topology-change {
+       description "Don't process stp topology change";
+       type empty;
+     }
+     container multichassis-lag-replicate-state {
+       presence "enable multichassis-lag-replicate-state";
+       description "Enable multichassis lag replication";
+       uses apply-advanced;
+       leaf suppress-report {
+         description "Enable mclag report suppression";
+         type empty;
+       }
+     }
+     container oism {
+       description "Optimized inter subnet multicast options";
+       uses apply-advanced;
+       leaf install-star-g-routes {
+         description "Install (*,G) multicast routes in data plane";
+         type empty;
+       }
+     }
+     leaf nexthop-hold-time {
+       description "Nexthop hold time in milliseconds";
+       units "milliseconds";
+       type union {
+         type string {
+           pattern "<.*>|$.*";
+         }
+         type uint32 {
+           range "1 .. 1000";
+         }
+       }
+     }
+     leaf multicast-router-job-pause {
+       description "Pause multicast router handling job";
+       type empty;
+     }
+     leaf multicast-router-no-flood-job-pause {
+       description "Pause multicast router no-flood handling job";
+       type empty;
+     }
+     leaf conserve-mcast-routes-in-pfe {
+       description "Don't install snooping routes in forwarding plane";
+       type empty;
+     }
+   }
+   grouping juniper-protocols-vlan {
+     description "VLANs switch-options configuration";
+     uses apply-advanced;
+     container mac-table-size {
+       description "Size of MAC address forwarding table";
+       uses apply-advanced;
+       leaf limit {
+         description "Maximum number of MAC addresses";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+       leaf packet-action {
+         description "Action when MAC limit is reached";
+         type enumeration {
+           enum "none" {
+             description "Forward the packet";
+           }
+           enum "drop" {
+             description "Drop packets and do not learn. Default is forward";
+           }
+         }
+       }
+     }
+     container mac-ip-table-size {
+       description "Size of MAC+IP bindings table";
+       uses apply-advanced;
+       leaf limit {
+         description "Maximum number of MAC+IP bindings";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+     }
+     container interface-mac-limit {
+       description "Maximum MAC address learned per interface";
+       uses apply-advanced;
+       leaf limit {
+         description "Maximum number of MAC addresses per interface";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+       leaf packet-action {
+         description "Action when MAC limit is reached";
+         type enumeration {
+           enum "none" {
+             description "Forward the packet";
+           }
+           enum "drop" {
+             description "Drop packets and do not learn. Default is forward";
+           }
+           enum "log" {
+             description "Do not drop the packet but generate an alarm, an SNMP trap or a system log entry";
+           }
+           enum "shutdown" {
+             description "Disable the interface and generate an alarm, an SNMP trap or a system log entry";
+           }
+           enum "drop-and-log" {
+             description "Drop the packet and generate an alarm, an SNMP trap or a system log entry";
+           }
+         }
+       }
+     }
+     container interface-mac-ip-limit {
+       description "Maximum number of MAC+IP bindings learned on the interface";
+       uses apply-advanced;
+       leaf limit {
+         description "Maximum number of MAC+IP bindings per interface";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+     }
+     leaf mac-table-aging-time {
+       description "Delay for discarding MAC address if no updates are received";
+       units "seconds";
+       type union {
+         type string {
+           pattern "<.*>|$.*";
+         }
+         type uint32;
+       }
+     }
+     leaf no-mac-learning {
+       description "Disable dynamic MAC address learning";
+       type empty;
+     }
+     leaf no-mac-ip-learning {
+       description "Disable dynamic MAC IP address learning";
+       type empty;
+     }
+     leaf no-normalization {
+       description "Disable vlan id normalization for interfaces";
+       type empty;
+     }
+     container port-extender {
+       presence "enable port-extender";
+       description "Configure port-extender";
+       uses apply-advanced;
+       leaf mode {
+         description "Configure port-extender mode";
+         type enumeration {
+           enum "aggregation-device" {
+             description "Aggregation Device";
+           }
+           enum "satellite-device" {
+             description "Satellite Device";
+           }
+         }
+       }
+     }
+     leaf drop-unknown-mac-ip {
+       description "Drop unknown MAC-IP traffic";
+       type empty;
+     }
+     leaf mac-statistics {
+       description "Enable MAC address statistics";
+       type empty;
+     }
+     container static-rvtep-mac {
+       description "Configure Static MAC and remote VxLAN tunnel endpoint entries";
+       uses apply-advanced;
+       list mac {
+         key "mac_addr remote-vtep";
+         description "Unicast MAC address";
+         leaf mac_addr {
+           type jt:mac-unicast;
+         }
+         leaf remote-vtep {
+           description "Configure static remote VXLAN tunnel endpoints";
+           type jt:ipaddr;
+         }
+       }
+     }
+     container network-isolation-profile {
+       description "Network isolation configuration";
+       uses apply-advanced;
+       list group {
+         key name;
+         description "Network isolation group";
+         leaf name {
+           description "Group name";
+           type string;
+         }
+         uses apply-advanced;
+       }
+     }
+     list interface {
+       key name;
+       description "Interface that connect this site to the VPN";
+       leaf name {
+         description "Interface name";
+         type union {
+           type jt:interface-name;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+       uses apply-advanced;
+       container mac-learning-priority {
+         description "MAC learning priority for the interface";
+         uses apply-advanced;
+         leaf priority {
+           description "Mac learning priority for the interface";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 65535";
+             }
+           }
+         }
+         leaf packet-action {
+           default "discard";
+           type enumeration {
+             enum "discard" {
+               description "Discard the packets and do not learn. Default is forward";
+             }
+             enum "forward" {
+               description "Forward the packet";
+             }
+           }
+         }
+       }
+       container interface-mac-limit {
+         description "Maximum number of MAC addresses learned on the interface";
+         uses apply-advanced;
+         leaf limit {
+           description "Maximum number of MAC addresses per interface";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+         leaf disable {
+           description "Disable interface for interface-mac-limit";
+           type empty;
+         }
+         leaf packet-action {
+           description "Action when MAC limit is reached";
+           type enumeration {
+             enum "none" {
+               description "Forward the packet";
+             }
+             enum "drop" {
+               description "Drop packets and do not learn. Default is forward";
+             }
+             enum "log" {
+               description "Do not drop the packet but generate an alarm, an SNMP trap or a system log entry";
+             }
+             enum "shutdown" {
+               description "Disable the interface and generate an alarm, an SNMP trap or a system log entry";
+             }
+             enum "drop-and-log" {
+               description "Drop the packet and generate an alarm, an SNMP trap or a system log entry";
+             }
+           }
+         }
+       }
+       leaf action-priority {
+         description "Blocking priority of this interface on mac move detection";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32 {
+             range "0 .. 8";
+           }
+         }
+       }
+       list static-mac {
+         key name;
+         ordered-by user;
+         description "Static MAC addresses assigned to this interface";
+         leaf name {
+           description "MAC address";
+           type jt:mac-addr;
+         }
+         uses apply-advanced;
+         list vlan-id {
+           key name;
+           ordered-by user;
+           description "VLAN ID of learning VLAN";
+           leaf name {
+             description "Learning VLAN";
+             type union {
+               type string {
+                 pattern "<.*>|$.*";
+               }
+               type uint32 {
+                 range "0 .. 4094";
+               }
+             }
+           }
+           uses apply-advanced;
+         }
+       }
+       list static-mac-ip {
+         key name;
+         ordered-by user;
+         description "Static MAC-IP address bindings";
+         leaf name {
+           description "IP address";
+           type jt:ipaddr;
+         }
+         uses apply-advanced;
+         leaf-list mac-address {
+           ordered-by user;
+           description "MAC address";
+           type jt:mac-unicast;
+           max-elements 8;
+         }
+         leaf router {
+           description "Router flag for ipv6 addresses";
+           type empty;
+         }
+       }
+       container interface-mac-ip-limit {
+         description "Maximum number of MAC+IP bindings learned on the interface";
+         uses apply-advanced;
+         leaf limit {
+           description "Maximum number of MAC+IP bindings per interface";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       leaf no-mac-learning {
+         description "Disable dynamic MAC address learning";
+         type empty;
+       }
+       leaf mac-pinning {
+         description "Enable MAC pinning";
+         type empty;
+       }
+     }
+     container traceoptions {
+       description "Trace options for this bridge domain";
+       uses apply-advanced;
+       leaf no-remote-trace {
+         description "Disable remote tracing";
+         type empty;
+       }
+       container file {
+         description "Trace file information";
+         leaf filename {
+           description "Name of file in which to write trace information";
+           type string {
+             length "1 .. 1024";
+           }
+         }
+         leaf size {
+           description "Maximum trace file size";
+           units "bytes";
+           type string;
+         }
+         leaf files {
+           description "Maximum number of trace files";
+           default "3";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "2 .. 1000";
+             }
+           }
+         }
+         choice world-readable-choice {
+           leaf world-readable {
+             description "Allow any user to read the log file";
+             type empty;
+           }
+           leaf no-world-readable {
+             description "Don't allow any user to read the log file";
+             type empty;
+           }
+         }
+         leaf match {
+           description "Regular expression for lines to be logged";
+           type jt:regular-expression;
+         }
+       }
+       leaf level {
+         description "Level of debugging output";
+         default "error";
+         type enumeration {
+           enum "error" {
+             description "Match error conditions";
+           }
+           enum "warning" {
+             description "Match warning messages";
+           }
+           enum "notice" {
+             description "Match conditions that should be handled specially";
+           }
+           enum "info" {
+             description "Match informational messages";
+           }
+           enum "verbose" {
+             description "Match verbose messages";
+           }
+           enum "all" {
+             description "Match all levels";
+           }
+         }
+       }
+       list flag {
+         key name;
+         ordered-by user;
+         description "Type of operation or event to include in trace";
+         leaf name {
+           type enumeration {
+             enum "configuration" {
+               description "Configuration operations";
+             }
+             enum "routing-socket" {
+               description "Routing socket operations";
+             }
+             enum "interface-device" {
+               description "Interface device operations";
+             }
+             enum "interface-logical" {
+               description "Logical interface operations";
+             }
+             enum "interface-family" {
+               description "Interface family operations";
+             }
+             enum "learning-domain" {
+               description "Learning domain operations";
+             }
+             enum "ipc" {
+               description "Inter-process communications operations";
+             }
+             enum "mac-learning" {
+               description "MAC address learning operations";
+             }
+             enum "initialization" {
+               description "Initialization operations";
+             }
+             enum "flood-next-hop" {
+               description "Flood next hop operations";
+             }
+             enum "storm-control" {
+               description "Storm-control";
+             }
+             enum "unknown-unicast-forwarding" {
+               description "Trace unknown unicast forwarding events";
+             }
+             enum "all" {
+               description "All operations";
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping security-dhcpv6-options-type {
+     description "Configure DHCPv6 options";
+     uses apply-advanced;
+     container option-37 {
+       presence "enable option-37";
+       description "Configure DHCPv6 remote identifier option";
+       uses apply-advanced;
+       container prefix {
+         description "Configure DHCPv6 remote identifier prefix";
+         uses apply-advanced;
+         leaf host-name {
+           description "Prefix router host name to DHCPv6 remote identifier";
+           type empty;
+         }
+         leaf logical-system-name {
+           description "Prefix logical system name to DHCPv6 remote identifier";
+           type empty;
+         }
+         leaf routing-instance-name {
+           description "Prefix routing instance name to DHCPv6 remote identifier";
+           type empty;
+         }
+         leaf vlan-name {
+           description "Prefix vlan name to DHCPv6 remote identifier";
+           type empty;
+         }
+         leaf vlan-id {
+           description "Prefix vlan tag to DHCPv6 remote identifier";
+           type empty;
+         }
+       }
+       leaf use-interface-mac {
+         description "Add incoming interface's MAC address to DHCPv6 remote identifier";
+         type empty;
+       }
+       leaf use-interface-index {
+         description "Add interface index to DHCPv6 remote identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface index";
+           }
+           enum "device" {
+             description "Use the device interface index";
+           }
+         }
+       }
+       leaf use-interface-name {
+         description "Add interface name to DHCPv6 remote identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface name";
+           }
+           enum "device" {
+             description "Use the device interface name";
+           }
+         }
+       }
+       leaf use-interface-description {
+         description "Add interface description to DHCPv6 remote identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface description";
+           }
+           enum "device" {
+             description "Use the device interface description";
+           }
+         }
+       }
+       leaf use-string {
+         description "Add custom string to DHCPv6 remote identifier";
+         type string;
+       }
+     }
+     container option-18 {
+       presence "enable option-18";
+       description "Configure DHCPv6 interface identifier option";
+       uses apply-advanced;
+       container prefix {
+         description "Configure DHCPv6 interface identifier prefix";
+         uses apply-advanced;
+         leaf host-name {
+           description "Prefix router host name to DHCPv6 interface identifier";
+           type empty;
+         }
+         leaf logical-system-name {
+           description "Prefix logical system name to DHCPv6 interface identifier";
+           type empty;
+         }
+         leaf routing-instance-name {
+           description "Prefix routing instance name to DHCPv6 interface identifier";
+           type empty;
+         }
+         leaf vlan-name {
+           description "Prefix vlan name to DHCPv6 interface identifier";
+           type empty;
+         }
+         leaf vlan-id {
+           description "Prefix vlan tag to DHCPv6 interface identifier";
+           type empty;
+         }
+       }
+       leaf use-interface-mac {
+         description "Add incoming interface's MAC address to DHCPv6 circuit identifier";
+         type empty;
+       }
+       leaf use-interface-index {
+         description "Add interface index to DHCPv6 interface identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface index";
+           }
+           enum "device" {
+             description "Use the device interface index";
+           }
+         }
+       }
+       leaf use-interface-name {
+         description "Add interface name to DHCPv6 remote identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface name";
+           }
+           enum "device" {
+             description "Use the device interface name";
+           }
+         }
+       }
+       leaf use-interface-description {
+         description "Add interface description to DHCPv6 interface identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface description";
+           }
+           enum "device" {
+             description "Use the device interface description";
+           }
+         }
+       }
+       leaf use-string {
+         description "Add custom string to DHCPv6 interface identifier";
+         type string;
+       }
+     }
+     container option-16 {
+       presence "enable option-16";
+       description "Configure DHCPv6 vendor class identifier option. Overwrite if exists";
+       uses apply-advanced;
+       leaf use-string {
+         description "Add custom string to DHCPv6 vendor identifier";
+         type string;
+       }
+     }
+     leaf option-79 {
+       description "Configure DHCPv6 client link layer address option";
+       type empty;
+     }
+   }
+   grouping security-option-82-type {
+     description "DHCP option-82 processing";
+     uses apply-advanced;
+     container circuit-id {
+       presence "enable circuit-id";
+       description "Configure DHCP option 82 circuit id";
+       uses apply-advanced;
+       container prefix {
+         description "Configure DHCP option 82 circuit id prefix";
+         uses apply-advanced;
+         leaf host-name {
+           description "Add router host name to DHCP option-82 circuit id";
+           type empty;
+         }
+         leaf logical-system-name {
+           description "Add logical system name to DHCP option-82 circuit id";
+           type empty;
+         }
+         leaf routing-instance-name {
+           description "Add routing instance name to DHCP option-82 circuit id";
+           type empty;
+         }
+       }
+       leaf use-interface-description {
+         description "Use interface description instead of circuit identifier";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface description";
+           }
+           enum "device" {
+             description "Use the device interface description";
+           }
+         }
+       }
+       leaf use-vlan-id {
+         description "Use VLAN id instead of name";
+         type empty;
+       }
+     }
+     container remote-id {
+       presence "enable remote-id";
+       description "Configure DHCP option 82 remote id";
+       uses apply-advanced;
+       leaf host-name {
+         description "Add router host name to DHCP option-82 remote id";
+         type empty;
+       }
+       leaf use-interface-description {
+         description "Use interface description instead of interface name";
+         type enumeration {
+           enum "logical" {
+             description "Use the logical interface description";
+           }
+           enum "device" {
+             description "Use the device interface description";
+           }
+         }
+       }
+       leaf use-string {
+         description "Use raw string instead of the default remote id";
+         type string;
+       }
+       leaf mac {
+         description "Add chassis MAC Address to DHCP option-82 remote id";
+         type empty;
+       }
+     }
+     container vendor-id {
+       presence "enable vendor-id";
+       description "Configure DHCP option 82 vendor id";
+       uses apply-advanced;
+       leaf use-string {
+         description "Use raw string instead of the default vendor id";
+         default "Juniper Networks";
+         type string;
+       }
+     }
+   }
+ }

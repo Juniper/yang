@@ -1,0 +1,213 @@
+module junos-state-lldp {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/lldp";
+  prefix js-lldp;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     LLDP state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2022-02-21 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping lldp-neighbors-top {
+    description
+      "Top-level grouping for LLDP neighbors";
+
+    container neighbors {
+      description
+        "Enclosing container for the list of LLDP neighbors on an interface";
+
+      list neighbor {
+        key "id";
+        description
+          "List of LLDP neighbors";
+
+        leaf id {
+          type string;
+          description
+            "System generated identifier for the neighbor on the interface";
+        }
+
+        leaf system-name {
+          type string;
+          description
+            "The system name field shall contain an alpha-numeric string that
+            indicates the system's administratively assigned name.  The system
+            name should be the system's fully qualified domain name. If
+            implementations support IETF RFC 3418, the sysName object should be
+            used for this field.";
+
+        }
+
+        leaf system-description {
+          type string;
+          description
+            "The system description field shall contain an alpha-numeric string
+            that is the textual description of the network entity.  The system
+            description should include the full name and version identification
+            of the system's hardware type, software operating system, and
+            networking software. If implementations support IETF RFC 3418, the
+            sysDescr object should be used for this field.";
+
+        }
+
+        leaf chassis-id {
+          type string;
+          description
+            "The Chassis ID is a mandatory TLV which identifies the chassis
+            component of the endpoint identifier associated with the
+            transmitting LLDP agent";
+        }
+
+        leaf port-id {
+          type string;
+          description
+            "The Port ID is a mandatory TLV which identifies the port component
+            of the endpoint identifier associated with the transmitting LLDP
+            agent. If the specified port is an IEEE 802.3 Repeater port, then
+            this TLV is optional.";
+
+        }
+
+        leaf port-description {
+          type string;
+          description
+            "The binary string containing the actual port identifier for the
+            port which this LLDP PDU was transmitted. The source and format of
+            this field is defined by PtopoPortId from RFC2922.";
+
+        }
+
+        leaf ttl {
+          type uint16;
+          units "seconds";
+          description
+            "The time-to-live (TTL) is a mandatory TLV which indicates how long
+            information from the neighbor should be considered valid";
+        }
+      }
+    }
+  }
+
+  grouping lldp-interface-counters {
+    description
+      "Grouping for per interface LLDP counters";
+
+    leaf frame-in {
+      type yang:counter64;
+      description
+        "The number of LLDP frames received";
+    }
+
+    leaf frame-out {
+      type yang:counter64;
+      description
+        "The number of LLDP frames transmitted";
+    }
+  }
+
+  grouping lldp-interfaces-top {
+    description
+      "Top-level grouping for LLDP interfaces";
+
+    container interfaces {
+      description
+        "Enclosing container for the list of LLDP interfaces";
+
+      list interface {
+        key "name";
+        description
+          "List of LLDP interfaces";
+
+        leaf name {
+          type string;
+          description
+            "The name of the interface running LLDP";
+        }
+
+        leaf local-port-id {
+          type string;
+          description
+            "The string value used to identify the port component associated
+            with a given port in the local system";
+        }
+
+        leaf local-port-description {
+          type string;
+          description
+            "The string value used to identify the IEEE 802 LAN station's port
+            description associated with the local system. If the local agent
+            supports IETF RFC 2863, lldpLocPortDesc object should have the same
+            value of ifDescr object.";
+
+        }
+
+        container counters {
+          description
+            "LLDP counters on each interface";
+
+          uses lldp-interface-counters;
+        }
+
+        uses lldp-neighbors-top;
+      }
+    }
+  }
+
+  grouping lldp-top {
+    description
+      "Top-level grouping for LLDP state data";
+
+    container lldp {
+      description
+        "Container for LLDP state";
+
+      uses lldp-interfaces-top;
+    }
+  }
+
+  augment "/js:state/js-pro:protocols" {
+    description
+      "Adds LLDP domain to protocol state";
+
+    uses lldp-top;
+  }
+}

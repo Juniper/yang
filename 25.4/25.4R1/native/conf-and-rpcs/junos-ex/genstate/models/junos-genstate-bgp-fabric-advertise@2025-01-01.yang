@@ -1,0 +1,67 @@
+ module junos-genstate-bgp-fabric-advertise {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-fabric-advertise";
+   prefix jgbfa;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-fabric-advertise";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-fabric-advertise-top {
+     description "Top-level grouping";
+     container bgp-fabric-advertise {
+       description "BGP fabric advertise routes";
+       container fabric-advertise-route {
+         description "One fabric advertie route";
+         leaf rt-destination {
+           type string;
+           description "Route prefixes awaiting ACK";
+         }
+         leaf rt-prefix-length {
+           type string;
+         }
+         leaf rt-color {
+           type string;
+         }
+         leaf rt-color-community {
+           type string;
+         }
+         leaf rt-backup-color {
+           type string;
+         }
+         leaf rt-backup-color-community {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-fabric-advertise to top-level genstate";
+     uses bgp-fabric-advertise-top;
+   }
+ }

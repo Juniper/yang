@@ -1,0 +1,113 @@
+ module junos-genstate-license-fpc-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/license-fpc-information";
+   prefix jglfi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for license-fpc-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping license-fpc-information-top {
+     description "Top-level grouping";
+     container license-fpc-information {
+       description "Information about Advance / Premium bandwidth usage on device";
+       container flex-only-fpc-bandwidth-info {
+         description "Flex only linecards bandwidth information";
+         leaf fpc-header {
+           type empty;
+           description "FPC being used on device";
+         }
+         leaf no-fpc-used {
+           type empty;
+           description "No FPC used on the device";
+         }
+         container fpc-bandwidth {
+           leaf license-advance-bandwidth {
+             type int32;
+             description "Advance Bandwidth usage in active ports";
+           }
+           leaf license-premium-bandwidth {
+             type int32;
+             description "Premium Bandwidth usage in active ports";
+           }
+           list fpc-info-summary {
+             description "Information about fpc bandwidth usage on this device";
+             list fpc-info {
+               leaf fpc {
+                 type int32;
+                 description "FPC slot";
+               }
+               leaf fpc-serial-number {
+                 type string;
+                 description "FPC serial number";
+               }
+             }
+           }
+         }
+       }
+       container flex-capable-fpc-bandwidth-info {
+         description "Flex capable linecards bandwidth information";
+         leaf fpc-header {
+           type empty;
+           description "FPC being used on device";
+         }
+         leaf no-fpc-used {
+           type empty;
+           description "No FPC used on the device";
+         }
+         container fpc-bandwidth {
+           leaf license-advance-bandwidth {
+             type int32;
+             description "Advance Bandwidth usage in active ports";
+           }
+           leaf license-premium-bandwidth {
+             type int32;
+             description "Premium Bandwidth usage in active ports";
+           }
+           list fpc-info-summary {
+             description "Information about fpc bandwidth usage on this device";
+             list fpc-info {
+               leaf fpc {
+                 type int32;
+                 description "FPC slot";
+               }
+               leaf fpc-serial-number {
+                 type string;
+                 description "FPC serial number";
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds license-fpc-information to top-level genstate";
+     uses license-fpc-information-top;
+   }
+ }

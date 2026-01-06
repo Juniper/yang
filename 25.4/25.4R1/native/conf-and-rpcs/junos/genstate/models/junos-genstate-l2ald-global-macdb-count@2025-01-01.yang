@@ -1,0 +1,49 @@
+ module junos-genstate-l2ald-global-macdb-count {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/l2ald-global-macdb-count";
+   prefix jglgmc;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for l2ald-global-macdb-count";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping l2ald-global-macdb-count-top {
+     description "Top-level grouping";
+     container l2ald-global-macdb-count {
+       description "Top-level container";
+       leaf global-mac-count {
+         type uint64;
+         description "Number of global media access control addresses";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds l2ald-global-macdb-count to top-level genstate";
+     uses l2ald-global-macdb-count-top;
+   }
+ }

@@ -1,0 +1,1088 @@
+module junos-bbe-smgd-sub-mgmt-network-stats {
+  yang-version 1;
+  namespace "http://juniper.net/yang/bbemg-sub-mgmt-network";
+  prefix junos-bbe-smgd-sub-mgmt-network-stats;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of Junos native bbe-smgd subscriber
+	 management network stats yang model.";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping network-io-basic-stats {
+    description
+      "The set of network input output related statistics";
+    leaf l2-rx-packets-cnt {
+      description
+        "The count of received L2 packets";
+      type uint64;
+    }
+    leaf l2-rx-packets-failed {
+      description
+        "The count of Failed L2 received packets";
+      type uint64;
+    }
+    leaf l2-rx-malformed-cnt {
+      description
+        "The count of received Malformed L2 packets";
+      type uint64;
+    }
+    leaf l2-rx-ifd-invalid {
+      description
+        "The count of received L2 packets with invalid IFD";
+      type uint64;
+    }
+    leaf l2-rx-ifl-invalid {
+      description
+        "The count of received L2 packets with invalid IFL";
+      type uint64;
+    }
+    leaf l2-rx-no-iff-cnt {
+      description
+        "The count of received L2 packets with no IFF";
+      type uint64;
+    }
+    leaf l2-rx-if-create-failed {
+      description
+        "The count of received L2 packets with interface create failed";
+      type uint64;
+    }
+    leaf l2-bbe-io-rcv-l3-unknown-address-family {
+      description
+        "The count of received L2 BBE packets with unknown address family";
+      type uint64;
+    }
+    leaf l2-rx-unsupported-inet-protocol {
+      description
+        "The count of received L2 packets with unsupported INET protocol";
+      type uint64;
+    }
+    leaf l2-rx-unsupported-inet6-protocol {
+      description
+        "The count of received L2 packets with unsupported INET6 protocol";
+      type uint64;
+    }
+    leaf l2-rx-unsupported-udp-protocol {
+      description
+        "The count of received L2 packets with unsupported UDP protocol";
+      type uint64;
+    }
+    leaf l2-rx-unsupported-punt-af {
+      description
+        "The count of received L2 packets punted with unsupported
+		 address family";
+      type uint64;
+    }
+    leaf l2-rx-v4-data-path-punt-pkt {
+      description
+        "The count of received L2 V4 data path packets";
+      type uint64;
+    }
+    leaf l2-rx-v4-data-path-punt-pkt-drop {
+      description
+        "The count of received L2 V4 data path packets dropped";
+      type uint64;
+    }
+    leaf l2-rx-v6-data-path-punt-pkt {
+      description
+        "The count of received L2 V6 data path packets";
+      type uint64;
+    }
+    leaf l2-rx-v6-data-path-punt-pkt-drop {
+      description
+        "The count of received L2 V6 data path packets dropped";
+      type uint64;
+    }
+    leaf l2-tx-packets-cnt {
+      description
+        "The count of transmitted L2 packets";
+      type uint64;
+    }
+    leaf l2-tx-malformed-cnt {
+      description
+        "The count of Malformed L2 transmitted packets";
+      type uint64;
+    }
+    leaf l2-tx-no-ifd-cnt {
+      description
+        "The count of L2 transmitted packets with no IFD";
+      type uint64;
+    }
+    leaf l2-tx-ifl-invalid {
+      description
+        "The count of L2 transmitted packets with invalid IFL";
+      type uint64;
+    }
+    leaf l2-bbe-io-send-tx-failed {
+      description
+        "The count of L2 BBE I/O transmission failed packets";
+      type uint64;
+    }
+    leaf l2-bbe-io-send-tx-failed-partial {
+      description
+        "The count of L2 BBE I/O transmission partial failed packets";
+      type uint64;
+    }
+    leaf l2-tx-v4-out-error-local-intf {
+      description
+        "The count of transmitted L2 V4 packets having local interface error";
+      type uint64;
+    }
+    leaf l2-tx-v6-out-error-local-intf {
+      description
+        "The count of transmitted L2 V6 packets having local interface error";
+      type uint64;
+    }
+    leaf l3-rx-packet-cnt {
+      description
+        "The count of received L3 packets";
+      type uint64;
+    }
+    leaf l3-rx-unsupported-protocol {
+      description
+        "The count of received L3 packets with unsupported protocol";
+      type uint64;
+    }
+    leaf l3-tx-packet-cnt {
+      description
+        "The count of transmitted L3 packets";
+      type uint64;
+    }
+    leaf l3-tx-send-failed {
+      description
+        "The count of L3 packets with transmission failure";
+      type uint64;
+    }
+    leaf l3-tx-v4-kernel-forward {
+      description
+        "The count of transmitted L3 packets with V4 kernel forward";
+      type uint64;
+    }
+    leaf l3-tx-v4-kernel-forward-drops {
+      description
+        "The count of transmitted L3 packets with V4 kernel forward drops";
+      type uint64;
+    }
+    leaf l3-tx-v6-kernel-forward {
+      description
+        "The count of transmitted L3 packets with V6 kernel forward";
+      type uint64;
+    }
+    leaf l3-tx-v6-kernel-forward-drops {
+      description
+        "The count of transmitted L3 packets with V4 kernel forward drops";
+      type uint64;
+    }
+  }
+
+  grouping network-dhcp-stats {
+    description
+      "The set of network DHCP protocol related statistics";
+    leaf rx-packet-cnt {
+      description
+        "The count of received DHCP packets";
+      type uint64;
+    }
+    leaf era-drops {
+      description
+        "The count of DHCP ERA dropped packets";
+      type uint64;
+    }
+    leaf rx-no-connection {
+      description
+        "The count of DHCP packets received with no connection";
+      type uint64;
+    }
+    leaf rx-malformed-cnt {
+      description
+        "The count of received DHCP packets which are malformed-";
+      type uint64;
+    }
+    leaf rx-no-if-cnt {
+      description
+        "The count of DHCP packets received which have no interface";
+      type uint64;
+    }
+    leaf rx-ifl-invalid {
+      description
+        "The count of DHCP packets received with invalid IFL";
+      type uint64;
+    }
+    leaf rx-send-failed {
+      description
+        "The count of DHCP packets with RX send failed";
+      type uint64;
+    }
+    leaf tx-packet-cnt {
+      description
+        "The count of DHCP transmitted packets";
+      type uint64;
+    }
+    leaf packets-transmitted {
+      description
+        "The count of DHCP packets transmitted";
+      type uint64;
+    }
+    leaf tx-malformed-cnt {
+      description
+        "The count of DHCP malformed transmitted packets";
+      type uint64;
+    }
+    leaf tx-null-pkt {
+      description
+        "The count of DHCP transmitted Null packets";
+      type uint64;
+    }
+    leaf tx-no-if-cnt {
+      description
+        "The count of DHCP transmitted packets with no interface";
+      type uint64;
+    }
+    leaf tx-no-iff-cnt {
+      description
+        "The count of DHCP transmitted packets with no IFF";
+      type uint64;
+    }
+    leaf tx-no-rtt-cnt {
+      description
+        "The count of DHCP transmitted packets with no RTT";
+      type uint64;
+    }
+    leaf tx-arp-failed {
+      description
+        "The count of DHCP transmitted packets with ARP failure";
+      type uint64;
+    }
+    leaf tx-if-invalid {
+      description
+        "The count of DHCP transmitted packets with invalid interface";
+      type uint64;
+    }
+    leaf tx-send-failed {
+      description
+        "The count of DHCP transmitted packets with send failure";
+      type uint64;
+    }
+    leaf rx-while-not-connected {
+      description
+        "The count of DHCP packets received while not connected";
+      type uint64;
+    }
+  }
+
+  grouping network-pppoe-stats {
+    description
+      "The set of network PPPOE protocol related statistics";
+    leaf rx-cnt {
+      description
+        "The count of PPPOE received packets";
+      type uint64;
+    }
+    leaf rx-padi-cnt {
+      description
+        "The count of received PPPOE PADI packets";
+      type uint64;
+    }
+    leaf rx-padr-cnt {
+      description
+        "The count of received PPPOE PADP packets";
+      type uint64;
+    }
+    leaf rx-ppp-cnt {
+      description
+        "The count of received PPP packets.";
+      type uint64;
+    }
+    leaf rx-malformed-cnt {
+      description
+        "The count of malformed PPPOE received packets";
+      type uint64;
+    }
+    leaf rx-no-if-cnt {
+      description
+        "The count of received PPPOE packets with no interface";
+      type uint64;
+    }
+    leaf rx-unsupported {
+      description
+        "The count of received PPPOE unsupported packets";
+      type uint64;
+    }
+    leaf rx-padi-era-discards {
+      description
+        "The count of PADI era discarded packets";
+      type uint64;
+    }
+    leaf tx-cnt {
+      description
+        "The count of transmitted PPPOE packets";
+      type uint64;
+    }
+    leaf tx-send-failed {
+      description
+        "The count of PPPOE packets with transmission failure";
+      type uint64;
+    }
+  }
+
+  grouping network-ppp-stats {
+    description
+      "The set of network PPP protocol related statistics";
+    leaf rx-network-pkt-cnt {
+      description
+        "The count of received PPP network packets";
+      type uint64;
+    }
+    leaf rx-plugin-pkt-cnt {
+      description
+        "The received PPP plugin packet count";
+      type uint64;
+    }
+    leaf rx-lcp-conf-req-cnt {
+      description
+        "The received LCP config request packets count";
+      type uint64;
+    }
+    leaf rx-lcp-conf-ack-cnt {
+      description
+        "The received LCP config ack packets count";
+      type uint64;
+    }
+    leaf rx-lcp-conf-nack-cnt {
+      description
+        "The received LCP config nack packets count";
+      type uint64;
+    }
+    leaf rx-lcp-conf-rej-cnt {
+      description
+        "The received LCP config reject packets count";
+      type uint64;
+    }
+    leaf rx-lcp-term-req-cnt {
+      description
+        "The received LCP term req packets count";
+      type uint64;
+    }
+    leaf rx-lcp-term-ack-cnt {
+      description
+        "The received LCP term ack packets count";
+      type uint64;
+    }
+    leaf rx-lcp-code-rej-cnt {
+      description
+        "The received LCP code reject packets count";
+      type uint64;
+    }
+    leaf rx-lcp-protocol-rej-cnt {
+      description
+        "The received LCP protocol reject packets count";
+      type uint64;
+    }
+    leaf rx-lcp-echo-req-cnt {
+      description
+        "The received LCP echo request count";
+      type uint64;
+    }
+    leaf rx-lcp-echo-reply-cnt {
+      description
+        "The received LCP echo reply count";
+      type uint64;
+    }
+    leaf rx-lcp-discard-req-cnt {
+      description
+        "The received LCP discard request count";
+      type uint64;
+    }
+    leaf rx-pap-req-cnt {
+      description
+        "The received PAP request count";
+      type uint64;
+    }
+    leaf rx-pap-ack-cnt {
+      description
+        "The received PAP ack count";
+      type uint64;
+    }
+    leaf rx-pap-nack-cnt {
+      description
+        "The received PAP nack count";
+      type uint64;
+    }
+    leaf rx-chap-challenge-cnt {
+      description
+        "The received CHAP challenge count";
+      type uint64;
+    }
+    leaf rx-chap-resp-cnt {
+      description
+        "The received CHAP response count";
+      type uint64;
+    }
+    leaf rx-chap-success-cnt {
+      description
+        "The received CHAP success count";
+      type uint64;
+    }
+    leaf rx-chap-failure-cnt {
+      description
+        "The received CHAP failure count";
+      type uint64;
+    }
+    leaf rx-ipcp-req-cnt {
+      description
+        "The received IPCP request count";
+      type uint64;
+    }
+    leaf rx-ipcp-ack-cnt {
+      description
+        "The received IPCP ack count";
+      type uint64;
+    }
+    leaf rx-ipcp-nack-cnt {
+      description
+        "The received IPCP nack count";
+      type uint64;
+    }
+    leaf rx-ipv6cp-req-cnt {
+      description
+        "The received IPV6CP request count";
+      type uint64;
+    }
+    leaf rx-ipv6cp-ack-cnt {
+      description
+        "The received IPV6CP ack count";
+      type uint64;
+    }
+    leaf rx-ipv6cp-nack-cnt {
+      description
+        "The received IPV6CP nack count";
+      type uint64;
+    }
+    leaf rx-malformed-cnt {
+      description
+        "The received PPP malformed packets count";
+      type uint64;
+    }
+    leaf rx-no-if-cnt {
+      description
+        "The received PPP packets with no interface count";
+      type uint64;
+    }
+    leaf rx-unsupported {
+      description
+        "The received PPP packets which are unsupported";
+      type uint64;
+    }
+    leaf tx-cnt {
+      description
+        "The transmitted PPP packet count";
+      type uint64;
+    }
+    leaf tx-lcp-conf-req-cnt {
+      description
+        "The transmitted LCP config request count";
+      type uint64;
+    }
+    leaf tx-lcp-conf-ack-cnt {
+      description
+        "The transmitted LCP config ack count";
+      type uint64;
+    }
+    leaf tx-lcp-conf-nack-cnt {
+      description
+        "The transmitted LCP config nack count";
+      type uint64;
+    }
+    leaf tx-lcp-conf-rej-cnt {
+      description
+        "The transmitted LCP config reject count";
+      type uint64;
+    }
+    leaf tx-lcp-echo-req-cnt {
+      description
+        "The transmitted LCP echo request count";
+      type uint64;
+    }
+    leaf tx-lcp-echo-reply-cnt {
+      description
+        "The transmitted LCP echo reply count";
+      type uint64;
+    }
+    leaf tx-lcp-discard-req-cnt {
+      description
+        "The transmitted LCP discard request count";
+      type uint64;
+    }
+    leaf tx-lcp-term-req-cnt {
+      description
+        "The transmitted LCP term request count";
+      type uint64;
+    }
+    leaf tx-lcp-term-ack-cnt {
+      description
+        "The transmitted LCP term ack count";
+      type uint64;
+    }
+    leaf tx-pap-req-cnt {
+      description
+        "The transmitted PAP request count";
+      type uint64;
+    }
+    leaf tx-pap-ack-cnt {
+      description
+        "The transmitted PAP ack count";
+      type uint64;
+    }
+    leaf tx-pap-nack-cnt {
+      description
+        "The transmitted PAP nack count";
+      type uint64;
+    }
+    leaf tx-chap-challenge-cnt {
+      description
+        "The transmitted CHAP challenge count";
+      type uint64;
+    }
+    leaf tx-chap-resp-cnt {
+      description
+        "The transmitted CHAP response count";
+      type uint64;
+    }
+    leaf tx-chap-success-cnt {
+      description
+        "The transmitted CHAP success count";
+      type uint64;
+    }
+    leaf tx-chap-failure-cnt {
+      description
+        "The transmitted CHAP failure count";
+      type uint64;
+    }
+    leaf tx-ipcp-req-cnt {
+      description
+        "The transmitted IPCP request count";
+      type uint64;
+    }
+    leaf tx-ipcp-ack-cnt {
+      description
+        "The transmitted IPCP ack count";
+      type uint64;
+    }
+    leaf tx-ipcp-nack-cnt {
+      description
+        "he transmitted IPCP nack count";
+      type uint64;
+    }
+    leaf tx-ipv6cp-req-cnt {
+      description
+        "The transmitted IPV6CP request count";
+      type uint64;
+    }
+    leaf tx-ipv6cp-ack-cnt {
+      description
+        "The transmitted IPV6CP ack count";
+      type uint64;
+    }
+    leaf tx-ipv6cp-nack-cnt {
+      description
+        "The transmitted IPV6CP nack count";
+      type uint64;
+    }
+    leaf tx-unknown-pkt-cnt {
+      description
+        "The transmitted unknown packet count";
+      type uint64;
+    }
+    leaf tx-send-failed {
+      description
+        "The PPP transmitted failed packets";
+      type uint64;
+    }
+    leaf tx-malformed-cnt {
+      description
+        "The transmitted malformed packets count";
+      type uint64;
+    }
+  }
+
+  grouping network-dvlan-stats {
+    description
+      "The set of network DVLAN related statistics";
+    leaf rx-packet-cnt {
+      type uint64;
+      description
+        "The count of received DVLAN packets";
+    }
+  }
+
+  grouping network-l2tp-stats {
+    description
+      "The set of network L2TP protocol related statistics";
+    leaf rx-cnt {
+      description
+        "The received L2TP packets count";
+      type uint64;
+    }
+    leaf rx-pkt-cnt {
+      description
+        "The received L2TP packets count";
+      type uint64;
+    }
+    leaf ppp-rx-pkt-cnt {
+      description
+        "The received PPP packets count";
+      type uint64;
+    }
+    leaf tx-pkt-cnt {
+      description
+        "The transmitted packets count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-conf-req-count {
+      description
+        "The received PPP LCP conf req packet count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-conf-ack-count {
+      description
+        "The received PPP LCP conf ack packet count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-conf-nack-count {
+      description
+        "The received PPP LCP conf nack packet count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-term-req-count {
+      description
+        "The received PPP LCP term req packet count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-term-ack-count {
+      description
+        "The received PPP LCP term ack packet count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-echo-req-count {
+      description
+        "The received PPP LCP echo req packet count";
+      type uint64;
+    }
+    leaf ppp-rx-lcp-echo-resp-count {
+      description
+        "The received PPP LCP echo response packet count";
+      type uint64;
+    }
+    leaf ppp-rx-pap-req-count {
+      description
+        "The received PPP pap req packet count";
+      type uint64;
+    }
+    leaf ppp-rx-pap-ack-count {
+      description
+        "The received PPP pap ack count";
+      type uint64;
+    }
+    leaf ppp-rx-pap-nack-count {
+      description
+        "The received PPP pap nack count";
+      type uint64;
+    }
+    leaf ppp-rx-chap-challenge-count {
+      description
+        "The received PPP chap challenge count";
+      type uint64;
+    }
+    leaf ppp-rx-chap-resp-count {
+      description
+        "The received PPP chap response count";
+      type uint64;
+    }
+    leaf ppp-rx-chap-success-count {
+      description
+        "The received PPP chap success count";
+      type uint64;
+    }
+    leaf ppp-rx-chap-fail-count {
+      description
+        "The received PPP chap fail count";
+      type uint64;
+    }
+    leaf ppp-rx-ipcp-conf-req-count {
+      description
+        "The received PPP IPCP config request count";
+      type uint64;
+    }
+    leaf ppp-rx-ipcp-conf-ack-count {
+      description
+        "The received PPP IPCP config ack count";
+      type uint64;
+    }
+    leaf ppp-rx-ipcp-conf-nack-count {
+      description
+        "The received PPP IPCP config nack count";
+      type uint64;
+    }
+    leaf rx-malformed-cnt {
+      description
+        "The received PPP malformed count";
+      type uint64;
+    }
+    leaf ppp-rx-unknown-protocol {
+      description
+        "The received PPP packets with unknown protocol";
+      type uint64;
+    }
+    leaf rx-msg-cnt {
+      description
+        "The received PPP messages count";
+      type uint64;
+    }
+    leaf rx-msg-processd-cnt {
+      description
+        "The received processes messages count";
+      type uint64;
+    }
+    leaf rx-msg-err {
+      description
+        "The received error messages count";
+      type uint64;
+    }
+    leaf rx-invalid-msg-cnt {
+      description
+        "The received invalid messages count";
+      type uint64;
+    }
+    leaf tx-cnt {
+      description
+        "The transmitted PPP packets count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-conf-req-count {
+      description
+        "The transmitted ppp LCP config req count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-conf-ack-count {
+      description
+        "The transmitted ppp LCP config ack count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-conf-nack-count {
+      description
+        "The transmitted ppp LCP config nack count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-echo-req-count {
+      description
+        "The transmitted ppp LCP echo request count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-echo-resp-count {
+      description
+        "The transmitted ppp LCP echo response count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-term-req-count {
+      description
+        "The transmitted ppp LCP term request count";
+      type uint64;
+    }
+    leaf ppp-tx-lcp-term-ack-count {
+      description
+        "The transmitted ppp LCP term ack count";
+      type uint64;
+    }
+    leaf ppp-tx-pap-req-count {
+      description
+        "The transmitted ppp pap req count";
+      type uint64;
+    }
+    leaf ppp-tx-pap-ack-count {
+      description
+        "The transmitted ppp pap ack count";
+      type uint64;
+    }
+    leaf ppp-tx-pap-nack-count {
+      description
+        "The transmitted ppp pap nack count";
+      type uint64;
+    }
+    leaf ppp-tx-chap-challenge-count {
+      description
+        "The transmitted ppp chap challenge count";
+      type uint64;
+    }
+    leaf ppp-tx-chap-resp-count {
+      description
+        "The transmitted ppp chap response count";
+      type uint64;
+    }
+    leaf ppp-tx-chap-success-count {
+      description
+        "The transmitted ppp chap success count";
+      type uint64;
+    }
+    leaf ppp-tx-chap-fail-count {
+      description
+        "The transmitted ppp chap fail count";
+      type uint64;
+    }
+    leaf ppp-tx-ipcp-conf-req-count {
+      description
+        "The transmitted ppp IPCP config request count";
+      type uint64;
+    }
+    leaf ppp-tx-ipcp-conf-ack-count {
+      description
+        "The transmitted ppp IPCP config ack count";
+      type uint64;
+    }
+    leaf ppp-tx-ipcp-conf-nack-count {
+      description
+        "The transmitted ppp IPCP config nack count";
+      type uint64;
+    }
+    leaf ppp-tx-unknown-protocol {
+      description
+        "The transmitted ppp packets with unknown protocol count";
+      type uint64;
+    }
+    leaf tx-pkt-send-failed {
+      description
+        "The packets count with send failed";
+      type uint64;
+    }
+    leaf tx-pkt-err {
+      description
+        "The transmitted packets with error count";
+      type uint64;
+    }
+    leaf tx-msg-cnt {
+      description
+        "The transmitted message packets count";
+      type uint64;
+    }
+    leaf tx-msg-err {
+      description
+        "The transmitted error message packets count";
+      type uint64;
+    }
+  }
+
+  grouping network-hag-stats {
+    description
+      "The set of network hag related statistics";
+    leaf rx-network-pkt-cnt {
+      description
+        "The received network packet count";
+      type uint64;
+    }
+    leaf rx-malformed-pkt-cnt {
+      description
+        "The received malformed packet count";
+      type uint64;
+    }
+    leaf rx-no-if-pkt-cnt {
+      description
+        "The received packets with no interface count";
+      type uint64;
+    }
+    leaf rx-send-succeeded-pkt-cnt {
+      description
+        "The received send succeeded packet count";
+      type uint64;
+    }
+    leaf rx-send-failed-pkt-cnt {
+      description
+        "The received send failed packet count";
+      type uint64;
+    }
+    leaf rx-unsupported-pkt-cnt {
+      description
+        "The received unsupported packet count";
+      type uint64;
+    }
+    leaf rx-setup-request-cnt {
+      description
+        "The received setup request count";
+      type uint64;
+    }
+    leaf rx-hello-pkt-cnt {
+      description
+        "The received hello packet count";
+      type uint64;
+    }
+    leaf rx-tear-down-pkt-cnt {
+      description
+        "The received tear down packet count";
+      type uint64;
+    }
+    leaf rx-notify-pkt-cnt {
+      description
+        "The received notify packet count";
+      type uint64;
+    }
+    leaf tx-network-pkt-cnt {
+      description
+        "The transmitted network packet count";
+      type uint64;
+    }
+    leaf tx-null-pkt-cnt {
+      description
+        "The transmitted null packet count";
+      type uint64;
+    }
+    leaf tx-no-if-pkt-cnt {
+      description
+        "The transmitted packet with no interface";
+      type uint64;
+    }
+    leaf tx-send-succeeded-pkt-cnt {
+      description
+        "The transmitted send succeeded packet count";
+      type uint64;
+    }
+    leaf tx-send-failed-pkt-cnt {
+      description
+        "The transmitted send failed packet count";
+      type uint64;
+    }
+    leaf tx-setup-request-pkt-cnt {
+      description
+        "The transmitted setup request packet count";
+      type uint64;
+    }
+    leaf tx-setup-accept-pkt-cnt {
+      description
+        "The transmitted setup accept packet count";
+      type uint64;
+    }
+    leaf tx-setup-deny-pkt-cnt {
+      description
+        "The transmitted setup deny packet count";
+      type uint64;
+    }
+    leaf tx-hello-pkt-cnt {
+      description
+        "The transmitted hello packet count";
+      type uint64;
+    }
+    leaf tx-tear-down-pkt-cnt {
+      description
+        "The transmitted tear down packet count";
+      type uint64;
+    }
+    leaf tx-notify-pkt-cnt {
+      description
+        "The transmitted notify packet count";
+      type uint64;
+    }
+    leaf inflight-hag-sessions-cnt {
+      description
+        "The inflight hag sessions count";
+      type uint64;
+    }
+    leaf successful-hag-sessions-cnt {
+      description
+        "The successful hag sessions count";
+      type uint64;
+    }
+    leaf failed_hag-sessions-cnt {
+      description
+        "The failed hag sessions count";
+      type uint64;
+    }
+  }
+
+  grouping bbe-smgd-sub-mgmt-network-stats-top {
+    description
+      "Top level grouping for bbe smgd mgmt network stats";
+    container junos {
+      description
+        "JunOS OS";
+      config false;
+      container system {
+        description
+          "Junos System";
+        container subscriber-management {
+          description
+            "Subscriber management data";
+          container uplanes {
+            description
+              "User planes";
+            list uplane {
+              description
+                "User plane list";
+              key "uplane-id";
+              leaf uplane-id {
+                description
+                  "user plane identification number";
+                type uint32;
+              }
+              container infra {
+                description
+                  "Container for infra";
+                container network {
+                  description
+                    "Container for network";
+                  container io {
+                    description
+                      "Input/output statistics";
+                    uses network-io-basic-stats;
+                  }
+                  container dhcp {
+                    description
+                      "DHCP protocol network statistics";
+                    uses network-dhcp-stats;
+                  }
+                  container ppp {
+                    description
+                      "PPP protocol network statistics";
+                    uses network-ppp-stats;
+                  }
+                  container pppoe {
+                    description
+                      "PPPOE protocol network statistics";
+                    uses network-pppoe-stats;
+                  }
+                  container dvlan {
+                    description
+                      "DVLAN related network statistics";
+                    uses network-dvlan-stats;
+                  }
+                  container l2tp {
+                    description
+                      "L2TP related network statistics";
+                    uses network-l2tp-stats;
+                  }
+                  container hag {
+                    description
+                      "HAG related network statistics";
+                    uses network-hag-stats;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses bbe-smgd-sub-mgmt-network-stats-top;
+}

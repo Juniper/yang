@@ -1,0 +1,678 @@
+module jnx-aug-openconfig-mpls {
+
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/mpls";
+
+  prefix "jnx-oc-mpls";
+
+  import openconfig-mpls-types { prefix oc-mpls-t; }
+  import openconfig-inet-types { prefix oc-inet-t; }
+
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains JUNOS augments to the OpenConfig MPLS model";
+
+  revision "2018-08-08" {
+    description
+      "Augment P2P path with references to associated RSVP path states";
+  }
+
+  revision "2018-05-20" {
+    description
+      "This revision adds the augments to /mpls/signaling-protocols/segment-routing for SR TE ingress and transit statistics";
+  }
+  
+  revision "2016-06-08" {
+    description
+      "Initial revision";
+    reference "TBD";
+  }
+
+
+  grouping jnx-tunnel-counters {
+    leaf name {
+      type string;
+      description
+        "Name of the counter. This is useful when an LSP has multiple
+        counters. When an LSP is resignalled, it is possible that a new
+        counter is created in the hardware.";
+    }
+
+    leaf packet-rate {
+      type uint64;
+      description
+        "Packet rate computed over the most recent 3 second interval";
+    }
+
+    leaf byte-rate {
+      type uint64;
+      description
+        "Byte rate computed over the most recent 3 second interval";
+    }
+  }
+
+  grouping jnx-tunnel-state {
+    leaf inherited-metric {
+      type uint32;
+      description
+        "Inherited metric";
+    }
+    
+    leaf tunnel-id {
+      type uint32;
+      description
+        "tunnel-id";
+    }
+
+    leaf instance-identifier {
+      type uint32;
+      description
+        "Instance Identifier for cases when RPD creates multiple
+        instances";
+    }
+  }
+
+  grouping jnx-tunnel-bandwidth-state {
+    leaf bandwidth {
+      type uint64;
+    description
+      "Reserved Bandwidth";
+    }
+  }
+
+  grouping jnx-tunnel-auto-bandwidth-state {
+    leaf max-average-bandwidth {
+      type uint64;
+      units "Bytes per second";
+      description
+        "Maximum Average Bandwidth";
+    }
+  }
+
+  grouping jnx-rsvp-session-state {
+    leaf notify-status {
+      type string;
+    }
+  }
+
+  grouping jnx-rsvp-interface-bw-res-state {
+    leaf static-bandwidth {
+      type uint64;
+      units "bps";
+      description 
+        "Maximum Reservable (Static) Bandwidth";
+    }
+  }
+
+  grouping jnx-tunnel-p2p-path-state {
+    leaf notify-status {
+      type string;
+    }
+  }
+
+  grouping jnx-tunnel-p2p-paths {
+    list lsp-instances {
+      key "local-index";
+
+      leaf local-index {
+        type leafref {
+          path "../state/local-index";
+        }
+      }
+
+      container state {
+        leaf local-index {
+          type uint32;
+        }
+        leaf notify-status {
+          type string;
+        }
+        leaf metric {
+          type int32;
+        }
+        leaf bandwidth {
+          type uint64;
+        }
+        leaf max-average-bandwidth {
+          type uint64;
+        }
+      }
+    }
+  }
+
+  grouping jnx-sr-te-ip-state {
+    leaf to-address {
+      type oc-inet-t:ip-address;
+      description
+        "Ip-address of the tunnel end-point. IPv4 and IPv6 are supported and will be denoted 7.7.7.7 and 7::7:7:7 respectively. (These are just examples)";
+    }
+
+    leaf color {
+      type uint64;
+      description
+        "Color identifier for the tunnel end-point
+        Valid range is 0..4294967295";
+    }
+  }
+
+  grouping jnx-sr-te-bsid-state {
+    leaf binding-sid {
+      type oc-mpls-t:mpls-label;
+      description
+        "Specify the binding-label to enable transit functionality for this tunnel.
+        Valid range is 16..1048575
+        [Here the label range for binding sid has to be from the static range mentioned in show mpls label usage]";
+    }
+
+    uses jnx-sr-te-ip-state;
+  }
+
+  grouping jnx-sr-te-transit-tunnel-state {
+      leaf tunnel-name {
+          type string;
+          description
+              "Tunnel name for the said sensor OC path";
+      }
+  }
+
+  grouping jnx-sr-te-per-lsp-transit-state {
+      list record {
+        key "tunnel-name source origin distinguisher lsp-name";
+        config false;
+      leaf tunnel-name {
+          type string;
+          description "Tunnel name for the said sensor";
+      }
+      leaf source {
+          type string;
+          description "Source for the said sensor";
+      }
+      leaf origin {
+          type string;
+          description "Origin for the said sensor";
+      }
+      leaf distinguisher {
+          type string;
+          description "Distinguisher for the said sensor";
+      }
+      leaf lsp-name {
+          type string;
+          description "Lsp name for the said sensor";
+      }
+
+      leaf counter-name {
+        type string;
+        description "Counter name for the said sensor";
+      }
+
+      leaf instance-identifier {
+        type uint32;
+        description "Instance Identifier for cases when RPD creates multiple instances";
+      }
+
+      leaf packets {
+        type uint64;
+        description "A cumulative counter of the packets";
+      }
+
+      leaf bytes {
+        type uint64;
+        description "A cumulative counter of the bytes";
+      }
+    }
+  }
+
+  grouping jnx-sr-te-per-lsp-ingress-state {
+      list record {
+        key "tunnel-name source origin distinguisher lsp-name";
+        config false;
+      leaf tunnel-name {
+          type string;
+          description "Tunnel name for the said sensor";
+      }
+      leaf source {
+          type string;
+          description "Source for the said sensor";
+      }
+      leaf origin {
+          type string;
+          description "Origin for the said sensor";
+      }
+      leaf distinguisher {
+          type string;
+          description "Distinguisher for the said sensor";
+      }
+      leaf lsp-name {
+          type string;
+          description "Lsp name for the said sensor";
+      }
+
+      leaf counter-name {
+        type string;
+        description "Counter name for the said sensor";
+      }
+
+      leaf instance-identifier {
+        type uint32;
+        description "Instance Identifier for cases when RPD creates multiple instances";
+      }
+
+      leaf packets {
+        type uint64;
+        description "A cumulative counter of the packets";
+      }
+
+      leaf bytes {
+        type uint64;
+        description "A cumulative counter of the bytes";
+      }
+    }
+  }
+
+  grouping jnx-sr-te-common-counters {
+    list counters {
+      key "name";
+      config false;
+
+      description
+        "Per segment indentifier counters used in the model";
+
+      leaf name {
+        type string;
+        description
+          "Counter name for the said sensor OC path";
+      }
+
+      leaf packets {
+        type uint64;
+        description
+          "A cumulative counter of the packets";
+      }
+
+      leaf bytes {
+        type uint64;
+        description
+          "A cumulative counter of the bytes";
+      }
+    }
+  }
+
+  grouping jnx-sr-sid-state-counters {
+    container counters {
+      description
+        "Per segment identifier counters used in the aggregate-sid  model";
+
+        leaf in-pkts {
+          type uint64;
+          description
+            "A cumulative counter of the packets received within the context
+            which have matched a label corresponding to an SR Segment Identifier.";
+        }
+
+        leaf out-pkts {
+          type uint64;
+          description
+            "A cumulative counter of the total number of packets transmitted by
+            the local system within the context which have a label imposed that
+            corresponds to an Segment Identifier.";
+        }
+    }
+  }
+
+  grouping jnx-sr-egress-interface-state-counters {
+    container counters {
+      description
+        "Per segment identifier counters used in the egress model";
+
+        leaf out-pkts {
+          type uint64;
+          description
+            "A cumulative counter of the total number of packets transmitted by
+            the local system within the context which have a label imposed that
+            corresponds to an Segment Identifier.";
+        }
+
+        leaf out-octets {
+          type uint64;
+          description
+            "A cumulative counter of the total bytes transmitted by the local
+            system within the context which have a label imported that
+            corresponds to an SR Segment Identifier.";
+        }
+    }
+  }
+
+  grouping jnx-sr-te-bsid-policies-container {
+    container sr-te-bsid-policies {
+      description
+        "Per bsid, to-address and color counters on the local system";
+
+      list sr-te-bsid-policy {
+        key "binding-sid to-address color";
+        config false;
+
+        description
+          "Counters of the local system corresponding to traffic received or forwarded
+          with a particular bsid, to-address and color";
+
+        leaf binding-sid {
+          type leafref {
+            path "../state/binding-sid";
+          }
+          description
+            "Specify the binding-label to enable transit functionality for this tunnel. [Here the label range for binding sid has to be from the static range mentioned in show mpls label usage]";
+        }
+
+        leaf to-address {
+          type leafref {
+            path "../state/to-address";
+          }
+          description
+            "Ip-address of the tunnel end-point";
+        }
+
+        leaf color {
+          type leafref {
+            path "../state/color";
+          }
+          description
+            "Color identifier for the tunnel end-point";
+        }
+
+        container state {
+          config false;
+          description
+            "State parameters for per binding-sid, to-address and color statistics";
+
+          uses jnx-sr-te-bsid-state;
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-sr-te-ip-policies-container {
+    container sr-te-ip-policies {
+      description
+        "Per to-address and color counters on the local system";
+
+      list sr-te-ip-policy {
+        key "to-address color";
+        config false;
+
+        description
+          "Counters of the local system corresponding to traffic received
+          with a particular to and color";
+
+        leaf to-address {
+          type leafref {
+            path "../state/to-address";
+          }
+          description
+            "Ip-address of the tunnel end-point";
+        }
+
+        leaf color {
+          type leafref {
+            path "../state/color";
+          }
+          description
+            "Color identifier for the tunnel end-point
+            Valid range is 0..4294967295";
+        }
+
+        container state {
+          config false;
+          description
+            "State parameters for per to-address and color statistics";
+
+          uses jnx-sr-te-ip-state;
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-sr-te-per-lsp-transit-policies-container {
+    container sr-te-per-lsp-transit-policies {
+      description
+        "Tunnel-name on the local system";
+
+      list sr-te-per-lsp-transit-policy {
+        config false;
+
+        description
+          "Counters of the local system corresponding to traffic received or forwarded
+          with a particular tunnel-name";
+
+          uses jnx-sr-te-per-lsp-transit-state;
+      }
+    }
+  }
+
+  grouping jnx-sr-te-per-lsp-ingress-policies-container {
+    container sr-te-per-lsp-ingress-policies {
+      description
+        "Tunnel-name on the local system";
+
+      list sr-te-per-lsp-ingress-policy {
+        config false;
+
+        description
+          "Counters of the local system corresponding to traffic received or forwarded
+          with a particular tunnel-name";
+
+          uses jnx-sr-te-per-lsp-ingress-state;
+      }
+    }
+  }
+
+  grouping jnx-sr-te-transit-tunnel-policies-container {
+    container sr-te-transit-tunnel-policies {
+      description
+        "Tunnel-name on the local system";
+
+      list sr-te-transit-tunnel-policy {
+        config false;
+
+        description
+          "Counters of the local system corresponding to traffic received or forwarded
+          with a particular tunnel-name";
+
+        container state {
+          config false;
+          description
+            "State parameters for tunnel-name statistics";
+
+          uses jnx-sr-te-transit-tunnel-state;
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-sr-te-ingress-tunnel-policies-container {
+    container sr-te-ingress-tunnel-policies {
+      description
+        "Tunnel-name on the local system";
+
+      list sr-te-ingress-tunnel-policy {
+        config false;
+
+        description
+          "Counters of the local system corresponding to traffic received or forwarded
+          with a particular tunnel-name";
+
+        container state {
+          config false;
+          description
+            "State parameters for tunnel-name statistics";
+
+          uses jnx-sr-te-transit-tunnel-state;
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-ldp-lsps-ingress-container {
+    container lsp-ingress-policies {
+      description
+        "LDP lsp ingress policies on the system";
+      list lsp-ingress-policy {
+        key "ip-prefix";
+
+        description
+            "LDP lsp ingress policy with the corresponding IP-prefix on the system";
+
+        leaf ip-prefix {
+          type string;
+
+          description
+            "IP-prefix";
+        }
+
+
+        container state {
+          description
+              "State parameters for Ingress LDP Lsp statistics";
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-ldp-lsps-transit-container {
+    container lsp-transit-policies {
+        description
+          "LDP lsp transit policies on the system";
+      list lsp-transit-policy {
+        key "ip-prefix";
+
+        description
+            "LDP lsp transit policy with the corresponding IP-prefix on the system";
+        leaf ip-prefix {
+          type string;
+
+          description
+              "IP-prefix";
+        }
+        container state {
+          description
+              "State parameters for Transit LDP Lsp statistics";
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-ldp-p2mp-lsps-container {
+    container p2mp-lsps {
+      description
+        " As per root-address lsp-id source-ip and group-ip counters on the system";
+      list p2mp-lsp {
+        key "root-address lsp-id source-ip group-ip";
+
+        leaf root-address {
+          type string;
+          description
+              "Root-address for P2MP";
+        }
+        leaf lsp-id {
+          type uint32;
+          description
+              "LSP-ID for P2MP";
+        }
+        leaf source-ip {
+          type string;
+          description
+              "Source-IP for P2MP";
+        }
+        leaf group-ip {
+          type string;
+          description
+              "Group-IP for P2MP";
+        }
+        container state {
+          description
+              "State parameters for Transit LDP P2MP LSP statistics";
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-ldp-p2mp-lsp-branches-container {
+    container p2mp-lsp-branches {
+      description
+        " As per root-address lsp-id branch-id source-ip and group-ip counters on the system";
+      list p2mp-lsp-branch {
+        key "root-address lsp-id source-ip group-ip branch-id";
+
+        leaf root-address {
+          type string;
+          description
+              "Root-address for P2MP";
+        }
+        leaf lsp-id {
+          type uint32;
+          description
+              "LSP-ID for P2MP";
+        }
+        leaf source-ip {
+          type string;
+          description
+              "Source-IP for P2MP";
+        }
+        leaf group-ip {
+          type string;
+          description
+              "Group-IP for P2MP";
+        }
+        leaf branch-id {
+          type uint32;
+          description
+              "BRANCH-ID for P2MP";
+        }
+        container state {
+          description
+              "State parameters for Transit LDP P2MP LSP BRANCH statistics";
+          uses jnx-sr-te-common-counters;
+        }
+      }
+    }
+  }
+
+  grouping jnx-ldp-p2mp-interface-container {
+    container p2mp-interfaces {
+    description
+      "Per interface-name for ldp p2mp interface counters on the system";
+      list p2mp-interface {
+        key "interface-name";
+
+        leaf interface-name {
+            type string;
+            description
+              "Interface-Name for P2MP";
+        }
+        container state {
+            container received-counters {
+                description
+                    "State parameters for Transit LDP P2MP IF received statistics";
+                uses jnx-sr-te-common-counters;
+            }
+            container transmit-counters {
+                description
+                    "State parameters for Transit LDP P2MP IF transmit statistics";
+                uses jnx-sr-te-common-counters;
+            }
+        }
+      }
+    }
+  }
+
+}

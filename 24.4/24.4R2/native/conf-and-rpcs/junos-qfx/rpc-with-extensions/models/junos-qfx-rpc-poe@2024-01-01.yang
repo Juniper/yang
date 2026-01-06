@@ -1,0 +1,1277 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-qfx-rpc-poe {
+   namespace "http://yang.juniper.net/junos-qfx/rpc/poe";
+
+   prefix poe;
+
+   import junos-common-ddl-extensions {
+     prefix junos;
+     revision-date 2024-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2024-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for poe command(s)";
+
+   revision 2024-01-01 {
+     description "Junos: 24.4R2.25";
+   }
+
+   rpc get-poe-interface-information {
+     description "Show Power over Ethernet interfaces";
+     junos:command "show poe interface";
+     input {
+       uses command-forwarding;
+       leaf ifname {
+         description "Name of interface";
+         junos:cli-feature "nokeyword";
+         type union {
+           type jt:interface-device;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       container poe {
+         uses poe-block;
+       }
+     }
+   }
+   rpc get-poe-interface-fpc-information {
+     description "Show PoE information for specific FPC Slot";
+     junos:command "show poe interface fpc-slot";
+     input {
+       leaf fpc-slot {
+         description "FPC slot number";
+         junos:cli-feature "nokeyword";
+         type union {
+           type string {
+             pattern "<.*>|$.*";
+           }
+           type uint32;
+         }
+       }
+     }
+     output {
+       container poe {
+         uses poe-block;
+       }
+     }
+   }
+   rpc get-telemetries-information {
+     description "Show Power over Ethernet telemetries";
+     junos:command "show poe telemetries";
+     input {
+       uses command-forwarding;
+       leaf count {
+         description "Number of entries to show";
+         default "all";
+         type string;
+       }
+       leaf interface {
+         description "Show PoE telemetries for an interface";
+         default "all";
+         type string;
+       }
+     }
+     output {
+       container poe {
+         uses poe-block;
+       }
+     }
+   }
+   rpc get-poe-controller-information {
+     description "Show Power over Ethernet system information";
+     junos:command "show poe controller";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container poe {
+         uses poe-block;
+       }
+     }
+   }
+   rpc get-poe-notifications {
+     description "Show Power over Ethernet notification information";
+     junos:command "show poe notification-control";
+     input {
+       uses command-forwarding;
+     }
+     output {
+       container poe {
+         uses poe-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping poe-block {
+     list poe-interface-information {
+       leaf interface-name {
+         type string;
+       }
+       leaf interface-enabled {
+         type string;
+       }
+       leaf interface-status {
+         type string;
+         description "Interface status";
+       }
+       leaf interface-power-limit {
+         type string;
+         description "Port power limit";
+       }
+       leaf interface-lldp-negotiation-power {
+         type string;
+         description "LLDP-negotiated power";
+       }
+       leaf interface-priority {
+         type string;
+         description "Priority options";
+       }
+       leaf interface-lldp-negotiation-priority {
+         type string;
+         description "LLDP-negotiated priority";
+       }
+       leaf interface-power {
+         type string;
+         description "Power per interface";
+       }
+       leaf interface-asterisk {
+         type string;
+         description "*";
+       }
+       leaf interface-class {
+         type string;
+         description "Class of powered device";
+       }
+     }
+     list poe-interface-information-detail {
+       leaf interface-name-detail {
+         type string;
+         description "Interface name";
+       }
+       leaf interface-enabled-detail {
+         type string;
+       }
+       leaf interface-status-detail {
+         type string;
+         description "Interface status";
+       }
+       leaf interface-power-limit-detail {
+         type string;
+         description "Port power limit";
+       }
+       leaf interface-lldp-negotiation-power-detail {
+         type string;
+         description "LLDP-negotiated power detail";
+       }
+       leaf interface-priority-detail {
+         type string;
+         description "Priority options";
+       }
+       leaf interface-lldp-negotiation-priority-detail {
+         type string;
+         description "LLDP-negotiated priority detail";
+       }
+       leaf interface-power-detail {
+         type string;
+         description "Power per interface";
+       }
+       leaf interface-detail-asterisk {
+         type string;
+         description "*";
+       }
+       leaf interface-class-detail {
+         type string;
+         description "Class of Powered Device";
+       }
+       leaf interface-mode-detail {
+         type string;
+         description "PoE Mode";
+       }
+     }
+     list notification-information {
+       leaf fpc-number {
+         type string;
+         description "Virtual-chassis number";
+       }
+       leaf notification-status {
+         type string;
+         description "Notification status";
+       }
+     }
+     list controller-information {
+       leaf controller-number {
+         type string;
+         description "Virtual-chassis index";
+       }
+       leaf controller-firmware-available {
+         type string;
+         description "**";
+       }
+       leaf controller-maxpower {
+         type string;
+         description "Power limit";
+       }
+       leaf controller-power {
+         type string;
+         description "Power";
+       }
+       leaf controller-asterisk {
+         type string;
+         description "*";
+       }
+       leaf controller-guardband {
+         type string;
+         description "Guard band";
+       }
+       leaf controller-management {
+         type string;
+         description "Management mode";
+       }
+       leaf controller-status {
+         type string;
+         description "Controller download status";
+       }
+       leaf controller-lldp-priority {
+         type string;
+         description "LLDP priority status";
+       }
+       leaf controller-power-reserved {
+         type string;
+         description "Power reserved";
+       }
+     }
+     container poe-error {
+       leaf max-power-exceeded-interface {
+         type empty;
+       }
+       leaf max-power-exceeded-controller {
+         type empty;
+       }
+       leaf poe-software-upgrade-controller {
+         type empty;
+       }
+       leaf poe-software-upgrade-reboot {
+         type empty;
+       }
+       leaf poe-lldp-negotiation-value-interface {
+         type empty;
+       }
+     }
+     list telemetries-information {
+       leaf telemetries-interface-name {
+         type string;
+         description "Interface name";
+       }
+       leaf telemetries-index {
+         type string;
+         description "Serial number";
+       }
+       leaf telemetries-timestamp {
+         type string;
+         description "Timestamp of entry";
+       }
+       leaf telemetries-power {
+         type string;
+         description "Power consumption by power device on the interface";
+       }
+       leaf telemetries-voltage {
+         type string;
+         description "Voltage provided to PD by the interface";
+       }
+     }
+     list telemetries-information-detail {
+       leaf telemetries-index-detail {
+         type string;
+         description "Serial number";
+       }
+       leaf telemetries-timestamp-detail {
+         type string;
+         description "Timestamp of entry";
+       }
+       leaf telemetries-power-detail {
+         type string;
+         description "Power consumption by power device on the interface";
+       }
+       leaf telemetries-voltage-detail {
+         type string;
+         description "Voltage provided to PD by the interface";
+       }
+     }
+     list fpc-information {
+       list fpc {
+         leaf slot {
+           type int32;
+         }
+         list mic {
+           leaf-list comment {
+             type string;
+           }
+           leaf mic-slot {
+             type int32;
+           }
+           leaf mic-state {
+             type string;
+           }
+           leaf mic-type {
+             type string;
+           }
+         }
+         container pic-detail {
+           container port-information {
+             container port {
+               leaf port-number {
+                 type int32;
+                 description "Port number on the PIC";
+               }
+               leaf cable-type {
+                 type string;
+                 description "Port cable type";
+               }
+               leaf fiber-mode {
+                 type string;
+                 description "Single or multi-mode";
+               }
+               leaf sfp-vendor-name {
+                 type string;
+                 description "SFP vendor name";
+               }
+               leaf sfp-vendor-pno {
+                 type string;
+                 description "SFP vendor part number";
+               }
+               leaf wavelength {
+                 type string;
+                 description "Wavelength of the optical transceiver";
+               }
+               leaf sfp-vendor-fw-ver {
+                 type string;
+                 description "Vendor firmware version";
+               }
+               leaf sfp-jnpr-ver {
+                 type string;
+                 description "Juniper revision";
+               }
+               leaf sfp-msa-version {
+                 type string;
+                 description "MSA version";
+               }
+             }
+           }
+           container port-profile-speed-information {
+             leaf active-portprofile-cfg {
+               type string;
+               description "Current Port Profile Config";
+             }
+             container profile-port {
+               leaf profile-port-number {
+                 type int32;
+                 description "PIC port profile port number";
+               }
+               leaf current-speed {
+                 type string;
+                 description "PIC port current speed";
+               }
+               leaf default-speed {
+                 type string;
+                 description "PIC port default speed";
+               }
+               leaf port-profile-speed-capability {
+                 type string;
+                 description "Port profile speed capabilities";
+               }
+             }
+             container port-profile-note-information {
+               leaf note-speed {
+                 type string;
+                 description "PIC Note";
+               }
+             }
+           }
+           container package-information {
+             container package {
+               leaf package-name {
+                 type string;
+               }
+             }
+           }
+           container port-speed-information {
+             container port {
+               leaf port-number1 {
+                 type int32;
+                 description "PIC port number";
+               }
+               leaf pfe-number {
+                 type int32;
+                 description "PIC PFE number";
+               }
+               leaf speed-capability {
+                 type string;
+                 description "Port speed capabilities";
+               }
+             }
+           }
+           container pic-error-information {
+             container error {
+               leaf errnumber {
+                 type int32;
+                 description "Serial No";
+               }
+               leaf errmsg {
+                 type string;
+                 description "Configuration Errors";
+               }
+             }
+           }
+           container fec-error-information {
+             container error {
+               leaf errnumber {
+                 type int32;
+                 description "Serial No";
+               }
+               leaf errmsg {
+                 type string;
+                 description "Configuration Errors";
+               }
+             }
+           }
+           leaf slot {
+             type int32;
+           }
+           leaf pic-slot {
+             type int32;
+           }
+           leaf pic-type {
+             type string;
+           }
+           leaf-list comment {
+             type string;
+           }
+           leaf asic-type {
+             type string;
+             description "Type of ASIC on the PIC";
+           }
+           leaf account-layer2-overhead {
+             type string;
+             description "Account Layer2 Overhead Knob Status";
+           }
+           leaf state {
+             type string;
+             description "Status of the component";
+           }
+           leaf pic-version {
+             type string;
+             description "PIC hardware version";
+           }
+           leaf slc-slot {
+             type int32;
+             description "SLC id number";
+           }
+           leaf cpu-sw-version {
+             type string;
+             description "Version of operating system running on the PIC";
+           }
+           leaf cpu-rom-version {
+             type string;
+             description "PIC ROM version";
+           }
+           leaf cpu-total {
+             type int32;
+             description "Percentage of CPU utilized";
+           }
+           leaf cpu-interrupt {
+             type int32;
+             description "Percentage of CPU utilized by interrupt processing";
+           }
+           leaf memory-dram-size {
+             type string;
+             description "DRAM";
+           }
+           leaf memory-buffer-utilization {
+             type int32;
+             description "Percentage of buffer memory utilized";
+           }
+           leaf memory-heap-utilization {
+             type int32;
+             description "Percentage of heap memory utilized";
+           }
+           leaf up-time {
+             type string;
+             description "Length of time this component has been operational";
+           }
+           leaf pic-package {
+             type string;
+           }
+           leaf pic-clock-sync {
+             type string;
+             description "PIC Clock Synchronization";
+           }
+           leaf pic-multirate-mode {
+             type string;
+           }
+           leaf pic-channelization-mode {
+             type string;
+             description "PIC Channelization Mode";
+           }
+           leaf configured-mode {
+             type string;
+           }
+           leaf control-cores {
+             type int32;
+           }
+           leaf data-cores {
+             type int32;
+           }
+           leaf object-cache-size {
+             type int32;
+           }
+           leaf policy-db-size {
+             type int32;
+           }
+           leaf forwarding-db-size {
+             type int32;
+           }
+           leaf wired-process-mem-size {
+             type int32;
+           }
+           leaf wired-max-processes {
+             type int32;
+           }
+           container pic-transport-information {
+             leaf pic-transport-admin-state {
+               type string;
+             }
+             leaf pic-transport-oper-state {
+               type string;
+             }
+           }
+         }
+         list pfe-info-values {
+           leaf pfe-instance {
+             type int32;
+           }
+           leaf pfeid {
+             type int32;
+           }
+           leaf pfe-state {
+             type string;
+           }
+           leaf ppfe-id {
+             type string;
+           }
+           leaf pfe-temp-perf-throt {
+             type string;
+           }
+           leaf pfe-temp-volt-reduction {
+             type string;
+           }
+         }
+         list pfeid-info-values {
+           leaf pfe-instance {
+             type int32;
+           }
+           leaf pfeid {
+             type int32;
+           }
+           leaf pfe-state {
+             type string;
+           }
+           leaf ppfe-id {
+             type string;
+           }
+           leaf pfe-temp-perf-throt {
+             type string;
+           }
+           leaf pfe-temp-volt-reduction {
+             type string;
+           }
+         }
+         list scope-level {
+         }
+         container fpc-slc-error-information {
+           list scope-level {
+           }
+         }
+         list fpc-error {
+           list fpc-error-group-detail {
+             leaf fpc-error-group-name {
+               type string;
+             }
+             leaf fpc-error-group-occurred {
+               type int32;
+             }
+             leaf fpc-error-group-cleared {
+               type int32;
+             }
+             leaf fpc-error-group-error-id {
+               type int32;
+             }
+           }
+         }
+         leaf state {
+           type string;
+           description "Status of the component";
+         }
+         leaf-list comment {
+           type string;
+         }
+         leaf-list temperature {
+           type string;
+           description "Temperature of the item";
+         }
+         leaf memory-rldram-size {
+           type int32;
+           description "RLDRAM";
+         }
+         leaf memory-xr2-size {
+           type int32;
+           description "XR2";
+         }
+         leaf memory-ddr-dram-size {
+           type int32;
+           description "DDR DRAM";
+         }
+         leaf cpu-total {
+           type int32;
+           description "Percentage of CPU utilized";
+         }
+         leaf cpu-interrupt {
+           type int32;
+           description "Percentage of CPU utilized by interrupt processing";
+         }
+         leaf cpu-1min-avg {
+           type int32;
+           description "Percentage of one min average CPU utilized";
+         }
+         leaf cpu-5min-avg {
+           type int32;
+           description "Percentage of five min average CPU utilized";
+         }
+         leaf cpu-15min-avg {
+           type int32;
+           description "Percentage of fifteen min average CPU utilized";
+         }
+         leaf memory-dram-size {
+           type string;
+           description "DRAM";
+         }
+         leaf memory-heap-utilization {
+           type int32;
+           description "Percentage of heap memory utilized";
+         }
+         leaf memory-buffer-utilization {
+           type int32;
+           description "Percentage of buffer memory utilized";
+         }
+         leaf gnf-id {
+           type string;
+         }
+         container fpc-slc-information {
+           leaf fpc-slot {
+             type int32;
+             description "FPC slot";
+           }
+           leaf fpc-slc-slot {
+             type int32;
+             description "SLC id number";
+           }
+           leaf fpc-slc-state {
+             type string;
+             description "SLC state";
+           }
+           leaf fpc-slc-comment {
+             type string;
+           }
+           leaf fpc-slc-temperature {
+             type int32;
+             description "Temperature in (C)";
+           }
+           leaf fpc-slc-cpu-total {
+             type int32;
+             description "Percentage of CPU utilized";
+           }
+           leaf fpc-slc-cpu-interrupt {
+             type int32;
+             description "Percentage of CPU utilized by interrupt processing";
+           }
+           leaf fpc-slc-cpu-1min-avg {
+             type int32;
+             description "Percentage of one min average CPU utilized";
+           }
+           leaf fpc-slc-cpu-5min-avg {
+             type int32;
+             description "Percentage of five min average CPU utilized";
+           }
+           leaf fpc-slc-cpu-15min-avg {
+             type int32;
+             description "Percentage of fifteen min average CPU utilized";
+           }
+           leaf fpc-slc-memory-dram-size {
+             type string;
+             description "DRAM";
+           }
+           leaf fpc-slc-memory-heap-utilization {
+             type int32;
+             description "Percentage of heap memory utilized";
+           }
+           leaf fpc-slc-memory-buffer-utilization {
+             type int32;
+             description "Percentage of buffer memory utilized";
+           }
+           leaf fpc-slc-gnf-id {
+             type string;
+             description "Gnf id assigned to SLC";
+           }
+           leaf fpc-slc-error-code {
+             type int32;
+             description "Code resulting from major or minor error";
+           }
+           leaf fpc-slc-version {
+             type string;
+           }
+           leaf fpc-slc-cpu-cores {
+             type int32;
+             description "Cpu cores assigned to SLC";
+           }
+           leaf fpc-slc-memory-rldram-size {
+             type int32;
+             description "RLDRAM";
+           }
+           leaf fpc-slc-memory-xr2-size {
+             type int32;
+             description "XR2";
+           }
+           leaf fpc-slc-memory-ddr-dram-size {
+             type int32;
+             description "DDR DRAM";
+           }
+           leaf fpc-slc-memory-hbm-size {
+             type int32;
+             description "HBM";
+           }
+           leaf fpc-slc-start-time {
+             type string;
+             description "Time this component was started";
+           }
+           leaf fpc-slc-up-time {
+             type string;
+             description "Length of time this component has been operational";
+           }
+           leaf fpc-slc-configured-bandwidth {
+             type int32;
+           }
+           leaf fpc-slc-operating-bandwidth {
+             type int32;
+           }
+         }
+         leaf error-code {
+           type int32;
+           description "Code resulting from major or minor error";
+         }
+         leaf logical-slot {
+           type int32;
+         }
+         leaf cpu-less-info-str {
+           type string;
+           description "Flexible PIC Concentrator (FPC) without CPU";
+         }
+         leaf memory-sram-size {
+           type int32;
+           description "SRAM";
+         }
+         leaf memory-sdram-size {
+           type int32;
+           description "SDRAM";
+         }
+         leaf memory-notification-sdram-size {
+           type int32;
+           description "Notification SDRAM";
+         }
+         leaf memory-hbm-size {
+           type int32;
+           description "HBM";
+         }
+         leaf asic-information {
+           type string;
+         }
+         leaf start-time {
+           type string;
+           description "Time this component was started";
+         }
+         leaf up-time {
+           type string;
+           description "Length of time this component has been operational";
+         }
+         leaf last-reboot-reason {
+           type string;
+           description "Last reboot reason of routing engine";
+         }
+         leaf max-power-consumption {
+           type int32;
+         }
+         leaf max-mpc-base-power-consumption {
+           type int32;
+         }
+         leaf max-mic0-power-consumption {
+           type int32;
+         }
+         leaf max-mic1-power-consumption {
+           type int32;
+         }
+         leaf max-mic2-power-consumption {
+           type int32;
+         }
+         leaf max-mpc-total-power-consumption {
+           type int32;
+         }
+         leaf fips-capable {
+           type string;
+           description "Does the FPC support FIPS";
+         }
+         leaf fips-mode {
+           type string;
+           description "Is the FPC in FIPS mode";
+         }
+         leaf configured-bandwidth {
+           type int32;
+         }
+         leaf operating-bandwidth {
+           type int32;
+         }
+         leaf high-performance-mode-support {
+           type string;
+           description "Is high-performance mode supported";
+         }
+         leaf pics-in-high-performance-mode {
+           type string;
+           description "PFEs in high-performance mode";
+         }
+         leaf fpc-pfe-type {
+           type string;
+         }
+         list fpc-pfe-information {
+           leaf fpc-pfe-num {
+             type int32;
+           }
+           leaf fpc-pfe-power-state {
+             type string;
+           }
+           leaf fpc-pfe-bandwidth {
+             type string;
+           }
+           leaf fpc-pfe-slc {
+             type int32;
+             description "SLC id number";
+           }
+         }
+         leaf description {
+           type string;
+           description "Description of this component";
+         }
+         list pic {
+           leaf pic-slot {
+             type int32;
+           }
+           leaf pic-state {
+             type string;
+           }
+           leaf pic-type {
+             type string;
+           }
+           leaf-list comment {
+             type string;
+           }
+         }
+         container slc {
+           leaf slc-id {
+             type int32;
+             description "SLC id number";
+           }
+           leaf slc-state {
+             type string;
+             description "SLC state";
+           }
+           leaf slc-info {
+             type string;
+             description "SLC config info";
+           }
+           leaf slc-gnf-id {
+             type int32;
+             description "Gnf id assigned to SLC";
+           }
+         }
+       }
+       leaf fpc-slot {
+         type int32;
+         description "FPC slot";
+       }
+       leaf fpc-status {
+         type string;
+         description "FPC status";
+       }
+       leaf fpc-power-limit {
+         type string;
+         description "FPC power limit";
+       }
+       leaf fpc-power {
+         type string;
+         description "Total FPC power consumption";
+       }
+       leaf fpc-priority {
+         type string;
+         description "Priority options";
+       }
+       leaf fpc-firmware-version {
+         type string;
+         description "POE firmware version";
+       }
+     }
+     list interface-information {
+       leaf interface-name {
+         type string;
+       }
+       leaf interface-enabled {
+         type string;
+       }
+       leaf interface-status {
+         type string;
+         description "Interface status";
+       }
+       leaf interface-fourpair-enabled {
+         type string;
+         description "Interface FourPair status";
+       }
+       leaf interface-power-limit {
+         type string;
+         description "Port power limit";
+       }
+       leaf interface-lldp-negotiation-power {
+         type string;
+         description "LLDP-negotiated power";
+       }
+       leaf interface-priority {
+         type string;
+         description "Priority options";
+       }
+       leaf interface-lldp-negotiation-priority {
+         type string;
+         description "LLDP-negotiated priority";
+       }
+       leaf interface-power {
+         type string;
+         description "Power per interface";
+       }
+       leaf interface-asterisk {
+         type string;
+         description "*";
+       }
+       leaf interface-class {
+         type string;
+         description "Class of powered device";
+       }
+     }
+     list interface-information-detail {
+       leaf interface-name-detail {
+         type string;
+         description "Interface name";
+       }
+       leaf interface-enabled-detail {
+         type string;
+       }
+       leaf interface-status-detail {
+         type string;
+         description "Interface status";
+       }
+       leaf interface-status-detail-extra {
+         type string;
+         description "Interface status Detail";
+       }
+       leaf interface-fourpair-enabled-detail {
+         type string;
+         description "Interface FourPair status";
+       }
+       leaf interface-power-limit-detail {
+         type string;
+         description "Port power limit";
+       }
+       leaf interface-lldp-negotiation-power-detail {
+         type string;
+         description "LLDP-negotiated power detail";
+       }
+       leaf interface-priority-detail {
+         type string;
+         description "Priority options";
+       }
+       leaf interface-lldp-negotiation-priority-detail {
+         type string;
+         description "LLDP-negotiated priority detail";
+       }
+       leaf interface-power-detail {
+         type string;
+         description "Power per interface";
+       }
+       leaf interface-detail-asterisk {
+         type string;
+         description "*";
+       }
+       leaf interface-class-detail {
+         type string;
+         description "Class of Powered Device";
+       }
+       leaf interface-mode-detail {
+         type string;
+         description "PoE Mode";
+       }
+     }
+     container poe-info {
+       leaf fast-poe-enabled-controller {
+         type empty;
+       }
+       leaf perpetual-poe-enabled-controller {
+         type empty;
+       }
+     }
+     list poe-fpc-information {
+       leaf poe-fpc-slot {
+         type string;
+         description "FPC slot number";
+       }
+       leaf poe-fpc-power-limit-detail {
+         type string;
+         description "FPC power limit";
+       }
+       leaf poe-fpc-power-detail {
+         type string;
+         description "Total FPC power consumption";
+       }
+       leaf poe-fpc-priority-detail {
+         type string;
+         description "Priority options";
+       }
+     }
+     list poe-fpc-information-detail {
+       leaf poe-fpc-slot {
+         type string;
+         description "FPC slot number";
+       }
+       leaf poe-fpc-power-limit-detail {
+         type string;
+         description "FPC power limit";
+       }
+       leaf poe-fpc-power-detail {
+         type string;
+         description "Total FPC power consumption";
+       }
+       leaf poe-fpc-priority-detail {
+         type string;
+         description "Priority options";
+       }
+     }
+   }
+ }

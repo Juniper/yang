@@ -1,0 +1,184 @@
+ module junos-genstate-bmp-kafka-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-kafka-statistics-information";
+   prefix jgbksi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-kafka-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-kafka-statistics-information-top {
+     description "Top-level grouping";
+     container bmp-kafka-statistics-information {
+       description "BMP kafka statistics";
+       container bmp-kafka-stats-brief {
+         container bmp-kafka-producer-stats-brief {
+           leaf bmp-kafka-producer-name {
+             type string;
+           }
+           leaf bmp-kafka-producer-msg-cnt {
+             type int32;
+           }
+           leaf bmp-kafka-producer-msg-size {
+             type int32;
+           }
+         }
+         container bmp-kafka-broker-stats-brief {
+           leaf bmp-kafka-broker-name {
+             type string;
+           }
+           leaf bmp-kafka-broker-state {
+             type int32;
+           }
+           leaf bmp-kafka-broker-tx {
+             type int32;
+           }
+           leaf bmp-kafka-broker-txbytes {
+             type int32;
+           }
+           leaf bmp-kafka-broker-req-timeouts {
+             type int32;
+           }
+         }
+         list bmp-kafka-topic-stats-brief {
+           leaf bmp-kafka-topic-name {
+             type string;
+           }
+           leaf bmp-kafka-topic-tx {
+             type string;
+           }
+           leaf bmp-kafka-topic-txbytes {
+             type string;
+           }
+         }
+       }
+       container bmp-kafka-producer-stats {
+         leaf bmp-kafka-producer-name {
+           type string;
+         }
+         leaf bmp-kafka-producer-msg-cnt {
+           type int32;
+         }
+         leaf bmp-kafka-producer-msg-size {
+           type int32;
+         }
+         leaf bmp-kafka-producer-msg-max {
+           type int32;
+         }
+         leaf bmp-kafka-producer-msg-size-max {
+           type int32;
+         }
+       }
+       container bmp-kafka-broker-stats {
+         leaf bmp-kafka-broker-name {
+           type string;
+         }
+         leaf bmp-kafka-broker-id {
+           type int32;
+         }
+         leaf bmp-kafka-broker-state {
+           type int32;
+         }
+         leaf bmp-kafka-broker-state-age {
+           type int32;
+         }
+         leaf bmp-kafka-broker-outbuf-cnt {
+           type int32;
+         }
+         leaf bmp-kafka-broker-waitresp-cnt {
+           type int32;
+         }
+         leaf bmp-kafka-broker-tx {
+           type int32;
+         }
+         leaf bmp-kafka-broker-txbytes {
+           type int32;
+         }
+         leaf bmp-kafka-broker-txerrs {
+           type int32;
+         }
+         leaf bmp-kafka-broker-txretries {
+           type int32;
+         }
+         leaf bmp-kafka-broker-req-timeouts {
+           type int32;
+         }
+         leaf bmp-kafka-broker-connects {
+           type int32;
+         }
+         leaf bmp-kafka-broker-disconnects {
+           type int32;
+         }
+         leaf bmp-kafka-broker-pq-latency {
+           type string;
+         }
+         leaf bmp-kafka-broker-int-latency-min {
+           type int32;
+         }
+         leaf bmp-kafka-broker-int-latency-max {
+           type int32;
+         }
+         leaf bmp-kafka-broker-int-latency-avg {
+           type int32;
+         }
+         leaf bmp-kafka-broker-rtt-latency {
+           type string;
+         }
+         leaf bmp-kafka-broker-rtt-latency-min {
+           type int32;
+         }
+         leaf bmp-kafka-broker-rtt-latency-max {
+           type int32;
+         }
+         leaf bmp-kafka-broker-rtt-latency-avg {
+           type int32;
+         }
+       }
+       container bmp-kafka-topic-stats {
+         leaf bmp-kafka-topic-stats-header {
+           type string;
+         }
+         leaf bmp-kafka-topic-name-with-tx {
+           type string;
+         }
+         container bmp-kafka-topic-client-info {
+           leaf-list bmp-kafka-topic-msg-origin {
+             type string;
+           }
+           leaf-list bmp-kafka-topic-msg-origin-cnt {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-kafka-statistics-information to top-level genstate";
+     uses bmp-kafka-statistics-information-top;
+   }
+ }

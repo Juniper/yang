@@ -1,0 +1,63 @@
+ module junos-genstate-environment-component-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/environment-component-information";
+   prefix jgeci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for environment-component-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping environment-component-information-top {
+     description "Top-level grouping";
+     container environment-component-information {
+       description "Top-level container";
+       list environment-component-item {
+         key "name";
+         description "Chassis environment component";
+         leaf name {
+           type string;
+           description "Name of this component";
+         }
+         container psm-information {
+           container fan-speed-reading-psm {
+             leaf fan1-speed {
+               type string;
+             }
+             leaf fan2-speed {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds environment-component-information to top-level genstate";
+     uses environment-component-information-top;
+   }
+ }

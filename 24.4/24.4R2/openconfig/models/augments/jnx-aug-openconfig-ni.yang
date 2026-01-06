@@ -1,0 +1,460 @@
+module jnx-aug-openconfig-ni {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/ni";
+
+  prefix "jnx-oc-ni";
+
+  import openconfig-network-instance { prefix oc-ni; }
+  import openconfig-bgp-types { prefix oc-bgp-types; }
+  import jnx-aug-openconfig-bfd { prefix jc-bfd; }
+  import junos-extension { prefix junos; }
+  import openconfig-routing-policy { prefix oc-rpol; }
+  import openconfig-bgp {prefix oc-bgp; }
+  import openconfig-local-routing {prefix oc-lrt; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig network-instance model";
+
+  revision "2021-07-09" {
+    description
+      "Added config for counter.";
+    reference "0.0.4";
+  }
+
+  revision "2021-07-21" {
+    description
+      "Support for BGP BFD state information
+       at the peer and peer-group level.And
+       removing BFD config params from
+       peer-group level";
+    reference "0.0.4";
+  }
+
+  revision "2021-06-30" {
+    description
+      "Add received-pre-policy counter,
+       rejected prefix from OC 5.2.0 model";
+    reference "0.0.3";
+  }
+
+
+  revision "2021-07-10" {
+    description "Added support forwarding-table";
+    reference "0.0.3";
+  }
+
+  revision "2018-04-25" {
+    description "Support for BGP 4.0.1";
+    reference "0.0.2";
+  }
+
+  revision "2017-07-17" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  identity IPV4_MULTICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet-multicast";
+  }
+
+  identity IPV6_MULTICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet6-multicast";
+  }
+
+  identity L2VPN_MSPW_AD {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: l2vpn-mspw-ad";
+  }
+
+  identity ATMVPN {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: atmvpn";
+  }
+ 
+  identity ROUTE_TARGET {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: route-target";
+  }
+
+  identity IPV4_FLOW {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet-flow";
+  }
+
+  identity IPV4_VPN_FLOW {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet-vpn-flow";
+  }
+
+  identity IPV6_FLOW {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet6-flow";
+  }
+
+  identity IPV6_VPN_FLOW {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet6-vpn-flow";
+  }
+
+  identity ISO_UNICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: iso-unicast";
+  }
+
+  identity ISO_VPN_UNICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: iso-vpn-unicast";
+  }
+
+  identity IPV4_MVPN {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet-mvpn";
+  }
+
+  identity IPV6_MVPN {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet6-mvpn";
+  }
+
+  identity IPV4_MDT {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: inet-mdt";
+  }
+
+  identity TE_UNICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: te-unicast";
+  }
+
+  identity BRIDGE_UNICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: bridge-unicast";
+  }
+
+  identity BRIDGE_VPN_UNICAST {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: bridge-vpn-unicast";
+  }
+
+  identity FABRIC {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: fabric";
+  }
+
+  identity FABRIC_VPN {
+    base oc-bgp-types:AFI_SAFI_TYPE;
+    description
+      "JUNOS Equivalent: fabric-vpn";
+  }
+
+   identity AUTHENTICATION_FAILURE {
+    base oc-bgp-types:BGP_ERROR_SUBCODE;
+    description
+      "JUNOS Equivalent: 517";
+  }
+
+  identity AS_LOOP {
+    base oc-bgp-types:BGP_ERROR_SUBCODE;
+    description
+      "JUNOS Equivalent: 775";
+  }
+
+  identity HARDRESET {
+    base oc-bgp-types:BGP_ERROR_SUBCODE;
+    description
+      "JUNOS Equivalent: 1545";
+  }
+
+  grouping bgp-neighbor-jnx_state {
+    description
+      "Grouping containing JUNOS specific operational state variables
+       relating to a BGP neighbor";
+
+    leaf session-status {
+      type enumeration {
+        enum RUNNING {
+          description
+            "FSM for the remote peer is running";
+        }
+        enum HALTED {
+          description
+            "FSM for the remote peer is halted";
+        }
+      }
+      description
+        "Whether the BGP FSM for this remote peer is
+         halted or running.
+         MIB Equivalent: jnxBgpM2PeerStatus";
+    }
+
+    leaf session-admin-status {
+      type enumeration {
+        enum STOP {
+          description
+            "Session disabled";
+        }
+        enum START {
+          description 
+            "Session enabled";
+        }
+      }
+      description
+        "The desired state of the BGP connection";
+    }
+
+    leaf interface-error {
+      type boolean;
+      description
+        "If true - this peer session is permanently idled";
+    }
+
+    leaf import-eval-pending {
+      type boolean;
+      description
+        "If true - this peer import evaluation is pending";
+    }
+
+    leaf import-eval {
+      type boolean;
+      description
+        "If true - this peer import evaluation is in process";
+    }
+
+  }
+
+  grouping bgp-neighbor-afi-safi-jnx_state_prefixes {
+    leaf accepted {
+      type uint32;
+      description
+        "The number of prefixes for a peer that are installed
+         in the Adj-Ribs-In and are eligible to become active
+         in the Loc-Rib.
+         MIB Equivalent: jnxBgpM2PrefixInPrefixesAccepted";
+    }
+
+    leaf rejected {
+      type uint32;
+      description
+        "This count is the number of prefixes that
+         are rejected to be installed in the Adj-RIB-In";
+    }
+  }
+  grouping bgp-neighbor-afi-safi-jnx_state {
+    container queues {
+      description
+        "Counters related to queued messages associated with the
+         BGP neighbor at AFI/SAFI level.";
+      leaf input {
+        type uint32;
+        description
+          "The number of messages received from the peer currently
+           queued";
+      }
+      leaf output {
+        type uint32;
+        description
+          "The number of messages queued to be sent to the peer";
+      }
+    } 
+  }
+
+  grouping bgp-neighbor-jnx_neighbor {
+    leaf snmp-peer-index {
+      type uint32;
+      description
+        "An unique index for the remote peer entry in the jnxBgpM2PeerTable";
+    }
+  }
+
+  grouping bgp-peer-jnx_dynamic_neighbor_prefixes {
+    description
+      "Grouping containing configuration relating to dynamic peers.";
+
+    container dynamic-neighbor-prefixes {
+      description
+        "A list of IP prefixes from which the system should:
+          - Accept connections to the BGP daemon
+          - Dynamically configure a BGP neighbor corresponding to the
+            source address of the remote system, using the parameters
+            of the specified peer-group.";
+
+      list dynamic-neighbor-prefix {
+        key "prefix";
+        description
+          "An individual prefix from which dynamic neighbor
+          connections are allowed.";
+
+        leaf prefix {
+          type string;
+          description
+            "Reference to the IP prefix from which source connections
+            are allowed for the dynamic neighbor group.";
+        }
+
+        container state {
+          config false;
+          description
+            "Operational state parameters relating to the source
+            prefix for the dynamic BGP neighbor connections.";
+
+          leaf prefix {
+            type string;
+            description
+              "Source prefix for the dynamic BGP neighbor connections.";
+          }
+        }
+      }
+    }
+  }
+
+    grouping policy-forwarding-jnx_count {
+        description
+            "Grouping contains configuration for counters.";
+
+        leaf jnx-count {
+            type string;
+            description
+                "This is to count matched packets for a given rules.";
+        }
+    }
+
+  grouping bfd-peer-state-params {
+    description
+      "BFD state grouping for session parameters for neighbor";
+    leaf jnx-min-tx-interval {
+      type uint32;
+      units microseconds;
+      description
+        "Minimum transmit interval of control packets.";
+    }
+    leaf jnx-local-multiplier {
+      type uint8;
+        description
+          "Multiplier transmitted by local system.";
+    }
+    leaf jnx-min-rx-interval {
+      type uint32;
+      units microseconds;
+      description
+        "Minimum receive interval of control packets.";
+    }
+    leaf jnx-session-state {
+      type boolean;
+      description
+        "Indicates whether the BFD session for the peer is
+         up or not";
+    }
+    leaf jnx-session-mode {
+      type enumeration {
+        enum AUTOMATIC {
+          description
+            "BFD session mode is AUTOMATIC";
+        }
+        enum SINGLE_HOP {
+          description
+            "BFD session mode is SINGLE_HOP";
+        }
+        enum MULTI_HOP {
+          description
+            "BFD session mode is MULTI_HOP";
+        }
+    }
+    description
+      "BGP BFD session mode";
+    }
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:global" {
+    description
+      "Augmentation to add export/import policies.";
+    uses oc-rpol:apply-policy-group;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:neighbors/oc-ni:neighbor/oc-ni:state" {
+    description
+      "Augmentation to add JUNOS specific operational state related
+       to a particular BGP neighbor";
+    uses jnx-oc-ni:bgp-neighbor-jnx_state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:neighbors/oc-ni:neighbor" {
+    description
+      "Augmentation to add JUNOS specific operational data related
+       to a particular BGP neighbor";
+    uses jnx-oc-ni:bgp-neighbor-jnx_neighbor;
+  }
+
+  /* TBD -- Augment ...../prefix-limit/state */
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:neighbors/oc-ni:neighbor/oc-ni:afi-safis/oc-ni:afi-safi/oc-ni:state" {
+    description
+      "Augmentation to add JUNOS specific operational state to a neighbor
+       on a per AFI-SAFI basis";
+    uses jnx-oc-ni:bgp-neighbor-afi-safi-jnx_state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:neighbors/oc-ni:neighbor/oc-ni:afi-safis/oc-ni:afi-safi/oc-ni:state/oc-ni:prefixes" {
+    description
+      "Augmentation to add JUNOS specific operational state to a neighbor
+       on a per AFI-SAFI prefixes basis";
+    uses jnx-oc-ni:bgp-neighbor-afi-safi-jnx_state_prefixes;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:peer-groups/oc-ni:peer-group" {
+    description
+      "Augment to add dynamic neighbor prefix states at peer group level.";
+
+    uses jnx-oc-ni:bgp-peer-jnx_dynamic_neighbor_prefixes;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:peer-groups/oc-ni:peer-group/oc-ni:afi-safis/oc-ni:afi-safi/oc-ni:state" {
+    description
+	"Augment the state information relating to the BGP peer-group.";
+
+    uses oc-bgp:bgp-common-state;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:neighbors/oc-ni:neighbor" {
+    description
+	"Augment the BGP routing protocol to add a link to BFD for neighbour detection.";
+
+    uses jc-bfd:client-cfg-parms;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:policy-forwarding/oc-ni:policies/oc-ni:policy/oc-ni:rules/oc-ni:rule/oc-ni:action/oc-ni:config" {
+    description
+      "Augmentation to action config under a rule for a policy for counting matched packets";
+    uses policy-forwarding-jnx_count;
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/oc-ni:protocols/oc-ni:protocol/oc-ni:bgp/oc-ni:neighbors/oc-ni:neighbor" {
+    description
+      "Augment the BGP routing protocol to display BFD params
+       within a neighbor.";
+
+    uses jnx-oc-ni:bfd-peer-state-params;
+  }
+}
+

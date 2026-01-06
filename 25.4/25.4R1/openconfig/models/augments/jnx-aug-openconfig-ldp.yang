@@ -1,0 +1,40 @@
+module jnx-aug-openconfig-ldp {
+
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/ldp";
+
+  prefix "jnx-oc-ldp";
+
+  import openconfig-network-instance { prefix oc-ni; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains JUNOS augments to the OpenConfig NI MPLS modules";
+
+  revision "2020-11-20" {
+    description
+      "Add a new module to capture JUNOS augments to the OpenConfig MPLS LDP";
+  }
+
+  grouping jnx-ldp-hello-adj-state {
+    description
+       "Group for representing LDP hello-adjacency state";
+
+    leaf jnx-enabled {
+      type boolean;
+    }
+  }
+
+  augment "/oc-ni:network-instances/oc-ni:network-instance/" +
+    "oc-ni:mpls/oc-ni:signaling-protocols/oc-ni:ldp/" +
+    "oc-ni:neighbors/oc-ni:neighbor/oc-ni:hello-adjacencies/" +
+    "oc-ni:hello-adjacency/oc-ni:state" {
+
+    uses jnx-ldp-hello-adj-state;
+  }
+
+}
+
+

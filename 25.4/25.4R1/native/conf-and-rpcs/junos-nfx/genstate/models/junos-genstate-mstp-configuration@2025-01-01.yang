@@ -1,0 +1,81 @@
+ module junos-genstate-mstp-configuration {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mstp-configuration";
+   prefix jgmc;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for mstp-configuration";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping mstp-configuration-top {
+     description "Top-level grouping";
+     container mstp-configuration {
+       description "Information about Multiple Spanning Tree protocol configuration";
+       list context-id-information {
+         key "routing-instance-name";
+         leaf routing-instance-name {
+           type string;
+           description "Routing instance name";
+         }
+         leaf context-id {
+           type int32;
+           description "Context identifier";
+         }
+         leaf mstp-name {
+           type string;
+           description "MSTP region name";
+         }
+         leaf mstp-revision {
+           type int32;
+           description "MSTP revision";
+         }
+         leaf mstp-configuration-digest {
+           type string;
+           description "MSTP configuration digest";
+         }
+         container vlan-map {
+           list vlan-map-entry {
+             key "msti-id";
+             leaf msti-id {
+               type int32;
+               description "MSTI ID";
+             }
+             leaf vlan-string {
+               type string;
+               description "Member VLANs in MSTI";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds mstp-configuration to top-level genstate";
+     uses mstp-configuration-top;
+   }
+ }

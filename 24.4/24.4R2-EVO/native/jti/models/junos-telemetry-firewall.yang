@@ -1,0 +1,147 @@
+/*
+ * Copyright (c) 2020, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-telemetry-firewall {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/junos-telemetry-firewall";
+
+    prefix "jnx-tel-fw";
+
+    import jnx-tel-top { prefix junos; }
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "Yang definition for Firewall";
+
+    revision "2019-05-28" {
+        description "Initial draft";
+    }
+
+    augment "/junos:junos" {
+        list firewall {
+            key name;
+            leaf name {
+                type string;
+                description "Name of the filter name";
+            }
+            container state {
+                leaf timestamp {
+                    type uint64;
+                    description
+                         "The Unix timestamp of last filter state change
+                          event such as filter add, filer change or counter
+                          clear";
+                }
+                list memory-usage {
+                    key name;
+                    leaf name {
+                        type string;
+                        description
+                             "The name of the memory subsystem whose
+                              utilization is being reported";
+                    }
+                    leaf allocated {
+                        type uint64;
+                        description
+                             "The amount of memory allocated in bytes to
+                              the filter";
+                    }
+                }
+
+                list counter {
+                    key name;
+                    leaf name {
+                        type string;
+                        description "The name of Counter name";
+                    }
+                    leaf packets {
+                        type uint64;
+                        description
+                             "The total number of packets seen by the counter";
+                    }
+                    leaf bytes {
+                        type uint64;
+                        description
+                             "The total number of bytes seen by the counter";
+                    }
+                }
+
+                list policer {
+                    key name;
+                    leaf name {
+                        type string;
+                        description "Policer instance name";
+                    }
+                    leaf out-of-spec-packets {
+                        type uint64;
+                        description
+                             "The total number of packets marked
+                              out-of-specification by the policer";
+                    }
+                    leaf out-of-spec-bytes {
+                        type uint64;
+                        description
+                             "The total number of bytes marked
+                              out-of-specification by the policer";
+                    }
+                    leaf offered-packets {
+                        type uint64;
+                        description
+                          "The total number of packets subjected to policing";
+                    }
+                    leaf offered-bytes {
+                        type uint64;
+                        description
+                             "The total number of bytes subjected to policing";
+                    }
+                    leaf transmitted-packets {
+                        type uint64;
+                        description
+                          "The total number of packets transmitted by policer";
+                    }
+                    leaf transmitted-bytes {
+                        type uint64;
+                        description
+                          "The total number of bytes transmitted by policer";
+                    }
+                }
+                list hierarchical-policer {
+                    key name;
+                    leaf name {
+                        type string;
+                        description "Hierarchical Policer instance name";
+                    }
+                    leaf premium-packets {
+                        type uint64;
+                        description
+                             "The total number of premium packets by
+                              hierarchical policer";
+                    }
+                    leaf premium-bytes {
+                        type uint64;
+                        description
+                             "The total number of premium bytes by
+                              hierarchical policer";
+                    }
+                    leaf aggregate-packets {
+                        type uint64;
+                        description
+                             "The total number of aggregated packets by
+                              hierarchical policer";
+                    }
+                    leaf aggregate-bytes {
+                        type uint64;
+                        description
+                             "The total number of aggregated bytes by
+                              hierarchical policer";
+                    }
+                }
+            }
+        }
+    }
+}

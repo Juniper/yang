@@ -1,0 +1,74 @@
+module junos-state-access-security {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/access-security";
+  prefix js-as;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-forwarding-options {
+    prefix js-fwd;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+    Access-security state data.
+
+    Copyright (c) 2023 Juniper Networks, Inc.
+    All rights reserved.";
+
+  revision 2023-04-21 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping access-security-top {
+    description
+      "Top-level grouping for JUNOS access security state data";
+
+    container access-security {
+      description
+        "Encapsulating container for all JUNOS access security state";
+    }
+  }
+
+  augment "/js:state/js-fwd:forwarding-options" {
+    description
+      "Adds access-security domain to forwarding-options state";
+
+    uses access-security-top;
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" + 
+    "/js-fwd:forwarding-options" {
+      description
+        "Adds access-security domain to forwarding-options state";
+
+      uses access-security-top;
+    }
+}

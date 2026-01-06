@@ -1,0 +1,466 @@
+module junos-extensions {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/extensions";
+  prefix jx;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module provides extensions to the YANG language to allow
+     JUNOS specific functionality and metadata to be defined.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-04-20 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+
+  extension version {
+    argument semver {
+      yin-element true;
+    }
+    description
+      "The version number for a YANG module or collection of YANG
+       modules.
+
+       It is expressed as a semantic version number in the form:
+         X.Y.Z
+       Where:
+         * X corresponds to the major version
+         * Y corresponds to the minor version
+         * Z corresponds to a patch version
+
+       NOTE: This is not the version of the OS release.
+      ";
+    reference
+      "https://semver.org/";
+  }
+
+  extension annotate {
+    argument path {
+      yin-element true;
+    }
+    description
+      "Similar to a YANG augmentation, the annotate extension specifies
+       a valid data node path that may be prefixed/qualified by an
+       origin (model grouping) to remove ambiguity.  It is often that a
+       prefix is not necessary because the annotation module itself will
+       be tied to the consumer YANG module.
+
+       Since within a schema set, nodes will be unique, there is no
+       mandate to prefix intermediate nodes.
+
+       This annotation applies to data tree nodes only.
+
+       Examples:
+         - openconfig:/system/config/login-banner
+         - juniper:/state/interfaces/interface/oper-status
+
+       Permitted substatements:
+       +------------------------+-------------+
+       | substatement           | cardinality |
+       +------------------------+-------------+
+       | annotate-statement     | 0..n        |
+       | corresponding-commands | 0..1        |
+       | corresponding-snmp     | 0..1        |
+       | corresponding-events   | 0..1        |
+       | corresponding-paths    | 0..1        |
+       | doc-url                | 0..1        |
+       | on-change              | 0..1        |
+       +------------------------+-------------+
+      ";
+  }
+
+  extension annotate-statement {
+    argument statement-path {
+      yin-element true;
+    }
+    description
+      "Similar to a YANG augmentation and the annotate extension, the
+       annotate-statement extension specifies a valid statement instead
+       of a path.  Since YANG augmentations (and deviations) are limited
+       to data tree nodes only, this annotation gives the ability to
+       annotate any valid YANG statement.
+
+       Examples of this are top-level constructs such as identities,
+       typedefs, nested under groupings and any other non-data tree
+       nodes.
+
+       It is quite often where an identity or typedef is reused across
+       data nodes and an annotation may only apply under a specific
+       context.  In such a situation, there are multiple options:
+
+       1. Target the annotation to the source-of-truth statement to
+          annotate behavior across all uses.
+       2. Target the data node and annotate the specific statement under
+          that specific context.
+
+       For #1, the syntax to target the source-of-truth statement is as
+       such:
+
+       * jx:annotate-statement identity[name='OSPF3']
+       * jx:annotate-statement typedef[name='ipv4-address']
+       * jx:annotate-statement typedef[name='ip-address']/union[name='ipv4-address']
+       * jx:annotate-statement grouping[name='system-clock-config']/timezone-name[type='timezone-name-type']
+
+       For #2, the syntax to target the statement must first be
+       accomplished via the `jx:annotate` statement to the node in
+       question, followed by a fully qualified target of the identity or
+       enum.
+
+       * jx:annotate-statement oc-pol-types:OSPF3
+       * jx:annotate-statement SERVER
+
+       Since within a schema set, fully qualified nodes will be unique
+       in the tree, there is no mandate to prefix intermediate nodes.
+
+       This annotation applies to non-data tree nodes only.
+
+       Examples:
+         // Annotate source-of-truth module to claim non-support across
+         // all uses of the identity
+         jx:annotate-statement identity[name='OSPF3'] {
+           jx:not-supported;
+         }
+
+         // Annotate a specific usage of an identity to claim non-support
+         // for a specific scenario
+         jx:annotate /network-instances/network-instance/protocols/protocol/state/identifier {
+           jx:annotate-statement oc-pol-types:OSPF3 {
+             jx:not-supported;
+         }
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | not-supported  | 0..1        |
+       +----------------+-------------+
+      ";
+  }
+
+  extension corresponding-commands {
+    description
+      "This extension is to be used as an encapsulating construct
+       for anywhere a corresponding command can be mapped.  This
+       extension is only to be used if there are child corresponding
+       commands.
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | command-name   | 1..n        |
+       +----------------+-------------+
+      ";
+  }
+
+  extension command-name {
+    argument name {
+      yin-element true;
+    }
+    description
+      "The equivalent corresponding command (e.g. show/request) to retrieve
+       the data node that carries this annotation. This corresponding
+       command is to be specified as the CLI equivalent (input) command
+       with or without arguments in order to provide the equivalent
+       output that relates to the data node.
+
+       This annotation is MANDATORY if there is an equivalent CLI
+       command to access a data node, otherwise can be omitted.
+
+       NOTE: It is not expected that the command return the data exactly
+       how it is encoded over another interface.  An example of this
+       could be an alternate presentation (datatype) format of the same
+       underlying data.
+
+       Examples:
+         - show interfaces
+         - show bgp neighbor
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | rpc-name       | 1..n        |
+       | rpc-output     | 1           |
+       +----------------+-------------+
+      ";
+  }
+
+  extension rpc-name {
+    argument path {
+      yin-element true;
+    }
+    description
+      "The equivalent corresponding RPC (e.g. request-*) to retrieve
+       the data node that carries this annotation. This corresponding
+       command is to be specified as the XML RPC equivalent (input)
+       with or without arguments formatted as an XPath string in order
+       to provide the equivalent output that relates to the data node.
+
+       This annotation is MANDATORY if there is an equivalent RPC to
+       access a data node, otherwise can be omitted.
+
+       Examples:
+         - /get-interface-information
+         - /get-interface-information[interface-name]/media
+      ";
+  }
+
+  extension rpc-output {
+    argument path {
+      yin-element true;
+    }
+    description
+      "The equivalent XML RPC output element that maps to the data node
+       carrying this annotation. This corresponding output is formatted as
+       an XPath string.
+
+       This annotation is MANDATORY if there is an equivalent RPC output
+       data node, otherwise can be omitted.
+
+       Examples:
+         - /interface-information/physical-interface/admin-status
+         - /bgp-information/bgp-peer/peer-state";
+  }
+
+  extension corresponding-paths {
+    description
+      "This extension is to be used as an encapsulating construct
+       for anywhere a corresponding schema path can be mapped.  This
+       extension is only to be used if there are child corresponding
+       paths.
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | schema-path    | 1..n        |
+       +----------------+-------------+
+      ";
+
+  }
+
+  extension schema-path {
+    argument path {
+      yin-element true;
+    }
+    description
+      "The equivalent path to an alternate (or same) schema set for the
+       data node carrying this annotation. This corresponding path is
+       formatted as an XPath string prefixed with an appropriate origin.
+
+       This annotation is MANDATORY if there is any alternate equivalent
+       schema node, otherwise can be omitted.
+
+       Examples:
+         - juniper:/state/interfaces/interface[name]
+         - openconfig:/interfaces/interface[name]
+         - openconfig:/interfaces/interface/state/name
+      ";
+  }
+
+  extension corresponding-snmp {
+    description
+      "This extension is to be used as an encapsulating construct for
+       anywhere a corresponding SNMP OID can be mapped.  This extension
+       is only to be used if there are child corresponding SNMP OIDs.
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | snmp-oid       | 1..n        |
+       +----------------+-------------+
+      ";
+   }
+
+  extension snmp-oid {
+    argument oid {
+      yin-element true;
+    }
+    description
+      "The equivalent corresponding SNMP OID for the data node carrying
+       this annotation. There can be OIDs across one or more MIBs
+       (Enterprise vs. Standard).
+
+       This annotation is MANDATORY if there is an equivalent OID,
+       otherwise can be omitted.
+
+       NOTE: Any indices are omitted from the OID definition
+
+       Examples:
+         - .1.3.6.1.2.1.31.1.1.1.1
+         - .1.3.6.1.4.1.2636.5.1.1.2.1.1.1.2
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | snmp-oid-name  | 1           |
+       +----------------+-------------+
+      ";
+  }
+
+  extension snmp-oid-name {
+    argument name {
+      yin-element true;
+    }
+    description
+      "The equivalent corresponding SNMP symbolic name that maps to the
+       OID for the data node carrying this annotation. There can be OIDs
+       across one or more MIBs (Enterprise vs. Standard).
+
+       This annotation is MANDATORY if there is an equivalent OID,
+       otherwise can be omitted.
+
+       Examples:
+         - SNMPv2-MIB:sysName.0
+         - IF-MIB::ifOperStatus
+         - IF-MIB::linkUp
+         - IF-MIB::linkDown
+         - BGP4-V2-MIB-JUNIPER::jnxBgpM2PeerState
+      ";
+  }
+
+  extension snmp-trap-oid {
+    argument oid {
+      yin-element true;
+    }
+    description
+      "In the case of ON_CHANGE capable nodes, the equivalent
+       corresponding SNMP Trap OID for the data node carrying this
+       annotation.  There can be OIDs across one or more MIBs
+       (Enterprise vs. Standard).
+
+       This annotation is MANDATORY if there is an equivalent OID,
+       otherwise can be omitted.
+
+       NOTE: Any indices are omitted from the OID definition
+
+       Examples:
+         - .1.3.6.1.6.3.1.1.5.4
+         - .1.3.6.1.6.3.1.1.5.3
+
+       Permitted substatements:
+       +----------------+-------------+
+       | substatement   | cardinality |
+       +----------------+-------------+
+       | snmp-oid-name  | 1           |
+       +----------------+-------------+
+      ";
+  }
+
+  extension corresponding-events {
+    description
+      "This extension is to be used as an encapsulating construct
+       for anywhere a corresponding JUNOS event can be mapped.  This
+       extension is only to be used if there are child corresponding
+       events.
+
+       Permitted substatements:
+       +--------------+-------------+
+       | substatement | cardinality |
+       +--------------+-------------+
+       | event-id     | 1..n        |
+       +--------------+-------------+
+      ";
+
+  }
+
+  extension event-id {
+    argument name {
+      yin-element true;
+    }
+    description
+      "In the case of ON_CHANGE capable nodes, the equivalent
+       corresponding JUNOS event-id for the data node carrying this
+       annotation.
+
+       This annotation is MANDATORY if there is an equivalent JUNOS
+       event-id, otherwise can be omitted.
+
+       Examples:
+         - SNMP_TRAP_LINK_UP
+         - SNMP_TRAP_LINK_DOWN
+      ";
+  }
+
+  extension doc-url {
+    argument url {
+      yin-element true;
+    }
+    description
+      "The documentation URL to the equivalent corresponding feature
+       (command/OID) for the data node carrying this annotation.
+
+       This annotation is MANDATORY if there is an equivalent OID or
+       command, otherwise can be omitted.
+
+       Examples:
+         - https://www.juniper.net/documentation/us/en/software/junos/user-access/topics/topic-map/junos-os-login-settings.html
+         - https://www.juniper.net/documentation/us/en/software/junos/bgp/topics/ref/command/show-bgp-neighbor.html";
+  }
+
+  extension origin {
+    argument name {
+      yin-element true;
+    }
+    description
+      "Abstract origin grouping in which a NBI (such as gNMI) can
+       interact with the module or node contents. It is a form of
+       metadata (much like a namespace) that can be defined in NBI
+       protocol communications to target a data node or path.  If a
+       module/node is supported across multiple origins, it is expected
+       this extension is defined for each origin.";
+  }
+
+  extension on-change {
+    description
+      "Whether the data node supports ON_CHANGE behavior for NBI that
+       support this functionality (e.g. gNMI).";
+  }
+
+  extension not-supported {
+    description
+      "The YANG 1.0/1.1 language can only express non-support by way of
+       deviations to a schema tree node.  This extension is for use with
+       the annotate-statement extension for targeting any statement that
+       cannot be covered by way of a proper deviation.
+
+       Example usage:
+
+         // Annotate source-of-truth module to claim non-support across
+         // all uses of the identity
+         jx:annotate-statement identity[name='OSPF3'] {
+           jx:not-supported;
+         }
+
+         // Annotate a specific usage of an identity to claim non-support
+         // for a specific scenario
+         jx:annotate /network-instances/network-instance/protocols/protocol/state/identifier {
+           jx:annotate-statement oc-pol-types:OSPF3 {
+             jx:not-supported;
+           }
+         }
+       ";
+  }
+
+}

@@ -1,0 +1,398 @@
+/*
+ * Copyright (c) 2025 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-community {
+   namespace "http://yang.juniper.net/junos-ex/rpc/community";
+
+   prefix community;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for community command(s)";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   rpc get-community-route-target-information {
+     description "Show communities containing a 'Route Target'";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf prefix-count {
+         description "Display prefix count information";
+         type empty;
+       }
+       leaf limit-exceeded {
+         description "Display 'Route Target' that exceeded prefix limit";
+         type empty;
+       }
+     }
+     output {
+       container community-information {
+         uses community-information-block;
+       }
+     }
+   }
+   rpc get-community-member-information {
+     description "Display communities containing a member community";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+       leaf community {
+         description "The community value";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       container community-information {
+         uses community-information-block;
+       }
+     }
+   }
+   rpc get-community-information-all {
+     description "Show all communities";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       container community-information {
+         uses community-information-block;
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping community-information-block {
+     container community-table {
+       list community-entry {
+         leaf com-refcount {
+           type int32;
+           description "References";
+         }
+         leaf com-bucket {
+           type uint32;
+           description "Community bucket index";
+         }
+         leaf com-ext-wk-mask {
+           type string;
+           description "Mask of wellknown extended community types";
+         }
+         leaf com-bgp-prefix-count {
+           type uint32;
+           description "Number of BGP prefixes";
+         }
+         leaf com-pfx-lmt-excd-count {
+           type uint32;
+           description "Prefix limit exceeded count";
+         }
+         leaf com-shard-prefix-count {
+           type uint32;
+           description "Number of BGP prefixes in current shard";
+         }
+         leaf com-pfx-cnt-mux-ptr-fm-main {
+           type uint64;
+           description "Shared pointer received from Main thread";
+         }
+         leaf com-pfx-cnt-mux-ptr-main {
+           type uint64;
+           description "Shared pointer in Main thread";
+         }
+         leaf com-rcv-fm-shards-mask {
+           type uint32;
+           description "Shards that have sent this community to Main";
+         }
+         leaf com-ptr-snt-to-shards-mask {
+           type uint32;
+           description "Shards that Main has sent shared pointer to";
+         }
+         container communities {
+           leaf-list community {
+             type string;
+             description "Basic community";
+           }
+           leaf-list extended-community {
+             type string;
+             description "Extended community";
+           }
+           leaf-list ipv6-extended-community {
+             type string;
+             description "IPv6 extended community";
+           }
+         }
+       }
+     }
+     container show-command-status {
+       container error {
+         leaf error-message {
+           type string;
+         }
+       }
+     }
+     container community-statistics {
+       leaf com-pfx-node-count {
+         type uint32;
+         description "Number of nodes in community prefix count tree";
+       }
+       leaf com-pfx-mux-node-count {
+         type uint32;
+         description "Number of nodes in Main thread community prefix count mux tree";
+       }
+       leaf com-pfx-err-not-shard {
+         type uint32;
+         description "Error counter, not a shard";
+       }
+       leaf com-pfx-err-shared-ptr-mismatch {
+         type uint32;
+         description "Error counter, pointer mismatch";
+       }
+       leaf com-pfx-err-shared-ptr-null {
+         type uint32;
+         description "Error counter, pointer is null";
+       }
+     }
+   }
+ }

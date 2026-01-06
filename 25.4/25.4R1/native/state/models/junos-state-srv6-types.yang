@@ -1,0 +1,611 @@
+module junos-state-srv6-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/srv6/types";
+  prefix js-srv6-types;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS SRv6 data
+     types.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-09-11 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  typedef sid-allocation-type {
+    type enumeration {
+      enum dynamic {
+        description
+          "SID allocated dynamically.";
+      }
+      enum static {
+        description
+          "SID allocated with explicit (static) value";
+      }
+    }
+    description
+      "Types of SID allocation used.";
+  }
+
+  identity srv6-endpoint-type {
+    description
+      "Base identity from which specific SRv6 Endpoint types are
+       derived.";
+  }
+
+  identity end {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: no PSP, no USP).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-psp {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: PSP only).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-usp {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: USP only).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-psp-usp {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: PSP and USP).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: no PSP, no USP).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-psp {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: PSP only).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-usp {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: USP only).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-psp-usp {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: PSP and USP).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: no PSP, no
+       USP).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-psp {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: PSP only).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-usp {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: USP only).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-psp-usp {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: PSP and
+       USP).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-b6-encaps {
+    base srv6-endpoint-type;
+    description
+      "Endpoint bound to an SRv6 Policy where the SRv6 Policy also
+       includes an IPv6 Source Address A.";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-bm {
+    base srv6-endpoint-type;
+    description
+      "Endpoint bound to an SR-MPLS Policy";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dx6 {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and cross-connect to an array of IPv6
+       adjacencies";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dx4 {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and cross-connect to an array of IPv4
+       adjacencies";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dt6 {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and specific IPv6 table lookup";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dt4 {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and specific IPv4 table lookup";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dt46 {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and specific IP (IPv4 or IPv6) table
+       lookup";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dx2 {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and Layer-2 cross-connect to an L2
+       interface";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dx2v {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and specific VLAN L2 table lookup";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dt2u {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and specific unicast MAC L2 table
+       lookup";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-dt2m {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and specific L2 table flooding";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-b6-encaps-red {
+    base srv6-endpoint-type;
+    description
+      "This is a reduced encap variation of the End-B6.Encap behavior.";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-usd {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-psp-usd {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: PSP and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-usp-usd {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: USP and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-psp-usp-usd {
+    base srv6-endpoint-type;
+    description
+      "End function (variant: PSP and USP and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-psp-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: PSP and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-usp-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: USP and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-x-psp-usp-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with cross-connect to an array of layer-3 adjacencies
+       (variant: PSP and USP and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with decapsulation and Layer-2 cross-connect to an L2
+       interface";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-psp-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: PSP and
+       USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-usp-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: USP and
+       USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-t-psp-usp-usd {
+    base srv6-endpoint-type;
+    description
+      "Endpoint with specific IPv6 table lookup (variant: PSP and USP
+       and USD).";
+    reference
+      "RFC 8986";
+  }
+
+  identity end-with-next-only-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-ONLY-CSID";
+  }
+
+  identity end-with-next-usid {
+    base srv6-endpoint-type;
+   description
+      "End with NEXT-CSID";
+  }
+
+  identity end-with-next-psp-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, PSP";
+  }
+
+  identity end-with-next-usp-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, USP";
+  }
+
+  identity end-with-next-psp-usp-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, PSP & USP";
+  }
+
+  identity end-with-next-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, USD";
+  }
+
+  identity end-with-next-psp-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, PSP & USD";
+  }
+
+  identity end-with-next-usp-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, USP & USD";
+  }
+
+  identity end-with-next-psp-usp-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End with NEXT-CSID, PSP, USP & USD";
+  }
+
+  identity end-x-with-next-only-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-ONLY-CSID";
+  }
+
+  identity end-x-with-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID";
+  }
+
+  identity end-x-with-next-psp-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, PSP";
+  }
+
+  identity end-x-with-next-usp-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, USP";
+
+  }
+
+  identity end-x-with-next-psp-usp-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, PSP & USP";
+  }
+
+  identity end-x-with-next-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, USD";
+  }
+
+  identity end-x-with-next-psp-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, PSP & USD";
+  }
+
+  identity end-x-with-next-usp-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, USP & USD";
+  }
+
+  identity end-x-with-next-psp-usp-usd-usid {
+    base srv6-endpoint-type;
+    description
+      "End.X with NEXT-CSID, PSP, USP & USD";
+  }
+
+  identity end-dx6-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DX6 with NEXT-CSID";
+  }
+
+  identity end-dx4-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DX4 with NEXT-CSID";
+  }
+
+  identity end-dt6-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DT6 with NEXT-CSID";
+  }
+
+  identity end-dt4-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DT4 with NEXT-CSID";
+  }
+
+  identity end-dt46-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DT46 with NEXT-CSID";
+  }
+
+  identity end-dx2-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DX2 with NEXT-CSID";
+  }
+
+  identity end-dx2v-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DX2V with NEXT-CSID";
+  }
+
+  identity end-dt2u-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DT2U with NEXT-CSID";
+  }
+
+  identity end-dt2m-next-usid {
+    base srv6-endpoint-type;
+    description
+      "End.DT2M with NEXT-CSID";
+  }
+
+  identity srv6-counter-type {
+    description
+      "Base identity from which SRv6 counter types are derived.";
+  }
+
+  identity local-sid-ingress {
+    base srv6-counter-type;
+    description
+      "Count packets and bytes traffic that matched that SID and was
+       processed successfully";
+    reference
+      "RFC 8986";
+  }
+
+  identity remote-locator-ingress {
+    base srv6-counter-type;
+    description
+      "Count packets and bytes traffic that matched that locator and was
+       processed successfully";
+  }
+
+  identity remote-locator-egress {
+    base srv6-counter-type;
+    description
+      "Count packets and bytes traffic that matched that locator and was
+       processed successfully";
+  }
+
+  identity srv6-sid-owner-type {
+    description
+      "Base identity from which SID owner types are derived.";
+  }
+
+  identity isis {
+    base srv6-sid-owner-type;
+    description
+      "ISIS";
+  }
+
+  identity ospf {
+    base srv6-sid-owner-type;
+    description
+      "OSPFv3";
+  }
+
+  identity bgp {
+    base srv6-sid-owner-type;
+    description
+      "BGP";
+  }
+
+  identity evpn {
+    base srv6-sid-owner-type;
+    description
+      "EVPN";
+  }
+
+  identity sr-te {
+    base srv6-sid-owner-type;
+    description
+      "SR-TE";
+  }
+
+  identity krt {
+    base srv6-sid-owner-type;
+    description
+      "Kernel routing table";
+  }
+
+  identity srv6 {
+    base srv6-sid-owner-type;
+    description
+      "SRv6 manager";
+  }
+}

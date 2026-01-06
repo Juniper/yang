@@ -1,0 +1,113 @@
+ module junos-genstate-loop-detect-enhanced-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/loop-detect-enhanced-interface-information";
+   prefix jgldeii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for loop-detect-enhanced-interface-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping loop-detect-enhanced-interface-information-top {
+     description "Top-level grouping";
+     container loop-detect-enhanced-interface-information {
+       description "Information about one or more loop detect interfaces";
+       list loop-detect-enhanced-interface-entry {
+         key "ld-interface-name";
+         description "Loop detect interace information";
+         leaf ld-interface-name {
+           type string;
+           description "Name of interface";
+         }
+         leaf ld-interface-vlan-id {
+           type string;
+           description "Vlan-id or 'all' in case of trunk port";
+         }
+         leaf ld-interface-esi {
+           type string;
+           description "ESI configured for the interface";
+         }
+         leaf ld-interface-state {
+           type string;
+           description "Current status of the interface";
+         }
+         leaf ld-remote-host {
+           type string;
+           description "Remote Host";
+         }
+         leaf ld-remote-chassis {
+           type string;
+           description "Remote chassis ID";
+         }
+         leaf ld-remote-interface {
+           type string;
+           description "Remote Interface";
+         }
+         leaf ld-remote-esi {
+           type string;
+           description "Remote ESI";
+         }
+         leaf ld-interface-vlan {
+           type uint32;
+           description "First detected loop vlan-id";
+         }
+         leaf ld-interface-other-vlan {
+           type string;
+           description "Other detected loop vlan-id";
+         }
+         leaf ld-interface-last-ld-time {
+           type string;
+           description "Last loop-detected timestamp";
+         }
+         leaf ld-interface-rx-stats {
+           type uint32;
+           description "Receive statistics of loop-detect PDUs";
+         }
+         leaf ld-interface-action {
+           type string;
+           description "Action configured for the interface";
+         }
+         leaf ld-interface-action-count {
+           type uint32;
+           description "Number of times action has been taken on this interface";
+         }
+         leaf ld-tx-interval {
+           type string;
+           description "Transmit interval configured for this interface";
+         }
+         leaf ld-revert-interval {
+           type uint32;
+           description "Revert interval configured for this interface";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds loop-detect-enhanced-interface-information to top-level genstate";
+     uses loop-detect-enhanced-interface-information-top;
+   }
+ }

@@ -1,0 +1,247 @@
+module junos-state-soft-gre {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/soft-gre";
+  prefix js-sgre;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-services {
+    prefix js-svc;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Soft GRE state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2025-03-14 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  grouping tunnel-counters {
+    description
+      "Top-level grouping for tunnel counters";
+
+    leaf static-tunnels {
+      type yang:gauge32;
+      description
+        "Total count of static tunnels";
+    }
+
+    leaf dynamic-tunnels {
+      type yang:gauge32;
+      description
+        "Total count of dynamic tunnels";
+    }
+  }
+
+  grouping session-counters {
+    description
+      "Top-level grouping for session counters";
+
+    leaf static-sessions {
+      type yang:gauge32;
+      description
+        "Total count of static sessions";
+    }
+
+    leaf pppoe-sessions {
+      type yang:gauge32;
+      description
+        "Total count of PPPoE sessions";
+    }
+
+    leaf dhcp-sessions {
+      type yang:gauge32;
+      description
+        "Total count of DHCP sessions";
+    }
+
+    leaf vlan-sessions {
+      type yang:gauge32;
+      description
+        "Total count of VLAN sessions";
+    }
+
+    leaf user-sessions {
+      type yang:gauge32;
+      description
+        "Total count of user sessions";
+    }
+  }
+
+  grouping tunnel-interface-state {
+    description
+      "Top-level grouping for tunnel interface state";
+
+    leaf local-address {
+      type inet:ip-address;
+      description
+        "Tunnel local IPv4 or IPv6 address";
+    }
+
+    leaf remote-address {
+      type inet:ip-address;
+      description
+        "Tunnel remote IPv4 or IPv6 address";
+    }
+
+    leaf routing-instance {
+      type leafref {
+        path "/js:state/js-ri:routing-instances/js-ri:routing-instance/js-ri:name";
+      }
+      description
+        "Routing instance membership of the interface";
+    }
+  }
+
+  grouping logical-interfaces {
+    description
+      "Top-level grouping for logical interface state data";
+
+    container logical-interfaces {
+      description
+        "Encapsulating container for logical interfaces";
+
+      list logical-interface {
+        description
+          "List of logical interfaces";
+
+        key name;
+
+        leaf name {
+          type junos-intft:interface-name;
+          description
+            "Interface name";
+        }
+
+        uses tunnel-counters;
+        uses session-counters;
+      }
+    }
+  }
+
+  grouping tunnel-interfaces {
+    description
+      "Top-level grouping for tunnel interface state data";
+
+    container tunnel-interfaces {
+      description
+        "Encapsulating container for tunnel interfaces";
+
+      list tunnel-interface {
+        description
+          "List of tunnel interfaces";
+
+        key name;
+
+        leaf name {
+          type junos-intft:interface-name;
+          description
+            "Interface name";
+        }
+
+        uses tunnel-interface-state;
+        uses session-counters;
+        uses session-interfaces;
+      }
+    }
+  }
+
+  grouping session-interfaces {
+    description
+      "List of session interfaces of all tunnels";
+
+    container session-interfaces {
+      description
+        "Encapsulating container for session interfaces";
+
+      list session-interface {
+        description
+          "List of session interfaces for the tunnel";
+
+        key name;
+
+        leaf name {
+          type junos-intft:interface-name;
+          description
+            "Session interface name";
+        }
+      }
+    }
+  }
+
+  grouping softgre-top {
+    description
+      "Top-level grouping for services Soft GRE state data";
+
+    container soft-gre {
+      description
+        "Top-level container for Soft GRE statistics and state
+         information";
+
+      container counters {
+        uses tunnel-counters;
+        uses session-counters;
+      }
+
+      uses logical-interfaces;
+      uses tunnel-interfaces;
+    }
+  }
+
+  augment "/js:state/js-svc:services" {
+    description
+      "Add Soft GRE domain to services state";
+
+    uses softgre-top;
+  }
+}

@@ -1,0 +1,104 @@
+module junos-state-forwarding {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/forwarding";
+  prefix js-fwdg;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Forwarding related state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-05-21 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "juniper";
+
+  grouping named-counters {
+    description
+      "Top-level grouping for user-defined named counters.";
+
+    container named-counters {
+      description
+        "Encapsulating container for named counters.  Note that the
+         named counters defined here are currently limited to definition
+         by way of select JET APIs.";
+
+      list named-counter {
+        key name;
+
+        description
+          "List of user-defined named counters";
+
+        leaf name {
+          type string;
+          description
+            "User-defined name for the counter";
+        }
+
+        leaf octets {
+          type yang:counter64;
+          description
+            "Count of total octets associated with the named counter";
+        }
+
+        leaf packets {
+          type yang:counter64;
+          description
+            "Count of total packets associated with the named counter";
+        }
+      }
+    }
+  }
+
+  grouping forwarding-top {
+    description
+      "Top-level grouping for JUNOS forwarding state data";
+
+    container forwarding {
+      description
+        "Encapsulating container for all JUNOS forwarding related state
+         data";
+
+      uses named-counters;
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds forwarding domain to top-level state";
+
+    uses forwarding-top;
+  }
+}
+

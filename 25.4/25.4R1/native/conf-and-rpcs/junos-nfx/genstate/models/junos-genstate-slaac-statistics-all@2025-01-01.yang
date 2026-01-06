@@ -1,0 +1,81 @@
+ module junos-genstate-slaac-statistics-all {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/slaac-statistics-all";
+   prefix jgssa;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for slaac-statistics-all";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping slaac-statistics-all-top {
+     description "Top-level grouping";
+     container slaac-statistics-all {
+       description "Top-level container";
+       leaf dad-request-queued {
+         type int32;
+       }
+       leaf confirmed-bindings {
+         type int32;
+       }
+       leaf declined-bindings {
+         type int32;
+       }
+       leaf conflicting-dad-entries {
+         type int32;
+       }
+       leaf auto-dad-queued {
+         type int32;
+       }
+       leaf auto-dad-pkt-tx {
+         type int32;
+       }
+       leaf request-on-trusted-port {
+         type int32;
+       }
+       leaf total-dropped {
+         type int32;
+       }
+       leaf bad-read {
+         type int32;
+       }
+       leaf no-cfg {
+         type int32;
+       }
+       leaf no-vlan {
+         type int32;
+       }
+       leaf no-ifl {
+         type int32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds slaac-statistics-all to top-level genstate";
+     uses slaac-statistics-all-top;
+   }
+ }

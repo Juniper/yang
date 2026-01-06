@@ -1,0 +1,111 @@
+module junos-sampling-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/sampling/types";
+  prefix jsmpt;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of JUNOS sampling data types.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-23 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef flow-status-code {
+    type enumeration {
+      enum steady {
+        value 0;
+        description
+          "Indicates the status is enabled";
+      }
+      enum reconfiguring {
+        value 1;
+        description
+          "Indicates the status is Reconfiguring";
+      }
+      enum disabled-by-internal-error {
+        value 2;
+        description
+          "Indicates the status is Disabled due to internal error";
+      }
+      enum unknown {
+        value 255;
+        description
+          "Indicates the status is Unknown state";
+      }
+    }
+    description
+      "Common operational state modes for flow-monitoring related
+       attributes";
+  }
+
+  typedef flow-format {
+    type enumeration {
+      enum netflow-v5 {
+        description
+          "Indicates flow-monitoring export using Netflow V5 format";
+      }
+      enum netflow-v9 {
+        description
+          "Indicates flow-monitoring export using Netflow V9 format";
+      }
+      enum ipfix {
+        description
+          "Indicates flow-monitoring export using IPFIX format";
+      }
+      enum unknown {
+        description
+          "Indicates unknown version format";
+      }
+    }
+    description
+      "Common export formats for flow-monitoring related attributes";
+  }
+
+  typedef flow-family {
+    type enumeration {
+      enum ipv4 {
+        description
+          "Indicate protocol family IP version 4";
+      }
+      enum ipv6 {
+        description
+          "Indicate protocol family IP version 6";
+      }
+      enum mpls {
+        description
+          "Indicate MPLS protocol family";
+      }
+      enum bridge {
+        description
+          "Indicate Bridge protocol family";
+      }
+    }
+    description
+      "Common flow-monitoring supported protocol families";
+  }
+}
+

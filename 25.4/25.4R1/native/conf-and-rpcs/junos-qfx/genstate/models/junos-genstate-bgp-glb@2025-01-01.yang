@@ -1,0 +1,161 @@
+ module junos-genstate-bgp-glb {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-glb";
+   prefix jgbg;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-glb";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-glb-top {
+     description "Top-level grouping";
+     container bgp-glb {
+       description "BGP global load balancing";
+       leaf bgp-glb-state {
+         type string;
+       }
+       leaf bgp-glb-role {
+         type string;
+       }
+       list bgp-glb-path {
+         key "bgp-glb-path-id";
+         leaf bgp-glb-path-id {
+           type uint32;
+         }
+         leaf bgp-glb-path-ifindex {
+           type int32;
+         }
+         leaf bgp-glb-path-nh-node-id {
+           type jt:ipaddr;
+         }
+       }
+       list bgp-glb-path-monitor {
+         key "bgp-glb-path-monitor-ifindex bgp-glb-path-monitor-local-node-id bgp-glb-path-monitor-remote-node-id";
+         leaf bgp-glb-path-monitor-ifindex {
+           type int32;
+         }
+         leaf bgp-glb-path-monitor-local-node-id {
+           type jt:ipaddr;
+         }
+         leaf bgp-glb-path-monitor-remote-node-id {
+           type jt:ipaddr;
+         }
+       }
+       list bgp-glb-profile {
+         key "bgp-glb-profile-id";
+         leaf bgp-glb-profile-pointer {
+           type string;
+         }
+         leaf bgp-glb-profile-id {
+           type uint32;
+         }
+         leaf bgp-glb-profile-lookahead-count {
+           type uint32;
+         }
+         leaf bgp-glb-profile-lookahead-list {
+           type empty;
+         }
+         leaf bgp-glb-profile-lookahead-profile-id {
+           type uint32;
+         }
+         leaf bgp-glb-profile-lookahead-profile-nnh-node-id {
+           type jt:ipaddr;
+         }
+         leaf bgp-glb-profile-lookahead-unalloc-list {
+           type empty;
+         }
+         leaf bgp-glb-profile-nnh-node-id {
+           type jt:ipaddr;
+         }
+         leaf bgp-glb-profile-path-count {
+           type uint32;
+         }
+         leaf bgp-glb-profile-path-list {
+           type empty;
+         }
+         leaf bgp-glb-profile-path-id {
+           type uint32;
+         }
+         leaf bgp-glb-profile-path-ifindex {
+           type uint32;
+         }
+         leaf bgp-glb-profile-path-nh-node-id {
+           type uint32;
+         }
+         leaf bgp-glb-profile-path-refcnt {
+           type uint32;
+         }
+         leaf bgp-glb-profile-path-unalloc-list {
+           type empty;
+         }
+         list bgp-glb-profile-lookahead-entry {
+           leaf bgp-glb-profile-lookahead-profile-id {
+             type uint32;
+           }
+           leaf bgp-glb-profile-lookahead-profile-nnh-node-id {
+             type jt:ipaddr;
+           }
+         }
+         list bgp-glb-profile-lookahead-unalloc-entry {
+           leaf bgp-glb-profile-lookahead-profile-nnh-node-id {
+             type jt:ipaddr;
+           }
+         }
+         list bgp-glb-profile-path-entry {
+           leaf bgp-glb-profile-path-id {
+             type uint32;
+           }
+           leaf bgp-glb-profile-path-ifindex {
+             type uint32;
+           }
+           leaf bgp-glb-profile-path-nh-node-id {
+             type uint32;
+           }
+           leaf bgp-glb-profile-path-refcnt {
+             type uint32;
+           }
+         }
+         list bgp-glb-profile-path-unalloc-entry {
+           leaf bgp-glb-profile-path-ifindex {
+             type uint32;
+           }
+           leaf bgp-glb-profile-path-nh-node-id {
+             type uint32;
+           }
+           leaf bgp-glb-profile-path-refcnt {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-glb to top-level genstate";
+     uses bgp-glb-top;
+   }
+ }

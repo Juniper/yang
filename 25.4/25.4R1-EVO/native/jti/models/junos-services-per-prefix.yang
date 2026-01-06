@@ -1,0 +1,65 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-services-per-prefix {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/srvs-per-prefix";
+  prefix junos-srvs-per-prefix;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     per-prefix related stats.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-10-30 {
+    description
+      "Initial revision";
+  }
+
+   grouping jnx-srvs-per-prefix-top {
+       container junos {
+           config false;
+           description "JunOS OS container";
+           container services {
+               container ipv4-unicast {
+                   description "Junos ipv4-unicast container";
+                   container prefix {
+                       description "Junos ipv4-unicast prefix container";
+                       container usage {
+                           description "Junos ipv4-unicast prefix usage container";
+                       }
+                   }
+               }
+               container ipv6-unicast {
+                   description "Junos ipv6-unicast container";
+                   container prefix {
+                       description "Junos ipv6-unicast prefix container";
+                       container usage {
+                           description "Junos ipv6-unicast prefix usage container";
+                       }
+                   }
+               }
+           }
+       }
+   }
+   uses jnx-srvs-per-prefix-top;
+}

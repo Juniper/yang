@@ -1,0 +1,43 @@
+module junos-evpn-types {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/evpn/types";
+  prefix "jevpnt";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains the definitions for types of EVPN data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-01-04 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  typedef esi {
+    type string;
+    description
+      "Ethernet segment identifier (ESI).";
+  }
+
+}

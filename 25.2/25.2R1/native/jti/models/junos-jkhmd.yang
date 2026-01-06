@@ -1,0 +1,941 @@
+module junos-jkhmd {
+  yang-version 1;
+  namespace "http://juniper.net/yang/kernel_health";
+  prefix junos-jkhmd;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of junos kernel health
+     monitoring data collection yang model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  typedef gresErrorState {
+    type enumeration {
+      enum KSYNCD_NO_ERROR {
+        value 0;
+      }
+      enum KSYNCD_ERROR_INIT {
+        value 1;
+      }
+      enum KSYNCD_ERROR_VERSION_MISMATCH {
+        value 2;
+      }
+      enum KSYNCD_VERSION_MIS_AND_INIT_ERR {
+        value 3;
+      }
+      enum KSYNCD_ERROR_RECONNECT {
+        value 4;
+      }
+      enum KSYNCD_RECONNECT_AND_INIT_ERR {
+        value 5;
+      }
+      enum KSYNCD_ERROR_RECONNECT1 {
+        value 8;
+      }
+      enum KSYNCD_ERROR_REPLICATION {
+        value 65536;
+      }
+      enum KSYNCD_INIT_AND_REPL_ERR {
+        value 65537;
+      }
+      enum KSYNCD_VERSION_MIS_AND_REPL_ERR {
+        value 65538;
+      }
+      enum KSYNCD_RECONNNECT_AND_REPL_ERR {
+        value 65540;
+      }
+      enum KSYNCD_ERROR_CONFIG_SYNC {
+        value 131072;
+      }
+      enum KSYNCD_INIT_AND_CFG_SYNC_ERR {
+        value 131073;
+      }
+      enum KSYNCD_VERSION_MIS_INIT_AND_CFG_SYNC_ERR {
+        value 131075;
+      }
+      enum KSYNCD_REPL_AND_CFG_SYNC_ERROR {
+        value 196608;
+      }
+      enum KSYNCD_INIT_REPL_AND_CFG_SYNC_ERR {
+        value 196609;
+      }
+      enum KSYNCD_ERROR_CONNECTION {
+        value 262144;
+      }
+      enum KSYNCD_CONN_AND_INIT_ERROR {
+        value 262145;
+      }
+      enum KSYNCD_CONN_AND_REPL_ERROR {
+        value 327680;
+      }
+      enum KSYNCD_CONN_REPL_AND_INIT_ERR {
+        value 327681;
+      }
+      enum KSYNCD_CONN_AND_CFG_SYNC_ERROR {
+        value 393216;
+      }
+      enum KSYNCD_CONN_INIT_AND_CFG_SYNC_ERR {
+        value 393217;
+      }
+      enum KSYNCD_CONN_REPL_AND_CFG_SYNC_ERR {
+        value 458752;
+      }
+    }
+  }
+
+  typedef veriexecType {
+    type enumeration {
+      enum VERIEXEC_STATE_INACTIVE {
+        value 0;
+      }
+      enum VERIEXEC_STATE_LOADED {
+        value 1;
+      }
+      enum VERIEXEC_STATE_ACTIVE {
+        value 2;
+      }
+      enum VERIEXEC_STATE_ACTIVE_AND_LOADED {
+        value 3;
+      }
+      enum VERIEXEC_STATE_ENFORCED {
+        value 4;
+      }
+      enum VERIEXEC_STATE_ACTIVE_LOADED_AND_ENFORCED {
+        value 7;
+      }
+      enum VERIEXEC_STATE_LOCKED {
+        value 8;
+      }
+      enum VERIEXEC_STATE_ACTIVE_LOADED_AND_LOCKED {
+        value 11;
+      }
+      enum VERIEXEC_STATE_ACTIVE_LOADED_ENFORCED_AND_LOCKED {
+        value 15;
+      }
+    }
+  }
+
+  typedef issuState {
+    type enumeration {
+      enum ISSU_STATE_IDLE {
+        value 0;
+      }
+      enum ISSU_STATE_ERROR {
+        value 16;
+      }
+      enum ISSU_STATE_VALIDATE {
+        value 32;
+      }
+      enum ISSU_STATE_SLAVE_RE_PREPARE {
+        value 48;
+      }
+      enum ISSU_STATE_SLAVE_RE_PREPARE_DONE {
+        value 64;
+      }
+      enum ISSU_STATE_LCC_SLAVE_RES_PREPARE {
+        value 65;
+      }
+      enum ISSU_STATE_LCC_SLAVE_RES_PREPARE_DONE {
+        value 66;
+      }
+      enum ISSU_STATE_LCC_PROTOCOL_BACKUP_SWITCHED {
+        value 72;
+      }
+      enum ISSU_STATE_DAEMON_PREPARE {
+        value 80;
+      }
+      enum ISSU_STATE_DAEMON_READY {
+        value 96;
+      }
+      enum ISSU_STATE_DAEMON_ABORT {
+        value 112;
+      }
+      enum ISSU_STATE_OFFLINE_FRUS {
+        value 120;
+      }
+      enum ISSU_STATE_FRU_ISSU {
+        value 128;
+      }
+      enum ISSU_STATE_FPC_WARM_BOOT {
+        value 136;
+      }
+      enum ISSU_STATE_FPC_WARM_BOOT_DONE {
+        value 137;
+      }
+      enum ISSU_STATE_FPC_HOSTIO_TRANSFER {
+        value 138;
+      }
+      enum ISSU_STATE_FRU_ISSU_DONE {
+        value 144;
+      }
+      enum ISSU_STATE_SWITCHOVER_PREPARE {
+        value 160;
+      }
+      enum ISSU_STATE_SWITCHOVER_READY {
+        value 176;
+      }
+      enum ISSU_STATE_ALL_VC_MEMBERS_SWITCHOVER_READY {
+        value 177;
+      }
+      enum ISSU_STATE_SWITCHOVER_DONE {
+        value 192;
+      }
+      enum ISSU_STATE_OLD_MASTER_UPGRADE {
+        value 208;
+      }
+      enum ISSU_STATE_OLD_MASTER_UPGRADE_DONE {
+        value 224;
+      }
+      enum ISSU_STATE_LCC_OLD_MASTER_UPGRADE {
+        value 225;
+      }
+      enum ISSU_STATE_LCC_OLD_MASTER_UPGRADE_DONE {
+        value 226;
+      }
+      enum ISSU_STATE_UNKNOWN {
+        value 240;
+      }
+    }
+  }
+
+  typedef gresConfiguredState {
+    type enumeration {
+      enum NOT_CONFIGURED {
+        value 0;
+      }
+      enum UNCONFIGURING {
+        value 1;
+      }
+      enum CONFIGURING {
+        value 2;
+      }
+      enum CONFIGURED {
+        value 3;
+      }
+    }
+  }
+
+  typedef gresReadyState {
+    type enumeration {
+      enum GRES_NOT_READY {
+        value 0;
+      }
+      enum GRES_READY {
+        value 1;
+      }
+    }
+  }
+
+  typedef gresOrePresent {
+    type enumeration {
+      enum OTHER_RE_NOT_PRESENT {
+        value 0;
+      }
+      enum OTHER_RE_PRESENT {
+        value 1;
+      }
+    }
+  }
+
+  typedef gresOreAlive {
+    type enumeration {
+      enum OTHER_RE_NOT_ALIVE {
+        value 0;
+      }
+      enum OTHER_RE_ALIVE {
+        value 1;
+      }
+    }
+  }
+
+  typedef gresMastershipState {
+    type enumeration {
+      enum NOT_PROTOCOL_MASTER {
+        value 0;
+      }
+      enum PROTOCOL_MASTER {
+        value 1;
+      }
+      enum PROTOCOL_BACKUP {
+        value 2;
+      }
+    }
+  }
+
+  grouping kernel-ifstate-group {
+    description
+      "Grouping for kernel ifstate data";
+    leaf dead-ifstates-cnt {
+      description
+        "Dead ifstate count";
+      type uint32;
+    }
+    leaf alive-ifstates-cnt {
+      description
+        "Count of alive ifstates in the system";
+      type uint32;
+    }
+    leaf delayed-unrefs-cnt {
+      description
+        "Delayed unrefs count";
+      type uint32;
+    }
+    leaf delayed-unrefs-max {
+      description
+        "Delayed unrefs max";
+      type uint32;
+    }
+    leaf stuck-clients-cnt {
+      description
+        "Stuck clients count";
+      type uint32;
+    }
+    leaf dead-clients-cnt {
+      description
+        "Dead clients count";
+      type uint32;
+    }
+    leaf alive-clients-cnt {
+      description
+        "Alive clients count";
+      type uint32;
+    }
+    leaf client-limit-reached {
+      description
+        "Limit of client has reached or not";
+      type uint32;
+    }
+  }
+
+  grouping chassis-gres-group {
+    description
+      "Grouping for kernel GRES data";
+    leaf gres-time {
+      description
+        "GRES time";
+      type uint64;
+    }
+    leaf slave-connect-time {
+      description
+        "Slave connected to master time elapsed";
+      type uint64;
+    }
+    leaf configured-state {
+      description
+        "GRES configured state";
+      type gresConfiguredState;
+    }
+    leaf master-kernel-ready {
+      description
+        "Master Kernel ready for GRES";
+      type gresReadyState;
+    }
+    leaf slave-kernel-ready {
+      description
+        "Slave Kernel ready for GRES";
+      type gresReadyState;
+    }
+    leaf error-state {
+      description
+        "GRES Error state";
+      type gresErrorState;
+    }
+    leaf other-re-present {
+      description
+        "Other RE Present";
+      type gresOrePresent;
+    }
+    leaf other-re-alive {
+      description
+        "Other RE Alive";
+      type gresOreAlive;
+    }
+    leaf is-protocol-master {
+      description
+        "RE in Master or Slave";
+      type gresMastershipState;
+    }
+  }
+
+  grouping chassis-issu-group {
+    description
+      "Grouping for kernel ISSU data";
+    leaf failure-stage {
+      description
+        "ISSU failure stage";
+      type issuState;
+    }
+    leaf current-issu-stage {
+      description
+        "ISSU current stage";
+      type issuState;
+    }
+  }
+
+  grouping kernel-peer-infra-group {
+    description
+      "Grouping for kernel peer-infra data";
+    leaf peer-pfeman-conn-drops {
+      description
+        "Number of peer pfeman connection drops";
+      type uint32;
+    }
+    leaf spurious-ppt-wkups {
+      description
+        "Number of peer pfe threads wakeups";
+      type uint32;
+    }
+  }
+
+  grouping kernel-tnp-group {
+    description
+      "Grouping for kernel TNP data";
+    leaf tnp-hello-drop-cnt {
+      description
+        "TNP hello packets drop count";
+      type uint64;
+    }
+    leaf tnp-frag-drop-cnt {
+      description
+        "TNP fragments drop count";
+      type uint64;
+    }
+  }
+
+  grouping kernel-vpls-group {
+    description
+      "Grouping for kernel vpls data";
+    leaf unicast-token-cnt {
+      description
+        "Current vpls unicast token count";
+      type uint32;
+    }
+    leaf unicast-token-max {
+      description
+        "Maximum vpls unicast tokens";
+      type uint32;
+    }
+    leaf flood-token-cnt {
+      description
+        "Current vpls flood token count";
+      type uint32;
+    }
+    leaf flood-token-max {
+      description
+        "Maximum vpls flood tokens";
+      type uint32;
+    }
+  }
+
+  grouping kernel-tunnel-group {
+    description
+      "Grouping for kernel tunnel data";
+    leaf rpf-tunnelid-cnt {
+      description
+        "Current rpf tunnelid count";
+      type uint32;
+    }
+    leaf rpf-tunnelid-max {
+      description
+        "Maximum rpf tunnelids";
+      type uint32;
+    }
+    leaf nonrpf-tunnelid-cnt {
+      description
+        "Current non-rpf tunnelid count";
+      type uint32;
+    }
+    leaf nonrpf-tunnelid-max {
+      description
+        "Maximum non-rpf tunnelids";
+      type uint32;
+    }
+    leaf looped-cnt {
+      description
+        "Number of looped tunnels";
+      type uint32;
+    }
+  }
+
+  grouping kernel-multicast-group {
+    description
+      "Grouping for kernel multicast data";
+    leaf iifmismatch-err-cnt {
+      description
+        "IIF mismatch error count";
+      type uint64;
+    }
+    leaf rslv-req-err-cnt {
+      description
+        "Resolve request error count";
+      type uint64;
+    }
+  }
+
+  grouping kernel-record-time-group {
+    description
+      "Grouping for kernel record-time data";
+    leaf record-time {
+      type uint64;
+      description
+        "Timestamp when the record was claimed";
+    }
+  }
+
+  grouping kernel-tcpip-nhidx-group {
+    description
+      "Grouping for kernel tcpip nexthop data";
+    leaf nexthop-pub-max {
+      description
+        "Maximum public nexthops";
+      type uint32;
+    }
+    leaf nexthop-priv-max {
+      description
+        "Maximum private nexthops";
+      type uint32;
+    }
+    leaf nexthop-pub-cnt {
+      description
+        "Used public nexthops";
+      type uint32;
+    }
+    leaf nexthop-priv-cnt {
+      description
+        "Used public nexthops";
+      type uint32;
+    }
+  }
+
+  grouping kernel-tcpip-rtb-group {
+    description
+      "Grouping for kernel tcpip rtb data";
+    leaf route-clone-max {
+      description
+        "RTB clone max";
+      type uint32;
+    }
+    leaf route-clone-cnt {
+      description
+        "RTB clone count";
+      type uint32;
+    }
+  }
+
+  grouping kernel-tcpip-arp-group {
+    description
+      "Grouping for kernel tcpip arp data";
+    leaf nbrcache-iri-max {
+      description
+        "Arpcache iri max";
+      type uint32;
+    }
+    leaf nbrcache-mgmt-max {
+      description
+        "Arpcache management max";
+      type uint32;
+    }
+    leaf nbrcache-public-max {
+      description
+        "Arpcache public max";
+      type uint32;
+    }
+    leaf nbrcache-iri-cnt {
+      description
+        "Arpcache iri count";
+      type uint32;
+    }
+    leaf nbrcache-mgmt-cnt {
+      description
+        "Arpcache management count";
+      type uint32;
+    }
+    leaf nbrcache-public-cnt {
+      description
+        "Arpcache public count";
+      type uint32;
+    }
+    leaf nbrcache-iri-drop-cnt {
+      description
+        "Arpcache iri drop count";
+      type uint32;
+    }
+    leaf nbrcache-mgmt-drop-cnt {
+      description
+        "Arpcache management drop count";
+      type uint32;
+    }
+    leaf nbrcache-public-drop-cnt {
+      description
+        "Arpcache public drop count";
+      type uint32;
+    }
+  }
+
+  grouping kernel-tcpip-ndp-group {
+    description
+      "Grouping for kernel tcpip ndp data";
+    leaf nbrcache-iri-max {
+      description
+        "Ndpcache iri max";
+      type uint32;
+    }
+    leaf nbrcache-mgmt-max {
+      description
+        "Ndpcache management max";
+      type uint32;
+    }
+    leaf nbrcache-public-max {
+      description
+        "Ndpcache public max";
+      type uint32;
+    }
+    leaf nbrcache-iri-cnt {
+      description
+        "Ndpcache iri count";
+      type uint32;
+    }
+    leaf nbrcache-mgmt-cnt {
+      description
+        "Ndpcache management count";
+      type uint32;
+    }
+    leaf nbrcache-public-cnt {
+      description
+        "Ndpcache public count";
+      type uint32;
+    }
+    leaf nbrcache-iri-drop-cnt {
+      description
+        "Ndpcache iri drop count";
+      type uint32;
+    }
+    leaf nbrcache-mgmt-drop-cnt {
+      description
+        "Ndpcache management drop count";
+      type uint32;
+    }
+    leaf nbrcache-public-drop-cnt {
+      description
+        "Ndpcache public drop count";
+      type uint32;
+    }
+  }
+
+  grouping kernel-tcpip-netisr-group {
+    description
+      "Grouping for kernel tcpip netisr data";
+    leaf ether-wm-cnt {
+      description
+        "Netisr ether watermark count";
+      type uint32;
+    }
+    leaf ether-drop-cnt {
+      description
+        "Netisr ether drop count";
+      type uint32;
+    }
+    leaf ether-pkt-handled {
+      description
+        "Netisr ether packet handled";
+      type uint64;
+    }
+    leaf ether-pkt-queued {
+      description
+        "Netisr ether packet queued";
+      type uint64;
+    }
+    leaf ip-wm-cnt {
+      description
+        "Netisr ip watermark count";
+      type uint32;
+    }
+    leaf ip-drop-cnt {
+      description
+        "Netisr ip drop count";
+      type uint32;
+    }
+    leaf ip-pkt-handled {
+      description
+        "Netisr ip packet handled";
+      type uint64;
+    }
+    leaf ip-pkt-queued {
+      description
+        "Netisr ip packet queued";
+      type uint64;
+    }
+    leaf ip6-wm-cnt {
+      description
+        "Netisr ip6 watermark count";
+      type uint32;
+    }
+    leaf ip6-drop-cnt {
+      description
+        "Netisr ip6 drop count";
+      type uint32;
+    }
+    leaf ip6-pkt-handled {
+      description
+        "Netisr ip6 packet handled";
+      type uint64;
+    }
+    leaf ip6-pkt-queued {
+      description
+        "Netisr ip6 packet queued";
+      type uint64;
+    }
+    leaf arp-wm-cnt {
+      description
+        "Netisr arp watermark count";
+      type uint32;
+    }
+    leaf arp-drop-cnt {
+      description
+        "Netisr arp drop count";
+      type uint32;
+    }
+    leaf arp-pkt-handled {
+      description
+        "Netisr arp packet handled";
+      type uint64;
+    }
+    leaf arp-pkt-queued {
+      description
+        "Netisr arp packet queued";
+      type uint64;
+    }
+  }
+
+  grouping kernel-tcpip-tcp-group {
+    description
+      "Grouping for kernel tcpip TCP data";
+    leaf tcp-ddos-attack-cnt {
+      description
+        "TCP DDOS attack count";
+      type uint32;
+    }
+    leaf tcp-conndrops-cnt {
+      description
+        "TCP connection drops count";
+      type uint32;
+    }
+    leaf tcp-time-wait-conn {
+      description
+        "TCP time wait connection";
+      type uint64;
+    }
+  }
+
+  grouping routing-options-nsr-group {
+    description
+      "Grouping for routing options NSR data";
+    leaf jsr-split-failure-cnt {
+      description
+        "JSR split failure count";
+      type uint32;
+    }
+    leaf jsr-merge-failure-cnt {
+      description
+        "JSR merge failure count";
+      type uint32;
+    }
+    leaf jsr-prl-queue-full-cnt {
+      description
+        "JSR PRL queue full count";
+      type uint32;
+    }
+  }
+
+  grouping security-group {
+    description
+      "Grouping for security data";
+    leaf veriexec-state {
+      type veriexecType;
+      description
+        "All the security related parameters";
+    }
+  }
+
+  grouping kernel-rtsock-group {
+    description
+      "Grouping for kernel rtsock data";
+    leaf total-veto-cnt {
+      description
+        "Total Veto Count";
+      type uint64;
+    }
+    leaf total-error-cnt {
+      description
+        "Total Error Count";
+      type uint64;
+    }
+  }
+
+  grouping chassis-aggregated-devices-group {
+    description
+      "Grouping for chassis aggregated devices data";
+    leaf ps-lt-unstack-cnt {
+      description
+        "PS LT unstacking error count";
+      type uint32;
+    }
+    leaf ps-ifl-ccc-down-cnt {
+      description
+        "PS IFL l2circuit down error count";
+      type uint32;
+    }
+    leaf rlt-lp-link-down-cnt {
+      description
+        "RLT LP Backup link down error count";
+      type uint32;
+    }
+    leaf ae-unstack-cnt {
+      description
+        "AE unstacking error count";
+      type uint32;
+    }
+    leaf ae-lp-link-down-cnt {
+      description
+        "AE LP Backup link down error count";
+      type uint32;
+    }
+  }
+
+  grouping jkhmd-top {
+    description
+      "Top level for jkhmd";
+    container junos {
+      description
+        "All kernel health data for Junos";
+      config false;
+      container chassis {
+        description
+          "All chassis information for GRES/ISSU";
+        container gres {
+          description
+            "Kernel health data for GRES";
+          uses chassis-gres-group;
+        }
+        container issu {
+          description
+            "Kernel health data for ISSU";
+          uses chassis-issu-group;
+        }
+        container aggregated-devices {
+          description
+            "Kernel health data for aggregated devices";
+          uses chassis-aggregated-devices-group;
+        }
+      }
+      container routing-options {
+        description
+          "Kernel health data for routing-options";
+        container nonstop-routing {
+          description
+            "Kernel health data for nonstop-routing";
+          uses routing-options-nsr-group;
+        }
+      }
+      container security {
+        description
+          "Kernel health data for security";
+        uses security-group;
+      }
+      container kernel {
+        description
+          "Container for kernel health data";
+        container peer-infra {
+          description
+            "Kernel health data for peer-infra";
+          uses kernel-peer-infra-group;
+        }
+        container vpls {
+          description
+            "Kernel health data for vpls";
+          uses kernel-vpls-group;
+        }
+        container tunnel {
+          description
+            "Kernel health data for tunnel";
+          uses kernel-tunnel-group;
+        }
+        container multicast {
+          description
+            "Kernel health data for multicast";
+          uses kernel-multicast-group;
+        }
+        container tnp {
+          description
+            "Kernel health data for TNP";
+          uses kernel-tnp-group;
+        }
+        container record-meta-data {
+          description
+            "Kernel health data for record meta data";
+          uses kernel-record-time-group;
+        }
+        container rtsock {
+          description
+            "Kernel health data for rtsock";
+          uses kernel-rtsock-group;
+        }
+        container tcpip {
+          description
+            "Kernel health data for tcpip";
+          container tcp {
+            description
+              "Kernel health data for tcp";
+            uses kernel-tcpip-tcp-group;
+          }
+          container nhidx {
+            description
+              "Kernel health data for nhidx";
+            uses kernel-tcpip-nhidx-group;
+          }
+          container rtb {
+            description
+              "Kernel health data for rtb";
+            uses kernel-tcpip-rtb-group;
+          }
+          container arp {
+            description
+              "Kernel health data for arp";
+            uses kernel-tcpip-arp-group;
+          }
+          container ndp {
+            description
+              "Kernel health data for ndp";
+            uses kernel-tcpip-ndp-group;
+          }
+          container netisr {
+            description
+              "Kernel health data for netisr";
+            uses kernel-tcpip-netisr-group;
+          }
+        }
+      }
+      container kernel-ifstate {
+        description
+          "Kernel health data for ifstate";
+        uses kernel-ifstate-group;
+      }
+    }
+  }
+
+  uses jkhmd-top;
+}

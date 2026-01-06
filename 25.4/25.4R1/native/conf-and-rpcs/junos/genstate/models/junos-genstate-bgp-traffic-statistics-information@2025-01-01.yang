@@ -1,0 +1,91 @@
+ module junos-genstate-bgp-traffic-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-traffic-statistics-information";
+   prefix jgbtsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-traffic-statistics-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-traffic-statistics-information-top {
+     description "Top-level grouping";
+     container bgp-traffic-statistics-information {
+       description "Top-level container";
+       container bgp-traffic-statistics-header {
+         leaf group-name {
+           type string;
+         }
+         leaf group-index {
+           type int32;
+         }
+         leaf nlri-name {
+           type string;
+         }
+       }
+       container bgp-traffic-statistics {
+         leaf bgp-prefix {
+           type string;
+         }
+         leaf bgp-traffic-error {
+           type string;
+           description "Error encountered when querying the statistics";
+         }
+         leaf bgp-traffic-statistics-packet-count {
+           type int32;
+           description "Number of packets";
+         }
+         leaf bgp-traffic-statistics-byte-count {
+           type int32;
+           description "Number of bytes";
+         }
+         leaf bgp-traffic-statistics-egress-as {
+           type string;
+           description "Egress AS for traffic destined for this prefix";
+         }
+         leaf bgp-traffic-statistics-advertised-fec-label {
+           type int32;
+           description "Label advertised for routes in FEC";
+         }
+         leaf bgp-traffic-type {
+           type string;
+           description "Type of traffic: ingress or transit";
+         }
+       }
+       container bgp-traffic-statistics-error {
+         leaf bgp-traffic-error {
+           type string;
+           description "Error encountered when querying the statistics";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-traffic-statistics-information to top-level genstate";
+     uses bgp-traffic-statistics-information-top;
+   }
+ }

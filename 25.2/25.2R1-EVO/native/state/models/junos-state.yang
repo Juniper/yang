@@ -1,0 +1,51 @@
+module junos-state {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state";
+  prefix js;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     state data.
+
+     Copyright (c) 2022 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2021-12-03 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping state-top {
+    description
+      "Top-level grouping for JUNOS state data";
+
+    container state {
+      description
+        "Encapsulating top-level state container for all JUNOS state";
+
+      config false;
+    }
+  }
+
+  uses state-top;
+}

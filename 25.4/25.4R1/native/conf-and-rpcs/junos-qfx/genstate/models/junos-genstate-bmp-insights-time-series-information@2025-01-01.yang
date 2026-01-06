@@ -1,0 +1,68 @@
+ module junos-genstate-bmp-insights-time-series-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bmp-insights-time-series-information";
+   prefix jgbitsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bmp-insights-time-series-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bmp-insights-time-series-information-top {
+     description "Top-level grouping";
+     container bmp-insights-time-series-information {
+       description "BMP insights time-series info";
+       leaf time-series-header {
+         type string;
+       }
+       container bmp-time-series {
+         leaf bmp-station-name {
+           type string;
+         }
+         container station-time-series {
+           leaf station-time-series-name {
+             type string;
+           }
+           container station-time-series-detail {
+             leaf station-time-series-time-stamp {
+               type string;
+               description "Time stamp of the sample";
+             }
+             leaf station-time-series-value {
+               type int32;
+               description "Value of the sample";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bmp-insights-time-series-information to top-level genstate";
+     uses bmp-insights-time-series-information-top;
+   }
+ }

@@ -1,0 +1,1286 @@
+ module junos-genstate-bgp-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-information";
+   prefix jgbi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-information-top {
+     description "Top-level grouping";
+     container bgp-information {
+       description "Operational and configuration information for BGP";
+       leaf bgp-thread-mode {
+         type string;
+       }
+       leaf thread-state {
+         type string;
+       }
+       leaf thread-updio-count {
+         type int32;
+         description "Update io thread count";
+       }
+       leaf thread-shard-count {
+         type int32;
+         description "Shards thread count";
+       }
+       leaf tcp-listen-port {
+         type uint32;
+         description "TCP port BGP is accepting connections on";
+       }
+       leaf default-ebgp-advertise-mode {
+         type string;
+         description "Default eBGP advertisement mode";
+       }
+       leaf default-ebgp-receive-mode {
+         type string;
+         description "Default eBGP receive mode";
+       }
+       leaf group-count {
+         type int32;
+       }
+       leaf peer-count {
+         type int32;
+         description "Total number of peers";
+       }
+       leaf down-peer-count {
+         type int32;
+       }
+       leaf unconfigured-peer-count {
+         type int32;
+       }
+       leaf half-open-peer-count {
+         type int32;
+       }
+       leaf auto-discovered-peer-count {
+         type int32;
+       }
+       list bgp-rib {
+         key "name";
+         leaf name {
+           type string;
+         }
+         leaf total-prefix-count {
+           type int32;
+           description "Total number of prefixes in this RIB";
+         }
+         leaf active-prefix-count {
+           type int32;
+           description "Number of active prefixes";
+         }
+         leaf suppressed-prefix-count {
+           type int32;
+           description "Number of prefixes suppressed due to damping";
+         }
+         leaf history-prefix-count {
+           type int32;
+           description "Number of prefixes with damping history maintained";
+         }
+         leaf damped-prefix-count {
+           type int32;
+           description "Number of prefixes in any damped state";
+         }
+         leaf pending-prefix-count {
+           type int32;
+           description "Number of prefixes with pending changes";
+         }
+         leaf received-prefix-count {
+           type int32;
+           description "For a peer RIB, number of prefixes received from this peer";
+         }
+         leaf accepted-prefix-count {
+           type int32;
+           description "For a peer RIB, number of prefixes from this peer accepted by policy";
+         }
+         leaf active-external-prefix-count {
+           type int32;
+           description "Number of active prefixes received from external peers";
+         }
+         leaf total-external-prefix-count {
+           type int32;
+           description "Total number of prefixes received from external peers";
+         }
+         leaf accepted-external-prefix-count {
+           type int32;
+           description "Number of accepted prefixes received from external peers";
+         }
+         leaf suppressed-external-prefix-count {
+           type int32;
+           description "Number of external prefixes suppressed due to damping";
+         }
+         leaf active-internal-prefix-count {
+           type int32;
+           description "Number of active prefixes received from internal peers";
+         }
+         leaf total-internal-prefix-count {
+           type int32;
+           description "Total number of prefixes received from internal peers";
+         }
+         leaf accepted-internal-prefix-count {
+           type int32;
+           description "Number of accepted prefixes received from internal peers";
+         }
+         leaf suppressed-internal-prefix-count {
+           type int32;
+           description "Number of internal prefixes suppressed due to damping";
+         }
+         leaf bgp-rib-state {
+           type string;
+         }
+         leaf send-state {
+           type string;
+         }
+       }
+       list bgp-peer {
+         key "peer-address";
+         description "Operational and configuration information for a BGP peer";
+         leaf peer-address {
+           type jt:ipaddr;
+         }
+         leaf peer-as {
+           type int32;
+           description "Peer AS number";
+         }
+         leaf input-messages {
+           type int32;
+         }
+         leaf output-messages {
+           type int32;
+         }
+         leaf route-queue-count {
+           type int32;
+           description "Total number of routes queued for output to this peer";
+         }
+         leaf flap-count {
+           type int32;
+           description "Number of times BGP sessions have gone down";
+         }
+         leaf elapsed-time {
+           type string;
+           description "Time this adjacency or session has been up or down";
+         }
+         leaf peer-state {
+           type string;
+         }
+         leaf local-interface-index {
+           type int32;
+           description "SNMP ifIndex of local interface";
+         }
+         leaf peer-end-of-rib-scheduled {
+           type string;
+         }
+         container bgp-option-information {
+           list nlri-policy {
+             key "nlri-type";
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf nlri-export-policy {
+               type string;
+             }
+             leaf nlri-import-policy {
+               type string;
+             }
+           }
+           container addpath-send {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf addpath-send-type {
+               type string;
+             }
+             leaf addpath-send-count {
+               type int32;
+             }
+             leaf addpath-send-policy {
+               type string;
+             }
+           }
+           container addpath-receive {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf addpath-receive-type {
+               type string;
+             }
+           }
+           container nlri-information {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf nlri-flow-novalidate {
+               type string;
+               description "Policy to accept flow routes without validation";
+             }
+             leaf nlri-output-queue-priority {
+               type string;
+               description "Default address family output queue priority";
+             }
+             leaf nlri-route-refresh-priority {
+               type string;
+               description "Default address family route-refresh priority";
+             }
+             leaf nlri-withdraw-priority {
+               type string;
+               description "Default address family withdraw priority";
+             }
+             container nlri-flags {
+               leaf bgp-nlri-flag-explicit-null-for-all-routes {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-explicit-null-for-connected-routes {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-aggregate-label {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-per-prefix-label {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-per-group-label {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-no-install-forwarding {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-rtage-refl-upd-msgs {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-no-resolution {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-resolve-preserve-hier {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-delay-route-advt {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-traffic-stats {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-l2vpn-status-vector {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-no-l2vpn-status-vector {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-accept-local-addr-pnh {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-accept-own {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-strip-nexthop {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-allow-po-add-nexthop {
+                 type empty;
+               }
+               leaf bgp-nlri-flag-per-nexthop-label {
+                 type empty;
+               }
+             }
+             container nlri-traffic-stats {
+               leaf traffic-stats-interval {
+                 type int32;
+               }
+             }
+           }
+           leaf export-policy {
+             type string;
+           }
+           leaf import-policy {
+             type string;
+           }
+           leaf advertise-bgp-static-policy {
+             type string;
+           }
+           leaf bgp-options {
+             type string;
+           }
+           leaf bgp-options2 {
+             type string;
+           }
+           leaf bgp-options-extended {
+             type string;
+           }
+           leaf bgp-options-extended2 {
+             type string;
+           }
+           leaf remove-private-options {
+             type string;
+           }
+           leaf authentication-key-chain {
+             type string;
+             description "Name of authentication key chain";
+           }
+           leaf authentication-algorithm {
+             type string;
+             description "Name of authentication algorithm";
+           }
+           leaf authentication-configured {
+             type empty;
+           }
+           leaf gshut-recv-local-preference {
+             type uint32;
+           }
+           leaf gshut-send-local-preference {
+             type uint32;
+           }
+           leaf address-families {
+             type string;
+           }
+           leaf drop-path-attributes {
+             type string;
+           }
+           leaf ignore-path-attributes {
+             type string;
+           }
+           leaf local-address {
+             type jt:ipaddr;
+           }
+           leaf holdtime {
+             type int32;
+             description "Delay before timing out the adjacency (default is 180 seconds)";
+           }
+           leaf metric-out {
+             type int32;
+           }
+           leaf preference {
+             type int32;
+             description "Preference for the route";
+           }
+           leaf local-preference {
+             type int32;
+           }
+           leaf local-as {
+             type int32;
+             description "Local AS number";
+           }
+           leaf local-as-private {
+             type empty;
+           }
+           leaf local-system-as {
+             type int32;
+           }
+           leaf receive-buffer-size {
+             type int32;
+           }
+           leaf send-buffer-size {
+             type int32;
+           }
+           leaf outbound-timer {
+             type int32;
+           }
+           leaf med-action {
+             type string;
+           }
+           leaf ipsec-sa {
+             type string;
+           }
+           leaf bgp-bmp-monitor-peers {
+             type string;
+           }
+           leaf bgp-bmp-route-monitoring-none {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-prepolicy {
+             type empty;
+           }
+           leaf bgp-bmp-prepolicy-exclude-non-feasible {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-postpolicy {
+             type empty;
+           }
+           leaf bgp-bmp-postpolicy-exclude-non-eligible {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-ribout-prepolicy {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-ribout-postpolicy {
+             type empty;
+           }
+           container prefix-limit {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf prefix-count {
+               type int32;
+               description "Number of prefixes accepted before action is taken";
+             }
+             leaf limit-action {
+               type string;
+               description "Action taken upon reaching limit";
+             }
+             leaf warning-percentage {
+               type int32;
+               description "Percentage of limit at which to log a warning";
+             }
+           }
+           container accepted-prefix-limit {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf prefix-count {
+               type int32;
+               description "Number of prefixes accepted before action is taken";
+             }
+             leaf limit-action {
+               type string;
+               description "Action taken upon reaching limit";
+             }
+             leaf warning-percentage {
+               type int32;
+               description "Percentage of limit at which to log a warning";
+             }
+           }
+           container aigp-mode {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+           }
+           container family-damping-info {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+           }
+           container protection {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+           }
+         }
+         container egress-protection {
+           container nlri-egress-protection {
+             leaf nlri-type {
+               type string;
+               description "Type of NLRI being limited";
+             }
+             leaf bgp-context-id {
+               type jt:ipaddr;
+             }
+             leaf bgp-import-policy {
+               type string;
+             }
+           }
+           leaf nlri-type {
+             type string;
+             description "Type of NLRI being limited";
+           }
+         }
+         list bgp-output-queue {
+           leaf number {
+             type int32;
+           }
+           leaf count {
+             type int32;
+           }
+           leaf table-name {
+             type string;
+             description "Unicast routing table";
+           }
+           leaf rib-adv-nlri {
+             type string;
+           }
+           leaf time-series {
+             type string;
+           }
+           list class {
+             leaf priority-type {
+               type string;
+               description "BGP output queue priority type";
+             }
+             leaf rank {
+               type int32;
+               description "BGP output queue rank for priority type";
+             }
+             leaf token-count {
+               type int32;
+               description "BGP output queue token count for priority";
+             }
+           }
+         }
+         list bgp-rib {
+           key "name";
+           leaf name {
+             type string;
+           }
+           leaf active-prefix-count {
+             type int32;
+             description "Number of active prefixes";
+           }
+           leaf suppressed-prefix-count {
+             type int32;
+             description "Number of prefixes suppressed due to damping";
+           }
+           leaf received-prefix-count {
+             type int32;
+             description "For a peer RIB, number of prefixes received from this peer";
+           }
+           leaf accepted-prefix-count {
+             type int32;
+             description "For a peer RIB, number of prefixes from this peer accepted by policy";
+           }
+           leaf rib-bit {
+             type string;
+           }
+           leaf bgp-rib-state {
+             type string;
+           }
+           leaf vpn-rib-state {
+             type string;
+           }
+           leaf send-state {
+             type string;
+           }
+           leaf stale-prefix-count {
+             type int32;
+             description "Number of prefixes marked as stale";
+           }
+           leaf llgr-stale-prefix-count {
+             type int32;
+             description "Number of prefixes marked as LLGR stale";
+           }
+           leaf advertised-prefix-count {
+             type int32;
+             description "Number of prefixes present in the RIB-OUT";
+           }
+         }
+         container bgp-family-stat {
+           leaf nlri-type {
+             type string;
+             description "Type of NLRI being limited";
+           }
+           leaf bgp-nlri-send-time {
+             type int32;
+             description "Time for initial send by peer";
+           }
+           leaf bgp-nlri-recv-time {
+             type int32;
+             description "Time for initial receive by peer";
+           }
+         }
+         list entropy-label-info {
+           key "nlri-type";
+           leaf nlri-type {
+             type string;
+             description "Type of NLRI being limited";
+           }
+           leaf entropy-label {
+             type string;
+             description "Entropy label";
+           }
+           leaf entropy-label-import-policy {
+             type string;
+           }
+           leaf entropy-label-no-next-hop-validation {
+             type string;
+             description "Entropy label no next hop validation";
+           }
+           leaf entropy-label-elc-v2-compatible {
+             type string;
+             description "Entropy label ELCv2 compatible";
+           }
+           leaf entropy-label-capability {
+             type string;
+             description "Local entropy label capability";
+           }
+           leaf entropy-label-stitching-capability {
+             type string;
+             description "Entropy label stitching capability";
+           }
+         }
+         leaf local-address {
+           type jt:ipaddr;
+         }
+         leaf local-as {
+           type int32;
+           description "Local AS number";
+         }
+         leaf tcp-connect-port {
+           type uint32;
+           description "TCP port to connect to BGP peer";
+         }
+         leaf description {
+           type string;
+         }
+         leaf notify-message {
+           type string;
+         }
+         leaf notify-message-recv {
+           type string;
+         }
+         leaf peer-group {
+           type string;
+           description "BGP peer-group peer belongs to";
+         }
+         leaf peer-cfg-rti {
+           type string;
+           description "Routing-instance peer is configured in";
+         }
+         leaf peer-fwd-rti {
+           type string;
+           description "Peer's forwarding-context routing-instance";
+         }
+         leaf dynamic-neighbor-template {
+           type string;
+           description "Dynamic-neighbor template peer brought up in";
+         }
+         leaf peer-type {
+           type string;
+         }
+         leaf route-reflector-client {
+           type empty;
+         }
+         leaf peer-flags {
+           type string;
+         }
+         leaf rsync-flags {
+           type string;
+         }
+         leaf last-state {
+           type string;
+         }
+         leaf last-event {
+           type string;
+         }
+         leaf recv-ebgp-origin-validation-state {
+           type string;
+         }
+         leaf last-error {
+           type string;
+         }
+         leaf last-flap-event {
+           type string;
+         }
+         leaf last-unreplicate-event {
+           type string;
+         }
+         leaf peer-id {
+           type jt:ipaddr;
+         }
+         leaf local-id {
+           type jt:ipaddr;
+         }
+         leaf active-holdtime {
+           type int32;
+         }
+         leaf keepalive-interval {
+           type int32;
+         }
+         leaf group-index {
+           type int32;
+         }
+         leaf peer-index {
+           type int32;
+         }
+         leaf snmp-index {
+           type uint32;
+         }
+         leaf bgp-alert {
+           type string;
+         }
+         leaf bgp-link-bandwidth-autosense-holdtime {
+           type uint32;
+         }
+         leaf bgp-link-bandwidth-autosense-timer {
+           type string;
+         }
+         leaf local-interface-name {
+           type string;
+           description "Logical interface name";
+         }
+         leaf glb-path-monitor-ifindex {
+           type uint32;
+           description "GLB Path Monitor ifIndex";
+         }
+         leaf glb-path-monitor-local-node-id {
+           type jt:ipaddr;
+           description "GLB Path Monitor local node ID";
+         }
+         leaf glb-path-monitor-remote-node-id {
+           type jt:ipaddr;
+           description "GLB Path Monitor remote node ID";
+         }
+         leaf peer-color {
+           type string;
+         }
+         leaf-list extended-community {
+           type string;
+           description "Extended community";
+         }
+         leaf nlri-type-peer {
+           type string;
+         }
+         leaf nlri-type-session {
+           type string;
+         }
+         leaf loop-check-display {
+           type string;
+         }
+         leaf peer-no-refresh {
+           type empty;
+           description "Present if this peer does not support refresh";
+         }
+         leaf peer-refresh-capability {
+           type int32;
+           description "Version of refresh capability supported by this peer";
+         }
+         leaf peer-4byte-as-capability-not-supported {
+           type empty;
+           description "This peer does not support 4 byte AS extension";
+         }
+         leaf peer-4byte-as-capability-advertised {
+           type int32;
+           description "4 byte Autonomous System capability advertised by this peer";
+         }
+         leaf peer-addpath-not-supported {
+           type empty;
+           description "This peer does not support addpath";
+         }
+         leaf peer-addpath-ronly-nlri {
+           type string;
+           description "Types of NLRI for which peer advertised recv capability";
+         }
+         leaf peer-addpath-sonly-nlri {
+           type string;
+           description "Types of NLRI for which peer advertised send capability";
+         }
+         leaf peer-addpath-rs-nlri {
+           type string;
+           description "Types of NLRI for which peer advertised send/recv cap";
+         }
+         leaf local-role-advertised {
+           type string;
+           description "BGP role configured locally";
+         }
+         leaf local-role-mode {
+           type string;
+           description "BGP local role mode";
+         }
+         leaf peer-remote-role-advertised {
+           type string;
+           description "BGP role is advertised from this peer";
+         }
+         leaf peer-delay-route-advertisements {
+           type string;
+         }
+         leaf local-ext-nh-nlri {
+           type string;
+           description "Types of NLRI for which we advertised extend nh cap";
+         }
+         leaf peer-ext-nh-nlri {
+           type string;
+           description "Types of NLRI for which peer advertised extend nh cap";
+         }
+         leaf peer-dont-wait-eor {
+           type string;
+         }
+         leaf peer-dont-send-eor {
+           type string;
+         }
+         leaf peer-restart-nlri-configured {
+           type string;
+         }
+         leaf peer-restart-time-configured {
+           type string;
+         }
+         leaf peer-stale-route-time-configured {
+           type string;
+         }
+         leaf peer-down-time-configured {
+           type string;
+         }
+         leaf peer-no-restart {
+           type empty;
+           description "Present if this peer does not support graceful restart restarter mode";
+         }
+         leaf peer-restart-nlri-received {
+           type string;
+         }
+         leaf peer-restart-time-received {
+           type int32;
+         }
+         leaf peer-restart-flags-received {
+           type string;
+         }
+         leaf peer-restart-nlri-can-save-state {
+           type string;
+         }
+         leaf peer-restart-nlri-state-saved {
+           type string;
+         }
+         leaf peer-restart-nlri-negotiated {
+           type string;
+         }
+         leaf peer-end-of-rib-received {
+           type string;
+         }
+         leaf peer-end-of-rib-sent {
+           type string;
+         }
+         leaf peer-delay-end-of-rib {
+           type string;
+         }
+         leaf peer-no-helper {
+           type empty;
+           description "Present if this peer does not support graceful restart receiver mode";
+         }
+         leaf peer-restart-nlri-held {
+           type string;
+         }
+         leaf peer-restart-remaining-time {
+           type string;
+         }
+         leaf peer-stale-remaining-time {
+           type string;
+         }
+         leaf peer-llgr-nlri-configured {
+           type string;
+         }
+         leaf peer-no-llgr-restarter {
+           type empty;
+           description "Present if this peer does not support long-lived graceful restart restarter mode";
+         }
+         leaf peer-llgr-nlri-restarter {
+           type string;
+         }
+         leaf peer-llgr-nlri-state-saved {
+           type string;
+         }
+         leaf peer-no-llgr-helper {
+           type empty;
+           description "Present if this peer does not support long-lived graceful restart receiver mode";
+         }
+         leaf peer-llgr-ext-nlri-times-set {
+           type string;
+           description "NLRIs and extended-route-retention times set for this peer";
+         }
+         leaf peer-llgr-nlri-times {
+           type string;
+           description "NLRIs and times before long-lived stale routes are deleted";
+         }
+         leaf local-ext-nh-color-nlri {
+           type string;
+           description "Types of NLRI for which we enabled extended color nexthop resolution";
+         }
+         leaf last-received {
+           type int32;
+         }
+         leaf last-sent {
+           type int32;
+         }
+         leaf last-checked {
+           type int32;
+         }
+         leaf input-updates {
+           type int32;
+         }
+         leaf input-refreshes {
+           type int32;
+         }
+         leaf input-octets {
+           type int32;
+         }
+         leaf output-updates {
+           type int32;
+         }
+         leaf output-refreshes {
+           type int32;
+         }
+         leaf output-octets {
+           type int32;
+         }
+         leaf input-checksum {
+           type int32;
+         }
+         leaf output-checksum {
+           type int32;
+         }
+         leaf input-checksum-err {
+           type int32;
+         }
+         leaf input-drop-path-attributes {
+           type string;
+         }
+         leaf input-ignore-path-attributes {
+           type string;
+         }
+         leaf buffered-octets-rx {
+           type int32;
+           description "Number of octets that have been received and are still buffered";
+         }
+         leaf buffered-octets-tx {
+           type int32;
+           description "Number of octets in the transmit buffer";
+         }
+         leaf input-updates-dropped {
+           type int32;
+           description "Number of received update messages dropped";
+         }
+         container bgp-peer-iosession {
+           leaf iosession-thread-name {
+             type string;
+           }
+           leaf iosession-state {
+             type string;
+           }
+         }
+         container bgp-bfd {
+           leaf bfd-configuration-state {
+             type string;
+             description "BFD configuration state";
+           }
+           leaf bfd-operational-state {
+             type string;
+             description "BFD operational state";
+           }
+           leaf strict-bfd-configured {
+             type empty;
+           }
+           leaf peer-strict-bfd-received {
+             type empty;
+           }
+           leaf bfd-up-wait-timer-due {
+             type string;
+             description "Time until bgp session is reset if bfd does not come up";
+           }
+         }
+         container prefix-limit-dropped-count {
+           leaf nlri-type {
+             type string;
+             description "Type of NLRI being limited";
+           }
+           leaf dropped-count {
+             type int32;
+             description "Per NLRI monotonously increasing count.";
+           }
+         }
+         container prefix-limit-hidden-count {
+           leaf nlri-type {
+             type string;
+             description "Type of NLRI being limited";
+           }
+           leaf hidden-count {
+             type int32;
+             description "Per NLRI monotonously increasing count.";
+           }
+         }
+         list bgp-shard-output-queue {
+           leaf shard-rib-number {
+             type int32;
+           }
+           leaf shard-outq-count {
+             type int32;
+           }
+           leaf shard-table-name {
+             type string;
+           }
+           leaf shard-rib-adv-nlri {
+             type string;
+           }
+           leaf thread-name {
+             type string;
+           }
+         }
+         container update-io-info {
+           leaf uio-info {
+             type string;
+           }
+           leaf peer-internal-state {
+             type string;
+           }
+           leaf peer-up-ack-pending-shards {
+             type string;
+           }
+           leaf uio-peer-up-ack {
+             type string;
+           }
+           leaf uio-peer-close-sent {
+             type string;
+           }
+           leaf uio-peer-close-done {
+             type string;
+           }
+         }
+         container uio-peer-bits {
+           leaf uio-peer-bits-header {
+             type string;
+           }
+           leaf uio-up-rcvd {
+             type string;
+           }
+           leaf uio-down-rcvd {
+             type string;
+           }
+           leaf uio-write-act-rcvd {
+             type string;
+           }
+           leaf uio-write-deact-rcvd {
+             type string;
+           }
+           leaf uio-nlri-type {
+             type string;
+           }
+           leaf uio-eor-rcvd {
+             type string;
+           }
+           leaf uio-cfg-seq {
+             type int32;
+           }
+           leaf uio-peer-create-thr-id {
+             type int32;
+           }
+         }
+         container bgp-error {
+           leaf name {
+             type string;
+           }
+           leaf send-count {
+             type int32;
+           }
+           leaf receive-count {
+             type int32;
+           }
+         }
+         container bgp-malformed-attributes {
+           container malformed-information {
+             leaf log-interval {
+               type int32;
+             }
+             leaf route-limit {
+               type int32;
+             }
+           }
+           container path-attribute {
+             leaf name {
+               type string;
+             }
+             leaf code {
+               type int32;
+             }
+             leaf last-recv {
+               type int32;
+             }
+             leaf total-recv {
+               type int32;
+             }
+           }
+         }
+         container bgp-uio-traffic {
+           leaf uio-last-sent {
+             type int32;
+           }
+           leaf uio-input-messages {
+             type int32;
+           }
+           leaf uio-input-octets {
+             type int32;
+           }
+         }
+       }
+       container bgp-bmp-information {
+         list bmp-station {
+           key "bmp-station-name";
+           leaf bmp-station-name {
+             type string;
+           }
+           leaf bmp-station-state {
+             type string;
+           }
+           leaf bmp-myaddr {
+             type string;
+           }
+           leaf bmp-remoteaddr {
+             type string;
+           }
+           leaf bmp-connect-time {
+             type string;
+           }
+           leaf bmp-holddown-time {
+             type string;
+           }
+           leaf elapsed-time {
+             type string;
+             description "Time this adjacency or session has been up or down";
+           }
+           leaf in-memory-profiling {
+             type string;
+           }
+           leaf bmp-skip-write-time {
+             type string;
+           }
+           leaf bmp-skip-read-time {
+             type string;
+           }
+           leaf bmp-version {
+             type string;
+           }
+           leaf bmp-route-instance {
+             type string;
+           }
+           leaf bgp-bmp-monitor-peers {
+             type string;
+           }
+           leaf bgp-bmp-route-monitoring-none {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-prepolicy {
+             type empty;
+           }
+           leaf bgp-bmp-prepolicy-exclude-non-feasible {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-postpolicy {
+             type empty;
+           }
+           leaf bgp-bmp-postpolicy-exclude-non-eligible {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-ribout-prepolicy {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-ribout-postpolicy {
+             type empty;
+           }
+           leaf bgp-bmp-route-monitoring-loc-rib {
+             type empty;
+           }
+           leaf bmp-treat-input-as-bmp {
+             type string;
+           }
+           leaf bmp-server {
+             type string;
+           }
+           leaf bmp-server-clients-cnt {
+             type string;
+           }
+           leaf bmp-initiation-message {
+             type string;
+           }
+           leaf bmp-priority {
+             type string;
+           }
+           leaf bmp-statistics-timeout {
+             type string;
+           }
+           container bmp-addresses-ports {
+             leaf bmp-local-address {
+               type string;
+             }
+             leaf bmp-local-port {
+               type string;
+             }
+             leaf bmp-station-address {
+               type string;
+             }
+             leaf bmp-station-port {
+               type string;
+             }
+             leaf bmp-connection-mode {
+               type string;
+             }
+           }
+           container bmp-authentication-with-key {
+             leaf bmp-auth-key {
+               type string;
+             }
+           }
+           container bmp-authentication-with-key-chain {
+             leaf bmp-auth-chain {
+               type string;
+             }
+             leaf bmp-auth-alg {
+               type string;
+             }
+           }
+           container bmp-holddown {
+             leaf bmp-holdtime {
+               type string;
+             }
+             leaf bmp-holdtimeflaps {
+               type string;
+             }
+             leaf bmp-holdtimeperiod {
+               type string;
+             }
+           }
+           container bmp-tcp-ka {
+             leaf bmp-tcp-ka-idle-time {
+               type string;
+             }
+             leaf bmp-tcp-ka-probe-count {
+               type string;
+             }
+             leaf bmp-tcp-ka-probe-interval {
+               type string;
+             }
+           }
+           container bmp-kafka-info {
+             leaf bmp-kafka-broker-address {
+               type string;
+             }
+             leaf bmp-kafka-broker-status {
+               type string;
+             }
+             leaf bmp-kafka-broker-elapsed-time {
+               type string;
+             }
+           }
+           container bmp-server-clients-info {
+             leaf client-sys-name {
+               type string;
+             }
+             leaf client-remote-address {
+               type string;
+             }
+             leaf client-up-time {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-information to top-level genstate";
+     uses bgp-information-top;
+   }
+ }

@@ -1,0 +1,73 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-linecard-ifl {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/lc-ifl";
+  prefix junos-lc-ifl;
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of nodes related to the Juniper
+     linecard ifl stats sensor.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-04-17 {
+    description
+      "Initial revision";
+  }
+  grouping jnx-lc-int-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container system {
+                container linecard {
+                    description "Junos Linecard container";
+                    container interface {
+                        description "Junos interface container";
+                        container logical {
+                            description "Junos logical interface container";
+                            container usage {
+                                description "Junos interface usage container";
+                            }
+                            container family {
+                                description "Junos ifl family container";
+                                    container ipv4 {
+                                        description "Junos linecard ipv4 container";
+                                            container usage {
+                                                description "Junos ifl family ipv4 usage container";
+                                            }
+                                    }
+                                    container ipv6 {
+                                        description "Junos linecard ipv6 container";
+                                            container usage {
+                                                description "Junos ifl family ipv6 usage container";
+                                            }
+                                    }
+                             }
+                        }
+                    }
+                }
+            }
+       }
+   }
+   uses jnx-lc-int-top;
+}

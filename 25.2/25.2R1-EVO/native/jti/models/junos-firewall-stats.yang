@@ -1,0 +1,144 @@
+module junos-firewall-stats {
+  yang-version "1";
+  namespace "http://juniper.net/yang/junos/fw-stats";
+  prefix junos-fw-stats;
+
+  organization "Juniper Networks";
+
+    description "Junos firewall stats data model";
+
+    revision "2030-10-05" {
+        description "Junos firewall stats data model";
+        reference "1.0.0";
+    }
+
+  grouping dfw-cntrs-group {
+      leaf name {
+          type string;
+          description "Counter name";
+      }
+      leaf index {
+          type uint32;
+          description "Index";
+      }
+      leaf packets {
+          type uint64;
+          description "Packets count";
+      }
+      leaf bytes {
+          type uint64;
+          description "Bytes count";
+      }
+  }
+
+  grouping dfw-pols-group {
+      leaf name {
+          type string;
+          description "Policer name ";
+      }
+      leaf index {
+          type uint32;
+          description "Index";
+      }
+      leaf out-of-spec-packets {
+          type uint64;
+          description "Out-of-spec packets";
+      }
+      leaf out-of-spec-bytes {
+          type uint64;
+          description "Out-of-spec bytes";
+      }
+  }
+  grouping dfw-hpols-group {
+      leaf name {
+          type string;
+          description "Policer name";
+      }
+      leaf index {
+          type uint32;
+          description "Index";
+      }
+      leaf high-packets {
+          type uint64;
+          description "High-packets";
+      }
+      leaf high-bytes {
+          type uint64;
+          description "High-bytes";
+      }
+      leaf medium-high-packets {
+          type uint64;
+          description "Medium-high packets";
+      }
+      leaf medium-high-bytes {
+          type uint64;
+          description "Medium-high bytes";
+      }
+      leaf medium-low-packets {
+          type uint64;
+          description "Medium-low packets";
+      }
+      leaf medium-low-bytes {
+          type uint64;
+          description "Medium Low bytes";
+      }
+      leaf low-packets {
+          type uint64;
+          description "Low packets";
+      }
+      leaf low-bytes {
+          type uint64;
+          description "Low bytes";
+      }
+  }
+
+  grouping dfw-filters-name {
+      leaf name {
+          type string;
+          description "Filter name";
+      }
+  }
+
+
+  grouping jnx-fw-stats-top {
+      container junos {
+          config false;
+          description "JunOS OS container";
+          container system {
+              description "Junos System container";
+              list linecard {
+                  description "Resources related to a linecard";
+                  list firewall {
+                      description "Firewall stats list";
+                      uses dfw-filters-name;
+                      key name;
+                      list state {
+                          leaf timestamp {
+                              type uint64;
+                              description "Timestamp of stats collected";
+                          }
+
+                          list counter_stats {
+                              uses dfw-cntrs-group;
+                              key name;
+                              description "Counter stats";
+                          }
+
+                          list policer_stats {
+                              uses dfw-pols-group;
+                              key name;
+                              description "Policer stats";
+                          }
+                          list hierarchical_policer_stats {
+                              uses dfw-hpols-group;
+                              key name;
+                              description "Hierarchical policer stats";
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+  uses jnx-fw-stats-top;
+}

@@ -1,0 +1,123 @@
+module jnx-aug-openconfig-lacp {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/lacp";
+
+  prefix "jnx-oc-lacp";
+
+  import openconfig-lacp { prefix oc-lacp; }
+  import ietf-yang-types { prefix yang; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig lacp model";
+
+  revision "2020-05-10" {
+    description "Add partner states";
+    reference "0.0.2";
+  }
+
+  revision "2016-06-07" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  // typedef statements
+  typedef lacp-mux-state-type {
+    type enumeration {
+      enum DETACHED {
+        description
+          "Initial state of the mux machine";
+      }
+      enum WAITING {
+        description
+          "Link is waiting to be part of the aggregation";
+      }
+      enum ATTACHED {
+        description
+          "Link is selected to be part of the aggregation";
+      }
+      enum COLLECTING {
+        description
+          "Participant is ready to collect traffic. This state
+          is applicable only if the device has implemented
+          independent mux machine";
+      }
+      enum DISTRIBUTING {
+        description
+          "Participant is ready to distribute traffic. This state
+          is applicable only if the device has implemented
+          independent mux machine";
+      }
+      enum COLLECTING_DISTRIBUTING {
+        description
+          "Participant is ready to collect and distribute traffic.
+          This state is applicable only if the device has
+          implemented coupled control mux machine";
+      }
+    }
+    description
+      "Indicates LACP mux machine state of the participant";
+    reference "IEEE 802.1AX-2008";
+  }
+
+  grouping lacp_partner_states {
+    leaf partner-timeout {
+      type oc-lacp:lacp-timeout-type;
+      description
+        "The timeout type (short or long) used by the partner";
+    }
+    leaf partner-synchronization {
+      type oc-lacp:lacp-synchronization-type;
+      description
+        "Indicates whether the partner is in-sync or out-of-sync";
+    }
+    leaf partner-aggregatable {
+      type boolean;
+      description
+        "A true value indicates that the partner will allow
+         the link to be used as part of the aggregate. A false
+         value indicates the link should be used as an individual
+         link";
+    }
+    leaf partner-collecting {
+      type boolean;
+      description
+        "If true, the partner is collecting incoming frames
+         on the link, otherwise false";
+    }
+    leaf partner-distributing {
+      type boolean;
+      description
+        "When true, the partner is distributing outgoing
+         frames; when false, distribution is disabled";
+    }
+  }
+
+  //augment data definitions
+  augment "/oc-lacp:lacp/oc-lacp:interfaces/oc-lacp:interface/oc-lacp:members/oc-lacp:member/oc-lacp:state/oc-lacp:counters" {
+    leaf collection-time {
+      type yang:date-and-time;
+      description
+        "Indicates the time when the counters were captured inside the device";
+    }
+  }
+
+  augment "/oc-lacp:lacp/oc-lacp:interfaces/oc-lacp:interface/oc-lacp:members/oc-lacp:member/oc-lacp:state" {
+    leaf mux-state {
+      type lacp-mux-state-type;
+      description
+        "Indicates LACP mux machine state of the participant";
+    }
+  }
+
+  augment "/oc-lacp:lacp/oc-lacp:interfaces/oc-lacp:interface/oc-lacp:members/oc-lacp:member/oc-lacp:state" {
+    description
+      "Augmentation to add JUNOS specific operational state related to
+       lacp partner states";
+    uses lacp_partner_states;
+  }
+}
+

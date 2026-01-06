@@ -1,0 +1,263 @@
+module junos-state-routing-tables {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/routing-tables";
+  prefix js-rtt;
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-l2-types {
+    prefix jl2t;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-routing-tables-types {
+    prefix js-rtt-types;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     Routing Table state data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-04-01 {
+    description
+      "Addition of protocols container/list.";
+    reference "0.2.0";
+  }
+
+  revision 2024-02-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.2.0";
+
+  grouping programmed-summary-counts {
+    description
+      "Grouping for programmed route count information.";
+
+    leaf primary {
+      type yang:gauge32;
+      description
+        "Count of progammed routes in this routing-table.";
+    }
+
+    leaf secondary {
+      type yang:gauge32;
+      description
+        "Count of programmed routes that are leaked into this routing-table.";
+    }
+  }
+
+  grouping programmed-vni-counts {
+    description
+      "Grouping for per-VNI route counts.";
+
+    container vnis {
+      description
+        "Container for list of VNIs.";
+
+      list vni {
+        key "id";
+
+        leaf id {
+          type jl2t:vni-id;
+          description
+            "VNI is uniquely identified by a 24-bit id.";
+        }
+
+        leaf count {
+          type yang:gauge32;
+          description
+            "Programmed route count with specific VNI.";
+        }
+      }
+    }
+  }
+
+  grouping programmed-protocol-counts {
+    description
+      "Grouping for programmed protocol information.";
+
+    container protocols {
+      description
+        "Container for list of programmed protocols.";
+
+      list protocol {
+        key "name";
+
+        description
+          "List of programmed protocols.";
+
+        leaf name {
+          type identityref {
+            base js-rtt-types:programmed-protocol-name;
+          }
+          description
+            "Programmed protocol name. E.g., static or bgp-static.";
+
+        }
+
+        uses programmed-summary-counts;
+        uses programmed-vni-counts;
+      }
+    }
+  }
+
+  grouping programmed-top {
+    description
+      "Top-level grouping for programmed routes information.";
+
+    container programmed {
+      description
+        "Container for programmed routes summary information.";
+      uses programmed-summary-counts;
+
+      container clients {
+        description
+          "Container for programmable-rpd clients.";
+        list client {
+          key id;
+
+          description
+            "List of programmable-rpd clients.";
+
+          leaf id {
+            type string;
+            description
+              "Unique string identifier for programmable-rpd client.";
+          }
+          uses programmed-protocol-counts;
+        }
+      }
+    }
+  }
+
+  grouping routing-tables-top {
+    description
+      "Top-level grouping for JUNOS routing-tables state data.";
+
+    container routing-tables {
+      description
+        "Encapsulating container for all JUNOS routing-tables state.";
+
+      list routing-table {
+        key "name family rib-id";
+
+        description
+          "List of all JUNOS routing-tables.";
+
+        leaf name {
+          type string;
+          description
+            "Name of the routing table.
+
+             The table name can be 'default' when routing table belongs
+             to default routing-instance.
+
+             The table name can be the name of the routing-intance eg.
+             vrf1, vrfA, etc.
+
+             The table name can include routing-instance name appended
+             with ':' followed by topology name. e.g. vrf1:gribi,
+             vrf2:abc, default:gribi etc.
+
+             The table name can be 'bgp' when referring to bgp specific
+             tables. eg. bgp.l3vpn.0
+
+             Examples:
+
+             1. routing-table: inet.0
+             /state/routing-instances/routing-instance[name=default]/routing-tables/routing-table[name=default][family=inet][rib-id=0]
+
+             2. routing-table: :gribi.inet.0
+             /state/routing-instances/routing-instance[name=default]/routing-tables/routing-table[name=default:gribi][family=inet][rib-id=0]
+             NOTE: prefix ':' indicates that this is a topology name.
+
+             3. routing-table: bgp.l3vpn.0
+             /state/routing-instances/routing-instance[name=default]/routing-tables/routing-table[name=bgp][family=l3vpn][rib-id=0]
+
+             4. routing-table: vrfA.inet6.0
+             /state/routing-instances/routing-instance[name=vrfA]/routing-tables/routing-table[name=vrfA][family=inet6][rib-id=0]
+
+             5. routing-table: inet.3
+             /state/routing-instances/routing-instance[name=default]/routing-tables/routing-table[name=default][family=inet][rib-id=3]";
+        }
+
+        leaf family {
+          type js-rtt-types:address-family;
+          description
+            "Address family of the routing table.";
+        }
+        leaf rib-id {
+          type uint16;
+          description
+            "RIB identifier of the routing table.";
+        }
+
+        container summaries {
+          description
+            "Encapsulating container for all JUNOS routing-tables
+             summary information.";
+
+          uses programmed-top;
+        }
+
+        container protocols {
+          description
+            "Encapsulating container for protocols.";
+
+          list protocol {
+            key "identifier";
+
+            description
+              "List of protocols.";
+
+            leaf identifier {
+              type identityref {
+                base js-rtt-types:protocol-type;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" {
+    description
+      "Adds routing-tables domain to top-level routing-instance state.";
+
+    uses routing-tables-top;
+  }
+}
+

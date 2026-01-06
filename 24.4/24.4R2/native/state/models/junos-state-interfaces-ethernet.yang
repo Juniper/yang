@@ -1,0 +1,272 @@
+module junos-state-interfaces-ethernet {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/interfaces/ethernet";
+  prefix js-if-eth;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import junos-interface-types {
+    prefix junos-intft;
+  }
+
+  organization
+    "Juniper Networks, Inc";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of Ethernet specific nodes for
+     JUNOS Interface state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-01-24 {
+    description
+      "Addition of Ethernet speed identities and speed leaf node.";
+    reference "0.2.0";
+  }
+
+  revision 2025-01-09 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.2.0";
+
+  identity ethernet-speed {
+    description
+      "Base type for available Ethernet link speeds";
+  }
+
+  identity speed-10mb {
+    base ethernet-speed;
+    description
+      "10 Mbps Ethernet";
+  }
+
+  identity speed-100mb {
+    base ethernet-speed;
+    description
+      "100 Mbps Ethernet";
+  }
+
+  identity speed-1gb {
+    base ethernet-speed;
+    description
+      "1 Gbps Ethernet";
+  }
+
+  identity speed-2500mb {
+    base ethernet-speed;
+    description
+      "2.5 Gbps Ethernet";
+  }
+
+  identity speed-5gb {
+    base ethernet-speed;
+    description
+      "5 Gbps Ethernet";
+  }
+  identity speed-10gb {
+    base ethernet-speed;
+    description
+      "10 Gbps Ethernet";
+  }
+
+  identity speed-25gb {
+    base ethernet-speed;
+    description
+      "25 Gbps Ethernet";
+  }
+
+  identity speed-40gb {
+    base ethernet-speed;
+    description
+      "40 Gbps Ethernet";
+  }
+
+  identity speed-50gb {
+    base ethernet-speed;
+    description
+      "50 Gbps Ethernet";
+  }
+
+  identity speed-100gb {
+    base ethernet-speed;
+    description
+      "100 Gbps Ethernet";
+  }
+
+  identity speed-200gb {
+    base ethernet-speed;
+    description
+      "200 Gbps Ethernet";
+  }
+
+  identity speed-400gb {
+    base ethernet-speed;
+    description
+      "400 Gbps Ethernet";
+  }
+
+  identity speed-600gb {
+    base ethernet-speed;
+    description
+      "600 Gbps Ethernet";
+  }
+
+  identity speed-800gb {
+    base ethernet-speed;
+    description
+      "800 Gbps Ethernet";
+  }
+
+  identity speed-unknown {
+    base ethernet-speed;
+    description
+      "Interface speed is unknown.  The system may report speed-unknown
+       when an interface is down or unpopulated (e.g. pluggable not
+       present).";
+  }
+
+  grouping ethernet-counters {
+    description
+      "Grouping for ethernet related counters";
+
+    leaf in-pcs-errored-seconds {
+      type yang:counter64;
+      description
+        "The number of seconds that physical coding sublayer (PCS)
+         errors have crossed a system defined threshold indicating the
+         link is erroring";
+    }
+
+    leaf fec-corrected-words {
+      type yang:counter64;
+      units words;
+      description
+        "The number of words that were corrected by the FEC";
+    }
+
+    leaf fec-uncorrectable-words {
+      type yang:counter64;
+      units words;
+      description
+        "The number of words that were uncorrectable by the FEC";
+    }
+  }
+
+  grouping ethernet-common-state {
+    description
+      "Grouping for common ethernet related state";
+
+    leaf auto-negotiation {
+      type boolean;
+      description
+        "When set to true, the interface auto-negotiates transmission
+         parameters with its peer interface.  When set to false, the
+         transmission parameters are specified manually.";
+      reference
+        "IEEE Std 802.3, Clause 28 and Annexes 28A-D";
+    }
+
+    leaf speed {
+      type identityref {
+        base ethernet-speed;
+      }
+      description
+        "When auto-negotiation is true, this optionally sets the speed
+         mode that will be advertised to the peer for negotiation.
+         Supported values are defined by the ethernet-speed
+         identities.";
+    }
+  }
+
+  grouping ethernet-fec-state {
+    description
+      "Grouping for ethernet related FEC (Forward Error Correction)
+       state";
+
+    leaf fec-mode {
+        type identityref {
+          base junos-intft:fec-mode;
+        }
+        description
+          "Interface FEC mode";
+    }
+
+    leaf fec-codeword-size {
+      type uint16;
+      units bits;
+      description
+        "The basic principle of FEC is the addition of a number of code
+         bits to a user signal to reduce the probability of a bit error
+         arising during transmission of that user signal. The FEC
+         codeword size is the number of bits added to reduce the
+         probability of bit error";
+    }
+
+    leaf fec-codeword-rate {
+      type decimal64 {
+        fraction-digits 2;
+      }
+      description
+        "The ratio between the number of source symbols and the number
+         of encoding symbols.  By definition, the code rate is such that
+         0 < code rate <= 1.  A code rate close to 1 indicates that a
+         small number of repair symbols have been produced during the
+         encoding process";
+    }
+  }
+
+  grouping ethernet-top {
+    description
+      "Top-level grouping for Ethernet interface state data";
+
+    container ethernet {
+      description
+        "Encapsulating container for ethernet related state";
+
+      uses ethernet-common-state;
+      uses ethernet-fec-state;
+
+      container counters {
+       description
+         "Ethernet interface counters";
+
+        uses ethernet-counters;
+      }
+    }
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface" {
+    description
+      "Adds Ethernet-specific data to interface state";
+
+    uses ethernet-top;
+  }
+}

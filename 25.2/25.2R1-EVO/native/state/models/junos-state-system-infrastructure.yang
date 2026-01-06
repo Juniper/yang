@@ -1,0 +1,64 @@
+module junos-state-system-infrastructure {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/infrastructure";
+  prefix js-infra;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  organization
+    "Juniper Networks Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+     USA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     and JUNOS-Evolved infrastructure data.
+
+     Copyright (c) 2024 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2024-08-02 {
+    description
+      "Initial revision";
+     reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+
+  grouping infrastructure-top {
+    description
+      "Top level grouping for infrastructure state";
+
+    container infrastructure {
+      description
+        "Top level container for all Junos and Junos-evolved
+         infrastructure state";
+    }
+  }
+
+  augment "/js:state/js-sys:system" {
+    description
+      "Adds system infrastructure domain to top-level state";
+
+    uses infrastructure-top;
+  }
+}

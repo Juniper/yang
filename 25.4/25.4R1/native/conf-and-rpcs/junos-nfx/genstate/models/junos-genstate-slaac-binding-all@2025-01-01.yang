@@ -1,0 +1,68 @@
+ module junos-genstate-slaac-binding-all {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/slaac-binding-all";
+   prefix jgsba;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for slaac-binding-all";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping slaac-binding-all-top {
+     description "Top-level grouping";
+     container slaac-binding-all {
+       description "Top-level container";
+       container slaac-snooping-entries {
+         list slaac-snooping-entry {
+           key "vlan-name intf-name";
+           leaf ipv6-address {
+             type jt:ipv6addr;
+           }
+           leaf hw-address {
+             type string;
+           }
+           leaf vlan-name {
+             type string;
+           }
+           leaf lease-expiry {
+             type int32;
+           }
+           leaf state {
+             type string;
+           }
+           leaf intf-name {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds slaac-binding-all to top-level genstate";
+     uses slaac-binding-all-top;
+   }
+ }

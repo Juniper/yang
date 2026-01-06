@@ -1,0 +1,112 @@
+ module junos-genstate-bgp-diagnostics-warnings {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-diagnostics-warnings";
+   prefix jgbdw;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-diagnostics-warnings";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-diagnostics-warnings-top {
+     description "Top-level grouping";
+     container bgp-diagnostics-warnings {
+       description "Top-level container";
+       leaf current-memory-percentage {
+         type uint32;
+       }
+       leaf max-memory-percentage {
+         type uint32;
+       }
+       leaf community-match-cache-lookups {
+         type uint64;
+       }
+       leaf community-match-cache-hit-ratio {
+         type string;
+       }
+       leaf aspath-match-cache-lookups {
+         type uint64;
+       }
+       leaf aspath-match-cache-hit-ratio {
+         type string;
+       }
+       leaf lsp-regex-match-cache-lookups {
+         type uint64;
+       }
+       leaf lsp-regex-match-cache-hit-ratio {
+         type string;
+       }
+       leaf community-hash-buckets {
+         type uint32;
+       }
+       leaf community-hash-used-buckets {
+         type uint32;
+       }
+       leaf average-community-hash-bucket-size {
+         type uint32;
+       }
+       leaf max-community-hash-bucket-size {
+         type uint32;
+       }
+       leaf advertisement-entries {
+         type uint32;
+       }
+       leaf bgp-groups {
+         type uint32;
+       }
+       leaf zero-bgp-id {
+         type empty;
+       }
+       list prefix-limit-warnings {
+         key "peer-address";
+         leaf peer-address {
+           type jt:ipaddr;
+         }
+         leaf nlri-type {
+           type string;
+           description "Type of NLRI being limited";
+         }
+         leaf prefix-limit-count {
+           type uint32;
+         }
+         leaf prefix-percentage {
+           type uint32;
+         }
+         leaf accepted-prefix-limit-count {
+           type uint32;
+         }
+         leaf accepted-prefix-percentage {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-diagnostics-warnings to top-level genstate";
+     uses bgp-diagnostics-warnings-top;
+   }
+ }

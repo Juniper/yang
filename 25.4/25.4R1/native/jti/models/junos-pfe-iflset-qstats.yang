@@ -1,0 +1,127 @@
+module junos-pfe-iflset-qstats {
+  yang-version 1;
+  namespace "http://juniper.net/yang/junos-telemetry-iflset";
+  prefix junos-pfe-iflset-qstats;
+
+// import some basic types
+  import ietf-yang-types { prefix "yang"; }
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Yang definition for Iflset Queue stats";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping iflset-counter {
+    description
+      "Iflset queue counter";
+    leaf queue-number {
+      description
+        "Queue number of iflset interface";
+      type uint64;
+    }
+    leaf queued-pkts {
+      description
+        "Total number of packets queued at the output queue";
+      type uint64;
+    }
+    leaf queued-octets {
+      description
+        "Number of bytes queued at the output queue";
+      type uint64;
+    }
+    leaf transmit-pkts {
+      description
+        "Number of packets transmitted on the queue";
+      type uint64;
+    }
+    leaf transmit-octets {
+      description
+        "Number of bytes transmitted on the queue";
+      type uint64;
+    }
+    leaf tail-drop-pkts {
+      description
+        "Number of packets tail dropped at the output queue";
+      type uint64;
+    }
+    leaf red-drop-pkts {
+      description
+        "Total number of packets dropped due to RED at the output on the queue";
+      type uint64;
+    }
+    leaf red-drop-octets {
+      description
+        "Total number of bytes RED-dropped at the output queue";
+      type uint64;
+    }
+  }
+
+  grouping pfe-iflset-qstats-top {
+    description
+      "This describes the data exported by PFE jvision for iflset qstats sensor";
+    container junos {
+      description
+        "JunOS OS";
+      config false;
+      container system {
+        description
+          "Container node for system";
+        container linecard {
+          description
+            "Container node for linecard";
+          container cos {
+            description
+              "Container node for cos";
+            list interface {
+              description
+                "Describes interface information";
+              key "name";
+              leaf name {
+                description
+                  "Interface name";
+                type string;
+              }
+              list interface-set {
+                description
+                  "Describes interface-set iflset queue stats information";
+                key "iflsetindex";
+                leaf iflsetindex {
+                  description
+                    "Iflset index";
+                  type uint64;
+                }
+                container output {
+                  description
+                    "Container node for output";
+                  list queue {
+                    description
+                      "Describes iflset egress queue stats information";
+                    key "queue-number";
+                    uses iflset-counter;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses pfe-iflset-qstats-top;
+}
+

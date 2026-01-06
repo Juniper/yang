@@ -1,0 +1,286 @@
+ module junos-genstate-forwarding-table-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/forwarding-table-information";
+   prefix jgfti;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for forwarding-table-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping forwarding-table-information-top {
+     description "Top-level grouping";
+     container forwarding-table-information {
+       description "Information about forwarding-table routing entries";
+       list route-table {
+         description "Denotes a routing table";
+         leaf logical-system-name {
+           type string;
+           description "Name of this logical system";
+         }
+         leaf table-name {
+           type string;
+           description "Name of this routing table";
+         }
+         leaf route-table-deleted {
+           type empty;
+           description "Whether this routing table has been deleted";
+         }
+         leaf pbbn-table-name {
+           type string;
+           description "Name of corresponding PBBN routing table";
+         }
+         leaf pbbn-route-table-deleted {
+           type empty;
+           description "Whether corresponding PBBN routing table has been deleted";
+         }
+         leaf mac-vrf-fwd-inst-name {
+           type string;
+           description "Forwarding instance name for a macvrf instance";
+         }
+         leaf mac-vrf-fwd-inst-flag {
+           type empty;
+           description "Instance is internal macvrf forwarding instance";
+         }
+         leaf bd-name {
+           type string;
+           description "Name of this bridging domain";
+         }
+         leaf bridge-table-deleted {
+           type empty;
+           description "Whether this bridge table has been deleted";
+         }
+         leaf address-family {
+           type string;
+           description "Address family for this routing table";
+         }
+         leaf address-family-number {
+           type string;
+           description "If the address family name is unknown, print the number";
+         }
+         leaf enabled-protocols {
+           type string;
+           description "Protocols enabled for this routing table";
+         }
+         leaf bier-subdomain-id {
+           type int32;
+           description "BIER table subdomain id";
+         }
+         leaf bier-bsl {
+           type int32;
+           description "BIER table bit string length";
+         }
+         leaf bier-set-id {
+           type int32;
+           description "BIER table set identifier";
+         }
+         list rt-entry {
+           description "Routing table entry for a destination";
+           leaf rt-destination {
+             type string;
+             description "Destination address";
+           }
+           leaf destination-type {
+             type string;
+             description "Destination type for this entry";
+           }
+           leaf route-reference-count {
+             type int32;
+             description "Reference count for this destination entry";
+           }
+           list nh {
+             leaf to {
+               type string;
+               description "Next-hop address for this entry";
+             }
+             leaf nh-type {
+               type string;
+               description "Next-hop type";
+             }
+             leaf nh-index {
+               type int32;
+               description "Index in next-hop table";
+             }
+             leaf nh-reference-count {
+               type int32;
+               description "Next-hop reference count";
+             }
+             leaf via {
+               type string;
+               description "Network interface name";
+             }
+             leaf nh-composite-num-nhs {
+               type int32;
+               description "Number of next hops in a composite next hop";
+             }
+             leaf nh-composite-nh-index {
+               type int32;
+               description "Index of next hops in a composite next hop";
+             }
+             leaf nh-composite-function {
+               type string;
+               description "Composition function for next hops in a composite next hop";
+             }
+             leaf nh-composite-num-derived-nhs {
+               type int32;
+               description "Number of derived next hops for a composite next hop";
+             }
+             leaf nh-composite-derived-nh-index {
+               type int32;
+               description "Index of derived next hops in a composite next hop";
+             }
+             leaf nh-label {
+               type string;
+               description "Next-hop tag label";
+             }
+             leaf nh-cfi-index {
+               type int32;
+               description "Next-hop core-facing-interface index";
+             }
+             leaf nh-key-flags {
+               type int32;
+               description "Next-hop key flags";
+             }
+             leaf subnh-index {
+               type int32;
+               description "Index of subnh in a nexthop";
+             }
+             leaf nh-weight {
+               type int32;
+               description "Next-hop weight";
+             }
+             leaf nh-balance {
+               type int32;
+               description "Next-hop balance";
+             }
+             leaf nh-uflags {
+               type int32;
+               description "Next-hop uflags";
+             }
+             leaf nh-le-beb-mac {
+               type jt:mac-addr;
+               description "The remote BEB MAC learned on bridge-domain of type PBN";
+             }
+             leaf alt-fwdnh-index {
+               type int32;
+               description "Alternate forward Index in next-hop table";
+             }
+             leaf nh-l3-interface {
+               type string;
+               description "Next-hop L3 interface";
+             }
+             list nh-l2-interface {
+               leaf nh-l2-interface-name {
+                 type string;
+                 description "Next-hop L2 interface";
+               }
+             }
+           }
+           leaf learn-vlan {
+             type uint32;
+             description "VLAN ID in the routing instance in which the MAC address was learned";
+           }
+           leaf route-interface-index {
+             type int32;
+             description "Interface referenced by this route";
+           }
+           leaf rt-feature-id {
+             type int32;
+             description "Route feature ID";
+           }
+           leaf multicast-rpf-nh-index {
+             type int32;
+             description "Multicast rpf nh index for this route";
+           }
+           leaf route-p2mp-index {
+             type int32;
+             description "P2mp nexthop index";
+           }
+           leaf ifl-generation {
+             type uint32;
+             description "Creation time of the IFL when this MAC was learned";
+           }
+           leaf epoch {
+             type uint32;
+             description "Time when this MAC was learned";
+           }
+           leaf flood-token {
+             type uint32;
+             description "Layer2 flood token associated with this route entry";
+           }
+           leaf mac-sequence-number {
+             type uint32;
+             description "Sequence number assigned to this MAC";
+           }
+           leaf learn-mask {
+             type uint32;
+             description "Mask of PFEs where this MAC was learned";
+           }
+           leaf l2al-rtflags {
+             type string;
+             description "Route flags associated with MAC routes";
+           }
+           leaf route-flags {
+             type string;
+             description "Flags associated with this route entry";
+           }
+           leaf vlan-index {
+             type uint32;
+             description "VLAN index";
+           }
+           leaf vlan-flags {
+             type uint32;
+             description "VLAN flags";
+           }
+           leaf statistics-group-id {
+             type uint32;
+             description "Stats ID Group ID";
+           }
+           leaf snmp-idx {
+             type uint32;
+             description "KRT: IFD SNMP index";
+           }
+         }
+         list route-table-summary {
+           description "Routing table summary";
+           leaf route-table-type {
+             type string;
+             description "Type for this routing table";
+           }
+           leaf route-count {
+             type int32;
+             description "Number of routes in this routing table";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds forwarding-table-information to top-level genstate";
+     uses forwarding-table-information-top;
+   }
+ }

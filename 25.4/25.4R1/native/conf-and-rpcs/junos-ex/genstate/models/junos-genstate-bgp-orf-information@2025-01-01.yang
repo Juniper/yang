@@ -1,0 +1,104 @@
+ module junos-genstate-bgp-orf-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-orf-information";
+   prefix jgboi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-orf-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-orf-information-top {
+     description "Top-level grouping";
+     container bgp-orf-information {
+       description "Operational information on BGP Outbound Route filtering";
+       container bgp-orf {
+         leaf peer-address {
+           type jt:ipaddr;
+         }
+         leaf peer-type {
+           type string;
+         }
+         leaf group-name {
+           type string;
+         }
+         list bgp-orf-nlri-info {
+           leaf nlri-name {
+             type string;
+           }
+           leaf filter-out-updates {
+             type int32;
+           }
+           leaf filter-qcount {
+             type int32;
+           }
+           leaf filter-in-updates {
+             type int32;
+           }
+           leaf immediate-count {
+             type int32;
+           }
+           list bgp-orf-filter-information {
+             leaf filter-type {
+               type string;
+             }
+             leaf filter-mode {
+               type string;
+             }
+             leaf filter-out-updates {
+               type int32;
+             }
+             leaf filter-qcount {
+               type int32;
+             }
+             leaf filter-in-updates {
+               type int32;
+             }
+             container bgp-orf-filter-info {
+               list bgp-orf-extcomm-filter {
+                 leaf-list extended-community {
+                   type string;
+                   description "Extended community";
+                 }
+               }
+               list bgp-orf-prefix-filter {
+                 leaf prefix-orf {
+                   type string;
+                   description "Prefix-based outbound route filter";
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-orf-information to top-level genstate";
+     uses bgp-orf-information-top;
+   }
+ }

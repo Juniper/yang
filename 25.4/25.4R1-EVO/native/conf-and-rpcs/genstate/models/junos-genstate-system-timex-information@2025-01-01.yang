@@ -1,0 +1,129 @@
+ module junos-genstate-system-timex-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/system-timex-information";
+   prefix jgsti;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for system-timex-information";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.13-EVO";
+   }
+
+   grouping system-timex-information-top {
+     description "Top-level grouping";
+     container system-timex-information {
+       description "System timex information";
+       leaf sync-status {
+         type int32;
+         description "Sync status";
+       }
+       leaf offset-seconds {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Offset";
+       }
+       leaf frequency-adjustment-ratio {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Frequency adjustment in parts per million (ppm)";
+       }
+       leaf maxerror-seconds {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Maximum error in seconds (s)";
+       }
+       leaf estimated-error-seconds {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Estimated error in seconds (s)";
+       }
+       leaf clock-status {
+         type int32;
+         description "Clock status flag";
+       }
+       leaf loop-time-constant {
+         type int32;
+         description "Phase-Locked Loop (PLL) time constant";
+       }
+       leaf tick-seconds {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Seconds added per clock tick";
+       }
+       leaf pps-frequency-hertz {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "Pulse Per Second (PPS) frequency adjustment in ppm";
+       }
+       leaf pps-jitter-seconds {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "PPS jitter in seconds (s)";
+       }
+       leaf pps-shift-seconds {
+         type int32;
+         description "Interval duration in seconds (s)";
+       }
+       leaf pps-stability-hertz {
+         type decimal64 {
+           fraction-digits 9;
+         }
+         description "PPS stability in parts per million (ppm)";
+       }
+       leaf pps-jitter-total {
+         type int32;
+         description "Number of times jitter limit was exceeded";
+       }
+       leaf pps-calibration-total {
+         type int32;
+         description "Number of successful calibration intervals";
+       }
+       leaf pps-error-total {
+         type int32;
+         description "Number of calibration errors";
+       }
+       leaf pps-stability-exceeded-total {
+         type int32;
+         description "Number of times the stability limit was exceeded";
+       }
+       leaf tai-offset-seconds {
+         type int32;
+         description "International Atomic Time (TAI) offset in seconds";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds system-timex-information to top-level genstate";
+     uses system-timex-information-top;
+   }
+ }

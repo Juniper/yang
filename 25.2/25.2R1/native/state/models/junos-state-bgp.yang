@@ -1,0 +1,437 @@
+module junos-state-bgp {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/bgp";
+  prefix js-bgp;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-route-validation-types {
+    prefix junos-rv;
+  }
+
+  import junos-bgp-types {
+    prefix junos-bt;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-control-protocol-types {
+    prefix junos-cpt;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-types {
+    prefix jt;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     BGP state data.
+
+     Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-10-09 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping bgp-statistics-top {
+    description
+      "Top level grouping for all the available validation-state
+       of a route.";
+
+    container statistics {
+      description
+        "Top level container for all the available BGP statistics.";
+
+      leaf validation-state-unverified {
+        type yang:gauge32;
+        description
+          "The number of routes with validation state as unverified.";
+      }
+
+      leaf validation-state-unknown {
+        type yang:gauge32;
+        description
+          "The number of routes with validation state as unknown.";
+      }
+
+      leaf validation-state-invalid {
+        type yang:gauge32;
+        description
+          "The number of routes with validation state as invalid.";
+      }
+
+      leaf validation-state-valid {
+        type yang:gauge32;
+        description
+          "The number of routes with validation state as valid.";
+      }
+
+      leaf prefixes-received {
+        type yang:gauge32;
+        description
+          "The number of prefixes received from the neighbor.";
+      }
+
+      leaf prefixes-accepted {
+        type yang:gauge32;
+        description
+          "The number of received prefixes accepted in the LOC-RIB.";
+      }
+
+      leaf prefixes-advertised {
+        type yang:gauge32;
+        description
+          "The number of prefixes advertised to the neighbor.";
+      }
+    }
+  }
+
+  grouping bgp-neighbor-afi-safi-list {
+    description
+      "List of address-families associated with the BGP neighbor.";
+    list afi-safi {
+      key "name";
+      description
+        "AFI, SAFI configuration available for the neighbor or
+         group.";
+
+      leaf name {
+        type identityref {
+          base junos-bt:afi-safi-type;
+        }
+        description
+          "AFI,SAFI name.";
+      }
+
+      leaf active {
+        type boolean;
+        description
+          "This value indicates whether a particular AFI-SAFI has
+           been successfully negotiated with the peer. An AFI-SAFI
+           may be enabled in the current running configuration, but
+           a session restart may be required in order to negotiate
+           the new capability.";
+      }
+
+      uses bgp-statistics-top;
+    }
+  }
+
+    grouping bgp-neighbors-top {
+      description
+        "Top-level grouping for BGP neighbors.";
+      container neighbors {
+        description
+          "Enclosing container for the list of BGP neighbors.";
+
+      list neighbor {
+        key "address";
+        description
+          "List of BGP neighbors configured on the local system,
+           uniquely identified by remote IPv[46] address.";
+
+        leaf address {
+          type inet:ip-address;
+          description
+            "The remote IP address of this entry's BGP peer.";
+        }
+
+        leaf local-address {
+          type inet:ip-address;
+          description
+            "The local IP address of this entry's BGP connection.";
+        }
+
+        container afi-safis {
+          description
+            "Per-address-family configuration parameters associated
+             with the neighbor.";
+          uses bgp-neighbor-afi-safi-list;
+        }
+      }
+    }
+  }
+
+  grouping bgp-groups-top {
+    description
+        "Top-level grouping for BGP groups.";
+    container groups {
+      description
+        "Enclosing container for the list of BGP groups.";
+
+      list group {
+        key "name";
+        description
+          "List of BGP groups configured on the local system.";
+
+        leaf name {
+          type string;
+          description
+            "Name of the group to be configured.";
+        }
+
+        leaf type {
+          type identityref {
+            base junos-bt:bgp-peer-type;
+          }
+          description
+            "Type of the group.";
+        }
+
+        uses bgp-neighbors-top;
+      }
+    }
+  }
+
+  grouping bgp-loc-rib-common-keys {
+    description
+      "Common references used in keys for IPv4 and IPv6 LOC-RIB
+       entries.";
+
+    leaf origin {
+      type union {
+        type inet:ip-address;
+        type identityref {
+          base junos-cpt:routing-protocol;
+        }
+      }
+      description
+        "Indicates the origin of the route.  If the route is learned
+         from a neighbor, this value is the neighbor address.  If
+         the route was injected or redistributed from another
+         protocol, the origin indicates the source protocol for the
+         route.";
+    }
+
+    leaf path-id {
+      type uint32;
+      description
+        "If the route is learned from a neighbor, the path-id
+         corresponds to the path-id for the route in the
+         corresponding adj-rib-in-post table.  If the route is
+         injected from another protocol, or the neighbor does not
+         support BGP add-paths, the path-id should be set
+         to zero, also the default value.
+
+         However, YANG does not allow default values to be set
+         for parameters that form the key, so a default value
+         cannot be set here.";
+    }
+  }
+
+
+  grouping bgp-common-route-annotations-state {
+    description
+      "Data definitions for flags and other information attached
+       to routes in both LOC-RIB and Adj-RIB.";
+
+    leaf last-modified {
+      type jt:absolute-time-microseconds;
+      description
+        "Timestamp when this path was last modified.
+         The value is the timestamp in microseconds relative to
+         the Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+    }
+
+    leaf origin-validation-state {
+      type identityref {
+          base junos-rv:rpki-validation-state;
+      }
+      description
+        "The origin-validation state of route.";
+      reference
+        "RFC 6811 BGP Prefix Origin Validation
+         Protocol Version 1";
+    }
+
+    leaf origin-validation-invalid-reason {
+      type identityref {
+          base junos-rv:rpki-validation-invalid-reason;
+      }
+      description
+        "If origin validation marks route as invalid, this field
+         indicates the reason.";
+      reference
+        "RFC 6811 BGP Prefix Origin Validation
+         Protocol Version 1";
+    }
+  }
+
+  grouping bgp-rib-top {
+    description
+      "Top-level grouping for BGP RIBs";
+
+    container rib {
+      description
+        "Enclosing container for RIB state.";
+
+      container afi-safis {
+        description
+          "Enclosing container for address family list.";
+
+        list afi-safi {
+          key "name";
+          description
+            "List of afi-safi types.";
+
+          leaf name {
+            type identityref {
+              base junos-bt:afi-safi-type;
+            }
+            description
+              "AFI,SAFI name.";
+          }
+
+          container ipv4-unicast {
+            when "../name = 'junos-bt:ipv4-unicast'" {
+              description
+                "Include this container for IPv4 unicast RIB.";
+            }
+
+            description
+              "Routing tables for IPv4 unicast -- active when the
+               afi-safi name is ipv4-unicast.";
+
+            container loc-rib {
+              description
+                "Container for the IPv4 BGP LOC-RIB data.";
+
+              uses bgp-statistics-top;
+
+              container routes {
+                description
+                  "Enclosing container for list of routes in the
+                   routing table.";
+
+                list route {
+                  key "prefix origin path-id";
+                  description
+                    "List of routes in the table, keyed by the route
+                     prefix, the route origin, and path-id. The route
+                     origin can be either the neighbor address from
+                     which the route was learned, or the source protocol
+                     that injected the route. The path-id distinguishes
+                     routes for the same prefix received from a neighbor
+                     (e.g., if add-paths is enabled).";
+
+                  leaf prefix {
+                    type inet:ipv4-prefix;
+                    description
+                      "The IPv4 prefix corresponding to the route.";
+                  }
+
+                  uses bgp-loc-rib-common-keys;
+                  uses bgp-common-route-annotations-state;
+                }
+              }
+            }
+          }
+
+          container ipv6-unicast {
+            when "../name = 'junos-bt:ipv6-unicast'" {
+              description
+                "Include this container for IPv6 unicast RIB.";
+            }
+
+            description
+              "Routing tables for IPv6 unicast -- active when the
+               afi-safi name is ipv6-unicast.";
+
+            container loc-rib {
+              description
+                "Container for the IPv6 BGP LOC-RIB data.";
+
+              uses bgp-statistics-top;
+
+              container routes {
+                description
+                  "Enclosing container for list of routes in the
+                   routing table.";
+
+                list route {
+                  key "prefix origin path-id";
+                  description
+                    "List of routes in the table, keyed by the route
+                     prefix, the route origin, and path-id. The route
+                     origin can be either the neighbor address from
+                     which the route was learned, or the source protocol
+                     that injected the route. The path-id distinguishes
+                     routes for the same prefix received from a neighbor
+                     (e.g., if add-paths is enabled).";
+
+                  leaf prefix {
+                    type inet:ipv6-prefix;
+                    description
+                      "The IPv6 prefix corresponding to the route.";
+                  }
+
+                  uses bgp-loc-rib-common-keys;
+                  uses bgp-common-route-annotations-state;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  grouping bgp-top {
+    description
+      "Top-level grouping for BGP state data.";
+
+    container bgp {
+      description
+        "Container for BGP state.";
+
+      uses bgp-groups-top;
+      uses bgp-rib-top;
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-pro:protocols" {
+    description
+       "Adds BGP domain to protocol state inside a routing instance.";
+
+    uses bgp-top;
+  }
+}

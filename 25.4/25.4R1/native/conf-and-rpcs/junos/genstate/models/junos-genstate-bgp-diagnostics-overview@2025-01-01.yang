@@ -1,0 +1,186 @@
+ module junos-genstate-bgp-diagnostics-overview {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-diagnostics-overview";
+   prefix jgbdo;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2025-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2025-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description "Junos genstate data model for bgp-diagnostics-overview";
+
+   revision 2025-01-01 {
+     description "Junos: 25.4R1.12";
+   }
+
+   grouping bgp-diagnostics-overview-top {
+     description "Top-level grouping";
+     container bgp-diagnostics-overview {
+       description "Top-level container";
+       leaf bgp-running {
+         type string;
+       }
+       leaf bgp-running-master {
+         type empty;
+       }
+       leaf bgp-running-instance {
+         type empty;
+       }
+       leaf bgp-running-api {
+         type empty;
+       }
+       leaf bgp-running-bmp {
+         type empty;
+       }
+       leaf nsr-enabled {
+         type string;
+       }
+       leaf nsr-re-mode {
+         type string;
+       }
+       leaf multipath-on-standby {
+         type empty;
+       }
+       leaf shard-count {
+         type uint32;
+       }
+       leaf update-io-count {
+         type uint32;
+       }
+       leaf global-as {
+         type uint32;
+       }
+       leaf global-confed-as {
+         type uint32;
+       }
+       leaf global-bgp-id {
+         type jt:ipaddr;
+       }
+       leaf listening-port {
+         type uint32;
+       }
+       leaf listening-port-status-ipv4 {
+         type string;
+       }
+       leaf listening-port-status-ipv6 {
+         type string;
+       }
+       leaf multipath-enabled {
+         type empty;
+       }
+       leaf multipath-foreground-mode {
+         type string;
+       }
+       leaf optimal-route-reflection {
+         type empty;
+       }
+       leaf flash-inactive {
+         type string;
+       }
+       leaf route-walk-full-quantum {
+         type string;
+       }
+       leaf write-job-suspend-threshold {
+         type uint32;
+       }
+       leaf defer-unreachable-nlris {
+         type empty;
+       }
+       leaf advertise-vpn-main-nlri {
+         type string;
+       }
+       leaf rr-asbr-nlri {
+         type string;
+       }
+       leaf configured-advertise-vpn-main-nlri {
+         type string;
+       }
+       leaf app-requested-advertise-vpn-main-nlri {
+         type string;
+       }
+       leaf stale-label-mode {
+         type string;
+       }
+       leaf stale-label-hold-time {
+         type string;
+       }
+       leaf stale-label-count {
+         type uint32;
+       }
+       leaf stale-label-cleanup-time {
+         type string;
+       }
+       leaf sr-label-type {
+         type string;
+       }
+       leaf sr-label-start {
+         type uint32;
+       }
+       leaf sr-label-end {
+         type uint32;
+       }
+       leaf interface-replay-done {
+         type string;
+       }
+       leaf inbound-convergence-pending-peer-count {
+         type string;
+       }
+       leaf outbound-gr-eor-pending-peer-count {
+         type string;
+       }
+       leaf warning-trigger-thresholds {
+         type empty;
+       }
+       leaf memory-in-use-threshold {
+         type uint32;
+       }
+       leaf memory-max-ever-threshold {
+         type uint32;
+       }
+       leaf match-cache-hit-ratio-threshold {
+         type uint32;
+       }
+       leaf match-cache-lookup-threshold {
+         type uint32;
+       }
+       leaf community-hash-average-load-threshold {
+         type uint32;
+       }
+       leaf community-hash-max-load-threshold {
+         type uint32;
+       }
+       leaf bgp-adv-entries-threshold {
+         type uint32;
+       }
+       leaf bgp-groups-threshold {
+         type uint32;
+       }
+       leaf prefix-limit-threshold {
+         type uint32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description "Adds bgp-diagnostics-overview to top-level genstate";
+     uses bgp-diagnostics-overview-top;
+   }
+ }

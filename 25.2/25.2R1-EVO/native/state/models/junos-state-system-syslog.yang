@@ -1,0 +1,195 @@
+module junos-state-system-syslog {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/system/syslog";
+  prefix js-log;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-system-syslog-types {
+    prefix js-log-types;
+  }
+
+  import ietf-routing-types {
+    prefix rt-types;
+  }
+
+  organization
+    "Juniper Networks Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA 94089
+    USA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     syslog state data.
+
+    Copyright (c) 2023 Juniper Networks, Inc.
+    All rights reserved.";
+
+  revision 2023-05-01 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  grouping syslog-messages {
+    description
+      "Top-level container for system syslog messages state data";
+
+    container messages {
+      description
+       "Top-level container for the list of syslog messages.  The list
+        has four keys.  The primary key is the timestamp and will be
+        unique per message.  The secondary keys (severity, facility,
+        and id) can be used to filter the messages. Filtering is
+        currently limited to 'exact match' semantics: the severity must
+        match precisely and will not include messages at a higher
+        severity.
+
+        On subscription, any existing buffered messages will be streamed
+        as part of the initial sync.  The existence of a message buffer
+        is configurable.  See the 'system syslog grpc-replay'
+        configuration statement. Subsequent to subscription (and after
+        the completion of any initial sync), only newly generated
+        messages will be streamed.
+
+        Only change-based subscriptions are currently supported.
+        Sample-based (including one time and periodic) subscriptions are
+        not supported.";
+
+      list message {
+        key "timestamp id severity facility";
+
+        description
+          "Syslog message";
+
+        leaf timestamp {
+          type rt-types:timeticks64;
+          units microseconds;
+          description
+            "The time at which log is generated in system.
+
+             The value is the timestamp in microseconds relative to the
+             Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+        }
+
+        leaf id {
+          description
+            "Event identifier";
+          type string;
+        }
+
+        leaf severity {
+          type js-log-types:log-severity;
+          description
+            "Syslog message severity";
+          reference
+            "IETF RFC 5424 - The Syslog Protocol";
+        }
+
+        leaf facility {
+          type js-log-types:log-facility;
+          description
+            "Syslog message facility";
+          reference
+            "IETF RFC 5424 - The Syslog Protocol";
+        }
+
+        leaf priority {
+          type uint8;
+          description
+            "Log priority (PRI)";
+        }
+
+        leaf pid {
+          type uint32;
+          description
+            "Process ID";
+        }
+
+        leaf log-message {
+          type string;
+          description
+            "Log message";
+        }
+
+        leaf application {
+          type string;
+          description
+            "Application name which generated the log message";
+        }
+
+        container structured-data {
+          description
+            "Structured data for a log message";
+
+          container parameters {
+            description
+              "List of parameters for a structured data element";
+
+            list parameter {
+              key "name";
+
+              description
+                "Parameter for a structured data element";
+
+              leaf name {
+                type string;
+                description
+                  "Parameter name";
+              }
+
+              leaf value {
+                type string;
+                description
+                  "Parameter value";
+              }
+            }
+          }
+
+          reference
+            "IETF RFC 5424 - The Syslog Protocol";
+        }
+      }
+    }
+  }
+
+  grouping syslog-top {
+    description
+      "Top-level grouping for JUNOS system syslog state data";
+
+    container syslog {
+      description
+        "System syslog";
+
+      uses syslog-messages;
+    }
+  }
+
+  augment "/js:state/js-sys:system" {
+    description
+      "Adds system syslog domain to top-level state";
+
+    uses syslog-top;
+  }
+}

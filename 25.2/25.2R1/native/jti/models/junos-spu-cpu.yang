@@ -1,0 +1,75 @@
+/*
+ * $Id$
+ * JunOS OS SPU (Security Processing Unit) CPU Utilization Yang model.
+ * Copyright (c) 2020, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-spu-cpu {
+    yang-version "1";
+
+    //namespace
+    namespace "http://juniper.net/yang/security/spu-cpu";
+    prefix "junos-spu-cpu";
+
+    // meta
+    organization "Juniper Networks";
+
+    contact "yang-support@juniper.net";
+
+    description "Yang definition for JunOS OS SPU CPU utilization module";
+
+    revision "2020-06-20" {
+        description "Initial yang file";
+    }
+
+    typedef percent {
+        type uint8 {
+            range "0 .. 100";
+        }
+        description "Percentage";
+    }
+
+    grouping jnx-spu-cpu {
+
+        container junos {
+            config false;
+            description "JunOS OS";
+
+            container security {
+                description
+                  "Contains JTI sensor objects of JunOS OS firewalls";
+
+                container spu {
+                    description
+                      "Contains SPU(Security Processing Unit) JTI sensor objects of JunOS OS firewalls";
+
+                    leaf spu_name {
+                        type string;
+                        description
+                          "SPU name";
+                    }
+
+                    list cpu {
+                       description
+                         "List of CPU cores";
+                        key cpu_name;
+
+                        leaf cpu_name {
+                            type string;
+                            description
+                              "CPU core name";
+                        }
+
+                        leaf utilization {
+                            type percent;
+                            description
+                              "Current utilization";
+                        }
+                    }
+                }
+            }
+        }
+    }
+    uses jnx-spu-cpu;
+}
