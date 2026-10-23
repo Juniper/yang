@@ -1,0 +1,73 @@
+ module junos-genstate-isis-hostname-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-hostname-information";
+   prefix jgihi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-hostname-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping isis-hostname-information-top {
+     description
+       "Top-level grouping";
+     container isis-hostname-information {
+       description
+         "System-ID-to-hostname mapping table";
+       list isis-hostname {
+         key "system-id";
+         description
+           "Entry in the system-ID-to-hostname mapping table";
+         leaf system-id {
+           type string;
+           description
+             "Six-octet ISO system ID for a system";
+         }
+         leaf system-name {
+           type string;
+           description
+             "Hostname for a system";
+         }
+         leaf isis-hostname-type {
+           type string;
+           description
+             "Type of system-ID-to-hostname mapping";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-hostname-information container to top-level genstate 
+       container";
+     uses isis-hostname-information-top;
+   }
+ }

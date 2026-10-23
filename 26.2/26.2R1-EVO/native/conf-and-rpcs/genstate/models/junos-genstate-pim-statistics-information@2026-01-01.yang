@@ -1,0 +1,91 @@
+ module junos-genstate-pim-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-statistics-information";
+   prefix jgpsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping pim-statistics-information-top {
+     description
+       "Top-level grouping";
+     container pim-statistics-information {
+       description
+         "Top-level container";
+       list pim-statistics-all {
+         key "pim-instance";
+         leaf pim-instance {
+           type string;
+           description
+             "Name of the PIM instance";
+         }
+         container pim-statistics-global {
+           list pim-statistic {
+             key "statistic-name";
+             leaf statistic-name {
+               type string;
+             }
+             leaf received-count {
+               type int32;
+             }
+             leaf sent-count {
+               type int32;
+             }
+             leaf error-count {
+               type int32;
+               description
+                 "Total number of errors encountered";
+             }
+           }
+         }
+         container pim-statistics-other {
+           list pim-other-statistic {
+             key "statistic-name";
+             leaf statistic-name {
+               type string;
+             }
+             leaf statistic-count {
+               type int32;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-statistics-information container to top-level genstate 
+       container";
+     uses pim-statistics-information-top;
+   }
+ }

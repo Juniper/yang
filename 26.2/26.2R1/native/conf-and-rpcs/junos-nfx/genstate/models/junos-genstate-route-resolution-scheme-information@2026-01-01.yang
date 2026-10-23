@@ -1,0 +1,106 @@
+ module junos-genstate-route-resolution-scheme-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/route-resolution-scheme-information";
+   prefix jgrrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for route-resolution-scheme-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping route-resolution-scheme-information-top {
+     description
+       "Top-level grouping";
+     container route-resolution-scheme-information {
+       description
+         "Top-level container";
+       list route-resolution-scheme {
+         key "rs-scheme-name";
+         leaf rs-scheme-name {
+           type string;
+           description
+             "Name of resolution scheme";
+         }
+         leaf rs-scheme-attr {
+           type string;
+           description
+             "Attributes of resolution scheme";
+         }
+         leaf rs-scheme-ref-cnt {
+           type int32;
+           description
+             "Number of references to this resolution scheme";
+         }
+         leaf rs-map-community {
+           type int32;
+           description
+             "The BGP Community that maps to this resolution-scheme";
+         }
+         leaf rs-tree-handle {
+           type string;
+           description
+             "Handle of the resolution tree";
+         }
+         leaf rs-tree-index {
+           type int32;
+           description
+             "Index of the resolution tree";
+         }
+         leaf rs-nodes {
+           type int32;
+           description
+             "Number of resolution nodes in the tree";
+         }
+         leaf rs-tree-flags {
+           type string;
+           description
+             "Resolution rib preference for tree";
+         }
+         leaf rs-tree-policy {
+           type string;
+           description
+             "Import policy on the tree";
+         }
+         leaf-list rs-transport-ribs {
+           type string;
+           description
+             "Name of Transport RIBs";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds route-resolution-scheme-information container to top-level 
+       genstate container";
+     uses route-resolution-scheme-information-top;
+   }
+ }

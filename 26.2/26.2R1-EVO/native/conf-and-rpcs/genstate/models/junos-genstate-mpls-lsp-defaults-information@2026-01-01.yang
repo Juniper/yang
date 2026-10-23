@@ -1,0 +1,78 @@
+ module junos-genstate-mpls-lsp-defaults-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-lsp-defaults-information";
+   prefix jgmldi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-lsp-defaults-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mpls-lsp-defaults-information-top {
+     description
+       "Top-level grouping";
+     container mpls-lsp-defaults-information {
+       description
+         "Top-level container";
+       container mpls-lsp-defaults {
+         leaf lsp-hold-priority {
+           type int32;
+           description
+             "Default priority for holding resources";
+         }
+         leaf lsp-setup-priority {
+           type int32;
+           description
+             "Default priority for taking resources";
+         }
+         leaf lsp-hoplimit {
+           type int32;
+           description
+             "Maximum number of hops that can be traversed";
+         }
+         leaf lsp-bandwidth {
+           type int32;
+           description
+             "Default LSP Bandwidth";
+         }
+         leaf lsp-retry-timer {
+           type int32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-lsp-defaults-information container to top-level genstate 
+       container";
+     uses mpls-lsp-defaults-information-top;
+   }
+ }

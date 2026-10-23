@@ -1,0 +1,74 @@
+module junos-state-segment-routing {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/segment-routing";
+  prefix js-sr;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     segment-routing state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-09-11 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  grouping sr-top {
+    description
+      "Top-level grouping for segment-routing state data.";
+
+    container source-packet-routing {
+      description
+        "Container for segment-routing state.";
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-pro:protocols" {
+    description
+      "Adds segment-routing to protocol state.";
+
+    uses sr-top;
+  }
+}

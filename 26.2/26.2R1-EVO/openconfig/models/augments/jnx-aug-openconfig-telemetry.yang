@@ -1,0 +1,127 @@
+module jnx-aug-openconfig-telemetry {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/telemetry";
+
+  prefix "jnx-oc-telemetry";
+
+  import openconfig-yang-types { prefix oc-ytypes; }
+  import openconfig-types      { prefix oc-types; }
+  import openconfig-telemetry { prefix oc-telemetry; }
+  import openconfig-system-logging { prefix oc-log; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig system grpc model";
+
+  revision "2021-10-07" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  identity COUNTER_UNIT {
+    description
+      "Identity describing the units of a counter.";
+  }
+
+  identity BYTES {
+    base COUNTER_UNIT;
+    description
+      "The counter is in units of bytes.";
+  }
+
+  identity PACKETS {
+    base COUNTER_UNIT;
+    description
+      "The counter is in units of packets.";
+  }
+
+  identity LATENCY {
+    base COUNTER_UNIT;
+    description
+      "The counter is in milliseconds for latency of packets.";
+  }
+
+  grouping telemetry-sensor-path-counters-state {
+    container counters {
+      description
+        "Grouping holding the counter information for the
+         individual sensor paths";
+
+      list counter {
+        description
+          "Counter information for current sensor path";
+        key severity;
+        leaf severity {
+          type oc-log:syslog-severity;
+          description
+            "The mapped severity of the counter. This value should
+             be used to indicate the severity of a particular
+             counter where possible.";
+        }
+        container state {
+          config false;
+          leaf severity {
+            type oc-log:syslog-severity;
+            description
+              "The mapped severity of the counter. This value should be used to
+               indicate the severity of a particular counter where possible.";
+          }
+          leaf id {
+            type string;
+            description
+              "Indicates the current counter value being streamed.
+               Like packets/bytes/drops/latency etc.";
+          }
+          leaf value {
+            type uint64;
+            description
+              "Indicates the value of the current counter id
+               being sent.";
+          }
+          leaf unit {
+            type identityref {
+              base COUNTER_UNIT;
+            }
+            description
+              "The unit of the counter being reported.";
+          }
+        }
+      }
+    }
+  }
+
+  grouping telemetry-sensor-path-state-sample-interval {
+    leaf sample-interval {
+      type uint64;
+      description
+        "Time in milliseconds between the device's sample of a
+         telemetry data source. For example, setting this to 100
+         would require the local device to collect the telemetry
+         data every 100 milliseconds. There can be latency or jitter
+         in transmitting the data, but the sample must occur at
+         the specified interval.
+
+         The timestamp must reflect the actual time when the data
+         was sampled, not simply the previous sample timestamp +
+         sample-interval.
+
+         If sample-interval is set to 0, the telemetry sensor
+         becomes event based. The sensor must then emit data upon
+         every change of the underlying data source.";
+    }
+
+  }
+
+  augment "/oc-telemetry:telemetry-system/oc-telemetry:subscriptions/oc-telemetry:dynamic-subscriptions/oc-telemetry:dynamic-subscription/oc-telemetry:sensor-paths/oc-telemetry:sensor-path/oc-telemetry:state" {
+      description
+          "Augmentation to add JUNOS specific telemetry sensor path counter
+          information.";
+      uses telemetry-sensor-path-state-sample-interval;
+      uses telemetry-sensor-path-counters-state;
+  }
+
+}
+

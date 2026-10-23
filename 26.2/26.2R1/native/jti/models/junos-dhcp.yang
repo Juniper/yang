@@ -1,0 +1,1619 @@
+module junos-dhcp {
+  yang-version 1;
+  namespace "http://juniper.net/yang/dhcp";
+  prefix junos-dhcp;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "This module contains a collection of DHCP state data.";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping jdhcpd-group-v4-stats {
+    leaf dropped-total {
+      type uint64;
+      description
+        "Total packets discard by DHCP service";
+    }
+    leaf dropped-bad-read {
+      type uint64;
+      description
+        "Packets discarded due to read error";
+    }
+    leaf dropped-ip-header {
+      type uint64;
+      description
+        "Packets discarded due to bad IP header";
+    }
+    leaf dropped-short-packet {
+      type uint64;
+      description
+        "Packets discarded due to runt packet";
+    }
+    leaf dropped-no-interface {
+      type uint64;
+      description
+        "Packets discarded due to no interface";
+    }
+    leaf dropped-no-routing-instance {
+      type uint64;
+      description
+        "Packets discarded due to no routing instance";
+    }
+    leaf dropped-no-memory {
+      type uint64;
+      description
+        "Packets discarded due to no memory";
+    }
+    leaf dropped-recovery-in-progress {
+      type uint64;
+      description
+        "Packets discarded due to switchover recovery in progress";
+    }
+  }
+
+  grouping jdhcpd-group-v6-stats {
+    leaf dropped-total {
+      type uint64;
+      description
+        "Total packets discard by DHCPv6 service";
+    }
+    leaf dropped-bad-read {
+      type uint64;
+      description
+        "Packets discarded due to read error";
+    }
+    leaf dropped-ip-header {
+      type uint64;
+      description
+        "Packets discarded due to bad IP header";
+    }
+    leaf dropped-short-packet {
+      type uint64;
+      description
+        "Packets discarded due to runt packet";
+    }
+    leaf dropped-no-interface {
+      type uint64;
+      description
+        "Packets discarded due to no interface";
+    }
+    leaf dropped-no-routing-instance {
+      type uint64;
+      description
+        "Packets discarded due to no routing instance";
+    }
+    leaf dropped-no-safd {
+      type uint64;
+      description
+        "Packets discarded due to no memory";
+    }
+    leaf dropped-no-memory {
+      type uint64;
+      description
+        "Packets discarded due to no memory";
+    }
+    leaf dropped-recovery-in-progress {
+      type uint64;
+      description
+        "Packets discarded due to switchover recovery in progress";
+    }
+  }
+
+  grouping jdhcpd-group-v4-era-stats {
+    leaf era-inflight-count {
+      type uint64;
+      description
+        "Number of clients that are in middle of DORA exchange";
+    }
+    leaf era-reported-failures {
+      type uint64;
+      description
+        "Number of DHCP clients that failed to Bind";
+    }
+    leaf era-reported-successes {
+      type uint64;
+      description
+        "Number of DHCP clients that completed DORA successfully";
+    }
+  }
+
+  grouping jdhcpd-group-v6-era-stats {
+    leaf era-inflight-count {
+      type uint64;
+      description
+        "Number of clients that are in middle of SARR exchange";
+    }
+    leaf era-reported-failures {
+      type uint64;
+      description
+        "Number of DHCP clients that failed to Bind";
+    }
+    leaf era-reported-successes {
+      type uint64;
+      description
+        "Number of DHCP clients that completed SARR successfully";
+    }
+  }
+
+  grouping jdhcpd-group-v4-server-stats {
+    leaf dropped-v4server-total {
+      type uint64;
+      description
+        "The total number of packets dropped";
+    }
+    leaf dropped-v4server-bad-hware {
+      type uint64;
+      description
+        "The total number of packets dropped due to bad hardware address";
+    }
+    leaf dropped-v4server-bootp-pkt {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because they are bootp packets";
+    }
+    leaf dropped-v4server-bad-bootp-opcode {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because they specified an invalid operation code in bootp";
+    }
+    leaf dropped-v4server-bad-options {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because they specified invalid options";
+    }
+    leaf dropped-v4server-bad-address {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because they specified an invalid server address";
+    }
+    leaf dropped-v4server-no-address {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because there were no addresses available for it to assign";
+    }
+    leaf dropped-v4server-no-interface-cfg {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because packets arrived on unconfigured interface";
+    }
+    leaf dropped-v4server-no-local-address {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because there was no valid local address";
+    }
+    leaf dropped-v4server-short-pkt {
+      type uint64;
+      description
+        "Number of packets discarded by the DHCP server because they were too short";
+    }
+    leaf dropped-v4server-no-bad-send {
+      type uint64;
+      description
+        "Number of packets that the DHCP server could not send";
+    }
+    leaf dropped-v4server-no-option60 {
+      type uint64;
+      description
+        "Number of packets discarded with no matching option-60";
+    }
+    leaf dropped-v4server-no-option82 {
+      type uint64;
+      description
+        "Number of packets discarded because option-82 could not be added";
+    }
+    leaf dropped-v4server-authentication {
+      type uint64;
+      description
+        "Number of packets discarded because authentication failed";
+    }
+    leaf dropped-v4server-dynamic-profile {
+      type uint64;
+      description
+        "Number of packets discarded because a dynamic profile failed";
+    }
+    leaf dropped-v4server-no-license {
+      type uint64;
+      description
+        "Number of packets discarded because of a license failure";
+    }
+    leaf dropped-v4server-no-bad-dhcp-opcode {
+      type uint64;
+      description
+        "Number of packets discarded because of bad DHCP opcode";
+    }
+    leaf dropped-v4server-no-options {
+      type uint64;
+      description
+        "Number of packets discarded because of no options";
+    }
+    leaf dropped-v4server-hop-limit {
+      type uint64;
+      description
+        "Number of packets discarded because of hop limit reached";
+    }
+    leaf dropped-v4server-ttl-expired {
+      type uint64;
+      description
+        "Number of packets discarded because of ttl expired";
+    }
+    leaf dropped-v4server-bad_udp-checksum {
+      type uint64;
+      description
+        "Number of packets discarded because of bad udp checksum";
+    }
+    leaf dropped-v4server-inactive-vlan {
+      type uint64;
+      description
+        "Number of packets discarded because of inactive VLAN";
+    }
+    leaf dropped-v4server-era-start-failed {
+      type uint64;
+      description
+        "Number of packets discarded because of ERA throttling";
+    }
+    leaf dropped-v4server-client-lookup {
+      type uint64;
+      description
+        "Number of packets discarded because no client binding was found";
+    }
+    leaf dropped-v4server-lease-time-violation {
+      type uint64;
+      description
+        "Packets dropped because of lease time violation";
+    }
+    leaf offer-delayed {
+      type uint64;
+      description
+        "Number of delayed Offer packets sent";
+    }
+    leaf offer-delay-in-progress {
+      type uint64;
+      description
+        "Number of delayed Offer packets queued";
+    }
+    leaf offer-delay-total {
+      type uint64;
+      description
+        "Total number of delayed Offer packets sent and queued";
+    }
+    leaf msg-recv-v4server-boot-request {
+      type uint64;
+      description
+        "The number of Boot Request packets received";
+    }
+    leaf msg-recv-v4server-decline {
+      type uint64;
+      description
+        "The number of DHCP Decline packets received";
+    }
+    leaf msg-recv-v4server-discover {
+      type uint64;
+      description
+        "The number of DHCP Discover packets received";
+    }
+    leaf msg-recv-v4server-inform {
+      type uint64;
+      description
+        "The number of DHCP inform packets received";
+    }
+    leaf msg-recv-v4server-release {
+      type uint64;
+      description
+        "The number of DHCP release packets received";
+    }
+    leaf msg-recv-v4server-request {
+      type uint64;
+      description
+        "The number of DHCP request packets received";
+    }
+    leaf msg-recv-v4server-renew {
+      type uint64;
+      description
+        "The number of DHCP renew packets received";
+    }
+    leaf msg-recv-v4server-rebind {
+      type uint64;
+      description
+        "The number of DHCP rebind packets received";
+    }
+    leaf msg-recv-v4server-lease-query {
+      type uint64;
+      description
+        "The number of DHCP lease query packets received";
+    }
+    leaf msg-recv-v4server-bulklease-query {
+      type uint64;
+      description
+        "The number of DHCP bulk lease query packets received";
+    }
+    leaf msg-sent-v4server-boot-reply {
+      type uint64;
+      description
+        "The number of DHCP Boot Reply packets sent";
+    }
+    leaf msg-sent-v4server-offer {
+      type uint64;
+      description
+        "The number of DHCP Offer packets sent";
+    }
+    leaf msg-sent-v4server-boot-ack {
+      type uint64;
+      description
+        "The number of DHCP Ack packets sent";
+    }
+    leaf msg-sent-v4server-nak {
+      type uint64;
+      description
+        "The number of DHCP Nak packets sent";
+    }
+    leaf msg-sent-v4server-force-renew {
+      type uint64;
+      description
+        "The number of DHCP Force Renew packets sent";
+    }
+    leaf msg-sent-v4server-unassigned {
+      type uint64;
+      description
+        "The number of DHCP Lease Unassigned packets sent";
+    }
+    leaf msg-sent-v4server-unknown {
+      type uint64;
+      description
+        "The number of DHCP Lease Unknown packets sent";
+    }
+    leaf msg-sent-v4server-active {
+      type uint64;
+      description
+        "The number of DHCP Lease Active packets sent";
+    }
+    leaf msg-sent-v4server-query-done {
+      type uint64;
+      description
+        "The number of DHCP Lease Query Done packets sent";
+    }
+  }
+
+  grouping jdhcpd-group-v6-server-stats {
+    leaf dropped-v6server-total {
+      type uint64;
+      description
+        "Total DHCP v6 packets dropped";
+    }
+    leaf dropped-v6server-no-safd {
+      type uint64;
+      description
+        "Total DHCP v6 packets dropped due to no safd match";
+    }
+    leaf dropped-v6server-no-routing-instance {
+      type uint64;
+      description
+        "Total DHCP v6 packets dropped due to no routing instance";
+    }
+    leaf dropped-v6server-bad-send {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to send error";
+    }
+    leaf dropped-v6server-short-packet {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to packet being too short";
+    }
+    leaf dropped-v6server-bad-msgtype {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to bad opcode in the packet";
+    }
+    leaf dropped-v6server-bad-options {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to bad options in the packet";
+    }
+    leaf dropped-v6server-bad-srcaddress {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to invalid addr family";
+    }
+    leaf dropped-v6server-relay-hop-count {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to max relays supported";
+    }
+    leaf dropped-v6server-bad-udp-checksum {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to bad udp checksum";
+    }
+    leaf dropped-v6server-no-client-id {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to missing client id";
+    }
+    leaf dropped-v6server-strict-reconfigure {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to strict reconfigure";
+    }
+    leaf dropped-v6server-option-18 {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to failure to add opt18";
+    }
+    leaf dropped-v6server-authentication {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to authentication failure";
+    }
+    leaf dropped-v6server-dynamic-profile {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to dynamic profile error";
+    }
+    leaf dropped-v6server-license {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to license failure";
+    }
+    leaf dropped-v6server-inactive-vlan {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to inactive vlan";
+    }
+    leaf dropped-v6server-era-start-failed {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to failure for era to start";
+    }
+    leaf dropped-v6server-client-lookup {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due due to client lookup failure";
+    }
+    leaf dropped-v6server-lease-time-violation {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to lease time validation violation";
+    }
+    leaf advertise-delayed {
+      type uint64;
+      description
+        "Number of delayed Advertise packets sent";
+    }
+    leaf advertise-queued {
+      type uint64;
+      description
+        "Number of delayed Advertise packets queued";
+    }
+    leaf advertise-total {
+      type uint64;
+      description
+        "Total number of delayed Advertise packets sent and queued";
+    }
+    leaf msg-recv-v6server-dhcpv6-decline {
+      type uint64;
+      description
+        "The number of DHCPv6 Decline packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-solicit {
+      type uint64;
+      description
+        "The number of DHCPv6 Solicit packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-information-request {
+      type uint64;
+      description
+        "The number of DHCPv6 Information Request packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-release {
+      type uint64;
+      description
+        "The number of DHCPv6 Release packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-request {
+      type uint64;
+      description
+        "The number of DHCPv6 Request packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-confirm {
+      type uint64;
+      description
+        "The number of DHCPv6 Confirm packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-renew {
+      type uint64;
+      description
+        "The number of DHCPv6 Renew packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-rebind {
+      type uint64;
+      description
+        "The number of DHCPv6 Rebind packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-relay-forw {
+      type uint64;
+      description
+        "The number of DHCPv6 Relay Forw packets received";
+    }
+    leaf msg-recv-v6server-dhcpv6-leasequery {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query packets received";
+    }
+    leaf msg-sent-v6server-advertise {
+      type uint64;
+      description
+        "The number of DHCPv6 Advertise packets sent";
+    }
+    leaf msg-sent-v6server-reply {
+      type uint64;
+      description
+        "The number of DHCPv6 Reply packets sent";
+    }
+    leaf msg-sent-v6server-logical_nak {
+      type uint64;
+      description
+        "The number of DHCPv6 Logical Nak packets sent";
+    }
+    leaf msg-sent-v6server-reconfigure {
+      type uint64;
+      description
+        "The number of DHCPv6 Reconfigure packets sent";
+    }
+    leaf msg-sent-v6server-relay-repl {
+      type uint64;
+      description
+        "The number of DHCPv6 Relay Reply packets sent";
+    }
+    leaf msg-sent-v6server-leasequery-repl {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Reply packets sent";
+    }
+    leaf msg-sent-v6server-leasequery-data {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Data packets sent";
+    }
+    leaf msg-sent-v6server-leasequery-done {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Done packets sent";
+    }
+  }
+
+  grouping jdhcpd-group-v4-relay-stats {
+    leaf dropped-v4relay-total {
+      type uint64;
+      description
+        "The total number of packets dropped";
+    }
+    leaf dropped-v4relay-bad-hardware {
+      type uint64;
+      description
+        "The total number of packets dropped due to bad hardware address";
+    }
+    leaf dropped-v4relay-bootp-packet {
+      type uint64;
+      description
+        "The total number of bootp packets dropped";
+    }
+    leaf dropped-v4relay-bad-bootp-opcode {
+      type uint64;
+      description
+        "The number of packets dropped due to not BOOTP message";
+    }
+    leaf dropped-v4relay-bad-options {
+      type uint64;
+      description
+        "The number of packets dropped due to bad options in the packet";
+    }
+    leaf dropped-v4relay-bad-address {
+      type uint64;
+      description
+        "The number of packets dropped due to invalid server address";
+    }
+    leaf dropped-v4relay-no-address {
+      type uint64;
+      description
+        "The number of packets dropped due to no available addresses";
+    }
+    leaf dropped-v4relay-no-interface-cfg {
+      type uint64;
+      description
+        "The number of packets dropped due to no interface match";
+    }
+    leaf dropped-v4relay-no-local-address {
+      type uint64;
+      description
+        "The number of packets dropped due to no valid local address";
+    }
+    leaf dropped-v4relay-short-packet {
+      type uint64;
+      description
+        "The number of packets dropped due to packet too short";
+    }
+    leaf dropped-v4relay-bad-send {
+      type uint64;
+      description
+        "The number of packets dropped due to send error";
+    }
+    leaf dropped-v4relay-option-60 {
+      type uint64;
+      description
+        "The number of packets dropped due to configure to drop";
+    }
+    leaf dropped-v4relay-relay-option {
+      type uint64;
+      description
+        "The number of packets dropped due to failure to add Relay Option";
+    }
+    leaf dropped-v4relay-option-82 {
+      type uint64;
+      description
+        "The number of packets dropped due to failure to add Option 82";
+    }
+    leaf dropped-v4relay-authentication {
+      type uint64;
+      description
+        "The number of packets dropped due to authentication failure";
+    }
+    leaf dropped-v4relay-dynamic-profile {
+      type uint64;
+      description
+        "The number of packets dropped due to dynamic profile error";
+    }
+    leaf dropped-v4relay-license {
+      type uint64;
+      description
+        "The number of packets dropped due to license error";
+    }
+    leaf dropped-v4relay-bad-dhcp-opcode {
+      type uint64;
+      description
+        "The number of packets dropped due to bad dhcp opcode";
+    }
+    leaf dropped-v4relay-no-options {
+      type uint64;
+      description
+        "The number of packets dropped due to no options in packet";
+    }
+    leaf dropped-v4relay-hop-limit {
+      type uint64;
+      description
+        "The number of packets dropped due to max hops reached";
+    }
+    leaf dropped-v4relay-ttl-expired {
+      type uint64;
+      description
+        "The number of packets dropped due to max ttl reached";
+    }
+    leaf dropped-v4relay-bad-udp-checksum {
+      type uint64;
+      description
+        "The number of packets dropped due to bad UDP checksum";
+    }
+    leaf dropped-v4relay-inactive-vlan {
+      type uint64;
+      description
+        "The number of packets dropped due to inactive vlan";
+    }
+    leaf dropped-v4relay-era-start-failed {
+      type uint64;
+      description
+        "The number of packets dropped due to failure for era to start";
+    }
+    leaf dropped-v4relay-client-lookup {
+      type uint64;
+      description
+        "The number of packets dropped due to client lookup failure";
+    }
+    leaf dropped-v4relay-proxy-no-server-addr {
+      type uint64;
+      description
+        "The number of packets dropped due to client-server_address being zero";
+    }
+    leaf dropped-v4relay-lease-time-violation {
+      type uint64;
+      description
+        "The number of packets dropped due to lease time validation violation";
+    }
+    leaf dropped-v4relay-leasequery-repl-no-circuitid {
+      type uint64;
+      description
+        "The number of packets dropped, no circuit id option in leasequery replies";
+    }
+    leaf dropped-v4relay-leasequery-repl-with-error-code {
+      type uint64;
+      description
+        "The number of packets dropped, error status code";
+    }
+    leaf dropped-v4relay-leasequery-repl-with-query-term {
+      type uint64;
+      description
+        "The number of packets dropped, error status code";
+    }
+    leaf dropped-v4relay-older-leasequery-reply {
+      type uint64;
+      description
+        "The number of packets dropped due to older leasequery reply timestamp than client";
+    }
+    leaf dropped-v4relay-abort-leasequery-reply-proc {
+      type uint64;
+      description
+        "The number of packets dropped due to delete event abort processing";
+    }
+    leaf dropped-v4relay-during-leasequery-reply {
+      type uint64;
+      description
+        "The number of packets dropped during leasequery reply processing";
+    }
+    leaf dropped-v4relay-relay-source-no-lpbk-interface {
+      type uint64;
+      description
+        "The number of packets dropped due to relay-source configured without loopback ifl";
+    }
+    leaf v4relay-bootp-request-rcvd {
+      type uint64;
+      description
+        "The number of Boot Request packets received";
+    }
+    leaf msg-recv-v4relay-decline {
+      type uint64;
+      description
+        "The number of Decline packets received";
+    }
+    leaf msg-recv-v4relay-discover {
+      type uint64;
+      description
+        "The number of Discover packets received";
+    }
+    leaf msg-recv-v4relay-inform {
+      type uint64;
+      description
+        "The number of Inform packets received";
+    }
+    leaf msg-recv-v4relay-release {
+      type uint64;
+      description
+        "The number of Release packets received";
+    }
+    leaf msg-recv-v4relay-request {
+      type uint64;
+      description
+        "The number of Request packets received";
+    }
+    leaf msg-recv-v4relay-leaseactive {
+      type uint64;
+      description
+        "The number of Lease Active packets received";
+    }
+    leaf msg-recv-v4relay-leaseunassigned {
+      type uint64;
+      description
+        "The number of Lease Unassigned packets received";
+    }
+    leaf msg-recv-v4relay-leaseunknown {
+      type uint64;
+      description
+        "The number of Lease Unknown packets received";
+    }
+    leaf msg-recv-v4relay-leasequerydone {
+      type uint64;
+      description
+        "The number of Lease Query Done packets received";
+    }
+    leaf v4relay-bootp-reply-rcvd {
+      type uint64;
+      description
+        "The number of Bootp Reply packets received";
+    }
+    leaf msg-recv-v4relay-offer {
+      type uint64;
+      description
+        "The number of Offer packets received";
+    }
+    leaf msg-recv-v4relay-ack {
+      type uint64;
+      description
+        "The number of Relay Ack packets received";
+    }
+    leaf msg-recv-v4relay-nak {
+      type uint64;
+      description
+        "The number of Relay Nak packets received";
+    }
+    leaf msg-recv-v4relay-forcerenew {
+      type uint64;
+      description
+        "The number of Relay Force Renew packets received";
+    }
+    leaf v4relay-bootp-reply-sent {
+      type uint64;
+      description
+        "The number of DHCP Boot Reply packets sent";
+    }
+    leaf msg-sent-v4relay-offer {
+      type uint64;
+      description
+        "The number of DHCP Offer packets sent";
+    }
+    leaf msg-sent-v4relay-ack {
+      type uint64;
+      description
+        "The number of DHCP Relay Ack packets sent";
+    }
+    leaf msg-sent-v4relay-nak {
+      type uint64;
+      description
+        "The number of DHCP Relay Nak packets sent";
+    }
+    leaf msg-sent-v4relay-forcerenew {
+      type uint64;
+      description
+        "The number of DHCP Relay Force Renew packets sent";
+    }
+    leaf msg-sent-v4relay-leasequery {
+      type uint64;
+      description
+        "The number of DHCP Lease Query packets sent";
+    }
+    leaf msg-sent-v4relay-bulkleasequery {
+      type uint64;
+      description
+        "The number of DHCP Bulk Lease Query packets sent";
+    }
+    leaf v4relay-bootp-request-sent {
+      type uint64;
+      description
+        "The number of DHCP Bootp Request packets sent";
+    }
+    leaf msg-sent-v4relay-decline {
+      type uint64;
+      description
+        "The number of DHCP Decline packets sent";
+    }
+    leaf msg-sent-v4relay-discover {
+      type uint64;
+      description
+        "The number of DHCP Discover packets sent";
+    }
+    leaf msg-sent-v4relay-inform {
+      type uint64;
+      description
+        "The number of DHCP Inform packets sent";
+    }
+    leaf msg-sent-v4relay-release {
+      type uint64;
+      description
+        "The number of DHCP Release packets sent";
+    }
+    leaf msg-sent-v4relay-request {
+      type uint64;
+      description
+        "The number of DHCP Request packets sent";
+    }
+    leaf v4relay-bootp-forwarded-total {
+      type uint64;
+      description
+        "The number of bootp req + bootp reply pkts forwarded";
+    }
+    leaf v4relay-bootp-request-fwd {
+      type uint64;
+      description
+        "The number of bootp req pkts forwarded";
+    }
+    leaf v4relay-bootp-reply-fwd {
+      type uint64;
+      description
+        "The number of bootp reply pkts forwarded";
+    }
+  }
+
+  grouping jdhcpd-group-v6-relay-stats {
+    leaf dropped-v6relay-total {
+      type uint64;
+      description
+        "Total DHCP v6 packets dropped";
+    }
+    leaf dropped-v6relay-no-safd {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to no safd match";
+    }
+    leaf dropped-v6relay-no-routing-instance {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to no routing instance match";
+    }
+    leaf dropped-v6relay-bad-send {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to send error";
+    }
+    leaf dropped-v6relay-short-packet {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to packet being too short";
+    }
+    leaf dropped-v6relay-bad-msgtype {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to bad opcode in the packet";
+    }
+    leaf dropped-v6relay-bad-options {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to bad options in the packet";
+    }
+    leaf dropped-v6relay-bad-srcaddress {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to invalid address family";
+    }
+    leaf dropped-v6relay-relay-hop-count {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to max relays supported";
+    }
+    leaf dropped-v6relay-bad-udp-checksum {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to bad udp checksum";
+    }
+    leaf dropped-v6relay-no-client-id {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to missing client id";
+    }
+    leaf dropped-v6relay-strict-reconfigure {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to due to strict reconfigure";
+    }
+    leaf dropped-v6relay-relay-option {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to relay-option processing";
+    }
+    leaf dropped-v6relay-option-18 {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to failure to add opt18";
+    }
+    leaf dropped-v6relay-option-37 {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to failure to add opt37";
+    }
+    leaf dropped-v6relay-authentication {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to authentication failure";
+    }
+    leaf dropped-v6relay-dynamic-profile {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to dynamic profile error";
+    }
+    leaf dropped-v6relay-license {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to license failure";
+    }
+    leaf dropped-v6relay-inactive-vlan {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to inactive vlan";
+    }
+    leaf dropped-v6relay-era-start-failed {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to failure for era to start";
+    }
+    leaf dropped-v6relay-client-lookup {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to client lookup failure";
+    }
+    leaf dropped-v6relay-lease-time-violation {
+      type uint64;
+      description
+        "DHCPv6 packets dropped due to lease time validation violation";
+    }
+    leaf dropped-v6relay-leasequery-repl-no-client-data {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, no option client-data in leasequery replies";
+    }
+    leaf dropped-v6relay-leasequery-repl-no-interfaceid {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, no interface id option in leasequery replies";
+    }
+    leaf dropped-v6relay-leasequery-repl-with-client-link {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, client-link in leasequery reply";
+    }
+    leaf dropped-v6relay-leasequery-repl-no-relay-data {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, no relay data option in leasequery replies";
+    }
+    leaf dropped-v6relay-leasequery-repl-with-hop-cnt {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, with hop count";
+    }
+    leaf dropped-v6relay-leasequery-repl-with-error-code {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, error status code";
+    }
+    leaf dropped-v6relay-leasequery-repl-with-query-term {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, with query term";
+    }
+    leaf dropped-v6relay-older-leasequery-reply {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, due to older leasequery reply timestamp than client";
+    }
+    leaf dropped-v6relay-abort-leasequery-reply-proc {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, due to delete event abort processing";
+    }
+    leaf dropped-v6relay-during-leasequery-reply {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, during leasequery reply processing";
+    }
+    leaf dropped-v6relay-relay-source-no-lpbk-interface {
+      type uint64;
+      description
+        "DHCPv6 packets dropped, due to relay-source configured without loopback ifl";
+    }
+    leaf msg-recv-v6relay-decline {
+      type uint64;
+      description
+        "The number of DHCPv6 Decline packets received";
+    }
+    leaf msg-recv-v6relay-solicit {
+      type uint64;
+      description
+        "The number of DHCPv6 Solicit packets received";
+    }
+    leaf msg-recv-v6relay-information-request {
+      type uint64;
+      description
+        "The number of DHCPv6 Information Request packets received";
+    }
+    leaf msg-recv-v6relay-release {
+      type uint64;
+      description
+        "The number of DHCPv6 Release packets received";
+    }
+    leaf msg-recv-v6relay-request {
+      type uint64;
+      description
+        "The number of DHCPv6 Request packets received";
+    }
+    leaf msg-recv-v6relay-confirm {
+      type uint64;
+      description
+        "The number of DHCPv6 Confirm packets received";
+    }
+    leaf msg-recv-v6relay-renew {
+      type uint64;
+      description
+        "The number of DHCPv6 Renew packets received";
+    }
+    leaf msg-recv-v6relay-rebind {
+      type uint64;
+      description
+        "The number of DHCPv6 Rebind packets received";
+    }
+    leaf msg-recv-v6relay-relay-forw {
+      type uint64;
+      description
+        "The number of DHCPv6 Relay Forw packets received";
+    }
+    leaf msg-recv-v6relay-leasequery-repl {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Reply packets received";
+    }
+    leaf msg-recv-v6relay-leasequery-data {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Data packets received";
+    }
+    leaf msg-recv-v6relay-leasequery-done {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Done packets received";
+    }
+    leaf msg-recv-v6relay-advertise {
+      type uint64;
+      description
+        "The number of DHCPv6 Advertise packets received";
+    }
+    leaf msg-recv-v6relay-reply {
+      type uint64;
+      description
+        "The number of DHCPv6 Reply packets received";
+    }
+    leaf msg-recv-v6relay-reconfigure {
+      type uint64;
+      description
+        "The number of DHCPv6 Reconfigure packets received";
+    }
+    leaf msg-recv-v6relay-relay-repl {
+      type uint64;
+      description
+        "The number of DHCPv6 Relay Reply packets received";
+    }
+    leaf msg-recv-v6relay-leasequery {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query packets received";
+    }
+    leaf msg-sent-v6relay-reply {
+      type uint64;
+      description
+        "The number of DHCPv6 Reply packets sent";
+    }
+    leaf msg-sent-v6relay-reconfigure {
+      type uint64;
+      description
+        "The number of DHCPv6 Reconfigure packets sent";
+    }
+    leaf msg-sent-v6relay-relay-repl {
+      type uint64;
+      description
+        "The number of DHCPv6 Relay Reply packets sent";
+    }
+    leaf msg-sent-v6relay-leasequery {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query packets sent";
+    }
+    leaf msg-sent-v6relay-decline {
+      type uint64;
+      description
+        "The number of DHCPv6 Decline packets sent";
+    }
+    leaf msg-sent-v6relay-solicit {
+      type uint64;
+      description
+        "The number of DHCPv6 Solicit packets sent";
+    }
+    leaf msg-sent-v6relay-information-request {
+      type uint64;
+      description
+        "The number of DHCPv6 Information Request packets sent";
+    }
+    leaf msg-sent-v6relay-release {
+      type uint64;
+      description
+        "The number of DHCPv6 Release packets sent";
+    }
+    leaf msg-sent-v6relay-request {
+      type uint64;
+      description
+        "The number of DHCPv6 Request packets sent";
+    }
+    leaf msg-sent-v6relay-confirm {
+      type uint64;
+      description
+        "The number of DHCPv6 Confirm packets sent";
+    }
+    leaf msg-sent-v6relay-renew {
+      type uint64;
+      description
+        "The number of DHCPv6 Renew packets sent";
+    }
+    leaf msg-sent-v6relay-rebind {
+      type uint64;
+      description
+        "The number of DHCPv6 Rebind packets sent";
+    }
+    leaf msg-sent-v6relay-relay-forw {
+      type uint64;
+      description
+        "The number of DHCPv6 Relay Forw packets sent";
+    }
+    leaf msg-sent-v6relay-leasequery-repl {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Reply packets sent";
+    }
+    leaf msg-sent-v6relay-leasequery-data {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Data packets sent";
+    }
+    leaf msg-sent-v6relay-leasequery-done {
+      type uint64;
+      description
+        "The number of DHCPv6 Lease Query Done packets sent";
+    }
+    leaf v6relay-fwd-total {
+      type uint64;
+      description
+        "The number of fwd req + fwd reply pkts forwarded";
+    }
+    leaf v6relay-fwd-request {
+      type uint64;
+      description
+        "The number of fwd req pkts forwarded";
+    }
+    leaf v6relay-fwd-reply {
+      type uint64;
+      description
+        "The number of fwd reply pkts forwarded";
+    }
+  }
+
+  grouping jdhcpd-group-v4-server-binding {
+    leaf binding-state-v4server-binding {
+      type uint64;
+      description
+        "Total number of Local Server Bindings";
+    }
+    leaf binding-state-v4server-init {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Init State";
+    }
+    leaf binding-state-v4server-bound {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Bound State";
+    }
+    leaf binding-state-v4server-selecting {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Bound State";
+    }
+    leaf binding-state-v4server-requesting {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Requesting State";
+    }
+    leaf binding-state-v4server-renew {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Renew State";
+    }
+    leaf binding-state-v4server-release {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Release State";
+    }
+    leaf binding-state-server-restoring {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Restoring State";
+    }
+  }
+
+  grouping jdhcpd-group-v6-server-binding {
+    leaf binding-state-v6server-binding {
+      type uint64;
+      description
+        "Total number of Local Server Bindings";
+    }
+    leaf binding-state-v6server-init {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Init State";
+    }
+    leaf binding-state-v6server-bound {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Bound State";
+    }
+    leaf binding-state-v6server-selecting {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Selecting State";
+    }
+    leaf binding-state-v6server-requesting {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Requesting State";
+    }
+    leaf binding-state-v6server-renew {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Renew State";
+    }
+    leaf binding-state-v6server-release {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Release State";
+    }
+    leaf binding-state-server-restoring {
+      type uint64;
+      description
+        "Number of Local Server Bindings in Restoring State";
+    }
+  }
+
+  grouping jdhcpd-group-v4-relay-binding {
+    leaf binding-state-v4relay-binding {
+      type uint64;
+      description
+        "Total number of Relay Bindings";
+    }
+    leaf binding-state-v4relay-init {
+      type uint64;
+      description
+        "Number of Relay Bindings in Init State";
+    }
+    leaf binding-state-v4relay-bound {
+      type uint64;
+      description
+        "Number of Relay Bindings in Bound State";
+    }
+    leaf binding-state-v4relay-selecting {
+      type uint64;
+      description
+        "Number of Relay Bindings in Selecting State";
+    }
+    leaf binding-state-v4relay-requesting {
+      type uint64;
+      description
+        "Number of Relay Bindings in Requesting State";
+    }
+    leaf binding-state-v4relay-renew {
+      type uint64;
+      description
+        "Number of Relay Bindings in Renew State";
+    }
+    leaf binding-state-v4relay-release {
+      type uint64;
+      description
+        "Number of Relay Bindings in Release State";
+    }
+    leaf binding-state-v4relay-restoring {
+      type uint64;
+      description
+        "Number of Relay Bindings in Restoring State";
+    }
+    leaf binding-state-v4relay-rebind {
+      type uint64;
+      description
+        "Number of Relay Bindings in Rebind State";
+    }
+  }
+
+  grouping jdhcpd-group-v6-relay-binding {
+    leaf binding-state-v6relay-binding {
+      type uint64;
+      description
+        "Total number of Relay Bindings";
+    }
+    leaf binding-state-v6relay-init {
+      type uint64;
+      description
+        "Number of Relay Bindings in Init State";
+    }
+    leaf binding-state-v6relay-bound {
+      type uint64;
+      description
+        "Number of Relay Bindings in Bound State";
+    }
+    leaf binding-state-v6relay-selecting {
+      type uint64;
+      description
+        "Number of Relay Bindings in Selecting State";
+    }
+    leaf binding-state-v6relay-requesting {
+      type uint64;
+      description
+        "Number of Relay Bindings in Requesting State";
+    }
+    leaf binding-state-v6relay-renew {
+      type uint64;
+      description
+        "Number of Relay Bindings in Renew State";
+    }
+    leaf binding-state-v6relay-release {
+      type uint64;
+      description
+        "Number of Relay Bindings in Release State";
+    }
+    leaf binding-state-relay-restoring {
+      type uint64;
+      description
+        "Number of Relay Bindings in Restoring State";
+    }
+    leaf binding-state-v6relay-rebind {
+      type uint64;
+      description
+        "Number of Relay Bindings in Rebind State";
+    }
+  }
+
+  grouping jdhcpd-v4-server-response-stats {
+    leaf one-minute-minimum-response-time {
+      type uint64;
+      description
+        "The minimum response time in microseconds";
+    }
+    leaf one-minute-average-response-time {
+      type uint64;
+      description
+        "The average response time in microseconds";
+    }
+    leaf one-minute-maximum-response-time {
+      type uint64;
+      description
+        "The maximum response time in microseconds";
+    }
+    leaf one-minute-messages-sent {
+      type uint64;
+      description
+        "The total messages sent toward the server for this period";
+    }
+    leaf one-minute-messages-received {
+      type uint64;
+      description
+        "The total messages received from the server for this period";
+    }
+    leaf one-minute-messages-no-response {
+      type uint64;
+      description
+        "The difference between sent and received but not less than zero";
+    }
+  }
+
+  grouping jdhcpd-v6-server-response-stats {
+    leaf one-minute-minimum-response-time {
+      type uint64;
+      description
+        "The minimum response time in microseconds";
+    }
+    leaf one-minute-average-response-time {
+      type uint64;
+      description
+        "The average response time in microseconds";
+    }
+    leaf one-minute-maximum-response-time {
+      type uint64;
+      description
+        "The maximum response time in microseconds";
+    }
+    leaf one-minute-messages-sent {
+      type uint64;
+      description
+        "The total messages sent toward the server for this period";
+    }
+    leaf one-minute-messages-received {
+      type uint64;
+      description
+        "The total messages received from the server for this period";
+    }
+    leaf one-minute-messages-no-response {
+      type uint64;
+      description
+        "The difference between sent and received but not less than zero";
+    }
+  }
+
+  grouping dhcp-top {
+    container junos {
+      config false;
+      container system {
+        container subscriber-management {
+          container client-protocols {
+            container dhcp {
+              container v4 {
+                container global-statistics {
+                  uses jdhcpd-group-v4-stats;
+                  uses jdhcpd-group-v4-era-stats;
+                }
+                container routing-instances {
+                  list routing-instance {
+                    key "ri-name";
+                    leaf ri-name {
+                      type string;
+                    }
+                    container server {
+                      container statistics {
+                        uses jdhcpd-group-v4-server-stats;
+                      }
+                      container bindings {
+                        uses jdhcpd-group-v4-server-binding;
+                      }
+                    }
+                    container relay {
+                      container statistics {
+                        uses jdhcpd-group-v4-relay-stats;
+                      }
+                      container bindings {
+                        uses jdhcpd-group-v4-relay-binding;
+                      }
+                      container servers {
+                        list server {
+                          key "server-ip";
+                          leaf server-ip {
+                            type string;
+                          }
+                          container response-time {
+                            uses jdhcpd-v4-server-response-stats;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              container v6 {
+                container global-statistics {
+                  uses jdhcpd-group-v6-stats;
+                  uses jdhcpd-group-v6-era-stats;
+                }
+                container routing-instances {
+                  list routing-instance {
+                    key "ri-name";
+                    leaf ri-name {
+                      type string;
+                    }
+                    container server {
+                      container statistics {
+                        uses jdhcpd-group-v6-server-stats;
+                      }
+                      container bindings {
+                        uses jdhcpd-group-v6-server-binding;
+                      }
+                    }
+                    container relay {
+                      container statistics {
+                        uses jdhcpd-group-v6-relay-stats;
+                      }
+                      container bindings {
+                        uses jdhcpd-group-v6-relay-binding;
+                      }
+                      container servers {
+                        list server {
+                          key "server-ipv6";
+                          leaf server-ipv6 {
+                            type string;
+                          }
+                          container response-time {
+                            uses jdhcpd-v6-server-response-stats;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses dhcp-top;
+}

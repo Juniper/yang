@@ -1,0 +1,85 @@
+ module junos-genstate-ldp-oam-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-oam-information";
+   prefix jgloi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-oam-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ldp-oam-information-top {
+     description
+       "Top-level grouping";
+     container ldp-oam-information {
+       description
+         "Top-level container";
+       list ldp-oam-status {
+         key "ldp-oam-prefix";
+         leaf ldp-oam-prefix {
+           type string;
+         }
+         leaf ldp-oam-time {
+           type string;
+         }
+         list ldp-oam-path {
+           key "ldp-oam-destination-address";
+           leaf ldp-oam-destination-address {
+             type jt:ipaddr;
+           }
+           leaf ldp-oam-nexthop-address {
+             type jt:ipaddr;
+           }
+           leaf ldp-oam-interface-name {
+             type string;
+           }
+           leaf ldp-oam-nexthop-lsp {
+             type string;
+           }
+           leaf ldp-oam-bfd-session-state {
+             type string;
+           }
+           leaf ldp-oam-lsp-ping-state {
+             type string;
+           }
+           leaf-list ldp-oam-path-address {
+             type jt:ipaddr;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-oam-information container to top-level genstate container";
+     uses ldp-oam-information-top;
+   }
+ }

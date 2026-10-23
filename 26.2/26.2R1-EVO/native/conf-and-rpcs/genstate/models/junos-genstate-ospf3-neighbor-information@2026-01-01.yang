@@ -1,0 +1,144 @@
+ module junos-genstate-ospf3-neighbor-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ospf3-neighbor-information";
+   prefix jgoni;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ospf3-neighbor-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ospf3-neighbor-information-top {
+     description
+       "Top-level grouping";
+     container ospf3-neighbor-information {
+       description
+         "Top-level container";
+       list ospf3-neighbor {
+         key "neighbor-id interface-name ospf-area";
+         leaf neighbor-id {
+           type jt:ipaddr;
+         }
+         leaf interface-name {
+           type string;
+           description
+             "Name of interface";
+         }
+         leaf ospf-neighbor-state {
+           type string;
+         }
+         leaf neighbor-priority {
+           type int32;
+         }
+         leaf activity-timer {
+           type int32;
+         }
+         leaf neighbor-address {
+           type jt:ipaddr;
+           description
+             "IP address of this neighbor";
+         }
+         leaf ospf-area {
+           type string;
+           description
+             "Area ID";
+         }
+         leaf options {
+           type int32;
+         }
+         leaf neighbor-secondary {
+           type empty;
+           description
+             "OSPF neighbor is on secondary interface";
+         }
+         leaf ospf3-interface-index {
+           type int32;
+         }
+         leaf neighbor-cost {
+           type int32;
+           description
+             "Cost associated with this neighbor";
+         }
+         leaf dr-id {
+           type jt:ipaddr;
+         }
+         leaf bdr-id {
+           type jt:ipaddr;
+         }
+         leaf neighbor-up-time {
+           type string;
+           description
+             "Time when neighbor came up";
+         }
+         leaf neighbor-adjacency-time {
+           type string;
+           description
+             "Time when neighbor became adjacent";
+         }
+         leaf neighbor-suppress-hello {
+           type int32;
+           description
+             "Time when neighbor suppressed hellos";
+         }
+         leaf master-slave {
+           type string;
+         }
+         leaf sequence-number {
+           type int64;
+           description
+             "History event number";
+         }
+         leaf dbd-retransmit-time {
+           type int32;
+           description
+             "Seconds until DBD is retransmitted";
+         }
+         leaf lsreq-retransmit-time {
+           type int32;
+           description
+             "Seconds until LSREQ is retransmitted";
+         }
+         leaf lsreq-enqueued {
+           type empty;
+         }
+         leaf lsreq-active {
+           type empty;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ospf3-neighbor-information container to top-level genstate 
+       container";
+     uses ospf3-neighbor-information-top;
+   }
+ }

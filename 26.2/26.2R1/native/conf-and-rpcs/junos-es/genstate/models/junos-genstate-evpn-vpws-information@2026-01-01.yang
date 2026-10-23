@@ -1,0 +1,315 @@
+ module junos-genstate-evpn-vpws-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-vpws-information";
+   prefix jgevi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-vpws-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-vpws-information-top {
+     description
+       "Top-level grouping";
+     container evpn-vpws-information {
+       description
+         "Top-level container";
+       list evpn-vpws-instance {
+         key "evpn-vpws-instance-name";
+         leaf evpn-vpws-instance-name {
+           type string;
+         }
+         leaf evpn-vpws-instance-type {
+           type string;
+         }
+         leaf evpn-vpws-instance-encap-type {
+           type string;
+         }
+         leaf route-distinguisher {
+           type string;
+           description
+             "Name of the route-distinguisher";
+         }
+         leaf local-interfaces {
+           type int32;
+         }
+         leaf local-interfaces-up {
+           type int32;
+         }
+         leaf num-protect-interfaces {
+           type int32;
+         }
+         leaf evpn-vpws-instance-advertised-dx2v-sid {
+           type jt:ipv6addr;
+         }
+         leaf evpn-vpws-instance-advertised-dx2v-sid-mode {
+           type string;
+         }
+         leaf evpn-vpws-instance-preserve-nexthop-hierarchy {
+           type string;
+         }
+         leaf evpn-vpws-instance-composite-nexthop {
+           type string;
+         }
+         container evpn-vpws-interface-status-table {
+           list evpn-vpws-interface {
+             key "evpn-vpws-interface-name";
+             leaf evpn-vpws-interface-name {
+               type string;
+             }
+             leaf evpn-vpws-interface-esi {
+               type string;
+             }
+             leaf evpn-vpws-interface-mode {
+               type string;
+             }
+             leaf evpn-vpws-interface-role {
+               type string;
+             }
+             leaf evpn-vpws-interface-status {
+               type string;
+             }
+             leaf evpn-vpws-pseudowire-status {
+               type string;
+             }
+             leaf evpn-vpws-control-word {
+               type string;
+             }
+             leaf evpn-vpws-flow-label-transmit {
+               type string;
+             }
+             leaf evpn-vpws-flow-label-receive {
+               type string;
+             }
+             container evpn-vpws-service-id-local-status-table {
+               list evpn-vpws-sid-local {
+                 key "evpn-vpws-sid-local-value";
+                 leaf evpn-vpws-sid-local-value {
+                   type int32;
+                 }
+                 leaf evpn-vpws-sid-advertised-label {
+                   type int32;
+                 }
+                 leaf evpn-vpws-sid-advertised-end-dx2-sid {
+                   type jt:ipv6addr;
+                 }
+                 leaf evpn-vpws-sid-advertised-end-dx2-sid-mode {
+                   type string;
+                 }
+                 leaf evpn-vpws-sid-local-interface-name {
+                   type string;
+                 }
+                 container evpn-vpws-sid-pe-status-table {
+                   list evpn-vpws-sid-pe-info {
+                     key "evpn-vpws-sid-interface-esi";
+                     leaf evpn-vpws-sid-pe-ipaddr {
+                       type jt:ipaddr;
+                     }
+                     leaf evpn-vpws-sid-interface-esi {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-label {
+                       type int32;
+                     }
+                     leaf evpn-vpws-sid-pe-end-dx2-sid {
+                       type jt:ipv6addr;
+                     }
+                     leaf evpn-vpws-sid-pe-mode {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-role {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-ts {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-status {
+                       type string;
+                     }
+                   }
+                 }
+               }
+             }
+             container evpn-vpws-service-id-remote-status-table {
+               list evpn-vpws-sid-remote {
+                 key "evpn-vpws-sid-remote-value";
+                 leaf evpn-vpws-sid-remote-value {
+                   type int32;
+                 }
+                 leaf evpn-vpws-sid-local-interface-name {
+                   type string;
+                 }
+                 leaf evpn-vpws-sid-local-interface-status {
+                   type string;
+                 }
+                 container evpn-vpws-sid-pe-status-table {
+                   list evpn-vpws-sid-pe-info {
+                     key "evpn-vpws-sid-interface-esi";
+                     leaf evpn-vpws-sid-pe-ipaddr {
+                       type jt:ipaddr;
+                     }
+                     leaf evpn-vpws-sid-interface-esi {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-label {
+                       type int32;
+                     }
+                     leaf evpn-vpws-sid-pe-end-dx2-sid {
+                       type jt:ipv6addr;
+                     }
+                     leaf evpn-vpws-sid-pe-mode {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-role {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-ts {
+                       type string;
+                     }
+                     leaf evpn-vpws-sid-pe-status {
+                       type string;
+                     }
+                   }
+                 }
+               }
+             }
+             container evpn-pref-nh-information {
+               leaf evpn-pref-nh-cfg-mode {
+                 type string;
+               }
+               leaf evpn-pref-nh-primary-pe {
+                 type jt:ipaddr;
+               }
+               leaf evpn-pref-nh-backup-pe {
+                 type jt:ipaddr;
+               }
+             }
+           }
+         }
+         container evpn-protect-interface-status-table {
+           list evpn-protect-interface {
+             key "evpn-primary-interface-name";
+             leaf evpn-primary-interface-name {
+               type string;
+             }
+             leaf evpn-protect-interface-name {
+               type string;
+             }
+             leaf evpn-protect-interface-status {
+               type string;
+             }
+           }
+         }
+         container evpn-vpws-esi-info-status-table {
+           list evpn-vpws-esi-info {
+             key "evpn-vpws-esi-val";
+             leaf evpn-vpws-esi-val {
+               type string;
+             }
+             leaf evpn-vpws-num-pes {
+               type int32;
+             }
+             container evpn-vpws-esi-pe-status-table {
+               list evpn-vpws-esi-pe-info {
+                 key "evpn-vpws-esi-pe-ipaddr";
+                 leaf evpn-vpws-esi-pe-ipaddr {
+                   type jt:ipaddr;
+                 }
+                 leaf-list evpn-vpws-esi-advertised-sid {
+                   type int32;
+                 }
+               }
+             }
+           }
+         }
+         list evpn-vpws-esi-df-table {
+           key "evpn-esi-value";
+           leaf evpn-esi-value {
+             type string;
+           }
+           leaf esi-df-election-algorithm {
+             type string;
+           }
+           leaf esi-lacp-oos-on-ndf {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-min-sid {
+             type int32;
+           }
+           leaf evpn-vpws-esi-df-primary-pe {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-primary-pe-preference {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-primary-pe-non-revertive {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-primary-pe-time-sync {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-backup-pe {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-backup-pe-preference {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-backup-pe-non-revertive {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-backup-pe-time-sync {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-other-pe {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-other-pe-preference {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-other-pe-non-revertive {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-other-pe-time-sync {
+             type string;
+           }
+           leaf evpn-vpws-esi-df-timestamp {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-vpws-information container to top-level genstate container";
+     uses evpn-vpws-information-top;
+   }
+ }

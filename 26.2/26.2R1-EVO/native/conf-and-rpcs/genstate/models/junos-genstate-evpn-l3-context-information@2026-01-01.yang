@@ -1,0 +1,235 @@
+ module junos-genstate-evpn-l3-context-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-l3-context-information";
+   prefix jgelci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-l3-context-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping evpn-l3-context-information-top {
+     description
+       "Top-level grouping";
+     container evpn-l3-context-information {
+       description
+         "Top-level container";
+       list evpn-l3-context {
+         key "context-name";
+         leaf context-name {
+           type string;
+         }
+         leaf context-type {
+           type string;
+           description
+             "Type";
+         }
+         leaf context-advertisement-mode {
+           type string;
+         }
+         leaf context-gateway-interface {
+           type string;
+         }
+         leaf context-router-mac {
+           type string;
+         }
+         leaf context-encapsulation {
+           type string;
+         }
+         leaf context-label {
+           type int32;
+         }
+         leaf context-vni {
+           type int32;
+         }
+         leaf context-dt4-sid {
+           type jt:ipaddr;
+         }
+         leaf context-dt6-sid {
+           type jt:ipaddr;
+         }
+         leaf context-dt46-sid {
+           type jt:ipaddr;
+         }
+         leaf context-import-policy {
+           type string;
+         }
+         leaf context-export-policy {
+           type string;
+         }
+         leaf route-distinguisher {
+           type string;
+           description
+             "Name of the route-distinguisher";
+         }
+         leaf context-multicast-routing-mode {
+           type string;
+         }
+         leaf context-flags {
+           type int32;
+         }
+         leaf context-flags-descriptions {
+           type string;
+         }
+         leaf context-change-flags {
+           type int32;
+         }
+         leaf context-change-flags-descriptions {
+           type string;
+         }
+         leaf context-composite-nexthop-support {
+           type string;
+         }
+         leaf context-reference-count {
+           type int32;
+         }
+         leaf context-symmetric-routing-encapsulation {
+           type string;
+         }
+         leaf context-symmetric-routing-label {
+           type int32;
+         }
+         leaf context-symmetric-routing-vni {
+           type int32;
+         }
+         leaf context-preserve-nexthop-hierarchy {
+           type string;
+         }
+         container context-overlay-gateway {
+           leaf gateway-family {
+             type string;
+           }
+           leaf gateway-address {
+             type jt:ipaddr;
+           }
+         }
+         list context-source-vtep {
+           key "vtep-family";
+           leaf vtep-family {
+             type string;
+           }
+           leaf vtep-address {
+             type jt:ipaddr;
+           }
+         }
+         container evpn-l3-context-irb-interface-table {
+           list evpn-l3-context-irb-interface {
+             key "irb-interface-name";
+             leaf irb-interface-name {
+               type string;
+             }
+             leaf irb-interface-vlan-id {
+               type string;
+             }
+             leaf irb-interface-vni-id {
+               type string;
+             }
+             leaf irb-interface-status {
+               type string;
+             }
+             leaf irb-interface-evpn-instance {
+               type string;
+             }
+             leaf irb-interface-irbd-flags {
+               type int32;
+             }
+             leaf irb-interface-flags {
+               type int32;
+             }
+             leaf irb-interface-esi {
+               type string;
+             }
+             leaf irb-interface-auto-esi {
+               type string;
+             }
+           }
+         }
+         container evpn-l3-context-symmetric-peer-table {
+           list evpn-l3-context-symmetric-peer {
+             key "evpn-neighbor-address";
+             leaf evpn-neighbor-address {
+               type jt:ipaddr;
+             }
+             leaf evpn-num-mac-routes {
+               type int32;
+             }
+             leaf evpn-num-mac-ip-routes {
+               type int32;
+             }
+             leaf evpn-peer-flags {
+               type int32;
+             }
+             leaf evpn-peer-rd {
+               type string;
+             }
+           }
+         }
+         container evpn-l3-context-symmetric-esi-table {
+           list evpn-l3-context-symmetric-esi {
+             key "evpn-l3-context-esi-value";
+             leaf evpn-l3-context-esi-value {
+               type string;
+             }
+             leaf evpn-l3-context-esi-num-mac {
+               type int32;
+             }
+             leaf evpn-l3-context-esi-refcount {
+               type int32;
+             }
+           }
+         }
+         container evpn-macip-tracking-table {
+           list evpn-macip-tracking {
+             key "evpn-macip-tracker-ip";
+             leaf evpn-macip-tracker-ip {
+               type jt:ipaddr;
+             }
+             list evpn-macip-tracker-maclist {
+               key "mac-address";
+               leaf mac-address {
+                 type jt:mac-addr;
+               }
+               leaf mac-source-name {
+                 type string;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-l3-context-information container to top-level genstate 
+       container";
+     uses evpn-l3-context-information-top;
+   }
+ }

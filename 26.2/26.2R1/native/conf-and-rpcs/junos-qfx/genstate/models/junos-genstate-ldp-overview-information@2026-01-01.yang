@@ -1,0 +1,601 @@
+ module junos-genstate-ldp-overview-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-overview-information";
+   prefix jgloi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-overview-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ldp-overview-information-top {
+     description
+       "Top-level grouping";
+     container ldp-overview-information {
+       description
+         "LDP overview information";
+       list ldp-overview {
+         key "ldp-instance-name";
+         leaf ldp-instance-name {
+           type string;
+           description
+             "Name of LDP instance";
+         }
+         leaf ldp-reference-count {
+           type int32;
+         }
+         leaf ldp-router-id {
+           type jt:ipaddr;
+           description
+             "LDP Router ID";
+         }
+         leaf ldp-inet-lsr-id {
+           type jt:ipaddr;
+           description
+             "LDP dual-transport LSR ID for IPv4";
+         }
+         leaf ldp-inet6-lsr-id {
+           type jt:ipaddr;
+           description
+             "LDP dual-transport LSR ID for IPv6";
+         }
+         leaf ldp-inet {
+           type string;
+           description
+             "LDP address family inet";
+         }
+         leaf ldp-inet6 {
+           type string;
+           description
+             "LDP address family inet6";
+         }
+         leaf ldp-transport-preference {
+           type string;
+         }
+         leaf ldp-message-id {
+           type uint32;
+           description
+             "Message id";
+         }
+         leaf ldp-configuration-sequence {
+           type uint32;
+           description
+             "Configuration sequence";
+         }
+         leaf ldp-advertised-configuration-sequence {
+           type uint32;
+           description
+             "Advertised configuration sequence";
+         }
+         leaf ldp-no-scaling-optimize {
+           type string;
+           description
+             "Disable scaling optimization";
+         }
+         leaf ldp-deaggregate {
+           type string;
+           description
+             "LDP deaggregate";
+         }
+         leaf ldp-explicit-null {
+           type string;
+           description
+             "Explicit null";
+         }
+         leaf ldp-ipv6-tunneling {
+           type string;
+           description
+             "IPv6 tunneling";
+         }
+         leaf ldp-strict-targeted-hellos {
+           type string;
+           description
+             "Strict targeted hellos";
+         }
+         leaf ldp-upstream-label-assignment {
+           type string;
+           description
+             "Upstream label assignment";
+         }
+         leaf ldp-loopback-if-added {
+           type string;
+           description
+             "Loopback if added";
+         }
+         leaf ldp-route-preference {
+           type uint32;
+           description
+             "Route preference";
+         }
+         leaf ldp-p2mp-max-branches {
+           type uint32;
+           description
+             "P2MP max branches";
+         }
+         leaf ldp-unicast-transit-lsp-chaining {
+           type string;
+           description
+             "Use chain nexthops for LDP unicast transit LSPs";
+         }
+         leaf ldp-p2mp-transit-lsp-chaining {
+           type string;
+           description
+             "Use chain nexthops for LDP P2MP transit LSPs";
+         }
+         leaf ldp-transit-lsp-route-stats {
+           type string;
+           description
+             "Use route statistics for LDP transit LSP statistics";
+         }
+         leaf ldp-route-acknowledgement {
+           type string;
+           description
+             "Use LDP route acknowledgemet";
+         }
+         leaf ldp-mtu-discovery {
+           type string;
+           description
+             "Use LDP mtu discovery";
+         }
+         leaf ldp-sr-mapping-client {
+           type string;
+           description
+             "Enable LDP SR mapping client";
+         }
+         leaf ldp-ingress-route-sessionid-count {
+           type uint32;
+           description
+             "Ingress route session id count";
+         }
+         leaf ldp-bgp-export {
+           type string;
+           description
+             "Use BGP export";
+         }
+         leaf ldp-no-ttl-propagate {
+           type string;
+           description
+             "Use No TTL propagate";
+         }
+         container ldp-instance-capability {
+           description
+             "LDP capability";
+           leaf-list ldp-capability {
+             type string;
+             description
+               "LDP capability";
+           }
+         }
+         container ldp-instance-egress-fec-capability {
+           description
+             "LDP egress FEC capability";
+           leaf-list ldp-egress-fec-capability {
+             type string;
+             description
+               "LDP egress FEC capability";
+           }
+         }
+         container ldp-longest-match-overview {
+           description
+             "Longest Match support";
+           leaf ldp-longest-match {
+             type string;
+           }
+           leaf ldp-longest-match-policy {
+             type string;
+           }
+         }
+         container ldp-session-count {
+           description
+             "LDP sessions";
+           leaf ldp-session-operational {
+             type uint32;
+             description
+               "Operational session count";
+           }
+           leaf ldp-session-nonexistent {
+             type uint32;
+             description
+               "Nonexistent session count";
+           }
+           leaf ldp-session-connecting {
+             type uint32;
+             description
+               "Connecting session count";
+           }
+           leaf ldp-session-initialized {
+             type uint32;
+             description
+               "Initialized session count";
+           }
+           leaf ldp-session-openrec {
+             type uint32;
+             description
+               "OpenRec session count";
+           }
+           leaf ldp-session-opensent {
+             type uint32;
+             description
+               "OpenSent session count";
+           }
+           leaf ldp-session-closing {
+             type uint32;
+             description
+               "Closing session count";
+           }
+           leaf ldp-retention-mode {
+             type string;
+             description
+               "LDP retention mode";
+           }
+           leaf ldp-control-mode {
+             type string;
+             description
+               "LDP control mode";
+           }
+         }
+         container ldp-dod-session-count {
+           description
+             "LDP sessions";
+           leaf ldp-session-operational {
+             type uint32;
+             description
+               "Operational session count";
+           }
+           leaf ldp-session-nonexistent {
+             type uint32;
+             description
+               "Nonexistent session count";
+           }
+           leaf ldp-session-connecting {
+             type uint32;
+             description
+               "Connecting session count";
+           }
+           leaf ldp-session-initialized {
+             type uint32;
+             description
+               "Initialized session count";
+           }
+           leaf ldp-session-openrec {
+             type uint32;
+             description
+               "OpenRec session count";
+           }
+           leaf ldp-session-opensent {
+             type uint32;
+             description
+               "OpenSent session count";
+           }
+           leaf ldp-session-closing {
+             type uint32;
+             description
+               "Closing session count";
+           }
+           leaf ldp-retention-mode {
+             type string;
+             description
+               "LDP retention mode";
+           }
+           leaf ldp-control-mode {
+             type string;
+             description
+               "LDP control mode";
+           }
+         }
+         container ldp-auto-targeted-session {
+           description
+             "LDP auto targeted sessions";
+           leaf ldp-auto-targeted-session-enabled {
+             type string;
+             description
+               "Use auto targerted sessions";
+           }
+           leaf ldp-auto-targeted-max-sessions {
+             type uint32;
+             description
+               "Max sessions";
+           }
+           leaf ldp-auto-targeted-session-count {
+             type uint32;
+             description
+               "Session count";
+           }
+           leaf ldp-auto-targeted-teardown-delay {
+             type uint32;
+             description
+               "Teardown delay";
+           }
+           leaf ldp-auto-targeted-dyn-tun-ses-count {
+             type uint32;
+             description
+               "Dynamic tunnel session count";
+           }
+         }
+         container ldp-p2mp {
+           description
+             "LDP P2MP";
+           leaf ldp-p2mp-recursive-route-enabled {
+             type string;
+             description
+               "Use recursive route for mldp signaling";
+           }
+           leaf ldp-p2mp-recursive-fec-enabled {
+             type string;
+             description
+               "Use recursive fec for mldp signaling";
+           }
+           leaf ldp-p2mp-no-rsvp-tunneling-enabled {
+             type string;
+             description
+               "Do not use rsvp tunneling for mldp";
+           }
+         }
+         container ldp-timer-overview {
+           description
+             "LDP timer overview";
+           leaf ldp-instance-keepalive-interval {
+             type uint32;
+             description
+               "Keepalive interval";
+           }
+           leaf ldp-instance-keepalive-timeout {
+             type uint32;
+             description
+               "Keepalive timeout";
+           }
+           leaf ldp-instance-link-hello-interval {
+             type uint32;
+             description
+               "Link hello interval";
+           }
+           leaf ldp-instance-link-hello-hold-time {
+             type uint32;
+             description
+               "Link hello hold time";
+           }
+           leaf ldp-instance-targeted-hello-interval {
+             type uint32;
+             description
+               "Targeted hello interval";
+           }
+           leaf ldp-instance-targeted-hello-hold-time {
+             type uint32;
+             description
+               "Targeted hello hold time";
+           }
+           leaf ldp-instance-label-withdraw-delay {
+             type uint32;
+             description
+               "Label withdraw delay";
+           }
+           leaf ldp-instance-make-before-break-timeout {
+             type uint32;
+             description
+               "Make before break timeout";
+           }
+           leaf ldp-instance-make-before-break-switchover-delay {
+             type uint32;
+             description
+               "Make before break switchover delay";
+           }
+           leaf ldp-instance-link-protection-timeout {
+             type uint32;
+             description
+               "Link protection timeout";
+           }
+         }
+         container ldp-gr-overview {
+           description
+             "LDP GR overview";
+           leaf ldp-gr-restart {
+             type string;
+             description
+               "Restart";
+           }
+           leaf ldp-gr-helper {
+             type string;
+             description
+               "Helper";
+           }
+           leaf ldp-gr-restarting {
+             type string;
+             description
+               "Restart in progress";
+           }
+           leaf ldp-gr-reconnect-time {
+             type uint32;
+             description
+               "Reconnect time";
+           }
+           leaf ldp-gr-max-neighbor-reconnect-time {
+             type uint32;
+             description
+               "Max neighbor reconnect time";
+           }
+           leaf ldp-gr-recovery-time {
+             type uint32;
+             description
+               "Recovery time";
+           }
+           leaf ldp-gr-max-neighbor-recovery-time {
+             type uint32;
+             description
+               "Max neighbor recovery time";
+           }
+           leaf ldp-gr-abort-reasons {
+             type string;
+             description
+               "GR abort reasons";
+           }
+         }
+         container ldp-te-overview {
+           description
+             "LDP TE overview";
+           leaf ldp-te-bgp-igp {
+             type string;
+             description
+               "Bgp igp";
+           }
+           leaf ldp-te-both-ribs {
+             type string;
+             description
+               "Both ribs";
+           }
+           leaf ldp-te-mpls-forwarding {
+             type string;
+             description
+               "Mpls forwarding";
+           }
+           leaf ldp-rib-group-change-pending {
+             type string;
+             description
+               "Rib group change pending";
+           }
+         }
+         container ldp-igp-overview {
+           description
+             "LDP igp overview";
+           leaf ldp-tracking-igp-metric {
+             type string;
+             description
+               "Tracking igp metric";
+           }
+           leaf ldp-igp-sync-session-up-delay {
+             type uint32;
+             description
+               "Sync session up delay";
+           }
+         }
+         container ldp-session-protect-overview {
+           description
+             "LDP session protect overview";
+           leaf ldp-session-protect {
+             type string;
+             description
+               "Session protect";
+           }
+           leaf ldp-session-protect-timeout {
+             type uint32;
+             description
+               "Session protect timeout";
+           }
+         }
+         container ldp-interface-address {
+           description
+             "LDP interface addresses advertised";
+           leaf-list interface-address {
+             type jt:ipaddr;
+           }
+         }
+         container ldp-label-allocation {
+           description
+             "Lable allocation";
+           leaf ldp-label-current-allocs {
+             type uint32;
+             description
+               "Current number of LDP labels allocated";
+           }
+           leaf ldp-label-total-allocs {
+             type uint32;
+             description
+               "Total number of LDP labels allocated";
+           }
+           leaf ldp-label-total-frees {
+             type uint32;
+             description
+               "Total number of LDP labels freed";
+           }
+           leaf ldp-label-alloc-failure {
+             type uint32;
+             description
+               "Total number of LDP label allocation failure";
+           }
+           leaf ldp-global-label-current-allocs {
+             type uint32;
+             description
+               "Current number of labels allocated by all protocols";
+           }
+         }
+         container ldp-job-overview {
+           description
+             "LDP job overview";
+           leaf ldp-read-job-time-quantum {
+             type uint32;
+             description
+               "Read job time quantum";
+           }
+           leaf ldp-write-job-time-quantum {
+             type uint32;
+             description
+               "Write job time quantum";
+           }
+           leaf ldp-read-job-loop-quantum {
+             type uint32;
+             description
+               "Read job loop quantum";
+           }
+           leaf ldp-write-job-loop-quantum {
+             type uint32;
+             description
+               "Write job loop quantum";
+           }
+           leaf ldp-inbound-read-job-time-quantum {
+             type uint32;
+             description
+               "Backup inbound read job time quantum";
+           }
+           leaf ldp-outbound-read-job-time-quantum {
+             type uint32;
+             description
+               "Backup outbound read job time quantum";
+           }
+           leaf ldp-inbound-read-job-loop-quantum {
+             type uint32;
+             description
+               "Backup inbound read job loop quantum";
+           }
+           leaf ldp-outbound-read-job-loop-quantum {
+             type uint32;
+             description
+               "Backup outbound read job loop quantum";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-overview-information container to top-level genstate 
+       container";
+     uses ldp-overview-information-top;
+   }
+ }

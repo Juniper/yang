@@ -1,0 +1,61 @@
+ module junos-genstate-ldp-rib-groups-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-rib-groups-information";
+   prefix jglrgi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-rib-groups-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ldp-rib-groups-information-top {
+     description
+       "Top-level grouping";
+     container ldp-rib-groups-information {
+       description
+         "Top-level container";
+       list ldp-rib-group {
+         key "ldp-rib-group-name";
+         leaf ldp-rib-group-name {
+           type string;
+           description
+             "Rib group name";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-rib-groups-information container to top-level genstate 
+       container";
+     uses ldp-rib-groups-information-top;
+   }
+ }

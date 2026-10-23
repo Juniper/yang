@@ -1,0 +1,712 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2023, Juniper Networks, Inc.
+ * All rights reserved.
+ *
+ */
+
+module junos-twamp {
+
+    yang-version "1";
+
+    // namespace
+    namespace "http://juniper.net/yang/twamp";
+
+    prefix "junos-twamp";
+
+    // meta
+    organization "Juniper Networks, Inc.";
+
+    contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+    revision 2023-11-22 {
+     description
+      "Initial revision";
+     reference "0.1.0";
+    }
+
+    typedef results-scope {
+        type enumeration {
+          enum CURRENT_TEST;
+          enum LAST_TEST;
+          enum MOVING_AVERAGE_TEST;
+          enum ALL_TESTS;
+        }
+    }
+
+    typedef probe-results-type {
+        type enumeration {
+          enum ROUND_TRIP_TIME;
+          enum EGRESS_DELAY;
+          enum INGRESS_DELAY;
+          enum POSITIVE_RTT_JITTER;
+          enum NEGATIVE_RTT_JITTER;
+          enum POSITIVE_EGRESS_JITTER;
+          enum NEGATIVE_EGRESS_JITTER;
+          enum POSITIVE_INGRESS_JITTER;
+          enum NEGATIVE_INGRESS_JITTER;
+        }
+    }
+
+    typedef twamp-mode {
+        type enumeration {
+          enum UNAUTHENTICATED;
+          enum AUTHENTICATED;
+          enum ENCRYPTED;
+          enum CONTROL_ENCRYPTED;
+        }
+    }
+
+    typedef twamp-session-state {
+        type enumeration {
+          enum ACTIVE;
+          enum PENDING;
+        }
+    }
+
+    grouping probe-summary-results-group {
+        leaf probe-measurement-type {
+            description
+                "Measurement";
+            type probe-results-type;
+        }
+        leaf samples {
+            description
+                "Number of Samples";
+            type uint32;
+        }
+        leaf min-delay {
+            description
+                "Minimum delay time";
+            type uint32;
+        }
+        leaf max-delay {
+            description
+                "Maximum delay time";
+            type uint32;
+        }
+        leaf avg-delay {
+            description
+                "Average delay time";
+            type uint32;
+        }
+        leaf jitter-delay {
+            description
+                "Difference between maximum and minimum delay times";
+            type uint32;
+        }
+        leaf stddev-delay {
+            description
+                "Standard deviation of delay time";
+            type uint64;
+        }
+        leaf sum-delay {
+            description
+                "Sum of delay times";
+            type uint64;
+        }
+    }
+
+    grouping probe-test-generic-results-group {
+        leaf results-scope {
+            description
+                "Scope of results";
+            type results-scope;
+        }
+        leaf probes-sent {
+            description
+                "Number of probes sent";
+            type uint32;
+        }
+        leaf probe-responses {
+            description
+                "Responses from probes";
+            type uint32;
+        }
+        leaf loss-percentage {
+            description
+                "Percentage of probes lost (no response)";
+            type uint32;
+        }
+        leaf last-test-time {
+            description
+                "Time at which last test was completed";
+            type string;
+        }
+    }
+
+    grouping probe-single-result-group {
+        leaf probe-time {
+            description
+                "Time at which probe response was received or timed out";
+            type string;
+        }
+        leaf probe-sent-time {
+            description
+                "Time at which probe was sent";
+            type string;
+        }
+        leaf probe-status {
+            description
+                "Probe status";
+            type string;
+        }
+        leaf hardware-timestamp-status {
+            description
+                "Use of hardware timestamps in probes";
+            type string;
+        }
+        leaf rtt {
+            description
+                "Round trip time of probes";
+            type uint32;
+        }
+        leaf egress {
+            description
+                "Egress trip time of probes";
+            type uint32;
+        }
+        leaf ingress {
+            description
+                "Ingress trip time of probes";
+            type uint32;
+        }
+        leaf egress-jitter {
+            description
+                "Egress jitter of probes";
+            type int32;
+        }
+        leaf ingress-jitter {
+            description
+                "Ingress jitter of probes";
+            type int32;
+        }
+        leaf round-trip-jitter {
+            description
+                "Round trip jitter of probes";
+            type int32;
+        }
+        leaf egress-interarrival-jitter {
+            description
+                "Egress interarrival jitter of probes";
+            type int32;
+        }
+        leaf ingress-interarrival-jitter {
+            description
+                "Inress interarrival jitter of probes";
+            type int32;
+        }
+        leaf round-trip-interarrival-jitter {
+            description
+                "Round trip interarrival jitter of probes";
+            type int32;
+        }
+        leaf http-status {
+            description
+                "HTTP Status Code";
+            type uint32;
+        }
+    }
+
+    grouping probe-test-results-group {
+        // basic config
+        leaf owner {
+            description
+                "Test owner name";
+            type string;
+        }
+        leaf test-name {
+            description
+                "Name of test";
+            type string;
+        }
+        leaf target-address {
+            description
+                "Target address of test";
+             type string;
+        }
+        leaf target-url {
+            description
+                "Target URL of test";
+             type string;
+        }
+        leaf source-address {
+            description
+                "Source address of test";
+            type string;
+        }
+        leaf destination-interface {
+            description
+                "Name of output interface for probes";
+             type string;
+        }
+        leaf probe-type {
+            description
+                "Name of the probe";
+             type string;
+        }
+        leaf icmp-id {
+            description
+                "Icmp id for icmp-ping probes";
+             type uint16;
+        }
+        leaf test-size {
+            description
+                "Number of probes in test";
+            type uint32;
+        }
+        leaf http-status {
+            description
+                "HTTP Status Code";
+            type uint32;
+        }
+        leaf routing-instance-name {
+            description
+                "Routing Instance Name";
+            type string;
+        }
+        // threshold config
+        leaf rtt-thresh {
+            description
+                "Round trip time thresh";
+            type uint32;
+        }
+        leaf rtt-jitter-thresh {
+            description
+                "Round trip jitter threshold";
+            type uint32;
+        }
+        leaf rtt-stddev-thresh {
+            description
+                "Round trip standard deviaion thresh";
+            type uint32;
+        }
+        leaf igr-thresh {
+            description
+                "Ingress threshold";
+            type uint32;
+        }
+        leaf igr-jitter-thresh {
+            description
+                "Ingress jitter threshold";
+            type uint32;
+        }
+        leaf igr-stddev-thresh {
+            description
+                "Ingress standard deviation threshold";
+            type uint32;
+       }
+        leaf egr-thresh {
+            description
+                "Egress threshold";
+            type uint32;
+        }
+        leaf egr-jitter-thresh {
+            description
+                "Egress jitter threshold";
+            type uint32;
+       }
+        leaf egr-stddev-thresh {
+            description
+                "Egress standard deviation threshold";
+            type uint32;
+        }
+    }
+
+    grouping probe-tests-hw-ts-err-group {
+        // error-counters
+        leaf invalid-client-recv-ts-cntr {
+            description
+                "Invalid client recv timestamp (T4 < T1)";
+            type uint32;
+        }
+        leaf invalid-client-nots-cntr {
+            description
+                "Invalid client send(T1), recv(T4) timestamps";
+            type uint32;
+        }
+        leaf invalid-server-send-ts-cntr {
+            description
+                "Invalid server send timestamp (T3 < T2)";
+            type uint32;
+        }
+        leaf invalid-server-spent-time-cntr {
+            description
+                "Invalid server processing time (T4 -T1) < (T3 -T2)";
+            type uint32;
+        }
+    }
+
+    grouping active-servers-group {
+        leaf protocol {
+            description
+                "Protocol";
+            type string;
+        }
+        leaf port {
+            description
+                "Port";
+            type uint16;
+        }
+        leaf dst-interface {
+            description
+                "Destination interface name";
+            type string;
+        }
+    }
+
+    // TWAMP related group
+    grouping twamp-test-session-group {
+        leaf session-name {
+            description
+                "TWAMP Client test session name";
+            type string;
+        }
+        leaf sender-address {
+            description
+                "Sender address";
+            type string;
+        }
+        leaf sender-port {
+            description
+                "Sender port";
+            type uint16;
+        }
+        leaf reflector-address {
+            description
+                "Reflector address";
+            type string;
+        }
+        leaf reflector-port {
+            description
+                "Reflector port";
+            type uint16;
+        }
+    }
+
+    grouping twamp-control-connection-group {
+        leaf control-name {
+            description
+                "TWAMP Client control connection name";
+            type string;
+        }
+        leaf client-address {
+            description
+                "Client address";
+             type string;
+        }
+        leaf client-port {
+            description
+                "Client port";
+            type uint16;
+        }
+        leaf server-address {
+            description
+                "Server address";
+            type string;
+        }
+        leaf server-port {
+            description
+                "Server port";
+            type uint16;
+        }
+        leaf session-count {
+            description
+                "Number of sessions";
+            type uint32;
+        }
+        leaf auth-mode {
+            description
+                "Authentication mode";
+            type twamp-mode;
+        }
+    }
+
+    grouping twamp-control-key-group {
+        leaf control-name {
+            description
+                "TWAMP Client control connection name";
+            type string;
+        }
+    }
+
+    grouping twamp-server-test-sess-group {
+        leaf test-id {
+            description
+                "Test ID";
+            type uint32;
+        }
+        leaf sender-address {
+            description
+                "Sender address";
+             type string;
+        }
+        leaf sender-port {
+            description
+                "Sender port";
+            type uint16;
+        }
+        leaf reflector-address {
+            description
+                "Reflector address";
+            type string;
+        }
+        leaf reflector-port {
+            description
+                "Reflector port";
+            type uint16;
+        }
+    }
+
+    grouping twamp-server-ctrl-conn-group {
+        leaf connection-id {
+            description
+                "Connection ID";
+            type uint32;
+        }
+        leaf client-address {
+            description
+                "Client address";
+             type string;
+        }
+        leaf client-port {
+            description
+                "Client port";
+            type uint16;
+        }
+        leaf server-address {
+            description
+                "Server address";
+            type string;
+        }
+        leaf server-port {
+            description
+                "Server-port";
+            type uint16;
+        }
+        leaf session-count {
+            description
+                "Number of sessions";
+            type uint32;
+        }
+        leaf authentication-mode {
+            description
+                "Authentication mode";
+            type twamp-mode;
+        }
+        leaf session-state {
+            description
+                "Session state";
+            type twamp-session-state;
+        }
+    }
+
+    grouping twamp-server-ctrl-key-group {
+        leaf connection-id {
+            description
+                "Connection ID";
+            type uint32;
+        }
+    }
+    grouping twamp-test-results-group {
+        leaf owner {
+            description
+                "Test owner name";
+            type string;
+        }
+        leaf test-name {
+            description
+                "Name of test";
+            type string;
+        }
+        leaf destination-interface {
+            description
+                "Destination interface name";
+            type string;
+        }
+        leaf test-size {
+            description
+                "Number of probes in test";
+            type uint32;
+        }
+        leaf client-address {
+            description
+                "Client address";
+            type string;
+        }
+        leaf client-port {
+            description
+                "Client port";
+             type uint16;
+        }
+        leaf sender-address {
+            description
+                "Sender address";
+            type string;
+        }
+        leaf sender-port {
+            description
+                "Sender port";
+            type uint16;
+        }
+        leaf reflector-address {
+            description
+                "Reflector address";
+            type string;
+        }
+        leaf reflector-port {
+            description
+                "Reflector port";
+            type uint16;
+        }
+        leaf server-address {
+            description
+                "Server address";
+             type string;
+        }
+        leaf server-port {
+            description
+                "Server port";
+            type uint16;
+        }
+        // threshold config
+        leaf loss-thresh-total {
+            description
+                "Maximum number of all lost probes";
+            type uint32;
+        }
+        leaf loss-thresh-succ {
+            description
+                "Maximum number of successive lost probes";
+            type uint32;
+        }
+        leaf rtt-thresh {
+            description
+                "Round trip time thresh";
+            type uint32;
+        }
+        leaf rtt-jitter-thresh {
+            description
+                "Round trip jitter thresh";
+            type uint32;
+        }
+        leaf rtt-stddev-thresh {
+            description
+                "Round trip standard deviaion thresh";
+            type uint32;
+        }
+        leaf igr-thresh {
+            description
+                "Ingress threshold";
+            type uint32;
+        }
+        leaf igr-jitter-thresh {
+            description
+                "Ingress jitter threshold";
+            type uint32;
+        }
+        leaf igr-stddev-thresh {
+            description
+                "Ingress standard deviaion threshold";
+            type uint32;
+        }
+        leaf egr-thresh {
+            description
+                "Egress threshold";
+            type uint32;
+        }
+        leaf egr-jitter-thresh {
+            description
+                "Egress jitter threshold";
+            type uint32;
+        }
+        leaf egr-stddev-thresh {
+            description
+                "Egress standard deviaion threshold";
+            type uint32;
+        }
+        // routing instance config
+        leaf routing-instance-name {
+            description
+                "Routing Instance Name";
+            type string;
+        }
+    }
+
+
+    grouping twamp-top {
+        container junos {
+            config false;
+            container twamp {
+                container server {
+                    list control-connection {
+                        key "connection-id";
+                        uses twamp-server-ctrl-conn-group;
+                    }
+                    list test-session {
+                        key "connection-id";
+                        uses twamp-server-ctrl-key-group;
+                        list test-session-info {
+                            key "test-id";
+                            uses twamp-server-test-sess-group;
+                        }
+                    }
+                }
+                container client {
+                    list control-connection {
+                        key "control-name";
+                        uses twamp-control-connection-group;
+                    }
+                    list test-session {
+                        key "control-name";
+                        uses twamp-control-connection-group;
+                        list test-session-info {
+                            key "session-name";
+                            uses twamp-test-session-group;
+                        }
+                    }
+                    list probe-test-results {
+                        key "owner test-name";
+                        uses twamp-test-results-group;
+                        container probe-tests-hw-ts-err {
+                            uses probe-tests-hw-ts-err-group;
+                        }
+                        container probe-single-results {
+                            uses probe-single-result-group;
+                        }
+                        list probe-test-generic-results {
+                            key "results-scope";
+                            uses probe-test-generic-results-group;
+
+                            list probe-test-generic-measurements {
+                                key "probe-measurement-type";
+                                uses probe-summary-results-group;
+                            }
+                        }
+                    }
+                    list history-test-results {
+                        list history-single-test-results {
+                            key "owner test-name";
+                            uses twamp-test-results-group;
+
+                            container probe-single-results {
+                                uses probe-single-result-group;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    uses twamp-top;
+}

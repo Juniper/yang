@@ -1,0 +1,105 @@
+ module junos-genstate-mpls-srlg-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-srlg-information";
+   prefix jgmsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-srlg-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mpls-srlg-information-top {
+     description
+       "Top-level grouping";
+     container mpls-srlg-information {
+       description
+         "Top-level container";
+       list mpls-srlg {
+         key "srlg-name";
+         leaf srlg-name {
+           type string;
+           description
+             "Name of the srlg";
+         }
+         leaf srlg-value {
+           type uint32;
+           description
+             "Value of the srlg";
+         }
+         leaf srlg-cost {
+           type uint32;
+           description
+             "Cost of the srlg";
+         }
+         container srlg-hold-down {
+           leaf hold-down-selection {
+             type string;
+           }
+           leaf hold-down-cost {
+             type uint32;
+           }
+           leaf hold-down-status {
+             type string;
+           }
+           leaf hold-down-interval {
+             type uint32;
+           }
+           leaf hold-down-start {
+             type string;
+           }
+           leaf hold-down-end {
+             type string;
+           }
+           leaf hold-down-current-triggers {
+             type uint32;
+           }
+           leaf hold-down-total {
+             type uint32;
+           }
+           leaf hold-down-total-triggers {
+             type uint32;
+           }
+           leaf hold-down-first-trigger {
+             type string;
+           }
+           leaf hold-down-last-trigger {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-srlg-information container to top-level genstate container";
+     uses mpls-srlg-information-top;
+   }
+ }

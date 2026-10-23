@@ -1,0 +1,449 @@
+module junos-state-snmp {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/snmp";
+  prefix js-snmp;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Juniper Networks Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA 94089
+    USA
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     SNMP state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-09-05 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  grouping snmp-common {
+    description
+      "Top-level grouping for SNMP common state data";
+
+    leaf average-response-time {
+      type uint32;
+      units "milliseconds";
+      description
+        "Average response time of the SNMP entity";
+    }
+
+    leaf one-minute-request-rate {
+      type yang:gauge64;
+      description
+        "Total number of SNMP requests processed by SNMP entity in last
+         one minute";
+    }
+
+    leaf five-minute-request-rate {
+      type yang:gauge64;
+      description
+        "Total number of SNMP requests processed by SNMP entity in last
+         five minutes";
+    }
+
+    leaf fifteen-minute-request-rate {
+      type yang:gauge64;
+      description
+        "Total number of SNMP requests processed by SNMP entity in last
+         fifteen minutes";
+    }
+
+    leaf one-minute-response-rate {
+      type yang:gauge64;
+      description
+        "Total number of SNMP responses processed by SNMP entity in last
+         one minute";
+    }
+
+    leaf five-minute-response-rate {
+      type yang:gauge64;
+      description
+        "Total number of SNMP responses processed by SNMP entity in last
+         five minutes";
+      }
+
+    leaf fifteen-minute-response-rate {
+      type yang:gauge64;
+      description
+        "Total number of SNMP responses processed by SNMP entity in last
+         fifteen minutes";
+    }
+  }
+
+  grouping snmp-counters {
+    description
+       "Top-level grouping for SNMP statistics data.";
+
+    leaf in-packets {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets delivered to the SNMP entity from
+         the transport service";
+    }
+
+    leaf in-bad-versions {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets delivered to the SNMP entity that
+         were for an unsupported SNMP version";
+    }
+
+    leaf in-bad-community-names {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets delivered to the SNMP entity which
+          used a community name not known to the entity";
+    }
+
+    leaf in-bad-community-uses {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets delivered to the SNMP entity which
+         represented an SNMP operation which was not allowed by the SNMP
+         community named in the message";
+    }
+
+    leaf in-asn-parse-errors {
+      type yang:counter32;
+      description
+        "Total number of ASN.1 or BER errors encountered by the SNMP
+         entity when decoding the received messages";
+    }
+
+    leaf in-too-bigs {
+      type yang:counter32;
+      description
+        "The total number of SNMP PDUs delivered to the SNMP entity
+         which have the error-status field set to tooBig";
+    }
+
+    leaf in-no-such-names {
+      type yang:counter32;
+      description
+        "The total number of SNMP PDUs delivered to the SNMP entity
+         which have the error-status field set to noSuchName";
+    }
+
+    leaf in-bad-values {
+      type yang:counter32;
+      description
+        "The total number of SNMP PDUs delivered to the SNMP entity
+         which have the error-status field set to badValue";
+    }
+
+    leaf in-read-onlys {
+      type yang:counter32;
+      description
+        "The total number of SNMP PDUs delivered to the SNMP entity
+         which have the error-status field set to readOnly. It should be
+         noted that it is a protocol error to generate an SNMP PDU which
+         contains the value of readOnly in the error-status field, as
+         such this object is provided as a means of detecting incorrect
+         implementations of the SNMP";
+    }
+
+    leaf in-general-errors {
+      type yang:counter32;
+      description
+        "The total number of SNMP PDUs delivered to the SNMP entity
+         which have the error-status field set to genErr";
+    }
+
+    leaf in-total-request-varbinds {
+      type yang:counter32;
+      description
+        "The total number of MIB objects which have been retrieved
+         successfully by the SNMP entity as the result of receiving SNMP
+         Get-Request and Get-Next PDUs";
+    }
+
+    leaf in-total-set-varbinds {
+      type yang:counter32;
+      description
+        "The total number of MIB objects which have been altered
+         successfully by the SNMP entity as the result of receiving
+         valid SNMP Set-Request";
+    }
+
+    leaf in-get-requests {
+      type yang:counter32;
+      description
+        "Total number of SNMP Get-Request PDUs accepted and processed by
+         the SNMP entity";
+    }
+
+    leaf in-get-nexts {
+      type yang:counter32;
+      description
+        "Total number of SNMP Get-Next PDUs accepted and processed by
+         the SNMP entity";
+    }
+
+    leaf in-set-requests {
+      type yang:counter32;
+      description
+        "Total number of SNMP Set-Request PDUs accepted and processed by
+         the SNMP entity";
+    }
+
+    leaf in-get-responses {
+      type yang:counter32;
+      description
+        "Total number of SNMP Get-Response PDUs accepted and processed by
+         the SNMP entity";
+    }
+
+    leaf in-traps {
+      type yang:counter32;
+      description
+        "Total number of SNMP Trap PDUs accepted and processed by
+         the SNMP entity";
+    }
+
+    leaf in-silent-drops {
+      type yang:counter32;
+      description
+        "Total number of GetRequest-PDUs, GetNextRequest-PDUs,
+         GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs
+         delivered to the SNMP entity which were silently dropped
+         because the size of a reply containing an alternate
+         Response-PDU with an empty variable-bindings field was
+         greater than either a local constraint or the maximum
+         message size associated with the originator of the request";
+      }
+
+    leaf in-proxy-drops {
+      type yang:counter32;
+      description
+        "Total number of GetRequest-PDUs, GetNextRequest-PDUs,
+         GetBulkRequest-PDUs, SetRequest-PDUs, and InformRequest-PDUs
+         delivered to the SNMP entity which were silently dropped
+         because the transmission of the (possibly translated)
+         message to a proxy target failed in a manner (other than a
+         time-out) such that no Response-PDU could be returned";
+    }
+
+    leaf in-commit-pending-drops {
+      type yang:counter32;
+      description
+        "Total number of SNMP Set-Request PDUs that were dropped by the
+         the SNMP entity when commit request is pending";
+    }
+
+    leaf in-throttle-drops {
+      type yang:counter32;
+      description
+        "Total number of incoming SNMP packets dropped when there are
+         more than 500 subagent requests currently outstanding";
+    }
+
+    leaf in-duplicate-request-drops {
+      type yang:counter32;
+      description
+        "Total number of duplicate SNMP requests dropped by the SNMP
+         entity";
+    }
+
+    leaf in-unknown-secmodels {
+      type yang:counter32;
+      description
+        "Total number of packets dropped because the referenced security
+         model in SNMPv3 PDU is not known to the SNMP entity";
+    }
+
+    leaf in-invalid-msgs {
+      type yang:counter32;
+      description
+        "Total number of packets received with invalid or inconsistent
+         components in SNMPv3 PDU";
+    }
+
+    leaf in-unknown-pdu-handlers {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets dropped by the SNMP entity
+         because pdu handlers for for pdu type was not found";
+    }
+
+    leaf in-unavailable-contexts {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets received for a context that is
+         known to the SNMP engine, but is currently unavailable";
+    }
+
+    leaf in-unknown-contexts {
+      type yang:counter32;
+      description
+        "Total number of requests received for a context that is unknown
+         to the SNMP engine";
+    }
+
+    leaf in-unsupported-seclevels {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets received by the SNMP engine that
+         were dropped because they requested a security level unknown to
+         the SNMP engine";
+    }
+
+    leaf not-in-timewindows {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets dropped because they appeared
+         outside the authoritative SNMP engine window";
+    }
+
+    leaf in-unknown-usernames {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets dropped because they referenced
+         a user that was not known to the SNMP engine";
+    }
+
+    leaf in-unknown-eids {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets received with unknown engine ID";
+    }
+
+    leaf in-wrong-digests {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets received with wrong digests";
+    }
+
+    leaf in-decrypt-errors {
+      type yang:counter32;
+      description
+        "Total number of SNMPv3 packets dropped by the SNMP entity due
+         to decryption failures";
+    }
+
+    leaf out-packets {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets sent out by the SNMP entity to the
+         transport service";
+    }
+
+    leaf out-too-bigs {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets generated by the SNMP entity with
+         error status set to tooBig";
+    }
+
+    leaf out-no-such-names {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets generated by the SNMP entity with
+         error status set to noSuchName";
+    }
+
+    leaf out-bad-values {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets generated by the SNMP entity with
+         error status set to badValue";
+    }
+
+    leaf out-general-errors {
+      type yang:counter32;
+      description
+        "Total number of SNMP packets generated by the SNMP entity with
+         error status set to genErr";
+    }
+
+    leaf out-get-requests {
+      type yang:counter32;
+      description
+        "Total number of Get-Request PDUs generated by the SNMP entity";
+    }
+
+    leaf out-get-nexts {
+      type yang:counter32;
+      description
+        "Total number of Get-Next PDUs generated by the SNMP entity";
+    }
+
+    leaf out-set-requests {
+      type yang:counter32;
+      description
+        "Total number of Set-Request PDUs generated by the SNMP entity";
+    }
+
+    leaf out-get-responses {
+      type yang:counter32;
+      description
+        "Total number of Get-Response PDUs generated by the SNMP entity";
+    }
+
+    leaf out-traps {
+      type yang:counter32;
+      description
+        "Total number of SNMP trap PDUs generated by the SNMP entity";
+    }
+  }
+
+  grouping snmp-top {
+    description
+      "Top-level grouping for SNMP state data";
+
+    container snmp {
+      description
+        "Encapsulating container for SNMP state data";
+
+      uses snmp-common;
+
+      container counters {
+        description
+          "Encapsulating container for SNMP counters";
+        uses snmp-counters;
+      }
+    }
+  }
+
+  augment "/js:state" {
+    description
+      "Adds SNMP domain to top-level state";
+
+    uses snmp-top;
+  }
+}
+

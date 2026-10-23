@@ -1,0 +1,99 @@
+ module junos-genstate-igmp-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/igmp-statistics-information";
+   prefix jgisi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for igmp-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping igmp-statistics-information-top {
+     description
+       "Top-level grouping";
+     container igmp-statistics-information {
+       description
+         "Top-level container";
+       container mgm-statistics-interface {
+         leaf mgm-interface-all {
+           type empty;
+         }
+       }
+       container mgm-statistics-global {
+         list mgm-other-statistic {
+           key "statistic-name";
+           leaf statistic-name {
+             type string;
+           }
+           leaf statistic-count {
+             type int32;
+           }
+         }
+       }
+       container mgm-statistics-all {
+         container mgm-statistics-group {
+           list mgm-statistic {
+             key "statistic-name";
+             leaf statistic-name {
+               type string;
+             }
+             leaf received-count {
+               type int32;
+             }
+             leaf sent-count {
+               type int32;
+             }
+             leaf error-count {
+               type int32;
+             }
+           }
+         }
+         container mgm-statistics-other {
+           list mgm-other-statistic {
+             key "statistic-name";
+             leaf statistic-name {
+               type string;
+             }
+             leaf statistic-count {
+               type int32;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds igmp-statistics-information container to top-level genstate 
+       container";
+     uses igmp-statistics-information-top;
+   }
+ }

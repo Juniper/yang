@@ -1,0 +1,307 @@
+ module junos-genstate-multicast-route-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-route-information";
+   prefix jgmri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-route-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping multicast-route-information-top {
+     description
+       "Top-level grouping";
+     container multicast-route-information {
+       description
+         "Top-level container";
+       list route-family {
+         key "address-family";
+         leaf multicast-instance {
+           type string;
+         }
+         leaf address-family {
+           type string;
+         }
+         container multicast-route-summaries {
+           list multicast-route-summary {
+           }
+         }
+         list multicast-route {
+           key "multicast-group-address";
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description
+               "Group address";
+           }
+           leaf multicast-group-prefix-length {
+             type uint32;
+             description
+               "Group prefix length";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description
+               "Source address";
+           }
+           leaf multicast-source-prefix-length {
+             type uint32;
+             description
+               "Source prefix length";
+           }
+           leaf upstream-interface-name {
+             type string;
+           }
+           leaf upstream-pair-nh-index {
+             type string;
+             description
+               "Upstream pair nexthop index";
+           }
+           leaf rpf-check-disabled {
+             type empty;
+             description
+               "Reverse path forwarding check is disabled";
+           }
+           leaf upstream-neighbor {
+             type jt:ipaddr;
+             description
+               "IP Address of Upstream Neighbor";
+           }
+           leaf incoming-interface-list-names {
+             type string;
+             description
+               "Incoming interface names";
+           }
+           leaf evpn-dci-ndf-upstream-interface-name {
+             type string;
+           }
+           leaf evpn-dci-ndf-upstream-pair-nh-index {
+             type string;
+             description
+               "EVPN DCI NDF upstream pair nexthop index";
+           }
+           leaf outgoing-interface-count {
+             type int32;
+           }
+           leaf evpn-dci-ndf-outgoing-interface-count {
+             type int32;
+           }
+           leaf rejected-downstream-interface-names {
+             type string;
+             description
+               "Downstream interfaces rejected by bandwidth admission 
+               control";
+           }
+           leaf for-blank-line-line {
+             type empty;
+           }
+           leaf session-name {
+             type string;
+           }
+           leaf forwarding-rate-kilobytes {
+             type uint32;
+           }
+           leaf forwarding-rate-packets {
+             type uint32;
+           }
+           leaf forwarded-packet-count {
+             type uint32;
+           }
+           leaf multicast-statistics-timed-out {
+             type empty;
+           }
+           leaf rpf-next-hop-id {
+             type uint32;
+           }
+           leaf next-hop-id {
+             type uint32;
+           }
+           leaf multicast-route-next-hop-type {
+             type string;
+             description
+               "Next-hop type";
+           }
+           leaf incoming-interface-list-id {
+             type uint32;
+             description
+               "Incoming Interface list id";
+           }
+           leaf upstream-nbr-nh-id {
+             type uint32;
+             description
+               "Upstream Neighbor Next-hop ID";
+           }
+           leaf upstream-protocol {
+             type string;
+           }
+           leaf multicast-route-state {
+             type string;
+           }
+           leaf multicast-route-forwarding-state {
+             type string;
+           }
+           leaf multicast-route-uptime {
+             type string;
+           }
+           leaf multicast-route-timeout {
+             type string;
+           }
+           leaf interface-mismatch-count {
+             type uint32;
+           }
+           leaf multicast-opaque-data {
+             type string;
+           }
+           leaf multicast-route-sensor {
+             type uint32;
+           }
+           leaf bandwidth-for-admission-control {
+             type uint64;
+             description
+               "Bandwidth used for admission control";
+           }
+           leaf pair-nh-index {
+             type string;
+             description
+               "Pair nexthop index";
+           }
+           leaf downstream-interface-name {
+             type string;
+             description
+               "Name of interface";
+           }
+           list multicast-route-source {
+             key "multicast-source-address";
+             leaf multicast-source-address {
+               type jt:ipaddr;
+               description
+                 "Source address";
+             }
+           }
+           list upstream-rpf-interface-names {
+             key "interface-name";
+             leaf interface-name {
+               type string;
+               description
+                 "Name of interface";
+             }
+             leaf-list interface-nh-index {
+               type uint32;
+               description
+                 "Logical interface nexthop index";
+             }
+             leaf sub-mcnh-index {
+               type uint32;
+               description
+                 "Sub multicast composite nexthop index";
+             }
+             leaf upstream-rpf-labels {
+               type string;
+               description
+                 "Sender-Based RPF labels";
+             }
+             leaf rpf-session-id {
+               type uint32;
+               description
+                 "Session id";
+             }
+             leaf rpf-session-status {
+               type string;
+               description
+                 "Session Status";
+             }
+             leaf rpf-min-rate {
+               type uint32;
+               description
+                 "Min rate";
+             }
+             leaf rpf-weight {
+               type uint32;
+               description
+                 "RPF Weight";
+             }
+           }
+           list downstream-interface-names {
+             key "interface-name";
+             leaf interface-name {
+               type string;
+               description
+                 "Name of interface";
+             }
+             leaf-list interface-nh-index {
+               type uint32;
+               description
+                 "Logical interface nexthop index";
+             }
+             leaf pair-nh-index {
+               type string;
+               description
+                 "Pair nexthop index";
+             }
+             leaf sub-mcnh-index {
+               type uint32;
+               description
+                 "Sub multicast composite nexthop index";
+             }
+           }
+           list evpn-dci-ndf-downstream-interface-names {
+             key "downstream-interface-name";
+             leaf downstream-interface-name {
+               type string;
+               description
+                 "Name of interface";
+             }
+             leaf-list interface-nh-index {
+               type uint32;
+               description
+                 "Logical interface nexthop index";
+             }
+             leaf pair-nh-index {
+               type string;
+               description
+                 "Pair nexthop index";
+             }
+             leaf sub-mcnh-index {
+               type uint32;
+               description
+                 "Sub multicast composite nexthop index";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-route-information container to top-level genstate 
+       container";
+     uses multicast-route-information-top;
+   }
+ }

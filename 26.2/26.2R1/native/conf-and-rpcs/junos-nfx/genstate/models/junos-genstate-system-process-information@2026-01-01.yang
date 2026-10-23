@@ -1,0 +1,97 @@
+ module junos-genstate-system-process-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/system-process-information";
+   prefix jgspi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for system-process-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping system-process-information-top {
+     description
+       "Top-level grouping";
+     container system-process-information {
+       description
+         "Show system process statistics";
+       container process-information {
+         list process {
+           key "pid";
+           leaf pid {
+             type int32;
+           }
+           leaf uid {
+             type int32;
+           }
+           leaf ppid {
+             type int32;
+           }
+           leaf on-cpu {
+             type int32;
+           }
+           leaf priority {
+             type int32;
+           }
+           leaf nice {
+             type int32;
+           }
+           leaf rss {
+             type int32;
+           }
+           leaf wait-channel {
+             type string;
+           }
+           leaf start-time {
+             type string;
+           }
+           leaf terminal-name {
+             type string;
+           }
+           leaf state {
+             type string;
+           }
+           leaf cpu-time {
+             type string;
+           }
+           leaf command {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds system-process-information container to top-level genstate 
+       container";
+     uses system-process-information-top;
+   }
+ }

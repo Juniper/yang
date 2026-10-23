@@ -1,0 +1,485 @@
+/*
+ * Copyright (c) 2026 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-ex-rpc-storm-control {
+   namespace "http://yang.juniper.net/junos-ex/rpc/storm-control";
+
+   prefix storm-control;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for storm-control command(s)";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   rpc get-l2ng-storm-control-profiles-information {
+     description "Show stormcontrol profile names and ids";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container l2ng-storm-control-profiles-information {
+             uses l2ng-storm-control-profiles-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container l2ng-storm-control-profiles-information {
+                     uses l2ng-storm-control-profiles-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-l2ng-storm-control-interface-information {
+     description "Show stormcontrol information of the interface";
+     input {
+       leaf verbosity {
+         default "brief";
+         type enumeration {
+           enum "detail" {
+             description "Display detailed output";
+           }
+           enum "brief" {
+             description "Display brief output";
+           }
+           enum "extensive" {
+             description "Display extensive output";
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container l2ng-storm-control-interface-information {
+             uses l2ng-storm-control-interface-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container l2ng-storm-control-interface-information {
+                     uses l2ng-storm-control-interface-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping l2ng-storm-control-profiles-information-block {
+     list l2ng-storm-control-profile-entry {
+       key "l2ng-profile-id";
+       leaf l2ng-profile-id {
+         type uint32;
+         description
+           "Stormcontrol profile Id";
+       }
+       leaf l2ng-profile-name1 {
+         type string;
+         description
+           "Stormcontrol profile name";
+       }
+       leaf l2ng-profile-agg {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-agg-bw-level {
+         type uint32;
+         description
+           "Bandwidth level (kbps)";
+       }
+       leaf l2ng-profile-agg-bw-percent {
+         type uint32;
+         description
+           "Bandwidth percent";
+       }
+       leaf l2ng-profile-agg-burst-size {
+         type uint32;
+         description
+           "Burst size (kb)";
+       }
+       leaf l2ng-profile-unk-ucast {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-unk-ucast-bw-level {
+         type uint32;
+         description
+           "Bandwidth level (kbps)";
+       }
+       leaf l2ng-profile-unk-ucast-bw-percent {
+         type uint32;
+         description
+           "Bandwidth percent";
+       }
+       leaf l2ng-profile-unk-ucast-burst-size {
+         type uint32;
+         description
+           "Burst size (kb)";
+       }
+       leaf l2ng-profile-br {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-br-bw-level {
+         type uint32;
+         description
+           "Bandwidth level (kbps)";
+       }
+       leaf l2ng-profile-br-bw-percent {
+         type uint32;
+         description
+           "Bandwidth percent";
+       }
+       leaf l2ng-profile-br-burst-size {
+         type uint32;
+         description
+           "Burst size (kb)";
+       }
+       leaf l2ng-profile-reg-mcast {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-reg-mcast-bw-level {
+         type uint32;
+         description
+           "Bandwidth level (kbps)";
+       }
+       leaf l2ng-profile-reg-mcast-bw-percent {
+         type uint32;
+         description
+           "Bandwidth percent";
+       }
+       leaf l2ng-profile-reg-mcast-burst-size {
+         type uint32;
+         description
+           "Burst size (kb)";
+       }
+       leaf l2ng-profile-unreg-mcast {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-unreg-mcast-bw-level {
+         type uint32;
+         description
+           "Bandwidth level (kbps)";
+       }
+       leaf l2ng-profile-unreg-mcast-bw-percent {
+         type uint32;
+         description
+           "Bandwidth percent";
+       }
+       leaf l2ng-profile-unreg-mcast-burst-size {
+         type uint32;
+         description
+           "Burst size (kb)";
+       }
+       leaf l2ng-profile-no-unk-ucast {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-no-br {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-no-reg-mcast {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+       leaf l2ng-profile-no-unreg-mcast {
+         type string;
+         description
+           "Stormcontrol traffic type";
+       }
+     }
+   }
+   grouping l2ng-storm-control-interface-information-block {
+     list l2ng-storm-control-interface-entry {
+       leaf l2ng-storm-control-interface-name {
+         type string;
+         description
+           "Interface Name";
+       }
+       leaf l2ng-storm-in-effect {
+         type string;
+         description
+           "Storm is in effect";
+       }
+       leaf l2ng-storm-time-to-recover {
+         type string;
+         description
+           "Time left to bringup the port";
+       }
+       leaf l2ng-storm-control-profile-name {
+         type string;
+         description
+           "Stormcontrol profile name";
+       }
+       leaf l2ng-storm-control-ifl-level-support {
+         type string;
+         description
+           "IFL levle stormcontrol enabled";
+       }
+       leaf l2ng-storm-control-profile-action {
+         type string;
+         description
+           "Stormcontrol profile action: drop or shutdown";
+       }
+       leaf l2ng-last-storm-hit-time {
+         type string;
+         description
+           "Timestamp of recent storm hit";
+       }
+       leaf l2ng-last-storm-clear-time {
+         type string;
+         description
+           "Timestamp of recent storm clear";
+       }
+     }
+   }
+ }

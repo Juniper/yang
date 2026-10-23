@@ -1,0 +1,84 @@
+ module junos-genstate-mvrp-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-interface-information";
+   prefix jgmii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mvrp-interface-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping mvrp-interface-information-top {
+     description
+       "Top-level grouping";
+     container mvrp-interface-information {
+       description
+         "Top-level container";
+       list mvrp-interface-instance {
+         key "mvrp-routing-instance-name";
+         leaf mvrp-routing-instance-name {
+           type string;
+           description
+             "Name of routing instance";
+         }
+         list mvrp-interface-entry {
+           key "mvrp-interface-name";
+           leaf mvrp-interface-name {
+             type string;
+             description
+               "Name of interface";
+           }
+           leaf mvrp-interface-status {
+             type string;
+             description
+               "MVRP interface operational status";
+           }
+           leaf mvrp-interface-registration-mode {
+             type string;
+             description
+               "MVRP interface registration mode";
+           }
+           leaf mvrp-interface-applicant-mode {
+             type string;
+             description
+               "MVRP interface applicant mode";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mvrp-interface-information container to top-level genstate 
+       container";
+     uses mvrp-interface-information-top;
+   }
+ }

@@ -1,0 +1,86 @@
+ module junos-genstate-mpls-context-identifier-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-context-identifier-information";
+   prefix jgmcii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-context-identifier-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mpls-context-identifier-information-top {
+     description
+       "Top-level grouping";
+     container mpls-context-identifier-information {
+       description
+         "Information of context identifiers";
+       leaf context-total-count {
+         type int32;
+         description
+           "Number context identifiers";
+       }
+       leaf primary-context-count {
+         type int32;
+         description
+           "Number primary context identifiers";
+       }
+       leaf protector-context-count {
+         type int32;
+         description
+           "Number primary context identifiers";
+       }
+       list mpls-context-identifier {
+         key "context-identifier";
+         description
+           "Egress protection context identifier";
+         leaf context-identifier {
+           type jt:ipaddr;
+           description
+             "IP address";
+         }
+         leaf context-type {
+           type string;
+           description
+             "Type";
+         }
+         leaf metric {
+           type int32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-context-identifier-information container to top-level 
+       genstate container";
+     uses mpls-context-identifier-information-top;
+   }
+ }

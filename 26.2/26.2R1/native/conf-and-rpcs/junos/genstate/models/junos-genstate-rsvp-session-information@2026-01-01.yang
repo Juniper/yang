@@ -1,0 +1,133 @@
+ module junos-genstate-rsvp-session-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rsvp-session-information";
+   prefix jgrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rsvp-session-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rsvp-session-information-top {
+     description
+       "Top-level grouping";
+     container rsvp-session-information {
+       description
+         "Top-level container";
+       list rsvp-session-data {
+         key "session-type";
+         leaf session-type {
+           type string;
+           description
+             "Type of session with respect to this router";
+         }
+         leaf count {
+           type int32;
+         }
+         leaf display-count {
+           type int32;
+           description
+             "Number of sessions displayed";
+         }
+         leaf up-count {
+           type int32;
+           description
+             "Number of sessions in up state";
+         }
+         leaf down-count {
+           type int32;
+           description
+             "Number of sessions in down state";
+         }
+         list rsvp-session {
+           key "name";
+           description
+             "Single RSVP session";
+           leaf destination-address {
+             type jt:ipaddr;
+             description
+               "Session destination address";
+           }
+           leaf source-address {
+             type jt:ipaddr;
+           }
+           leaf lsp-state {
+             type string;
+             description
+               "State of an LSP";
+           }
+           leaf route-count {
+             type int32;
+             description
+               "Number of active routes";
+           }
+           leaf rsb-count {
+             type int32;
+             description
+               "Number of RSBs";
+           }
+           leaf resv-style {
+             type string;
+           }
+           leaf label-in {
+             type string;
+             description
+               "Incoming label";
+           }
+           leaf label-out {
+             type string;
+             description
+               "Outgoing label";
+           }
+           leaf name {
+             type string;
+           }
+           leaf bidirectional {
+             type empty;
+             description
+               "LSP is bidirectional";
+           }
+           leaf associated-bidirectional {
+             type empty;
+             description
+               "LSP is associated-bidirectional";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rsvp-session-information container to top-level genstate 
+       container";
+     uses rsvp-session-information-top;
+   }
+ }

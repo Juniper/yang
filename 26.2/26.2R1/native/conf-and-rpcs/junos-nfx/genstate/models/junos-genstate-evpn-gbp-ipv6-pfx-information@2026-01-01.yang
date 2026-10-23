@@ -1,0 +1,89 @@
+ module junos-genstate-evpn-gbp-ipv6-pfx-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-gbp-ipv6-pfx-information";
+   prefix jgegipi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-gbp-ipv6-pfx-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-gbp-ipv6-pfx-information-top {
+     description
+       "Top-level grouping";
+     container evpn-gbp-ipv6-pfx-information {
+       description
+         "Top-level container";
+       list evpn-gbptagdb-ipv6-pfx-db {
+         key "entry-prefix context-name";
+         leaf evpn-pfx-type {
+           type string;
+         }
+         leaf entry-prefix {
+           type jt:ipprefix;
+         }
+         leaf evpn-src-tag {
+           type int32;
+         }
+         leaf context-name {
+           type string;
+         }
+         leaf evpn-filter-name {
+           type string;
+         }
+       }
+       list evpn-gbptagdb-collide-pfx-db {
+         key "entry-prefix context-name";
+         leaf evpn-pfx-type {
+           type string;
+         }
+         leaf entry-prefix {
+           type jt:ipprefix;
+         }
+         leaf evpn-src-tag {
+           type int32;
+         }
+         leaf context-name {
+           type string;
+         }
+         leaf evpn-filter-name {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-gbp-ipv6-pfx-information container to top-level genstate 
+       container";
+     uses evpn-gbp-ipv6-pfx-information-top;
+   }
+ }

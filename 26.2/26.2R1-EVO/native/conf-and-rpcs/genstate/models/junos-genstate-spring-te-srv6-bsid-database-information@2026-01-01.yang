@@ -1,0 +1,106 @@
+ module junos-genstate-spring-te-srv6-bsid-database-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/spring-te-srv6-bsid-database-information";
+   prefix jgstsbdi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for spring-te-srv6-bsid-database-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping spring-te-srv6-bsid-database-information-top {
+     description
+       "Top-level grouping";
+     container spring-te-srv6-bsid-database-information {
+       description
+         "Top-level container";
+       list ste-srv6-binding-sid {
+         key "ste-srv6-bsid ste-srv6-bsid-len";
+         description
+           "SPRING-TE SRv6 Binding SID";
+         leaf ste-srv6-bsid {
+           type string;
+         }
+         leaf ste-srv6-bsid-len {
+           type uint32;
+         }
+         leaf ste-srv6-bsid-ep-bhv {
+           type uint32;
+         }
+         container ste-srv6-bsid-policies {
+           description
+             "SPRING-TE SRv6 BSID policies";
+           list ste-srv6-bsid-policy-info {
+             key "ste-srv6-bsid-policy";
+             description
+               "SPRING-TE SRv6 BSID policy information";
+             leaf ste-srv6-bsid-policy {
+               type string;
+             }
+             container ste-srv6-bsid-policy-tunnels-info {
+               description
+                 "SPRING-TE SRv6 BSID policy tunnel information";
+               list ste-srv6-bsid-policy-tunnel {
+                 key "ste-srv6-bsid-policy-tunnel-name";
+                 description
+                   "SPRING-TE SRv6 BSID tunnel information";
+                 leaf ste-srv6-bsid-policy-tunnel-name {
+                   type string;
+                 }
+                 leaf ste-srv6-bsid-policy-tunnel-unallocation-reason {
+                   type string;
+                 }
+               }
+             }
+             leaf ste-srv6-bsid-policy-inactive {
+               type string;
+             }
+           }
+         }
+         leaf ste-srv6-bsid-locator {
+           type string;
+         }
+         leaf ste-srv6-bsid-origin {
+           type string;
+         }
+         leaf ste-srv6-bsid-sstlv {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds spring-te-srv6-bsid-database-information container to top-level
+       genstate container";
+     uses spring-te-srv6-bsid-database-information-top;
+   }
+ }

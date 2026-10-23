@@ -1,0 +1,81 @@
+module jnx-aug-openconfig-ni-vlan {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/ni-vlan";
+
+  prefix "jnx-oc-ni-vlan";
+
+  import openconfig-network-instance { prefix oc-ni; }
+  import openconfig-yang-types { prefix yang; }
+
+  //meta
+  organization "Juniper Networks";
+
+  description
+    "This module contains JUNOS augments to the OpenConfig NI VLAN modules";
+
+  revision "2019-12-04" {
+    description "Initial version";
+    reference "0.0.1";
+  }
+
+  grouping bd-group-top {
+    leaf vlan-name {
+      type string;
+      description
+        "Bridge Domain Name";
+    }
+
+    leaf vlan {
+      type uint32;
+      description
+        "Vlan tag of the Bridge domain";
+    }
+
+    leaf status {
+      type enumeration {
+        enum ACTIVE {
+          description "VLAN is active";
+        }
+        enum SUSPENDED {
+          description "VLAN is inactive / suspended";
+        }
+      }
+      default ACTIVE;
+      description "Admin state of the VLAN";
+    }
+
+    leaf vni {
+      type uint32;
+      description
+        "VXLAN VNI of the Bridge domain";
+    }
+
+    leaf l3-interface {
+      type string;
+      description
+        "L3 Inter Routing interface name of the Bridge domain";
+    }
+  }
+
+  grouping l2ni-bd-member-group-top {
+    leaf interface {
+      type string;
+      description
+        "Member interface of the Bridge domain";
+    }
+  }
+
+  augment  "/oc-ni:network-instances/oc-ni:network-instance" {
+    list vlan {
+      config false;
+      key "vlan-name";
+      uses bd-group-top;
+
+      list member {
+        key "interface";
+        uses l2ni-bd-member-group-top;
+      }
+    }
+  }
+}

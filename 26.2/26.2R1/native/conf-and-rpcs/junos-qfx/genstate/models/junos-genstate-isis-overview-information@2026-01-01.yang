@@ -1,0 +1,496 @@
+ module junos-genstate-isis-overview-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-overview-information";
+   prefix jgioi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-overview-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping isis-overview-information-top {
+     description
+       "Top-level grouping";
+     container isis-overview-information {
+       description
+         "ISIS overview information";
+       container isis-overview {
+         description
+           "Overview information for an IS-IS instance";
+         leaf instance-name {
+           type string;
+         }
+         leaf isis-instance-id {
+           type uint16;
+           description
+             "IS-IS Instance ID";
+         }
+         leaf isis-router-id {
+           type jt:ipaddr;
+           description
+             "IS-IS router ID";
+         }
+         leaf isis-v6-router-id {
+           type jt:ipv6addr;
+           description
+             "IS-IS IPv6 Router ID";
+         }
+         leaf isis-router-hostname {
+           type string;
+           description
+             "IS-IS router hostname";
+         }
+         leaf isis-router-sysid {
+           type string;
+           description
+             "IS-IS router sysid";
+         }
+         leaf isis-router-areaid {
+           type string;
+           description
+             "IS-IS router areaid";
+         }
+         leaf isis-max-areas {
+           type uint32;
+           description
+             "Maximum Number of Areas";
+         }
+         leaf isis-lsp-lifetime {
+           type uint32;
+           description
+             "Maximum LSP lifetime";
+         }
+         leaf isis-lsp-lifetime-filter {
+           type uint32;
+           description
+             "Low LSP life time filter";
+         }
+         leaf isis-reference-bandwidth {
+           type uint64;
+           description
+             "Bandwidth for calculating metric defaults";
+         }
+         leaf isis-adjacency-holddown {
+           type string;
+           description
+             "IS-IS Adjacency holddown status";
+         }
+         leaf isis-attached-bit-evaluation {
+           type string;
+           description
+             "The IS-IS L1 attached bit evaluation";
+         }
+         leaf isis-layer2-map-enabled {
+           type string;
+           description
+             "IS-IS controls kernel ARP/ND entries for its nexthops";
+         }
+         container isis-overload-information {
+           description
+             "Overload bit behaviour at startup";
+           leaf isis-overload-enabled {
+             type empty;
+             description
+               "Overload bit upon startup is set";
+           }
+           leaf isis-overload-high-metrics {
+             type string;
+             description
+               "High metrics are used for Overload signaling";
+           }
+           leaf isis-overload-allow-route-leaking {
+             type string;
+             description
+               "Allow route leaking when configured to be in overload";
+           }
+           leaf isis-overload-internal-prefixes {
+             type string;
+             description
+               "Allow internal prefixes to be advertised with high metric";
+           }
+           leaf isis-overload-external-prefixes {
+             type string;
+             description
+               "Allow external prefixes to be advertised with high metric";
+           }
+           leaf isis-overload-timeout {
+             type int32;
+             description
+               "Clearance of the Overload bit after startup";
+           }
+           leaf isis-overload-remaining-time {
+             type string;
+             description
+               "Time remaining on configured overload timeout";
+           }
+         }
+         container isis-routing {
+           description
+             "List of routed IS-IS address families";
+           leaf isis-routing-ipv4 {
+             type empty;
+             description
+               "Routing IPv4 prefixes is enabled";
+           }
+           leaf isis-routing-ipv6 {
+             type empty;
+             description
+               "Routing IPv6 prefixes is enabled";
+           }
+           leaf isis-routing-clns {
+             type empty;
+             description
+               "Routing CLNS prefixes is enabled";
+           }
+           leaf isis-routing-spring-mpls {
+             type empty;
+             description
+               "Routing CLNS prefixes is enabled";
+           }
+         }
+         container isis-traffic-engineering {
+           description
+             "Traffic engineering";
+           leaf isis-te-status {
+             type string;
+             description
+               "Traffic engineering status";
+           }
+           leaf isis-ted-ipv6 {
+             type string;
+             description
+               "Traffic Engineering v6 status";
+           }
+           leaf isis-te-shortcuts-ipv4 {
+             type empty;
+             description
+               "IPv4 Traffic engineering shortcuts are enabled";
+           }
+           leaf isis-te-shortcuts-ipv6 {
+             type empty;
+             description
+               "IPv6 Traffic engineering shortcuts are enabled";
+           }
+           leaf isis-te-shortcuts-ipv4-mpls {
+             type empty;
+             description
+               "IPv4-MPLS Traffic engineering shortcuts are enabled";
+           }
+           leaf isis-te-shortcuts-ipv6-mpls {
+             type empty;
+             description
+               "IPv6-MPLS Traffic engineering shortcuts are enabled";
+           }
+           leaf isis-ipv4-multicast-rpf-routes {
+             type empty;
+             description
+               "IPv4 routes for multicast RPF checks are installed into 
+               inet.2";
+           }
+           leaf isis-ignore-lsp-metrics {
+             type empty;
+             description
+               "Label-switched path metrics when doing shortcuts are ignored";
+           }
+           leaf isis-ted-credibility-preference {
+             type empty;
+             description
+               "Credibility follows protocol preference";
+           }
+         }
+         container isis-restart {
+           description
+             "IS-IS restart parameters";
+           leaf isis-restart-enabled {
+             type string;
+             description
+               "IS-IS restart mode";
+           }
+           leaf isis-restart-duration {
+             type uint32;
+             description
+               "Duration of IS-IS restart";
+           }
+           leaf isis-restart-helper-mode-enabled {
+             type string;
+             description
+               "IS-IS helper mode";
+           }
+         }
+         container isis-tilfa {
+           description
+             "IS-IS Post Convergence Backup parameters";
+           leaf isis-tilfa-enabled {
+             type string;
+             description
+               "Post Convergence Backup";
+           }
+           leaf isis-tilfa-max-labels {
+             type int32;
+             description
+               "Max labels";
+           }
+           leaf isis-tilfa-max-srv6-sids {
+             type int32;
+             description
+               "Max SRV6 SIDs";
+           }
+           leaf isis-tilfa-max-spf {
+             type int32;
+             description
+               "Max spf";
+           }
+           leaf isis-tilfa-ecmp-backup {
+             type int32;
+             description
+               "Post Convergence Max Ecmp Backup";
+           }
+         }
+         container isis-spring {
+           description
+             "IS-IS SPRING parameters";
+           leaf isis-spring-enabled {
+             type string;
+             description
+               "Source Packet Routing";
+           }
+           leaf isis-srgb-allocation {
+             type string;
+             description
+               "SRGB Block Allocation";
+           }
+           leaf isis-node-segment-enabled {
+             type string;
+             description
+               "Node Segments Enabled";
+           }
+           leaf isis-srv6-enabled {
+             type string;
+             description
+               "SRv6 Enabled";
+           }
+           container isis-srgb-config {
+             description
+               "SRGB block configuration related information";
+             leaf isis-srgb-config-block-header {
+               type string;
+               description
+                 "SRGB Config Block";
+             }
+             leaf isis-srgb-start-label {
+               type int32;
+               description
+                 "Configuration of SRGB start label";
+             }
+             leaf isis-srgb-index-range {
+               type int32;
+               description
+                 "Configuration of SRGB index range";
+             }
+           }
+           container isis-srgb-block {
+             description
+               "SRGB block related information";
+             leaf isis-srgb-start-index {
+               type int32;
+               description
+                 "Starting Index for SRGB Block";
+             }
+             leaf isis-srgb-size {
+               type int32;
+               description
+                 "Size of the specific SRGB Block";
+             }
+             leaf isis-srgb-first-label {
+               type int32;
+               description
+                 "First label allocated for SRGB Block";
+             }
+             leaf isis-srgb-last-label {
+               type int32;
+               description
+                 "Last label allocated for SRGB Block";
+             }
+           }
+           container isis-node-segment {
+             leaf isis-node-segment-ipv4-index {
+               type int32;
+               description
+                 "IPv4 Node Segment index for this device";
+             }
+             leaf isis-node-segment-ipv6-index {
+               type int32;
+               description
+                 "IPv6 Node Segment index for this device";
+             }
+             leaf isis-node-segment-index-range {
+               type int32;
+               description
+                 "Range of Node Segment indices configured";
+             }
+             leaf isis-node-segment-block-header {
+               type empty;
+               description
+                 "Node Segment Blocks";
+             }
+             list isis-node-segment-block {
+               key "isis-node-segment-block-start-index";
+               description
+                 "Node Segment Blocks related information";
+               leaf isis-node-segment-block-start-index {
+                 type int32;
+                 description
+                   "Starting Index for the specific Node Segment Block";
+               }
+               leaf isis-node-segment-block-size {
+                 type int32;
+                 description
+                   "Size of the specific Node Segment Block";
+               }
+               leaf isis-node-segment-block-first-label {
+                 type int32;
+                 description
+                   "First label allocated for the specific Node Segment 
+                   Block";
+               }
+               leaf isis-node-segment-block-last-label {
+                 type int32;
+                 description
+                   "Last label allocated for the specific Node Segment Block";
+               }
+             }
+           }
+           list isis-srv6-locator {
+             key "isis-srv6-locator-address";
+             description
+               "SRv6 Locator information";
+             leaf isis-srv6-locator-name {
+               type string;
+               description
+                 "Locator name";
+             }
+             leaf isis-srv6-locator-address {
+               type string;
+               description
+                 "Locator prefix";
+             }
+             leaf isis-srv6-locator-algorithm {
+               type uint32;
+               description
+                 "Locator algorithm";
+             }
+             leaf isis-prefix-attribute-flags {
+               type string;
+             }
+             container isis-srv6-end-sid {
+               description
+                 "SRv6 end sid entry";
+               leaf isis-srv6-end-sid-addr {
+                 type jt:ipv6addr;
+                 description
+                   "SRv6 End-SID prefix";
+               }
+               leaf-list isis-srv6-sid-flavor {
+                 type string;
+               }
+             }
+             container isis-srv6-micro-node-sid {
+               description
+                 "SRv6 end sid entry";
+               leaf isis-srv6-micro-node-sid-addr {
+                 type jt:ipv6addr;
+                 description
+                   "SRv6 micro-node-SID address";
+               }
+               leaf-list isis-srv6-micro-sid-flavor {
+                 type string;
+               }
+             }
+           }
+         }
+         list isis-level-information {
+           key "isis-level";
+           description
+             "IS-IS Level Information";
+           leaf isis-level {
+             type int32;
+             description
+               "IS-IS Level";
+           }
+           leaf isis-preference {
+             type uint32;
+             description
+               "IS-IS internal route preference";
+           }
+           leaf isis-external-preference {
+             type uint32;
+             description
+               "IS-IS external route preference";
+           }
+           leaf isis-prefix-export-limit {
+             type uint32;
+             description
+               "IS-IS limit for external route export";
+           }
+           leaf isis-prefix-export-count {
+             type uint32;
+             description
+               "Actual number of exported prefixes";
+           }
+           leaf isis-wide-metrics {
+             type empty;
+             description
+               "Generation of wide metric TLVs is enabled";
+           }
+           leaf isis-narrow-metrics {
+             type empty;
+             description
+               "Generation of narrow metric TLVs is enabled";
+           }
+           leaf isis-level-spring-enabled {
+             type empty;
+             description
+               "Source Packet Routing is enabled";
+           }
+           leaf isis-adjacency-holddown-state {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-overview-information container to top-level genstate 
+       container";
+     uses isis-overview-information-top;
+   }
+ }

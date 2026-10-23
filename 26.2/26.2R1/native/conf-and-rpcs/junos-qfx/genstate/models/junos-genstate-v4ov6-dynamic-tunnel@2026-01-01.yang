@@ -1,0 +1,99 @@
+ module junos-genstate-v4ov6-dynamic-tunnel {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/v4ov6-dynamic-tunnel";
+   prefix jgvdt;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for v4ov6-dynamic-tunnel.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping v4ov6-dynamic-tunnel-top {
+     description
+       "Top-level grouping";
+     container v4ov6-dynamic-tunnel {
+       description
+         "Top-level container";
+       list v4ov6-dynamic-tunnel-information {
+         key "v4ov6-tunnel-dest";
+         leaf v4ov6-tunnel-dest {
+           type jt:ipaddr;
+         }
+         leaf v4ov6-tunnel-src {
+           type jt:ipaddr;
+         }
+         leaf v4ov6-tunnel-antispoof {
+           type jt:ipaddr;
+         }
+         leaf v4ov6-tunnel-antispoof-disable {
+           type string;
+         }
+         leaf v4ov6-tunnel-mtu {
+           type uint32;
+         }
+         leaf v4ov6-tunnel-anchor-pfe {
+           type string;
+         }
+         leaf v4ov6-tunnel-nh-handle {
+           type string;
+         }
+         leaf v4ov6-tunnel-nh-index {
+           type uint32;
+         }
+         leaf v4ov6-tunnel-nh-refcount {
+           type uint32;
+         }
+         leaf v4ov6-tunnel-status {
+           type string;
+         }
+         leaf v4ov6-tunnel-flags {
+           type string;
+         }
+       }
+       container v4ov6-dynamic-tunnel-information-count {
+         leaf v4ov6-tunnel-count {
+           type uint32;
+         }
+         leaf v4ov6-tunnel-kernel-count {
+           type uint32;
+         }
+         leaf v4ov6-tunnel-kernel-active-count {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds v4ov6-dynamic-tunnel container to top-level genstate container";
+     uses v4ov6-dynamic-tunnel-top;
+   }
+ }

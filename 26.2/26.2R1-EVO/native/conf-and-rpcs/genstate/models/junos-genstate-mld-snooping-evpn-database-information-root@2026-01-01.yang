@@ -1,0 +1,100 @@
+ module junos-genstate-mld-snooping-evpn-database-information-root {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mld-snooping-evpn-database-information-root";
+   prefix jgmsedir;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mld-snooping-evpn-database-information-root.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mld-snooping-evpn-database-information-root-top {
+     description
+       "Top-level grouping";
+     container mld-snooping-evpn-database-information-root {
+       description
+         "Top-level container";
+       list mld-snooping-evpn-database-information-per-instance {
+         key "instance-name";
+         leaf instance-name {
+           type string;
+         }
+         list mld-snooping-evpn-database-information-per-ld {
+           key "evpn-bridge-domain";
+           leaf evpn-bridge-domain {
+             type string;
+           }
+           leaf vlan-id {
+             type int32;
+           }
+           leaf vni-id {
+             type int32;
+           }
+           list evpn-source-group-entry {
+             key "group-ip";
+             leaf group-ip {
+               type jt:ipaddr;
+             }
+             leaf source-ip {
+               type jt:ipaddr;
+             }
+             leaf access-oif-count {
+               type int32;
+             }
+             leaf evpn-core-nh {
+               type uint32;
+               description
+                 "EVPN core nexthop index";
+             }
+             list evpn-source-group-intf {
+               key "intf-name";
+               leaf intf-name {
+                 type string;
+               }
+               leaf local-adv {
+                 type string;
+               }
+               leaf remote-adv {
+                 type string;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mld-snooping-evpn-database-information-root container to 
+       top-level genstate container";
+     uses mld-snooping-evpn-database-information-root-top;
+   }
+ }

@@ -1,0 +1,285 @@
+ module junos-genstate-isis-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-interface-information";
+   prefix jgiii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-interface-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping isis-interface-information-top {
+     description
+       "Top-level grouping";
+     container isis-interface-information {
+       description
+         "Top-level container";
+       list isis-interface {
+         key "interface-name";
+         leaf interface-name {
+           type string;
+           description
+             "Name of interface";
+         }
+         leaf circuit-type {
+           type int32;
+         }
+         leaf circuit-id {
+           type int32;
+         }
+         leaf isis-interface-state-one {
+           type string;
+         }
+         leaf dr-id-one {
+           type string;
+         }
+         leaf isis-interface-state-two {
+           type string;
+         }
+         leaf dr-id-two {
+           type string;
+         }
+         leaf metric-one {
+           type int32;
+         }
+         leaf metric-two {
+           type int32;
+         }
+         list interface-level-data {
+           key "level";
+           leaf level {
+             type int32;
+             description
+               "IS-IS Level";
+           }
+           leaf adjacency-count {
+             type int32;
+           }
+           leaf interface-priority {
+             type int32;
+           }
+           leaf metric {
+             type int32;
+           }
+           leaf passive {
+             type string;
+           }
+           leaf hello-time {
+             type jt:unsigned-float;
+           }
+           leaf holdtime {
+             type int32;
+             description
+               "Delay before timing out the adjacency (default is 180 
+               seconds)";
+           }
+           leaf dr-id-one {
+             type string;
+           }
+           leaf dr-id-two {
+             type string;
+           }
+           leaf dr-flag {
+             type string;
+           }
+           leaf te-metric {
+             type int32;
+             description
+               "LSP TE metric";
+           }
+           leaf flex-algo-te-metric {
+             type int32;
+           }
+           leaf tilfa-prot-link {
+             type string;
+           }
+           leaf tilfa-prot-fate {
+             type string;
+           }
+           leaf tilfa-prot-srlg {
+             type string;
+           }
+           leaf tilfa-prot-node {
+             type int32;
+           }
+           list isis-interface-level-topology {
+             key "isis-topology-id";
+             description
+               "Topology-specific information for an interface level";
+             leaf isis-topology-id {
+               type string;
+             }
+             leaf isis-topology-metric {
+               type int32;
+               description
+                 "Metric for a topology";
+             }
+           }
+         }
+         leaf interface-index {
+           type int32;
+         }
+         leaf interface-state-value {
+           type int32;
+         }
+         leaf interface-disabled-flag {
+           type empty;
+         }
+         leaf lsp-interval {
+           type int32;
+         }
+         leaf csnp-interval {
+           type int32;
+         }
+         leaf mesh-group {
+           type string;
+         }
+         leaf adjacency-advertisement {
+           type string;
+           description
+             "State of the adjacency advertisment";
+         }
+         leaf isis-layer2-map-enabled {
+           type string;
+           description
+             "IS-IS controls kernel ARP/ND entries for its nexthops";
+         }
+         leaf interface-protection-type {
+           type string;
+         }
+         leaf no-eligible-backup {
+           type empty;
+         }
+         leaf level {
+           type int32;
+           description
+             "IS-IS Level";
+         }
+         leaf hello-padding {
+           type string;
+         }
+         leaf max-hello-size {
+           type int32;
+         }
+         leaf flood-group-iso-address {
+           type string;
+           description
+             "ISO address of an interface LSP filter";
+         }
+         leaf igp-ldp-sync-state {
+           type string;
+           description
+             "State of synchronization between Label Distribution Protocol 
+             (LDP) and the interior gateway protocol (IGP)";
+         }
+         leaf igp-ldp-sync-last-change {
+           type string;
+           description
+             "Time since the state of synchronization between Label 
+             Distribution Protocol (LDP) and the interior gateway protocol 
+             (IGP) last changed";
+         }
+         leaf igp-ldp-sync-reason {
+           type string;
+           description
+             "Reason for the change in the state of synchronization between 
+             Label Distribution Protocol (LDP) and the interior gateway 
+             protocol (IGP)";
+         }
+         leaf igp-ldp-sync-holdtime {
+           type string;
+           description
+             "Length of time during which the maximum metric is advertised 
+             for an interface that is in the hold-down state because 
+             synchronization was lost between Label Distribution Protocol 
+             (LDP) and the interior gateway protocol (IGP)";
+         }
+         leaf igp-ldp-sync-timeleft {
+           type int32;
+           description
+             "Remaining amount of time the interface will remain in the 
+             hold-down state because synchronization was lost between Label
+             Distribution Protocol (LDP) and the interior gateway protocol 
+             (IGP)";
+         }
+         leaf interface-group-holddown-delay {
+           type int32;
+         }
+         leaf interface-group-holddown-left {
+           type int32;
+         }
+         leaf unidirectional-link-delay {
+           type uint32;
+         }
+         leaf min-unidirectional-link-delay {
+           type uint32;
+         }
+         leaf max-unidirectional-link-delay {
+           type uint32;
+         }
+         leaf unidirectional-delay-variation {
+           type uint32;
+         }
+         leaf link-delay-normalization-interval {
+           type uint32;
+         }
+         leaf link-delay-normalization-offset {
+           type uint32;
+         }
+         leaf link-normalized-delay {
+           type uint32;
+         }
+         leaf link-normalized-delay-time {
+           type string;
+         }
+         container interface-strict-bfd {
+           description
+             "Interface strict bfd config";
+           leaf interface-bfd-family {
+             type string;
+           }
+           leaf interface-bfdv6-family {
+             type string;
+           }
+           leaf strict-bfd {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-interface-information container to top-level genstate 
+       container";
+     uses isis-interface-information-top;
+   }
+ }

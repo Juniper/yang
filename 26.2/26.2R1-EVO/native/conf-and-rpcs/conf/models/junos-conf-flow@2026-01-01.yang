@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2026 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-conf-flow {
+   namespace "http://yang.juniper.net/junos/conf/flow";
+
+   prefix jc-flow;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   import junos-conf-root {
+     prefix jc;
+     revision-date 2026-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos flow configuration module";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   augment /jc:configuration {
+     uses flow-group;
+   }
+   augment /jc:configuration/jc:groups {
+     uses flow-group;
+   }
+   grouping flow-group {
+     container flow {
+       description "Flow options";
+       uses apply-advanced;
+       container analyzer {
+         description "Flow Analyzer";
+         uses apply-advanced;
+       }
+     }
+   }
+   grouping apply-advanced {
+     description "Apply advanced configuration logic";
+     leaf-list apply-groups {
+       ordered-by user;
+       description "Groups from which to inherit configuration data";
+       type string;
+     }
+     leaf-list apply-groups-except {
+       ordered-by user;
+       description "Don't inherit configuration data from these groups";
+       type string;
+     }
+     list apply-macro {
+       key name;
+       ordered-by user;
+       description "Macro and parameters for commit script expansion";
+       uses apply-macro-type;
+     }
+   }
+   grouping apply-macro-type {
+     description "Macro data for commit-script expansion";
+     leaf name {
+       description "Name of the macro to be expanded";
+       type string;
+     }
+     list data {
+       key name;
+       uses macro-data-type;
+     }
+   }
+   grouping macro-data-type {
+     leaf name {
+       description "Keyword part of the keyword-value pair";
+       type string;
+     }
+     leaf value {
+       description "Value part of the keyword-value pair";
+       type string;
+     }
+   }
+ }

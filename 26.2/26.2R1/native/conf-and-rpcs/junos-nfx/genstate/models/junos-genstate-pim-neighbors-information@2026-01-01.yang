@@ -1,0 +1,283 @@
+ module junos-genstate-pim-neighbors-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-neighbors-information";
+   prefix jgpni;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-neighbors-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping pim-neighbors-information-top {
+     description
+       "Top-level grouping";
+     container pim-neighbors-information {
+       description
+         "Top-level container";
+       leaf pim-instance {
+         type string;
+         description
+           "Name of the PIM instance";
+       }
+       container neighbor-option-banner {
+         leaf banner-first {
+           type empty;
+         }
+         leaf banner-second {
+           type empty;
+         }
+         leaf banner-third {
+           type empty;
+         }
+         leaf banner-fourth {
+           type empty;
+         }
+         leaf banner-fifth {
+           type empty;
+         }
+       }
+       list pim-interface {
+         key "pim-interface-name";
+         list pim-neighbor {
+           key "pim-neighbor-address";
+           leaf pim-interface-name {
+             type string;
+             description
+               "Name of PIM interface";
+           }
+           leaf ip-protocol-version {
+             type int32;
+             description
+               "IP protocol version of PIM interface";
+           }
+           leaf protocol-version {
+             type int32;
+             description
+               "PIM protocol version of PIM interface";
+           }
+           leaf pim-interface-mode {
+             type string;
+             description
+               "Mode of PIM interface";
+           }
+           leaf pim-neighbor-uptime {
+             type string;
+             description
+               "PIM neighbor uptime";
+           }
+           leaf pim-neighbor-address {
+             type jt:ipaddr;
+             description
+               "PIM neighbor address";
+           }
+           container pim-neighbor-flags {
+             leaf pim-neighbor-hold-time-flag {
+               type empty;
+             }
+             leaf pim-neighbor-priority-flag {
+               type empty;
+             }
+             leaf pim-neighbor-lan-prune-flag {
+               type empty;
+             }
+             leaf pim-neighbor-generation-id-flag {
+               type empty;
+             }
+             leaf pim-neighbor-bidirectional-flag {
+               type empty;
+             }
+             leaf pim-neighbor-t-bit-flag {
+               type empty;
+             }
+             leaf pim-neighbor-a-bit-flag {
+               type empty;
+             }
+             leaf pim-neighbor-interface-id-flag {
+               type empty;
+             }
+             leaf pim-neighbor-cluster-id-flag {
+               type empty;
+             }
+           }
+           leaf pim-neighbor-join-sg-count {
+             type int32;
+             description
+               "Number of (s,g) joins sent to the neighbor";
+           }
+           leaf pim-neighbor-join-tsg-count {
+             type int32;
+             description
+               "Number of (*,g) joins sent to the neighbor";
+           }
+           leaf pim-neighbor-nexthop-id {
+             type int32;
+             description
+               "PIM neighbor nexthop id";
+           }
+           leaf pim-neighbor-p2mp-hello-tx-timeout {
+             type int32;
+             description
+               "PIM P2MP Hello TX Timeout";
+           }
+           leaf-list pim-neighbor-secondary-address {
+             type jt:ipaddr;
+             description
+               "PIM neighbor secondary address";
+           }
+           leaf hello-holdtime {
+             type int32;
+           }
+           leaf hello-holdtime-remaining {
+             type int32;
+           }
+           leaf hello-dr-priority {
+             type int32;
+           }
+           leaf hello-generation-id {
+             type int32;
+           }
+           leaf hello-lanprune-delay {
+             type int32;
+           }
+           leaf hello-override-interval {
+             type int32;
+           }
+           leaf hello-nbr-t-bit {
+             type empty;
+           }
+           leaf hello-join-attribute {
+             type empty;
+           }
+           leaf hello-interface-id {
+             type int32;
+           }
+           leaf hello-router-id {
+             type jt:ipaddr;
+             description
+               "PIM neighbor router-id";
+           }
+           leaf hello-cluster-id {
+             type int32;
+           }
+           list pim-neighbor-bfd {
+             key "configuration-state";
+             leaf configuration-state {
+               type string;
+               description
+                 "State (enabled or disabled) of Bidirectional Forwarding 
+                 Detection for a PIM neighbor";
+             }
+             leaf operational-state {
+               type string;
+               description
+                 "Operational state of Bidirectional Forwarding Detection 
+                 session for a PIM neighbor";
+             }
+           }
+           list pim-neighbor-join {
+             key "multicast-group-address";
+             leaf multicast-group-address {
+               type jt:ipaddr;
+               description
+                 "Group address";
+             }
+             leaf multicast-source-address {
+               type jt:ipaddr;
+               description
+                 "Source address";
+             }
+             leaf join-timeout {
+               type int32;
+             }
+           }
+           list pim-neighbor-assert {
+             key "pim-neighbor-address";
+             leaf multicast-group-address {
+               type jt:ipaddr;
+               description
+                 "Group address";
+             }
+             leaf multicast-source-address {
+               type jt:ipaddr;
+               description
+                 "Source address";
+             }
+             leaf assert-state {
+               type string;
+             }
+             leaf pim-neighbor-address {
+               type jt:ipaddr;
+               description
+                 "PIM neighbor address";
+             }
+             leaf assert-timeout {
+               type int32;
+             }
+           }
+         }
+         leaf pim-interface-name {
+           type string;
+           description
+             "Name of PIM interface";
+         }
+       }
+       list pim-interface-1 {
+         key "pim-interface-name-1";
+         leaf pim-interface-name-1 {
+           type string;
+         }
+         list pim-neighbor {
+           key "pim-neighbor-address";
+           leaf pim-interface-name-1 {
+             type string;
+           }
+           leaf hello-holdtime {
+             type int32;
+           }
+           leaf pim-neighbor-address {
+             type string;
+           }
+           container pim-neighbor-child-level {
+             leaf simple-string-leaf {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-neighbors-information container to top-level genstate 
+       container";
+     uses pim-neighbors-information-top;
+   }
+ }

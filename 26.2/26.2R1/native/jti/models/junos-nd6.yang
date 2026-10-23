@@ -1,0 +1,130 @@
+module junos-nd6 {
+
+    yang-version "1";
+
+    namespace "http://juniper.net/yang/nd6";
+
+    prefix "jnx-nd6";
+
+    organization "Juniper Networks";
+
+    description "Junos ND6 Information data model";
+
+    revision "2020-07-17" {
+        description "Junos ND6 Information data model";
+        reference "1.0.0";
+    }
+
+    container "nd6-information" {
+        config false;
+
+        description "This container hold all the ND6 information.";
+        container ipv6 {
+
+            description "This container hold IPv6 information.";
+            container neighbors {
+
+                description "This container hold neighbors information.";
+                list neighbor {
+                    key "ip";
+                    description "This container hold neighbor information.";
+                    leaf ip {
+                        type string;
+                        description "IPv6 destination address.";
+                    }
+
+                    container state {
+                        leaf ip {
+                            type string;
+                            description "IPv6 destination address.";
+                        }
+
+                        leaf link-layer-address {
+                            type string;
+                            description "The link-layer address of the neighbor node.";
+                        }
+
+                        leaf origin {
+                            type enumeration {
+                                enum STATIC {
+                                    description "origin is static.";
+                                }
+                                enum DYNAMIC {
+                                    description "origin is dynamic.";
+                                }
+                                enum OTHER {
+                                    description "origin is neither static nor dynamic.";
+                                }
+                            }
+                            description "The origin of this address.";
+                        }
+
+                        leaf is-router {
+                            type boolean;
+                            description "Indicates that the neighbor node acts as a router.";
+                        }
+
+                        leaf neighbor-state {
+                            type enumeration {
+                                enum INCOMPLETE {
+                                    description
+                                    "Address resolution is in progress, and the link-layer
+                                    address of the neighbor has not yet been
+                                    determined.";
+                                 }
+
+                                enum REACHABLE {
+                                    description
+                                    "Roughly speaking, the neighbor is known to have been
+                                    reachable recently (within tens of seconds ago).";
+                                }
+
+                                enum PROBE {
+                                    description
+                                    "The neighbor is no longer known to be reachable, and
+                                    unicast Neighbor Solicitation probes are being sent
+                                    to verify reachability.";
+                                }
+
+                                enum PERM {
+                                    description
+                                    "The neighbor is statically configured";
+                                }
+                            }
+                            description "ARP neighbor FSM state";
+                        }
+
+                        leaf table-id {
+                            type uint32;
+                            description "Routing table ID for this neighbor entry";
+                        }
+
+                        leaf is-secure {
+                            type boolean;
+                            description "whether the neighbor was learnt from a secure NS message";
+                        }
+                        leaf expiry {
+                            type uint32;
+                            description "lifetime of ND6 neighbor entry";
+                        }
+
+                        leaf is-publish {
+                            type boolean;
+                            description "whether the ND6 neighbor is a published one";
+                        }
+
+                        leaf interface-name {
+                            type string;
+                            description "interface on which this neighbor entry was learnt";
+                        }
+
+                        leaf logical-router-id {
+                            type uint8;
+                            description "logical router ID for this neighbor entry";
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

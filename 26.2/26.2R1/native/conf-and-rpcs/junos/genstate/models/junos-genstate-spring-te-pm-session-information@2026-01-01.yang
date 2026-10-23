@@ -1,0 +1,174 @@
+ module junos-genstate-spring-te-pm-session-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/spring-te-pm-session-information";
+   prefix jgstpsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for spring-te-pm-session-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping spring-te-pm-session-information-top {
+     description
+       "Top-level grouping";
+     container spring-te-pm-session-information {
+       description
+         "Top-level container";
+       list spring-te-pm-session {
+         key "stpms-session-id";
+         description
+           "Spring traffic engineered performance measurement session info";
+         leaf stpms-session-id {
+           type uint32;
+         }
+         leaf stpms-session-state {
+           type string;
+         }
+         leaf stpms-avg-delay {
+           type uint32;
+         }
+         leaf stpms-max-delay {
+           type uint32;
+         }
+         leaf stpms-min-delay {
+           type uint32;
+         }
+         leaf stpms-delay-variance {
+           type uint32;
+         }
+         leaf stpms-last-changed {
+           type string;
+         }
+         leaf stpms-twamp-owner {
+           type string;
+         }
+         leaf stpms-twamp-owner-id {
+           type uint32;
+         }
+         leaf stpms-twamp-testname {
+           type string;
+         }
+         leaf stpms-twamp-test-id {
+           type uint32;
+         }
+         leaf stpms-state-transitions {
+           type uint32;
+         }
+         leaf stpms-result-updates {
+           type uint32;
+         }
+         container stpms-session-info {
+           leaf stpms-src {
+             type jt:ipaddr;
+           }
+           leaf stpms-dst {
+             type jt:ipaddr;
+           }
+           leaf stpms-forward-type {
+             type string;
+           }
+           list stpms-sr-ero-list {
+             key "stpms-sr-ero-list-type";
+             leaf stpms-sr-ero-list-type {
+               type string;
+             }
+             leaf stpms-sr-ero-num-eros {
+               type uint32;
+             }
+             list stpms-sr-ero {
+               key "stpms-sr-ero-index";
+               leaf stpms-sr-ero-index {
+                 type uint32;
+               }
+               leaf stpms-sr-ero-sid-value {
+                 type uint32;
+               }
+               leaf stpms-sr-ero-srv6-sid-value {
+                 type jt:ipaddr;
+               }
+               leaf stpms-sr-ero-sid-ttl {
+                 type uint32;
+               }
+               leaf stpms-sr-ero-sid-exp {
+                 type uint32;
+               }
+             }
+           }
+         }
+         container stpms-effective-parameters {
+           leaf stpms-probe-interval {
+             type uint32;
+           }
+           leaf stpms-probe-count {
+             type uint32;
+           }
+           leaf stpms-periodic-interval {
+             type uint32;
+           }
+           leaf stpms-periodic-threshold {
+             type uint32;
+           }
+           leaf stpms-accelerated {
+             type string;
+           }
+           leaf stpms-accelerated-threshold {
+             type uint32;
+           }
+         }
+         container stpms-ref-lsps {
+           leaf-list stpms-ref-lsp {
+             type string;
+           }
+         }
+       }
+       container spring-te-pm-session-counts {
+         leaf stpmsc-total-sessions {
+           type uint32;
+         }
+         leaf stpmsc-active-sessions {
+           type uint32;
+         }
+         leaf stpmsc-failed-sessions {
+           type uint32;
+         }
+         leaf stpmsc-idle-sessions {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds spring-te-pm-session-information container to top-level 
+       genstate container";
+     uses spring-te-pm-session-information-top;
+   }
+ }

@@ -1,0 +1,211 @@
+ module junos-genstate-evpn-ip-prefix-database-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-ip-prefix-database-information";
+   prefix jgeipdi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-ip-prefix-database-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-ip-prefix-database-information-top {
+     description
+       "Top-level grouping";
+     container evpn-ip-prefix-database-information {
+       description
+         "Top-level container";
+       list evpn-pfxdb-l3-context {
+         key "context-name";
+         leaf context-name {
+           type string;
+         }
+         leaf context-dt4-sid {
+           type jt:ipaddr;
+         }
+         leaf context-dt6-sid {
+           type jt:ipaddr;
+         }
+         leaf context-dt46-sid {
+           type jt:ipaddr;
+         }
+         list evpn-pfxdb-ip-table {
+           key "table-description";
+           leaf table-description {
+             type string;
+           }
+           list evpn-pfxdb-ip-entry {
+             key "entry-prefix";
+             leaf entry-prefix {
+               type jt:ipprefix;
+             }
+             leaf entry-evpn-route-status {
+               type string;
+             }
+             leaf entry-evpn-route-error {
+               type string;
+             }
+             leaf entry-change-flags {
+               type int32;
+             }
+             leaf entry-change-flags-descriptions {
+               type string;
+             }
+             leaf entry-gw-proto {
+               type int32;
+             }
+             leaf entry-aggr-gw-proto {
+               type int32;
+             }
+             leaf entry-uecmp-aggr-bandwidth {
+               type int32;
+             }
+             leaf entry-aggr-dpath-same {
+               type string;
+             }
+             leaf entry-in-unknown-rd-queue {
+               type string;
+             }
+             leaf entry-advertisement-mode {
+               type string;
+             }
+             leaf entry-encap {
+               type string;
+             }
+             leaf entry-vni {
+               type int32;
+             }
+             leaf entry-label {
+               type int32;
+             }
+             leaf entry-overlay-gateway-address {
+               type jt:ipaddr;
+             }
+             leaf entry-router-mac {
+               type string;
+             }
+           }
+         }
+         list evpn-pfxdb-evpn-ip-table {
+           key "table-description";
+           leaf table-description {
+             type string;
+           }
+           list evpn-pfxdb-evpn-ip-entry {
+             key "entry-prefix";
+             leaf entry-prefix {
+               type jt:ipprefix;
+             }
+             leaf entry-etag {
+               type int32;
+             }
+             list evpn-pfxdb-evpn-ip-adv {
+               key "route-distinguisher";
+               leaf route-distinguisher {
+                 type string;
+                 description
+                   "Name of the route-distinguisher";
+               }
+               leaf adv-vni {
+                 type int32;
+               }
+               leaf adv-label {
+                 type int32;
+               }
+               leaf adv-sid {
+                 type jt:ipaddr;
+               }
+               leaf adv-router-mac {
+                 type string;
+               }
+               leaf adv-bgp-nexthop {
+                 type jt:ipaddr;
+               }
+               leaf adv-overlay-gateway-address {
+                 type jt:ipaddr;
+               }
+               leaf adv-esi {
+                 type string;
+               }
+               leaf adv-ip-route-status {
+                 type string;
+               }
+               leaf adv-ip-route-error {
+                 type string;
+               }
+               leaf adv-gbp-tag {
+                 type int32;
+               }
+               leaf adv-change-flags {
+                 type int32;
+               }
+               leaf adv-change-flags-descriptions {
+                 type string;
+               }
+               leaf adv-in-gw-addr-queue {
+                 type string;
+               }
+               leaf adv-evpn-link-bandwidth {
+                 type string;
+               }
+             }
+             leaf entry-change-flags {
+               type int32;
+             }
+             leaf entry-change-flags-descriptions {
+               type string;
+             }
+             leaf entry-state-flags {
+               type int32;
+             }
+             leaf entry-state-flags-descriptions {
+               type string;
+             }
+             leaf entry-in-unknown-kernel-id-queue {
+               type string;
+             }
+             leaf entry-in-underlay-change-queue {
+               type string;
+             }
+             leaf entry-uecmp-state {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-ip-prefix-database-information container to top-level 
+       genstate container";
+     uses evpn-ip-prefix-database-information-top;
+   }
+ }

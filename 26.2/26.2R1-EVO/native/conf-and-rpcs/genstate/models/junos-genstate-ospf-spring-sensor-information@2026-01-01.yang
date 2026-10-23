@@ -1,0 +1,108 @@
+ module junos-genstate-ospf-spring-sensor-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ospf-spring-sensor-information";
+   prefix jgossi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ospf-spring-sensor-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ospf-spring-sensor-information-top {
+     description
+       "Top-level grouping";
+     container ospf-spring-sensor-information {
+       description
+         "Top-level container";
+       leaf ospf-spring-sensor-information-attribute {
+         type string;
+       }
+       container ospf-sensor-ingress {
+         description
+           "OSPF SPRING ingress sensor information";
+         list ospf-sensor-ingress-entries {
+           key "ingress-sensor-name";
+           leaf ingress-sensor-name {
+             type string;
+           }
+           leaf ingress-sensor-id {
+             type int32;
+           }
+         }
+       }
+       container ospf-sensor-egress {
+         description
+           "OSPF SPRING egress sensor information";
+         list ospf-sensor-egress-entries {
+           key "egress-sensor-name";
+           leaf egress-sensor-name {
+             type string;
+           }
+           leaf egress-sensor-id {
+             type int32;
+           }
+         }
+       }
+       container ospf-sensor-per-sid {
+         description
+           "OSPF SPRING Per Sid ingress sensor information";
+         list ospf-sensor-per-sid-entries {
+           key "per-sid-sensor-name";
+           leaf per-sid-sensor-name {
+             type string;
+           }
+           leaf per-sid-sensor-id {
+             type int32;
+           }
+         }
+       }
+       container ospf-sensor-ip-mpls {
+         description
+           "OSPF SPRING Per Sid egress sensor information";
+         list ospf-sensor-ip-mpls-entries {
+           key "per-sid-sensor-name";
+           leaf per-sid-sensor-name {
+             type string;
+           }
+           leaf per-sid-sensor-id {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ospf-spring-sensor-information container to top-level genstate 
+       container";
+     uses ospf-spring-sensor-information-top;
+   }
+ }

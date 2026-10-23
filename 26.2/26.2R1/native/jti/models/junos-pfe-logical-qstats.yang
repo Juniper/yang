@@ -1,0 +1,184 @@
+module junos-pfe-logical-qstats {
+  yang-version 1;
+  namespace "http://juniper.net/yang/junos-telemetry-interface-logical-qstats";
+  prefix junos-pfe-logical-qstats;
+
+// import some basic types
+  import ietf-yang-types { prefix "yang"; }
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Yang definition for IFL Queue stats
+
+  Copyright (c) 2023 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2023-08-01 {
+    description
+      "Initial revision";
+  }
+
+grouping jnx-interface-logical-queue-stats {
+      leaf queue-number {
+        type uint32;
+        description
+          "queue number";
+      }
+
+      leaf pkts {
+        type yang:counter64;
+        description
+          "Number of Packets trasmitted in the queue.";
+      }
+
+      leaf bytes {
+        type yang:counter64;
+        description
+          "Number of bytes trasmitted in the queue.";
+      }
+
+      leaf tail-drop-pkts {
+        type yang:counter64;
+        description
+          "The number of packets tail dropped at the queue.";
+      }
+
+      leaf tail-drop-bytes {
+        type yang:counter64;
+        description
+          "The number of bytes tail dropped at the queue.";
+      }
+
+      leaf rl-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of rate limit dropped packets at the queue.";
+      }
+
+      leaf rl-drop-bytes {
+        type yang:counter64;
+        description
+          "The total number of rate limit dropped bytes at the queue.";
+      }
+
+      leaf red-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of red drop packets at the queue.";
+      }
+
+      leaf red-drop-bytes {
+        type yang:counter64;
+        description
+          "The total number of red drop bytes at the queue.";
+      }
+
+      leaf avg-buffer-occupancy {
+        type yang:counter64;
+        description
+          "Average buffer occupancy of the queue.";
+      }
+
+      leaf cur-buffer-occupancy {
+        type yang:counter64;
+        description
+          "Current buffer occupancy of the queue.";
+      }
+
+      leaf peak-buffer-occupancy {
+        type yang:counter64;
+        description
+          "Peak buffer occupancy of the queue.";
+      }
+
+      leaf allocated-buffer-size {
+        type yang:counter64;
+        description
+          "Allocated buffer size for the queue.";
+      }
+
+      leaf queued-pkts {
+        type yang:counter64;
+        description
+          "The total number of packets queued at the queue.";
+      }
+
+      leaf queued-bytes {
+        type yang:counter64;
+        description
+          "The total number of bytes queued at the queue.";
+      }
+
+      leaf lp-red-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of low PLP packets RED-droppped at the queue.";
+      }
+
+      leaf hp-red-drop-pkts {
+        type yang:counter64;
+        description
+          "The total number of high PLP packets RED-droppped at the queue.";
+      }
+
+    }
+
+ grouping pfe-interface-logical-qstats-top {
+    description
+      "This describes the data exported by PFE jvision for ifl qstats sensor";
+    container junos {
+      description
+        "JunOS OS";
+      config false;
+      container system {
+        description
+          "Container node for system";
+        container linecard {
+          description
+            "Container node for linecard";
+          list interface {
+            description
+              "Describes interface information";
+              key "name";
+              leaf name {
+                description
+                  "Interface name";
+                type string;
+              }
+              container logical {
+                description
+                  "Container node for logical";
+		container usage {
+                  description
+                    "Container node for usage";
+                  list in-queue {
+		    description
+                      "Describes ingress queue stats information";
+                    key "queue-number";
+                    uses jnx-interface-logical-queue-stats;
+                  }
+                  list out-queue {
+		    description
+                      "Describes egress queue stats information";
+                    key "queue-number";
+                    uses jnx-interface-logical-queue-stats;
+                  }
+                }
+              }
+           }
+         }
+       }
+     }
+  }
+  uses pfe-interface-logical-qstats-top;
+}

@@ -1,0 +1,2696 @@
+/*
+ * Copyright (c) 2026 Juniper Networks, Inc.
+ * All rights reserved.
+ */
+ module junos-rpc-krt {
+   namespace "http://yang.juniper.net/junos/rpc/krt";
+
+   prefix krt;
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization "Juniper Networks, Inc.";
+
+   contact "yang-support@juniper.net";
+
+   description "Junos RPC YANG module for krt command(s)";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   rpc get-krt-state {
+     description "Show the state of KRT";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-state-information {
+             uses krt-state-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-state-information {
+                     uses krt-state-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-state-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-state-information {
+             uses krt-state-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-state-information {
+                     uses krt-state-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krtq-statistics {
+     description "Show KRT statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krtq-statistics {
+             uses krtq-statistics-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krtq-statistics {
+                     uses krtq-statistics-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-information {
+     description "Show KRT queues";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-interface-route-operations {
+     description "Show interface route operations";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-interface-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-operations {
+     description "Show high priority operations";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-add-operations {
+     description "Adds";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-add-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-change-operations {
+     description "Changes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-change-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-delete-operations {
+     description "Deletes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-delete-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-high-priority-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-operations {
+     description "Show normal priority operations";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-add-operations {
+     description "Adds";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-add-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-change-operations {
+     description "Changes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-change-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-delete-operations {
+     description "Deletes";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-delete-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-normal-priority-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-queue-channel {
+     input {
+       leaf channel-name {
+         description "Configured FIB channel name";
+         type string;
+         mandatory true;
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-queue-information {
+             uses krt-queue-information-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-queue-information {
+                     uses krt-queue-information-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-acknowledgement-state {
+     description "Show the state of kernel acknowledgements";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-acknowledgement-state {
+             uses krt-acknowledgement-state-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-acknowledgement-state {
+                     uses krt-acknowledgement-state-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-acknowledgement-statistics {
+     description "Show kernel acknowledgement statistics";
+     input {
+       choice daemon-select {
+         case logical-system {
+           leaf logical-system {
+             description "Name of logical system, or 'all'";
+             type string {
+             }
+           }
+         }
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case actual-tag {
+           container krt-acknowledgement-state {
+             uses krt-acknowledgement-state-block;
+           }
+         }
+         case multichassis-tag {
+           container multi-routing-engine-results {
+             list multi-routing-engine-item {
+               leaf re-name {
+                 type string;
+               }
+               choice output-tags {
+                 case actual-tag {
+                   container krt-acknowledgement-state {
+                     uses krt-acknowledgement-state-block;
+                   }
+                 }
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   rpc get-krt-acknowledgement-ack-conv {
+     description "Show route acknowledgement convergence statistics";
+     output {
+       choice output-tags {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml krt-acknowledgement-ack-conv;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-krt-long-live-ack-information {
+     description "Show long-live-ack convergence statistics";
+     output {
+       choice output-tags {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case actual-tag {
+           anyxml krt-long-live-ack;
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   rpc get-krt-interface-cache {
+     description "Show interface cache learnt from kernel";
+     input {
+       choice daemon-select {
+         case rib-sharding {
+           leaf rib-sharding {
+             description "Name of rib shard";
+             type string {
+             }
+           }
+         }
+       }
+       leaf vrouter {
+         description "Show interface cache learnt from vrouter";
+         type empty;
+       }
+       leaf interface-name {
+         description "Name of interface";
+         type union {
+           type jt:interface-wildcard;
+           type string {
+             pattern "<.*>|$.*";
+           }
+         }
+       }
+     }
+     output {
+       choice output-tags {
+         case output-tag {
+           leaf output {
+             type string;
+           }
+         }
+         case multichassis-tag {
+           anyxml multi-routing-engine-results;
+         }
+       }
+     }
+   }
+   grouping command-forwarding {
+     leaf no-forwarding {
+       description "No forwarding";
+       type empty;
+     }
+     choice chassis-selector {
+       case case_1 {
+         leaf all-chassis {
+           description "All chassis";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-lcc {
+           description "All LCC chassis";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf scc {
+           description "SCC";
+           type empty;
+         }
+       }
+       case case_4 {
+         leaf sfc {
+           description "SFC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_5 {
+         leaf lcc {
+           description "Specific LCC";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+       case case_6 {
+         leaf node {
+           description "Specific node";
+           type string;
+         }
+       }
+       case case_7 {
+         leaf bsys {
+           description "Base system";
+           type empty;
+         }
+       }
+       case case_8 {
+         leaf gnf {
+           description "Specific guest network function";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "1 .. 10";
+             }
+           }
+         }
+       }
+       case case_9 {
+         leaf all-gnfs {
+           description "All guest network functions";
+           type empty;
+         }
+       }
+       case case_10 {
+         leaf all-system {
+           description "All system (BSYS and GNFs)";
+           type empty;
+         }
+       }
+       case case_11 {
+         leaf server {
+           description "Specific server slot";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32 {
+               range "0 .. 1";
+             }
+           }
+         }
+       }
+       case case_12 {
+         leaf all-servers {
+           description "All servers";
+           type empty;
+         }
+       }
+       case case_13 {
+         leaf vnf {
+           description "Specific virtual-network-function";
+           type string;
+         }
+       }
+       case case_14 {
+         leaf all-vnfs {
+           description "All virtual-network-functions";
+           type empty;
+         }
+       }
+     }
+     choice re-selector {
+       case case_1 {
+         leaf re0 {
+           description "RE0";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf re1 {
+           description "RE1";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf routing-engine {
+           description "Specific routing engine";
+           type enumeration {
+             enum "local" {
+               description "Local routing engine";
+             }
+             enum "other" {
+               description "Other routing engine";
+             }
+             enum "master" {
+               description "Master routing engine";
+             }
+             enum "backup" {
+               description "Backup routing engine";
+             }
+             enum "both" {
+               description "Both routing engines";
+             }
+           }
+         }
+       }
+     }
+     choice lr-selector {
+       case case_1 {
+         leaf logical-system {
+           description "Name of logical system, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice tenant-selector {
+       case case_1 {
+         leaf tenant {
+           description "Name of tenant, or 'all'";
+           type string;
+         }
+       }
+     }
+     choice vc-selector {
+       case case_1 {
+         leaf local {
+           description "Local virtual chassis member";
+           type empty;
+         }
+       }
+       case case_2 {
+         leaf all-members {
+           description "All virtual chassis members";
+           type empty;
+         }
+       }
+       case case_3 {
+         leaf member {
+           description "Specific virtual chassis member which is master";
+           type union {
+             type string {
+               pattern "<.*>|$.*";
+             }
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   grouping krt-state-information-block {
+     leaf krt-fib-state {
+       type string;
+     }
+     leaf krt-options {
+       type string;
+       description
+         "Kernel routing table options";
+     }
+     leaf krt-re-mode {
+       type string;
+     }
+     leaf krt-block-count {
+       type int32;
+     }
+     leaf krt-unblock-count {
+       type int32;
+     }
+     leaf krt-install-job-not-running {
+       type empty;
+     }
+     leaf krt-install-job-state {
+       type string;
+     }
+     leaf krt-install-job-priority {
+       type string;
+     }
+     leaf rtsock-time-until-next-scan {
+       type string;
+       description
+         "Time until next scan for kernel routing table routing socket 
+         lossage";
+     }
+     leaf krt-mcnh-delete-defer-timeout {
+       type int32;
+     }
+     container krt-io-tx-job-state {
+       leaf krt-io-tx-job-running {
+         type empty;
+         description
+           "KRT io tx job is running";
+       }
+       leaf krt-io-tx-job-not-running {
+         type empty;
+         description
+           "KRT io tx job is not running";
+       }
+     }
+     container krt-queue-state {
+       leaf krtq-operations-queued {
+         type int32;
+         description
+           "Number of queued operations";
+       }
+       leaf krtq-rt-table-adds {
+         type int32;
+         description
+           "Number of routing table additions";
+       }
+       leaf krtq-interface-routes {
+         type int32;
+         description
+           "Number of queued interface routes";
+       }
+       leaf krtq-high-multicast-adds-changes {
+         type int32;
+         description
+           "Number of queued high-priority multicast additions and changes";
+       }
+       leaf krtq-indirect-adds-changes {
+         type int32;
+         description
+           "Number of queued indirect next-hop additions and changes";
+       }
+       leaf krtq-indirect-deletes {
+         type int32;
+         description
+           "Number of queued indirect next-hop deletions";
+       }
+       leaf krtq-high-mpls-adds {
+         type int32;
+         description
+           "Number of queued high-priority MPLS additions";
+       }
+       leaf krtq-high-mpls-changes {
+         type int32;
+         description
+           "Number of queued high-priority MPLS changes";
+       }
+       leaf krtq-high-priority-adds {
+         type int32;
+         description
+           "Number of queued high-priority additions";
+       }
+       leaf krtq-high-priority-changes {
+         type int32;
+         description
+           "Number of queued high-priority changes";
+       }
+       leaf krtq-high-priority-deletes {
+         type int32;
+         description
+           "Number of queued high-priority deletions";
+       }
+       leaf krtq-normal-priority-indirects {
+         type int32;
+         description
+           "Number of queued normal-priority indirect next-hops";
+       }
+       leaf krtq-normal-priority-adds {
+         type int32;
+         description
+           "Number of queued normal-priority additions";
+       }
+       leaf krtq-normal-priority-changes {
+         type int32;
+         description
+           "Number of queued normal-priority changes";
+       }
+       leaf krtq-normal-priority-deletes {
+         type int32;
+         description
+           "Number of queued normal-priority deletions";
+       }
+       leaf krtq-rt-table-deletes {
+         type int32;
+         description
+           "Number of queued routing table deletions";
+       }
+       leaf krtq-normal-priority-gmp {
+         type int32;
+         description
+           "Number of queued normal-priority GMP objects";
+       }
+       leaf krtq-operations-deferred {
+         type int32;
+         description
+           "Number of deferred operations";
+       }
+       leaf krtq-operations-canceled {
+         type int32;
+         description
+           "Number of canceled operations";
+       }
+       leaf krtq-async-count {
+         type int32;
+         description
+           "Number of async queue entry";
+       }
+       leaf krtq-async-non-q-count {
+         type int32;
+         description
+           "Number of async non queue entry";
+       }
+       leaf krtq-time-until-next-run {
+         type string;
+         description
+           "Time until queue next runs";
+       }
+       leaf krtq-kernel-rt-learnt {
+         type int32;
+         description
+           "Number of routes learned from kernel";
+       }
+       leaf krtq-tcp-buffer-full {
+         type int32;
+         description
+           "Number of times tcp buffer full";
+       }
+       leaf krtq-outer-msg-buf-full {
+         type int32;
+         description
+           "Number of times outer msg buffer full";
+       }
+       leaf krtq-top-indirect-adds-changes {
+         type int32;
+         description
+           "Number of queued prioritized indirect next-hop additions and 
+           changes";
+       }
+       leaf krtq-top-priority-deletes {
+         type int32;
+         description
+           "Number of queued top-priority deletions";
+       }
+       leaf krtq-top-priority-changes {
+         type int32;
+         description
+           "Number of queued top-priority changes";
+       }
+       leaf krtq-top-priority-adds {
+         type int32;
+         description
+           "Number of queued top-priority adds";
+       }
+       leaf krtq-least-priority-deletes {
+         type int32;
+         description
+           "Number of queued least-priority deletions";
+       }
+       leaf krtq-least-priority-changes {
+         type int32;
+         description
+           "Number of queued least-priority changes";
+       }
+       leaf krtq-least-priority-adds {
+         type int32;
+         description
+           "Number of queued least-priority adds";
+       }
+       leaf krtq-normal-priority-cnh-deletes {
+         type int32;
+         description
+           "Number of queued normal-priority composite nexthop deletions";
+       }
+     }
+     container rib-fib-consistency-check-state {
+       leaf consistency-check-state {
+         type string;
+         description
+           "Whether RIB/FIB consistency checker is running";
+       }
+       leaf consistency-check-timeout {
+         type string;
+         description
+           "Interval for the RIB/FIB consistency checker";
+       }
+       leaf consistency-check-threshold {
+         type int32;
+         description
+           "Mismatch threshold of the RIB/FIB consistency checker";
+       }
+       leaf consistency-check-time-until-next-run {
+         type string;
+         description
+           "Time until RIB/FIB consistency checker next runs";
+       }
+     }
+     container krt-dfwd-connection-state {
+       leaf krt-dfwd-connection-status {
+         type string;
+         description
+           "Show the status of dfwd connection establishment";
+       }
+       leaf krt-dfwd-connection-timestamp {
+         type int32;
+         description
+           "Time between the first retry and connection establishment";
+       }
+     }
+   }
+   grouping krtq-statistics-block {
+     leaf krtq-topqueued {
+       type int32;
+     }
+     leaf krtq-highqueued {
+       type int32;
+     }
+     leaf krtq-lowqueued {
+       type int32;
+     }
+     leaf krtq-leastqueued {
+       type int32;
+     }
+   }
+   grouping krt-queue-information-block {
+     list krt-queue {
+       key "krtq-type";
+       description
+         "KRT Queue";
+       leaf krtq-type {
+         type string;
+       }
+       leaf krtq-queue-length {
+         type int32;
+         description
+           "Number of entries in this queue";
+       }
+       leaf krtq-gencfg-type {
+         type int32;
+         description
+           "Gencfg Type stuck in the queue";
+       }
+       leaf krtq-entry-deleted {
+         type empty;
+         description
+           "Entry in krt queue as deleted";
+       }
+       leaf krtq-unknown-entry {
+         type int32;
+         description
+           "Queue entry of an unknown type";
+       }
+       list krtq-table-entry {
+         description
+           "Queue entry of type table";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krt-table-index {
+           type int32;
+           description
+             "Table index";
+         }
+         leaf krtq-family {
+           type int32;
+           description
+             "Address family";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-interface-entry {
+         description
+           "Queue entry of type interface";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-device-index {
+           type int32;
+           description
+             "Kernel index for this interface";
+         }
+         leaf krtq-ifl-unit-number {
+           type int32;
+           description
+             "Unit number of this logical interface";
+         }
+         leaf krtq-family {
+           type int32;
+           description
+             "Address family";
+         }
+         leaf krtq-instance-id {
+           type int32;
+           description
+             "Routing instance id";
+         }
+         leaf krtq-interface-state {
+           type string;
+           description
+             "States for ifl/iff create/delete request";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-core-isolation-state {
+           type uint32;
+           description
+             "Core isolation state";
+         }
+         leaf krtq-esi-df-role {
+           type uint32;
+           description
+             "ESI DF role";
+         }
+         leaf krtq-esi-lacp-oos {
+           type uint32;
+           description
+             "ESI LACP OOS Cfg";
+         }
+         leaf krtq-ifl-name {
+           type string;
+           description
+             "Interface name";
+         }
+         leaf krtq-esi-mode {
+           type uint32;
+           description
+             "ESI mode";
+         }
+         leaf krtq-sh-label {
+           type uint32;
+           description
+             "Split-horizon label";
+         }
+         leaf krtq-srv6-arg {
+           type uint32;
+           description
+             "SRv6 argument";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-indirect-nh-entry {
+         description
+           "Queue entry of type indirect next hop";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krt-protocol-nh {
+           type string;
+           description
+             "Protocol next hop of indirect next hop";
+         }
+         leaf indirect-nh-index {
+           type int32;
+           description
+             "Index of indirect next hop";
+         }
+         leaf-list indirect-nh {
+           type string;
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-composite-nh-entry {
+         description
+           "Queue entry of type composite next hop";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf composite-nh-index {
+           type int32;
+           description
+             "Index of composite next hop";
+         }
+         leaf-list composite-nh {
+           type string;
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-rt-entry {
+         description
+           "Queue entry of type route";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-family {
+           type int32;
+           description
+             "Address family";
+         }
+         leaf krtq-instance-id {
+           type int32;
+           description
+             "Routing instance id";
+         }
+         leaf rt-destination {
+           type string;
+           description
+             "Route prefixes awaiting ACK";
+         }
+         leaf rt-prefix-length {
+           type string;
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+         list krtq-nh {
+           leaf krtq-nh-type {
+             type string;
+             description
+               "Type of this next hop (such as router, discard, reject, 
+               table)";
+           }
+           leaf krtq-nh-subtype {
+             type string;
+             description
+               "Subtype of the next hop (shared or point to point) used for 
+               local next-hop type";
+           }
+           leaf krt-table-index {
+             type int32;
+             description
+               "Table index";
+           }
+           leaf krtq-nh-family {
+             type int32;
+             description
+               "Address family of this next hop";
+           }
+           leaf krtq-mpls-label {
+             type string;
+             description
+               "MPLS label of the top next hop (applicable for chain nexthop
+               only)";
+           }
+           list krtq-gw {
+             leaf krtq-element-gw-handle {
+               type string;
+               description
+                 "Element next-hop handle (applicable only for chain, 
+                 indexed or list)";
+             }
+             leaf krtq-element-nh-type {
+               type string;
+               description
+                 "Type of the element next hop (applicable only for chain, 
+                 indexed or list)";
+             }
+             leaf krtq-element-nh-subtype {
+               type string;
+               description
+                 "Subtype of the element next hope (applicable only for 
+                 chain, indexed or list)";
+             }
+             leaf krtq-element-fc {
+               type int32;
+               description
+                 "Forward Class of the element next hop (if indexed nexthop 
+                 only)";
+             }
+             leaf krtq-element-gw-addr {
+               type string;
+               description
+                 "Element next-hop gateway address";
+             }
+             leaf krtq-element-gw-if {
+               type string;
+               description
+                 "Element nexthop interface name";
+             }
+             leaf krtq-element-mpls-label {
+               type string;
+               description
+                 "MPLS label of the element next hop";
+             }
+           }
+         }
+       }
+       list krtq-ifdest-entry {
+         description
+           "Queue entry of type interface destination";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-device-index {
+           type int32;
+           description
+             "Kernel index for this interface";
+         }
+         leaf krtq-ifl-unit-number {
+           type int32;
+           description
+             "Unit number of this logical interface";
+         }
+         leaf krtq-family {
+           type int32;
+           description
+             "Address family";
+         }
+         leaf krtq-destination {
+           type string;
+           description
+             "Destination prefix for this interface";
+         }
+         leaf krtq-transition {
+           type string;
+           description
+             "Direction of state transition";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-flood-nh-entry {
+         description
+           "Queue entry of type flooding next hop";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf flood-nh-index {
+           type int32;
+           description
+             "Index of flood nexthop";
+         }
+         leaf flood-nh-handle {
+           type string;
+           description
+             "Handle of flooding next hop";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-nh-entry {
+         description
+           "Queue entry of type next-hop";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf nh-type {
+           type string;
+           description
+             "Special next hop: Reject, Blackhole, Receive, Multicast, 
+             Local, or Unused";
+         }
+         leaf nh-index {
+           type uint32;
+           description
+             "Next-hop index";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-gencfg-entry {
+         description
+           "Queue entry of type gencfg";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf gencfg-major-type {
+           type int32;
+           description
+             "Major type";
+         }
+         leaf gencfg-minor-type {
+           type int32;
+           description
+             "Minor type";
+         }
+         leaf gencfg-key {
+           type string;
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf gencfg-key-len {
+           type int32;
+           description
+             "Key length";
+         }
+       }
+       list krtq-mcnh-entry {
+         description
+           "Queue entry of type multicast composite nexthop";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf mcnh-index {
+           type uint32;
+         }
+         leaf mcnh {
+           type string;
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+       }
+       list krtq-localized-tnh-entry {
+         description
+           "Queue entry of localized table next hop";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-localized-instance {
+           type string;
+           description
+             "Instance for iff localized table next hop create request";
+         }
+         leaf krtq-localized-interface {
+           type string;
+           description
+             "Interface for iff localized table next hop create request";
+         }
+         leaf krtq-localized-family {
+           type string;
+           description
+             "Family for iff localized table next hop create request";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-sgid-entry {
+         description
+           "Queue entry of type Statistics-id-group";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-statistics-id-group-kernel-id {
+           type int32;
+           description
+             "Kernel-id of Statistics-id-group";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+       }
+       list krtq-evpn-gencfg-entry {
+         description
+           "Queue entry of type KRT evpn gencfg";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-evpn-gencfg-minor-type {
+           type int32;
+           description
+             "Evpn-gencfg-minor-type";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-gmp-entry {
+         description
+           "Queue entry of type gmp";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf gmp-type {
+           type uint32;
+           description
+             "GMP object type";
+         }
+         leaf gmp-key-len {
+           type int32;
+           description
+             "Key length";
+         }
+         leaf gmp-key {
+           type string;
+         }
+         leaf gmp-object {
+           type string;
+           description
+             "GMP object address";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-fwdcls-entry {
+         description
+           "Queue entry of type Fwdclass";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-fwd-class-index {
+           type int32;
+           description
+             "Fwdclass index";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-sesid-state-entry {
+         description
+           "Queue entry of type Session-id-state Gencfg";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-sesid-state-kernel-id {
+           type int32;
+           description
+             "Kernel-id of Session-id-state Gencfg";
+         }
+         leaf krtq-sesid-state-sesid {
+           type int32;
+           description
+             "Session-id of Session-id-state Gencfg";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+       }
+       list krtq-slice-gencfg-entry {
+         description
+           "Queue entry of type Slice-Gencfg";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-slice-gencfg-kid {
+           type uint32;
+           description
+             "Kernel-id of Slice-Gencfg";
+         }
+         leaf krtq-slice-gencfg-handle {
+           type int32;
+           description
+             "Handle of Slice-Gencfg";
+         }
+         leaf krtq-slice-gencfg-slice-name {
+           type string;
+           description
+             "Slice name of Slice-Gencfg";
+         }
+         leaf krtq-slice-gencfg-sliceid {
+           type uint32;
+           description
+             "Slice-id of Slice-Gencfg";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+       }
+       list krtq-slice-entry {
+         description
+           "Queue entry of type Slice";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-slice-kid {
+           type uint32;
+           description
+             "Kernel-id(slice-id) of Slice";
+         }
+         leaf krtq-slice-handle {
+           type int32;
+           description
+             "Handle of Slice";
+         }
+         leaf krtq-slice-name {
+           type string;
+           description
+             "Slice name of Slice";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+       }
+       list krtq-fwf-entry {
+         description
+           "Queue entry of type Firewall Filter";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-fwf-kid {
+           type uint32;
+           description
+             "Filter-id of Firewall-filter";
+         }
+         leaf krtq-fwf-handle {
+           type int32;
+           description
+             "Handle of Firewall-filter";
+         }
+         leaf krtq-fwf-name {
+           type string;
+           description
+             "Firewall-filter name";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+       }
+       list krtq-frr-sesid-gencfg-entry {
+         description
+           "Queue entry of type KRT session id gencfg";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-frr-sesid-gencfg-type {
+           type string;
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+       list krtq-dynamic-index-gencfg-entry {
+         description
+           "Queue entry of type KRT queue dynamic index gencfg.";
+         leaf krtq-operation {
+           type string;
+           description
+             "Operation to be performed";
+         }
+         leaf krtq-dynamic-index-node-handle {
+           type string;
+           description
+             "KRT queue dynamic index gencfg node handle.";
+         }
+         leaf krtq-dynamic-index-key-id {
+           type uint32;
+           description
+             "KRT queue dynamic index gencfg object key index.";
+         }
+         leaf krtq-dynamic-index-refcount {
+           type uint32;
+           description
+             "KRT queue dynamic index gencfg node refcount";
+         }
+         leaf krtq-attempts {
+           type int32;
+           description
+             "Number of attempts";
+         }
+         leaf krtq-error {
+           type string;
+           description
+             "Reason for last failure";
+         }
+         leaf krt-queue-entry {
+           type string;
+           description
+             "Krt queue entry Address";
+         }
+         leaf krtq-defer-time {
+           type string;
+           description
+             "Kqp defer time";
+         }
+       }
+     }
+   }
+   grouping krt-acknowledgement-state-block {
+     leaf krt-acknowledgement-enabled {
+       type string;
+       description
+         "Acknowledgements enabled or not";
+     }
+     leaf krt-rt-acknowledgement-timeout {
+       type int32;
+       description
+         "Route Acknowledgements timeout in seconds";
+     }
+     leaf krt-rt-acknowledgement-requested {
+       type int32;
+       description
+         "Total Route ACKs requested";
+     }
+     leaf krt-rt-acknowledgement-pending {
+       type int32;
+       description
+         "Route ACK count currently pending";
+     }
+     leaf krt-rt-acknowledgement-received {
+       type int32;
+       description
+         "Positive Route ACKs received from kernel";
+     }
+     leaf krt-rt-acknowledgement-max-pending {
+       type int32;
+       description
+         "Maximum concurrently pending Route ACK's since boot";
+     }
+     leaf krt-rt-acknowledgement-timeouts {
+       type int32;
+       description
+         "Number of Route ACK's which timed out";
+     }
+     leaf krt-rt-acknowledgement-notfound {
+       type int32;
+       description
+         "Number of times a matching Route ACK request not found";
+     }
+     leaf krt-nh-acknowledgement-timeout {
+       type int32;
+       description
+         "Next Hop Acknowledgements timeout in seconds";
+     }
+     leaf krt-nh-acknowledgement-requested {
+       type int32;
+       description
+         "Total Next Hop ACKs requested";
+     }
+     leaf krt-nh-acknowledgement-pending {
+       type int32;
+       description
+         "Next Hop ACK count currently pending";
+     }
+     leaf krt-nh-acknowledgement-received {
+       type int32;
+       description
+         "Positive Next Hop ACKs received from kernel";
+     }
+     leaf krt-nh-acknowledgement-max-pending {
+       type int32;
+       description
+         "Maximum concurrently pending Next Hop ACK's since boot";
+     }
+     leaf krt-nh-acknowledgement-timeouts {
+       type int32;
+       description
+         "Number of Next Hop ACK's which timed out";
+     }
+     leaf krt-acknowledgement-notfound {
+       type int32;
+       description
+         "Number of times a matching NEXTHOP ACK request not found";
+     }
+     leaf krt-nh-acknowledgement-errors {
+       type int32;
+       description
+         "Number of times an error occurred requesting an Next Hop ACK";
+     }
+     leaf krt-rt-acknowledgement-errors {
+       type int32;
+       description
+         "Number of times an error occurred requesting an Route ACK";
+     }
+     leaf krt-rt-long-timeout {
+       type int32;
+       description
+         "Route acknowledgement long timeout";
+     }
+     leaf krt-rt-acknowledgement-msg-rcvd {
+       type int32;
+       description
+         "Route ACK message received";
+     }
+     leaf krt-rt-acknowledgement-before-resp {
+       type int32;
+       description
+         "Route ACK received before response";
+     }
+     leaf krt-rt-acknowledgement-after-timeout {
+       type int32;
+       description
+         "Route ACK received after timeout";
+     }
+     leaf krt-nh-acknowledgement-msg-rcvd {
+       type int32;
+       description
+         "Nexthop ACK message received";
+     }
+     leaf krt-nh-acknowledgement-before-resp {
+       type int32;
+       description
+         "Nexthop ACK received before response";
+     }
+     leaf krt-nh-acknowledgement-after-timeout {
+       type int32;
+       description
+         "Nexthop ACK received after timeout";
+     }
+   }
+ }

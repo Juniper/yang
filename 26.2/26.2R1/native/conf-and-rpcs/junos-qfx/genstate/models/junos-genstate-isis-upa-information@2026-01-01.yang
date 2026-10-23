@@ -1,0 +1,90 @@
+ module junos-genstate-isis-upa-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-upa-information";
+   prefix jgiui;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-upa-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping isis-upa-information-top {
+     description
+       "Top-level grouping";
+     container isis-upa-information {
+       description
+         "Top-level container";
+       list isis-upa-instance-information {
+         key "level";
+         leaf isis-instance-name {
+           type string;
+           description
+             "Name of ISIS instance";
+         }
+         leaf isis-routing-instance-name {
+           type string;
+           description
+             "Name of Routing instance";
+         }
+         leaf level {
+           type int32;
+           description
+             "IS-IS Level";
+         }
+         list isis-upa-log {
+           key "address-prefix";
+           leaf upa-time {
+             type string;
+           }
+           leaf address-prefix {
+             type jt:ipaddr;
+           }
+           leaf upa-event {
+             type string;
+           }
+           leaf upa-reason {
+             type string;
+           }
+           leaf lsp-name {
+             type string;
+             description
+               "Tunneled into an RSVP LSP";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-upa-information container to top-level genstate container";
+     uses isis-upa-information-top;
+   }
+ }

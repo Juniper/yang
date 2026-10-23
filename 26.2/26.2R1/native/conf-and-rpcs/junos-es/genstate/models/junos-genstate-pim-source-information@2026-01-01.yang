@@ -1,0 +1,98 @@
+ module junos-genstate-pim-source-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-source-information";
+   prefix jgpsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-source-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping pim-source-information-top {
+     description
+       "Top-level grouping";
+     container pim-source-information {
+       description
+         "Top-level container";
+       list source-family {
+         key "pim-instance";
+         leaf pim-instance {
+           type string;
+           description
+             "Name of the PIM instance";
+         }
+         leaf address-family {
+           type string;
+         }
+         list pim-source {
+           key "multicast-source-address";
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description
+               "Source address";
+           }
+           leaf route-prefix {
+             type jt:ipaddr;
+           }
+           leaf upstream-protocol-name {
+             type string;
+             description
+               "Upstream protocol";
+           }
+           leaf upstream-interface-name {
+             type string;
+             description
+               "Upstream interface";
+           }
+           leaf upstream-neighbor {
+             type jt:ipaddr;
+             description
+               "IP Address of Upstream Neighbor";
+           }
+           list upstream-group {
+             key "multicast-group-address";
+             leaf multicast-group-address {
+               type jt:ipaddr;
+               description
+                 "Group address";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-source-information container to top-level genstate 
+       container";
+     uses pim-source-information-top;
+   }
+ }

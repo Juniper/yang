@@ -1,0 +1,77 @@
+ module junos-genstate-route-record-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/route-record-information";
+   prefix jgrri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for route-record-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping route-record-information-top {
+     description
+       "Top-level grouping";
+     container route-record-information {
+       description
+         "Top-level container";
+       leaf jflow-enabled {
+         type string;
+       }
+       leaf data-rec-field {
+         type string;
+       }
+       leaf rt-rec-add {
+         type uint32;
+       }
+       leaf rt-rec-del {
+         type uint32;
+       }
+       leaf as-rec-add {
+         type uint32;
+       }
+       leaf as-rec-del {
+         type uint32;
+       }
+       leaf com-rec-add {
+         type uint32;
+       }
+       leaf com-rec-del {
+         type uint32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds route-record-information container to top-level genstate 
+       container";
+     uses route-record-information-top;
+   }
+ }

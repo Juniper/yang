@@ -1,0 +1,78 @@
+ module junos-genstate-mc-fwd-cache-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mc-fwd-cache-information";
+   prefix jgmfci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mc-fwd-cache-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mc-fwd-cache-information-top {
+     description
+       "Top-level grouping";
+     container mc-fwd-cache-information {
+       description
+         "Show multicast forwarding cache statistics";
+       container mc-fwd-cache-threshold {
+         leaf mc-instance {
+           type string;
+           description
+             "Multicast Instance";
+         }
+         leaf mc-fwd-cache-family {
+           type string;
+           description
+             "Multicast address family";
+         }
+         list mc-cache-params {
+           key "mc-cache-param-name";
+           leaf mc-cache-param-name {
+             type string;
+             description
+               "Multicast Fwd Cache Parameter";
+           }
+           leaf mc-cache-param-value {
+             type uint32;
+             description
+               "Multicast Fwd Cache parameter value";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mc-fwd-cache-information container to top-level genstate 
+       container";
+     uses mc-fwd-cache-information-top;
+   }
+ }

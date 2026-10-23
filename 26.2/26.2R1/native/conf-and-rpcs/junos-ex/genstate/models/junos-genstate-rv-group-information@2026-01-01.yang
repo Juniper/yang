@@ -1,0 +1,79 @@
+ module junos-genstate-rv-group-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rv-group-information";
+   prefix jgrgi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rv-group-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rv-group-information-top {
+     description
+       "Top-level grouping";
+     container rv-group-information {
+       description
+         "RV redundancy group information";
+       container rv-group {
+         leaf instance-name {
+           type string;
+         }
+         leaf group-name {
+           type string;
+         }
+         leaf maximum-sessions {
+           type uint32;
+         }
+         list session-info {
+           key "ip-address";
+           leaf ip-address {
+             type jt:ipaddr;
+           }
+           leaf session-state {
+             type string;
+             description
+               "State of the session session";
+           }
+           leaf preference {
+             type int32;
+             description
+               "Preference for the route";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rv-group-information container to top-level genstate container";
+     uses rv-group-information-top;
+   }
+ }

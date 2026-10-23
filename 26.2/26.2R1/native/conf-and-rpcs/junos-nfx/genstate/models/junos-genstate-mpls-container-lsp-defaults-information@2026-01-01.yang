@@ -1,0 +1,124 @@
+ module junos-genstate-mpls-container-lsp-defaults-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-container-lsp-defaults-information";
+   prefix jgmcldi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-container-lsp-defaults-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping mpls-container-lsp-defaults-information-top {
+     description
+       "Top-level grouping";
+     container mpls-container-lsp-defaults-information {
+       description
+         "Top-level container";
+       container mpls-container-lsp-defaults {
+         leaf minimum-splitting-bandwidth {
+           type int32;
+           description
+             "Configured splitting minimum bandwidth";
+         }
+         leaf maximum-splitting-bandwidth {
+           type int32;
+           description
+             "Configured splitting maximum bandwidth";
+         }
+         leaf minimum-signaling-bandwidth {
+           type int32;
+           description
+             "Configured signaling minimum bandwidth";
+         }
+         leaf maximum-signaling-bandwidth {
+           type int32;
+           description
+             "Configured signaling maximum bandwidth";
+         }
+         leaf maximum-member-lsps {
+           type int32;
+           description
+             "Configured maximum LSPs";
+         }
+         leaf minimum-member-lsps {
+           type int32;
+           description
+             "Configured minimum LSPs";
+         }
+         leaf splitting-merging-threshold {
+           type int32;
+           description
+             "Percentage change in aggregate LSP utilization to trigger 
+             normalization";
+         }
+         leaf normalize-interval {
+           type int32;
+           description
+             "Configured LSP normalize timer";
+         }
+         leaf normalization-mode {
+           type string;
+         }
+         leaf normalize-retry-duration {
+           type int32;
+           description
+             "Default normalize retry duration";
+         }
+         leaf normalize-retry-limit {
+           type int32;
+           description
+             "Default normalize retry limit";
+         }
+         leaf sampling-mode {
+           type string;
+           description
+             "Sampling Attributes";
+         }
+         leaf failover-normalization {
+           type string;
+           description
+             "Default failover normalization";
+         }
+         leaf stats-sampling-interval {
+           type int32;
+           description
+             "Default statistics collection interval";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-container-lsp-defaults-information container to top-level 
+       genstate container";
+     uses mpls-container-lsp-defaults-information-top;
+   }
+ }

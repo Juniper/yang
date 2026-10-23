@@ -1,0 +1,46 @@
+module junos-ietf-netconf-acm-deviations {
+  yang-version "1";
+  namespace "http://yang.juniper.net/ietf/ietf-netconf-acm/deviations";
+  prefix jnx-nacm-dev;
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+
+  import ietf-netconf-acm {
+    prefix nacm;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+    1133 Innovation Way
+    Sunnyvale, CA 94089
+
+    +1 888 314-5822
+
+    E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains deviations for ietf-netconf-acm module.
+
+    Copyright (c) 2023 Juniper Networks, Inc.
+    All rights reserved.";
+
+  revision 2023-07-09 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  junos-base:version "0.1.0";
+
+  deviation "/nacm:nacm" {
+    deviate not-supported;
+    description
+      "Subtree not-supported, import-only module";
+  }
+}

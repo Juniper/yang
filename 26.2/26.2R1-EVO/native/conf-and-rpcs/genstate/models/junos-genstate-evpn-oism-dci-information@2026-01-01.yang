@@ -1,0 +1,94 @@
+ module junos-genstate-evpn-oism-dci-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-oism-dci-information";
+   prefix jgeodi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-oism-dci-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping evpn-oism-dci-information-top {
+     description
+       "Top-level grouping";
+     container evpn-oism-dci-information {
+       description
+         "Top-level container";
+       list evpn-oism-dci-context {
+         key "oism-context-name";
+         leaf oism-context-name {
+           type string;
+         }
+         leaf oism-mode {
+           type string;
+         }
+         leaf oism-dci-status {
+           type string;
+         }
+         container oism-dci-iesi-designated-forwarder {
+           leaf esi-designated-forwarder {
+             type string;
+           }
+           leaf oism-dci-session-id {
+             type uint32;
+           }
+           leaf oism-dci-session-state {
+             type string;
+           }
+         }
+         list oism-dci-iesi-backup-forwarder {
+           key "esi-backup-forwarder";
+           leaf esi-backup-forwarder {
+             type string;
+           }
+           leaf oism-dci-session-id {
+             type uint32;
+           }
+           leaf oism-dci-session-state {
+             type string;
+           }
+         }
+         leaf oism-dci-iesi-value {
+           type string;
+         }
+         leaf oism-dci-iesi-status {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-oism-dci-information container to top-level genstate 
+       container";
+     uses evpn-oism-dci-information-top;
+   }
+ }

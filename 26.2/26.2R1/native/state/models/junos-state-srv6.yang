@@ -1,0 +1,377 @@
+module junos-state-srv6 {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/srv6";
+  prefix js-srv6;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-routing-instances {
+    prefix js-ri;
+  }
+
+  import junos-state-protocols {
+    prefix js-pro;
+  }
+
+  import junos-state-segment-routing {
+    prefix js-sr;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import junos-state-srv6-types {
+    prefix js-srv6-types;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS
+     SRv6 state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.1.1";
+  }
+
+  revision 2024-09-11 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  jx:version "0.1.1";
+  jx:origin "juniper";
+
+  grouping sr-in-stats {
+    description
+      "Grouping for SRv6 ingress statistics";
+
+    leaf in-pkts {
+      type yang:counter64;
+      description
+        "A cumulative counter of the total number of packets received";
+    }
+
+    leaf in-octets {
+      type yang:counter64;
+      description
+        "A cumulative counter of the total bytes received.";
+    }
+  }
+
+  grouping sr-out-stats {
+    description
+      "Grouping for SRv6 egress statistics";
+
+    leaf out-pkts {
+      type yang:counter64;
+      description
+        "A cumulative counter of the total number of packets
+         transmitted";
+    }
+
+    leaf out-octets {
+      type yang:counter64;
+      description
+        "A cumulative counter of the total bytes transmitted";
+    }
+  }
+
+  grouping srv6-remote-locators {
+    description
+      "SRv6 remote locator grouping";
+
+    container remote-locators {
+      description
+        "Encapsulating container for SRv6 remote locators";
+
+      list remote-locator {
+        key "address";
+
+        description
+          "List of SRv6 remote locators";
+
+        leaf address {
+          type inet:ipv6-prefix;
+          description
+            "Locator Service for SRv6 - IPv6 address";
+        }
+
+        container counters {
+          description
+            "SRv6 remote locators ingress and egress counters";
+
+          uses sr-in-stats;
+          uses sr-out-stats;
+        }
+      }
+    }
+  }
+
+  grouping srv6-locators {
+    description
+      "SRv6 locator grouping";
+
+    container locators {
+      description
+        "SRv6 locators";
+
+      list locator {
+        key "name";
+        description
+          "SRv6 locator name";
+
+        leaf name {
+          type string;
+          description
+            "Locator entry name";
+        }
+
+        leaf address {
+          type inet:ipv6-prefix;
+          description
+            "Locator Service for SRv6 - IPv6 address";
+        }
+
+        leaf algorithm {
+          type uint8;
+          description
+            "Algorithm associated with this locator";
+        }
+
+        leaf anycast {
+          type boolean;
+          description
+            "True if locator is an anycast locator";
+        }
+      }
+    }
+  }
+
+  grouping srv6-node-capabilities {
+    description
+      "SRv6 node capabilities grouping";
+
+    container node-capabilities {
+      description
+        "SRv6 node capabilities";
+
+      container supported-end-behavior {
+        description
+          "Supported SRv6 End behavior";
+
+        leaf-list end-behavior-type {
+          type identityref {
+            base js-srv6-types:srv6-endpoint-type;
+          }
+          description
+            "End behavior (End*) type";
+        }
+      }
+
+      container msd {
+        description
+          "SRv6 signaled MSD parameter support";
+
+        leaf max-sl {
+          type uint8;
+          description
+            "Maximum value of the SL field in the SRH of a received
+             packet before applying the Endpoint behavior associated
+             with a SID";
+        }
+
+        leaf max-end-pop {
+          type uint8;
+          description
+            "Maximum number of SIDs in the top SRH in an SRH stack to
+             which the router can apply PSP or USP flavors";
+        }
+
+        leaf max-h-encap {
+          type uint8;
+          description
+            "Maximum number of SIDs that can be pushed as part of the
+             H.Encaps* behavior";
+        }
+
+        leaf max-end-d {
+          type uint8;
+          description
+            "Maximum number of SIDs in an SRH when applying End.D*
+             behaviors (e.g. End.X6 and End.DT6)";
+        }
+      }
+
+      container supported-counters {
+        description
+          "SRv6 supported counters";
+
+        leaf-list type {
+          type identityref {
+            base js-srv6-types:srv6-counter-type;
+          }
+          description
+            "List of supported counter types";
+        }
+      }
+    }
+  }
+
+  grouping srv6-local-sids {
+    description
+      "SRv6 SID state grouping";
+
+    container local-sids {
+      description
+        "Local-SID state";
+
+      list local-sid {
+        key "sid";
+        description
+          "Per-local SID Counters";
+
+        leaf sid {
+          type inet:ipv6-prefix;
+          description
+            "Local SID value";
+        }
+
+        leaf locator {
+          type leafref {
+            path "../../../locators/locator/name";
+          }
+          description
+            "Locator which allocated SID";
+        }
+
+        container sstlv {
+          description
+            "SRv6 SSTLV";
+
+          leaf locator-block-length {
+            type uint8;
+            description
+              "SRv6 locator Block length";
+          }
+
+          leaf locator-node-length {
+            type uint8;
+            description
+              "SRv6 locator Node length";
+          }
+
+          leaf locator-function-length {
+            type uint8;
+            description
+              "SRv6 locator Function length";
+          }
+
+          leaf locator-argument-length {
+            type uint8;
+            description
+              "SRv6 locator Argument length";
+          }
+        }
+
+        leaf reserved {
+          type boolean;
+          description
+            "Set to true if SID comes from reserved pool";
+        }
+
+        leaf end-behavior-type {
+          type identityref {
+            base js-srv6-types:srv6-endpoint-type;
+          }
+          description
+            "Type of SRv6 end behavior.";
+        }
+
+        leaf allocation-type {
+          type js-srv6-types:sid-allocation-type;
+          description
+           "Type of SID allocation.";
+        }
+
+        container owners {
+          description
+            "SID allocating protcols";
+
+          list owner {
+            key "type";
+            description
+              "SID Owner clients";
+
+            leaf type {
+              type identityref {
+                base js-srv6-types:srv6-sid-owner-type;
+              }
+              description
+                "SID owner/client type";
+            }
+          }
+        }
+        container counters {
+          description
+            "Counts SRv6 traffic received/dropped on local prefix not
+             instantiated as local-SID";
+
+          uses sr-in-stats;
+        }
+      }
+    }
+  }
+
+  grouping srv6-top {
+    description
+      "Top-level grouping for SRv6 state data.";
+
+    container srv6 {
+      description
+        "Container for SRv6 state";
+
+      uses srv6-locators;
+      uses srv6-remote-locators;
+      uses srv6-node-capabilities;
+      uses srv6-local-sids;
+    }
+  }
+
+  augment "/js:state/js-ri:routing-instances/js-ri:routing-instance" +
+          "/js-pro:protocols/js-sr:source-packet-routing" {
+    description
+      "Adds SRv6 domain to segment-routing state";
+
+    uses srv6-top;
+  }
+}
+

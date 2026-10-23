@@ -1,0 +1,90 @@
+ module junos-genstate-ldp-database-label-requests-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-database-label-requests-information";
+   prefix jgldlri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-database-label-requests-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ldp-database-label-requests-information-top {
+     description
+       "Top-level grouping";
+     container ldp-database-label-requests-information {
+       description
+         "Top-level container";
+       list ldp-database-label-requests {
+         key "ldp-session-id";
+         leaf ldp-database-label-request-type {
+           type string;
+         }
+         leaf ldp-session-id {
+           type string;
+         }
+         list ldp-label-request {
+           key "ldp-prefix";
+           leaf ldp-prefix {
+             type string;
+           }
+           leaf ldp-label-request-state {
+             type string;
+           }
+           leaf ldp-label-request-filtered {
+             type empty;
+           }
+           leaf ldp-label-request-stale {
+             type empty;
+           }
+           leaf ldp-label-request-status-code {
+             type string;
+             description
+               "Status of label request from downstream session";
+           }
+           leaf ldp-route-backoff-time {
+             type int32;
+             description
+               "Time since label request backoff timer started";
+           }
+           leaf ldp-label-request-age {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-database-label-requests-information container to top-level 
+       genstate container";
+     uses ldp-database-label-requests-information-top;
+   }
+ }

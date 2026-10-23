@@ -1,0 +1,1034 @@
+ module junos-genstate-krt-queue-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/krt-queue-information";
+   prefix jgkqi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for krt-queue-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping krt-queue-information-top {
+     description
+       "Top-level grouping";
+     container krt-queue-information {
+       description
+         "Top-level container";
+       list krt-queue {
+         key "krtq-type";
+         description
+           "KRT Queue";
+         leaf krtq-type {
+           type string;
+         }
+         leaf krtq-queue-length {
+           type int32;
+           description
+             "Number of entries in this queue";
+         }
+         leaf krtq-gencfg-type {
+           type int32;
+           description
+             "Gencfg Type stuck in the queue";
+         }
+         leaf krtq-entry-deleted {
+           type empty;
+           description
+             "Entry in krt queue as deleted";
+         }
+         leaf krtq-unknown-entry {
+           type int32;
+           description
+             "Queue entry of an unknown type";
+         }
+         list krtq-table-entry {
+           description
+             "Queue entry of type table";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krt-table-index {
+             type int32;
+             description
+               "Table index";
+           }
+           leaf krtq-family {
+             type int32;
+             description
+               "Address family";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-interface-entry {
+           description
+             "Queue entry of type interface";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-device-index {
+             type int32;
+             description
+               "Kernel index for this interface";
+           }
+           leaf krtq-ifl-unit-number {
+             type int32;
+             description
+               "Unit number of this logical interface";
+           }
+           leaf krtq-family {
+             type int32;
+             description
+               "Address family";
+           }
+           leaf krtq-instance-id {
+             type int32;
+             description
+               "Routing instance id";
+           }
+           leaf krtq-interface-state {
+             type string;
+             description
+               "States for ifl/iff create/delete request";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-core-isolation-state {
+             type uint32;
+             description
+               "Core isolation state";
+           }
+           leaf krtq-esi-df-role {
+             type uint32;
+             description
+               "ESI DF role";
+           }
+           leaf krtq-esi-lacp-oos {
+             type uint32;
+             description
+               "ESI LACP OOS Cfg";
+           }
+           leaf krtq-ifl-name {
+             type string;
+             description
+               "Interface name";
+           }
+           leaf krtq-sh-label {
+             type uint32;
+             description
+               "Split-horizon label";
+           }
+           leaf krtq-srv6-arg {
+             type uint32;
+             description
+               "SRv6 argument";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-indirect-nh-entry {
+           description
+             "Queue entry of type indirect next hop";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krt-protocol-nh {
+             type string;
+             description
+               "Protocol next hop of indirect next hop";
+           }
+           leaf indirect-nh-index {
+             type int32;
+             description
+               "Index of indirect next hop";
+           }
+           leaf-list indirect-nh {
+             type string;
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-composite-nh-entry {
+           description
+             "Queue entry of type composite next hop";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf composite-nh-index {
+             type int32;
+             description
+               "Index of composite next hop";
+           }
+           leaf-list composite-nh {
+             type string;
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-rt-entry {
+           description
+             "Queue entry of type route";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-family {
+             type int32;
+             description
+               "Address family";
+           }
+           leaf krtq-instance-id {
+             type int32;
+             description
+               "Routing instance id";
+           }
+           leaf rt-destination {
+             type string;
+             description
+               "Route prefixes awaiting ACK";
+           }
+           leaf rt-prefix-length {
+             type string;
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+           list krtq-nh {
+             leaf krtq-nh-type {
+               type string;
+               description
+                 "Type of this next hop (such as router, discard, reject, 
+                 table)";
+             }
+             leaf krtq-nh-subtype {
+               type string;
+               description
+                 "Subtype of the next hop (shared or point to point) used 
+                 for local next-hop type";
+             }
+             leaf krt-table-index {
+               type int32;
+               description
+                 "Table index";
+             }
+             leaf krtq-nh-family {
+               type int32;
+               description
+                 "Address family of this next hop";
+             }
+             leaf krtq-mpls-label {
+               type string;
+               description
+                 "MPLS label of the top next hop (applicable for chain 
+                 nexthop only)";
+             }
+             list krtq-gw {
+               leaf krtq-element-gw-handle {
+                 type string;
+                 description
+                   "Element next-hop handle (applicable only for chain, 
+                   indexed or list)";
+               }
+               leaf krtq-element-nh-type {
+                 type string;
+                 description
+                   "Type of the element next hop (applicable only for chain,
+                   indexed or list)";
+               }
+               leaf krtq-element-fc {
+                 type int32;
+                 description
+                   "Forward Class of the element next hop (if indexed 
+                   nexthop only)";
+               }
+               leaf krtq-element-gw-addr {
+                 type string;
+                 description
+                   "Element next-hop gateway address";
+               }
+               leaf krtq-element-gw-if {
+                 type string;
+                 description
+                   "Element nexthop interface name";
+               }
+               leaf krtq-element-mpls-label {
+                 type string;
+                 description
+                   "MPLS label of the element next hop";
+               }
+             }
+           }
+         }
+         list krtq-ifdest-entry {
+           description
+             "Queue entry of type interface destination";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-device-index {
+             type int32;
+             description
+               "Kernel index for this interface";
+           }
+           leaf krtq-ifl-unit-number {
+             type int32;
+             description
+               "Unit number of this logical interface";
+           }
+           leaf krtq-family {
+             type int32;
+             description
+               "Address family";
+           }
+           leaf krtq-destination {
+             type string;
+             description
+               "Destination prefix for this interface";
+           }
+           leaf krtq-transition {
+             type string;
+             description
+               "Direction of state transition";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-flood-nh-entry {
+           description
+             "Queue entry of type flooding next hop";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf flood-nh-index {
+             type int32;
+             description
+               "Index of flood nexthop";
+           }
+           leaf flood-nh-handle {
+             type string;
+             description
+               "Handle of flooding next hop";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-nh-entry {
+           description
+             "Queue entry of type next-hop";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf nh-type {
+             type string;
+             description
+               "Special next hop: Reject, Blackhole, Receive, Multicast, 
+               Local, or Unused";
+           }
+           leaf nh-index {
+             type uint32;
+             description
+               "Next-hop index";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-gencfg-entry {
+           description
+             "Queue entry of type gencfg";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf gencfg-major-type {
+             type int32;
+             description
+               "Major type";
+           }
+           leaf gencfg-minor-type {
+             type int32;
+             description
+               "Minor type";
+           }
+           leaf gencfg-key {
+             type string;
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-mcnh-entry {
+           description
+             "Queue entry of type multicast composite nexthop";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf mcnh-index {
+             type uint32;
+           }
+           leaf mcnh {
+             type string;
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-localized-tnh-entry {
+           description
+             "Queue entry of localized table next hop";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-localized-instance {
+             type string;
+             description
+               "Instance for iff localized table next hop create request";
+           }
+           leaf krtq-localized-interface {
+             type string;
+             description
+               "Interface for iff localized table next hop create request";
+           }
+           leaf krtq-localized-family {
+             type string;
+             description
+               "Family for iff localized table next hop create request";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-sgid-entry {
+           description
+             "Queue entry of type Statistics-id-group";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-statistics-id-group-kernel-id {
+             type int32;
+             description
+               "Kernel-id of Statistics-id-group";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-evpn-gencfg-entry {
+           description
+             "Queue entry of type KRT evpn gencfg";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-evpn-gencfg-minor-type {
+             type int32;
+             description
+               "Evpn-gencfg-minor-type";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-gmp-entry {
+           description
+             "Queue entry of type gmp";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf gmp-type {
+             type uint32;
+             description
+               "GMP object type";
+           }
+           leaf gmp-key-len {
+             type int32;
+             description
+               "Key length";
+           }
+           leaf gmp-key {
+             type string;
+           }
+           leaf gmp-object {
+             type string;
+             description
+               "GMP object address";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-fwdcls-entry {
+           description
+             "Queue entry of type Fwdclass";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-fwd-class-index {
+             type int32;
+             description
+               "Fwdclass index";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-sesid-state-entry {
+           description
+             "Queue entry of type Session-id-state Gencfg";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-sesid-state-kernel-id {
+             type int32;
+             description
+               "Kernel-id of Session-id-state Gencfg";
+           }
+           leaf krtq-sesid-state-sesid {
+             type int32;
+             description
+               "Session-id of Session-id-state Gencfg";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-slice-gencfg-entry {
+           description
+             "Queue entry of type Slice-Gencfg";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-slice-gencfg-kid {
+             type uint32;
+             description
+               "Kernel-id of Slice-Gencfg";
+           }
+           leaf krtq-slice-gencfg-handle {
+             type int32;
+             description
+               "Handle of Slice-Gencfg";
+           }
+           leaf krtq-slice-gencfg-slice-name {
+             type string;
+             description
+               "Slice name of Slice-Gencfg";
+           }
+           leaf krtq-slice-gencfg-sliceid {
+             type uint32;
+             description
+               "Slice-id of Slice-Gencfg";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-slice-entry {
+           description
+             "Queue entry of type Slice";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-slice-kid {
+             type uint32;
+             description
+               "Kernel-id(slice-id) of Slice";
+           }
+           leaf krtq-slice-handle {
+             type int32;
+             description
+               "Handle of Slice";
+           }
+           leaf krtq-slice-name {
+             type string;
+             description
+               "Slice name of Slice";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-fwf-entry {
+           description
+             "Queue entry of type Firewall Filter";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-fwf-kid {
+             type uint32;
+             description
+               "Filter-id of Firewall-filter";
+           }
+           leaf krtq-fwf-handle {
+             type int32;
+             description
+               "Handle of Firewall-filter";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+         }
+         list krtq-frr-sesid-gencfg-entry {
+           description
+             "Queue entry of type KRT session id gencfg";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-frr-sesid-gencfg-type {
+             type string;
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+         list krtq-dynamic-index-gencfg-entry {
+           description
+             "Queue entry of type KRT queue dynamic index gencfg.";
+           leaf krtq-operation {
+             type string;
+             description
+               "Operation to be performed";
+           }
+           leaf krtq-dynamic-index-node-handle {
+             type string;
+             description
+               "KRT queue dynamic index gencfg node handle.";
+           }
+           leaf krtq-dynamic-index-key-id {
+             type uint32;
+             description
+               "KRT queue dynamic index gencfg object key index.";
+           }
+           leaf krtq-dynamic-index-refcount {
+             type uint32;
+             description
+               "KRT queue dynamic index gencfg node refcount";
+           }
+           leaf krtq-attempts {
+             type int32;
+             description
+               "Number of attempts";
+           }
+           leaf krtq-error {
+             type string;
+             description
+               "Reason for last failure";
+           }
+           leaf krt-queue-entry {
+             type string;
+             description
+               "Krt queue entry Address";
+           }
+           leaf krtq-defer-time {
+             type string;
+             description
+               "Kqp defer time";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds krt-queue-information container to top-level genstate container";
+     uses krt-queue-information-top;
+   }
+ }

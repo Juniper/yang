@@ -1,0 +1,45 @@
+module jnx-aug-openconfig-acl {
+    yang-version "1";
+
+    namespace "http://yang.juniper.net/openconfig/augment/acl";
+
+    prefix "jnx-oc-acl";
+
+    import ietf-yang-types { prefix yang; }
+    import openconfig-acl { prefix oc-acl; }
+    import junos-extension { prefix junos; }
+
+    organization "Juniper Networks";
+
+    description
+        "This module contains JUNOS augments to OpenConfig ACL model";
+
+    revision "2021-10-12" {
+        description "Added port-mirror";
+    }
+
+    revision "2016-06-02" {
+        description "Initial revision";
+        reference "TBD";
+    }
+
+    grouping redirect-action-config {
+        leaf jnx-redirect {
+            type string;
+            description "Redirect packets to specified instance";
+        }
+    }
+
+    grouping count-action-config {
+        leaf jnx-count {
+            type string;
+            description "Count the packet in the named counter";
+        }
+    }
+
+
+    augment "/oc-acl:acl/oc-acl:acl-sets/oc-acl:acl-set/oc-acl:acl-entries/oc-acl:acl-entry/oc-acl:actions/oc-acl:config" {
+        uses redirect-action-config;
+        uses count-action-config;
+    }
+}

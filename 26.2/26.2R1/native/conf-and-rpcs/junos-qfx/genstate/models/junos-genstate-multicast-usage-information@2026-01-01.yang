@@ -1,0 +1,149 @@
+ module junos-genstate-multicast-usage-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-usage-information";
+   prefix jgmui;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-usage-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping multicast-usage-information-top {
+     description
+       "Top-level grouping";
+     container multicast-usage-information {
+       description
+         "Top-level container";
+       list multicast-group {
+         key "multicast-group-address";
+         leaf multicast-group-address {
+           type jt:ipaddr;
+           description
+             "Group address";
+         }
+         leaf multicast-source-count {
+           type uint32;
+         }
+         leaf multicast-packet-count {
+           type uint32;
+         }
+         leaf multicast-packet-count-not-available {
+           type empty;
+         }
+         leaf multicast-byte-count {
+           type uint32;
+         }
+         leaf multicast-byte-count-not-available {
+           type empty;
+         }
+         list multicast-group-source {
+           key "multicast-source-address";
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description
+               "Source address";
+           }
+           leaf multicast-source-prefix-length {
+             type uint32;
+             description
+               "Source prefix length";
+           }
+           leaf multicast-packet-count {
+             type uint32;
+           }
+           leaf multicast-byte-count {
+             type uint32;
+           }
+           leaf multicast-packet-count-not-available {
+             type empty;
+           }
+           leaf multicast-byte-count-not-available {
+             type empty;
+           }
+         }
+       }
+       list multicast-source {
+         key "multicast-source-address";
+         leaf multicast-source-address {
+           type jt:ipaddr;
+           description
+             "Source address";
+         }
+         leaf multicast-source-prefix-length {
+           type uint32;
+           description
+             "Source prefix length";
+         }
+         leaf multicast-group-count {
+           type uint32;
+         }
+         leaf multicast-packet-count {
+           type uint32;
+         }
+         leaf multicast-packet-count-not-available {
+           type empty;
+         }
+         leaf multicast-byte-count {
+           type uint32;
+         }
+         leaf multicast-byte-count-not-available {
+           type empty;
+         }
+         list multicast-source-group {
+           key "multicast-group-address";
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description
+               "Group address";
+           }
+           leaf multicast-packet-count {
+             type uint32;
+           }
+           leaf multicast-byte-count {
+             type uint32;
+           }
+           leaf multicast-packet-count-not-available {
+             type empty;
+           }
+           leaf multicast-byte-count-not-available {
+             type empty;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-usage-information container to top-level genstate 
+       container";
+     uses multicast-usage-information-top;
+   }
+ }

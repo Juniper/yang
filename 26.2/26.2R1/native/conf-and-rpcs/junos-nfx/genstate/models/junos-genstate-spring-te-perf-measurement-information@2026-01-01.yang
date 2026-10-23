@@ -1,0 +1,218 @@
+ module junos-genstate-spring-te-perf-measurement-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/spring-te-perf-measurement-information";
+   prefix jgstpmi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for spring-te-perf-measurement-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping spring-te-perf-measurement-information-top {
+     description
+       "Top-level grouping";
+     container spring-te-perf-measurement-information {
+       description
+         "Top-level container";
+       list spring-te-perf-measurement {
+         key "stpm-tunnel-name";
+         description
+           "Spring traffic engineered performance measurement info";
+         leaf stpm-tunnel-name {
+           type string;
+         }
+         leaf stpm-tunnel-source {
+           type string;
+         }
+         leaf stpm-tunnel-type {
+           type string;
+         }
+         leaf stpm-tunnel-src {
+           type jt:ipaddr;
+         }
+         leaf stpm-tunnel-dst {
+           type jt:ipaddr;
+         }
+         leaf stpm-tunnel-probe-interval {
+           type uint32;
+         }
+         leaf stpm-tunnel-probe-count {
+           type uint32;
+         }
+         leaf stpm-tunnel-periodic-interval {
+           type uint32;
+         }
+         leaf stpm-tunnel-periodic-threshold {
+           type uint32;
+         }
+         leaf stpm-tunnel-accelerated {
+           type string;
+         }
+         leaf stpm-tunnel-accelerated-threshold {
+           type uint32;
+         }
+         list stpm-sub-cp {
+           key "stpm-sub-cp-name";
+           description
+             "Spring traffic engineered performance measurement sub 
+             candidate path info";
+           leaf stpm-sub-cp-name {
+             type string;
+           }
+           leaf stpm-sub-cp-ret-name {
+             type string;
+           }
+           list stpm-path-info {
+             key "stpm-segment-list-id";
+             description
+               "Spring traffic engineered performance measurement path info";
+             leaf stpm-segment-list-id {
+               type uint32;
+             }
+             container stpm-segment-list {
+               description
+                 "Spring traffic engineered performance measurement segment 
+                 list info";
+               container stl-sr-ero-list {
+                 leaf stl-sr-ero-num-eros-pm-path {
+                   type uint32;
+                 }
+                 list stl-sr-ero {
+                   key "stl-sr-ero-index";
+                   leaf stl-sr-ero-index {
+                     type uint32;
+                   }
+                   leaf stl-sr-ero-sid-value {
+                     type uint32;
+                   }
+                   leaf stl-sr-ero-srv6-sid-value {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-ero-sid-ttl {
+                     type uint32;
+                   }
+                   leaf stl-sr-ero-sid-exp {
+                     type uint32;
+                   }
+                 }
+               }
+             }
+             container stpm-ret-segment-list {
+               description
+                 "Spring traffic engineered performance measurement return 
+                 segment list info";
+               container stl-sr-ero-list {
+                 leaf stl-sr-ero-num-eros-pm-ret-path {
+                   type uint32;
+                 }
+                 list stl-sr-ero {
+                   key "stl-sr-ero-index";
+                   leaf stl-sr-ero-index {
+                     type uint32;
+                   }
+                   leaf stl-sr-ero-sid-value {
+                     type uint32;
+                   }
+                   leaf stl-sr-ero-srv6-sid-value {
+                     type jt:ipaddr;
+                   }
+                   leaf stl-sr-ero-sid-ttl {
+                     type uint32;
+                   }
+                   leaf stl-sr-ero-sid-exp {
+                     type uint32;
+                   }
+                 }
+               }
+             }
+             container stpm-path-measurement-info {
+               description
+                 "Spring traffic engineered performance measurement data";
+               leaf stpm-path-session-state {
+                 type string;
+               }
+               leaf stpm-path-session-id {
+                 type uint32;
+               }
+               leaf stpm-path-session-last-changed {
+                 type string;
+               }
+               leaf stpm-path-session-avg-delay {
+                 type uint32;
+               }
+               leaf stpm-path-session-max-delay {
+                 type uint32;
+               }
+               leaf stpm-path-session-min-delay {
+                 type uint32;
+               }
+               leaf stpm-path-session-delay-variance {
+                 type uint32;
+               }
+               leaf stpm-path-session-twamp-owner {
+                 type string;
+               }
+               leaf stpm-path-session-twamp-testname {
+                 type string;
+               }
+               leaf stpm-path-session-state-transitions {
+                 type uint32;
+               }
+               leaf stpm-path-session-result-updates {
+                 type uint32;
+               }
+             }
+           }
+         }
+       }
+       container spring-te-perf-measurement-path-counts {
+         leaf stpmpc-total-paths {
+           type uint32;
+         }
+         leaf stpmpc-active-paths {
+           type uint32;
+         }
+         leaf stpmpc-failed-paths {
+           type uint32;
+         }
+         leaf stpmpc-idle-paths {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds spring-te-perf-measurement-information container to top-level 
+       genstate container";
+     uses spring-te-perf-measurement-information-top;
+   }
+ }

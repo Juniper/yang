@@ -1,0 +1,100 @@
+ module junos-genstate-spring-te-overview-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/spring-te-overview-information";
+   prefix jgstoi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for spring-te-overview-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping spring-te-overview-information-top {
+     description
+       "Top-level grouping";
+     container spring-te-overview-information {
+       description
+         "Top-level container";
+       container spring-te-overview {
+         description
+           "Overview of SPRING Traffic-Engineering";
+         leaf ste-preference {
+           type uint32;
+         }
+         leaf ste-num-lsps {
+           type uint32;
+         }
+         leaf ste-num-lsps-up {
+           type uint32;
+         }
+         leaf ste-num-lsps-down {
+           type uint32;
+         }
+         leaf ste-num-lsps-initializing {
+           type uint32;
+         }
+         leaf ste-num-ldp-tunnels {
+           type uint32;
+         }
+         container ste-ext-ctrlrs {
+           leaf-list ste-ext-ctrlr {
+             type string;
+           }
+         }
+         container ste-delay-measurement-overview {
+           leaf ste-twamp-client-state {
+             type string;
+           }
+           leaf ste-twamp-client-state-changed {
+             type string;
+           }
+           leaf ste-twamp-client-sessions {
+             type uint32;
+           }
+           leaf ste-twamp-client-sessions-active {
+             type uint32;
+           }
+           leaf ste-twamp-client-sessions-failed {
+             type uint32;
+           }
+           leaf ste-twamp-client-sessions-idle {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds spring-te-overview-information container to top-level genstate 
+       container";
+     uses spring-te-overview-information-top;
+   }
+ }

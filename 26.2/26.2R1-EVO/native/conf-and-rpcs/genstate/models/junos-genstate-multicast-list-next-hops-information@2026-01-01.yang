@@ -1,0 +1,73 @@
+ module junos-genstate-multicast-list-next-hops-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-list-next-hops-information";
+   prefix jgmlnhi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-list-next-hops-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping multicast-list-next-hops-information-top {
+     description
+       "Top-level grouping";
+     container multicast-list-next-hops-information {
+       description
+         "Top-level container";
+       list list-next-hop {
+         key "list-next-hop-id";
+         leaf list-next-hop-id {
+           type uint32;
+         }
+         leaf list-next-hop-ref-count {
+           type uint32;
+         }
+         leaf list-next-hop-kernel-table-id {
+           type uint32;
+         }
+         list list-next-hop-member-next-hops {
+           key "member-interface-name";
+           leaf member-interface-name {
+             type string;
+             description
+               "Name of interface";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-list-next-hops-information container to top-level 
+       genstate container";
+     uses multicast-list-next-hops-information-top;
+   }
+ }

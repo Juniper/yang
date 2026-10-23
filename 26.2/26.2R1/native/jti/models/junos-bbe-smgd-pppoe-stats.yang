@@ -1,0 +1,167 @@
+module junos-bbe-smgd-pppoe-stats {
+  yang-version 1;
+  namespace "http://juniper.net/yang/bbe-smgd";
+  prefix junos-bbe-smgd-pppoe-stats;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of Junos native bbe smgd model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping pppoe-stats-group {
+    description
+      "The set of statistics associated with the PPPoE protocol module";
+    leaf padi-packets-sent {
+      description
+        "The number of PPPoE Active Discovery Initiation (PADI) packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf padi-packets-received {
+      description
+        "The number of PPPoE Active Discovery Initiation (PADI) packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf pado-packets-sent {
+      description
+        "The number of PPPoE Active Discovery Offer (PADO) packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf pado-packets-received {
+      description
+        "The number of PPPoE Active Discovery Offer (PADO) packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf padr-packets-sent {
+      description
+        "The number of PPPoE Active Discovery Request (PADR) packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf padr-packets-received {
+      description
+        "The number of PPPoE Active Discovery Request (PADR) packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf pads-packets-sent {
+      description
+        "The number of PPPoE Active Discovery Session-Confirmation (PADS) packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf pads-packets-received {
+      description
+        "The number of PPPoE Active Discovery Session-Confirmation (PADS) packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf padt-packets-sent {
+      description
+        "The number of PPPoE Active Discovery Terminate (PADT) packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf padt-packets-received {
+      description
+        "The number of PPPoE Active Discovery Terminate (PADT) packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf service-error-sent {
+      description
+        "The number of PPPoE service error packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf service-error-received {
+      description
+        "The number of PPPoE service error packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf ac-error-sent {
+      description
+        "The number of PPPoE ac error packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf ac-error-received {
+      description
+        "The number of PPPoE ac error packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf generic-error-sent {
+      description
+        "The number of PPPoE generic error packets transmitted by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf generic-error-received {
+      description
+        "The number of PPPoE generic error packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf malformed-packets-received {
+      description
+        "The number of PPPoE malformed packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf unknown-packets-received {
+      description
+        "The number of PPPoE unknown packets received by the PPPoE protocol module";
+      type uint32;
+    }
+    leaf era-inflight-count {
+      description
+        "The count of in-flight PPPoE sessions reported to the Event Rate Analyzer (ERA)";
+      type uint32;
+    }
+    leaf era-reported-successes {
+      description
+        "The count of successful PPPoE sessions reported to the Event Rate Analyzer (ERA)";
+      type uint32;
+    }
+    leaf era-reported-failures {
+      description
+        "The count of failed PPPoE sessions reported to the Event Rate Analyzer (ERA)";
+      type uint32;
+    }
+  }
+
+  grouping bbe-smgd-pppoe-stats-top {
+    description
+      "Top level grouping for PPPoE stats";
+    container junos {
+      description
+        "Container for JunOS";
+      config false;
+      container system {
+        description
+          "Container for system";
+        container subscriber-management {
+          description
+            "Container for subscriber management";
+          container client-protocols {
+            description
+              "Container for client protocols";
+            container pppoe {
+              description
+                "Container for PPPoE";
+              container statistics {
+                description
+                  "Container for statistics";
+                uses pppoe-stats-group;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses bbe-smgd-pppoe-stats-top;
+}

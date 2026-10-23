@@ -1,0 +1,123 @@
+ module junos-genstate-multicast-sessions-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-sessions-information";
+   prefix jgmsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-sessions-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping multicast-sessions-information-top {
+     description
+       "Top-level grouping";
+     container multicast-sessions-information {
+       description
+         "Top-level container";
+       leaf multicast-session-count {
+         type uint32;
+       }
+       leaf multicast-sessions-type {
+         type string;
+       }
+       list multicast-session {
+         key "session-name";
+         leaf session-announcement {
+           type string;
+         }
+         leaf session-name {
+           type string;
+         }
+         leaf upstream-protocol {
+           type string;
+         }
+         leaf session-version {
+           type string;
+         }
+         leaf session-description {
+           type string;
+         }
+         leaf session-uri {
+           type string;
+         }
+         leaf session-email {
+           type string;
+         }
+         leaf session-phone {
+           type string;
+         }
+         leaf session-bandwidth {
+           type string;
+         }
+         leaf session-start-time {
+           type string;
+         }
+         leaf session-stop-time {
+           type string;
+         }
+         leaf session-encryption-key {
+           type string;
+         }
+         leaf session-attribute {
+           type string;
+         }
+         leaf session-media {
+           type string;
+         }
+         container session-origin {
+           leaf session-originator-username {
+             type string;
+           }
+           leaf session-originator-address {
+             type string;
+           }
+         }
+         container session-connection-data {
+           leaf session-address {
+             type string;
+           }
+           leaf session-ttl {
+             type uint32;
+           }
+           leaf session-layers {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-sessions-information container to top-level genstate 
+       container";
+     uses multicast-sessions-information-top;
+   }
+ }

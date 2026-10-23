@@ -1,0 +1,84 @@
+ module junos-genstate-ospf-backup-mplsp-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ospf-backup-mplsp-information";
+   prefix jgobmi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ospf-backup-mplsp-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ospf-backup-mplsp-information-top {
+     description
+       "Top-level grouping";
+     container ospf-backup-mplsp-information {
+       description
+         "OSPF backup MPLSP information";
+       list ospf-backup-mplsp {
+         key "lsp-name";
+         leaf lsp-name {
+           type string;
+           description
+             "Tunneled into an RSVP LSP";
+         }
+         leaf lsp-addr {
+           type jt:ipaddr;
+           description
+             "LSP destination address";
+         }
+         leaf lsp-status {
+           type string;
+           description
+             "LSP status";
+         }
+         leaf lsp-last-change {
+           type string;
+           description
+             "Time of last LSP change";
+         }
+         leaf te-metric {
+           type int32;
+           description
+             "LSP TE metric";
+         }
+         leaf metric {
+           type int32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ospf-backup-mplsp-information container to top-level genstate 
+       container";
+     uses ospf-backup-mplsp-information-top;
+   }
+ }

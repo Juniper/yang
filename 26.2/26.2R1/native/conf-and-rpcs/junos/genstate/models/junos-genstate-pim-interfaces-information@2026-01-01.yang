@@ -1,0 +1,148 @@
+ module junos-genstate-pim-interfaces-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-interfaces-information";
+   prefix jgpii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-interfaces-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping pim-interfaces-information-top {
+     description
+       "Top-level grouping";
+     container pim-interfaces-information {
+       description
+         "Top-level container";
+       leaf pim-instance {
+         type string;
+         description
+           "Name of the PIM instance";
+       }
+       list pim-interface {
+         key "pim-interface-name";
+         leaf pim-interface-name {
+           type string;
+           description
+             "Name of PIM interface";
+         }
+         leaf status {
+           type string;
+           description
+             "Status of PIM interface";
+         }
+         leaf ip-protocol-version {
+           type int32;
+           description
+             "IP protocol version of PIM interface";
+         }
+         leaf protocol-version {
+           type int32;
+           description
+             "PIM protocol version of PIM interface";
+         }
+         leaf neighbor-count {
+           type int32;
+           description
+             "Number of neighbors on PIM interface";
+         }
+         leaf interface-join-sg-count {
+           type int32;
+           description
+             "Number of (s,g) joins sent on the interface";
+         }
+         leaf interface-join-tsg-count {
+           type int32;
+           description
+             "Number of (*,g) joins sent on the interface";
+         }
+         leaf designated-router-address {
+           type jt:ipaddr;
+           description
+             "Designated router address of PIM interface";
+         }
+         container pim-interface-mode-abbreviation {
+           description
+             "Mode of PIM interface";
+           leaf pim-interface-mode-s {
+             type empty;
+           }
+           leaf pim-interface-mode-d {
+             type empty;
+           }
+           leaf pim-interface-mode-b {
+             type empty;
+           }
+         }
+         container interface-state {
+           description
+             "State of PIM interface";
+           leaf interface-state-evpn-df-election {
+             type empty;
+           }
+           leaf interface-state-dr {
+             type empty;
+           }
+           leaf interface-state-not-dr {
+             type empty;
+           }
+           leaf interface-state-ddr-dr {
+             type empty;
+           }
+           leaf interface-state-ddr-bdr {
+             type empty;
+           }
+           leaf interface-state-distributed-dr {
+             type empty;
+           }
+           leaf interface-state-p2p {
+             type empty;
+           }
+           leaf interface-state-p2mp {
+             type empty;
+           }
+           leaf interface-state-bidir-active {
+             type empty;
+           }
+           leaf interface-state-bidir-not-capable {
+             type empty;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-interfaces-information container to top-level genstate 
+       container";
+     uses pim-interfaces-information-top;
+   }
+ }

@@ -1,0 +1,80 @@
+ module junos-genstate-evpn-multicast-snooping-ar-mh-peers-data {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-multicast-snooping-ar-mh-peers-data";
+   prefix jgemsampd;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-multicast-snooping-ar-mh-peers-data.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-multicast-snooping-ar-mh-peers-data-top {
+     description
+       "Top-level grouping";
+     container evpn-multicast-snooping-ar-mh-peers-data {
+       description
+         "Top-level container";
+       list evpn-multicast-snooping-ar-mh-peers-per-instance {
+         key "evpn-instance-name";
+         leaf evpn-instance-name {
+           type string;
+         }
+         leaf evpn-ar-role {
+           type string;
+         }
+         list evpn-ar-mh-peer {
+           key "evpn-neighbor-address";
+           leaf evpn-neighbor-address {
+             type jt:ipaddr;
+           }
+           leaf evpn-neighbor-nexthop-index {
+             type int32;
+           }
+           leaf evpn-neighbor-interface {
+             type string;
+           }
+           list evpn-local-multihomed-esi-table {
+             key "evpn-interface-esi";
+             leaf evpn-interface-esi {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-multicast-snooping-ar-mh-peers-data container to top-level
+       genstate container";
+     uses evpn-multicast-snooping-ar-mh-peers-data-top;
+   }
+ }

@@ -1,0 +1,76 @@
+/*
+ * $Id:$
+ *
+ * Copyright (c) 2025, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-dynamic-tunnel {
+    yang-version "1";
+
+    // namespace
+    namespace "http://juniper.net/yang/junos-dynamic-tunnel";
+
+    prefix "junos-dynamic-tunnel";
+
+    import jnx-tel-top { prefix junos; }
+
+    organization "Juniper Network Inc.";
+
+    grouping ip-tunnel-name-group {
+        leaf name {
+            type string;
+        }
+    }
+
+    grouping tunnel-jvision-stats-group {
+       leaf tunnel_type {
+           type string;
+       }
+       leaf tunnel_src {
+           type string;
+       }
+       leaf tunnel_dest {
+           type string;
+       }
+       leaf rx_packets {
+           type uint64;
+       }
+       leaf rx_octets {
+           type uint64;
+       }
+       leaf tx_packets {
+           description
+            "Encapsulated packets";
+           type uint64;
+       }
+       leaf tx_octets {
+           description
+            "Encapsulated bytes";
+           type uint64;
+       }
+       leaf timestamp {
+           type uint64;
+       }
+    }
+
+  grouping ip-tunnel-top {
+        container junos {
+            config false;
+            container services {
+                list ip-tunnel {
+                    uses ip-tunnel-name-group;
+                    key name;
+ 
+                    container usage {
+                        container counters {
+                            uses tunnel-jvision-stats-group;
+                        }
+                    }
+                }
+            }
+        }
+    }
+ 
+   uses ip-tunnel-top;
+}

@@ -1,0 +1,64 @@
+ module junos-genstate-krtq-statistics {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/krtq-statistics";
+   prefix jgks;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for krtq-statistics.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping krtq-statistics-top {
+     description
+       "Top-level grouping";
+     container krtq-statistics {
+       description
+         "Top-level container";
+       leaf krtq-topqueued {
+         type int32;
+       }
+       leaf krtq-highqueued {
+         type int32;
+       }
+       leaf krtq-lowqueued {
+         type int32;
+       }
+       leaf krtq-leastqueued {
+         type int32;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds krtq-statistics container to top-level genstate container";
+     uses krtq-statistics-top;
+   }
+ }

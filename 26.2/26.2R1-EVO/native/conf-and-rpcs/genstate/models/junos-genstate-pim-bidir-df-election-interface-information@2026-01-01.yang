@@ -1,0 +1,95 @@
+ module junos-genstate-pim-bidir-df-election-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-bidir-df-election-interface-information";
+   prefix jgpbdeii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-bidir-df-election-interface-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping pim-bidir-df-election-interface-information-top {
+     description
+       "Top-level grouping";
+     container pim-bidir-df-election-interface-information {
+       description
+         "Top-level container";
+       list bidir-df-election-interface-family {
+         key "address-family";
+         leaf pim-instance {
+           type string;
+           description
+             "Name of the PIM instance";
+         }
+         leaf address-family {
+           type string;
+         }
+         list bidir-df-election-interface-interface-list {
+           key "pim-interface-name";
+           leaf pim-interface-name {
+             type string;
+             description
+               "Name of PIM interface";
+           }
+           leaf robustness-count {
+             type int32;
+           }
+           leaf offer-period {
+             type int32;
+           }
+           leaf backoff-period {
+             type int32;
+           }
+           list bidir-df-election-interface-rpa-list {
+             key "rpa";
+             leaf rpa {
+               type jt:ipaddr;
+             }
+             leaf df-state {
+               type string;
+               description
+                 "PIM-BIDIR DF election state";
+             }
+             leaf df {
+               type jt:ipaddr;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-bidir-df-election-interface-information container to 
+       top-level genstate container";
+     uses pim-bidir-df-election-interface-information-top;
+   }
+ }

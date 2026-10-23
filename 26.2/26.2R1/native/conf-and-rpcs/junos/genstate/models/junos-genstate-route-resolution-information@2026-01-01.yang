@@ -1,0 +1,91 @@
+ module junos-genstate-route-resolution-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/route-resolution-information";
+   prefix jgrri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for route-resolution-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping route-resolution-information-top {
+     description
+       "Top-level grouping";
+     container route-resolution-information {
+       description
+         "Top-level container";
+       list route-resolution-tree {
+         key "tree-index";
+         leaf tree-index {
+           type int32;
+           description
+             "Index of the resolution tree";
+         }
+         leaf nodes {
+           type int32;
+           description
+             "Number of resolution nodes in the tree";
+         }
+         leaf tree-reference-count {
+           type int32;
+           description
+             "Reference count on the tree";
+         }
+         leaf tree-policy {
+           type string;
+           description
+             "Import policy on the tree";
+         }
+         leaf urpf-count {
+           type int32;
+           description
+             "URPF enabled count";
+         }
+         leaf pe-pe-cnh-status {
+           type int32;
+           description
+             "PE-PE-CNH enabled";
+         }
+         leaf-list tree-contributing-ribs {
+           type string;
+           description
+             "Name of routing table inserting routes in the tree";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds route-resolution-information container to top-level genstate 
+       container";
+     uses route-resolution-information-top;
+   }
+ }

@@ -1,0 +1,183 @@
+ module junos-genstate-rsvp-version-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rsvp-version-information";
+   prefix jgrvi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rsvp-version-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rsvp-version-information-top {
+     description
+       "Top-level grouping";
+     container rsvp-version-information {
+       description
+         "Top-level container";
+       container rsvp-version {
+         leaf rsvp-status {
+           type string;
+           description
+             "Administrative or per-interface status of RSVP";
+         }
+         leaf rsvp-restart-flag {
+           type empty;
+           description
+             "RSVP restart is in progress";
+         }
+         leaf refresh-timer {
+           type int32;
+           description
+             "Refresh interval (R)";
+         }
+         leaf keep-multiplier {
+           type int32;
+           description
+             "Keep Multiplier (K)";
+         }
+         leaf rsvp-node-hello-status {
+           type string;
+           description
+             "Node-ID based Hello status";
+         }
+         leaf rsvp-hello-ack-status {
+           type string;
+           description
+             "Hello acknowledgements status";
+         }
+         leaf preemption-type {
+           type string;
+           description
+             "Type of preemption scheme";
+         }
+         leaf soft-preemption-cleanup-timer {
+           type int32;
+           description
+             "Soft-preemption cleanup timer";
+         }
+         leaf graceful-deletion-timeout {
+           type int32;
+           description
+             "RSVP graceful deletion timeout";
+         }
+         leaf rsvp-nsr-mode {
+           type string;
+           description
+             "RSVP nonstop-routing mode";
+         }
+         leaf rsvp-nsr-state {
+           type string;
+           description
+             "RSVP nonstop-routing state";
+         }
+         leaf rsvp-enh-local-prot-status {
+           type string;
+           description
+             "Enhanced FRR local protection status";
+         }
+         leaf rsvp-local-reversion-status {
+           type string;
+           description
+             "FRR local reversion status";
+         }
+         leaf rsvp-setup-protection {
+           type string;
+           description
+             "State of setup protection";
+         }
+         leaf rsvp-p2mp-remerge-permission {
+           type string;
+           description
+             "State of p2mp remerge permission";
+         }
+         leaf rsvp-cross-cred-cspf-status {
+           type string;
+           description
+             "RSVP cross credibility CSPF status";
+         }
+         leaf ingress-route-session-id-count {
+           type int32;
+           description
+             "RSVP Ingress route session id count";
+         }
+         leaf rsvp-assoc-bidir-lsp-config-state {
+           type string;
+           description
+             "Configuration state for support of associated bidirectional 
+             LSP";
+         }
+         container rsvp-graceful-restart {
+           leaf restart-status {
+             type string;
+           }
+           leaf helper-status {
+             type string;
+           }
+           leaf maximum-helper-restart-time {
+             type uint32;
+             description
+               "Maximum wait time from down event to neighbor dead";
+           }
+           leaf maximum-helper-recovery-time {
+             type uint32;
+             description
+               "Maximum state re-synchronization time for restarting 
+               neighbor";
+           }
+           leaf restart-time {
+             type int32;
+             description
+               "Restart time advertised";
+           }
+           leaf recovery-time {
+             type int32;
+             description
+               "Recovery time advertised";
+           }
+         }
+         container rsvp-transit-nexthop-chaining-mode {
+           leaf p2p-transit-lsp-nexthop-mode {
+             type string;
+           }
+           leaf p2mp-transit-lsp-nexthop-mode {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rsvp-version-information container to top-level genstate 
+       container";
+     uses rsvp-version-information-top;
+   }
+ }

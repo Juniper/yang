@@ -1,0 +1,85 @@
+ module junos-genstate-pim-bootstrap-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-bootstrap-information";
+   prefix jgpbi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-bootstrap-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping pim-bootstrap-information-top {
+     description
+       "Top-level grouping";
+     container pim-bootstrap-information {
+       description
+         "Top-level container";
+       leaf pim-instance {
+         type string;
+         description
+           "Name of the PIM instance";
+       }
+       list bootstrap-family {
+         key "address-family";
+         leaf bootstrap-priority {
+           type int32;
+           description
+             "Priority of bootstrap router";
+         }
+         leaf local-address {
+           type jt:ipaddr;
+         }
+         leaf local-priority {
+           type int32;
+           description
+             "Local priority";
+         }
+         leaf bootstrap-state {
+           type string;
+         }
+         leaf bootstrap-timeout {
+           type int32;
+           description
+             "Bootstrap router timeout";
+         }
+         leaf address-family {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-bootstrap-information container to top-level genstate 
+       container";
+     uses pim-bootstrap-information-top;
+   }
+ }

@@ -1,0 +1,102 @@
+ module junos-genstate-evpn-multicast-snooping-status-data {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-multicast-snooping-status-data";
+   prefix jgemssd;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-multicast-snooping-status-data.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping evpn-multicast-snooping-status-data-top {
+     description
+       "Top-level grouping";
+     container evpn-multicast-snooping-status-data {
+       description
+         "Top-level container";
+       list evpn-multicast-snooping-status-per-instance {
+         key "evpn-instance-name";
+         leaf evpn-instance-name {
+           type string;
+         }
+         list evpn-multicast-snooping-status-per-vlan {
+           key "vlan-id";
+           leaf vlan-id {
+             type int32;
+           }
+           list evpn-multicast-snooping-status-per-family {
+             key "evpn-multicast-snooping-family";
+             leaf evpn-multicast-snooping-family {
+               type string;
+             }
+             container evpn-multicast-snooping-status-table {
+               leaf sg-sync {
+                 type string;
+               }
+               leaf sg-sync-graceful-restart-status {
+                 type string;
+               }
+               leaf end-of-resync-marker {
+                 type string;
+               }
+               leaf inclusive-multicast-all-nexthop {
+                 type int32;
+               }
+               leaf inclusive-multicast-subset-nexthop {
+                 type int32;
+               }
+             }
+             container evpn-sg-database-status-table {
+               leaf local-join-sync-sgs {
+                 type int32;
+               }
+               leaf remote-join-sync-sgs {
+                 type int32;
+               }
+               leaf local-proxy-sgs {
+                 type int32;
+               }
+               leaf remote-proxy-sgs {
+                 type int32;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-multicast-snooping-status-data container to top-level 
+       genstate container";
+     uses evpn-multicast-snooping-status-data-top;
+   }
+ }
