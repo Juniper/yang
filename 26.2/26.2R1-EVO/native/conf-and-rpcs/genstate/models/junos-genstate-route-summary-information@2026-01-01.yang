@@ -1,0 +1,222 @@
+ module junos-genstate-route-summary-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/route-summary-information";
+   prefix jgrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for route-summary-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping route-summary-information-top {
+     description
+       "Top-level grouping";
+     container route-summary-information {
+       description
+         "Top-level container";
+       leaf as-number {
+         type int32;
+       }
+       leaf router-id {
+         type jt:ipaddr;
+       }
+       leaf maximum-ecmp {
+         type int32;
+       }
+       leaf note-network-services-mode {
+         type string;
+       }
+       container routing-highwatermark {
+         leaf rt-uniq-highwatermark {
+           type int32;
+           description
+             "RIB unique destination routes high watermark";
+         }
+         leaf rt-uniq-highwatermark-ts {
+           type string;
+           description
+             "RIB unique destination routes high watermark time stamp";
+         }
+         leaf rt-uniq-tavg-watermark {
+           type int32;
+           description
+             "RIB unique destination routes time averaged watermark";
+         }
+         leaf rt-all-highwatermark {
+           type int32;
+           description
+             "RIB routes high watermark";
+         }
+         leaf rt-all-highwatermark-ts {
+           type string;
+           description
+             "RIB routes high watermark time stamp";
+         }
+         leaf rt-all-tavg-watermark {
+           type int32;
+           description
+             "RIB routes time averaged watermark";
+         }
+         leaf rt-fib-highwatermark {
+           type int32;
+           description
+             "FIB routes high watermark";
+         }
+         leaf rt-fib-highwatermark-ts {
+           type string;
+           description
+             "FIB routes high watermark time stamp";
+         }
+         leaf rt-fib-tavg-watermark {
+           type int32;
+           description
+             "FIB routes time averaged watermark";
+         }
+         leaf rt-vrf-highwatermark {
+           type int32;
+           description
+             "VRF type routing instances high watermark";
+         }
+         leaf rt-vrf-highwatermark-ts {
+           type string;
+           description
+             "VRF type routing instances high watermark";
+         }
+       }
+       list route-table {
+         key "table-name";
+         leaf table-name {
+           type string;
+           description
+             "Unicast routing table";
+         }
+         leaf destination-count {
+           type int32;
+           description
+             "Number of destinations in this rib";
+         }
+         leaf total-route-count {
+           type int32;
+         }
+         leaf active-route-count {
+           type int32;
+           description
+             "Active routes";
+         }
+         leaf holddown-route-count {
+           type int32;
+         }
+         leaf hidden-route-count {
+           type int32;
+         }
+         leaf restart-state {
+           type string;
+         }
+         leaf family-prefix-max {
+           type int32;
+         }
+         leaf family-prefix-threshold {
+           type int32;
+         }
+         leaf family-prefix-label {
+           type string;
+         }
+         leaf family-route-max {
+           type int32;
+         }
+         leaf family-route-threshold {
+           type int32;
+         }
+         leaf family-route-limit-label {
+           type string;
+         }
+         leaf global-prefix-max {
+           type int32;
+         }
+         leaf global-prefix-threshold {
+           type int32;
+         }
+         leaf global-prefix-label {
+           type string;
+         }
+         leaf global-route-max {
+           type int32;
+         }
+         leaf global-route-threshold {
+           type int32;
+         }
+         leaf global-route-limit-label {
+           type string;
+         }
+         leaf prefix-max {
+           type int32;
+         }
+         leaf prefix-threshold {
+           type int32;
+         }
+         leaf prefix-label {
+           type string;
+         }
+         leaf route-max {
+           type int32;
+         }
+         leaf route-threshold {
+           type int32;
+         }
+         leaf route-limit-label {
+           type string;
+         }
+         list protocols {
+           key "protocol-name";
+           leaf protocol-name {
+             type string;
+           }
+           leaf protocol-route-count {
+             type int32;
+             description
+               "Total protocol routes";
+           }
+           leaf active-route-count {
+             type int32;
+             description
+               "Active routes";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds route-summary-information container to top-level genstate 
+       container";
+     uses route-summary-information-top;
+   }
+ }

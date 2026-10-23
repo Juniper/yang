@@ -1,0 +1,107 @@
+ module junos-genstate-msdp-source-active-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/msdp-source-active-information";
+   prefix jgmsai;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for msdp-source-active-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping msdp-source-active-information-top {
+     description
+       "Top-level grouping";
+     container msdp-source-active-information {
+       description
+         "Top-level container";
+       list msdp-instance {
+         key "instance-name";
+         leaf instance-name {
+           type string;
+         }
+         leaf msdp-global-active-source-limit-exceeded {
+           type uint32;
+         }
+         leaf msdp-global-active-source-limit-maximum {
+           type uint32;
+         }
+         leaf msdp-global-active-source-limit-threshold {
+           type uint32;
+         }
+         leaf msdp-global-active-source-limit-log-warning {
+           type uint32;
+         }
+         leaf msdp-global-active-source-limit-log-interval {
+           type uint32;
+         }
+         list msdp-route {
+           key "multicast-group-address";
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description
+               "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description
+               "Source address";
+           }
+           list msdp-route-peer {
+             key "msdp-peer-address";
+             leaf msdp-peer-address {
+               type jt:ipaddr;
+             }
+             leaf msdp-originator {
+               type jt:ipaddr;
+             }
+             container msdp-route-peer-flags {
+               leaf msdp-accept {
+                 type empty;
+               }
+               leaf msdp-reject {
+                 type empty;
+               }
+               leaf msdp-filtered {
+                 type empty;
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds msdp-source-active-information container to top-level genstate 
+       container";
+     uses msdp-source-active-information-top;
+   }
+ }

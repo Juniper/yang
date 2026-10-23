@@ -1,0 +1,84 @@
+ module junos-genstate-ldp-p2mp-tunnel-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-p2mp-tunnel-information";
+   prefix jglpti;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-p2mp-tunnel-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ldp-p2mp-tunnel-information-top {
+     description
+       "Top-level grouping";
+     container ldp-p2mp-tunnel-information {
+       description
+         "Top-level container";
+       list ldp-p2mp-tunnel {
+         key "ldp-prefix";
+         description
+           "P2MP tunnel entry";
+         leaf ldp-instance-id {
+           type int32;
+           description
+             "Routing instance identifier";
+         }
+         leaf ldp-p2mp-tunnel-type {
+           type string;
+           description
+             "P2MP tunnel type";
+         }
+         leaf ldp-p2mp-tunnel-name {
+           type string;
+           description
+             "P2MP tunnel name";
+         }
+         leaf ldp-prefix {
+           type string;
+         }
+         leaf ldp-p2mp-tunnel-selfid {
+           type uint32;
+           description
+             "P2MP tunnel self ID";
+         }
+         leaf ldp-reference-count {
+           type int32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-p2mp-tunnel-information container to top-level genstate 
+       container";
+     uses ldp-p2mp-tunnel-information-top;
+   }
+ }

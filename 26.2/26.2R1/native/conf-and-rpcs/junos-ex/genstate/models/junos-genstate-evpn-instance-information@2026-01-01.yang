@@ -1,0 +1,1067 @@
+ module junos-genstate-evpn-instance-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-instance-information";
+   prefix jgeii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-instance-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-instance-information-top {
+     description
+       "Top-level grouping";
+     container evpn-instance-information {
+       description
+         "Top-level container";
+       list evpn-instance {
+         key "evpn-instance-name";
+         leaf evpn-instance-name {
+           type string;
+         }
+         leaf route-distinguisher {
+           type string;
+           description
+             "Name of the route-distinguisher";
+         }
+         leaf evpn-encap-type {
+           type string;
+         }
+         leaf evpn-instance-vlan-id {
+           type string;
+         }
+         leaf evpn-instance-pbb-evpn-core {
+           type string;
+         }
+         leaf evpn-instance-control-word {
+           type string;
+         }
+         leaf evpn-instance-flow-label {
+           type string;
+         }
+         leaf evpn-instance-flow-label-static {
+           type string;
+         }
+         leaf evpn-service-interface-type {
+           type string;
+         }
+         leaf evpn-instance-mac-label {
+           type string;
+         }
+         leaf evpn-instance-mc-label {
+           type string;
+         }
+         leaf evpn-etree-leaf-label {
+           type string;
+         }
+         leaf evpn-instance-df-preference {
+           type string;
+         }
+         leaf duplicate-mac-detection-threshold {
+           type int32;
+         }
+         leaf duplicate-mac-detection-window {
+           type int32;
+         }
+         leaf duplicate-mac-auto-recovery-time {
+           type int32;
+         }
+         leaf duplicate-mac-auto-recovery-time-seconds {
+           type int32;
+         }
+         leaf duplicate-mac-detection-exclude-list-name {
+           type string;
+         }
+         leaf num-local-macs {
+           type int32;
+         }
+         leaf num-remote-macs {
+           type int32;
+         }
+         leaf local-interfaces {
+           type int32;
+         }
+         leaf local-interfaces-up {
+           type int32;
+         }
+         leaf num-protect-interfaces {
+           type int32;
+         }
+         leaf irb-interfaces {
+           type int32;
+         }
+         leaf irb-interfaces-up {
+           type int32;
+         }
+         leaf num-bridge-domains {
+           type int32;
+         }
+         leaf num-bundle-bridge-domains {
+           type int32;
+         }
+         leaf evpn-num-neighbors {
+           type int32;
+         }
+         leaf evpn-num-esi {
+           type int32;
+         }
+         leaf evpn-router-id {
+           type jt:ipaddr;
+         }
+         leaf evpn-source-vtep-ipaddr {
+           type jt:ipaddr;
+         }
+         leaf evpn-migration {
+           type string;
+         }
+         leaf evpn-smet-forwarding {
+           type string;
+         }
+         leaf evpn-srv6-locator {
+           type string;
+         }
+         leaf evpn-srv6-mode {
+           type string;
+         }
+         leaf evpn-rib-table-id {
+           type int32;
+         }
+         leaf evpn-kernel-table-id {
+           type int32;
+         }
+         leaf evpn-kernel-table-id-generation {
+           type int32;
+         }
+         leaf evpn-rtt-update-ts {
+           type string;
+         }
+         leaf evpn-l2ald-state-chg-ts {
+           type string;
+         }
+         leaf evpn-instance-ready-ts {
+           type string;
+         }
+         leaf evpn-instance-flags {
+           type int32;
+         }
+         leaf core-isolation-chg-ts {
+           type string;
+         }
+         leaf core-isolated-state {
+           type string;
+         }
+         leaf core-isolation-chg-reason {
+           type string;
+         }
+         leaf evpn-composite-nexthop {
+           type string;
+         }
+         leaf evpn-preserve-nexthop-hierarchy {
+           type string;
+         }
+         leaf evpn-dynamic-list-nexthop {
+           type string;
+         }
+         leaf port-extender-mode {
+           type string;
+         }
+         container mac-database-status-table {
+           leaf local-macs {
+             type int32;
+           }
+           leaf remote-macs {
+             type int32;
+           }
+           leaf local-mac-ips {
+             type int32;
+           }
+           leaf remote-mac-ips {
+             type int32;
+           }
+           leaf local-default-gateway-macs {
+             type int32;
+           }
+           leaf remote-default-gateway-macs {
+             type int32;
+           }
+         }
+         container evpn-interconn-info {
+           leaf route-distinguisher {
+             type string;
+             description
+               "Name of the route-distinguisher";
+           }
+           leaf interconn-vrf-import {
+             type string;
+           }
+           leaf interconn-vrf-export {
+             type string;
+           }
+           leaf interconn-vrf-import-target {
+             type string;
+           }
+           leaf interconn-vrf-export-target {
+             type string;
+           }
+           leaf evpn-interconn-mac-label {
+             type string;
+           }
+           leaf evpn-interconn-mc-label {
+             type string;
+           }
+         }
+         container evpn-interconn-route-stats-table {
+           leaf evpn-interconn-num-local-ad-routes {
+             type int32;
+           }
+           leaf evpn-interconn-num-local-im-routes {
+             type int32;
+           }
+           leaf evpn-interconn-num-local-mac-routes {
+             type int32;
+           }
+           leaf evpn-interconn-num-local-mac-ip-routes {
+             type int32;
+           }
+           leaf evpn-interconn-num-local-es-routes {
+             type int32;
+           }
+           leaf evpn-interconn-num-local-sg-proxy-routes {
+             type int32;
+           }
+         }
+         container evpn-interface-status-table {
+           list evpn-interface {
+             key "evpn-interface-name";
+             leaf evpn-interface-name {
+               type string;
+             }
+             leaf evpn-interface-esi {
+               type string;
+             }
+             leaf evpn-interface-mode {
+               type string;
+             }
+             leaf evpn-interface-status {
+               type string;
+             }
+             leaf evpn-interface-etree-role {
+               type string;
+             }
+             container history-db {
+               leaf history-db-heading {
+                 type string;
+               }
+               leaf history-db-maximum-size {
+                 type int32;
+               }
+               leaf history-db-current-size {
+                 type int32;
+               }
+               container history-db-entries {
+                 leaf history-db-entries-heading {
+                   type string;
+                 }
+                 list history-db-entry {
+                   key "history-db-entry-timestamp";
+                   leaf history-db-entry-timestamp {
+                     type string;
+                   }
+                   leaf history-db-entry-event {
+                     type string;
+                   }
+                 }
+               }
+             }
+             leaf evpn-interface-flags {
+               type int32;
+             }
+             leaf evpn-interface-flags-description {
+               type string;
+             }
+             leaf evpn-interface-in-kernel-q {
+               type string;
+             }
+             leaf evpn-interface-vc-flags {
+               type int32;
+             }
+             leaf evpn-interface-vc-df-role {
+               type string;
+             }
+             leaf evpn-interface-sh-label {
+               type int32;
+             }
+             leaf evpn-interface-srv6-arg {
+               type int32;
+             }
+             leaf evpn-interface-core-isolation-update-ts {
+               type string;
+             }
+             leaf evpn-interface-df-role-update-ts {
+               type string;
+             }
+             leaf evpn-interface-vc-df-role-enqueue-ts {
+               type string;
+             }
+             leaf evpn-interface-state-change-ts {
+               type string;
+             }
+             container evpn-df-info {
+               leaf evpn-df-type {
+                 type string;
+               }
+               leaf evpn-df-no-preempt {
+                 type string;
+               }
+               leaf evpn-df-preference {
+                 type int32;
+               }
+               leaf evpn-df-esi-granularity {
+                 type string;
+               }
+               leaf evpn-lacp-oos-ndf {
+                 type string;
+               }
+             }
+           }
+         }
+         container irb-interface-status-table {
+           list irb-interface {
+             key "irb-interface-name";
+             leaf irb-interface-name {
+               type string;
+             }
+             leaf irb-interface-vlan-id {
+               type string;
+             }
+             leaf irb-interface-vni-id {
+               type string;
+             }
+             leaf irb-interface-status {
+               type string;
+             }
+             leaf irb-interface-l3-context {
+               type string;
+             }
+             leaf irb-interface-irbd-flags {
+               type int32;
+             }
+             leaf irb-interface-flags {
+               type int32;
+             }
+             leaf irb-interface-esi {
+               type string;
+             }
+             leaf irb-interface-auto-esi {
+               type string;
+             }
+             leaf irb-interface-num-macs {
+               type int32;
+             }
+             leaf irb-interface-state-change-ts {
+               type string;
+             }
+           }
+         }
+         container rvtep-interface-status-table {
+           list rvtep-interface {
+             key "rvtep-interface-name";
+             leaf rvtep-interface-name {
+               type string;
+             }
+             leaf rvtep-addr {
+               type jt:ipaddr;
+             }
+             container history-db {
+               leaf history-db-heading {
+                 type string;
+               }
+               leaf history-db-maximum-size {
+                 type int32;
+               }
+               leaf history-db-current-size {
+                 type int32;
+               }
+               container history-db-entries {
+                 leaf history-db-entries-heading {
+                   type string;
+                 }
+                 list history-db-entry {
+                   key "history-db-entry-timestamp";
+                   leaf history-db-entry-timestamp {
+                     type string;
+                   }
+                   leaf history-db-entry-event {
+                     type string;
+                   }
+                 }
+               }
+             }
+             leaf rvtep-iflnh {
+               type string;
+             }
+             leaf rvtep-iflnhid {
+               type uint32;
+             }
+             leaf rvtep-old-iflnh {
+               type string;
+             }
+             leaf rvtep-old-iflnhid {
+               type uint32;
+             }
+             leaf rvtep-interface-flags {
+               type int32;
+             }
+           }
+         }
+         container evpn-protect-interface-status-table {
+           list evpn-protect-interface {
+             key "evpn-primary-interface-name";
+             leaf evpn-primary-interface-name {
+               type string;
+             }
+             leaf evpn-protect-interface-name {
+               type string;
+             }
+             leaf evpn-protect-interface-status {
+               type string;
+             }
+           }
+         }
+         container bridge-domain-status-table {
+           list bridge-domain {
+             key "vlan-id";
+             leaf vlan-id {
+               type int32;
+             }
+             leaf domain-id {
+               type int32;
+             }
+             leaf interfaces {
+               type int32;
+             }
+             leaf interfaces-up {
+               type int32;
+             }
+             leaf-list irb-interface {
+               type string;
+             }
+             leaf mode {
+               type string;
+             }
+             leaf mac-sync-status {
+               type string;
+             }
+             leaf sg-sync-status {
+               type string;
+             }
+             leaf v6-sg-sync-status {
+               type string;
+             }
+           }
+         }
+         container bridge-domain-status-table-detailed {
+           list bridge-domain-detailed {
+             key "vlan-id";
+             leaf vlan-id {
+               type int32;
+             }
+             leaf domain-id {
+               type int32;
+             }
+             leaf trans-domain-id {
+               type int32;
+             }
+             leaf inclusive-multicast-label {
+               type int32;
+             }
+             leaf bd-mac-label {
+               type int32;
+             }
+             leaf evpn-srv6-dt2u-sid {
+               type jt:ipaddr;
+             }
+             leaf evpn-srv6-dt2m-sid {
+               type jt:ipaddr;
+             }
+             leaf inclusive-multicast-core-nh {
+               type int32;
+             }
+             leaf v6-inclusive-multicast-core-nh {
+               type int32;
+             }
+             leaf l2ald-sync-ts {
+               type string;
+             }
+           }
+         }
+         container bundle-bridge-domain-status-table {
+           list bundle-bridge-domain {
+             key "domain-name";
+             leaf domain-name {
+               type string;
+             }
+             leaf num-isids {
+               type int32;
+             }
+             leaf mode {
+               type string;
+             }
+             leaf mac-sync-status {
+               type string;
+             }
+           }
+         }
+         list evpn-ngpe-data-table {
+           key "vlan-id";
+           leaf ngpe-exclude-com {
+             type string;
+           }
+           leaf vlan-id {
+             type int32;
+           }
+           leaf domain-id {
+             type int32;
+           }
+           leaf ngpe-remote-mc-entry-count {
+             type uint32;
+           }
+         }
+         list evpn-neighbor {
+           key "evpn-neighbor-address";
+           leaf evpn-neighbor-address {
+             type jt:ipaddr;
+           }
+           container evpn-neighbor-route-information {
+             leaf evpn-neighbor-address {
+               type jt:ipaddr;
+             }
+             leaf evpn-num-mac-routes {
+               type int32;
+             }
+             leaf evpn-num-mac-ip-routes {
+               type int32;
+             }
+             leaf evpn-num-ethernet-autodiscovery-routes {
+               type int32;
+             }
+             leaf evpn-num-inclusive-multicast-routes {
+               type int32;
+             }
+             leaf evpn-num-ethernet-segment-routes {
+               type int32;
+             }
+             leaf evpn-peer-leaf-label {
+               type int32;
+             }
+             leaf evpn-peer-dci {
+               type string;
+             }
+             leaf evpn-flow-label {
+               type string;
+             }
+             leaf evpn-recv-srv6-dt2u-sid {
+               type jt:ipaddr;
+             }
+             leaf evpn-recv-srv6-dt2m-sid {
+               type jt:ipaddr;
+             }
+           }
+         }
+         container evpn-peer-table-detailed {
+           list evpn-peer-detailed {
+             key "evpn-neighbor-address";
+             leaf evpn-neighbor-address {
+               type jt:ipaddr;
+             }
+             leaf evpn-num-mac-routes {
+               type int32;
+             }
+             leaf evpn-num-mac-ip-routes {
+               type int32;
+             }
+             leaf evpn-num-ethernet-autodiscovery-routes {
+               type int32;
+             }
+             leaf evpn-num-smet-routes {
+               type int32;
+             }
+             leaf evpn-num-spmsi-ad-routes {
+               type int32;
+             }
+             leaf evpn-mac-refcnt {
+               type int32;
+             }
+             leaf evpn-ad-refcnt {
+               type int32;
+             }
+             leaf evpn-bmac-refcnt {
+               type int32;
+             }
+             leaf evpn-peer-flags {
+               type int32;
+             }
+             leaf evpn-peer-rd {
+               type string;
+             }
+             leaf evpn-peer-global-ad-rt {
+               type string;
+             }
+             leaf evpn-peer-rmt-origin-type {
+               type string;
+             }
+             leaf evpn-peer-rmt-origin-refcnt {
+               type int32;
+             }
+             leaf evpn-peer-vxlan-tun-created {
+               type string;
+             }
+             leaf evpn-peer-rert-vxlan-tun {
+               type string;
+             }
+             leaf evpn-peer-pw-intf-del-fg {
+               type string;
+             }
+             leaf evpn-peer-reroute-addr {
+               type jt:ipaddr;
+             }
+             leaf evpn-peer-l2extcom-present {
+               type string;
+             }
+             container evpn-peer-vxlan-ipc-status {
+               leaf evpn-peer-vxlan-ipc-msg-event {
+                 type string;
+               }
+               leaf evpn-peer-vxlan-ipc-msg-status {
+                 type string;
+               }
+               leaf evpn-peer-vxlan-ipc-msg-ts {
+                 type string;
+               }
+             }
+             container evpn-peer-pw-intf-ipc-status {
+               leaf evpn-peer-pw-intf-ipc-msg-event {
+                 type string;
+               }
+               leaf evpn-peer-pw-intf-ipc-msg-status {
+                 type string;
+               }
+               leaf evpn-peer-pw-intf-ipc-msg-ts {
+                 type string;
+               }
+             }
+           }
+         }
+         container evpn-mc-entry-table {
+           list evpn-mc-entry {
+             key "evpn-mc-entry-pfx";
+             leaf evpn-mc-entry-pfx {
+               type string;
+             }
+             leaf evpn-mc-entry-delete-pending {
+               type string;
+             }
+             leaf evpn-mc-entry-rmt-origin {
+               type jt:ipaddr;
+             }
+             leaf evpn-mc-entry-create-ts {
+               type jt:ipaddr;
+             }
+             container evpn-mc-entry-vxlan-ir {
+               leaf vxlan-ir-ipc-msg-advertised {
+                 type string;
+               }
+               leaf vxlan-ir-ipc-msg-event {
+                 type string;
+               }
+               leaf vxlan-ir-ipc-msg-status {
+                 type string;
+               }
+               leaf vxlan-ir-ipc-msg-ts {
+                 type string;
+               }
+             }
+             container evpn-mc-entry-vxlan-ar {
+               leaf vxlan-ar-ipc-msg-advertised {
+                 type string;
+               }
+               leaf vxlan-ar-ipc-msg-event {
+                 type string;
+               }
+               leaf vxlan-ar-ipc-msg-status {
+                 type string;
+               }
+               leaf vxlan-ar-ipc-msg-ts {
+                 type string;
+               }
+               leaf vxlan-ar-active {
+                 type string;
+               }
+               leaf vxlan-ar-preferred-eligible {
+                 type string;
+               }
+             }
+             container evpn-mc-entry-mpls-ir {
+               leaf mpls-ir-mcast-label {
+                 type int32;
+               }
+               leaf mpls-ir-leaf-label {
+                 type int32;
+               }
+               leaf mpls-ir-sh-label {
+                 type int32;
+               }
+               leaf mpls-ir-nh-addr {
+                 type jt:ipaddr;
+               }
+               leaf mpls-ir-fwd-nh {
+                 type int32;
+               }
+             }
+             container evpn-mc-entry-mpls-p2mp {
+               leaf mpls-p2mp-p-tunnel-added {
+                 type string;
+               }
+               leaf mpls-p2mp-rsvp-branch-added {
+                 type string;
+               }
+               leaf mpls-p2mp-bum-label {
+                 type int32;
+               }
+               leaf mpls-p2mp-table-nh {
+                 type int32;
+               }
+             }
+           }
+         }
+         container evpn-macip-tracking-table {
+           list evpn-macip-tracking {
+             key "evpn-macip-tracker-ip";
+             leaf evpn-macip-tracker-ip {
+               type jt:ipaddr;
+             }
+             list evpn-macip-tracker-maclist {
+               key "mac-address";
+               leaf mac-address {
+                 type jt:mac-addr;
+               }
+               leaf mac-source-name {
+                 type string;
+               }
+             }
+           }
+         }
+         list evpn-reserved-esi {
+           key "evpn-reserved-str";
+           leaf evpn-reserved-str {
+             type string;
+           }
+           list evpn-reserved-esi-bd-remote-pe-information {
+             key "evpn-reserved-esi-bd-vlan";
+             leaf evpn-reserved-esi-bd-vlan {
+               type int32;
+             }
+             leaf evpn-reserved-esi-bd-status {
+               type string;
+             }
+             leaf evpn-reserved-esi-bd-state-bits {
+               type int32;
+             }
+             leaf evpn-reserved-esi-bd-token-rt-nh {
+               type int32;
+             }
+             container evpn-reserved-esi-bd-remote-pe {
+               leaf evpn-reserved-esi-bd-remote-pe-ipaddr {
+                 type jt:ipaddr;
+               }
+               leaf evpn-reserved-esi-bd-remote-mac-label {
+                 type int32;
+               }
+               leaf evpn-reserved-esi-bd-remote-dt2u-sid {
+                 type jt:ipaddr;
+               }
+             }
+           }
+         }
+         list evpn-esi {
+           key "evpn-esi-value";
+           description
+             "ESI in EVPN Route";
+           leaf evpn-esi-value {
+             type string;
+           }
+           leaf evpn-interconn-esi {
+             type string;
+           }
+           leaf evpn-esi-status {
+             type string;
+           }
+           leaf evpn-esi-state-bits {
+             type int32;
+           }
+           leaf evpn-esi-min-isid {
+             type int32;
+           }
+           leaf evpn-esi-mac-label {
+             type int32;
+           }
+           leaf evpn-esi-aliasing-label {
+             type int32;
+           }
+           leaf evpn-esi-split-horizon-label {
+             type int32;
+           }
+           leaf evpn-esi-srv6-argument {
+             type int32;
+           }
+           leaf evpn-esi-rt-label {
+             type int32;
+           }
+           leaf evpn-esi-num-mac {
+             type int32;
+           }
+           leaf evpn-esi-num-sgdb {
+             type int32;
+           }
+           leaf evpn-esi-refcount {
+             type int32;
+           }
+           leaf evpn-esi-nh-retry-count {
+             type int32;
+           }
+           leaf evpn-esi-token-rt-nh {
+             type int32;
+           }
+           leaf evpn-esi-srv6-token-rt-nh {
+             type int32;
+           }
+           container evpn-esi-local-intf-information {
+             leaf evpn-esi-num-local-intf {
+               type int32;
+             }
+             leaf evpn-esi-local-intf-name {
+               type string;
+             }
+             leaf evpn-esi-local-intf-status {
+               type string;
+             }
+           }
+           container evpn-esi-event-history-information {
+             list evpn-esi-event-history-database {
+               key "evpn-esi-event-entry";
+               leaf evpn-esi-event-entry {
+                 type string;
+               }
+             }
+           }
+           container evpn-esi-remote-pe-information {
+             leaf evpn-esi-num-remote-pe {
+               type int32;
+             }
+             list evpn-esi-remote-pe {
+               key "evpn-esi-remote-pe-ipaddr";
+               leaf evpn-esi-remote-pe-ipaddr {
+                 type jt:ipaddr;
+               }
+               leaf evpn-esi-remote-mac-label {
+                 type int32;
+               }
+               leaf evpn-esi-remote-aliasing-label {
+                 type int32;
+               }
+               leaf evpn-esi-remote-pe-mode {
+                 type string;
+               }
+               container evpn-srv6-info {
+                 leaf evpn-srv6-sid {
+                   type jt:ipaddr;
+                 }
+                 leaf evpn-srv6-behavior {
+                   type int32;
+                 }
+                 container evpn-srv6-ss {
+                   leaf srv6-block-len {
+                     type int32;
+                   }
+                   leaf srv6-node-len {
+                     type int32;
+                   }
+                   leaf srv6-fn-len {
+                     type int32;
+                   }
+                   leaf srv6-arg-len {
+                     type int32;
+                   }
+                 }
+               }
+               leaf evpn-esi-remote-fp-label {
+                 type int32;
+               }
+               leaf evpn-esi-remote-flags {
+                 type int32;
+               }
+               leaf evpn-esi-num-remote-bd {
+                 type int32;
+               }
+               leaf evpn-esi-remote-rd {
+                 type string;
+               }
+               leaf evpn-esi-remote-nh {
+                 type int32;
+               }
+               leaf evpn-esi-remote-srv6-nh {
+                 type int32;
+               }
+               leaf evpn-esi-remote-mac-label-ts {
+                 type string;
+               }
+               leaf evpn-esi-remote-token-rt-label {
+                 type int32;
+               }
+               leaf evpn-esi-remote-token-rt-nh {
+                 type int32;
+               }
+               leaf evpn-esi-remote-mac-count {
+                 type int32;
+               }
+               leaf evpn-esi-remote-vlan-id {
+                 type int32;
+               }
+               leaf evpn-esi-remote-flow-label-update-pending {
+                 type string;
+               }
+             }
+           }
+           container evpn-esi-df-information {
+             leaf esi-df-election-algorithm {
+               type string;
+             }
+             leaf esi-granularity {
+               type string;
+             }
+             leaf esi-lacp-oos-on-ndf {
+               type string;
+             }
+             leaf esi-designated-forwarder {
+               type string;
+             }
+             leaf esi-df-preference {
+               type int32;
+             }
+             leaf esi-df-non-revertive {
+               type string;
+             }
+             leaf esi-df-time-sync {
+               type string;
+             }
+             leaf-list esi-backup-forwarder {
+               type string;
+             }
+             leaf-list esi-backup-df-preference {
+               type int32;
+             }
+             leaf-list esi-backup-df-non-revertive {
+               type string;
+             }
+             leaf-list esi-backup-df-time-sync {
+               type string;
+             }
+             leaf esi-last-df-update-timestamp {
+               type string;
+             }
+           }
+           list evpn-esi-bd-remote-pe-information {
+             key "evpn-esi-bd-vlan";
+             leaf evpn-esi-bd-vlan {
+               type int32;
+             }
+             leaf evpn-esi-bd-status {
+               type string;
+             }
+             leaf evpn-esi-bd-state-bits {
+               type int32;
+             }
+             leaf evpn-esi-bd-refcount {
+               type int32;
+             }
+             leaf evpn-esi-bd-nh-retry-count {
+               type int32;
+             }
+             leaf evpn-esi-bd-remote-prefix {
+               type int32;
+             }
+             leaf evpn-esi-bd-token-rt-nh {
+               type int32;
+             }
+             leaf evpn-esi-bd-num-remote-pe {
+               type int32;
+             }
+             list evpn-esi-bd-remote-pe {
+               key "evpn-esi-bd-remote-pe-ipaddr";
+               leaf evpn-esi-bd-remote-pe-ipaddr {
+                 type jt:ipaddr;
+               }
+               leaf evpn-esi-bd-remote-mac-label {
+                 type int32;
+               }
+               leaf evpn-esi-bd-remote-aliasing-label {
+                 type int32;
+               }
+               leaf evpn-esi-bd-remote-pe-mode {
+                 type string;
+               }
+               leaf evpn-esi-bd-remote-dt2u-sid {
+                 type jt:ipaddr;
+               }
+             }
+           }
+           container evpn-pref-nh-information {
+             leaf evpn-pref-nh-cfg-mode {
+               type string;
+             }
+             leaf evpn-pref-nh-primary-pe {
+               type jt:ipaddr;
+             }
+             leaf evpn-pref-nh-backup-pe {
+               type jt:ipaddr;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-instance-information container to top-level genstate 
+       container";
+     uses evpn-instance-information-top;
+   }
+ }

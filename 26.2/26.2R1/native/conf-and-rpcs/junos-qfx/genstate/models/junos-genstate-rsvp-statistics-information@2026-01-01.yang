@@ -1,0 +1,146 @@
+ module junos-genstate-rsvp-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rsvp-statistics-information";
+   prefix jgrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rsvp-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rsvp-statistics-information-top {
+     description
+       "Top-level grouping";
+     container rsvp-statistics-information {
+       description
+         "Top-level container";
+       list message-statistics {
+         key "rsvp-message";
+         description
+           "Statistics per RSVP message type";
+         leaf rsvp-message {
+           type string;
+         }
+         leaf messages-sent {
+           type int32;
+           description
+             "Total number of messages sent";
+         }
+         leaf messages-received {
+           type int32;
+           description
+             "Total number of messages received";
+         }
+         leaf messages-sent-5seconds {
+           type int32;
+           description
+             "Number of messages sent in the last 5 seconds";
+         }
+         leaf messages-received-5seconds {
+           type int32;
+           description
+             "Number of messages received in the last 5 seconds";
+         }
+       }
+       list rsvp-error {
+         key "error-message";
+         leaf error-message {
+           type string;
+         }
+         leaf error-count {
+           type int32;
+           description
+             "Total number of errors encountered";
+         }
+         leaf error-count-5seconds {
+           type int32;
+           description
+             "Number of errors encountered in the last 5 seconds";
+         }
+       }
+       list rsvp-enhanced-frr {
+         key "enhanced-frr-count-type";
+         leaf enhanced-frr-count-type {
+           type string;
+         }
+         leaf enhanced-frr-count {
+           type int32;
+           description
+             "Total number of enhanced FRR states";
+         }
+         leaf enhanced-frr-count-5seconds {
+           type int32;
+           description
+             "Total number of enhanced FRR states last 5 seconds";
+         }
+       }
+       list rsvp-statistics-average {
+         key "average-data-type";
+         leaf average-data-type {
+           type string;
+           description
+             "Event type for which statistical average computed";
+         }
+         leaf average-data-count {
+           type int32;
+           description
+             "Count of values of the data type";
+         }
+         leaf average-data-min {
+           type int32;
+           description
+             "Minimum value of the data type";
+         }
+         leaf average-data-max {
+           type int32;
+           description
+             "Maximum value of the data type";
+         }
+         leaf average-data-mean {
+           type int32;
+           description
+             "Mean value of the data type";
+         }
+         leaf average-data-unit {
+           type string;
+           description
+             "Unit of the values for the data type";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rsvp-statistics-information container to top-level genstate 
+       container";
+     uses rsvp-statistics-information-top;
+   }
+ }

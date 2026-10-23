@@ -1,0 +1,103 @@
+ module junos-genstate-evpn-p2mp-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-p2mp-information";
+   prefix jgepi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-p2mp-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-p2mp-information-top {
+     description
+       "Top-level grouping";
+     container evpn-p2mp-information {
+       description
+         "Top-level container";
+       list evpn-p2mp-instance {
+         key "evpn-instance-name";
+         leaf evpn-instance-name {
+           type string;
+         }
+         list evpn-p2mp-nh-table {
+           key "evpn-p2mp-nh-l2-domain";
+           leaf evpn-p2mp-nh-l2-domain {
+             type int32;
+           }
+           leaf evpn-p2mp-nh-id {
+             type int32;
+           }
+           list evpn-p2mp-nh-esi-list {
+             key "evpn-p2mp-nh-esi";
+             leaf evpn-p2mp-nh-esi {
+               type string;
+             }
+             leaf evpn-p2mp-nh-sh {
+               type int32;
+             }
+           }
+           leaf evpn-p2mp-nh-tunnel {
+             type string;
+           }
+           leaf evpn-p2mp-nh-pmsi {
+             type string;
+             description
+               "P-multicast service interface";
+           }
+         }
+         container evpn-p2mp-peer-table {
+           list evpn-p2mp-peer {
+             key "evpn-p2mp-peer-addr";
+             leaf evpn-p2mp-peer-addr {
+               type jt:ipaddr;
+             }
+             leaf evpn-p2mp-peer-l2-domain {
+               type int32;
+             }
+             leaf evpn-p2mp-peer-transport-label {
+               type int32;
+             }
+             leaf evpn-p2mp-peer-pmsi {
+               type string;
+               description
+                 "P-multicast service interface";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-p2mp-information container to top-level genstate container";
+     uses evpn-p2mp-information-top;
+   }
+ }

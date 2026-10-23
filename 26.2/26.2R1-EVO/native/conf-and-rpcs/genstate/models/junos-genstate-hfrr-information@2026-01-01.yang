@@ -1,0 +1,140 @@
+ module junos-genstate-hfrr-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/hfrr-information";
+   prefix jghi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for hfrr-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping hfrr-information-top {
+     description
+       "Top-level grouping";
+     container hfrr-information {
+       description
+         "Top-level container";
+       list hfrrp {
+         key "ptr";
+         leaf ptr {
+           type string;
+           description
+             "HFRR profile pointer";
+         }
+         leaf state {
+           type string;
+           description
+             "HFRR profile Current state";
+         }
+         leaf inactive-reason {
+           type string;
+           description
+             "HFRR profile Inactive reason (if any)";
+         }
+         leaf prefix-limit-timer-expiration {
+           type uint32;
+           description
+             "HFRR prefix limit blackout timer expiration (in secs)";
+         }
+         leaf prefix-limit-hit-count {
+           type uint32;
+           description
+             "Number of times prefix limit was hit for this profile.";
+         }
+         leaf prefix-limit-last-occurance {
+           type string;
+           description
+             "Time at which prefix limit was hit the last time.";
+         }
+         leaf ifl-name {
+           type string;
+           description
+             "HFRR profile protected IFL Name";
+         }
+         leaf ifl-handle {
+           type string;
+           description
+             "HFRR profile protected IFL Handle";
+         }
+         leaf rt-instance-name {
+           type string;
+           description
+             "HFRR profile Routing Instance Name";
+         }
+         leaf rt-instance-handle {
+           type string;
+           description
+             "HFRR profile Routing Instance Handle";
+         }
+         leaf sync-bg-running {
+           type string;
+           description
+             "HFRR profile Sync BG running currently";
+         }
+         leaf rts-filter-set {
+           type string;
+           description
+             "HFRR profile RTS Filter Set";
+         }
+         leaf delete-bg-running {
+           type string;
+           description
+             "HFRR profile Delete BG running currently";
+         }
+         leaf arp-prefix-limit {
+           type int32;
+           description
+             "HFRR profile ARP prefix limit";
+         }
+         leaf blackout-timeout-scale-factor {
+           type int32;
+           description
+             "HFRR profile blackout timeout scale factor (in mins)";
+         }
+         leaf num-arp-routes {
+           type int32;
+           description
+             "HFRR profile No of ARP routes learnt";
+         }
+         leaf num-frr-routes {
+           type int32;
+           description
+             "HFRR profile No of HFRR routes added currently";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds hfrr-information container to top-level genstate container";
+     uses hfrr-information-top;
+   }
+ }

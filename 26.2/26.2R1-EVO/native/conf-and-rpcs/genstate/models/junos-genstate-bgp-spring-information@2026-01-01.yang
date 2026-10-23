@@ -1,0 +1,95 @@
+ module junos-genstate-bgp-spring-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-spring-information";
+   prefix jgbsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for bgp-spring-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping bgp-spring-information-top {
+     description
+       "Top-level grouping";
+     container bgp-spring-information {
+       description
+         "BGP source-packet-routing information";
+       container bgp-srgb-information {
+         description
+           "BGP source-packet-routing srgb information";
+         leaf bgp-srgb-allocation {
+           type string;
+           description
+             "SRGB Block Allocation";
+         }
+         container bgp-srgb-config {
+           description
+             "SRGB block configuration related information";
+           leaf bgp-srgb-config-block-header {
+             type string;
+             description
+               "SRGB Config Block";
+           }
+           leaf bgp-srgb-start-label {
+             type int32;
+             description
+               "Configuration of SRGB start label";
+           }
+           leaf bgp-srgb-index-range {
+             type int32;
+             description
+               "Configuration of SRGB index range";
+           }
+         }
+         container bgp-srgb-block {
+           description
+             "SRGB block related information";
+           leaf bgp-srgb-first-label {
+             type int32;
+             description
+               "First label allocated for SRGB Block";
+           }
+           leaf bgp-srgb-last-label {
+             type int32;
+             description
+               "Last label allocated for SRGB Block";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds bgp-spring-information container to top-level genstate 
+       container";
+     uses bgp-spring-information-top;
+   }
+ }

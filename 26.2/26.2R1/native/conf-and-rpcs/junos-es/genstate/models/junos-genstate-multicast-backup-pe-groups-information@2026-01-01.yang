@@ -1,0 +1,103 @@
+ module junos-genstate-multicast-backup-pe-groups-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-backup-pe-groups-information";
+   prefix jgmbpgi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-backup-pe-groups-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping multicast-backup-pe-groups-information-top {
+     description
+       "Top-level grouping";
+     container multicast-backup-pe-groups-information {
+       description
+         "Information about multicast backup PE groups for one or more 
+         routing instances";
+       container multicast-backup-pe-groups {
+         description
+           "Information about multicast backup PE groups for one routing 
+           instance";
+         leaf instance-name {
+           type string;
+         }
+         list multicast-backup-pe-group {
+           key "multicast-backup-pe-group-name";
+           description
+             "Information about a multicast backup PE group";
+           leaf multicast-backup-pe-group-name {
+             type string;
+             description
+               "Name of the backup PE group";
+           }
+           leaf designated-pe {
+             type jt:ipaddr;
+             description
+               "Address of the designated PE";
+           }
+           leaf transitions {
+             type uint32;
+             description
+               "Number of times desginated PE has changed";
+           }
+           leaf last-transition {
+             type string;
+             description
+               "Time since last designated PE transition 
+               (hours:minutes:seconds)";
+           }
+           leaf local-pe-address {
+             type jt:ipaddr;
+             description
+               "Local address used in designated router election";
+           }
+           list backup-pes {
+             key "multicast-backup-pe-address";
+             description
+               "Backup PE addresses";
+             leaf multicast-backup-pe-address {
+               type jt:ipaddr;
+               description
+                 "Backup PE address";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-backup-pe-groups-information container to top-level 
+       genstate container";
+     uses multicast-backup-pe-groups-information-top;
+   }
+ }

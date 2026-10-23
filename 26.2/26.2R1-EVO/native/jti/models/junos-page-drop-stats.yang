@@ -1,0 +1,99 @@
+module junos-page-drop-stats {
+
+  yang-version "1";
+
+  // namespace
+  namespace "http://juniper.net/yang/junos-page-drop-stats";
+
+  prefix "junos-page-drop";
+
+  import junos-base-extensions {
+    prefix junos-base;
+  }
+  // meta
+  organization "Juniper Networks";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module provides data definitions for PFE page drop counters
+    ";
+
+  revision 2023-08-08 {
+    description
+      "Initial revision.";
+    reference "0.1.0";
+  }
+
+  grouping page-drop-detail {
+    list page-drop {
+       description
+       "Describes page drop interface informations";
+       key pfe;
+
+      leaf pfe {
+        type uint32;
+        description
+          "Describes pfe number";
+      }
+
+      leaf count {
+        type uint32;
+        description
+        "Describes page drop counter value from each pfe";
+      }
+
+      leaf interface {
+        type string;
+        description
+        "Describes interface name in which page drop happening";
+      }
+
+      leaf interface-oq {
+        type uint32;
+        description
+        "Describes output queue number of interface in which page drop happens ";
+      }
+
+      leaf interface-parent-ae {
+        type string;
+        description
+        "Describes parent ae name if page drop interface is part of ae";
+      }
+    }
+  }
+
+  grouping pfe-page-drop {
+    description
+      "This describes the data exported by PFE jvision page drop sensor";
+
+    container junos {
+      config false;
+      description "JunOS OS";
+
+      container system {
+        description "Junos System";
+
+        container linecard {
+          description "Contains PFE resources";
+
+          container  page-drops {
+            description "Page drop sensor data";
+            uses page-drop-detail;
+          }
+        }
+      }
+    }
+  }
+
+  uses pfe-page-drop;
+
+}

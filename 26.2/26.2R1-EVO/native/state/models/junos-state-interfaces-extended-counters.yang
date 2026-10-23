@@ -1,0 +1,166 @@
+module junos-state-interfaces-extended-counters {
+  yang-version "1.1";
+  namespace "http://yang.juniper.net/junos/state/interfaces/extended-counters";
+  prefix js-if-ecntr;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-interfaces {
+    prefix js-if;
+  }
+
+  import ietf-yang-types {
+    prefix yang;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of extended counters for JUNOS
+     Interface state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-09-20 {
+    description
+      "Initial version";
+     reference "0.1.0";
+  }
+
+  jx:version "0.1.0";
+  jx:origin "experimental";
+
+  grouping common-directional-extended-counters {
+    description
+      "Grouping of directional extended counters";
+
+    leaf in-bytes {
+      type yang:counter64;
+      description
+        "Input bytes on the logical interface";
+    }
+
+    leaf in-pkts {
+      type yang:counter64;
+      description
+        "Input packets on the logical interface";
+    }
+
+    leaf out-bytes {
+      type yang:counter64;
+      description
+        "Output bytes on the logical interface";
+    }
+
+    leaf out-pkts {
+      type yang:counter64;
+      description
+        "Output packets on the logical interface";
+    }
+  }
+
+  grouping common-nondirectional-extended-counters {
+    description
+      "Grouping of non directional extended counters";
+
+    leaf bytes {
+      type yang:counter64;
+      description
+        "Bytes on logical interface";
+    }
+
+    leaf pkts {
+      type yang:counter64;
+      description
+        "Packets on logical interface";
+    }
+
+    leaf drop-pkts {
+      type yang:counter64;
+      description
+        "Drop packets on logical interface";
+    }
+  }
+
+  grouping extended-counters-top {
+    description
+      "Top level grouping for extended counters";
+
+    container extended-counters {
+      description
+        "Enclosing container for extended counters";
+
+      uses common-directional-extended-counters;
+
+      container queues {
+        description
+          "Queue counters for logical interfaces";
+
+        list queue {
+          description
+            "Queue counters for logical interfaces";
+
+          key id;
+
+          leaf id {
+            type uint8 {
+              range "0..7";
+            }
+            description
+              "Queue ID";
+          }
+
+          uses common-nondirectional-extended-counters;
+        }
+      }
+
+      container hierarchical-policers {
+        description
+          "Enclosing container for hierarchical policer counters";
+
+        list hierarchical-policer {
+          description
+            "The list of hierarchical policers for logical interfaces";
+
+          key level;
+
+          leaf level {
+            type uint8 {
+              range "0..3";
+            }
+            description
+              "Policer level";
+          }
+
+          uses common-nondirectional-extended-counters;
+        }
+      }
+    }
+  }
+
+  augment "/js:state/js-if:interfaces/js-if:interface/js-if:units" +
+          "/js-if:unit" {
+    description
+      "Adds extended counters to logical interfaces";
+
+    uses extended-counters-top;
+  }
+}

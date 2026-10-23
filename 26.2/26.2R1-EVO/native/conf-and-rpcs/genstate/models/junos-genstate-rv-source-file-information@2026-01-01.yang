@@ -1,0 +1,97 @@
+ module junos-genstate-rv-source-file-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rv-source-file-information";
+   prefix jgrsfi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rv-source-file-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping rv-source-file-information-top {
+     description
+       "Top-level grouping";
+     container rv-source-file-information {
+       description
+         "RV source file information";
+       container rv-source-file {
+         leaf rv-source-file-name {
+           type string;
+         }
+         leaf rv-source-file-status {
+           type string;
+         }
+         leaf rv-source-file-records {
+           type uint32;
+         }
+         leaf rv-source-file-version {
+           type string;
+         }
+         leaf rv-source-file-last-read {
+           type string;
+         }
+         leaf rv-source-file-error-reason {
+           type string;
+         }
+         leaf rv-source-file-last-synced {
+           type string;
+         }
+         leaf rv-source-file-process-time {
+           type string;
+         }
+         leaf rv-source-file-serial {
+           type uint32;
+         }
+         leaf rv-source-file-size {
+           type uint32;
+         }
+         leaf rv-source-file-reads {
+           type uint32;
+         }
+         leaf rv-source-file-synced {
+           type uint32;
+         }
+         leaf rv-source-file-reverts {
+           type uint32;
+         }
+         leaf rv-source-file-errors {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rv-source-file-information container to top-level genstate 
+       container";
+     uses rv-source-file-information-top;
+   }
+ }

@@ -1,0 +1,207 @@
+ module junos-genstate-rsvp-neighbor-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rsvp-neighbor-information";
+   prefix jgrni;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rsvp-neighbor-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping rsvp-neighbor-information-top {
+     description
+       "Top-level grouping";
+     container rsvp-neighbor-information {
+       description
+         "Top-level container";
+       leaf rsvp-neighbor-count {
+         type int32;
+         description
+           "Number of RSVP neighbors learned";
+       }
+       list rsvp-neighbor {
+         key "rsvp-neighbor-address";
+         leaf rsvp-neighbor-address {
+           type jt:ipaddr;
+         }
+         leaf neighbor-idle {
+           type string;
+           description
+             "Length of time this neighbor has been idle";
+         }
+         leaf neighbor-up-count {
+           type int32;
+           description
+             "Number of times neighbor came up";
+         }
+         leaf neighbor-down-count {
+           type int32;
+           description
+             "Number of times neighbor went down";
+         }
+         leaf last-changed-time {
+           type string;
+           description
+             "Time this neighbor last changed state";
+         }
+         leaf hello-interval {
+           type int32;
+           description
+             "Interval between two successive hellos";
+         }
+         leaf hellos-sent {
+           type int32;
+           description
+             "Number of hellos sent";
+         }
+         leaf hellos-received {
+           type int32;
+           description
+             "Number of hellos received";
+         }
+         leaf messages-received {
+           type int32;
+           description
+             "Total number of messages received";
+         }
+         container rsvp-graceful-restart {
+           leaf restart-time {
+             type int32;
+             description
+               "Restart time advertised";
+           }
+           leaf recovery-time {
+             type int32;
+             description
+               "Recovery time advertised";
+           }
+         }
+         leaf rsvp-neighbor-interface {
+           type string;
+           description
+             "Local interface name";
+         }
+         leaf rsvp-neighbor-status {
+           type string;
+         }
+         leaf rsvp-neighbor-remote {
+           type empty;
+           description
+             "Address represents an RSVP remote neighbor";
+         }
+         leaf rsvp-neighbor-node {
+           type empty;
+           description
+             "Address represents a RSVP node neighbor";
+         }
+         leaf rsvp-neighbor-remote-node {
+           type empty;
+           description
+             "Address of RSVP remote node neighbor";
+         }
+         leaf rsvp-neighbor-remote-instance {
+           type string;
+           description
+             "Remote instance";
+         }
+         leaf rsvp-neighbor-local-instance {
+           type string;
+           description
+             "Local instance";
+         }
+         leaf rsvp-refresh-reduct-status {
+           type string;
+         }
+         leaf rsvp-refresh-reduct-remote-status {
+           type string;
+         }
+         leaf rsvp-refresh-reduct-ack-status {
+           type string;
+         }
+         container rsvp-nbr-enh-local-protection {
+           leaf rsvp-nbr-enh-lp-status {
+             type string;
+             description
+               "Enhanced FRR local protection status on Neighbor";
+           }
+           leaf rsvp-nbr-flow-control-status {
+             type string;
+             description
+               "RSVP flow control support on neighbor";
+           }
+           leaf rsvp-nbr-enh-lp-total-lsp-count {
+             type uint32;
+             description
+               "Number of LSPs associated with this Neighbor";
+           }
+           leaf rsvp-nbr-enh-lp-phop-lsp-count {
+             type uint32;
+             description
+               "Number of LSPs for which this is Phop Neighbor";
+           }
+           leaf rsvp-nbr-enh-lp-pphop-lsp-count {
+             type uint32;
+             description
+               "Number of LSPs for which this is PPhop Neighbor";
+           }
+           leaf rsvp-nbr-enh-lp-nhop-lsp-count {
+             type uint32;
+             description
+               "Number of LSPs for which this is Nhop Neighbor";
+           }
+           leaf rsvp-nbr-enh-lp-nnhop-lsp-count {
+             type uint32;
+             description
+               "Number of LSPs for which this is NNhop Neighbor";
+           }
+         }
+         container rsvp-nbr-label {
+           leaf rsvp-nbr-label-unprotected {
+             type uint32;
+             description
+               "Pop and forward label for the neighbor";
+           }
+           leaf rsvp-nbr-label-link-protected {
+             type uint32;
+             description
+               "Pop and forward link-protected label";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rsvp-neighbor-information container to top-level genstate 
+       container";
+     uses rsvp-neighbor-information-top;
+   }
+ }

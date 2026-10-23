@@ -1,0 +1,397 @@
+ module junos-genstate-ospf3-overview-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ospf3-overview-information";
+   prefix jgooi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ospf3-overview-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ospf3-overview-information-top {
+     description
+       "Top-level grouping";
+     container ospf3-overview-information {
+       description
+         "Overview information for an OSPFv3 instance";
+       container ospf-overview {
+         description
+           "Overview information for an OSPF instance";
+         leaf instance-name {
+           type string;
+         }
+         leaf ospf-router-id {
+           type jt:ipaddr;
+           description
+             "OSPF router ID";
+         }
+         leaf ospf-route-table-index {
+           type uint32;
+           description
+             "Route table index";
+         }
+         leaf ospf-configured-overload {
+           type empty;
+           description
+             "Instance is configured to be in overload";
+         }
+         leaf ospf-configured-overload-remaining-time {
+           type string;
+           description
+             "Time remaining on configured overload timeout";
+         }
+         leaf ospf-abr {
+           type empty;
+           description
+             "Router is an area border router";
+         }
+         leaf ospf-asbr {
+           type empty;
+           description
+             "Router is an autonomous system boundary router";
+         }
+         leaf ospf-nssa-router {
+           type empty;
+           description
+             "Router is a not-so-stubby area router";
+         }
+         leaf no-rfc-1583 {
+           type empty;
+           description
+             "RFC1583 compatibility is disabled";
+         }
+         leaf forwarding-address-to-broadcast {
+           type empty;
+           description
+             "Set forwarding address in Type 5 LSA in broadcast network";
+         }
+         leaf ospf-lsa-refresh-time {
+           type uint32;
+           description
+             "Refresh period for link-state advertisement (in minutes)";
+         }
+         leaf ospf-traffic-engineering {
+           type empty;
+           description
+             "Traffic engineering is enabled";
+         }
+         leaf ospf-dna-uncapable {
+           type empty;
+           description
+             "Not safe to generate DoNotAge LSAs";
+         }
+         leaf ospf-as-dc-bit-clear-count {
+           type uint32;
+           description
+             "Number of AS scope link-state advertisements received with DC 
+             bit clear";
+         }
+         leaf ospf-area-dc-bit-clear-count {
+           type uint32;
+           description
+             "Number of area scope link-state advertisements received with 
+             DC bit clear";
+         }
+         leaf ospf-area-indications-count {
+           type uint32;
+           description
+             "Number of indication link-state advertisements received";
+         }
+         leaf ospf-link-dc-bit-clear-count {
+           type uint32;
+           description
+             "Number of link local scope link-state advertisements received 
+             with no DC bit clear";
+         }
+         container ospf-restart {
+           description
+             "OSPF restart parameters";
+           leaf ospf-restart-enabled {
+             type string;
+             description
+               "OSPF restart mode";
+           }
+           leaf ospf-restart-duration {
+             type uint32;
+             description
+               "Duration of OSPF restart (seconds)";
+           }
+           leaf ospf-restart-grace-period {
+             type uint32;
+             description
+               "Grace period for OSPF restart (seconds)";
+           }
+           leaf ospf-standard-graceful-restart-helper-mode {
+             type string;
+             description
+               "OSPF graceful restart (RFC3623) helper mode";
+           }
+           leaf ospf-restart-signaling-helper-mode {
+             type string;
+             description
+               "OSPF restart-signaling helper mode";
+           }
+         }
+         container ospf-db-protection-overview {
+           description
+             "OSPF database protection overview information";
+           leaf ospf-db-protection-state {
+             type string;
+             description
+               "Database protection state";
+           }
+           leaf ospf-db-protection-remaining-time {
+             type uint32;
+             description
+               "Time remaining in the current state";
+           }
+           leaf ospf-db-protection-warning-threshold {
+             type uint32;
+             description
+               "Warning threshold as percentage";
+           }
+           leaf ospf-db-protection-warning-only {
+             type empty;
+             description
+               "Configured to generate warning only";
+           }
+           leaf ospf-db-protection-lsa-current {
+             type uint32;
+             description
+               "Current number of non self-generated LSAs";
+           }
+           leaf ospf-db-protection-lsa-warning {
+             type uint32;
+             description
+               "Warning number of non self-generated LSAs";
+           }
+           leaf ospf-db-protection-lsa-maximum {
+             type uint32;
+             description
+               "Allowed number of non self-generated LSAs";
+           }
+           leaf ospf-db-protection-ignore-time {
+             type uint32;
+             description
+               "Configured value of ignore time";
+           }
+           leaf ospf-db-protection-reset-time {
+             type uint32;
+             description
+               "Configured value of reset time";
+           }
+           leaf ospf-db-protection-ignore-current {
+             type uint32;
+             description
+               "Current number of transitions to Ignore state";
+           }
+           leaf ospf-db-protection-ignore-maximum {
+             type uint32;
+             description
+               "Allowed number of transitions to Ignore state";
+           }
+         }
+         list ospf-area-overview {
+           key "ospf-area";
+           description
+             "Overview information for an OSPF area";
+           leaf ospf-area {
+             type string;
+             description
+               "Area ID";
+           }
+           leaf ospf-stub-type {
+             type string;
+             description
+               "Stub type of area";
+           }
+           leaf ospf-stub-cost {
+             type uint32;
+             description
+               "Cost of default route in stub area";
+           }
+           leaf ospf-virtual-transit {
+             type empty;
+             description
+               "Area is transit for virtual links";
+           }
+           leaf authentication-type {
+             type string;
+             description
+               "Type of authentication";
+           }
+           leaf ospf-abr-count {
+             type uint32;
+             description
+               "Number of area border routers";
+           }
+           leaf ospf-asbr-count {
+             type uint32;
+             description
+               "Number of autonomous system boundary routers";
+           }
+           leaf ospf-dna-uncapable {
+             type empty;
+             description
+               "Not safe to generate DoNotAge LSAs";
+           }
+           leaf ospf-area-dc-bit-clear-count {
+             type uint32;
+             description
+               "Number of area scope link-state advertisements received with
+               DC bit clear";
+           }
+           leaf ospf-area-indications-count {
+             type uint32;
+             description
+               "Number of indication link-state advertisements received";
+           }
+           leaf ospf-area-self-indicating {
+             type empty;
+             description
+               "Router generated an indication link-state advertisement";
+           }
+           leaf ospf-link-dc-bit-clear-count {
+             type uint32;
+             description
+               "Number of link local scope link-state advertisements 
+               received with no DC bit clear";
+           }
+           container ospf-nbr-overview {
+             leaf ospf-nbr-up-count {
+               type uint32;
+               description
+                 "Number of neighbors in full state";
+             }
+           }
+         }
+         list ospf-topology-overview {
+           key "ospf-topology-name";
+           description
+             "OSPF topology specific overview information";
+           leaf ospf-topology-name {
+             type string;
+             description
+               "OSPF topology name";
+           }
+           leaf ospf-topology-id {
+             type int32;
+             description
+               "OSPF topology id";
+           }
+           leaf ospf-topology-configured-overload {
+             type empty;
+             description
+               "Topology is configured to be in overload";
+           }
+           leaf ospf-topology-dynamic-overload {
+             type empty;
+             description
+               "Topology is in dynamic overload i.e. prefix limit was 
+               exceeded";
+           }
+           leaf ospf-prefix-export-count {
+             type uint32;
+             description
+               "Number of prefixes exported into the topology";
+           }
+           leaf ospf-prefix-export-limit {
+             type uint32;
+             description
+               "Number of prefixes we are allowed to exported into the 
+               topology";
+           }
+           leaf ospf-full-spf-count {
+             type uint32;
+             description
+               "Number of full SPF calculations";
+           }
+           leaf ospf-spf-delay {
+             type string;
+             description
+               "Delay before performing consecutive SPF calculations";
+           }
+           leaf ospf-spf-holddown {
+             type string;
+             description
+               "Time to hold down before running an SPF";
+           }
+           leaf ospf-spf-rapid-runs {
+             type string;
+             description
+               "Number of rapid SPF runs before SPF holddown";
+           }
+           leaf ospf-backup-spf-status {
+             type string;
+             description
+               "Backup SPF status";
+           }
+           leaf ospf-backup-spf-remote-backup-calculation {
+             type empty;
+             description
+               "Remote-LFA backup calculations enabled";
+           }
+           leaf ospf-backup-spf-downstream-only {
+             type empty;
+             description
+               "Topology is configured to use only downstream backup paths";
+           }
+           leaf ospf-backup-spf-node-link-degradation {
+             type empty;
+             description
+               "Topology is configured to use node link degradation";
+           }
+           leaf ospf-te-shortcuts {
+             type empty;
+             description
+               "IP Traffic engineering shortcuts are enabled";
+           }
+           leaf ospf-te-shortcuts-mpls {
+             type empty;
+             description
+               "MPLS Traffic engineering shortcuts are enabled";
+           }
+           leaf ospf-topo-sessid-count {
+             type uint32;
+             description
+               "Number of Session IDs associated with routes in this toplogy";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ospf3-overview-information container to top-level genstate 
+       container";
+     uses ospf3-overview-information-top;
+   }
+ }

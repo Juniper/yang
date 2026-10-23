@@ -1,0 +1,85 @@
+ module junos-genstate-ldp-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-statistics-information";
+   prefix jglsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ldp-statistics-information-top {
+     description
+       "Top-level grouping";
+     container ldp-statistics-information {
+       description
+         "Top-level container";
+       container ldp-statistics {
+         list ldp-message-statistics {
+           key "ldp-message-type";
+           leaf ldp-message-type {
+             type string;
+           }
+           leaf ldp-messages-sent {
+             type uint32;
+           }
+           leaf ldp-messages-received {
+             type uint32;
+           }
+           leaf ldp-messages-sent-5seconds {
+             type uint32;
+           }
+           leaf ldp-messages-received-5seconds {
+             type uint32;
+           }
+         }
+         list ldp-event-statistics {
+           key "ldp-event-type";
+           leaf ldp-event-type {
+             type string;
+           }
+           leaf ldp-event-count {
+             type uint32;
+           }
+           leaf ldp-event-count-5seconds {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-statistics-information container to top-level genstate 
+       container";
+     uses ldp-statistics-information-top;
+   }
+ }

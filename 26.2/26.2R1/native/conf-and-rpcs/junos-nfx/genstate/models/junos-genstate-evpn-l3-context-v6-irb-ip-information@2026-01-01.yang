@@ -1,0 +1,71 @@
+ module junos-genstate-evpn-l3-context-v6-irb-ip-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-l3-context-v6-irb-ip-information";
+   prefix jgelcviii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-l3-context-v6-irb-ip-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-l3-context-v6-irb-ip-information-top {
+     description
+       "Top-level grouping";
+     container evpn-l3-context-v6-irb-ip-information {
+       description
+         "Top-level container";
+       list evpn-irb-ip-context {
+         key "context-name";
+         leaf context-name {
+           type string;
+         }
+         list irb-ip-entry {
+           key "irb-ip-addr";
+           leaf irb-interface-name {
+             type string;
+           }
+           leaf irb-ip-addr {
+             type jt:ipaddr;
+           }
+           leaf irb-ip-pfxlen {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-l3-context-v6-irb-ip-information container to top-level 
+       genstate container";
+     uses evpn-l3-context-v6-irb-ip-information-top;
+   }
+ }

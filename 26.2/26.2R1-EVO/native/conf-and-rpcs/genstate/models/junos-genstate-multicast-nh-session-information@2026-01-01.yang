@@ -1,0 +1,73 @@
+ module junos-genstate-multicast-nh-session-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-nh-session-information";
+   prefix jgmnsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-nh-session-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping multicast-nh-session-information-top {
+     description
+       "Top-level grouping";
+     container multicast-nh-session-information {
+       description
+         "Top-level container";
+       list multicast-nh-session {
+         key "multicast-nh-session-index";
+         description
+           "Multicast Composite next hop session IDs";
+         leaf multicast-nh-session-index {
+           type uint32;
+         }
+         leaf multicast-nh-session-role {
+           type string;
+         }
+         leaf multicast-nh-session-l3-vrf {
+           type string;
+         }
+         leaf multicast-nh-session-state {
+           type string;
+         }
+         leaf multicast-nh-session-refcount {
+           type uint32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-nh-session-information container to top-level 
+       genstate container";
+     uses multicast-nh-session-information-top;
+   }
+ }

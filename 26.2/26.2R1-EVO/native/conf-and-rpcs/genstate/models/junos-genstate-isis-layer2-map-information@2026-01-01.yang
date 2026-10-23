@@ -1,0 +1,80 @@
+ module junos-genstate-isis-layer2-map-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-layer2-map-information";
+   prefix jgilmi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-layer2-map-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping isis-layer2-map-information-top {
+     description
+       "Top-level grouping";
+     container isis-layer2-map-information {
+       description
+         "IS-IS Layer2 mapping information";
+       list isis-layer2-map-database {
+         key "instance-name";
+         leaf instance-name {
+           type string;
+         }
+         leaf ip-entry-count {
+           type uint32;
+         }
+         leaf ip6-entry-count {
+           type uint32;
+         }
+         list isis-layer2-map-entry {
+           key "ip-address";
+           leaf ip-address {
+             type jt:ipaddr;
+           }
+           leaf interface-name2 {
+             type string;
+           }
+           leaf isis-layer2-map-next-refresh {
+             type string;
+           }
+           leaf-list isis-layer2-map-state {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-layer2-map-information container to top-level genstate 
+       container";
+     uses isis-layer2-map-information-top;
+   }
+ }

@@ -1,0 +1,91 @@
+ module junos-genstate-mld-snooping-evpn-status-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mld-snooping-evpn-status-information";
+   prefix jgmsesi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mld-snooping-evpn-status-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mld-snooping-evpn-status-information-top {
+     description
+       "Top-level grouping";
+     container mld-snooping-evpn-status-information {
+       description
+         "Top-level container";
+       leaf oism-mode {
+         type string;
+       }
+       leaf smet-enabled {
+         type string;
+       }
+       list mld-snooping-evpn-status-information-per-instance {
+         key "instance-name";
+         leaf instance-name {
+           type string;
+         }
+         list mld-snooping-evpn-status-information-per-bd {
+           key "evpn-bridge-domain";
+           leaf evpn-bridge-domain {
+             type string;
+           }
+           leaf vlan-id {
+             type int32;
+           }
+           leaf vni-id {
+             type int32;
+           }
+           container evpn-status-bd-info {
+             leaf evpn-oism-bd-state {
+               type string;
+             }
+             leaf evpn-oism-bd-sbd-state {
+               type string;
+             }
+             leaf evpn-oism-bd-mvlan-state {
+               type string;
+             }
+             leaf evpn-oism-bd-dci-state {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mld-snooping-evpn-status-information container to top-level 
+       genstate container";
+     uses mld-snooping-evpn-status-information-top;
+   }
+ }

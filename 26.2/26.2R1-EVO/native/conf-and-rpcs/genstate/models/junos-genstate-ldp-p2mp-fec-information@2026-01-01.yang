@@ -1,0 +1,85 @@
+ module junos-genstate-ldp-p2mp-fec-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-p2mp-fec-information";
+   prefix jglpfi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-p2mp-fec-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ldp-p2mp-fec-information-top {
+     description
+       "Top-level grouping";
+     container ldp-p2mp-fec-information {
+       description
+         "Top-level container";
+       list ldp-p2mp-fec {
+         key "ldp-prefix";
+         leaf ldp-prefix {
+           type string;
+         }
+         leaf next-root {
+           type string;
+         }
+         leaf ldp-p2mp-fec-mofrr {
+           type string;
+           description
+             "Indicates if MoFRR enabled for this fec";
+         }
+         leaf ldp-p2mp-fec-type {
+           type string;
+           description
+             "Type of p2mp fec";
+         }
+         leaf ldp-prefix-active {
+           type string;
+           description
+             "Indicates if p2mp path is active for this fec";
+         }
+         leaf ldp-p2mp-fec-outlib-label {
+           type int32;
+           description
+             "Label advertised on output session";
+         }
+         leaf ldp-reference-count {
+           type int32;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-p2mp-fec-information container to top-level genstate 
+       container";
+     uses ldp-p2mp-fec-information-top;
+   }
+ }

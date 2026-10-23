@@ -1,0 +1,95 @@
+ module junos-genstate-mvrp-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mvrp-interface-information";
+   prefix jgmii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   import junos-extension {
+     prefix junos;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mvrp-interface-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mvrp-interface-information-top {
+     description
+       "Top-level grouping";
+     container mvrp-interface-information {
+       description
+         "Top-level container";
+       junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+       list mvrp-interface-instance {
+         key "mvrp-routing-instance-name";
+         junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+         leaf mvrp-routing-instance-name {
+           type string;
+           description
+             "Name of routing instance";
+         }
+         list mvrp-interface-entry {
+           key "mvrp-interface-name";
+           junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+           leaf mvrp-interface-name {
+             type string;
+             description
+               "Name of interface";
+             junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+           }
+           leaf mvrp-interface-status {
+             type string;
+             description
+               "MVRP interface operational status";
+             junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+           }
+           leaf mvrp-interface-registration-mode {
+             type string;
+             description
+               "MVRP interface registration mode";
+             junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+           }
+           leaf mvrp-interface-applicant-mode {
+             type string;
+             description
+               "MVRP interface applicant mode";
+             junos:product "olive mx960 mx480 srx5800 srx5600 mx240 srx3600 srx3400 srx210b srx210h srx210h-poe srx210h-p-m srx240b srx240h srx240h-poe srx240h-p-m srx630 srx650 srx680 srx100b srx100h srx110b-va srx110h-va srx110b-vb srx110h-vb srx110b-wl srx220h srx220h-poe srx220h-p-m ln1000-v dc_olive srx1400 mx80 mx80-48t srx240h-dc qfx3500s srx110h-wl srx110h-va-wl srx210be srx210he srx210he-poe srx110h-vb-wl srx210he-p-m mx5-t mx10-t mx40-t mx80-t srx550 mx80-p qfx3600-16qs mx2020 mx2010 ln2600 ex8208-j ex8216-j ex4300-24p ex4300-24t ex4300-48p ex4300-48t ex4300-48t-bf ex4300-48t-dc ex4300-48t-dc-bf ex9204 ex9208 ex9214 mx104 qfx5100-48s-6q ex4300-32f qfx5100-96s-8q vmx qfx5100-24q-2p srx5400 qfx5100-24q-aa pvi-model vrr qfx10004 qfx10008 qfx10016 vqfx-10000 qfx10000-elit srx240b2 srx240h2 srx240h2-poe srx240h2-dc vsrx srx100h2 srx110h2-va srx110h2-vb srx210he2 srx210he2-poe srx220h2 srx220h2-poe srxtvp srx550m qfx5200-32c-32q srx300 srx300-lem srx320 srx320-lem srx320-poe srx320-poe-lem srx340 srx340-lem srx345 srx345-lem mx2008 mxtsr80 mx10001 mx10002 ptx10003-160c srx320-lte-aa srx320-lte-ae srx320-poe-lte-aa srx320-poe-lte-ae srx345-dual-ac srx345-dc ex9251 ex9253 ptx10003-80c ptx10016 ptx10001-27cd ptx10008 qfx5220-32cd qfx5220-128c srx380-poe-ac ptx10001-36mr qfx5130-32cd ptx10004 qfx5700 qfx5009 mx304 ptx10002-36qdd qfx5230-64cd qfx5130-48c qfx5130-48cm qfx5240-64od qfx5240-64qd qfx5130e-32cd ptx10001-36mr-k ptx12008 ptx12000 qfx5241-32od qfx5241-32qd qfx5241-64od qfx5241-64qd mx301 ptx10002-60mr ptx10002-36cd qfx5241e_64od qfx5241e_64qd qfx5140-24cd8o qfx5250-64oe qfx5250-64oe-l ptx10002kx ptx12012 ptx10002-36-od ";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mvrp-interface-information container to top-level genstate 
+       container";
+     uses mvrp-interface-information-top;
+   }
+ }

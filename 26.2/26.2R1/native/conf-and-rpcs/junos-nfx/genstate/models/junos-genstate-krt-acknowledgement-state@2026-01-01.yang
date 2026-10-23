@@ -1,0 +1,123 @@
+ module junos-genstate-krt-acknowledgement-state {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/krt-acknowledgement-state";
+   prefix jgkas;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for krt-acknowledgement-state.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping krt-acknowledgement-state-top {
+     description
+       "Top-level grouping";
+     container krt-acknowledgement-state {
+       description
+         "Top-level container";
+       leaf krt-acknowledgement-enabled {
+         type string;
+         description
+           "Acknowledgements enabled or not";
+       }
+       leaf krt-rt-acknowledgement-timeout {
+         type int32;
+         description
+           "Route Acknowledgements timeout in seconds";
+       }
+       leaf krt-rt-acknowledgement-requested {
+         type int32;
+         description
+           "Total Route ACKs requested";
+       }
+       leaf krt-rt-acknowledgement-pending {
+         type int32;
+         description
+           "Route ACK count currently pending";
+       }
+       leaf krt-rt-acknowledgement-received {
+         type int32;
+         description
+           "Positive Route ACKs received from kernel";
+       }
+       leaf krt-rt-acknowledgement-max-pending {
+         type int32;
+         description
+           "Maximum concurrently pending Route ACK's since boot";
+       }
+       leaf krt-rt-acknowledgement-timeouts {
+         type int32;
+         description
+           "Number of Route ACK's which timed out";
+       }
+       leaf krt-nh-acknowledgement-timeout {
+         type int32;
+         description
+           "Next Hop Acknowledgements timeout in seconds";
+       }
+       leaf krt-nh-acknowledgement-requested {
+         type int32;
+         description
+           "Total Next Hop ACKs requested";
+       }
+       leaf krt-nh-acknowledgement-pending {
+         type int32;
+         description
+           "Next Hop ACK count currently pending";
+       }
+       leaf krt-nh-acknowledgement-received {
+         type int32;
+         description
+           "Positive Next Hop ACKs received from kernel";
+       }
+       leaf krt-nh-acknowledgement-max-pending {
+         type int32;
+         description
+           "Maximum concurrently pending Next Hop ACK's since boot";
+       }
+       leaf krt-nh-acknowledgement-timeouts {
+         type int32;
+         description
+           "Number of Next Hop ACK's which timed out";
+       }
+       leaf krt-acknowledgement-notfound {
+         type int32;
+         description
+           "Number of times a matching NEXTHOP ACK request not found";
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds krt-acknowledgement-state container to top-level genstate 
+       container";
+     uses krt-acknowledgement-state-top;
+   }
+ }

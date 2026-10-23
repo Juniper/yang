@@ -1,0 +1,56 @@
+ module junos-genstate-stitch-release-os-root-tag {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/stitch-release-os-root-tag";
+   prefix jgsrort;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for stitch-release-os-root-tag.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping stitch-release-os-root-tag-top {
+     description
+       "Top-level grouping";
+     container stitch-release-os-root-tag {
+       description
+         "Top-level container";
+       leaf stitch-release-os-root-tag-leaf {
+         type string;
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds stitch-release-os-root-tag container to top-level genstate 
+       container";
+     uses stitch-release-os-root-tag-top;
+   }
+ }

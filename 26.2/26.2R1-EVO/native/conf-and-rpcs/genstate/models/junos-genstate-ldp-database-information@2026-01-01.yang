@@ -1,0 +1,230 @@
+ module junos-genstate-ldp-database-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-database-information";
+   prefix jgldi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-database-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ldp-database-information-top {
+     description
+       "Top-level grouping";
+     container ldp-database-information {
+       description
+         "Top-level container";
+       list ldp-database {
+         key "ldp-session-id";
+         leaf ldp-database-type {
+           type string;
+         }
+         leaf ldp-session-id {
+           type string;
+         }
+         leaf ldp-label-received {
+           type uint32;
+           description
+             "Labels received";
+         }
+         leaf ldp-label-advertised {
+           type uint32;
+           description
+             "Labels advertised";
+         }
+         container ldp-database-summary {
+           leaf ldp-session-id {
+             type string;
+           }
+           leaf ldp-label-received {
+             type uint32;
+             description
+               "Labels received";
+           }
+           leaf ldp-label-advertised {
+             type uint32;
+             description
+               "Labels advertised";
+           }
+         }
+         list ldp-binding {
+           key "ldp-label";
+           leaf ldp-label {
+             type int32;
+           }
+           leaf ldp-prefix {
+             type string;
+           }
+           leaf next-root {
+             type string;
+           }
+           leaf ldp-binding-filtered {
+             type empty;
+           }
+           leaf ldp-binding-mbbreqrecvd {
+             type empty;
+           }
+           leaf ldp-binding-mbbreqsent {
+             type empty;
+           }
+           leaf ldp-binding-stale {
+             type empty;
+           }
+           leaf ldp-binding-mtu {
+             type int32;
+           }
+           leaf ldp-binding-cell-bundle-size {
+             type int32;
+           }
+           leaf ldp-binding-requested-vlan-id {
+             type int32;
+           }
+           leaf ldp-binding-bitrate {
+             type int32;
+           }
+           leaf ldp-binding-payload-size {
+             type int32;
+           }
+           leaf ldp-binding-pw-flow-label-tx {
+             type int32;
+           }
+           leaf ldp-binding-pw-flow-label-rx {
+             type int32;
+           }
+           leaf ldp-binding-pw-status-code {
+             type int32;
+           }
+           leaf ldp-binding-l2protec-context-id {
+             type jt:ipaddr;
+           }
+           leaf ldp-binding-l2protec-ctrl-word {
+             type string;
+           }
+           leaf ldp-binding-state {
+             type string;
+           }
+           leaf ldp-binding-age {
+             type string;
+           }
+           leaf ldp-binding-queued {
+             type empty;
+           }
+           leaf ldp-binding-not-yet-sent {
+             type empty;
+           }
+           leaf ldp-binding-delete-scheduled {
+             type string;
+           }
+           leaf ldp-binding-elc {
+             type string;
+           }
+           container ldp-binding-standby {
+             description
+               "Standby binding information";
+             leaf ldp-binding-standby-map-count {
+               type int32;
+               description
+                 "Count of outstanding map messages received";
+             }
+             leaf ldp-binding-standby-rel-count {
+               type int32;
+               description
+                 "Count of outstanding release messages received";
+             }
+           }
+           container ldp-l2circuit-vccv-cc-type {
+             description
+               "VCCV connectivity channel types supported by peer";
+             leaf mpls-type-control-word {
+               type string;
+               description
+                 "Indicates that pwe3 control word type is supported";
+             }
+             leaf mpls-type-router-alert {
+               type string;
+               description
+                 "Indicates that mpls router alert label is supported";
+             }
+             leaf mpls-type-pw-label {
+               type string;
+               description
+                 "Indicates that pseudowire label with ttl=1 is supported";
+             }
+           }
+           container ldp-l2circuit-vccv-cv-type {
+             description
+               "VCCV connectivity verification types supported by peer";
+             leaf mpls-type-icmp-ping {
+               type string;
+               description
+                 "Indicates that ICMP ping is supported";
+             }
+             leaf mpls-type-lsp-ping {
+               type string;
+               description
+                 "Indicates that LSP ping is supported";
+             }
+             leaf mpls-type-bfd-pw-ach-fd {
+               type string;
+               description
+                 "Indicates that PW-ACH-encapsulated BFD for PW Fault 
+                 Detection is supported";
+             }
+             leaf mpls-type-bfd-pw-ach-fd-fss {
+               type string;
+               description
+                 "Indicates that PW-ACH-encapsulated BFD for PW Fault 
+                 Detection and AC/PW Fault Status Signaling is supported";
+             }
+             leaf mpls-type-bfd-ip-udp-fd {
+               type string;
+               description
+                 "Indicates that IP/UDP-encapsulated BFD for PW Fault 
+                 Detection is supported";
+             }
+             leaf mpls-type-bfd-ip-udp-fd-fss {
+               type string;
+               description
+                 "Indicates that IP/UDP-encapsulated BFD for PW Fault 
+                 Detection and AC/PW Fault Status Signaling is supported";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-database-information container to top-level genstate 
+       container";
+     uses ldp-database-information-top;
+   }
+ }

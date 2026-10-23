@@ -1,0 +1,70 @@
+ module junos-genstate-rt-pfe-install-errors {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rt-pfe-install-errors";
+   prefix jgrpie;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rt-pfe-install-errors.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping rt-pfe-install-errors-top {
+     description
+       "Top-level grouping";
+     container rt-pfe-install-errors {
+       description
+         "Top-level container";
+       list route-pfe-err {
+         key "rt-prefix";
+         leaf rt-prefix {
+           type string;
+         }
+         leaf rt-err-category {
+           type string;
+         }
+         leaf rt-handle {
+           type string;
+         }
+         leaf rt-err-type {
+           type string;
+         }
+         leaf rt-timestamp {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rt-pfe-install-errors container to top-level genstate container";
+     uses rt-pfe-install-errors-top;
+   }
+ }

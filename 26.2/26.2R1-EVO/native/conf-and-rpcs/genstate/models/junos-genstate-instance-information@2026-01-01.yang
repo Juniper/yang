@@ -1,0 +1,141 @@
+ module junos-genstate-instance-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/instance-information";
+   prefix jgii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for instance-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping instance-information-top {
+     description
+       "Top-level grouping";
+     container instance-information {
+       description
+         "Operational and configuration information for routing instances";
+       list instance-core {
+         key "instance-name";
+         leaf instance-name {
+           type string;
+         }
+         leaf instance-type {
+           type string;
+         }
+         list instance-rib {
+           key "irib-name";
+           leaf irib-name {
+             type string;
+           }
+           leaf irib-active-count {
+             type int32;
+           }
+           leaf irib-holddown-count {
+             type int32;
+           }
+           leaf irib-hidden-count {
+             type int32;
+           }
+           leaf irib-route-count {
+             type int32;
+           }
+           leaf irib-restart-state {
+             type string;
+           }
+         }
+         leaf instance-description {
+           type string;
+         }
+         leaf router-id {
+           type jt:ipaddr;
+         }
+         leaf ipv6-router-id {
+           type string;
+         }
+         leaf instance-state {
+           type string;
+         }
+         leaf instance-restart-state {
+           type string;
+         }
+         leaf instance-pathsel-timeout {
+           type int32;
+         }
+         leaf instance-proto-gr-enabled {
+           type string;
+         }
+         leaf instance-lsi-state {
+           type string;
+         }
+         leaf pre-export-filter {
+           type string;
+         }
+         list instance-vrf {
+           key "route-distinguisher";
+           leaf route-distinguisher {
+             type string;
+             description
+               "Name of the route-distinguisher";
+           }
+           leaf vrf-import {
+             type string;
+           }
+           leaf vrf-export {
+             type string;
+           }
+           leaf vrf-import-target {
+             type string;
+           }
+           leaf vrf-export-target {
+             type string;
+           }
+           leaf vrf-label-allocation {
+             type string;
+           }
+           leaf vrf-label-substitution {
+             type string;
+           }
+           leaf fast-reroute-priority {
+             type string;
+           }
+           leaf vrf-edge-protection-context-id {
+             type jt:ipaddr;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds instance-information container to top-level genstate container";
+     uses instance-information-top;
+   }
+ }

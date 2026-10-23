@@ -1,0 +1,72 @@
+ module junos-genstate-evpn-oism-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-oism-information";
+   prefix jgeoi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-oism-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping evpn-oism-information-top {
+     description
+       "Top-level grouping";
+     container evpn-oism-information {
+       description
+         "Top-level container";
+       container evpn-oism {
+         leaf oism-context-name {
+           type string;
+         }
+         leaf oism-sbd-interface {
+           type string;
+         }
+         leaf oism-peg-df-election {
+           type string;
+         }
+         leaf oism-peg-df-algorithm {
+           type string;
+         }
+         leaf oism-mode {
+           type string;
+         }
+         leaf oism-dci-status {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-oism-information container to top-level genstate container";
+     uses evpn-oism-information-top;
+   }
+ }

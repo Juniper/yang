@@ -1,0 +1,78 @@
+ module junos-genstate-mpls-label-history {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-label-history";
+   prefix jgmlh;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-label-history.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping mpls-label-history-top {
+     description
+       "Top-level grouping";
+     container mpls-label-history {
+       description
+         "Top-level container";
+       list label-history-entry {
+         key "label";
+         description
+           "Label history";
+         leaf time {
+           type string;
+           description
+             "Time of the event";
+         }
+         leaf label {
+           type int32;
+           description
+             "Label";
+         }
+         leaf action {
+           type string;
+         }
+         leaf protocol {
+           type string;
+           description
+             "Protocol from which route was learned";
+         }
+         leaf info {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-label-history container to top-level genstate container";
+     uses mpls-label-history-top;
+   }
+ }

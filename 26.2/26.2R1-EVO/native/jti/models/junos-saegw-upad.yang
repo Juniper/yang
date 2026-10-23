@@ -1,0 +1,520 @@
+
+/*
+ * $Id$
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+/**
+ * @file
+ * OC Render Tree Model file.
+ */
+
+module junos-saegw-upad {
+    yang-version "1";
+    namespace "http://juniper.net/yang/junos-saegw-upad";
+
+    prefix "jupad";
+
+    // meta
+    organization "Juniper Networks Inc.";
+
+    description
+        "This module provides common data definitions for mobile-edge
+        saegw-upad operational state and statistics";
+
+    revision "2021-08-23" {
+        description
+            "Initial definition of Junos native saegw-upad yang model";
+        reference "1.0.0";
+    }
+
+    grouping ip-addr-common {
+        description "IP adress used for iteration";
+        leaf ip-addr {
+            type string;
+            description "IPv4 or IPv6 adress in string format";
+        }
+    }
+    grouping slot-common {
+        description "slot number used for iteration";
+        leaf pfe {
+            type uint32;
+            description "slot number";
+        }
+    }
+    grouping pic-common {
+        description "PIC used for iteration";
+        leaf pfe {
+            type string;
+            description "Physical Interface Card(PIC) name as pfe-m/n";
+        }
+    }
+    grouping apfe-common {
+        description "APFE for sessions summary stats";
+        leaf apfe-name {
+            type string;
+            description "Anchor PFE name as apfe[n]:pfe-s/p";
+        }
+        leaf apfe-role {
+            type string;
+            description "Anchor PFE role of Primary or Secondary";
+        }
+        leaf apfe-sync {
+            type string;
+            description "Anchor PFE synchronization stataus";
+        }
+    }
+    grouping apn-common {
+        leaf apn-name {
+            type string;
+            description "Access Point Name";
+        }
+    }
+
+    grouping stats-by-state {
+        description "summary statistics for mobile edge upad session and bearer summary";
+        leaf established {
+            type uint64;
+            description "sessions in established state";
+        }
+        leaf wait {
+            type uint64;
+            description "sessions or bearers in waiting state";
+        }
+        leaf invalid {
+            type uint64;
+            description "sessions or bearers in invalid state";
+        }
+        leaf deleting {
+            type uint64;
+            description "sessions or bearers in deleting state";
+        }
+        leaf init {
+            type uint64;
+            description "sessions or bearers in initialization state";
+        }
+        leaf total {
+            type uint64;
+            description "Total sessions/bearers";
+        }
+    }
+
+    grouping summary-session-bearer {
+        container session {
+            uses stats-by-state;
+        }
+        container bearer {
+            uses stats-by-state;
+        }
+    }
+    
+    grouping summary-cpf {
+        container control-peers {
+            description "saegw-upad sessions summary on control-peers";
+            list control-peer {
+                uses ip-addr-common;
+                description "list of all control peers";
+                key "ip-addr";
+                uses summary-session-bearer;
+            }
+        }
+    }
+    grouping summary-access {
+        container access-peers {
+            description "saegw-upad sessions summary on access-peers";
+            list access-peer {
+                uses ip-addr-common;
+                description "list of all access peers";
+                key "ip-addr";
+                uses summary-session-bearer;
+            }
+        }
+    }
+    grouping summary-core {
+        container core-peers {
+            description "saegw-upad sessions summary on core-peers";
+            list core-peer {
+                uses ip-addr-common;
+                description "list of all core peers";
+                key "ip-addr";
+                uses summary-session-bearer;
+            }
+        }
+    }
+    grouping summary-slots {
+        container slots {
+            description "saegw-upad sessions summary on each slots";
+            list slot {
+                description "list of all slots used by saegw-upad";
+                uses slot-common;
+                key "pfe";
+                uses summary-session-bearer;
+            }
+        }
+    }
+    grouping summary-pics {
+        container pics {
+            description "saegw-upad sessions summary on each pics";
+            list pic {
+                description "list of all PIC used saegw-upad";
+                uses pic-common;
+                key "pfe";
+                uses summary-session-bearer;
+            }
+        }
+    }
+    grouping summary-apfes {
+        container apfes {
+            description "saegw-upad sessions summary on each anchor pfe groups";
+            list apfe {
+                description "list of all anchor PFEs used by saegw-upad";
+                uses apfe-common;
+                key "apfe-name";
+                uses summary-session-bearer;
+            }
+        }
+    }
+    grouping summary-apns {
+        container apns {
+            description "saegw-upad sessions summary on each apn";
+            list apn {
+                description "list of all APNS used by saegw-upad";
+                uses apn-common;
+                key "apn-name";
+                uses summary-session-bearer;
+            }
+        }
+    }
+
+    grouping dlfar-bearer-stats {
+        description "Downlink Forwarding Action Rule(FAR) bearers by state";
+        leaf forward {
+            type uint64;
+            description "downlink FAR bearers in forwarding state";
+        }
+        leaf idle {
+            type uint64;
+            description "downlink FAR bearers in idle state";
+        }
+        leaf buffering {
+            type uint64;
+            description "downlink FAR bearers in buffering state";
+        }
+        leaf drop {
+            type uint64;
+            description "downlink FAR bearers in drop state";
+        }
+        leaf total {
+            type uint64;
+            description "total downlink FAR bearers";
+        }
+    }
+
+    grouping qos-flow-stats {
+        description "5G QoS Flow stats by state";
+        leaf established {
+            type uint64;
+            description "QoS flows in established state";
+        }
+        leaf wait {
+            type uint64;
+            description "QoS flows in wait state";
+        }
+        leaf invalid {
+            type uint64;
+            description "QoS flows in invalid state";
+        }
+        leaf total {
+            type uint64;
+            description "total QoS flows";
+        }
+    }
+
+    grouping system-stats {
+        description "The CUPS system level statistics";
+
+        leaf system-state {
+            type string;
+            description "Mobile-edge system in running, init, reconcile or other state";
+        }
+        leaf cur-inflight {
+            type uint32;
+            description "Mobile-edge system current inflight number";
+        }
+        leaf sync-status {
+            type string;
+            description "Mobile-edge system synchronization status";
+        }
+        leaf shared-memory {
+            type string;
+            description "Mobile-edge system shared memory size";
+        }
+        leaf heap-memory {
+            type string;
+            description "Mobile-edge system heap memory size";
+        }
+    }
+
+    grouping peers-summary {
+        description "Peers information summary";
+        leaf total-control-peers {
+            type uint32;
+            description "total control peers count";
+        }
+        leaf total-access-peers {
+            type uint32;
+            description "total access peers count";
+        }
+        leaf total-core-peers {
+            type uint32;
+            description "total core peers count";
+        }
+        leaf total-cpfu-peers {
+            type uint32;
+            description "total cpf-u peers count";
+        }
+    }
+
+    grouping control-peer-stats {
+        description "control peer statistics";
+        leaf routing-instance {
+            type string;
+            description "control peer routing instance name, default if not defined";
+        }
+        leaf heartbeat-request-received {
+            type uint32;
+            description "control peer heartbeat request received count";
+        }
+        leaf heartbeat-response-sent {
+            type uint32;
+            description "control peer heartbeat response sent count";
+        }
+        leaf heartbeat-request-sent {
+            type uint32;
+            description "control peer heartbeat request sent count";
+        }
+        leaf heartbeat-response-received {
+            type uint32;
+            description "control peer heartbeat response received count";
+        }
+        leaf association-setup-request-received {
+            type uint32;
+            description "control peer association setup request received count";
+        }
+        leaf association-setup_response-sent {
+            type uint32;
+            description "control peer association setup response sent count";
+        }
+        leaf association-release-request-received {
+            type uint32;
+            description "control peer association release request received count";
+        }
+        leaf association-release-response-sent {
+            type uint32;
+            description "control peer association release response sent count";
+        }
+        leaf session-establishment-request-received {
+            type uint32;
+            description "control peer session establishment request received count";
+        }
+        leaf session-establishment-request-accepted {
+            type uint32;
+            description "control peer session establishment request accepted count";
+        }
+        leaf session-establishment-request-rejected {
+            type uint32;
+            description "control peer session establismenth request rejected count";
+        }
+        leaf session-modification-request-received {
+            type uint64;
+            description "control peer session modification request received count";
+        }
+        leaf session-modification-request-accepted {
+            type uint32;
+            description "control peer session modification request accepted count";
+        }
+        leaf session-modification-request-rejected {
+            type uint32;
+            description "control peer session modification request rejected count";
+        }
+        leaf session-deletion-request-received {
+            type uint32;
+            description "control peer session deletion request received count";
+        }
+        leaf session-deletion-request-accepted {
+            type uint32;
+            description "control peer session deletion request accepted count";
+        }
+        leaf session-deletion-request-rejected {
+            type uint32;
+            description "control peer session deletion request rejected count";
+        }
+    }
+    grouping peers-cpf {
+        container control-peers {
+            description "saegw-upad control-peers statistics";
+            list control-peer {
+                uses ip-addr-common;
+                uses control-peer-stats;
+                key "ip-addr";
+            }
+        }
+    }
+
+    grouping access-peer-stats {
+        description "access peer statistics";
+        leaf routing-instance {
+            type string;
+            description "access peer routing instance name, default if not defined";
+        }
+        leaf echo-request-received {
+            type uint32;
+            description "access peer echo request received count";
+        }
+        leaf echo-response-sent {
+            type uint32;
+            description "access peer echo response sent count";
+        }
+        leaf error-indication-received {
+            type uint32;
+            description "access peer error indication received count";
+        }
+        leaf end-marker-sent {
+            type uint32;
+            description "access peer end marker sent count";
+        }
+    }
+    grouping peers-access {
+        container access-peers {
+            description "saegw-upad access-peers statistics";
+            list access-peer {
+                uses ip-addr-common;
+                uses access-peer-stats;
+                key "ip-addr";
+            }
+        }
+    }
+
+    grouping core-peer-stats {
+        description "core peer statistics";
+        leaf routing-instance {
+            type string;
+            description "core peer routing instance name, default if not defined";
+        }
+        leaf echo-request-received {
+            type uint32;
+            description "access peer echo request received count";
+        }
+        leaf echo-response-sent {
+            type uint32;
+            description "access peer echo response sent count";
+        }
+    }
+    grouping peers-core {
+        container core-peers {
+            description "saegw-upad core-peers statistics";
+            list core-peer {
+                uses ip-addr-common;
+                uses core-peer-stats;
+                key "ip-addr";
+            }
+        }
+    }
+    grouping peers-cpfu {
+        container cpfu-peers {
+            description "saegw-upad cpfu-peers statistics";
+            list cpfu-peer {
+                uses ip-addr-common;
+                uses core-peer-stats;
+                key "ip-addr";
+            }
+        }
+    }
+
+    grouping upad-events {
+        description "saegw-upad notification events";
+        leaf association {
+            type string;
+            description "saegw-upad notification event on association status";
+        }
+        leaf peer {
+            type string;
+            description "saegw-upad notification event on peer status";
+        }
+        leaf apfe {
+            type string;
+            description "saegw-upad notification event on apfe sync status";
+        }
+        leaf ha-sync {
+            type string;
+            description "saegw-upad notification event on HA sync status";
+        }
+        leaf load-control {
+            type string;
+            description "saegw-upad load control information notification";
+        }
+    }
+
+    grouping upad-stats-top {
+        container junos {
+            config false;
+            description "JunOS OS";
+            container services {
+                description "System services";
+                container mobile-edge {
+                    container system-stats {
+                        description "saegw-upad general system statistics";
+                        uses system-stats;
+                    }
+                    container sessions {
+                        container summary {
+                            description "saegw-upad sessions summary statistics";
+                            container session {
+                                description "saegw-upad sessions summary session statistics";
+                                uses stats-by-state;
+                            }
+                            container bearer {
+                                description "saegw-upad sessions summary bearer statistics";
+                                uses stats-by-state;
+                            }
+                            container dlfar-bearer {
+                                description "saegw-upad sessions summary down-link FAR bearer statistics";
+                                uses dlfar-bearer-stats;
+                            }
+                            container qos-flow {
+                                description "saegw-upad sessions summary 5G QoS flow statistics";
+                                uses qos-flow-stats;
+                            }
+                            uses summary-cpf;
+                            uses summary-access;
+                            uses summary-core;
+                            uses summary-slots;
+                            uses summary-pics;
+                            uses summary-apfes;
+                            uses summary-apns;
+                        }
+                    }
+                    container peers {
+                        description "saegw-upad peers statistics";
+                        container summary {
+                            description "saegw-upad peers summary statistics";
+                            uses peers-summary;
+                        }
+                        uses peers-cpf;
+                        uses peers-access;
+                        uses peers-core;
+                        uses peers-cpfu;
+                    }
+                    container events {
+                        description "saegw-upad notification events";
+                        uses upad-events;
+                    }
+                }
+            }
+        }
+    }
+
+    uses upad-stats-top;
+ }

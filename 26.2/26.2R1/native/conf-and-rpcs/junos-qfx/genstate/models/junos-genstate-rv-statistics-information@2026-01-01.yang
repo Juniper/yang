@@ -1,0 +1,152 @@
+ module junos-genstate-rv-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rv-statistics-information";
+   prefix jgrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rv-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rv-statistics-information-top {
+     description
+       "Top-level grouping";
+     container rv-statistics-information {
+       description
+         "RV statistic information";
+       container rv-statistics {
+         leaf rv-record-count {
+           type uint32;
+         }
+         leaf rv-replication-record-count {
+           type uint32;
+         }
+         leaf rv-prefix-count {
+           type uint32;
+         }
+         leaf rv-origin-as-count {
+           type uint32;
+         }
+         leaf rv-memory-utilization {
+           type string;
+         }
+         leaf rv-policy-origin-validation-requests {
+           type uint32;
+         }
+         leaf rv-policy-origin-validation-results-valid {
+           type uint32;
+         }
+         leaf rv-policy-origin-validation-results-invalid {
+           type uint32;
+         }
+         leaf rv-policy-origin-validation-results-unknown {
+           type uint32;
+         }
+         leaf rv-bgp-import-policy-reevaluations {
+           type uint32;
+         }
+         leaf rv-resync-conn-flaps {
+           type uint32;
+         }
+         leaf last-resync-started {
+           type string;
+         }
+         leaf last-resync-complete {
+           type string;
+         }
+         leaf last-resync-conn-down {
+           type string;
+         }
+         leaf last-resync-conn-ready {
+           type string;
+         }
+         container rv-vrp-information {
+           description
+             "VRP table statistics information";
+           leaf count-of-records {
+             type uint32;
+           }
+           leaf count-of-reevaluations {
+             type uint32;
+           }
+           leaf count-of-records-added {
+             type uint32;
+           }
+           leaf count-of-records-withdrawn {
+             type uint32;
+           }
+         }
+         list rv-database-statistics {
+           key "rv-database-name";
+           leaf rv-database-name {
+             type string;
+           }
+           leaf rv-database-record-count {
+             type uint32;
+           }
+           leaf rv-database-origin-as-count {
+             type uint32;
+           }
+           leaf rv-database-origin-validation-requests {
+             type uint32;
+           }
+           leaf rv-database-origin-validation-results-valid {
+             type uint32;
+           }
+           leaf rv-database-origin-validation-results-invalid {
+             type uint32;
+           }
+           leaf rv-database-origin-validation-results-unknown {
+             type uint32;
+           }
+           leaf rv-bgp-import-policy-database-reevaluations {
+             type uint32;
+           }
+           list rv-bgp-import-policy-database-rib-statistics {
+             key "rv-bgp-import-policy-database-rib-name";
+             leaf rv-bgp-import-policy-database-rib-name {
+               type string;
+             }
+             leaf rv-bgp-import-policy-database-rib-reevaluations {
+               type uint32;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rv-statistics-information container to top-level genstate 
+       container";
+     uses rv-statistics-information-top;
+   }
+ }

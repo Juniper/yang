@@ -1,0 +1,102 @@
+ module junos-genstate-mpls-cspf-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-cspf-information";
+   prefix jgmci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-cspf-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mpls-cspf-information-top {
+     description
+       "Top-level grouping";
+     container mpls-cspf-information {
+       description
+         "Top-level container";
+       container mpls-cspf {
+         container cspf-queue {
+           description
+             "CSPF queue statistics";
+           leaf current {
+             type int32;
+           }
+           leaf maximum {
+             type int32;
+           }
+           leaf dequeued {
+             type int32;
+           }
+         }
+         container cspf-paths {
+           description
+             "CSPF path computations statistics";
+           leaf total-paths {
+             type int32;
+           }
+           leaf successful {
+             type int32;
+           }
+           leaf no-route {
+             type int32;
+           }
+           leaf sys-error {
+             type int32;
+           }
+           leaf cspfs {
+             type int32;
+           }
+         }
+         container cspf-timing {
+           description
+             "CSPF timing statistics";
+           leaf total-time {
+             type string;
+           }
+           leaf cspf-time {
+             type string;
+           }
+           leaf average-time {
+             type string;
+           }
+           leaf rpd-time {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-cspf-information container to top-level genstate container";
+     uses mpls-cspf-information-top;
+   }
+ }

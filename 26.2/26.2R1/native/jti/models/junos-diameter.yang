@@ -1,0 +1,186 @@
+module junos-diameter {
+  yang-version 1;
+  namespace "http://juniper.net/yang/diameter";
+  prefix junos-diameter;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of diameter yang model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping group-diameter-peer-statistic-list {
+    description
+      "The list of Diameter peer statistics";
+    list peer {
+      description
+        "The statistics for a Diameter peer";
+      key "peer-name";
+      leaf peer-name {
+        description
+          "The Diameter peer name";
+        type string;
+      }
+      container nasreq {
+        description
+          "The Diameter peer statistics for NASREQ";
+        container response-time {
+          description
+            "The NASREQ peer 1 minute interval statistics";
+          leaf one-minute-minimum-response-time {
+            description
+              "The minimum response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-average-response-time {
+            description
+              "The average response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-maximum-response-time {
+            description
+              "The maximum response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-sent {
+            description
+              "The total number of messages sent over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-received {
+            description
+              "The total number of messages received over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-no-response {
+            description
+              "The total number of messages pending response over a 1 minute interval";
+            type uint64;
+          }
+        }
+      }
+      container gx {
+        description
+          "The Diameter peer statistics for PCRF";
+        container response-time {
+          description
+            "The PCRF peer 1 minute interval statistics";
+          leaf one-minute-minimum-response-time {
+            description
+              "The minimum response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-average-response-time {
+            description
+              "The average response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-maximum-response-time {
+            description
+              "The maximum response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-sent {
+            description
+              "The total number of messages sent over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-received {
+            description
+              "The total number of messages received over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-no-response {
+            description
+              "The total number of messages pending response over a 1 minute interval";
+            type uint64;
+          }
+        }
+      }
+      container gy {
+        description
+          "The Diameter peer statistics for OCS";
+        container response-time {
+          description
+            "The OCS peer 1 minute interval statistics";
+          leaf one-minute-minimum-response-time {
+            description
+              "The minimum response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-average-response-time {
+            description
+              "The average response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-maximum-response-time {
+            description
+              "The maximum response time measured over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-sent {
+            description
+              "The total number of messages sent over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-received {
+            description
+              "The total number of messages received over a 1 minute interval";
+            type uint64;
+          }
+          leaf one-minute-messages-no-response {
+            description
+              "The total number of messages pending response over a 1 minute interval";
+            type uint64;
+          }
+        }
+      }
+    }
+  }
+
+  grouping diameter-top {
+    description
+      "Top level for diameter";
+    container junos {
+      description
+        "All diameter information for junos";
+      config false;
+      container system {
+        description
+          "All system information";
+        container subscriber-management {
+          description
+            "All subscriber management information";
+          container aaa {
+            description
+              "All aaa related information";
+            container diameter {
+              description
+                "All diameter related information";
+              container peers {
+                description
+                  "The list of Diameter peer statistics";
+                uses group-diameter-peer-statistic-list;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  uses diameter-top;
+}

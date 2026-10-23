@@ -1,0 +1,215 @@
+ module junos-genstate-mpls-tunnel-manager-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-tunnel-manager-statistics-information";
+   prefix jgmtmsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-tunnel-manager-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mpls-tunnel-manager-statistics-information-top {
+     description
+       "Top-level grouping";
+     container mpls-tunnel-manager-statistics-information {
+       description
+         "Top-level container";
+       container mpls-lsp-reroute-statistics {
+         leaf lsp-make-before-break {
+           type int32;
+           description
+             "LSP make-before-break count";
+         }
+         leaf lsp-path-mbb-time-taken-min {
+           type int32;
+           description
+             "LSP path make-before-break time taken - minimum";
+         }
+         leaf lsp-path-mbb-time-taken-max {
+           type int32;
+           description
+             "LSP path make-before-break time taken - maximum";
+         }
+         leaf lsp-path-mbb-time-taken-avg {
+           type int32;
+           description
+             "LSP path make-before-break time taken - average";
+         }
+         leaf lsp-path-old-lsp-release-min {
+           type int32;
+           description
+             "Min time for control plane users to release old LSP during MBB";
+         }
+         leaf lsp-path-old-lsp-release-max {
+           type int32;
+           description
+             "Max time for control plane users to release old LSP during MBB";
+         }
+         leaf lsp-path-old-lsp-release-avg {
+           type int32;
+           description
+             "Avg time for control plane users to release old LSP during MBB";
+         }
+         leaf lsp-local-repair-count {
+           type int32;
+           description
+             "LSP local-repair count";
+         }
+         leaf lsp-path-local-repair-time-taken-min {
+           type int32;
+           description
+             "LSP path local-repair time taken - minimum";
+         }
+         leaf lsp-path-local-repair-time-taken-max {
+           type int32;
+           description
+             "LSP path local-repair time taken - maximum";
+         }
+         leaf lsp-path-local-repair-time-taken-avg {
+           type int32;
+           description
+             "LSP path local-repair time taken - average";
+         }
+         leaf lsp-in-place-update-bw-increase {
+           type int32;
+           description
+             "In-place LSP BW increase count";
+         }
+         leaf lsp-in-place-update-bw-decrease {
+           type int32;
+           description
+             "In-place LSP BW decrease count";
+         }
+         leaf lsp-in-place-update-cspf-failure {
+           type int32;
+           description
+             "In-place LSP update CSPF failure";
+         }
+         leaf lsp-in-place-update-signal-error {
+           type int32;
+           description
+             "In-place LSP update signaling error";
+         }
+         leaf lsp-in-place-update-signal-timeout {
+           type int32;
+           description
+             "In-place LSP update signaling timeout";
+         }
+         leaf lsp-in-place-upd-hold-prio-increase-req {
+           type int32;
+           description
+             "In-place LSP hold-prio increase request";
+         }
+         leaf lsp-in-place-upd-hold-prio-decrease-req {
+           type int32;
+           description
+             "In-place LSP hold-prio decrease request";
+         }
+         leaf lsp-in-place-upd-hold-prio-success {
+           type int32;
+           description
+             "In-place LSP hold-prio update successful";
+         }
+         leaf lsp-in-place-upd-hold-prio-signal-error {
+           type int32;
+           description
+             "In-place LSP hold-prio update error";
+         }
+         leaf lsp-in-place-upd-hold-prio-signal-timeout {
+           type int32;
+           description
+             "In-place LSP hold-prio update timeout";
+         }
+         leaf lsp-rsvp-signal-initiate-count {
+           type int32;
+           description
+             "RSVP path signaling initiated";
+         }
+         leaf lsp-rsvp-signal-success-or-error-count {
+           type int32;
+           description
+             "RSVP path signaling success or error count";
+         }
+         leaf lsp-rsvp-signal-time-min {
+           type int32;
+           description
+             "RSVP path signaling time taken - minimum";
+         }
+         leaf lsp-rsvp-signal-time-max {
+           type int32;
+           description
+             "RSVP path signaling time taken - maximum";
+         }
+         leaf lsp-rsvp-signal-time-avg {
+           type int32;
+           description
+             "RSVP path signaling time taken - average";
+         }
+         leaf lsp-rsvp-signal-timeout-count {
+           type int32;
+           description
+             "RSVP path signaling timed out";
+         }
+         leaf lsp-statistics-requests-sent {
+           type int32;
+           description
+             "Statistics requests sent";
+         }
+         leaf lsp-statistics-responses-received {
+           type int32;
+           description
+             "Statistics responses received";
+         }
+         leaf lsp-statistics-time-taken-min {
+           type int32;
+           description
+             "Minimum time to get a response for a statistics request";
+         }
+         leaf lsp-statistics-time-taken-max {
+           type int32;
+           description
+             "Maximum time to get a response for a statistics request";
+         }
+         leaf lsp-statistics-time-taken-avg {
+           type int32;
+           description
+             "Average time to get a response for a statistics request";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-tunnel-manager-statistics-information container to 
+       top-level genstate container";
+     uses mpls-tunnel-manager-statistics-information-top;
+   }
+ }

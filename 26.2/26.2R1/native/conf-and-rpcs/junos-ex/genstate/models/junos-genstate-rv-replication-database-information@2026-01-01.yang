@@ -1,0 +1,87 @@
+ module junos-genstate-rv-replication-database-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rv-replication-database-information";
+   prefix jgrrdi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rv-replication-database-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rv-replication-database-information-top {
+     description
+       "Top-level grouping";
+     container rv-replication-database-information {
+       description
+         "RV replication database information";
+       container rv-replication-database {
+         leaf instance-name {
+           type string;
+         }
+         leaf ip-prefix-count {
+           type uint32;
+         }
+         leaf ip6-prefix-count {
+           type uint32;
+         }
+         list rv-replication-database-entry {
+           key "ip-prefix maximum-length origin-as";
+           leaf ip-prefix {
+             type jt:ipprefix;
+           }
+           leaf maximum-length {
+             type uint32;
+           }
+           leaf origin-as {
+             type uint32;
+           }
+           leaf ip-address {
+             type jt:ipaddr;
+           }
+           leaf validation-state {
+             type string;
+             description
+               "Validation-state of a route";
+           }
+           leaf database-name {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rv-replication-database-information container to top-level 
+       genstate container";
+     uses rv-replication-database-information-top;
+   }
+ }

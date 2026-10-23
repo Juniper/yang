@@ -1,0 +1,109 @@
+ module junos-genstate-bgp-rtf-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/bgp-rtf-information";
+   prefix jgbri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for bgp-rtf-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping bgp-rtf-information-top {
+     description
+       "Top-level grouping";
+     container bgp-rtf-information {
+       description
+         "BGP route target filtering information";
+       list bgp-rtf-brief {
+         key "group-name";
+         leaf group-name {
+           type string;
+         }
+         leaf table-name {
+           type string;
+           description
+             "Unicast routing table";
+         }
+         leaf bgp-rtf-state-flags {
+           type string;
+         }
+         leaf bgp-rtf-entries {
+           type int32;
+         }
+       }
+       list bgp-rtf-group {
+         key "group-name";
+         leaf group-index {
+           type int32;
+         }
+         leaf rtarget-recv-mask {
+           type string;
+         }
+         leaf default-mask {
+           type string;
+         }
+         leaf group-name {
+           type string;
+         }
+         list bgp-rtf-state {
+           key "table-name";
+           leaf table-name {
+             type string;
+             description
+               "Unicast routing table";
+           }
+           leaf bgp-rtf-state-flags {
+             type string;
+           }
+           leaf bgp-rtf-entries {
+             type int32;
+           }
+           list bgp-rtf-entry {
+             key "rtarget";
+             leaf rtarget {
+               type string;
+               description
+                 "Route target community";
+             }
+             leaf rtarget-mask {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds bgp-rtf-information container to top-level genstate container";
+     uses bgp-rtf-information-top;
+   }
+ }

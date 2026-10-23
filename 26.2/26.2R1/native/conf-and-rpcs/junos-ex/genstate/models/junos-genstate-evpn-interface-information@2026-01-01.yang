@@ -1,0 +1,79 @@
+ module junos-genstate-evpn-interface-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-interface-information";
+   prefix jgeii;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-interface-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-interface-information-top {
+     description
+       "Top-level grouping";
+     container evpn-interface-information {
+       description
+         "Top-level container";
+       list evpn-interface-detailed {
+         key "intf-name";
+         leaf intf-name {
+           type string;
+         }
+         leaf intf-inst-name {
+           type string;
+         }
+         leaf intf-status {
+           type string;
+         }
+         container evpn-intf-bridge-domains {
+           list intf-bridge-domain {
+             key "bridge-l2-domain-id";
+             leaf bridge-l2-domain-id {
+               type int32;
+             }
+             leaf bridge-domain-flags {
+               type int32;
+             }
+             leaf bridge-domain-flags-description {
+               type string;
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-interface-information container to top-level genstate 
+       container";
+     uses evpn-interface-information-top;
+   }
+ }

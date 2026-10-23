@@ -1,0 +1,90 @@
+module junos-state-grpc {
+  yang-version 1.1;
+  namespace "http://yang.juniper.net/junos/state/grpc";
+  prefix js-grpc;
+
+  import junos-extensions {
+    prefix jx;
+  }
+
+  import junos-state {
+    prefix js;
+  }
+
+  import junos-state-system {
+    prefix js-sys;
+  }
+
+  import junos-state-system-services {
+    prefix js-sys-svc;
+  }
+
+  import junos-state-system-http {
+    prefix js-http;
+  }
+
+  organization
+    "Juniper Networks, Inc.";
+
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA 94089
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+
+  description
+    "This module contains a collection of top level nodes for JUNOS gRPC
+     services state data.
+
+     Copyright (c) 2025 Juniper Networks, Inc.
+     All rights reserved.";
+
+  revision 2025-04-25 {
+    description
+     "Addition of jx:origin annotation";
+    reference "0.2.1";
+  }
+
+  revision 2025-02-10 {
+    description
+      "Addition of services container, update semver extension
+       reference";
+    reference "0.2.0";
+  }
+
+  revision 2023-07-20 {
+    description
+      "Initial revision";
+    reference "0.1.0";
+  }
+
+  jx:version "0.2.1";
+  jx:origin "juniper";
+
+  grouping grpc-top {
+    description
+      "Top-level grouping for grpc services";
+
+    container grpc {
+      description
+        "Container for gRPC services, their state and statistics";
+
+      container services {
+        description
+          "Container anchor point for gRPC services";
+      }
+    }
+  }
+
+  augment "/js:state/js-sys:system/js-sys-svc:services/js-http:http" +
+          "/js-http:servers/js-http:server" {
+      description
+        "Add gRPC servers to HTTP services";
+
+      uses grpc-top;
+    }
+}

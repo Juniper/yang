@@ -1,0 +1,84 @@
+ module junos-genstate-isis-database-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-database-information";
+   prefix jgidi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-database-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping isis-database-information-top {
+     description
+       "Top-level grouping";
+     container isis-database-information {
+       description
+         "Top-level container";
+       list isis-database {
+         key "level";
+         leaf level {
+           type int32;
+           description
+             "IS-IS Level";
+         }
+         leaf lsp-count {
+           type int32;
+         }
+         list isis-database-entry {
+           key "lsp-id";
+           leaf lsp-id {
+             type string;
+           }
+           leaf sequence-number {
+             type int64;
+             description
+               "History event number";
+           }
+           leaf checksum {
+             type int32;
+           }
+           leaf remaining-lifetime {
+             type int32;
+           }
+           leaf lsp-attributes {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-database-information container to top-level genstate 
+       container";
+     uses isis-database-information-top;
+   }
+ }

@@ -1,0 +1,91 @@
+ module junos-genstate-mld-snooping-group-information-root {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mld-snooping-group-information-root";
+   prefix jgmsgir;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mld-snooping-group-information-root.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mld-snooping-group-information-root-top {
+     description
+       "Top-level grouping";
+     container mld-snooping-group-information-root {
+       description
+         "Top-level container";
+       list mld-snooping-group-information-per-instance {
+         key "instance-name";
+         leaf instance-name {
+           type string;
+         }
+         list mld-snooping-group-information-per-bridge-domain {
+           key "bridge-domain";
+           leaf bridge-domain {
+             type string;
+             description
+               "Bridge Domain";
+           }
+           list mld-snooping-group-information-per-learning-domain {
+             key "learning-domain";
+             leaf learning-domain {
+               type string;
+               description
+                 "Bridge or VPLS learning domain";
+             }
+           }
+         }
+         list mld-snooping-group-information-per-vlan {
+           key "vlan";
+           leaf vlan {
+             type string;
+             description
+               "Vlan";
+           }
+           list mld-snooping-group-information-per-learning-domain {
+             key "learning-domain";
+             leaf learning-domain {
+               type string;
+               description
+                 "Bridge or VPLS learning domain";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mld-snooping-group-information-root container to top-level 
+       genstate container";
+     uses mld-snooping-group-information-root-top;
+   }
+ }

@@ -1,0 +1,113 @@
+ module junos-genstate-pfe-tunnel-localization {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pfe-tunnel-localization";
+   prefix jgptl;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pfe-tunnel-localization.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping pfe-tunnel-localization-top {
+     description
+       "Top-level grouping";
+     container pfe-tunnel-localization {
+       description
+         "Top-level container";
+       list pfe-localization-information {
+         key "pfe-name";
+         leaf pfe-name {
+           type string;
+         }
+         leaf pfe-refcount {
+           type uint32;
+         }
+         list pfe-gencfg {
+           key "pfe-gencfg-keyid";
+           leaf pfe-gencfg-keyid {
+             type uint32;
+           }
+           leaf pfe-gencfg-tunnel-type {
+             type string;
+           }
+           leaf pfe-gencfg-last-ifd-index {
+             type int32;
+           }
+           leaf pfe-gencfg-current-ifd-index {
+             type int32;
+           }
+           leaf pfe-gencfg-last-ifd-state {
+             type string;
+           }
+           leaf pfe-gencfg-current-ifd-state {
+             type string;
+           }
+           leaf pfe-gencfg-v6-src {
+             type string;
+           }
+           leaf pfe-gencfg-backup-lock {
+             type uint32;
+           }
+           leaf pfe-gencfg-kqp {
+             type string;
+           }
+           leaf pfe-gencfg-refcnt {
+             type uint32;
+           }
+         }
+         list pfe-aggr-prefix {
+           key "pfe-aggr-prefix-address";
+           leaf pfe-aggr-prefix-address {
+             type string;
+           }
+           leaf pfe-aggr-prefix-refcount {
+             type uint32;
+           }
+         }
+         list pfe-v6src-prefix {
+           key "pfe-v6src-prefix-address";
+           leaf pfe-v6src-prefix-address {
+             type string;
+           }
+           leaf pfe-v6src-prefix-refcount {
+             type uint32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pfe-tunnel-localization container to top-level genstate 
+       container";
+     uses pfe-tunnel-localization-top;
+   }
+ }

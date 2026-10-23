@@ -1,0 +1,117 @@
+ module junos-genstate-ingress-replication-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ingress-replication-information";
+   prefix jgiri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ingress-replication-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ingress-replication-information-top {
+     description
+       "Top-level grouping";
+     container ingress-replication-information {
+       description
+         "Top-level container";
+       container ir-tunnel {
+         list ir-tunnel-entry {
+           key "ir-tunnel-name";
+           leaf ir-tunnel-name {
+             type string;
+             description
+               "Ingress-Replication tunnel name";
+           }
+           leaf ir-tunnel-nh {
+             type uint32;
+           }
+           leaf ir-tunnel-nh-type {
+             type string;
+           }
+           leaf ir-tunnel-application {
+             type string;
+             description
+               "Application that owns the Ingress-Replication tunnel";
+           }
+           leaf ir-tunnel-transport-class-name {
+             type string;
+             description
+               "Ingress-Replication transport class name";
+           }
+           leaf ir-tunnel-regular-expression {
+             type string;
+             description
+               "Ingress-Replication regular expression";
+           }
+           container ir-unicast-tunnel {
+             list ir-unicast-tunnel-entry {
+               key "ir-unicast-tunnel-dst";
+               leaf ir-unicast-tunnel-dst {
+                 type string;
+                 description
+                   "Unicast tunnel leaf address";
+               }
+               leaf ir-unicast-tunnel-type {
+                 type string;
+                 description
+                   "Ingress-Replication unicast tunnel type";
+               }
+               leaf ir-unicast-tunnel-mode {
+                 type string;
+                 description
+                   "Ingress-Replication unicast tunnel mode";
+               }
+               leaf ir-unicast-tunnel-state {
+                 type string;
+                 description
+                   "Ingress-Replication unicast tunnel status";
+               }
+               leaf ir-unicast-tunnel-nh {
+                 type uint32;
+               }
+               leaf ir-unicast-is-preferred {
+                 type string;
+                 description
+                   "Ingress-Replication unicast preferred tunnel information";
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ingress-replication-information container to top-level genstate
+       container";
+     uses ingress-replication-information-top;
+   }
+ }

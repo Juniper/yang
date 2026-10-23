@@ -1,0 +1,107 @@
+ module junos-genstate-ospf-backup-coverage-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ospf-backup-coverage-information";
+   prefix jgobci;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ospf-backup-coverage-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ospf-backup-coverage-information-top {
+     description
+       "Top-level grouping";
+     container ospf-backup-coverage-information {
+       description
+         "OSPF backup coverage information";
+       list ospf-topology-backup-coverage {
+         key "ospf-topology-name";
+         leaf ospf-topology-name {
+           type string;
+           description
+             "OSPF topology name";
+         }
+         list ospf-backup-node-coverage {
+           key "ospf-area";
+           leaf ospf-area {
+             type string;
+             description
+               "Area ID";
+           }
+           leaf ospf-covered-nodes {
+             type int32;
+             description
+               "Number of nodes covered by backup nexthops";
+           }
+           leaf ospf-total-nodes {
+             type int32;
+             description
+               "Total number of nodes in the area";
+           }
+           leaf ospf-node-coverage {
+             type string;
+             description
+               "Percent of nodes covered by backup nexthops";
+           }
+         }
+         list ospf-backup-route-coverage {
+           key "ospf-path-type";
+           leaf ospf-path-type {
+             type string;
+             description
+               "Route path type";
+           }
+           leaf ospf-covered-routes {
+             type int32;
+             description
+               "Number of routes covered by backup nexthops";
+           }
+           leaf ospf-total-routes {
+             type int32;
+             description
+               "Total number of routes in the area";
+           }
+           leaf ospf-route-coverage {
+             type string;
+             description
+               "Percent of routes covered by backup nexthops";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ospf-backup-coverage-information container to top-level 
+       genstate container";
+     uses ospf-backup-coverage-information-top;
+   }
+ }

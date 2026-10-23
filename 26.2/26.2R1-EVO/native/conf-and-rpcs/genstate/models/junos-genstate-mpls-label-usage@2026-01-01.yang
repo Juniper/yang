@@ -1,0 +1,112 @@
+ module junos-genstate-mpls-label-usage {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mpls-label-usage";
+   prefix jgmlu;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mpls-label-usage.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping mpls-label-usage-top {
+     description
+       "Top-level grouping";
+     container mpls-label-usage {
+       description
+         "Top-level container";
+       list label-usage {
+         key "label-space-name";
+         description
+           "Label space usage";
+         leaf label-space-name {
+           type string;
+         }
+         leaf total-labels {
+           type int32;
+         }
+         leaf free-labels {
+           type int32;
+         }
+         leaf free-labels-percent {
+           type string;
+         }
+         leaf applications {
+           type string;
+         }
+       }
+       container label-effective-ranges {
+         leaf label-effective-ranges-attribute {
+           type string;
+         }
+         list label-type-effective-ranges {
+           key "label-effective-range-start label-effective-range-end";
+           leaf label-effective-range-type-name {
+             type string;
+           }
+           leaf label-effective-range-start {
+             type int32;
+           }
+           leaf label-effective-range-end {
+             type int32;
+           }
+           leaf label-effective-range-subtype-name {
+             type string;
+           }
+         }
+       }
+       container label-configured-ranges {
+         leaf label-configured-ranges-attribute {
+           type string;
+         }
+         list label-type-configured-ranges {
+           key "label-configured-range-start label-configured-range-end";
+           leaf label-configured-range-type-name {
+             type string;
+           }
+           leaf label-configured-range-start {
+             type int32;
+           }
+           leaf label-configured-range-end {
+             type int32;
+           }
+           leaf label-configured-range-subtype-name {
+             type string;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mpls-label-usage container to top-level genstate container";
+     uses mpls-label-usage-top;
+   }
+ }

@@ -1,0 +1,68 @@
+ module junos-genstate-evpn-mac-list-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-mac-list-information";
+   prefix jgemli;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-mac-list-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping evpn-mac-list-information-top {
+     description
+       "Top-level grouping";
+     container evpn-mac-list-information {
+       description
+         "Top-level container";
+       list evpn-mac-lists {
+         key "list-name";
+         leaf list-name {
+           type string;
+         }
+         leaf list-desc {
+           type string;
+         }
+         list mac-list-entry {
+           key "mac-address";
+           leaf mac-address {
+             type jt:mac-addr;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-mac-list-information container to top-level genstate 
+       container";
+     uses evpn-mac-list-information-top;
+   }
+ }

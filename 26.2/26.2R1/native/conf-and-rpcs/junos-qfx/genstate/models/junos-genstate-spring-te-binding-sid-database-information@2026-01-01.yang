@@ -1,0 +1,96 @@
+ module junos-genstate-spring-te-binding-sid-database-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/spring-te-binding-sid-database-information";
+   prefix jgstbsdi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for spring-te-binding-sid-database-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping spring-te-binding-sid-database-information-top {
+     description
+       "Top-level grouping";
+     container spring-te-binding-sid-database-information {
+       description
+         "Top-level container";
+       list ste-binding-sid {
+         key "ste-bsid-20-bit-label";
+         description
+           "SPRING Traffic-Engineered Binding Sid";
+         leaf ste-bsid-20-bit-label {
+           type uint32;
+         }
+         list ste-bsid-policy-info {
+           key "ste-bsid-policy";
+           leaf ste-bsid-policy {
+             type string;
+           }
+           container ste-bsid-associated-tunnel-info {
+             list ste-bsid-associated-tunnel {
+               key "ste-bsid-associated-tunnel-name";
+               leaf ste-bsid-associated-tunnel-name {
+                 type string;
+               }
+               leaf ste-bsid-associated-tunnel-bsid-type {
+                 type string;
+               }
+               leaf ste-bsid-associated-tunnel-bsid-s {
+                 type uint32;
+               }
+               leaf ste-bsid-associated-tunnel-bsid-cos {
+                 type uint32;
+               }
+               leaf ste-bsid-associated-tunnel-bsid-ttl {
+                 type uint32;
+               }
+               leaf ste-bsid-associated-tunnel-bsid-unallocation-reason {
+                 type string;
+               }
+             }
+           }
+           leaf ste-bsid-policy-inactive {
+             type string;
+           }
+         }
+         leaf ste-bsid-origin {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds spring-te-binding-sid-database-information container to 
+       top-level genstate container";
+     uses spring-te-binding-sid-database-information-top;
+   }
+ }

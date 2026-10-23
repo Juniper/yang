@@ -1,0 +1,88 @@
+ module junos-genstate-isis-srv6-sensor-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/isis-srv6-sensor-information";
+   prefix jgissi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for isis-srv6-sensor-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping isis-srv6-sensor-information-top {
+     description
+       "Top-level grouping";
+     container isis-srv6-sensor-information {
+       description
+         "Top-level container";
+       leaf isis-srv6-sensor-information-attribute {
+         type string;
+       }
+       leaf srv6-sensor-name {
+         type string;
+       }
+       leaf srv6-sensor-id {
+         type int32;
+       }
+       container isis-srv6-rmt-locs-sensor-ingress {
+         description
+           "ISIS SRv6 Remote locator ingress sensor information";
+         list isis-srv6-rmt-loc-ingress-entries {
+           key "srv6-sensor-name";
+           leaf srv6-sensor-name {
+             type string;
+           }
+           leaf srv6-sensor-id {
+             type int32;
+           }
+         }
+       }
+       container isis-srv6-rmt-locs-sensor-egress {
+         description
+           "ISIS SRv6 Remote locator egress sensor information";
+         list isis-srv6-rmt-loc-egress-entries {
+           key "srv6-sensor-name";
+           leaf srv6-sensor-name {
+             type string;
+           }
+           leaf srv6-sensor-id {
+             type int32;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds isis-srv6-sensor-information container to top-level genstate 
+       container";
+     uses isis-srv6-sensor-information-top;
+   }
+ }

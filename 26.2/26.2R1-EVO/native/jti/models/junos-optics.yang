@@ -1,0 +1,44 @@
+/*
+ * $Id$
+ *
+ * Copyright (c) 2021, Juniper Networks, Inc.
+ * All rights reserved.
+ */
+
+module junos-optics {
+    yang-version 1;
+
+    namespace "http://yang.juniper.net/telemetry/junos-optics";
+
+    prefix "jnx-optics";
+
+    organization "Juniper Networks";
+
+    contact "support@juniper.net";
+
+    description "Yang definition for native optics,
+                this model is not published as the export path is not same as
+                subscription path.";
+
+    revision "2023-04-10" {
+        description "Initial yang file";
+    }
+
+    // /junos/system/linecard/optics/   <==> /interfaces/interface[name='et-0/0/0']/optics/lanediags/lane[lane-number='0']/
+    grouping junos-optics-top {
+       container junos {
+            config false;
+            description "JunOS OS container";
+            container system {
+                description "Junos System container";
+                list linecard {
+                    description "Resources related to a linecard";
+                    list optics {
+                        description "Resources related to a optics";
+                        }
+                    }
+                }
+            }
+    }
+    uses junos-optics-top;
+}

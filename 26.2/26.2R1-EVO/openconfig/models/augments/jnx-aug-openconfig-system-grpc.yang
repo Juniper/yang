@@ -1,0 +1,150 @@
+module jnx-aug-openconfig-system-grpc {
+  yang-version "1";
+
+  namespace "http://yang.juniper.net/openconfig/augment/system/grpc";
+
+  prefix "jnx-oc-sys-grpc";
+
+  import openconfig-yang-types { prefix oc-ytypes; }
+  import openconfig-types      { prefix oc-types; }
+  import openconfig-system { prefix oc-sys; }
+  import openconfig-system-grpc { prefix oc-sys-grpc; }
+  import junos-extension { prefix junos; }
+
+  organization "Juniper Networks";
+
+  description
+    "This module contains augments to openconfig system grpc model";
+
+  revision "2021-10-07" {
+    description "Initial revision";
+    reference "0.0.1";
+  }
+
+  grouping system-grpc-server-connections-state {
+    container state {
+      config false;
+      leaf client-id {
+        type string;
+        description
+          "The identifier of the connected client to grpc server";
+      }
+      leaf username {
+        type string;
+        description
+          "Username used to connect to grpc server";
+      }
+      leaf source-host {
+        type string;
+        description
+          "Details of the peer connected to grpc server";
+      }
+      leaf login-time {
+        type oc-types:timeticks64;
+        description
+          "Time in UTC when the client connected to grpc server.
+           The value is the timestamp in seconds relative to the
+           Unix Epoch (Jan 1, 1970 00:00:00 UTC).";
+      }
+      leaf in-rpcs {
+        type uint64;
+        description
+          "Number of RPCs sent by the client to the grpc server";
+      }
+      leaf out-pkts {
+        type uint64;
+        description
+          "Number of packets sent to the client for the requested
+           RPCs";
+      }
+      leaf socket-buffer-usage {
+        type oc-types:percentage;
+        description
+          "The tcp connection socket buffer usage percentage to
+           indicate amount of data pending to be read.";
+      }
+    }
+  }
+
+  grouping system-grpc-server-state {
+    description
+      "Top level grouping for gRPC connection details";
+
+      container connections {
+        description
+          "Enclosing container ";
+        list connection {
+          key client-id;
+          description
+            "Top level container for grpc connection details";
+
+          leaf client-id {
+            type string;
+            description
+              "The identifier of the connected client to grpc server";
+          }
+          uses system-grpc-server-connections-state;
+        }
+      }
+  }
+
+  grouping system-grpc-server-counter-state {
+    container state {
+      config false;
+      leaf service {
+        type string;
+        description
+          "Name of the service exposed by the server";
+      }
+      leaf in-rpcs {
+        type uint64;
+        description
+          "Number of times the service was requested.";
+      }
+      leaf out-pkts {
+        type uint64;
+        description
+          "Number of packets sent as response for the given service";
+      }
+    }
+  }
+
+  grouping system-grpc-server-service-counter-state {
+    description
+      "Top level grouping for gRPC service counter details";
+
+      container counters {
+          description
+            "Enclosing container for server counters";
+
+          list counter {
+            key service;
+            description
+              "Counters of services exposed by the server.";
+
+            leaf service {
+              type string;
+              description
+                "Name of the service exposed by the server";
+            }
+
+            uses system-grpc-server-counter-state;
+          }
+      }
+  }
+
+  augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state" {
+      description
+          "Augmentation to add JUNOS specific grpc connection state
+          information.";
+      uses system-grpc-server-state;
+  }
+
+  augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server" {
+      description
+          "Augmentation to add JUNOS specific grpc service counter
+          information.";
+      uses system-grpc-server-service-counter-state;
+  }
+}
+

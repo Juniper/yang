@@ -1,0 +1,62 @@
+ module junos-genstate-route-resolution-unresolved-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/route-resolution-unresolved-information";
+   prefix jgrrui;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for route-resolution-unresolved-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping route-resolution-unresolved-information-top {
+     description
+       "Top-level grouping";
+     container route-resolution-unresolved-information {
+       description
+         "Top-level container";
+       list route-resolution-unresolved {
+         key "resolution-unresolved-tree-index";
+         leaf resolution-unresolved-tree-index {
+           type uint32;
+         }
+         leaf resolution-unresolved-tree-address {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds route-resolution-unresolved-information container to top-level 
+       genstate container";
+     uses route-resolution-unresolved-information-top;
+   }
+ }

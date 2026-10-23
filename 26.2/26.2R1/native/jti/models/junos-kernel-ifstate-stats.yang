@@ -1,0 +1,195 @@
+module junos-kernel-ifstate-stats {
+  yang-version 1;
+  namespace "http://juniper.net/yang/kod";
+  prefix junos-kernel-ifstate-stats;
+
+  organization
+    "Juniper Networks Inc.";
+  contact
+    "Juniper Networks, Inc.
+
+     1133 Innovation Way
+     Sunnyvale, CA
+
+     +1 888 314-5822
+
+     E-mail: yang-support@juniper.net";
+  description
+    "Juniper Networks definition of junos kernel
+     ifstate statistics collection yang model";
+
+  revision 2017-01-01 {
+    description
+      "Initial revision";
+  }
+
+  grouping kernel-ifstate-rate-group {
+    description
+      "Grouping for kernel ifstate stats";
+    list stats {
+      description
+        "List of all kernel ifstate stats";
+      key "record-time";
+      leaf record-time {
+        description
+          "Record creation time";
+        type uint32;
+      }
+      leaf record-seq-num {
+        description
+          "Record sequence number";
+        type uint32;
+      }
+      container churn-rate {
+        description
+          "Ifstate creation rate stats in kernel";
+        leaf overall-churn-rate {
+          description
+            "Overall ifstate creation rate in kernel";
+          type uint32;
+        }
+        leaf route-add-rate {
+          description
+            "Rate of route ifstate addition in kernel";
+          type uint32;
+        }
+        leaf route-change-rate {
+          description
+            "Rate of route ifstate change in kernel";
+          type uint32;
+        }
+        leaf route-delete-rate {
+          description
+            "Rate of route ifstate deletion in kernel";
+          type uint32;
+        }
+        leaf nexthop-add-rate {
+          description
+            "Rate of nexthop ifstate addition in kernel";
+          type uint32;
+        }
+        leaf nexthop-delete-rate {
+          description
+            "Rate of nexthop ifstate delete in kernel";
+          type uint32;
+        }
+        leaf nexthop-change-rate {
+          description
+            "Rate of nexthop ifstate change in kernel";
+          type uint32;
+        }
+      }
+      container vetos-statistics {
+        description
+          "Basic kernel vetoes stats";
+        leaf veto-vm-page-count-severe {
+          description
+            "Number of vetoes due to severe page counts";
+          type uint32;
+        }
+        leaf veto-ifstate-memory {
+          description
+            "Number of vetoes due to low rt ifstate memory";
+          type uint32;
+        }
+        leaf veto-memory-overconsumed {
+          description
+            "Number of vetoes due to over consumed memory";
+          type uint32;
+        }
+        leaf veto-pfe-veto-max-routes {
+          description
+            "Number of vetoes due to maximum number of routes";
+          type uint32;
+        }
+        leaf veto-too-many-delayed-unrefs {
+          description
+            "Number of vetoes due to delayed unrefs";
+          type uint32;
+        }
+        leaf veto-nh-memory-usage {
+          description
+            "Number of vetoes due to exhaustion of route/nexthop memory";
+          type uint32;
+        }
+        leaf veto-mbuf-cluster {
+          description
+            "Number of vetoes due to exhaustion mbuf cluster";
+          type uint32;
+        }
+        leaf veto-flabel-space-exhaustion {
+          description
+            "Number of vetoes due to exhaustion of flabel";
+          type uint32;
+        }
+        leaf veto-flabel-space-consumption {
+          description
+            "Number of vetoes due to consumption of flabel";
+          type uint32;
+        }
+      }
+      list peer-consumption-rate {
+        description
+          "Ifstate consumption rate from peers";
+        key "peer-index";
+        leaf peer-index {
+          description
+            "peer-index value";
+          type uint32;
+        }
+        leaf consumption-rate-counter {
+          description
+            "Overall ifstate consumption rate from peer";
+          type uint32;
+        }
+        leaf consumption-route-add-rate {
+          description
+            "Route ifstate addition consumption rate from peer";
+          type uint32;
+        }
+        leaf consumption-route-change-rate {
+          description
+            "Route ifstate change consumption rate from peer";
+          type uint32;
+        }
+        leaf consumption-route-delete-rate {
+          description
+            "Route ifstate deletion consumption rate from peer";
+          type uint32;
+        }
+        leaf consumption-nexthop-add-rate {
+          description
+            "Nexthop ifstate addition consumption rate from peer";
+          type uint32;
+        }
+        leaf consumption-nexthop-change-rate {
+          description
+            "Nexthop ifstate change consumption rate from peer";
+          type uint32;
+        }
+        leaf consumption-nexthop-delete-rate {
+          description
+            "Nexthop ifstate deletion consumption rate from peer";
+          type uint32;
+        }
+      }
+    }
+  }
+
+  grouping kernel-ifstate-stats-top {
+    description
+      "Top level for kernel ifstate data";
+    container junos {
+      description
+        "Kernel ifstate data for Junos";
+      config false;
+      container kernel-ifstate {
+        description
+          "Container for kernel ifstate data";
+        uses kernel-ifstate-rate-group;
+      }
+    }
+  }
+
+  uses kernel-ifstate-stats-top;
+}

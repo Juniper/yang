@@ -1,0 +1,112 @@
+ module junos-genstate-evpn-globals-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/evpn-globals-information";
+   prefix jgegi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for evpn-globals-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping evpn-globals-information-top {
+     description
+       "Top-level grouping";
+     container evpn-globals-information {
+       description
+         "Top-level container";
+       container evpn-globals-detailed {
+         leaf evpn-router-id {
+           type jt:ipaddr;
+         }
+         leaf v6-primary-addr {
+           type jt:ipaddr;
+         }
+         leaf v6-underlay {
+           type string;
+         }
+         leaf underlay-changed {
+           type string;
+         }
+         leaf init-complete-ts {
+           type string;
+         }
+         leaf l2ald-conn-status {
+           type string;
+         }
+         leaf l2ald-conn-down-ts {
+           type string;
+         }
+         leaf l2ald-conn-up-ts {
+           type string;
+         }
+         leaf num-ibgp-peers {
+           type int32;
+         }
+         leaf mcsn-blocked {
+           type string;
+         }
+         leaf etree-instance-count {
+           type int32;
+         }
+         leaf leaf-label {
+           type int32;
+         }
+         leaf gmp-client-id {
+           type int32;
+         }
+         leaf smet-nh-limit {
+           type int32;
+         }
+         leaf rvtep-mode {
+           type string;
+         }
+         leaf rvtep-ar-mgid {
+           type string;
+         }
+         leaf global-mac-vrf-enhanced-convergence {
+           type string;
+         }
+         leaf global-evpn-vpws-enhanced-convergence {
+           type string;
+         }
+         leaf global-l3-context-enhanced-convergence {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds evpn-globals-information container to top-level genstate 
+       container";
+     uses evpn-globals-information-top;
+   }
+ }

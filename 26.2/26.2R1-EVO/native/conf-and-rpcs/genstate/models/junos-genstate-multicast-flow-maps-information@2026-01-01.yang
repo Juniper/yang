@@ -1,0 +1,101 @@
+ module junos-genstate-multicast-flow-maps-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/multicast-flow-maps-information";
+   prefix jgmfmi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for multicast-flow-maps-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping multicast-flow-maps-information-top {
+     description
+       "Top-level grouping";
+     container multicast-flow-maps-information {
+       description
+         "Information about multicast flow maps for one or more routing 
+         instances";
+       container multicast-flow-maps {
+         description
+           "Information about multicast flow maps for one routing instance";
+         leaf instance-name {
+           type string;
+         }
+         list multicast-flow-map {
+           key "flow-map-name";
+           description
+             "Information about a multicast flow map";
+           leaf flow-map-name {
+             type string;
+             description
+               "Name of the flow map";
+           }
+           leaf policy-name {
+             type string;
+             description
+               "Name of the policy";
+           }
+           leaf cache-timeout {
+             type string;
+             description
+               "Delay before discarding a matched cache entry";
+           }
+           leaf flow-bandwidth {
+             type uint64;
+             description
+               "Bandwidth for matched flows";
+           }
+           leaf bandwidth-type {
+             type string;
+             description
+               "Bandwidth type for matched flows";
+           }
+           list redundant-sources {
+             key "multicast-source-address";
+             description
+               "Redundant source addresses";
+             leaf multicast-source-address {
+               type jt:ipaddr;
+               description
+                 "Source address";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds multicast-flow-maps-information container to top-level genstate
+       container";
+     uses multicast-flow-maps-information-top;
+   }
+ }

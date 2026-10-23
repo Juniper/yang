@@ -1,0 +1,438 @@
+ module junos-genstate-pim-join-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-join-information";
+   prefix jgpji;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-join-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping pim-join-information-top {
+     description
+       "Top-level grouping";
+     container pim-join-information {
+       description
+         "Top-level container";
+       list join-family {
+         key "address-family";
+         leaf pim-instance {
+           type string;
+           description
+             "Name of the PIM instance";
+         }
+         leaf address-family {
+           type string;
+         }
+         container join-summaries {
+           list join-summary {
+             key "multicast-route-type";
+             leaf multicast-route-type {
+               type string;
+             }
+             leaf multicast-route-count {
+               type int32;
+             }
+           }
+         }
+         list join-group {
+           key "multicast-group-address";
+           leaf multicast-group-address {
+             type jt:ipaddr;
+             description
+               "Group address";
+           }
+           leaf multicast-source-address {
+             type jt:ipaddr;
+             description
+               "Source address";
+           }
+           leaf upstream-interface-name {
+             type string;
+             description
+               "Upstream interface";
+           }
+           leaf pim-interface-state {
+             type string;
+             description
+               "State of PIM interface";
+           }
+           leaf upstream-neighbor {
+             type jt:ipaddr;
+             description
+               "IP Address of Upstream Neighbor";
+           }
+           leaf upstream-neighbor-rpf-origin {
+             type string;
+             description
+               "Reverse-path forwarding origin of upstream neighbor";
+           }
+           leaf uptime {
+             type string;
+           }
+           leaf downstream-interface-count {
+             type int32;
+           }
+           leaf downstream-neighbor-count {
+             type int32;
+           }
+           container pim-group-flags {
+             leaf sparse {
+               type empty;
+             }
+             leaf bidir {
+               type empty;
+               description
+                 "Bidirectional flag";
+             }
+             leaf dense {
+               type empty;
+             }
+             leaf rptree {
+               type empty;
+             }
+             leaf wildcard {
+               type empty;
+             }
+             leaf spt {
+               type empty;
+             }
+           }
+           container dense-event {
+             container dense-receive-prune {
+               leaf pim-interface-name {
+                 type string;
+                 description
+                   "Name of PIM interface";
+               }
+               leaf dense-timeout {
+                 type int32;
+               }
+             }
+             container dense-send-prune {
+               leaf pim-interface-name {
+                 type string;
+                 description
+                   "Name of PIM interface";
+               }
+               leaf dense-timeout {
+                 type int32;
+               }
+             }
+             container dense-join {
+               leaf pim-interface-name {
+                 type string;
+                 description
+                   "Name of PIM interface";
+               }
+               leaf dense-timeout {
+                 type int32;
+               }
+             }
+             container dense-graft {
+               leaf pim-interface-name {
+                 type string;
+                 description
+                   "Name of PIM interface";
+               }
+               leaf dense-timeout {
+                 type int32;
+               }
+             }
+           }
+           container downstream-interfaces {
+             leaf dummy {
+               type empty;
+             }
+             list downstream-interface {
+               key "pim-interface-name";
+               description
+                 "Downstream/Outgoing interface list";
+               leaf pim-interface-name {
+                 type string;
+                 description
+                   "Name of PIM interface";
+               }
+               leaf pruned-timeout {
+                 type int32;
+                 description
+                   "PIM-DM pruned timeout";
+               }
+               leaf pim-interface-state {
+                 type string;
+                 description
+                   "State of PIM interface";
+               }
+               list downstream-neighbor {
+                 key "neighbor-address";
+                 leaf neighbor-address {
+                   type jt:ipaddr;
+                   description
+                     "IP address of this neighbor";
+                 }
+                 leaf neighbor-state {
+                   type string;
+                 }
+                 leaf terse-sparse {
+                   type empty;
+                 }
+                 leaf terse-rpt {
+                   type empty;
+                 }
+                 leaf terse-wc {
+                   type empty;
+                 }
+                 leaf neighbor-timeout {
+                   type int32;
+                 }
+                 leaf downstream-if-uptime {
+                   type string;
+                   description
+                     "Time since first join received on this interface";
+                 }
+                 leaf downstream-rpf-vector {
+                   type jt:ipaddr;
+                   description
+                     "Downstream rpf vector for this downstream neighbor";
+                 }
+                 container downstream-last-jp {
+                   leaf downstream-last-jp-oper {
+                     type string;
+                   }
+                   leaf downstream-last-jp-time {
+                     type string;
+                   }
+                 }
+                 leaf terse-bidir {
+                   type empty;
+                   description
+                     "Bidirectional flag";
+                 }
+               }
+               leaf register-rp {
+                 type jt:ipaddr;
+               }
+               leaf register-interface-name {
+                 type string;
+               }
+               leaf-list pim-pseudo-downstream-interface-name {
+                 type string;
+                 description
+                   "Downstream pseudo interface representing aggregated IGMP
+                   interfaces";
+               }
+               container downstream-assert-neighbor {
+                 description
+                   "Information about the neighbor that won the assert";
+                 leaf neighbor-address {
+                   type jt:ipaddr;
+                   description
+                     "IP address of this neighbor";
+                 }
+                 leaf neighbor-assert-metric {
+                   type int32;
+                   description
+                     "Metric of the assert winner for reaching a source or 
+                     RP";
+                 }
+                 leaf neighbor-assert-preference {
+                   type int32;
+                   description
+                     "Preference of the assert winner for reaching a source 
+                     or RP";
+                 }
+                 leaf neighbor-assert-timeout {
+                   type int32;
+                   description
+                     "Time remaining before assert winner timer expires";
+                 }
+               }
+             }
+           }
+           leaf rendezvous-point-address {
+             type jt:ipaddr;
+             description
+               "Address of rendezvous point";
+           }
+           leaf upstream-protocol-name {
+             type string;
+             description
+               "Upstream protocol";
+           }
+           leaf upstream-rpf-vector {
+             type jt:ipaddr;
+           }
+           leaf keepalive-timeout {
+             type int32;
+           }
+           leaf no-keepalive-timeout {
+             type empty;
+           }
+           leaf switchover-timeout {
+             type int32;
+           }
+           container active-upstream-path {
+             leaf upstream-protocol-name {
+               type string;
+               description
+                 "Upstream protocol";
+             }
+             leaf upstream-interface-name {
+               type string;
+               description
+                 "Upstream interface";
+             }
+             leaf pim-interface-state {
+               type string;
+               description
+                 "State of PIM interface";
+             }
+             leaf upstream-neighbor {
+               type jt:ipaddr;
+               description
+                 "IP Address of Upstream Neighbor";
+             }
+             leaf upstream-neighbor-rpf-origin {
+               type string;
+               description
+                 "Reverse-path forwarding origin of upstream neighbor";
+             }
+           }
+           container mofrr-backup-upstream-path {
+             leaf upstream-protocol-name {
+               type string;
+               description
+                 "Upstream protocol";
+             }
+             leaf upstream-interface-name {
+               type string;
+               description
+                 "Upstream interface";
+             }
+             leaf pim-interface-state {
+               type string;
+               description
+                 "State of PIM interface";
+             }
+             leaf upstream-neighbor {
+               type jt:ipaddr;
+               description
+                 "IP Address of Upstream Neighbor";
+             }
+             leaf upstream-neighbor-rpf-origin {
+               type string;
+               description
+                 "Reverse-path forwarding origin of upstream neighbor";
+             }
+           }
+           container standby-upstream-path {
+             leaf upstream-protocol-name {
+               type string;
+               description
+                 "Upstream protocol";
+             }
+             leaf upstream-interface-name {
+               type string;
+               description
+                 "Upstream interface";
+             }
+             leaf pim-interface-state {
+               type string;
+               description
+                 "State of PIM interface";
+             }
+             leaf upstream-neighbor {
+               type jt:ipaddr;
+               description
+                 "IP Address of Upstream Neighbor";
+             }
+             leaf upstream-neighbor-rpf-origin {
+               type string;
+               description
+                 "Reverse-path forwarding origin of upstream neighbor";
+             }
+           }
+           container upstream-state-flags {
+             leaf none {
+               type empty;
+             }
+             leaf local-source {
+               type empty;
+             }
+             leaf local-rp {
+               type empty;
+             }
+             leaf join-to-rp {
+               type empty;
+             }
+             leaf join-to-source {
+               type empty;
+             }
+             leaf prune-to-rp {
+               type empty;
+             }
+             leaf no-prune-to-rp {
+               type empty;
+             }
+             leaf prune-to-source {
+               type empty;
+             }
+           }
+           leaf bidir-group-prefix-length {
+             type uint32;
+             description
+               "Bidirectional group prefix length";
+           }
+           list accepting-interface {
+             key "pim-interface-name";
+             description
+               "Accepting interface list";
+             leaf pim-interface-name {
+               type string;
+               description
+                 "Name of PIM interface";
+             }
+             leaf df-state {
+               type string;
+               description
+                 "PIM-BIDIR DF election state";
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-join-information container to top-level genstate container";
+     uses pim-join-information-top;
+   }
+ }

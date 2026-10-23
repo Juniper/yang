@@ -1,0 +1,216 @@
+ module junos-genstate-pim-rps-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/pim-rps-information";
+   prefix jgpri;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for pim-rps-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping pim-rps-information-top {
+     description
+       "Top-level grouping";
+     container pim-rps-information {
+       description
+         "Top-level container";
+       list pim-instance-rps-information {
+         key "pim-instance";
+         leaf pim-instance {
+           type string;
+           description
+             "Name of the PIM instance";
+         }
+         list rp-family {
+           key "address-family";
+           leaf address-family {
+             type string;
+           }
+           list rendezvous-point {
+             key "rendezvous-point-address";
+             leaf rendezvous-point-address {
+               type jt:ipaddr;
+               description
+                 "Address of rendezvous point";
+             }
+             leaf rp-flag-static {
+               type empty;
+             }
+             leaf rp-flag-embedded-rp {
+               type empty;
+             }
+             leaf rp-flag-autorp {
+               type empty;
+             }
+             leaf rp-flag-bootstrap {
+               type empty;
+             }
+             leaf rp-flag-sparse {
+               type empty;
+             }
+             leaf rp-flag-bidirectional {
+               type empty;
+             }
+             leaf rendezvous-point-holdtime {
+               type int32;
+             }
+             leaf rendezvous-point-timeout {
+               type string;
+             }
+             leaf rendezvous-point-active-groups {
+               type int32;
+             }
+             list rendezvous-point-group-prefixes {
+               key "multicast-group-prefix";
+               leaf multicast-group-prefix {
+                 type jt:ipaddr;
+                 description
+                   "Group prefix";
+               }
+               leaf rp-group-timeout {
+                 type string;
+                 description
+                   "Time remaining for RP group prefix";
+               }
+             }
+             container rendezvous-point-active-group-prefixes {
+               leaf rendezvous-point-active-groups {
+                 type int32;
+               }
+               list rendezvous-point-active-group-prefix {
+                 key "multicast-group-address";
+                 leaf multicast-group-address {
+                   type jt:ipaddr;
+                   description
+                     "Group address";
+                 }
+               }
+             }
+             leaf rendezvous-point-from-address {
+               type jt:ipaddr;
+             }
+             leaf rendezvous-point-static-override {
+               type string;
+             }
+             leaf rendezvous-point-time-active {
+               type string;
+             }
+             leaf rendezvous-point-refcount {
+               type int32;
+             }
+             leaf rendezvous-point-holdtime-remaining {
+               type int32;
+             }
+             leaf rp-interface-device-index {
+               type int32;
+             }
+             leaf rp-interface-device-subunit {
+               type int32;
+             }
+             leaf pim-interface-name {
+               type string;
+               description
+                 "Name of PIM interface";
+             }
+             leaf rendezvous-point-anycast-pim-local-address {
+               type jt:ipaddr;
+               description
+                 "Local address for replicating register messages to anycast
+                 RPs";
+             }
+             list rendezvous-point-register-state {
+               key "multicast-group-address multicast-source-address";
+               leaf multicast-group-address {
+                 type jt:ipaddr;
+                 description
+                   "Group address";
+               }
+               leaf multicast-source-address {
+                 type jt:ipaddr;
+                 description
+                   "Source address";
+               }
+               leaf first-hop-address {
+                 type jt:ipaddr;
+               }
+               leaf rendezvous-point-address {
+                 type jt:ipaddr;
+                 description
+                   "Address of rendezvous point";
+               }
+               leaf pim-register-state {
+                 type string;
+               }
+               leaf pim-register-timeout {
+                 type int32;
+               }
+             }
+             list rendezvous-point-anycast-pim-rpset {
+               key "multicast-group-address";
+               description
+                 "IPv4 address of one or more remote anycast RPs";
+               leaf multicast-group-address {
+                 type jt:ipaddr;
+                 description
+                   "Group address";
+               }
+             }
+             list rendezvous-point-anycast-register-state {
+               key "multicast-group-address";
+               description
+                 "Anycast register state";
+               leaf multicast-group-address {
+                 type jt:ipaddr;
+                 description
+                   "Group address";
+               }
+               leaf multicast-source-address {
+                 type jt:ipaddr;
+                 description
+                   "Source address";
+               }
+               leaf pim-anycast-register-state-origin {
+                 type string;
+                 description
+                   "Origin of anycast register state";
+               }
+             }
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds pim-rps-information container to top-level genstate container";
+     uses pim-rps-information-top;
+   }
+ }

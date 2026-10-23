@@ -1,0 +1,91 @@
+ module junos-genstate-mvpn-suppressed-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/mvpn-suppressed-information";
+   prefix jgmsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for mvpn-suppressed-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping mvpn-suppressed-information-top {
+     description
+       "Top-level grouping";
+     container mvpn-suppressed-information {
+       description
+         "Show suppressed MVPN forwarding prefixes";
+       list mvpn-suppressed {
+         key "mvpn-suppressed-instance";
+         leaf mvpn-suppressed-instance {
+           type string;
+           description
+             "MVPN Instance";
+         }
+         leaf mvpn-suppressed-family {
+           type string;
+           description
+             "MVPN address family";
+         }
+         list mvpn-suppressed-prefix {
+           key "c-multicast-address";
+           leaf c-multicast-address {
+             type string;
+             description
+               "Address of the c-multicast route";
+           }
+           leaf suppress-reason {
+             type string;
+             description
+               "Reason prefix was suppressed by MVPN";
+           }
+         }
+         container mvpn-suppressed-summary {
+           leaf suppressed-general-count {
+             type int32;
+             description
+               "Number of general suppressed MVPN forwarding cache entries";
+           }
+           leaf suppressed-mvpn-rpt-count {
+             type int32;
+             description
+               "Number of RPT suppressed MVPN forwarding cache entries";
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds mvpn-suppressed-information container to top-level genstate 
+       container";
+     uses mvpn-suppressed-information-top;
+   }
+ }

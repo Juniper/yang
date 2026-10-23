@@ -1,0 +1,79 @@
+ module junos-genstate-ldp-fec-filters-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ldp-fec-filters-information";
+   prefix jglffi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ldp-fec-filters-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping ldp-fec-filters-information-top {
+     description
+       "Top-level grouping";
+     container ldp-fec-filters-information {
+       description
+         "Top-level container";
+       list ldp-fec-filter {
+         key "ldp-prefix";
+         leaf ldp-prefix {
+           type string;
+         }
+         leaf ldp-ingress-filter {
+           type string;
+           description
+             "Ingress firewall filter name";
+         }
+         leaf ldp-ingress-filterid {
+           type int32;
+           description
+             "Ingress firewall filter index";
+         }
+         leaf ldp-transit-filter {
+           type string;
+           description
+             "Transit firewall filter name";
+         }
+         leaf ldp-transit-filterid {
+           type int32;
+           description
+             "Transit firewall filter index";
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ldp-fec-filters-information container to top-level genstate 
+       container";
+     uses ldp-fec-filters-information-top;
+   }
+ }

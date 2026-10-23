@@ -1,0 +1,204 @@
+ module junos-genstate-ospf3-statistics-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/ospf3-statistics-information";
+   prefix jgosi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for ospf3-statistics-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7-EVO";
+   }
+
+   grouping ospf3-statistics-information-top {
+     description
+       "Top-level grouping";
+     container ospf3-statistics-information {
+       description
+         "Top-level container";
+       container ospf-statistics {
+         leaf dbds-retransmit {
+           type uint64;
+         }
+         leaf dbds-retransmit-5seconds {
+           type int32;
+         }
+         leaf lsas-flooded {
+           type uint64;
+         }
+         leaf lsas-flooded-5seconds {
+           type int32;
+         }
+         leaf lsas-high-prio-flooded {
+           type uint64;
+         }
+         leaf lsas-high-prio-flooded-5seconds {
+           type int32;
+         }
+         leaf lsas-retransmit {
+           type uint64;
+         }
+         leaf lsas-retransmit-5seconds {
+           type int32;
+         }
+         leaf lsas-nbr-transmit {
+           type uint64;
+         }
+         leaf lsas-nbr-transmit-5seconds {
+           type int32;
+         }
+         leaf lsas-requested {
+           type uint64;
+         }
+         leaf lsas-requested-5seconds {
+           type int32;
+         }
+         leaf lsas-acknowledged {
+           type uint64;
+         }
+         leaf lsas-acknowledged-5seconds {
+           type int32;
+         }
+         leaf max-age-lsas-received {
+           type uint64;
+         }
+         leaf max-age-lsas-received-5seconds {
+           type int32;
+         }
+         leaf flood-queue-depth {
+           type int32;
+         }
+         leaf total-retransmits {
+           type int32;
+         }
+         leaf total-database-summaries {
+           type int32;
+         }
+         leaf total-linkstate-request {
+           type int32;
+         }
+         list packet-statistics {
+           key "ospf-packet-type";
+           leaf ospf-packet-type {
+             type string;
+           }
+           leaf packets-sent {
+             type uint64;
+           }
+           leaf packets-received {
+             type uint64;
+           }
+           leaf packets-sent-5seconds {
+             type int32;
+           }
+           leaf packets-received-5seconds {
+             type int32;
+           }
+         }
+         container ospf-errors {
+           leaf runt-header-error {
+             type int32;
+           }
+           leaf short-packets-error {
+             type int32;
+           }
+           leaf bad-version-error {
+             type int32;
+           }
+           leaf truncated-packets-error {
+             type int32;
+           }
+           leaf checksum-error {
+             type int32;
+           }
+           leaf subnet-mismatch-error {
+             type int32;
+           }
+           leaf virtual-link-error {
+             type int32;
+           }
+           leaf area-mismatch-error {
+             type int32;
+           }
+           leaf authentication-mismatch-error {
+             type int32;
+           }
+           leaf authentication-failure-error {
+             type int32;
+           }
+           leaf bad-packettype-error {
+             type int32;
+           }
+           leaf netmask-mismatch-error {
+             type int32;
+           }
+           leaf hello-interval-mismatch-error {
+             type int32;
+           }
+           leaf dead-interval-mismatch-error {
+             type int32;
+           }
+           leaf stub-area-mismatch-error {
+             type int32;
+           }
+           leaf nssa-mismatch-error {
+             type int32;
+           }
+           leaf default-exclusion-mismatch-error {
+             type int32;
+           }
+           leaf mtu-mismatch-error {
+             type int32;
+           }
+           leaf hello-received-error {
+             type int32;
+           }
+           leaf no-router-id-error {
+             type int32;
+           }
+           leaf instance-id-mismatch-error {
+             type int32;
+           }
+           leaf lanp2p-cfgmismatch-error {
+             type int32;
+           }
+           leaf no-error {
+             type empty;
+           }
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds ospf3-statistics-information container to top-level genstate 
+       container";
+     uses ospf3-statistics-information-top;
+   }
+ }

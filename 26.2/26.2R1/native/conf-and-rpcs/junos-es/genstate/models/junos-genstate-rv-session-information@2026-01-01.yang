@@ -1,0 +1,134 @@
+ module junos-genstate-rv-session-information {
+   yang-version 1;
+   namespace "http://yang.juniper.net/junos/genstate/rv-session-information";
+   prefix jgrsi;
+
+   import junos-genstate {
+     prefix jgs;
+     revision-date 2026-01-01;
+   }
+
+   import junos-common-types {
+     prefix jt;
+     revision-date 2026-01-01;
+   }
+
+   organization
+     "Juniper Networks, Inc.";
+
+   contact
+     "Juniper Networks, Inc.
+
+      1133 Innovation Way
+      Sunnyvale, CA 94089
+
+      +1 888 314-5822
+
+      E-mail: yang-support@juniper.net";
+
+   description
+      "Junos genstate Yang module for rv-session-information.
+
+      Copyright (c) 2026 Juniper Networks, Inc.
+      All rights reserved.";
+
+   revision 2026-01-01 {
+     description "Junos: 26.2R1.7";
+   }
+
+   grouping rv-session-information-top {
+     description
+       "Top-level grouping";
+     container rv-session-information {
+       description
+         "RV session information";
+       list rv-session {
+         key "ip-address";
+         leaf ip-address {
+           type jt:ipaddr;
+         }
+         leaf session-state {
+           type string;
+           description
+             "State of the session session";
+         }
+         leaf session-flaps {
+           type uint32;
+         }
+         leaf session-uptime {
+           type string;
+         }
+         leaf ip-prefix-count {
+           type uint32;
+         }
+         leaf ip6-prefix-count {
+           type uint32;
+         }
+         leaf session-dest-database {
+           type string;
+         }
+         leaf last-eod-received {
+           type string;
+         }
+         leaf last-reset-query {
+           type string;
+         }
+         leaf last-serial-query {
+           type string;
+         }
+         leaf last-gc-started {
+           type string;
+         }
+         leaf last-gc-end {
+           type string;
+         }
+         leaf last-gc-reason {
+           type string;
+           description
+             "Reason for last session GC";
+         }
+         leaf session-index {
+           type uint32;
+         }
+         leaf group-name {
+           type string;
+         }
+         leaf preference {
+           type int32;
+           description
+             "Preference for the route";
+         }
+         leaf local-ip-address {
+           type jt:ipaddr;
+         }
+         leaf port {
+           type uint32;
+         }
+         leaf refresh-time {
+           type string;
+         }
+         leaf hold-time {
+           type string;
+         }
+         leaf record-life-time {
+           type string;
+         }
+         leaf serial-full {
+           type uint32;
+         }
+         leaf serial-incremental {
+           type uint32;
+         }
+         leaf last-update {
+           type string;
+         }
+       }
+     }
+   }
+   augment "/jgs:genstate" {
+     description
+       "Adds rv-session-information container to top-level genstate 
+       container";
+     uses rv-session-information-top;
+   }
+ }
